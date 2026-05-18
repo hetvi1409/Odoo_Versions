@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_event_event_inherit" model="ir.ui.view">
+        <field name="name">event.event</field>
+        <field name="model">event.event</field>
+        <field name="inherit_id" ref="event.view_event_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="show_podcast_link" invisible="1"/>
+                <field name="show_webinar_link" invisible="1"/>
+                <field name="podcast_link" invisible="show_podcast_link == False" required="show_podcast_link == True"/>
+                <field name="webinar_link" invisible="show_webinar_link == False" required="show_webinar_link == True"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

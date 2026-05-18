@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="scm_valuation_wizard_view_form" model="ir.ui.view">
+        <field name="name">scm.valuation.wizard.form.view</field>
+        <field name="model">scm.valuation.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="assessment_id"/>
+                        <field name="valuation_id" invisible="1"/>
+<!--                        <field name="valuation_report"/>-->
+                        <field name="valuation_report" widget="download_link" filename="valuation_report_name" options="{'filename': 'valuation_report_name'}"/>
+                        <field name="valuation_report_name" readonly="1"  invisible="1" force_save="1"/>
+<!--                        <field name="proceed_request"/>-->
+                    </group>
+                </sheet>
+                <footer>
+                        <button name="action_submit"
+                                string="Submit"
+                                type="object"
+                                class="btn-primary"
+                                data-hotkey="t"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

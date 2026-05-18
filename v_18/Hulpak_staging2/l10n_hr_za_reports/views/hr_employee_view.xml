@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_view_form_inherit_za" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.za</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_payroll.payroll_hr_employee_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='payroll_group']" position="after">
+                <group>
+                    <field name="paye_number"/>
+                    <field name="uif_number"/>
+                    <field name="income_tax_number"/>
+                    <field name="cost_centre"/>
+                    <field name="company_rule"/>
+                    <field name="employee_code"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_payslip_view_form_inherit_za" model="ir.ui.view">
+        <field name="name">hr.payslip.view.form.za</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <field name="input_line_ids" position="after">
+                <field name="leave_balance_line_ids" invisible="1" readonly="state in ['cancel', 'done']"/>
+            </field>
+        </field>
+    </record>
+</odoo>

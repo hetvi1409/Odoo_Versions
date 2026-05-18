@@ -1,0 +1,18 @@
+flowchart LR
+  subgraph BR[Browser JS]
+    A([Start]) --> B[Read tender_id and timer_token]
+    B --> C[jsonrpc POST /tender/timer]
+  end
+  subgraph API[Timer Endpoint]
+    C --> D[Parse tender id]
+    D --> E{Token valid?}
+    E -->|No| F[Return false payload]
+    E -->|Yes| G[Load tender and closing date]
+    G --> H[Return start_time end_time state]
+  end
+  subgraph UI[Browser UI]
+    F --> I[Show N/A]
+    H --> J[Start live countdown interval]
+    I --> K([End])
+    J --> K
+  end

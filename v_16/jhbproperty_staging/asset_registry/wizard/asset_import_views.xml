@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="asset_import_view_form" model="ir.ui.view">
+        <field name="name">asset.import.view.form</field>
+        <field name="model">asset.import</field>
+        <field name="arch" type="xml">
+            <form string="Import Assets">
+                <group>
+                    <group>
+                        <field name="file"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_import_asset" string="Import Asset"
+                            type="object" class="btn-primary"/>
+                    <button name="action_import_asset_model" string="Import Asset Model"
+                            type="object" class="btn-primary"/>
+                    <button name="action_update_location_assets" string="Update Asset Model"
+                            type="object" class="btn-secondary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="asset_import_action" model="ir.actions.act_window">
+        <field name="name">Asset Import</field>
+        <field name="res_model">asset.import</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="asset_import_view_form"/>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_asset_import_action"
+              name="Import Asset"
+              action="asset_import_action"
+              parent="account.menu_finance_entries_management"/>
+</odoo>

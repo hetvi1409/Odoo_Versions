@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sagovbudget_confirmation_list" model="ir.ui.view">
+        <field name="name">sagovtender.budget.confirm.list</field>
+        <field name="model">sagovtender.budget.confirm</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="requisition_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="app_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="department_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="procurement_method_config_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="preference_point_system_config_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="available_budget" widget="monetary"/>
+                <field name="requested_amount" widget="monetary"/>
+                <field name="confirmed_amount" widget="monetary"/>
+                <field name="budget_verified"/>
+                <field name="memo_required"/>
+                <field name="confirmation_date"/>
+                <field name="finance_user_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sagovbudget_confirmation_form" model="ir.ui.view">
+        <field name="name">sagovtender.budget.confirm.form</field>
+        <field name="model">sagovtender.budget.confirm</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_refresh_lines" type="object" string="Sync Commodity Lines" class="btn-warning" invisible="state != 'pending'"/>
+                    <button name="action_confirm_budget" string="Confirm Budget" type="object" class="btn-success" invisible="state != 'pending'"/>
+                    <button name="action_mark_insufficient" string="Mark Insufficient" type="object" invisible="state != 'pending'"/>
+                    <button name="action_reject" string="Reject" type="object" invisible="state not in ['pending', 'draft']"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet readonly="state not in ['draft', 'pending']">
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="currency_id" invisible="0" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="available_budget" widget="monetary"/>
+                            <field name="requested_amount" widget="monetary"/>
+                            <field name="procurement_method_config_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="preference_point_system_config_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="budget_verified"/>
+                            <field name="confirmed_amount" widget="monetary"/>
+                            <field name="memo_required"/>
+                            <field name="memo_attachment_id" invisible="not memo_required" required="not memo_required" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="confirmation_date"/>
+                            <field name="finance_user_id" required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="requisition_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="app_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="department_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="remarks" placeholder="Finance remarks..."/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Commodity Budget Lines">
+                            <field name="line_ids" readonly="state not in ['draft', 'pending']">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id" required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="description" required="1"/>
+                                    <field name="uom_id" required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="quantity" required="1"/>
+                                    <field name="unit_price" widget="monetary"/>
+                                    <field name="subtotal" widget="monetary" sum="Total"/>
+                                    <field name="budget_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="remaining_budget" widget="monetary" readonly="1"/>
+                                    <field name="account_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="deducted" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group string="PFMA/MFMA Compliance Notes" class="oe_read_only">
+                        <div style="background-color: #e8f4f8; padding: 10px; border-left: 4px solid #0066cc;">
+                            <p><strong>Budget Confirmation Process:</strong></p>
+                            <ul>
+                                <li><strong>Step 1:</strong> Verify GL Account has sufficient budget allocation</li>
+                                <li><strong>Step 2:</strong> Confirm budget verified checkbox</li>
+                                <li><strong>Step 3:</strong> Click "Confirm Budget" to create encumbrance</li>
+                            </ul>
+                            <p><strong>What Happens on Confirmation:</strong></p>
+                            <ul>
+                                <li>✓ Budget encumbrance created on GL Account</li>
+                                <li>✓ Funds reserved and cannot be used elsewhere</li>
+                                <li>✓ Available budget reduced accordingly</li>
+                                <li>✓ GL Account propagated to all commodity lines</li>
+                                <li>✓ Audit trail created for Auditor-General</li>
+                                <li>✓ Complies with PFMA Section 38 / MFMA Section 62</li>
+                            </ul>
+                            <p><em>Required for National Treasury BAS reporting</em></p>
+                        </div>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sagovbudget_confirmation" model="ir.actions.act_window">
+        <field name="name">Budget Confirmations</field>
+        <field name="res_model">sagovtender.budget.confirm</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

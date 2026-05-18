@@ -1,0 +1,39 @@
+<odoo>
+    <record id="view_entity_class_tree" model="ir.ui.view">
+        <field name="name">entity.class.tree</field>
+        <field name="model">entity.class</field>
+        <field name="arch" type="xml">
+            <list string="Entity Classes">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_entity_class_form" model="ir.ui.view">
+        <field name="name">entity.class.form</field>
+        <field name="model">entity.class</field>
+        <field name="arch" type="xml">
+            <form string="Entity Class">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="entity_class_action" model="ir.actions.act_window">
+        <field name="name">Entity Classes</field>
+        <field name="res_model">entity.class</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_tender_configuration" name="Configuration"
+              parent="menu_tender_management_root"/>
+
+    <menuitem id="menu_entity_class_root" name="Entity Classes"
+              sequence="10" parent="menu_tender_configuration"
+              action="entity_class_action"/>
+
+</odoo>

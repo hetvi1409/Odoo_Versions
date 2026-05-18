@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="portal_my_task" name="My Task"
+              inherit_id="project.portal_my_task">
+        <xpath expr="//div[@id='task_content']/div[@id='card']/div[@id='card_body']/div[@class='container']"
+               position="after">
+            <h4>REQUIRED MATERIAL LIST</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="text-center">
+                        <th class="text-right">Material Used
+                            (Description)
+                        </th>
+                        <th class="text-right">Quantity</th>
+                        <th class="text-right">Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="task.helpdesk_ticket_id.ticket_job_card_id.required_inventory_ids"
+                       t-as="inventory">
+                        <tr>
+                            <td>
+                                <t t-esc="inventory.product_id.name"/>
+                            </td>
+                            <td>
+                                <t t-esc="inventory.product_uom_qty"/>
+                            </td>
+                            <td><!-- Add corresponding field here --></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+</odoo>

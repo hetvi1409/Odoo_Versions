@@ -1,0 +1,82 @@
+<odoo>
+  <record id="view_competency_tree" model="ir.ui.view">
+    <field name="name">scs.competency.tree</field>
+    <field name="model">scs.competency</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="code"/>
+        <field name="cluster_id"/>
+        <field name="name"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_competency_form" model="ir.ui.view">
+    <field name="name">scs.competency.form</field>
+    <field name="model">scs.competency</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <style>
+              .o_form_view:not(.o_field_highlight)
+              .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+              .o_input:not(:hover):not(:focus) {
+              --o-input-border-color: black !important;
+              }
+              .o_form_view:not(o_field_highlight)
+              .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+              .note-editable:not(:focus) {
+              border-color: black !important;
+              }
+              .form-check:not(:hover),
+              .form-check:not(:hover) .form-check-input:not(:disabled),
+              .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+              border-color: black !important;
+              }
+          </style>
+          <div class="oe_title pe-0">
+            <h1 class="d-flex flex-row justify-content-between">
+              <field name="name" placeholder="Cluster Name"/>
+            </h1>
+          </div>
+          <group>
+            <group>
+              <field name="cluster_id"/>
+                <field name="definition"/>
+            </group>
+            <group>
+              <group>
+                <field name="code" readonly="1"/>
+              </group>
+            </group>
+          </group>
+        </sheet>
+        <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_competency_search" model="ir.ui.view">
+        <field name="name">competency.search.view</field>
+        <field name="model">scs.competency</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <separator/>
+                <field name="cluster_id"/>
+                <!-- <filter date="create_date" name="filter_create_date" string="Create Date"/> -->
+                <!-- <filter date="update_date" name="filter_update_date" string="Update Date"/> -->
+                <separator/>
+                <filter string="My Competencies" name="my_competencies_filter"
+                    domain="['|', ('cluster_id', '=', uid), ('create_uid', '=', uid)]"/>
+                <filter string="Cluster" name="groupby_cluster_id"
+                        context="{'group_by':'cluster_id'}" domain="[]"/>
+            </search>
+        </field>
+    </record>
+
+</odoo>

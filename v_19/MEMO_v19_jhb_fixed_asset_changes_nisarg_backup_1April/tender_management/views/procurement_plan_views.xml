@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Procurement Plan Tree View -->
+    <record id="procurement_plan_tree_view" model="ir.ui.view">
+        <field name="name">procurement.plan.list.view</field>
+        <field name="model">procurement.plan</field>
+        <field name="arch" type="xml">
+            <list string="Procurement Plans">
+                <field name="name"/>
+                <field name="year"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Procurement Plan Form View -->
+    <record id="procurement_plan_form_view" model="ir.ui.view">
+        <field name="name">procurement.plan.form.view</field>
+        <field name="model">procurement.plan</field>
+        <field name="arch" type="xml">
+            <form string="Procurement Plan">
+                    <header>
+                        <field name="status" widget="statusbar"/>
+                    </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="year"/>
+                        <field name="plan_description"/>
+                        <field name="demand_request_id"/>
+                        <field name="budget_for_year"/>
+                        <field name="strategic_objectives"/>
+                    </group>
+<!--                    <notebook>-->
+<!--                        <page string="Strategic Objectives" name="strategic_objectives_page">-->
+<!--                            <field name="strategic_objectives_ids" widget="one2many_list">-->
+<!--                                <list editable="bottom">-->
+<!--                                    <field name="year"/>-->
+<!--                                    <field name="objective"/>-->
+<!--                                    <field name="description"/>-->
+<!--                                </list>-->
+<!--                            </field>-->
+<!--                        </page>-->
+<!--                    </notebook>-->
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Procurement Plan -->
+    <record id="action_procurement_plan" model="ir.actions.act_window">
+        <field name="name">Procurement Plan</field>
+        <field name="res_model">procurement.plan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu Item for Procurement Plan -->
+    <menuitem id="menu_procurement_plan_root" name="Procurement Plan"
+              sequence="10" parent="menu_tender_configuration"
+              action="action_procurement_plan"/>
+</odoo>

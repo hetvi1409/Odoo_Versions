@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="project_checklist_form" model="ir.ui.view">
+        <field name="name">project_checklist_form</field>
+        <field name="model">project.checklist</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="internal_audit_management.project_checklist_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="replace">
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}" statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>
+                    <button name="action_2nd_review" type="object" string="Prepare"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'preparer')]}"/>
+                    <button name="action_approve" type="object" string="Reviewed"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'second_reviewer')]}"/>
+                    <button name="action_reject" type="object"
+                           
+                            string="Reject" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'second_reviewer')]}"/>
+                    <button name="action_revert" type="object"
+                           
+                            string="Revert" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'second_reviewer')]}"/>
+                    <button name="action_print_project_checklist" type="object" string="Print" class="oe_highlight"/>
+                </header>
+            </xpath>
+            <xpath expr="//table" position="replace">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <strong>Title:  <field name="project_title"/></strong>
+                        </td>
+                        <td>
+                            <group>
+                                <field name="preparer_id"/>
+                            </group>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Project:  <field name="project_id"/></strong>
+                        </td>
+                        <td>
+                            <group>
+                                <field name="reviewer_id"/>
+                            </group>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Project #: </strong><field name="project"/>
+                        </td>
+                        <td>
+                            <group>
+                                <field name="approver_id"/>
+                            </group>
+                        </td>
+                    </tr>
+                </table>
+            </xpath>
+        </field>
+    </record>
+</odoo>

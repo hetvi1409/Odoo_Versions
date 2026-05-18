@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="hr_applicant_view_form" model="ir.ui.view">
+        <field name="name">hr.applicant.form</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='priority']" position="before">
+                <field name="user_role_id"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='job_id']" position="attributes">
+                <attribute name="domain">[('requisition_state', '=', 'approved')]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='availability']" position="after">
+                <field name="current_salary"/>
+            </xpath>
+            <xpath expr="//field[@name='categ_ids']" position="after">
+                <field name="relocate"/>
+                <field name="notice_period"/>
+                <field name="access_token"/>
+                <field name="pre_screening_state" widget="badge"
+                    decoration-success="pre_screening_state == 'done'"
+                    decoration-warning="pre_screening_state == 'new'"
+                    decoration-info="pre_screening_state == 'in_progress'"/>
+                <field name="cv_id"/>
+                <field name="qualification_id"/>
+            </xpath>
+            <xpath expr="//button[@name='archive_applicant']" position="after">
+                <button name="action_send_feedback" string="Send Interview Feedback" type="object"/>
+            </xpath>
+            <xpath expr="//button[@name='action_send_survey']" position="replace">
+                <button name="action_send_interview_letter" string="Send Interview Letter" type="object"/>
+            </xpath>
+            <xpath expr="//field[@name='email_from']" position="before">
+                <field name="applicant_id"/>
+                <field name="title_id"/>
+                <field name="initial"/>
+                <field name="surname"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_mobile']" position="before">
+                <field name="passport"/>
+                <field name="country_id"
+                       options="{'no_open': True, 'no_create': True}"/>
+                <field name="language_id"
+                       options="{'no_open': True, 'no_create': True}"/>
+                <field name="date_of_birth"/>
+                <field name="gender"/>
+                <field name="disability"/>
+                <field name="desc_disability"/>
+                <field name="race"/>
+                <field name="higher_qualification"/>
+                <field name="have_honours"/>
+                <field name="have_master"/>
+                <field name="professional_body"/>
+                <field name="work_experience"/>
+                <field name="last_role"/>
+                <field name="exp_by_role"/>
+                <field name="employee_status"/>
+            </xpath>
+            <xpath expr="//button[@name='archive_applicant']" position="after">
+                <button string="Send To Manager" name="send_manager"
+                        invisible="overall_performance &lt; 74" type="object"
+                        data-hotkey="d"/>
+            </xpath>
+            <xpath expr="//page[@name='application_summary']"
+                   position="replace">
+                <page string="Application Summary" name="application_summary">
+                    <field name="motivation_description" placeholder="Motivations..."/>
+                </page>
+                <page string="Performance" name="application_performance">
+                    <group>
+                        <field name="performance_ids">
+                            <tree>
+                                <field name="skill_type_id"/>
+                                <field name="skill_id"/>
+                                <field name="description"/>
+                                <field name="percentage" widget="progressbar"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <group>
+                                        <field name="skill_type_id"/>
+                                        <field name="description"/>
+                                    </group>
+                                    <group>
+                                        <field name="skill_id"/>
+                                        <field name="percentage"/>
+                                        <field name="percentage"
+                                               widget="progressbar"/>
+                                    </group>
+                                </group>
+                            </form>
+                        </field>
+
+                        <field name="overall_performance" widget="progressbar"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_open_candidate" type="object" class="oe_stat_button" icon="fa-id-card-o" groups="hr.group_hr_user" invisible="not applicant_id">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Candidates</span>
+                    </div>
+                </button>
+                <button name="action_open_pre_screening_answer" type="object" class="oe_stat_button" icon="fa-id-card-o" >
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Pre-Screening</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="crm_case_tree_view_job" model="ir.ui.view">
+        <field name="name">hr.applicant.tree</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='priority']" position="before">
+                <field name="user_role_id"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='application_status']" position="after">
+                <field name="pre_screening_state" widget="badge"
+                    decoration-success="pre_screening_state == 'done'"
+                    decoration-warning="pre_screening_state == 'new'"
+                    decoration-info="pre_screening_state == 'in_progress'" optional="show"/>
+                <field name="overall_performance" widget="progressbar"
+                       optional="show"/>
+                <field name="screening_point" widget="progressbar" />
+                <field name="matching_skill_ids" widget="many2many_tags" />
+                <field name="missing_skill_ids" widget="many2many_tags" />
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_kanban_view_applicant" model="ir.ui.view">
+        <field name="name">hr.applicant.kanban</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_kanban_view_applicant"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='application_status']" position="after">
+                <field name="overall_performance"/>
+            </xpath>
+            <xpath expr="//field[@name='categ_ids']" position="after">
+                <div>
+                    Overall Progress: <field name="overall_performance" widget="progressbar"/>
+                </div>
+                <div>
+                    Screening points: <field name="screening_point" widget="progressbar"/>
+                </div>
+
+            </xpath>
+            <xpath expr="//a[@name='action_makeMeeting']" position="after">
+                <a role="menuitem" name="action_add_performance" type="object"
+                   class="dropdown-item">Add Performance
+                </a>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_applicant_view_search_bis" model="ir.ui.view">
+        <field name="name">hr.applicant.search</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id"
+               ref="hr_recruitment.hr_applicant_view_search_bis"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='message_needaction']" position="after">
+                <separator/>
+                <filter string="High Performance" name="high_performance"
+                        domain="[('overall_performance', '>=', '90')]"/>
+                <filter string="Above 75% Performance"
+                        name="above_75_performance"
+                        domain="[('overall_performance', '>=', '75')]"/>
+                <filter string="Above 50% Performance"
+                        name="above_50_performance"
+                        domain="[('overall_performance', '>=', '50')]"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="action_hr_applications_failed" model="ir.actions.act_window">
+        <field name="name">Failed Applications</field>
+        <field name="res_model">hr.applicant</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('stage_id.name', 'ilike', 'staging'), ('job_id', '=', active_id)]</field>
+        <field name="context">{'default_job_id': active_id}</field>
+    </record>
+
+</odoo>

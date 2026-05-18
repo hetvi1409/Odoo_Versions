@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+     <record id="internal_audit_rolling_plan_report_action" model="ir.actions.report">
+        <field name="name">ARP 3 year Report</field>
+        <field name="model">internal.audit.plan</field>
+        <field name="report_type">qweb-pdf</field>
+         <field name="report_name">internal_audit_management.audi_plan_report</field>
+        <field name="report_file">internal_audit_management.audi_plan_report</field>
+        <field name="binding_model_id" ref="model_internal_audit_plan"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="audi_plan_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="col-xs-4" style="padding:0;">
+                            <center>
+                                <h2 t-esc="doc.name"/>
+                            </center>
+                            <table class="table table-striped align_center">
+                                <tr>
+                                    <td>
+                                        <strong>Start Date:</strong>
+                                    </td>
+                                    <td>
+                                        <t t-esc="doc.date_from"/>
+                                    </td>
+                                    <td>
+                                        <strong>End Date:</strong>
+                                    </td>
+                                    <td>
+                                        <t t-esc="doc.date_to"/>
+                                    </td>
+                                    <td>
+                                        <strong>State</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.state"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table table-striped align_center">
+                                <tr>
+                                    <td>
+                                        <strong>Preparer:</strong>
+                                    </td>
+                                    <td>
+                                        <t t-esc="doc.user_preparer_ids.name"/>
+                                    </td>
+                                    <td>
+                                        <strong>First Reviewer:</strong>
+                                    </td>
+                                    <td>
+                                        <t t-esc="doc.user_reviewer_1_ids.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Second Reviewer:</strong>
+                                    </td>
+                                    <td>
+                                        <t t-esc="doc.user_reviewer_2_ids.name"/>
+                                    </td>
+                                    <td>
+                                        <strong>Approver:</strong>
+                                    </td>
+                                    <td>
+                                        <t t-esc="doc.user_approver_ids.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <center>
+                                <h3>ARP Lines</h3>
+                            </center>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Process Name</th>
+                                        <th>Departments</th>
+                                        <th>Risk Priority</th>
+                                        <th>Year 1</th>
+                                        <th>Year 2</th>
+                                        <th>Year 3</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="doc.line_ids" t-as="line">
+                                        <td>
+                                            <t t-esc="line.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-foreach="line.team_ids" t-as="team">
+                                                <t t-esc="team.name"/>,
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.risk_priority_rating"/>
+                                        </td>
+                                        <td>
+                                            <t t-if="line.year_1">
+                                                <t>Yes</t>
+                                            </t>
+                                            <t t-else="">
+                                                <t>No</t>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <t t-if="line.year_2">
+                                                <t>Yes</t>
+                                            </t>
+                                            <t t-else="">
+                                                <t>No</t>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <t t-if="line.year_3">
+                                                <t>Yes</t>
+                                            </t>
+                                            <t t-else="">
+                                                <t>No</t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

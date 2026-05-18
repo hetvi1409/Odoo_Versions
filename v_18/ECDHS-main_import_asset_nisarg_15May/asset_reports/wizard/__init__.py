@@ -1,0 +1,12 @@
+from . import asset_acquisition_report
+from . import asset_disposal_report
+from . import asset_impairment_report
+from . import asset_depreciation_report
+from . import rul_change_report
+from . import asset_transfer_report
+# from . import asset_useful_report
+from . import asset_report
+# from . import asset_insurence_report
+from . import asset_register_report
+from . import asset_verification_report
+from . import asset_wip_report

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<record id="category_committee" model="ir.module.category">
+		<field name="name">Committee</field>
+	</record>
+
+	    <record model="res.groups.privilege" id="res_groups_privilege_committee">
+        <field name="name">Committee</field>
+        <field name="sequence">18</field>
+        <field name="category_id" ref="oi_committee.category_committee"/>
+    </record>
+	
+	<record id="group_committee" model="res.groups">
+		<field name="name">Committee Management</field>
+		<field name="privilege_id" ref="res_groups_privilege_committee" />
+		<field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+		<field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+	</record>
+	
+	<record id="group_committee_member" model="res.groups">
+		<field name="name">Committee Member</field>
+		<field name="privilege_id" ref="res_groups_privilege_committee" />
+		<field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('oi_committee.group_committee'))]" />
+		<field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+	</record>
+
+</odoo>

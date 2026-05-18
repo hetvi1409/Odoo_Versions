@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<!--t-if="message.author === env.messaging.currentPartner" style="margin: 0px 200px 0px;" -->
+    <t t-name="basic.listsView" owl="1">
+        <div>
+            <h1>Products</h1>
+        </div>
+        <div name="root" style="display: -webkit-box; flex-flow: row wrap;">
+            <script>
+                function allowDrop (ev) {
+                    ev.preventDefault();
+                }
+                function dragStart (ev) {
+                    console.log(ev);
+                    console.log(ev.target.firstElementChild.firstChild.src);
+                    console.log(ev.target.firstElementChild.innerHTML);
+                    ev.dataTransfer.setData("text",  ev.target.innerText);
+                    ev.dataTransfer.setData("image",  ev.target.firstElementChild.firstChild.src);
+                    ev.dataTransfer.effectAllowed = "copy";
+                }
+                function dragStartImg (ev) {
+                    console.log(ev);
+                    console.log(ev.target.src);
+                    console.log(ev.target.innerHTML);
+                    ev.dataTransfer.setData("text",  ev.target.id);
+                    ev.dataTransfer.effectAllowed = "copy";
+                }
+            </script>
+            <t t-if="messageView">
+                <div class="o_kanban_view o_kanban_ungrouped" t-foreach="messageView" t-as="record" t-key="record.id">
+                    <div t-attf-id="kanbandrag{{record.id}}" class="oe_kanban_card oe_kanban_global_click o_kanban_record" style="max-width: 270px;">
+                        <div class="o_kanban_image mr-1">
+                            <img t-attf-src="/web/image/product.template/{{record.id}}/image_128" alt="Product" class="o_image_64_contain" id="productimg" draggable="true" ondragstart="dragStartImg(event)"/>
+                        </div>
+                        <div class="oe_kanban_details" draggable="true" ondragstart="dragStart(event)">
+                            <div class="o_kanban_record_top mb-0">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <span t-esc="record.name"/>
+                                    </strong>
+                                </div>
+                                <!-- <field name="priority" widget="priority"/> -->
+                            </div>
+                            <t t-if="record.default_code.value">[<span t-esc="record.default_code"/>]</t>
+                            <div t-if="record.product_variant_count &gt; 1">
+                                <strong>
+                                    <t t-esc="record.product_variant_count"/> Variants
+                                </strong>
+                            </div>
+                            <div name="product_lst_price" class="mt-1">
+                                Price: <t t-esc="record.list_price"/>
+                                        <t t-if="record.currency_id">
+                                            <t t-esc="record.currency_symbol"/>
+                                        </t>
+                                        <t t-else="">
+                                        $
+                                        </t>
+                                <p style="display: none;"><t t-esc="record.image_1920"/></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="currency_field" class="o_field_monetary o_field_number o_field_widget">
+        <t t-js="ctx">
+            ctx.value = _.str.sprintf('%.2f', parseFloat(ctx.value));
+        </t>
+        <t t-if="currency">
+            <t t-if="currency.position == 'after'">
+                <t t-esc="value"/><t t-esc="currency.symbol"/>
+            </t>
+            <t t-else="">
+                <t t-esc="currency.symbol"/><t t-esc="value"/>
+            </t>
+        </t>
+        <t t-else="">
+            <t t-esc="value"/>
+        </t>
+    </t>
+</templates>

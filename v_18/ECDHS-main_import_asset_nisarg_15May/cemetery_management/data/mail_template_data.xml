@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="email_template_grave_booking_created"
+            model="mail.template">
+        <field name="name">Grave Booking
+        </field>
+        <field name="model_id"
+               ref="cemetery_management.model_grave_booking"/>
+        <field name="subject">Grave Booking {{object.name}}: Booking Was Created
+        </field>
+        <field name="description">Booking Was Created</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi ,
+                    <br/>
+                    The Grave <t t-if="object.type == 'purchase'"><b>Purchase</b></t> <t t-if="object.type == 'lease'"><b>Lease</b></t> was created.
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                </p>
+            </div>
+            <div style="margin: 16px 0px 16px 0px;">
+                <a t-att-href="(object.get_list_url())"
+                   style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                    <t>
+                        Open
+                        <t t-out="object.name"/>
+                    </t>
+                </a>
+            </div>
+
+        </field>
+    </record>
+
+    <record id="email_template_grave_booking_sale_order_created"
+            model="mail.template">
+        <field name="name">Grave Booking: Created sale order
+        </field>
+        <field name="model_id"
+               ref="cemetery_management.model_grave_booking"/>
+        <field name="subject">Grave Booking- {{ object.name }}:Sale Order: (Ref {{ object.sale_order_id.name or 'n/a' }})
+        </field>
+        <field name="partner_to">{{ object.applicant_email }}</field>
+        <field name="description">Booking Was Created</field>
+        <field name="body_html" type="html">
+
+            <div style="margin: 0px; padding: 0px;">
+            <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                Hello <t t-out="object.applicant_name or ''"></t>,
+                <br/><br/>
+                An Quotation is created for your Grave <t t-if="object.type == 'purchase'"><b>Purchase</b></t> <t t-if="object.type == 'lease'"><b>Lease</b></t><b><t t-out="object.name or ''"/></b> from the <b><t t-out="object.municipality_id.name or ''"/></b>.
+                <br/>
+                Your quotation <b><t t-out="object.sale_order_id.name or ''"/></b> amounting in <span style="font-weight: bold;" t-out="format_amount(object.sale_order_id.amount_total, object.sale_order_id.currency_id) or ''">$ 10.00</span> is ready for review.
+                <br/><br/>Do not hesitate to contact us if you have any questions.
+        <t t-if="not is_html_empty(object.env.user.signature)">
+            <br/><br/>
+            <t t-out="object.env.user.signature or ''">--<br/>Mitchell Admin</t>
+        </t>
+        <br/><br/>
+            </p>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_grave_booking_sale_order_confirmed"
+            model="mail.template">
+        <field name="name">Grave Booking: Created sale order
+        </field>
+        <field name="model_id"
+               ref="cemetery_management.model_grave_booking"/>
+        <field name="subject">Grave Booking- {{ object.name }}:Sale Order: (Ref {{ object.sale_order_id.name or 'n/a' }})
+        </field>
+        <field name="partner_to">{{ object.applicant_email }}</field>
+        <field name="description">Sale Order Was Confirmed</field>
+        <field name="body_html" type="html">
+
+            <div style="margin: 0px; padding: 0px;">
+            <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                Hello <t t-out="object.applicant_name or ''"></t>,
+                <br/><br/>
+                An Quotation is created for your Grave <t t-if="object.type == 'purchase'"><b>Purchase</b></t> <t t-if="object.type == 'lease'"><b>Lease</b></t> <b><t t-out="object.name or ''"/></b> from the <b><t t-out="object.municipality_id.name or ''"/></b>.
+                <br/>
+                Your quotation <b><t t-out="object.sale_order_id.name or ''"/></b> amounting in <span style="font-weight: bold;" t-out="format_amount(object.sale_order_id.amount_total, object.sale_order_id.currency_id) or ''">$ 10.00</span> has been confirmed.
+                <br/>Thank you for your trust!
+                <br/><br/>Do not hesitate to contact us if you have any questions.
+        <t t-if="not is_html_empty(object.env.user.signature)">
+            <br/><br/>
+            <t t-out="object.env.user.signature or ''">--<br/>Mitchell Admin</t>
+        </t>
+        <br/><br/>
+            </p>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_grave_booking_invoice_created"
+            model="mail.template">
+        <field name="name">Grave Booking: Invoice Created
+        </field>
+        <field name="model_id"
+               ref="cemetery_management.model_grave_booking"/>
+        <field name="subject">Grave Booking- {{ object.name }} Sale Order: (Ref {{ object.sale_order_id.name or 'n/a' }} Invoice: (Ref {{ object.invoice_id.name or 'n/a' }})
+        </field>
+        <field name="partner_to">{{ object.applicant_email }}</field>
+        <field name="description">Invoice Was Confirmed</field>
+        <field name="body_html" type="html">
+
+            <div style="margin: 0px; padding: 0px;">
+            <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                Hello <t t-out="object.applicant_name or ''"></t>,
+                <br/><br/>
+                An Invoice is created for your Grave <t t-if="object.type == 'purchase'"><b>Purchase</b></t> <t t-if="object.type == 'lease'"><b>Lease</b></t> <b><t t-out="object.name or ''"/></b> from the <b><t t-out="object.municipality_id.name or ''"/></b>.
+                <br/>
+                Your quotation <b><t t-out="object.sale_order_id.name or ''"/></b> amounting in <span style="font-weight: bold;" t-out="format_amount(object.sale_order_id.amount_total, object.sale_order_id.currency_id) or ''">$ 10.00</span> has been confirmed.
+                Here is your invoice <b><t t-out="object.invoice_id.name or ''"/></b> (with reference: <t t-out="object.sale_order_id.name or ''"/>) amounting in <span style="font-weight: bold;" t-out="format_amount(object.sale_order_id.amount_total, object.sale_order_id.currency_id) or ''">$ 10.00</span> from <b><t t-out="object.municipality_id.name or ''"/></b>. Please remit payment at your earliest convenience.
+
+                <br/>Thank you for your trust!
+                <br/><br/>Do not hesitate to contact us if you have any questions.
+        <t t-if="not is_html_empty(object.env.user.signature)">
+            <br/><br/>
+            <t t-out="object.env.user.signature or ''">--<br/>Mitchell Admin</t>
+        </t>
+        <br/><br/>
+            </p>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_grave_booking_invoice_paid"
+            model="mail.template">
+        <field name="name">Grave Booking: Invoice Created
+        </field>
+        <field name="model_id"
+               ref="cemetery_management.model_grave_booking"/>
+        <field name="subject">Grave Booking- {{ object.name }} Sale Order: (Ref {{ object.sale_order_id.name or 'n/a' }} Invoice: (Ref {{ object.invoice_id.name or 'n/a' }})
+        </field>
+        <field name="partner_to">{{ object.applicant_email }}</field>
+        <field name="description">Invoice Was Confirmed</field>
+        <field name="body_html" type="html">
+
+            <div style="margin: 0px; padding: 0px;">
+            <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                Hello <t t-out="object.applicant_name or ''"></t>,
+                <br/><br/>
+                An Invoice is created for your Grave <t t-if="object.type == 'purchase'"><b>Purchase</b></t> <t t-if="object.type == 'lease'"><b>Lease</b></t> <b><t t-out="object.name or ''"/></b> from the <b><t t-out="object.municipality_id.name or ''"/></b>.
+                <br/>
+                Your quotation <b><t t-out="object.sale_order_id.name or ''"/></b> amounting in <span style="font-weight: bold;" t-out="format_amount(object.sale_order_id.amount_total, object.sale_order_id.currency_id) or ''">$ 10.00</span> has been confirmed.
+                Here is your invoice <b><t t-out="object.invoice_id.name or ''"/></b> (with reference: <t t-out="object.sale_order_id.name or ''"/>) amounting in <span style="font-weight: bold;" t-out="format_amount(object.sale_order_id.amount_total, object.sale_order_id.currency_id) or ''">$ 10.00</span> from <b><t t-out="object.municipality_id.name or ''"/></b>. This invoice is already paid..
+
+                <br/>Thank you for your trust!
+                <br/><br/>Do not hesitate to contact us if you have any questions.
+        <t t-if="not is_html_empty(object.env.user.signature)">
+            <br/><br/>
+            <t t-out="object.env.user.signature or ''">--<br/>Mitchell Admin</t>
+        </t>
+        <br/><br/>
+            </p>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_grave_booking_approved"
+            model="mail.template">
+        <field name="name">Grave Booking: Approved
+        </field>
+        <field name="model_id"
+               ref="cemetery_management.model_grave_booking"/>
+        <field name="subject">Grave Booking- {{ object.name }} Approved</field>
+        <field name="partner_to">{{ object.applicant_email }}</field>
+        <field name="description">Approved</field>
+        <field name="body_html" type="html">
+
+            <div style="margin: 0px; padding: 0px;">
+            <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                Hello <t t-out="object.applicant_name or ''"></t>,
+                <br/><br/>
+                Your Grave <t t-if="object.type == 'purchase'"><b>Purchase</b></t> <t t-if="object.type == 'lease'"><b>Lease</b></t> <b><t t-out="object.name or ''"/></b> from the <b><t t-out="object.municipality_id.name or ''"/></b> was approved.
+                <br/>
+                Here is your Grave number <b><t t-out="object.allocated_grave_id.number or ''"/></b> and grave name <b><t t-out="object.allocated_grave_id.name or ''"/></b>
+
+                <br/>Thank you for your trust!
+                <br/><br/>Do not hesitate to contact us if you have any questions.
+        <t t-if="not is_html_empty(object.env.user.signature)">
+            <br/><br/>
+            <t t-out="object.env.user.signature or ''">--<br/>Mitchell Admin</t>
+        </t>
+        <br/><br/>
+            </p>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_grave_booking_rejected"
+            model="mail.template">
+        <field name="name">Grave Booking: Rejected
+        </field>
+        <field name="model_id"
+               ref="cemetery_management.model_grave_booking"/>
+        <field name="subject">Grave Booking- {{ object.name }} Rejected</field>
+        <field name="partner_to">{{ object.applicant_email }}</field>
+        <field name="description">Rejected</field>
+        <field name="body_html" type="html">
+
+            <div style="margin: 0px; padding: 0px;">
+            <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                Hello <t t-out="object.applicant_name or ''"></t>,
+                <br/><br/>
+                Your Grave <t t-if="object.type == 'purchase'"><b>Purchase</b></t> <t t-if="object.type == 'lease'"><b>Lease</b></t> <b><t t-out="object.name or ''"/></b> from the <b><t t-out="object.municipality_id.name or ''"/></b> was rejected.
+                <br/>
+
+                <br/>Thank you for your trust!
+                <br/><br/>Do not hesitate to contact us if you have any questions.
+        <t t-if="not is_html_empty(object.env.user.signature)">
+            <br/><br/>
+            <t t-out="object.env.user.signature or ''">--<br/>Mitchell Admin</t>
+        </t>
+        <br/><br/>
+            </p>
+            </div>
+        </field>
+    </record>
+</odoo>

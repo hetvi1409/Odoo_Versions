@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="frontdesk_visitor_inh_form" model="ir.ui.view">
+        <field name="name">frontdesk.visitor.inh.form</field>
+        <field name="model">frontdesk.visitor</field>
+        <field name="inherit_id" ref="frontdesk.frontdesk_visitor_view_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="surname" invisible="visitor_leptop_register == False"/>
+            </field>
+            <field name="company" position="after">
+                <field name="category"/>
+                <field name="visitor_leptop_register" invisible="category == 'Contractor'"/>
+            </field>
+            <field name="drink_ids" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="duration" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </field>
+            <xpath expr="//sheet//group" position="inside">
+                <group string="Contractors Register Detail" invisible="category == 'Visitor'">
+                    <field name="department_id" invisible="category == 'Visitor'" required="category == 'Contractor'"/>
+                </group>
+                <group string="Laptop Register Detail"
+                       invisible="category != 'Visitor' or visitor_leptop_register != 'yes'">
+                    <field name="make" />
+                    <field name="serial_number_or_tag"/>
+                </group>
+                <group string="Visitors Register Detail">
+                    <field name="id_number"/>
+                    <field name="office_visiting"/>
+                    <field name="purpose_of_the_meeting"/>
+                </group>
+                <group string="Firearm Information">
+                    <field name="x_has_firearm"/>
+                    <field name="x_firearm_serial" invisible="x_has_firearm == 'No'"/>
+                    <field name="x_firearm_name" invisible="x_has_firearm == 'No'"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

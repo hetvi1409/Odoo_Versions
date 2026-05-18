@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_rental_contract_sign_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center; margin-top:0;">Rental
+                        Contract
+                    </h2>
+                    <t t-foreach="docs" t-as="doc">
+                        <!-- Basic Info -->
+                        <table class="table table-sm"
+                               style="width:100%; margin-top:20px; border-collapse:collapse; font-size:13px;">
+
+                            <tr style="background:#f2f2f2;">
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Name
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.name"/>
+                                </td>
+
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Reference
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.ref"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Start Date
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.date_from"/>
+                                </td>
+
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    End Date
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.date_to"/>
+                                </td>
+                            </tr>
+
+                            <tr style="background:#f9f9f9;">
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Tenant
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.partner_id.name"/>
+                                </td>
+
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Salesman
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.user_id.name"/>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <h3 style="margin-top:20px;">Building Information</h3>
+                        <table class="table table-sm"
+                               style="width:100%; margin-top:20px; border-collapse:collapse; font-size:13px;">
+
+                            <tr style="background:#f2f2f2;">
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Building
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.building.name"/>
+                                </td>
+
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Code
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.building_code"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    No. of Floors
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.no_of_floors"/>
+                                </td>
+
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Unit Code
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.unit_code"/>
+                                </td>
+                            </tr>
+                            <tr style="background:#f2f2f2;">
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Floor
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.floor"/>
+                                </td>
+
+                                <!-- LABEL -->
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Area (m²)
+                                </th>
+                                <!-- VALUE -->
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.building_area"/>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <h3 style="margin-top:20px;">Lease Timing</h3>
+                        <table class="table table-sm"
+                               style="width:100%; margin-top:20px; border-collapse:collapse; font-size:13px;">
+                            <tr style="background:#f2f2f2;">
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Beneficial Occupation Date
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <span t-field="doc.date_from"/>
+                                </td>
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Beneficial Occupation Period
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.beneficial_occupation_period"/>
+                                </td>
+                            </tr>
+                            <tr >
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Lease Commencement Date
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <span t-field="doc.lease_comm_date"/>
+                                </td>
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Lease Term
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <spant t-field="doc.lease_term"/>
+                                </td>
+                            </tr>
+                            <tr style="background:#f2f2f2;">
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Lease End Date
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <span t-field="doc.date_to"/>
+                                </td>
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Lease Duration Years
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <spant t-field="doc.lease_duration_years"/>
+                                </td>
+                            </tr>
+                            <tr >
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Lease Duration Months
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <span t-field="doc.lease_duration_months"/>
+                                </td>
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Lease Duration Days
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <spant t-field="doc.lease_duration_days"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <h3 style="margin-top:20px;">Lease Financials – Recurring</h3>
+                        <table class="table table-sm"
+                               style="width:100%; margin-top:20px; border-collapse:collapse; font-size:13px;">
+                            <tr style="background:#e6e6e6;">
+                                <th colspan="6"
+                                    style="padding:8px; border:1px solid #ddd; font-weight:bold; text-align:left;">
+                                    Rent
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Total Area (m²)
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <span t-field="doc.total_area"/>
+                                </td>
+
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Net Rent (Rates)
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.net_rent"/>
+                                </td>
+
+                                <th style="padding:8px; border:1px solid:#ddd; font-weight:bold;">
+                                    Net Rent (Monthly)
+                                </th>
+                                <td style="padding:8px; border:1px solid:#ddd; font-weight:normal;">
+                                    <t t-esc="doc.net_rent_monthly"/>
+                                </td>
+                            </tr>
+
+                            <tr style="background:#e6e6e6;">
+                                <th colspan="6"
+                                    style="padding:8px; border:1px solid #ddd; font-weight:bold; text-align:left;">
+                                    Parking
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    No. of Parking
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <span t-field="doc.parking"/>
+                                </td>
+
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Parking Bays
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.parking_bays"/>
+                                </td>
+
+                                <th style="padding:8px; border:1px solid:#ddd; font-weight:bold;">
+                                    Parking Bays (Monthly)
+                                </th>
+                                <td style="padding:8px; border:1px solid:#ddd; font-weight:normal;">
+                                    <t t-esc="doc.parking_bays_monthly"/>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <table class="table table-sm"
+                               style="width:100%; border-collapse:collapse; font-size:13px;">
+                            <tr style="background:#e6e6e6;">
+                                <th colspan="4"
+                                    style="padding:8px; border:1px solid #ddd; font-weight:bold; text-align:left;">
+                                    Tax
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Rates &amp; Taxes (p/m²)
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <span t-field="doc.rates_tax"/>
+                                </td>
+
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Rates &amp; Taxes (Monthly)
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.rates_tax_monthly"/>
+                                </td>
+                            </tr>
+
+
+                            <!-- ================= LEVY ================ -->
+                            <tr style="background:#e6e6e6;">
+                                <th colspan="4"
+                                    style="padding:8px; border:1px solid #ddd; font-weight:bold; text-align:left;">
+                                    Levy
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Rates &amp; Levy (p/m²)
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <span t-field="doc.levy_rate"/>
+                                </td>
+
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Rates &amp; Levy (Monthly)
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.levy_rate_monthly"/>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <h3 style="margin-top:20px;">Annual Amounts</h3>
+                        <table class="table table-sm"
+                               style="width:100%; margin-top:20px; border-collapse:collapse; font-size:13px;">
+
+                            <tr style="background:#e6e6e6;">
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Total Annual Net Rent
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <span t-field="doc.net_rent_annual"/>
+                                </td>
+
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Total Annual Rates &amp; Taxes
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.rates_tax_annual"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Total Annual Levies Rate
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <span t-field="doc.levy_rate_annual"/>
+                                </td>
+
+                                <th style="padding:8px; border:1px solid #ddd; font-weight:bold;">
+                                    Total Annual Parking Bays
+                                </th>
+                                <td style="padding:8px; border:1px solid #ddd; font-weight:normal;">
+                                    <t t-esc="doc.parking_bays_annual"/>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+    <record id="action_rental_contract_sign_report" model="ir.actions.report">
+        <field name="name">Rental Contract Sign</field>
+        <field name="model">rental.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">real_estate_management.report_rental_contract_sign_report</field>
+        <field name="report_file">real_estate_management.report_rental_contract_sign_report</field>
+        <field name="binding_model_id" ref="model_rental_contract"/>
+    </record>
+</odoo>

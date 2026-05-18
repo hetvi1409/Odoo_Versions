@@ -1,0 +1,42 @@
+{
+    'name': "Property Update.",
+    'description': """Property Update""",
+    'summary': """Property Update""",
+    'version': '16.0.1.2.0',
+    'sequence': '20',
+    'category': 'Services',
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': 'https://natedsystems.co.za/',
+    'depends': ['itsys_real_estate', 'client_enquiry', 'valuation_roll_import', 'itsys_real_estate_approval'],
+    'data': [
+        'data/outdoor_sequence.xml',
+        'data/ir_sequence.xml',
+        'data/approval_mail_template.xml',
+        'data/ir_cron_data.xml',
+        'security/ir.model.access.csv',
+        'views/property_views.xml',
+        'views/property_zoning_views.xml',
+        'views/property_contract_views.xml',
+        # 'views/property_zoning_views.xml',
+        'views/creditor_region_views.xml',
+        'views/outdoor_advertisement_views.xml',
+        'views/region_views.xml',
+        'views/trade_rent_views.xml',
+        'wizard/trade_rent_import_views.xml',
+        'wizard/property_import_views.xml',
+        'wizard/outdoor_advertisement_import_views.xml',
+        'wizard/property_contract_import_views.xml'
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'property_update/static/src/xml/list_controller_views.xml'
+        ],
+    },
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+}

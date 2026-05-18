@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!-- Tree View -->
+    <record id="view_project_cost_list" model="ir.ui.view">
+        <field name="name">project.cost.list</field>
+        <field name="model">project.cost</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="category_id"/>
+                <field name="sub_category_id"/>
+                <field name="year"/>
+                <field name="month"/>
+                <field name="budget"/>
+                <field name="spent"/>
+                <field name="estimate_to_complete"/>
+                <field name="total_at_completion"/>
+                <field name="variance"/>
+                <field name="write_date" string="Last Update" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_project_cost_form" model="ir.ui.view">
+        <field name="name">project.cost.form</field>
+        <field name="model">project.cost</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+<!--                    <div class="oe_button_box" name="button_box" groups="base.group_user">-->
+<!--                        <button class="oe_stat_button" type="object" name="action_view_analytic_lines" icon="fa-check">-->
+<!--                            <div class="o_field_widget o_stat_info">-->
+<!--                                <span class="o_stat_text">Analytic Lines</span>-->
+<!--                            </div>-->
+<!--                        </button>-->
+<!--                    </div>-->
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover),
+                        .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover)
+                        .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover)
+                        .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+
+                    <group string="Cost Information" colspan="2">
+                        <group>
+                            <field name="name"/>
+
+                            <field name="project_id" context="{'form_view_ref': 'project_porfolio_management.edit_project_ppe'}"/>
+                            <field name="category_id"/>
+                            <field name="sub_category_id"/>
+                            <field name="year"/>
+                            <field name="month"/>
+                            <field name="other_description"/>
+                        </group>
+                        <group>
+                            <field name="budget"/>
+                            <field name="spent" widget="percentage"/>
+                            <field name="committed" widget="percentage"/>
+                            <field name="estimate_to_complete" widget="percentage"/>
+                            <field name="total_at_completion" widget="percentage"/>
+                            <field name="variance" widget="percentage"/>
+                            <field name="analytic_account_id"/>
+                            <field name="company_id"/>
+                            <button name="action_view_cost_graph"
+                            class="oe_highlight"
+                            string="View Graph"
+                            type="object"/>
+
+                        </group>
+                    </group>
+
+                <group>
+<!--                    <field name="chart_data" widget="project_cost_chart" readonly="1" nolabel="1"/>-->
+                </group>
+
+                    <group string="Linked Documents" colspan="2">
+                        <field name="document_ids" widget="many2many_tags" domain="[('id', '=', False)]"
+                               options="{'no_quick_create': True,'no_create_edit': False}"
+                               context="{'default_res_model': 'project.cost'}"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+<record id="project_cost_view_graph" model="ir.ui.view">
+        <field name="name">project.cost.view.graph</field>
+        <field name="model">project.cost</field>
+        <field name="arch" type="xml">
+            <graph string="Project Cost Analysis" type="bar">
+                <field name="budget" type="measure"/>
+                <field name="spent" type="measure"/>
+                <field name="committed" type="measure"/>
+                <field name="variance" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Action + Menu -->
+    <record id="action_project_cost" model="ir.actions.act_window">
+        <field name="name">Project Costs</field>
+        <field name="res_model">project.cost</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_ppo_time_and_cost" name="Time &amp; Cost" sequence="1"
+              parent="project_porfolio_management.projects_ppo_mian_menu"/>
+    <menuitem id="menu_project_cost_root"
+              name="Costs" sequence="1"
+              parent="project_porfolio_management.menu_ppo_time_and_cost"
+              action="action_project_cost"/>
+
+    <!-- Tree View -->
+    <record id="view_project_cost_category_list" model="ir.ui.view">
+        <field name="name">project.cost.category.list</field>
+        <field name="model">project.cost.category</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_project_cost_category_form" model="ir.ui.view">
+        <field name="name">project.cost.category.form</field>
+        <field name="model">project.cost.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_project_cost_subcategory_list" model="ir.ui.view">
+        <field name="name">project.cost.subcategory.list</field>
+        <field name="model">project.cost.subcategory</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="category_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_project_cost_subcategory_form" model="ir.ui.view">
+        <field name="name">project.cost.subcategory.form</field>
+        <field name="model">project.cost.subcategory</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="category_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action + Menu -->
+    <record id="action_project_category" model="ir.actions.act_window">
+        <field name="name">Category</field>
+        <field name="res_model">project.cost.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_project_sub_category" model="ir.actions.act_window">
+        <field name="name">Sub-Category</field>
+        <field name="res_model">project.cost.subcategory</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_ppo_configuration" name="PPO Configuration" parent="project.menu_project_config"/>
+    <menuitem id="menu_project_category" name="Category" parent="project_porfolio_management.menu_ppo_configuration"
+              action="action_project_category"/>
+    <menuitem id="menu_project_sub_category" name="Sub Category"
+              parent="project_porfolio_management.menu_ppo_configuration"
+              action="action_project_sub_category"/>
+</odoo>

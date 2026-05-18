@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_asset_addition_form" model="ir.ui.view">
+        <field name="name">asset.addition.form</field>
+        <field name="model">asset.addition</field>
+        <field name="arch" type="xml">
+            <form string="Asset Addition Request">
+
+                <header>
+                    <button name="action_submit" string="Submit" type="object"
+                            invisible="state != 'draft'" class="btn-primary" groups="asset_addition.group_fixed_asset_officer"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            invisible="state != 'submitted'" class="btn-primary" groups="fixed_assets.group_fixed_asset_approver"/>
+                    <button name="action_refuse" string="Refuse" type="object"
+                            invisible="state != 'submitted'" class="btn-secondary " groups="fixed_assets.group_fixed_asset_approver"/>
+                    <button name="action_mark_in_use" string="Create Asset" type="object"
+                            invisible="state != 'approved'" class="btn-info" groups="fixed_assets.group_fixed_asset_approver"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,in_use"/>
+                </header>
+
+                <sheet>
+                                        <div name="button_box" position="inside">
+                        <button class="oe_stat_button" type="object" invisible="not created_asset_id"
+                                name="action_view_asset" icon="fa-list-alt">
+                            Asset
+                        </button>
+                    </div>
+
+                    <group>
+                        <field name="name" readonly="1"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="asset_name"/>
+                            <field name="original_value"/>
+                            <field name="salvage_value"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" invisible="0"/>
+                        </group>
+                        <group>
+                            <field name="afs_classification"/>
+                            <field name="serial_number"/>
+                            <field name="alternative_ref"/>
+                            <field name="job_location_id"/>
+                            <field name="created_asset_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                    <group>
+                        <field name="supporting_document_ids" widget="many2many_binary"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_asset_addition_tree" model="ir.ui.view">
+        <field name="name">asset.addition.tree</field>
+        <field name="model">asset.addition</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="asset_name"/>
+                <field name="state"/>
+                <field name="created_asset_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_asset_addition" model="ir.actions.act_window">
+        <field name="name">Asset Additions</field>
+        <field name="res_model">asset.addition</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_asset_addition"
+              sequence="5"
+              parent="fixed_assets.menu_action_fixed_assets"
+              action="action_asset_addition"
+              name="Addition Requests"/>
+</odoo>

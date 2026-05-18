@@ -1,0 +1,25 @@
+# __manifest__.py
+{
+    "name": "Insurance Management",
+    "version": "18.0.1.0.0",
+    "summary": "Manage insurance policies, claims, documents and reminders",
+    "description": "Insurance policies (Property/Asset/Vehicle/Tenant), claims, smart buttons for documents/payments/claims.",
+    "category": "Operations/Administration",
+    "author": "Nated Systems",
+    "company": "Nated Systems",
+    "maintainer": "Nated Systems",
+    "website": "https://natedsystems.co.za/",
+    "license": "LGPL-3",
+    "depends": ["base", "mail", "contacts", "account","asset_registry","maintenance","hr","itsys_real_estate"],
+    "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
+        "data/insurance_sequence.xml",
+        "views/insurance_menu.xml",
+        "views/insurance_policy_views.xml",
+        "views/insurance_claim_views.xml",
+    ],
+    "installable": True,
+    "application": True,
+    "auto_install": False,
+}

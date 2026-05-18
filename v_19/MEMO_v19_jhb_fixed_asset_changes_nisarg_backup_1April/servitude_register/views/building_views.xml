@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="building_base_pages_form">
+        <field name="name">building.form.view</field>
+        <field name="model">building</field>
+        <field name="inherit_id"
+               ref="property_update.building_base_pages_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='view_trade_rental_contract']" position="before">
+
+                <button class="oe_stat_button" type="object"
+                        name="action_view_servitude"
+                        icon="fa-credit-card" invisible="servitude_ids == False">
+                    <field name="servitude_ids" invisible="1"/>
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Servitude</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

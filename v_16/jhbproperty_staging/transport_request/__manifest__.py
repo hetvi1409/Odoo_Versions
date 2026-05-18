@@ -1,0 +1,22 @@
+{
+    'name': "Transaport Request",
+    'description': """Transport Request""",
+    'summary': """Transport Request""",
+    'version': '16.0.1.0.0',
+    'category': 'Services',
+    'depends': ['fleet', 'hr','mail'],
+    'data': [
+        'data/ir_sequence.xml',
+        'data/mail_template_transport_request.xml',
+        'security/transport_request_security.xml',
+        'security/ir.model.access.csv',
+        'views/transport_request_views.xml',
+        'views/fleet_vehicles_views.xml',
+        'wizard/transport_request_reject_wizard.xml',
+    ],
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

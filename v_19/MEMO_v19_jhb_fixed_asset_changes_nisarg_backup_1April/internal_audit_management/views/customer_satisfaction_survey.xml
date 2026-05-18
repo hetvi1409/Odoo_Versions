@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_client_sat_survey" model="ir.actions.act_window">
+        <field name="name">Satisfaction Survey</field>
+        <field name="res_model">client.survey</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Client Survey
+            </p>
+            <p>
+                Create and manage the Client Survey
+            </p>
+        </field>
+    </record>
+    <record id="survey_tree_custom" model="ir.ui.view">
+        <field name="name">survey.view.form</field>
+        <field name="model">client.survey</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="auditee"/>
+                <field name="subject"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_print_survey" model="ir.actions.report">
+        <field name="name">Client Satisfaction Survey</field>
+        <field name="model">ir.actions.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">internal_audit_management.report_client_template</field>
+        <field name="print_report_name">'Client Satisfaction Survey Report'</field>
+    </record>
+    <record id="survey_form_custom" model="ir.ui.view">
+        <field name="name">view.survey.form.custom</field>
+        <field name="model">client.survey</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_send" type="object" invisible="state != 'draft'" string="Send Survey" class="oe_highlight"/>
+                    <button name="action_completed" type="object" invisible="state != 'in_progress'" string="Complete Survey" class="oe_highlight"/>
+                    <button name="action_revert" type="object" invisible="state != 'in_progress'" string="Revert" class="oe_highlight"/>
+                    <button name="action_print_client_survey" type="object" string="Print" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <div style="width:100%">
+                        <table border="1" style="width:100%">
+                            <tr>
+                                <td><h3 style="text-align:left;">JHB Local Municipality</h3></td>
+                                <td rowspan="3" style="vertical-align:middle"><img src="/internal_audit_management/static/src/image/img.png" style="height:90px; width:150px;" alt="Document"/></td>
+                                <td><strong>W/P Reference:  <field name="survey_number"/></strong></td>
+                            </tr>
+                            <tr>
+                                <td><h5 style="text-align:left;">Internal Audit Unit</h5></td>
+                            </tr>
+                            <tr>
+                                <td><h4 style="text-align:left;">CUSTOMER SATISFACTION SURVEY</h4></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Auditee:  <field name="auditee"/></strong></td>
+                                <td><strong>Project:  <field name="project"/></strong></td>
+                                <td><strong>Team Leader:  <field name="team_leader"/></strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Subject:  <field name="subject"/></strong></td>
+                                <td><strong>Project Name:  <field name="project_name"/></strong></td>
+                                <td><strong>Reviewer:  <field name="reviewer"/></strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="width:100%">
+                        <h2>Client Feedback</h2>
+                        <p>Your input is essential to our improvement and success. Please mark the box which best describes the level at which we performed during the audit project. For unsatisfactory responses, provide details and recommendations. Thank you!</p>
+                        <p><strong>Ratings:</strong></p>
+                        <ul>
+                            <li>1. Not acceptable performance</li>
+                            <li>2. Meet some expectations</li>
+                            <li>3. Meet expectations</li>
+                            <li>4. Exceed expectations</li>
+                            <li>5. Exceptional performance</li>
+                        </ul>
+                    </div>
+                    <div style="width:100%">
+                        <field name="comments_ids" style="border-collapse: collapse; width: 100%; border: 2px solid black;">
+                            <list options='{"no_open": True}'>
+                                <field name="description" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="comment_client" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="rating_client" style="border: 1px solid black; padding: 8px;"/>
+                            </list>
+                        </field>
+                    </div>
+                    <div>
+                        <p style="margin-top:20px;"><strong>Completed by :</strong> <span><field name="completed_by"/></span></p>
+                        <p><strong>Position :</strong> <span><field name="position"/></span></p>
+                        <p><strong>Date :</strong> <field name="date"/></p>
+                    </div>
+                    <notebook>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                        <page string="Documents">
+                            <field name="document_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+    <menuitem id="client_sat_menu"
+              name="Client Satisfaction Survey"
+              parent="project.menu_project_config"
+              action="action_client_sat_survey"
+              sequence="21"/>
+</odoo>

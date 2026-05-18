@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+<!--    <record id="res_config_settings_view_form" model="ir.ui.view">-->
+<!--        <field name="name">res.config.settings.view.form.board.management.system</field>-->
+<!--        <field name="model">res.config.settings</field>-->
+<!--        <field name="priority" eval="5"/>-->
+<!--        <field name="inherit_id" ref="base.res_config_settings_view_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//field[@name='show_effect']" position="after">-->
+<!--                <block title="Agenda Settings" name="calendar">-->
+<!--                    <setting string="Section In Agenda"  help="Add More Section To Agenda" id="agenda_calendar_setting">-->
+<!--                        <field name="need_section"/>-->
+<!--                    </setting>-->
+<!--                </block>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherent.oi_risk_management</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="70"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Calendar" string="Calendar"
+                     data-key="board_management_system" groups="base.group_system">
+                        <h2> Agenda Settings</h2>
+                    <div class="row mt16 o_settings_container" name="risk_management_setting_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="enrich_risk_management_setting">
+                            <div class="o_setting_left_pane">
+                                    <field name="need_section" string="Section In Agenda"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="need_section"/>
+                                <div class="text-muted">
+                                   Add More Section To Agenda
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sagovtender_bid_list" model="ir.ui.view">
+        <field name="name">sagovtender.bid.list</field>
+        <field name="model">sagovtender.bid</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state=='draft'" decoration-success="state=='compliant'" decoration-danger="state=='non_compliant'" default_order="id desc" open_form_view="1">
+                <field name="name"/>
+                <field name="tender_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <!-- <field name="partner_id" domain="[('id', '=', bid_id.partner_id.id)]" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/> -->
+                <field name="partner_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="bid_amount" widget="monetary"/>
+                <field name="submission_date"/>
+                <field name="is_compliant"/>
+                <field name="total_score"/>
+                <field name="state" widget="badge" decoration-info="state=='draft'" decoration-success="state=='compliant'" decoration-danger="state=='non_compliant'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sagovtender_bid_form" model="ir.ui.view">
+        <field name="name">sagovtender.bid.form</field>
+        <field name="model">sagovtender.bid</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit Bid" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_mark_evaluated" string="Mark Evaluated" type="object" class="btn-primary" invisible="state != 'compliant'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="tender_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="partner_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="bid_amount" widget="monetary"/>
+                            <field name="currency_id" invisible="0" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="submission_date"/>
+                            <field name="validity_period"/>
+                        </group>
+                    </group>
+                    <group string="SBD Forms Checklist">
+                        <group>
+                            <field name="sbd1_complete"/>
+                            <field name="sbd2_complete"/>
+                            <field name="sbd3_complete"/>
+                            <field name="sbd4_complete"/>
+                        </group>
+                        <group>
+                            <field name="sbd6_complete"/>
+                            <field name="sbd7_complete"/>
+                            <field name="sbd8_complete"/>
+                            <field name="sbd9_complete"/>
+                        </group>
+                    </group>
+                    <group string="Evaluation Scores" invisible="state not in ['evaluated', 'awarded']">
+                        <group>
+                            <field name="functionality_score"/>
+                            <field name="price_score"/>
+                        </group>
+                        <group>
+                            <field name="bbbee_score"/>
+                            <field name="total_score"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Compliance">
+                            <field name="sagovcompliance_check_id" string="Compliance Check" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="is_compliant" string="Is Compliant" readonly="1"/>
+                        </group>
+                        <group string="Documents">
+                            <field name="document_ids" widget="many2many_binary"/>
+                        </group>
+                            <field name="evaluation_ids" readonly="1"/>
+                    </group>
+                    <!-- <notebook>
+                        <page string="Documents">
+                        </page>
+                    </notebook> -->
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sagovtender_bid" model="ir.actions.act_window">
+        <field name="name">Tender Bids</field>
+        <field name="res_model">sagovtender.bid</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

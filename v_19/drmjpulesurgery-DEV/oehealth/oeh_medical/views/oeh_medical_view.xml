@@ -1,0 +1,1562 @@
+<?xml version="1.0" ?>
+<data>
+    <record model="ir.ui.view" id="oeh_medical_treatment_type_tree">
+        <field name="name">Treatment Types Tree</field>
+        <field name="model">oeh.medical.treatment.type</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string="Treatment Types" editable="bottom">
+                <field name="name" required="1"/>
+            </list>
+        </field>
+    </record>
+
+<!--    <record id="view_medical_treatment_type_filter" model="ir.ui.view">-->
+<!--        <field name="name">Treatment Types Search</field>-->
+<!--        <field name="model">oeh.medical.treatment.type</field>-->
+<!--        <field name="priority" eval="8"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Treatment Types">-->
+<!--                <field name="name"/>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="action_oeh_medical_treatment_type" model="ir.actions.act_window">
+        <field name="name">Treatment Types</field>
+        <field name="res_model">oeh.medical.treatment.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new treatment type.
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="action_oeh_medical_treatment_type" id="oeh_medical_treatment_type_listview"
+              parent="oeh_medical_conf_medicaments" sequence="3"/>
+
+    Appointment
+
+    <record model="ir.ui.view" id="view_oeh_medical_event_calendar">
+        <field name="name">Appointment Calendar</field>
+        <field name="model">oeh.medical.appointment</field>
+        <field name="arch" type="xml">
+            <calendar string="Appointments" date_start="appointment_date" date_stop="appointment_end"
+                      date_delay="duration"
+                      color="state" mode="week">
+                <field name="doctor"/>
+                <field name="patient"/>
+                <field name="institution" string="Health Center"/>
+                <field name="state" invisible="1"/>
+            </calendar>
+        </field>
+    </record>
+
+<!--    <record id="view_oeh_medical_appointment_filter" model="ir.ui.view">-->
+<!--        <field name="name">Appointment Search</field>-->
+<!--        <field name="model">oeh.medical.appointment</field>-->
+<!--        <field name="type">search</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Search Appointments">-->
+<!--                <separator orientation="vertical"/>-->
+<!--                <field name="name"/>-->
+<!--                <field name="patient" string="Patient"/>-->
+<!--                <field name="doctor" string="Doctor"/>-->
+<!--                <field name="institution" string="Health Center"/>-->
+<!--                <newline/>-->
+<!--                <group expand="0" string="Group By..." colspan="11" col="11">-->
+<!--                    <filter string="Patient" name="group_patient" context="{'group_by':'patient'}"/>-->
+<!--                    <filter string="Doctor" name="group_doctor" context="{'group_by':'doctor'}"/>-->
+<!--                    <filter string="Health Center" name="group_health_center" context="{'group_by':'institution'}"/>-->
+<!--                    <filter string="Urgency" name="group_urgency" context="{'group_by':'urgency_level'}"/>-->
+<!--                    <filter string="Status" name="group_state" context="{'group_by':'patient_status'}"/>-->
+<!--                </group>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record model="ir.ui.view" id="oeh_medical_appointment_view">
+        <field name="name">Appointments</field>
+        <field name="model">oeh.medical.appointment</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Appointment">
+                <header>
+                    <button confirm="Are you sure you want to mark appointment as completed?"
+                            name="set_to_completed" invisible="state != 'Scheduled'" string="Mark as Completed"
+                            type="object"
+                            class="oe_highlight"
+                            groups="oehealth.group_oeh_medical_physician,oehealth.group_oeh_medical_manager"/>
+                    <button confirm="Are you sure you want to create the invoice?" name="set_to_invoiced"
+                            invisible="state != 'Completed'" string="Create Invoice" type="object"
+                            class="oe_highlight"
+                            groups="oehealth.group_oeh_medical_physician,oehealth.group_oeh_medical_manager"/>
+                    <button name="create_online_meetings" string="Create Online Meeting"
+                            type="object" class="oe_highlight"
+                            invisible="['|', ('check_source', '=', False), ('state', '!=', 'Scheduled')]"/>
+                    <button name="action_meeting_invitation_send" string="Send Invitation" class="oe_highlight"
+                            invisible="['|', ('invitation_text', '=', False), ('state', '!=', 'Scheduled')]"
+                            type="object"/>
+                    <field name="state" widget="statusbar" statusbar_visible="Scheduled,Completed,Invoiced"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_url" class="oe_stat_button" type="object"
+                                icon="fa-play" string="Start Meeting" invisible="[('invitation_text', '=', False)]">
+                        </button>
+                    </div>
+                    <div class="oe_left" style="width: 500px;">
+                        <div class="oe_title" style="width: 390px;">
+                            <label class="oe_edit_only" for="name" string="Appointment #"/>
+                            <h1>
+                                <field name="name" class="oe_inline" readonly="1"/>
+                            </h1>
+                            <label for="patient"/>
+                            <field name="patient" readonly="0"/>
+                        </div>
+                    </div>
+                    <group class="col-12">
+                        <group class="col-6">
+                            <field name="doctor" readonly="0"/>
+                            <field name="appointment_date"/>
+                            <field name="patient_status"/>
+                            <field name="appointment_end" invisible="1"/>
+                            <field name="invitation_text" invisible="1"/>
+                        </group>
+                        <group class="col-6">
+                            <field name="institution" options="{'no_create': True}"/>
+                            <field name="duration" widget="float_time"/>
+                            <field name="urgency_level"/>
+                            <field name="move_id" readonly="1"/>
+                            <field name="check_source" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Comments">
+                            <group>
+                                <group>
+                                    <field name="comments" nolabel="1" colspan="2"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Prescription">
+                            <field name="prescription_line" widget="one2many_list" nolabel="1"
+                                   context="{'default_patient':patient, 'default_doctor':doctor, 'default_appointment': id}"/>
+                        </page>
+                        <page string="Treatments">
+                            <field name="treatment_line" widget="one2many_list" nolabel="1"
+                                   context="{'default_patient':patient, 'default_doctor':doctor, 'default_appointment': id}">
+                                <list string="Treatments">
+                                    <field name="name"/>
+                                    <field name="appointment"/>
+                                    <field name="treatment_type_id" options="{'no_create': True}"/>
+                                    <field name="institution"/>
+                                    <field name="doctor"/>
+                                    <field name="treatment_date"/>
+                                    <field name="company_id" invisible="1"/>
+                                </list>
+                                <form string="Treatments">
+                                    <sheet>
+                                        <div class="oe_left" style="width: 500px;">
+                                            <div class="oe_title">
+                                                <label for="name" string="Treatment #" class="oe_edit_only"/>
+                                                <h1>
+                                                    <field name="name"/>
+                                                </h1>
+                                            </div>
+                                        </div>
+                                        <group>
+                                            <group>
+                                                <field name="patient" required="1"/>
+                                                <field name="doctor" required="1"/>
+                                                <field name="appointment"/>
+                                            </group>
+                                            <group>
+                                                <field name="institution" string="Health Center" readonly="1"/>
+                                                <field name="treatment_type_id" options="{'no_create': True}"/>
+                                                <field name="treatment_date"/>
+                                                <field name="company_id" invisible="1"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page string="Items">
+                                                <field name="treatment_items" widget="one2many_list" nolabel="1">
+                                                    <list string="Items" editable="bottom">
+                                                        <field name="name" required="1"
+                                                               options="{'no_create': True}"
+                                                               domain="[('treatment_type_id','=', parent.treatment_type_id)]"/>
+                                                        <field name="qty" required="1"/>
+                                                        <field name="treatment_price" string="Sales Price"
+                                                               widget="monetary"
+                                                               options="{'currency_field': 'currency_id'}"/>
+                                                        <field name="currency_id" invisible="1"/>
+                                                    </list>
+                                                    <form>
+                                                        <group>
+                                                            <field name="name" required="1"
+                                                                   options="{'no_create': True}"
+                                                                   domain="[('treatment_type_id','=', parent.treatment_type_id)]"/>
+                                                            <field name="qty" required="1"/>
+                                                            <field name="treatment_price" string="Sales Price"
+                                                                   widget="monetary"
+                                                                   options="{'currency_field': 'currency_id'}"/>
+                                                            <field name="currency_id" invisible="1"/>
+                                                        </group>
+                                                    </form>
+                                                </field>
+                                            </page>
+                                            <page string="Notes">
+                                                <field name="other" nolabel="1" colspan="2"/>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="oeh_medical_appointment_tree">
+        <field name="name">Appointment List</field>
+        <field name="model">oeh.medical.appointment</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string="Appointment Details" decoration-muted="state=='Invoiced'"
+                  decoration-info="state=='Scheduled'" decoration-success="state=='Completed'">
+                <field name="name"/>
+                <field name="patient"/>
+                <field name="doctor"/>
+                <field name="appointment_date"/>
+                <field name="institution"/>
+                <field name="patient_status"/>
+                <field name="urgency_level"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="oeh_medical_appointment_action_tree" model="ir.actions.act_window">
+        <field name="name">Appointments</field>
+        <field name="res_model">oeh.medical.appointment</field>
+        <field name="view_mode">calendar,list,form</field>
+        <field name="view_id" eval="False"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new appointment.
+            </p>
+            <p>
+                Easily manage all of your appointment schedules;
+            </p>
+        </field>
+    </record>
+    <record id="action_clinical_notes_list" model="ir.actions.act_window">
+        <field name="name">Clinical Notes</field>
+        <field name="res_model">clinical.notes</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('patient_id', '=', active_id)]</field>
+        <field name="context">{'default_patient_id': active_id}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new appointment.
+            </p>
+            <p>
+                Easily manage all of your appointment schedules;
+            </p>
+        </field>
+    </record>
+    <record id="action_sketchpad_notes_list" model="ir.actions.act_window">
+        <field name="name">SketchPad</field>
+        <field name="res_model">patient.sketch.note</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('patient_sketch_note_id', '=', active_id)]</field>
+        <field name="context">{'default_patient_sketch_note_id': active_id}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new appointment.
+            </p>
+            <p>
+                Easily manage all of your appointment schedules;
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="oeh_medical_appointment_action_tree" parent="oeh_medical_general_menu"
+              id="oeh_medical_appointment_list" sequence="1"/>
+
+    <!-- Prescriptions   -->
+
+    <record model="ir.ui.view" id="oeh_medical_prescription_view">
+        <field name="name">Prescriptions</field>
+        <field name="model">oeh.medical.prescription</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Prescriptions">
+                <header>
+                    <button confirm="Are you sure you want to create the invoice?"
+                            name="action_prescription_invoice_create" invisible="state != 'Draft'"
+                            string="Consultancy Invoice"
+                            type="object" class="oe_highlight"
+                            groups="oehealth.group_oeh_medical_physician,oehealth.group_oeh_medical_manager"/>
+                    <button confirm="Are you sure you want to send prescription to selected pharmacy?"
+                            name="action_prescription_send_to_pharmacy" invisible="state != 'Draft'"
+                            string="Send to Pharmacy"
+                            type="object" class="oe_highlight"
+                            groups="oehealth.group_oeh_medical_physician,oehealth.group_oeh_medical_manager"/>
+                    <button name="action_prescription_send"
+                            invisible="[('send_prescription_by_email', '=', False)]"
+                            string="Send Prescription by email" type="object"
+                            groups="oehealth.group_oeh_medical_physician,oehealth.group_oeh_medical_manager"/>
+                    <button name="print_patient_prescription" string="Print Prescription" type="object"
+                            groups="oehealth.group_oeh_medical_physician,oehealth.group_oeh_medical_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="Draft"/>
+                </header>
+                <sheet>
+                    <div class="oe_left" style="width: 500px;">
+                        <div class="oe_title">
+                            <label for="name" string="Prescription #" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                    </div>
+                    <group class="col-12">
+                        <group class="col-6">
+                            <field name="patient"/>
+                            <field name="pharmacy" readonly="0"/>
+                            <field name="institution" options="{'no_create': True}"/>
+                            <field name="appointment" readonly="1"
+                                   invisible="[('appointment', '=', False)]"/>
+                        </group>
+                        <group class="col-6">
+                            <field name="doctor" readonly="0"/>
+                            <field name="date"/>
+                            <field name="move_id" readonly="1" invisible="[('move_id', '=', False)]"/>
+                            <field name="partner_id" invisible="1"/>
+                            <field name="send_prescription_by_email" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Prescription Lines">
+                            <field name="prescription_line">
+                                <form string="Prescription Lines">
+                                    <group>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="dose_form"/>
+                                            <field name="start_treatment"/>
+                                            <field name="patient" required="1"/>
+                                        </group>
+                                        <group>
+                                            <field name="indication"/>
+                                            <field name="dose_route"/>
+                                            <field name="end_treatment"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <group string="Dosage">
+                                            <field name="qty" required="1"/>
+                                            <label for="dose"/>
+                                            <div>
+                                                <field name="dose" placeholder="250" style="width: 20%%"/>
+                                                <field name="dose_unit" placeholder="mg" style="width: 40%%"/>
+                                            </div>
+                                        </group>
+                                        <group string="Common Dosage">
+                                            <field name="common_dosage"/>
+                                            <field name="admin_times"/>
+                                        </group>
+                                    </group>
+                                    <group string="Specific Dosage">
+                                        <p class="oe_grey">
+                                            Time in between doses the patient must wait (ie, for 1 pill each 8
+                                            hours, put here 8 and select 'hours' in the unit field
+                                        </p>
+                                    </group>
+                                    <group>
+                                        <group>
+                                            <field name="frequency"/>
+                                        </group>
+                                        <group>
+                                            <field name="frequency_unit"/>
+                                        </group>
+                                    </group>
+                                    <group string="Treatment">
+                                        <p class="oe_grey">
+                                            Treatment period that the patient must take the medication in minutes,
+                                            hours, days, months, years or indefinitely
+                                        </p>
+                                    </group>
+                                    <group>
+                                        <group>
+                                            <field name="duration" string="Day(s)"/>
+                                        </group>
+                                        <group>
+                                            <field name="duration_period" string="Period"/>
+                                        </group>
+                                    </group>
+                                    <group string="Comment">
+                                        <field name="info" nolabel="1"/>
+                                    </group>
+                                </form>
+                                <list string="Prescription Lines" editabe="bottom">
+                                    <field name="name"/>
+                                    <field name="indication"/>
+                                    <field name="dose"/>
+                                    <field name="dose_unit"/>
+                                    <field name="dose_form"/>
+                                    <field name="common_dosage"/>
+                                    <field name="qty"/>
+                                    <field name="duration"/>
+                                    <field name="duration_period"/>
+                                    <field name="info"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="info" colspan="2" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="oeh_medical_prescription_tree">
+        <field name="name">Prescription List</field>
+        <field name="model">oeh.medical.prescription</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string='Prescriptions' decoration-muted="state=='Invoiced'" decoration-info="state=='Draft'"
+                  decoration-success="state=='Sent to Pharmacy'">
+                <field name="name"/>
+                <field name="patient"/>
+                <field name="date"/>
+                <field name="doctor"/>
+                <field name="pharmacy"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+<!--    <record id="view_medical_prescription_filter" model="ir.ui.view">-->
+<!--        <field name="name">Prescription Search</field>-->
+<!--        <field name="model">oeh.medical.prescription</field>-->
+<!--        <field name="priority" eval="8"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Prescriptions">-->
+<!--                <field name="name"/>-->
+<!--                <field name="patient"/>-->
+<!--                <field name="doctor"/>-->
+<!--                <field name="pharmacy"/>-->
+<!--                <newline/>-->
+<!--                <group expand="0" string="Group By...">-->
+<!--                    <filter string="Patient" name="group_patient" domain="[]" context="{'group_by':'patient'}"/>-->
+<!--                    <filter string="Doctors" name="group_physicians" domain="[]" context="{'group_by':'doctor'}"/>-->
+<!--                    <filter string="Pharmacy" name="group_pharmacy" domain="[]" context="{'group_by':'pharmacy'}"/>-->
+<!--                    <filter string="Status" name="group_state" domain="[]" context="{'group_by':'state'}"/>-->
+<!--                </group>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="oeh_medical_prescription_action_tree" model="ir.actions.act_window">
+        <field name="name">Prescriptions</field>
+        <field name="res_model">oeh.medical.prescription</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="view_id" eval="False"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new prescription.
+            </p>
+            <p>
+                Assignment of medicines to the patient.
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="oeh_medical_prescription_action_tree" id="oeh_medical_prescription_list"
+              parent="oeh_medical_general_menu" sequence="2"/>
+
+    <!-- Vaccines  -->
+
+    <record model="ir.ui.view" id="oeh_medical_vaccine_view">
+        <field name="name">Vaccines</field>
+        <field name="model">oeh.medical.vaccines</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Vaccines">
+                <sheet>
+                    <div class="oe_left" style="width: 500px;">
+                        <div class="oe_title">
+                            <label for="name" string="Vaccine" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                            <label for="patient" class="oe_edit_only"/>
+                            <field name="patient"/>
+                        </div>
+                    </div>
+                    <group class="col-12">
+                        <group class="col-6">
+                            <field name="dose"/>
+                            <field name="date"/>
+                        </group>
+                        <group class="col-6">
+                            <field name="doctor" options="{'no_create': True}"/>
+                            <field name="institution" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Observations">
+                            <field name="info" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="oeh_medical_vaccine_tree">
+        <field name="name">Vaccine List</field>
+        <field name="model">oeh.medical.vaccines</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string='Vaccines'>
+                <field name="name"/>
+                <field name="patient"/>
+                <field name="dose"/>
+                <field name="doctor"/>
+                <field name="date"/>
+                <field name="institution"/>
+            </list>
+        </field>
+    </record>
+
+<!--    <record id="view_medical_vaccine_filter" model="ir.ui.view">-->
+<!--        <field name="name">Vaccine Search</field>-->
+<!--        <field name="model">oeh.medical.vaccines</field>-->
+<!--        <field name="priority" eval="8"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Vaccines">-->
+<!--                <field name="name"/>-->
+<!--                <field name="patient"/>-->
+<!--                <field name="doctor"/>-->
+<!--                <field name="institution"/>-->
+<!--                <newline/>-->
+<!--                <group expand="0" string="Group By...">-->
+<!--                    <filter string="Patient" name="group_patient" domain="[]" context="{'group_by':'patient'}"/>-->
+<!--                    <filter string="Doctor" name="group_doctor" domain="[]" context="{'group_by':'doctor'}"/>-->
+<!--                    <filter string="Institution" name="group_institution" domain="[]"-->
+<!--                            context="{'group_by':'institution'}"/>-->
+<!--                </group>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="oeh_medical_vaccine_action_tree" model="ir.actions.act_window">
+        <field name="name">Vaccines</field>
+        <field name="res_model">oeh.medical.vaccines</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="view_id" eval="False"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new vaccine.
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="oeh_medical_vaccine_action_tree" id="oeh_medical_vaccine_list"
+              parent="oeh_medical_operations_other" sequence="1"/>
+
+    <!-- Patient -->
+
+<!--    <record id="view_oeh_medical_patient_filter" model="ir.ui.view">-->
+<!--        <field name="name">oeh.medical.patient.select</field>-->
+<!--        <field name="model">oeh.medical.patient</field>-->
+<!--        <field name="type">search</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Search Patients">-->
+<!--                <separator orientation="vertical"/>-->
+<!--                <field name="name" select="1"/>-->
+<!--                <field name="national_id" string="National ID"/>-->
+<!--                <field name="identification_code" string="Patient ID"/>-->
+<!--                <field name="oeh_patient_user_id"/>-->
+<!--                <newline/>-->
+<!--                <group expand="0" string="Group By..." colspan="11" col="11">-->
+<!--                    <filter string="Gender" name="group_sex" domain="[]" context="{'group_by':'sex'}"/>-->
+<!--                    <filter string="Doctor" name="group_doctor" domain="[]" context="{'group_by':'doctor'}"/>-->
+<!--                </group>-->
+<!--                <searchpanel>-->
+<!--                    <field name="sex" icon="fa-venus-mars" enable_counters="1"/>-->
+<!--                    <field name="marital_status" icon="fa-users" enable_counters="1"/>-->
+<!--                </searchpanel>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record model="ir.ui.view" id="oeh_medical_patient_view">
+        <field name="name">Patient</field>
+        <field name="model">oeh.medical.patient</field>
+        <!--            <field name="type">form</field>-->
+        <field name="arch" type="xml">
+            <form string="Patient">
+                <sheet>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="action" class="oe_stat_button" name="%(oeh_medical_appointment_action_tree)d"
+                                context="{'search_default_patient': id,'default_patient': id,'default_name':'/'}"
+                                icon="fa-calendar">
+                            <field string="Appointments" name="app_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(action_clinical_notes_list)d"
+                                icon="fa-sticky-note">
+                            <field string="Clinical Notes" name="note_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(action_sketchpad_notes_list)d"
+                                icon="fa-pencil-square-o">
+                            <field string="Sketchpad" name="sketch_count" widget="statinfo"/>
+                        </button>
+
+                        <button type="action" class="oe_stat_button" name="%(oeh_medical_prescription_action_tree)d"
+                                context="{'search_default_patient': id,'default_patient': id}"
+                                icon="fa-list">
+                            <field string="Prescriptions" name="prescription_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button"
+                                name="%(oehealth.oeh_medical_inpatient_action_tree)d"
+                                context="{'search_default_patient': id,'default_patient': id}"
+                                icon="fa-building-o">
+                            <field string="Admissions" name="admission_count" widget="statinfo"/>
+                        </button>
+                        <button type="action" class="oe_stat_button" name="%(account.action_move_out_invoice_type)d"
+                                context="{'search_default_patient': id,'default_patient': id}"
+                                icon="fa-pencil-square-o">
+                            <field string="Invoices" name="invoice_count" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" name="action_open_attachments" type="object"
+                                icon="fa-file-text-o">
+                            <field string="Documents" name="attachment_count" widget="statinfo"/>
+                        </button>
+                        <button name="print_patient_label"
+                                type="object"
+                                icon="fa-print"
+                                string="Print Patient Card">
+                        </button>
+                        <button name="print_patient_sick_note" type="object"
+                                    icon="fa-print"
+                                    string="Print Patient Sick Note">
+                            </button>
+                    </div>
+                    <div class="oe_button_box" name="button_box2"
+                         style="box-shadow: inset 0 0px 0 #ced4da;margin-top:5px!important;">
+                        <button name="change_archive"
+                                type="object"
+                                class="oe_stat_button text-success"
+                                icon="fa-archive text-success"
+                                style="margin-right: 5px; border: 1px solid lightgray; border-radius: 20px;"
+                                invisible="[('active', '=', False)]"
+                                string="Active">
+                        </button>
+                        <button name="change_archive"
+                                type="object"
+                                class="oe_stat_button text-danger"
+                                style="margin-right: 5px; border: 1px solid lightgray; border-radius: 20px;"
+                                icon="fa-archive text-danger"
+                                invisible="[('active', '=', False)]"
+                                string="Inactive">
+                        </button>
+                    </div>
+                    <div>
+                        <field name="image_1920" widget='image' class="oe_avatar"
+                               options='{"preview_image": "image_128"}'/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" class="oe_read_only"/>
+                            </h1>
+                            <group class="oe_edit_only">
+                                <label for="firstname" string="First Name" class="oe_edit_only"/>
+                                <h5 class="oe_edit_only">
+                                    <field name="firstname" required="1"/>
+                                </h5>
+                                <label for="lastname" string="Last Name" class="oe_edit_only"/>
+                                <h5 class="oe_edit_only">
+                                    <field name="lastname" required="1"/>
+                                </h5>
+                            </group>
+                            <field name="identification_code"/>
+                        </div>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="dob" required="1"/>
+                            <field name="marital_status" required="1"/>
+                            <field name="sex" required="1"/>
+                            <field name="national_id"/>
+                            <field name="ethnic_group" options="{'no_create': True}"/>
+                            <field name="genetic_risks" widget="many2many_tags" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="age"/>
+                            <label for="blood_type"/>
+                            <div>
+                                <field name="blood_type" class="oe_inline"/>
+                                <field name="rh" class="oe_inline"/>
+                            </div>
+                            <field name="email" widget="email"/>
+                            <field name="phone" placeholder="e.g. +32.81.81.37.00"/>
+<!--                            <field name="mobile"/>-->
+                            <field name="doctor" options="{'no_create': True}"/>
+                            <!--                                <field name="current_insurance"/>-->
+                            <!--                                       context="{'default_patient': id, 'default_state': 'Active'}"/>-->
+                        </group>
+                    </group>
+                    <group invisible="1">
+                        <p class="oe_grey" groups="oehealth.group_oeh_medical_manager">
+                            This field will allow to connect patient with your preferred Odoo native user. Please
+                            note that the user you choose here must not related to any other patient.
+                        </p>
+                    </group>
+                    <group invisible="1">
+                        <field name="oeh_patient_user_id" options="{'no_create': True}"
+                               groups="oehealth.group_oeh_medical_manager"/>
+                    </group>
+                    <notebook>
+                        <page string="Personal">
+                            <group>
+                                <group>
+                                    <label for="street" string="Address"/>
+                                    <div class="o_address_format">
+                                        <field name="street" placeholder="Street..." class="o_address_street"/>
+                                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                        <field name="city" placeholder="City" class="o_address_city"/>
+                                        <field name="state_id" class="o_address_state" placeholder="State"
+                                               options='{"no_open": True}'/>
+                                        <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                        <field name="country_id" placeholder="Country" class="o_address_country"
+                                               options='{"no_open": True, "no_create": True}'/>
+                                    </div>
+                                    <field name="website" string="Website" widget="url"
+                                           placeholder="e.g. www.odoo.com"/>
+                                </group>
+                                <group>
+                                    <field name="function" string="Profession" placeholder="e.g. Sales Director"/>
+                                    <field name="deceased"/>
+                                    <field name="cod" invisible="[('deceased', '=', False)]"/>
+                                    <field name="dod"
+                                           invisible="[('deceased', '=', False)]"
+                                           required="[('deceased', '=', True)]"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Critical Information">
+                                    <field name="critical_info" colspan="2" nolabel="1"/>
+                                </group>
+                                <group string="Extra Information">
+                                    <field name="general_info" colspan="2" nolabel="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Family">
+                            <group string="Family Members">
+                                <field name="family" mode="kanban" context="{'default_patient_id': id}"
+                                       nolabel="1">
+                                    <kanban>
+                                        <field name="id"/>
+                                        <field name="name"/>
+                                        <field name="relation"/>
+                                        <field name="age"/>
+                                        <field name="existing_patient_id"/>
+                                        <field name="patient_id"/>
+                                        <field name="contact_no"/>
+                                        <field name="email"/>
+                                        <templates>
+                                            <t t-name="card">
+                                                <div class="oe_kanban_global_click">
+                                                    <div class="oe_kanban_details">
+                                                        <strong>
+                                                            <field name="name"/>
+                                                        </strong>
+                                                        <div t-if="record.relation.raw_value">
+                                                            <em>
+                                                                <field name="relation"/>
+                                                            </em>
+                                                        </div>
+                                                        <div t-if="record.age.raw_value">Age:
+                                                            <field name="age"/>
+                                                            years
+                                                        </div>
+                                                        <div t-if="record.existing_patient_id.raw_value">Existing
+                                                            Patient:
+                                                            <field name="existing_patient_id"/>
+                                                        </div>
+                                                        <div t-if="record.contact_no.raw_value">Contact No:
+                                                            <field name="contact_no" widget="phone"/>
+                                                        </div>
+                                                        <div t-if="record.email.raw_value">Email:
+                                                            <field name="email" widget="email"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                    <form string="Family Members">
+                                        <sheet>
+                                            <field name="patient_id" invisible="1"/>
+                                            <group col="12">
+                                                <group colspan="5">
+                                                    <field name="name" string="Family Member Name" required="1"/>
+                                                    <field name="relation" required="1"/>
+                                                    <label for="age" string="Age"/>
+                                                    <div class="o_row">
+                                                        <field name="age"/>
+                                                        years
+                                                    </div>
+                                                    <field name="existing_patient_id"/>
+                                                </group>
+                                                <group colspan="5">
+                                                    <field name="contact_no" widget="phone" required="1"/>
+                                                    <field name="email" widget="email"/>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Treatments">
+                            <field name="treatments" widget="one2many_list" nolabel="1" readonly="1">
+                                <list string="Treatments">
+                                    <field name="name"/>
+                                    <field name="appointment"/>
+                                    <field name="treatment_type_id"/>
+                                    <field name="institution"/>
+                                    <field name="doctor"/>
+                                    <field name="treatment_date"/>
+                                    <field name="patient" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                </list>
+                                <form string="Treatments">
+                                    <sheet>
+                                        <div class="oe_left" style="width: 500px;">
+                                            <div class="oe_title">
+                                                <label for="name" string="Treatment #" class="oe_edit_only"/>
+                                                <h1>
+                                                    <field name="name"/>
+                                                </h1>
+                                            </div>
+                                        </div>
+                                        <group>
+                                            <group>
+                                                <field name="appointment" required="1"/>
+                                                <field name="doctor" required="1"/>
+                                                <field name="patient"/>
+                                            </group>
+                                            <group>
+                                                <field name="institution" string="Clinic" readonly="1"/>
+                                                <field name="treatment_type_id"/>
+                                                <field name="treatment_date"/>
+                                                <field name="company_id" invisible="1"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page string="Items">
+                                                <field name="treatment_items" widget="one2many_list" nolabel="1">
+                                                    <list string="Items" editable="bottom">
+                                                        <field name="name" required="1"
+                                                               options="{'no_create': True}"/>
+                                                        <field name="qty" required="1"/>
+                                                        <field name="treatment_price" string="Sales Price"
+                                                               widget="monetary"
+                                                               options="{'currency_field': 'currency_id'}"/>
+                                                        <field name="currency_id" invisible="1"/>
+                                                    </list>
+                                                    <form>
+                                                        <group>
+                                                            <field name="name" required="1"
+                                                                   options="{'no_create': True}"/>
+                                                            <field name="qty" required="1"/>
+                                                            <field name="treatment_price" string="Sales Price"
+                                                                   widget="monetary"
+                                                                   options="{'currency_field': 'currency_id'}"/>
+                                                            <field name="currency_id" invisible="1"/>
+                                                        </group>
+                                                    </form>
+                                                </field>
+                                            </page>
+                                            <page string="Notes">
+                                                <field name="other" nolabel="1"/>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Clinical Notes">
+                            <field name="clinical_note_ids">
+                                <list editable="bottom">
+                                    <field name="note_date"/>
+<!--                                    <field name="notes"/>-->
+
+                                </list>
+                            </field>
+
+                        </page>
+                        <page string="Clinical SketchPad">
+                            <field name="clinical_sketchpad_ids">
+                                <list editable="bottom">
+                                    <field name="sketch_note_date"/>
+                                    <field name="sketch_notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Medicines">
+                            <field name="prescription_line" readonly="1">
+                                <form string="Medicines">
+                                    <group>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="dose_form"/>
+                                            <field name="start_treatment"/>
+                                            <field name="prescription_id"/>
+                                        </group>
+                                        <group>
+                                            <field name="indication"/>
+                                            <field name="dose_route"/>
+                                            <field name="end_treatment"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <group string="Dosage">
+                                            <field name="qty" required="1"/>
+                                            <label for="dose"/>
+                                            <div>
+                                                <field name="dose" placeholder="250" style="width: 20%%"/>
+                                                <field name="dose_unit" placeholder="mg" style="width: 40%%"/>
+                                            </div>
+                                        </group>
+                                        <group string="Common Dosage">
+                                            <field name="common_dosage"/>
+                                            <field name="admin_times"/>
+                                        </group>
+                                    </group>
+                                    <group string="Specific Dosage">
+                                        <p class="oe_grey">
+                                            Time in between doses the patient must wait (ie, for 1 pill each 8
+                                            hours, put here 8 and select 'hours' in the unit field)
+                                        </p>
+                                    </group>
+                                    <group>
+                                        <group>
+                                            <field name="frequency"/>
+                                        </group>
+                                        <group>
+                                            <field name="frequency_unit"/>
+                                        </group>
+                                    </group>
+                                    <group string="Treatment">
+                                        <p class="oe_grey">
+                                            Treatment period that the patient must take the medication in minutes,
+                                            hours, days, months, years or indefinitely
+                                        </p>
+                                    </group>
+                                    <group>
+                                        <group>
+                                            <field name="duration" string="Day(s)"/>
+                                        </group>
+                                        <group>
+                                            <field name="duration_period" string="Period"/>
+                                        </group>
+                                    </group>
+                                    <group string="Comment">
+                                        <field name="info" nolabel="1"/>
+                                    </group>
+                                </form>
+                                <list string="Medicines">
+                                    <field name="name"/>
+                                    <field name="indication"/>
+                                    <field name="prescription_id"/>
+                                    <field name="dose"/>
+                                    <field name="dose_unit"/>
+                                    <field name="dose_form"/>
+                                    <field name="common_dosage"/>
+                                    <field name="qty"/>
+                                    <field name="duration"/>
+                                    <field name="duration_period"/>
+                                    <field name="info"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Followups">
+                            <field name="followups" widget="one2many_list" nolabel="1"
+                                   context="{'default_patient':id}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="oeh_medical_patient_kanban_view">
+        <field name="name">Patient Kanban</field>
+        <field name="model">oeh.medical.patient</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="identification_code"/>
+                <field name="sex"/>
+                <field name="age"/>
+                <field name="rh"/>
+                <field name="blood_type"/>
+                <field name="email"/>
+                <field name="image_512"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_patient_kanban_record">
+                            <field name="image_512" widget="image" class="o_kanban_image_fill_left"
+                                   options="{'zoom': true, 'zoom_delay': 1000, 'background': true, 'preventClicks': false}"/>
+
+                            <div class="oeh_medical_details">
+                                <h4>
+                                    <a type="open">
+                                        <field name="name"/>
+                                    </a>
+                                </h4>
+                                <ul>
+                                    <li t-if="record.identification_code.raw_value">
+                                        <field name="identification_code"/>
+                                    </li>
+                                    <li t-if="record.sex.raw_value">
+                                        <field name="sex"/>
+                                    </li>
+                                    <li t-if="record.age.raw_value">
+                                        <field name="age"/>
+                                    </li>
+                                    <li t-if="record.rh.raw_value">
+                                        <field name="blood_type"/>
+                                        <field name="rh"/>
+                                    </li>
+                                    <li t-if="record.email.raw_value">
+                                        <a t-attf-href="mailto:#{record.email.value}">
+                                            <field name="email"/>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="oeh_medical_patient_tree">
+        <field name="name">Patient List</field>
+        <field name="model">oeh.medical.patient</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string='Patient Information' decoration-muted="deceased==True">
+                <field name="name"/>
+                <field name="identification_code"/>
+                <field name="sex"/>
+                <field name="dob"/>
+                <field name="age"/>
+                <field name="doctor"/>
+                <field name="deceased"/>
+                <button name="action_sketchpad"
+                        type="object"
+                        string="SketchPad"
+                        icon="fa-pencil"/>
+                <button name="action_claim"
+                        type="object"
+                        string="New Claim"
+                        icon="fa-medkit"/>
+                 <button name="action_payment"
+                        type="object"
+                        string="Payment"
+                        icon="fa-credit-card"/>
+                    <!-- <widget name="web_voice_recorder"/> -->
+            </list>
+        </field>
+    </record>
+
+
+    <record id="oeh_medical_patient_action_tree" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">oeh.medical.patient</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[]</field>
+        <field name="view_id" eval="False"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new patient.
+            </p>
+            <p>
+                This screen will allow you to easily find all the information you need for each patients;
+                personal information, medical history, vaccination history, etc.
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="oeh_medical_patient_action_tree" parent="oeh_medical_menu" id="oeh_medical_edit_patient"
+              sequence="10"/>
+
+    <!-- Physicians -->
+
+    <record model="ir.ui.view" id="oeh_medical_staff_view">
+        <field name="name">Medical Staff</field>
+        <field name="model">oeh.medical.physician</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Medical Staff">
+                <sheet>
+                    <field name="active" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="action" class="oe_stat_button" name="%(oeh_medical_appointment_action_tree)d"
+                                context="{'search_default_doctor': id,'default_doctor': id,'default_name':'/'}"
+                                icon="fa-calendar"
+                                groups="oehealth.group_oeh_medical_physician,oehealth.group_oeh_medical_nurse">
+                            <field string="Appointments" name="app_count" widget="statinfo"/>
+                        </button>
+
+                        <button type="action" class="oe_stat_button" name="%(oeh_medical_prescription_action_tree)d"
+                                context="{'search_default_doctor': id,'default_doctor': id}"
+                                icon="fa-list" groups="oehealth.group_oeh_medical_physician">
+                            <field string="Prescriptions" name="prescription_count" widget="statinfo"/>
+                        </button>
+                        <button name="print_medical_staff_badge" type="object" class="oe_stat_button"
+                                icon="fa-barcode" groups="oehealth.group_oeh_medical_manager">
+                            <field string="Print Badge" name="print_badge" widget="statinfo"/>
+                        </button>
+                        <button name="change_archive_status"
+                                type="object"
+                                class="oe_stat_button text-success"
+                                groups="oehealth.group_oeh_medical_manager"
+                                icon="fa-archive text-success"
+                                invisible="[('active', '=', False)]"
+                                string="Active">
+                        </button>
+                        <button name="change_archive_status"
+                                type="object"
+                                class="oe_stat_button text-danger"
+                                groups="oehealth.group_oeh_medical_manager"
+                                icon="fa-archive text-danger"
+                                invisible="[('active', '!=', False)]"
+                                string="Inactive">
+                        </button>
+
+
+                    </div>
+                    <field name="image_1920" widget='image' class="oe_avatar"
+                           options='{"preview_image": "image_128"}'/>
+                    <div class="oe_title">
+                        <label for="name" string="Name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" required="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="staff_type" widget="radio" groups="oehealth.group_oeh_medical_manager"
+                               options="{'horizontal': true}" required="1" readonly="0"/>
+                    </group>
+                    <group>
+                        <group string="Professional Details">
+                            <field name="speciality" groups="oehealth.group_oeh_medical_physician"
+                                   placeholder="Speciality"/>
+                            <field name="degree_id" widget="many2many_tags" placeholder="Degrees..."/>
+                            <field name="code"/>
+                            <field name="employee_id"/>
+                            <field name="institution" string="Graduation Institute" options="{'no_create': True}"/>
+                            <field name="consultancy_type"/>
+                            <field name="consultancy_price"/>
+                        </group>
+                        <group string="Work Details">
+                            <field name="address_id" string="Working Institution"
+                                   domain="[('is_institution', '=', True)]"
+                                   context="{'show_address': 1, 'default_customer': False}"
+                                   options='{"always_reload": True, "highlight_first_line": True, "no_create": True}'/>
+                            <field name="work_email" widget="email" required="1"/>
+                            <field name="mobile_phone" widget="phone"/>
+                            <field name="work_phone" widget="phone"/>
+                            <field name="work_location_id"/>
+                            <label for="barcode"/>
+                            <div class="o_row">
+                                <field name="barcode"/>
+                                <button string="Generate" class="btn btn-link" type="object"
+                                        name="generate_random_barcode"
+                                        invisible="[('barcode', '!=', False)]"/>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <p class="oe_grey" groups="oehealth.group_oeh_medical_manager" colspan="2">
+                            This field will allow to connect medical staff with your preferred Odoo native user.
+                            Please
+                            note that the user you choose here must not related to any other medical staff.
+                        </p>
+                    </group>
+                    <group>
+                        <field name="oeh_user_id" options="{'no_create': True}"
+                               groups="oehealth.group_oeh_medical_manager"/>
+                    </group>
+                    <notebook>
+                        <page name="personal_information" string="Personal Information">
+                            <group>
+                                <group string="Private Contact">
+                                    <!--                                        <field name="address_home_id"-->
+                                    <!--                                               context="{-->
+                                    <!--                                                    'show_address': 1,-->
+                                    <!--                                                    'default_type': 'private',-->
+                                    <!--                                                    'form_view_ref': 'base.res_partner_view_form_private'}"-->
+                                    <!--                                               options='{"always_reload": True, "highlight_first_line": True}'/>-->
+                                    <field name="private_email" string="Email"/>
+                                    <field name="phone" class="o_force_ltr" groups="hr.group_hr_user"
+                                           string="Phone"/>
+                                    <!--                                        <field name="bank_account_id"-->
+                                    <!--                                               context="{'default_partner_id': address_home_id}"/>-->
+                                    <label for="km_home_work"/>
+                                    <div class="o_row" name="div_km_home_work">
+                                        <field name="km_home_work" groups="hr.group_hr_user"/>
+                                        <span>Km</span>
+                                    </div>
+
+                                </group>
+                                <group string="Citizenship">
+                                    <field name="country_id" options='{"no_open": True, "no_create": True}'/>
+                                    <field name="identification_id" groups="hr.group_hr_user"/>
+                                    <field name="passport_id" groups="hr.group_hr_user"/>
+<!--                                    <field name="gender"/>-->
+                                    <field name="birthday"/>
+                                    <field name="place_of_birth" groups="hr.group_hr_user"/>
+                                    <field name="country_of_birth" groups="hr.group_hr_user"/>
+                                </group>
+                                <group string="Marital Status">
+                                    <field name="marital"/>
+                                    <field name="spouse_complete_name"
+                                           invisible="[('marital', 'not in', ['married', 'cohabitant'])]"
+                                           groups="hr.group_hr_user"/>
+                                    <field name="spouse_birthdate"
+                                           invisible="[('marital', 'not in', ['married', 'cohabitant'])]"
+                                           groups="hr.group_hr_user"/>
+                                </group>
+                                <group string="Dependant">
+                                    <field name="children"/>
+                                </group>
+                                <group string="Emergency">
+                                    <field name="emergency_contact"/>
+                                    <field name="emergency_phone" class="o_force_ltr"/>
+                                </group>
+                                <group string="Work Permit" name="work_permit">
+                                    <field name="visa_no"/>
+                                    <field name="permit_no"/>
+                                    <field name="visa_expire"/>
+                                </group>
+                                <group string="Education">
+                                    <field name="certificate"/>
+                                    <field name="study_field"/>
+                                    <field name="study_school"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Weekly Availability">
+                            <group>
+                                <field name="appointment_type" required="1"/>
+                            </group>
+                            <group string="Weekly Appointment Schedule">
+                                <field name="available_lines" colspan="2" nolabel="1">
+                                    <list string="Doctor Availability" nolabel="1" editable="bottom">
+                                        <field name="name"/>
+                                        <field name="start_time" widget="float_time"/>
+                                        <field name="end_time" widget="float_time"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Extra Info">
+<!--                            <field name="notes"/>-->
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="oeh_medical_medical_staff_tree">
+        <field name="name">Medical Staff List</field>
+        <field name="model">oeh.medical.physician</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string='Doctor Information'>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="address_id"/>
+                <field name="speciality"/>
+            </list>
+        </field>
+    </record>
+
+<!--    <record id="view_medical_medical_staff_filter" model="ir.ui.view">-->
+<!--        <field name="name">Search Medical Staff</field>-->
+<!--        <field name="model">oeh.medical.physician</field>-->
+<!--        <field name="priority" eval="8"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Doctor">-->
+<!--                <field name="name"/>-->
+<!--                <field name="code"/>-->
+<!--                <field name="speciality"/>-->
+<!--                <separator/>-->
+<!--                <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>-->
+<!--                <group expand="0" string="Group By...">-->
+<!--                    <filter string="Speciality" name="group_speciality" domain="[]"-->
+<!--                            context="{'group_by':'speciality'}"/>-->
+<!--                </group>-->
+<!--                <searchpanel>-->
+<!--                    <field name="speciality" string="Specialities" icon="fa-user-md" enable_counters="1"/>-->
+<!--                    <field name="address_id" string="Working Institutes" icon="fa-address-card"-->
+<!--                           enable_counters="1"/>-->
+<!--                </searchpanel>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record model="ir.ui.view" id="oeh_medical_staff_kanban_view">
+        <field name="name">Kanban Medical Staff</field>
+        <field name="model">oeh.medical.physician</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="degree_id"/>
+                <field name="speciality"/>
+                <field name="address_id"/>
+                <field name="code"/>
+                <field name="work_email"/>
+                <field name="image_1920"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_doctor_kanban_record">
+                            <field name="image_1920" widget="image" class="o_kanban_image_fill_left"
+                                   options="{'zoom': true, 'zoom_delay': 1000, 'background': true, 'preventClicks': false}"/>
+
+                            <div class="oeh_medical_details">
+                                <h4>
+                                    <a type="open">
+                                        <field name="name"/>
+                                    </a>
+                                </h4>
+                                <ul>
+                                    <li t-if="record.speciality.raw_value">
+                                        <field name="speciality"/>
+                                    </li>
+                                    <li t-if="record.address_id.raw_value">
+                                        <field name="address_id"/>
+                                    </li>
+                                    <li t-if="record.code.raw_value">
+                                        <field name="code"/>
+                                    </li>
+                                    <li t-if="record.work_email.raw_value">
+                                        <a t-attf-href="mailto:#{record.work_email.value}">
+                                            <field name="work_email"/>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="oeh_medical_physician_action_tree" model="ir.actions.act_window">
+        <field name="name">Doctors</field>
+        <field name="res_model">oeh.medical.physician</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('staff_type', '=', 'doctor')]</field>
+        <field name="context">{'default_staff_type': 'doctor'}</field>
+        <field name="view_id" eval="False"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new doctor.
+            </p>
+            <p>
+                Manage Doctor's profile &amp; weekly schedule
+            </p>
+        </field>
+    </record>
+
+    <record id="oeh_medical_therapists_action_tree" model="ir.actions.act_window">
+        <field name="name">Therapists</field>
+        <field name="res_model">oeh.medical.physician</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('staff_type', '=', 'therapist')]</field>
+        <field name="context">{'default_staff_type': 'therapist'}</field>
+        <field name="view_id" eval="False"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new Therapists.
+            </p>
+            <p>
+                Manage Therapist's profile
+            </p>
+        </field>
+    </record>
+
+    <record id="oeh_medical_nurses_action_tree" model="ir.actions.act_window">
+        <field name="name">Nurses</field>
+        <field name="res_model">oeh.medical.physician</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('staff_type', '=', 'nurse')]</field>
+        <field name="context">{'default_staff_type': 'nurse'}</field>
+        <field name="view_id" eval="False"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new Nurses.
+            </p>
+            <p>
+                Manage Nurse's profile
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="oeh_medical_physician_action_tree" id="oeh_medical_physician_list"
+              parent="oeh_medical_medical_staff_menu" sequence="10"/>
+    <menuitem name="Therapists" action="oeh_medical_therapists_action_tree" id="oeh_medical_therapists_list"
+              parent="oeh_medical_medical_staff_menu" sequence="10"/>
+    <menuitem name="Nurses" action="oeh_medical_nurses_action_tree" id="oeh_medical_nurses_list"
+              parent="oeh_medical_medical_staff_menu" sequence="10"/>
+
+
+    <record id="oeh_medical_physician_action_tree1" model="ir.actions.act_window">
+        <field name="name">My Profile</field>
+        <field name="res_model">oeh.medical.physician</field>
+        <field name="view_mode">kanban,list,form</field>
+        <!-- <field name="domain">[('oeh_user_id', '=', uid)]</field> -->
+        <field name="context">{}</field>
+        <field name="view_id" eval="False"/>
+    </record>
+
+    <menuitem action="oeh_medical_physician_action_tree1" parent="oeh_medical_menu"
+              id="oeh_medical_my_physician_profile" sequence="3"/>
+
+
+    <!-- Doctors Speciality Configuration -->
+
+    <record model="ir.ui.view" id="oeh_medical_physician_speciality_tree">
+        <field name="name">Doctor Specialities</field>
+        <field name="model">oeh.medical.speciality</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string='Speciality' editable="top">
+                <field name="name"/>
+                <field name="code"/>
+            </list>
+        </field>
+    </record>
+
+<!--    <record id="view_medical_physician_speciality_filter" model="ir.ui.view">-->
+<!--        <field name="name">Specialities</field>-->
+<!--        <field name="model">oeh.medical.speciality</field>-->
+<!--        <field name="type">search</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Search Specialities">-->
+<!--                <separator orientation="vertical"/>-->
+<!--                <field name="name"/>-->
+<!--                <field name="code"/>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="oeh_medical_physician_speciality_action_tree" model="ir.actions.act_window">
+        <field name="name">Specialities</field>
+        <field name="res_model">oeh.medical.speciality</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="view_id" eval="False"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new physician speciality.
+            </p>
+            <p>
+                Add different medical specialities which will be used in doctor management screen.
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="oeh_medical_physician_speciality_action_tree" id="oeh_medical_physician_speciality_list"
+              parent="oeh_medical_conf_physician" sequence="1"/>
+
+    <!-- Doctors Degrees Configuration -->
+
+    <record model="ir.ui.view" id="oeh_medical_physician_degree_tree">
+        <field name="name">Degrees</field>
+        <field name="model">oeh.medical.degrees</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string='Degrees' editable="top">
+                <field name="name"/>
+                <field name="full_name"/>
+            </list>
+        </field>
+    </record>
+
+<!--    <record id="view_medical_physician_degree_filter" model="ir.ui.view">-->
+<!--        <field name="name">Doctor Degrees</field>-->
+<!--        <field name="model">oeh.medical.degrees</field>-->
+<!--        <field name="type">search</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Search Degrees">-->
+<!--                <separator orientation="vertical"/>-->
+<!--                <field name="name"/>-->
+<!--                <field name="full_name"/>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="oeh_medical_physician_degrees_action_tree" model="ir.actions.act_window">
+        <field name="name">Degrees</field>
+        <field name="res_model">oeh.medical.degrees</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="view_id" eval="False"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new physician degrees.
+            </p>
+            <p>
+                Add different medical degrees which will be used in doctor management screen.
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="oeh_medical_physician_degrees_action_tree" id="oeh_medical_physician_degrees_list"
+              parent="oeh_medical_conf_physician" sequence="2"/>
+
+    <record id="view_ir_attachment_search" model="ir.ui.view">
+        <field name="name">ir.attachment.search.inherit</field>
+        <field name="model">ir.attachment</field>
+        <field name="inherit_id" ref="base.view_attachment_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="res_name"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</data>

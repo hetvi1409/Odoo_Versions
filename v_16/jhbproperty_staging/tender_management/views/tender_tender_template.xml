@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="tender_information_list" name="Website Tenders">
+        <t t-call="website.layout">
+            <div id="wrap" class="o_portal_wrap tm-procurement-wrap">
+                <t t-set="active_menu" t-value="'home'"/>
+                <t t-call="tender_management.procurement_contact_nav"/>
+
+                <t t-set="hero_title" t-value="'PROCUREMENT'"/>
+                <t t-set="hero_subtitle"
+                   t-value="'We are committed to fair, transparent, and inclusive procurement processes that empower local enterprises and drive sustainable development across our city.'"/>
+                <t t-set="breadcrumb_label" t-value="False"/>
+                <t t-call="tender_management.procurement_hero"/>
+
+                <div class="container tm-content-block">
+                    <div class="tm-additional-links">
+                        <strong>Additional Links</strong>
+                        <a href="/tenders-rfqs">Request For Quotations (RFQs)</a>
+                        <a href="/tenders-rfps">Request For Proposals (RFPs)</a>
+                        <a href="/bid-status">Bid Status</a>
+                        <a href="/tenders-archive">Archive</a>
+                    </div>
+
+                    <t t-set="ticker_enabled"
+                       t-value="request.env['ir.config_parameter'].sudo().get_param('tender_management.ticker_enabled', 'True')"/>
+                    <t t-if="ticker_enabled not in ('False', '0', 'false', '')">
+                        <t t-set="ticker_title"
+                           t-value="request.env['ir.config_parameter'].sudo().get_param('tender_management.ticker_title', 'STAY UP TO DATE:')"/>
+                        <t t-set="ticker_message"
+                           t-value="request.env['ir.config_parameter'].sudo().get_param('tender_management.ticker_message', '')"/>
+                        <t t-if="ticker_message">
+                            <div class="bg-light p-2 d-flex align-items-center tm-ticker">
+                                <strong class="me-2"><t t-esc="ticker_title"/></strong>
+                                <div class="tm-ticker-window text-muted" aria-live="polite">
+                                    <div class="tm-ticker-track">
+                                        <span class="tm-ticker-text"><t t-esc="ticker_message"/></span>
+                                        <span class="tm-ticker-separator" aria-hidden="true"> | </span>
+                                        <span class="tm-ticker-text" aria-hidden="true"><t t-esc="ticker_message"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+
+                    <div class="row text-center mt-4 mb-5">
+                        <a href="/tenders-rfqs" class="col-md-4 link text-decoration-none text-dark tm-card-link">
+                            <div class="border p-4 shadow-sm tm-procurement-card">
+                                <i class="fa fa-bookmark fa-2x mb-2"></i>
+                                <h5>RFQs</h5>
+                            </div>
+                        </a>
+                        <a href="/tenders-rfps" class="col-md-4 link text-decoration-none text-dark tm-card-link">
+                            <div class="border p-4 shadow-sm tm-procurement-card">
+                                <i class="fa fa-bookmark fa-2x mb-2"></i>
+                                <h5>RFPs</h5>
+                            </div>
+                        </a>
+                        <a href="/bid-status" class="col-md-4 link text-decoration-none text-dark tm-card-link">
+                            <div class="border p-4 shadow-sm tm-procurement-card">
+                                <i class="fa fa-bookmark fa-2x mb-2"></i>
+                                <h5>BID STATUS</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="procurement_search_form" name="Procurement Search Form">
+        <form class="form-inline" name="frmsearch" t-att-action="search_action" method="POST" autocomplete="off">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" autocomplete="off"/>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group w-100">
+                        <label for="searchRefNo">Search:</label>
+                        <input type="text"
+                               placeholder="Search"
+                               id="searchRefNo"
+                               name="searchRefNo"
+                               class="form-control"
+                               t-att-value="search_value"
+                               maxlength="50"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </template>
+
+    <template id="procurement_tender_table" name="Procurement Tender Table">
+        <table id="tender_information" class="table table-bordered table-hover tm-legacy-table mt-3">
+            <thead>
+                <tr class="active">
+                    <th class="text-center tm-col-publish">Publish Date</th>
+                    <!-- <th class="text-center tm-col-open">Opening Date</th> -->
+                    <th class="text-center tm-col-name">Tender Name</th>
+                    <th class="text-center tm-col-desc">Tender Description</th>
+                    <th class="text-center tm-col-close">Closing Date</th>
+                    <th class="text-center tm-col-status">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr t-foreach="tender_records" t-as="tender">
+                    <td class="text-center tm-col-publish" data-label="Publish Date"><t t-esc="tender.publish_date"/></td>
+                    <!-- <td class="text-center tm-col-open" data-label="Opening Date"><t t-esc="tender.start_time"/></td> -->
+                    <td class="text-center tm-col-name" data-label="Tender Name"><a t-att-href="'/tender/%d' % tender.id" t-esc="tender.name"/></td>
+                    <td class="text-center tm-col-desc" data-label="Tender Description"><a t-att-href="'/tender/%d' % tender.id" t-esc="tender.description"/></td>
+                    <td class="text-center tm-col-close" data-label="Closing Date"><t t-esc="tender.closing_date"/></td>
+                    <td class="text-center tm-col-status" data-label="Status">
+                        <t t-set="state_label" t-value="dict(env['tender.tender']._fields['state'].selection).get(tender.state, tender.state)"/>
+                        <t t-esc="state_label"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
+    <template id="procurement_table_panel" name="Procurement Table Panel">
+        <div class="container tm-content-block responsive-card-table">
+            <div class="tm-table-panel">
+                <t t-call="tender_management.procurement_search_form"/>
+                <t t-out="0"/>
+                <t t-if="pager">
+                    <t t-call="website.pager">
+                        <t t-set="pager" t-value="pager"/>
+                    </t>
+                </t>
+            </div>
+        </div>
+    </template>
+
+    <template id="tender_rfq_information_list" name="Website RFQs">
+        <t t-call="website.layout">
+            <div id="wrap" class="o_portal_wrap tm-procurement-wrap">
+                <t t-set="active_menu" t-value="'rfq'"/>
+                <t t-call="tender_management.procurement_contact_nav"/>
+
+                <t t-set="hero_title" t-value="'PROCUREMENT'"/>
+                <t t-set="hero_subtitle" t-value="'Request For Quotations (RFQs)'"/>
+                <t t-set="breadcrumb_parent_label" t-value="False"/>
+                <t t-set="breadcrumb_parent_url" t-value="False"/>
+                <t t-set="breadcrumb_label" t-value="'RFQs'"/>
+                <t t-call="tender_management.procurement_hero"/>
+
+                <t t-set="search_action" t-value="'/tenders-rfqs'"/>
+                <t t-set="search_value" t-value="searchRefNo"/>
+                <t t-call="tender_management.procurement_table_panel">
+                    <t t-set="tender_records" t-value="rfqs"/>
+                    <t t-call="tender_management.procurement_tender_table"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="tender_rfp_information_list" name="Website RFPs">
+        <t t-call="website.layout">
+            <div id="wrap" class="o_portal_wrap tm-procurement-wrap">
+                <t t-set="active_menu" t-value="'rfp'"/>
+                <t t-call="tender_management.procurement_contact_nav"/>
+
+                <t t-set="hero_title" t-value="'PROCUREMENT'"/>
+                <t t-set="hero_subtitle" t-value="'Request For Proposals (RFPs)'"/>
+                <t t-set="breadcrumb_parent_label" t-value="False"/>
+                <t t-set="breadcrumb_parent_url" t-value="False"/>
+                <t t-set="breadcrumb_label" t-value="'RFPs'"/>
+                <t t-call="tender_management.procurement_hero"/>
+
+                <t t-set="search_action" t-value="'/tenders-rfps'"/>
+                <t t-set="search_value" t-value="searchRefNo"/>
+                <t t-call="tender_management.procurement_table_panel">
+                    <t t-set="tender_records" t-value="rfps"/>
+                    <t t-call="tender_management.procurement_tender_table"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="tender_bid_status_information" name="Website Bid Status">
+        <t t-call="website.layout">
+            <div id="wrap" class="o_portal_wrap tm-procurement-wrap">
+                <t t-set="active_menu" t-value="'bid_status'"/>
+                <t t-call="tender_management.procurement_contact_nav"/>
+
+                <t t-set="hero_title" t-value="'PROCUREMENT'"/>
+                <t t-set="hero_subtitle" t-value="'RFQs, RFPs and RFIs in Adjudication or Awarded Status'"/>
+                <t t-set="breadcrumb_parent_label" t-value="False"/>
+                <t t-set="breadcrumb_parent_url" t-value="False"/>
+                <t t-set="breadcrumb_label" t-value="'Bid Status'"/>
+                <t t-call="tender_management.procurement_hero"/>
+
+                <t t-set="search_action" t-value="'/bid-status'"/>
+                <t t-set="search_value" t-value="searchRefNo"/>
+                <t t-call="tender_management.procurement_table_panel">
+                    <t t-set="tender_records" t-value="bid_status_tenders"/>
+                    <t t-call="tender_management.procurement_tender_table"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="tender_archive_information_list" name="Website Archive">
+        <t t-call="website.layout">
+            <div id="wrap" class="o_portal_wrap tm-procurement-wrap">
+                <t t-set="active_menu" t-value="'archive'"/>
+                <t t-call="tender_management.procurement_contact_nav"/>
+
+                <t t-set="hero_title" t-value="'PROCUREMENT'"/>
+                <t t-set="hero_subtitle" t-value="'Archive'"/>
+                <t t-set="breadcrumb_parent_label" t-value="False"/>
+                <t t-set="breadcrumb_parent_url" t-value="False"/>
+                <t t-set="breadcrumb_label" t-value="'Archive'"/>
+                <t t-call="tender_management.procurement_hero"/>
+
+                <div class="container tm-content-block">
+                    <div class="tm-additional-links">
+                        <strong>Archive Years</strong>
+                        <t t-foreach="archive_years" t-as="year_item">
+                            <a t-att-href="'/tenders-archive/%d' % year_item"
+                               t-attf-class="#{'fw-bold text-dark' if year_item == selected_archive_year else ''}">
+                                <t t-esc="year_item"/>
+                            </a>
+                        </t>
+                    </div>
+                </div>
+
+                <t t-set="search_action" t-value="'/tenders-archive/%d' % selected_archive_year"/>
+                <t t-set="search_value" t-value="searchRefNo"/>
+                <t t-call="tender_management.procurement_table_panel">
+                    <table id="tender_information" class="table table-bordered tm-legacy-table mt-3">
+                        <thead>
+                            <tr class="active">
+                                <th class="text-center tm-col-publish">Publish Date</th>
+                                <!-- <th class="text-center tm-col-open">Opening Date</th> -->
+                                <th class="text-center tm-col-name">Tender Name</th>
+                                <th class="text-center tm-col-desc">Tender Description</th>
+                                <th class="text-center tm-col-close">Closing Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="archive_tenders" t-as="tender">
+                                <td class="text-center tm-col-publish" data-label="Publish Date"><t t-esc="tender.publish_date"/></td>
+                                <!-- <td class="text-center tm-col-open" data-label="Opening Date"><t t-esc="tender.start_time"/></td> -->
+                                <td class="text-center tm-col-name" data-label="Tender Name"><t t-esc="tender.name"/></td>
+                                <td class="text-center tm-col-desc" data-label="Tender Description"><t t-esc="tender.description"/></td>
+                                <td class="text-center tm-col-close" data-label="Closing Date"><t t-esc="tender.closing_date"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

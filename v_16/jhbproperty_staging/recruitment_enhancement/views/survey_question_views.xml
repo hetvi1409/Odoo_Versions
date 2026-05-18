@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="survey_question_form" model="ir.ui.view">
+        <field name="name">Form view for survey question</field>
+        <field name="model">survey.question</field>
+        <field name="inherit_id" ref="survey.survey_question_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='constr_mandatory']" position="before">
+                <field name="elimination_question"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="survey_question_list" model="ir.ui.view">
+        <field name="name">List view for survey question</field>
+        <field name="model">survey.question</field>
+        <field name="inherit_id" ref="survey.survey_question_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='triggering_question_id']" position="before">
+                <field name="elimination_question" optional="1"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

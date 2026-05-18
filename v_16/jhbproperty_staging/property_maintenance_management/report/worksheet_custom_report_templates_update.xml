@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Inherit the existing template -->
+        <template id="worksheet_custom_page_inherited"
+                  inherit_id="industry_fsm.worksheet_custom_page">
+
+            <!-- Add the new table after the existing content -->
+            <xpath expr="//div[@name='worksheet_map']" position="after">
+
+                <!-- Add your new content here -->
+                <h5>REQUIRED MATERIAL LIST</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="text-center">
+                            <th class="text-right">Material Used (Description)
+                            </th>
+                            <th class="text-right">Quantity</th>
+                            <th class="text-right">Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="doc.helpdesk_ticket_id.ticket_job_card_id.required_inventory_ids"
+                           t-as="inventory">
+                            <tr>
+                                <td>
+                                    <t t-esc="inventory.product_id.name"/>
+                                </td>
+                                <td>
+                                    <t t-esc="inventory.product_uom_qty"/>
+                                </td>
+                                <td><!-- Add corresponding field here --></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </xpath>
+        </template>
+
+        <!-- Inherit the main template to include the new inherited template -->
+        <template id="worksheet_custom_inherited"
+                  inherit_id="industry_fsm.worksheet_custom">
+            <xpath expr="//t" position="replace">
+                <t t-call="web.html_container">
+                    <t t-foreach="docs" t-as="doc">
+                        <t t-call="web.external_layout">
+                            <t t-call="property_maintenance_management.worksheet_custom_page_inherited"
+                               t-lang="doc.partner_id.lang"/>
+                        </t>
+                    </t>
+                </t>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>
+

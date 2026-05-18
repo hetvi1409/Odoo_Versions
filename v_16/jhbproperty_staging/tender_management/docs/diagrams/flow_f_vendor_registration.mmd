@@ -1,0 +1,19 @@
+flowchart LR
+  subgraph PU[Public User]
+    A([Start]) --> B[Open vendor registration page]
+    B --> C[Complete form]
+    C --> D[Submit]
+  end
+  subgraph VC[Registration Controller]
+    D --> E[POST and CSRF validation]
+    E --> F[Rate-limit check]
+    F --> G[Required fields check]
+    G --> H{Valid?}
+    H -->|No| I[Render form with error]
+    H -->|Yes| J[Create supplier partner]
+  end
+  subgraph WF[Website]
+    J --> K[Render success page]
+    I --> L([End])
+    K --> L
+  end

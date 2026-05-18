@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <!-- tree view -->
+    <record id="view_fleet_accident_report_tree" model="ir.ui.view">
+        <field name="name">fleet.accident.report.tree</field>
+        <field name="model">fleet.accident.report</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="insured_name"/>
+                <field name="vehicle_registration"/>
+                <field name="driver_name"/>
+                <field name="accident_date"/>
+                <field name="accident_place"/>
+                <field name="accident_description"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="view_fleet_accident_report_form" model="ir.ui.view">
+        <field name="name">fleet.accident.report.form</field>
+        <field name="model">fleet.accident.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <!-- Insurer Section -->
+                    <group string="Insurer">
+                        <field name="insurer"/>
+                        <field name="broker_agent"/>
+                        <field name="policy"/>
+                    </group>
+
+                    <!-- Insured Section -->
+                    <group string="Insured">
+                        <field name="insured_name"/>
+                        <field name="insured_department"/>
+                        <field name="insured_region"/>
+                        <field name="insured_address"/>
+                        <field name="insured_phone"/>
+                        <field name="insured_email"/>
+                    </group>
+
+                    <!-- Vehicle Section -->
+                    <group string="Vehicle">
+                        <field name="finance_company"/>
+                        <field name="vehicle_make"/>
+                        <field name="vehicle_registration"/>
+                        <field name="vehicle_value"/>
+                        <field name="vehicle_model_year"/>
+                        <field name="vehicle_purchase_date"/>
+                        <field name="vehicle_price_paid"/>
+                        <field name="vehicle_tar"/>
+                        <field name="vehicle_gross_mass"/>
+                        <field name="vehicle_kilometres"/>
+                        <field name="vehicle_registered_name"/>
+                    </group>
+
+                    <!-- Damage Section -->
+                    <group string="Damage">
+                        <field name="damage_description"/>
+                        <field name="repair_estimate"/>
+                        <field name="repairer_details"/>
+                        <field name="inspection_location"/>
+                    </group>
+
+                    <!-- Driver Section -->
+                    <group string="Driver">
+                        <field name="driver_name"/>
+                        <field name="driver_address"/>
+                        <field name="driver_occupation"/>
+                        <field name="driver_phone"/>
+                        <field name="driver_identity"/>
+                        <field name="driver_license_no"/>
+                        <field name="driver_license_date"/>
+                        <field name="driver_license_code"/>
+                        <field name="driver_license_type"/>
+                        <field name="vehicle_usage"/>
+                        <field name="permission"/>
+                        <field name="employed"/>
+                        <field name="other_vehicle_owner"/>
+                        <field name="other_vehicle_insurer"/>
+                        <field name="other_vehicle_policy"/>
+                        <field name="convictions"/>
+                        <field name="licence_endorsed"/>
+                        <field name="physical_defects"/>
+                        <field name="previous_accidents"/>
+                    </group>
+
+                    <!-- Passengers Section -->
+                    <group string="Passengers">
+                        <field name="passenger_name"/>
+                        <field name="passenger_address"/>
+                        <field name="passenger_injury"/>
+                        <field name="passenger_purpose"/>
+                        <field name="passenger_employee"/>
+                    </group>
+
+                    <!-- Other Vehicles Section -->
+                    <group string="Other Vehicles">
+                        <field name="other_vehicle_registration"/>
+                        <field name="other_vehicle_make"/>
+                        <field name="other_vehicle_owner_driver"/>
+                        <field name="other_vehicle_damage"/>
+                    </group>
+
+                    <!-- Other Party Section -->
+                    <group string="Other Party">
+                        <field name="other_property_owner"/>
+                        <field name="other_property_damage"/>
+                    </group>
+
+                    <!-- Personal Injuries Section -->
+                    <group string="Personal Injuries">
+                        <field name="injury_name"/>
+                        <field name="injury_relationship"/>
+                        <field name="injury_details"/>
+                        <field name="injury_hospital"/>
+                    </group>
+
+                    <!-- Witnesses Section -->
+                    <group string="Witnesses">
+                        <field name="witness1"/>
+                        <field name="witness2"/>
+                        <field name="witness3"/>
+                    </group>
+
+                    <!-- Accident Details Section -->
+                    <group string="Accident Details">
+                        <field name="accident_date"/>
+                        <field name="accident_time"/>
+                        <field name="accident_place"/>
+                        <field name="speed_before"/>
+                        <field name="speed_impact"/>
+                        <field name="weather_conditions"/>
+                        <field name="visibility"/>
+                        <field name="road_surface"/>
+                        <field name="road_width"/>
+                        <field name="vehicle_lights"/>
+                        <field name="street_lighting"/>
+                        <field name="warning_given"/>
+                        <field name="police_officer"/>
+                        <field name="police_station"/>
+                        <field name="police_reference"/>
+                        <field name="alcohol_tested"/>
+                        <field name="accident_description"/>
+                        <field name="accident_sketch"/>
+                    </group>
+
+                    <!-- Licence Inspection Section -->
+                    <group string="Licence Inspection">
+                        <field name="licence_endorsement_status"/>
+                        <field name="driver_signature"/>
+                        <field name="driver_capacity"/>
+                        <field name="driver_signature_date"/>
+                        <field name="insured_signature"/>
+                        <field name="insured_capacity"/>
+                        <field name="insured_signature_date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_fleet_accident_report" model="ir.actions.act_window">
+        <field name="name">Fleet Accident Reports</field>
+        <field name="res_model">fleet.accident.report</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Fleet Accident report menu -->
+    <menuitem id="menu_fleet_accident_report" name="Fleet Accident Reports" parent="fleet.fleet_configuration"
+        action="action_fleet_accident_report"/>
+
+</odoo>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="ownership_contract_form_view" model="ir.ui.view">
+        <field name="name">ownership.contract.view.form</field>
+        <field name="model">ownership.contract</field>
+        <field name="inherit_id" ref="itsys_real_estate.ownership_contract_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet/group[3]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet/group[4]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet/separator[1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet/separator[2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//page[1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='reservation_id']" position="after">
+                <field name="company_id"/>
+                <field name="currency_id"/>
+                <field name="lead_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//div[@class='oe_button_box']" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="action_view_installment"
+                        invisible="not installment_count"
+                        icon="fa-external-link">
+                    <field string="Installments" name="installment_count"
+                           widget="statinfo"/>
+                </button>
+                <button class="oe_stat_button" type="object"
+                        name="action_view_attach_line"
+                        icon="fa-external-link">
+                    <field string="Documents" name="attach_line_count"
+                           widget="statinfo"/>
+                </button>
+                <button class="oe_stat_button" type="object"
+                        name="action_crm_lead"
+                        invisible="not lead_id"
+                        icon="fa-tags">
+                    Lead
+                </button>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Transaction" name="transaction">
+                    <group>
+                        <group>
+                            <field name="sales_price"/>
+                            <field name="purchase_balance_amount"/>
+                            <field name="current_rates_taxes"/>
+                            <field name="no_parking_bays"/>
+                        </group>
+                        <group>
+                            <field name="deposit" widget="percentage"/>
+                            <field name="deposit_amount"/>
+                            <field name="current_levy_taxes"/>
+                            <field name="parking_bay_no"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Location" name="location">
+                    <group string="Location">
+                        <group>
+                            <field name="building" readonly="state != 'draft'"/>
+                            <field name="building_code"
+                                   readonly="state != 'draft'"/>
+                            <field name="no_of_floors"
+                                   readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="region" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+
+                </page>
+                <page string="Building Unit" name="building">
+                    <group name="building_unit">
+                        <group>
+                            <field name="building_unit"
+                                   options="{'no_create': True, 'no_open': True}"
+                                   readonly="state != 'draft'"/>
+                            <field name="unit_code"
+                                   readonly="state != 'draft'"/>
+                            <field name="floor" readonly="state != 'draft'"/>
+                            <field name="address" readonly="state != 'draft'"/>
+                            <field name="pricing" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="type" readonly="state != 'draft'"/>
+                            <field name="status" readonly="state != 'draft'"/>
+                            <field name="building_area"
+                                   readonly="state != 'draft'"/>
+                            <field name="template_id"
+                                   readonly="state != 'draft'" required="1"/>
+                        </group>
+                    </group>
+                        <group string="Other Payments">
+                            <group>
+                                <label for="maintenance"/>
+                                <div class="o_row">
+                                    <field name="maintenance" required="1" readonly="state != 'draft'"/>
+                                    <field name="date_maintenance" class="field_rule_type"
+                                           readonly="state != 'draft'" required="maintenance != 0"/>
+                                </div>
+                                <label for="club"/>
+                                <div class="o_row">
+                                    <field name="club" required="1" readonly="state != 'draft'"/>
+                                    <field name="date_club" class="field_rule_type"
+                                           readonly="state != 'draft'" required="club != 0"/>
+                                </div>
+                                <label for="garage"/>
+                                <div class="o_row">
+                                    <field name="garage" required="1" readonly="state != 'draft'"/>
+                                    <field name="date_garage" class="field_rule_type"
+                                           readonly="state != 'draft'" required="garage != 0"/>
+                                </div>
+                            </group>
+                            <group>
+                                <label for="elevator"/>
+                                <div class="o_row">
+                                    <field name="elevator" required="1" readonly="state != 'draft'"/>
+                                    <field name="date_elevator" class="field_rule_type"
+                                           readonly="state != 'draft'" required="elevator != 0"/>
+                                </div>
+                                <label for="other"/>
+                                <div class="o_row">
+                                    <field name="other" required="1" readonly="state != 'draft'"/>
+                                    <field name="date_other" class="field_rule_type"
+                                           readonly="state != 'draft'" required="other != 0"/>
+                                </div>
+                            </group>
+                        </group>
+
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

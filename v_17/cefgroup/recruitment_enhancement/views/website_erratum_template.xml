@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="eratum_template" name="Eratum">
+        <t t-call="website.layout">
+            <!-- Page Header Section -->
+            <section class="s_title parallax bg-black-50"
+                     style="padding-bottom: 50px; padding-top: 50px; background-color: #333;">
+                <div class="container text-center">
+                    <h1 class="text-white">Eratum</h1>
+                    <p class="text-light">Discover the latest updates and corrections</p>
+                </div>
+            </section>
+
+            <!-- Erratum List Section -->
+            <div id="eratum_section" class="container mt-5">
+                <div class="row">
+                    <div class="col-12">
+                        <t t-if="errata">
+                            <div class="row">
+                                <t t-foreach="errata" t-as="erratum">
+                                    <div class="col-md-6 mb-4">
+                                        <div class="card shadow-sm border">
+                                            <div class="card-header bg-primary text-white">
+                                                <h5 class="card-title mb-0">
+                                                    <t t-esc="erratum.title"/>
+                                                </h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text">
+                                                    <t t-esc="erratum.description"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="alert alert-info" role="alert">
+                                No errata records found.
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Menu Item -->
+    <record id="menu_eratum" model="website.menu">
+        <field name="name">Eratum</field>
+        <field name="url">/eratum</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">10</field>
+    </record>
+</odoo>

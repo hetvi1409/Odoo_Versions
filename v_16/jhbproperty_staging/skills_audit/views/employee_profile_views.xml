@@ -1,0 +1,200 @@
+
+<odoo>
+  <record id="view_profile_tree" model="ir.ui.view">
+    <field name="name">scs.employee.profile.tree</field>
+    <field name="model">scs.employee.profile</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="employee_id"/>
+        <field name="role_id"/>
+        <field name="total_competencies"/>
+        <field name="met_count"/>
+        <field name="gap_count"/>
+        <field name="gap_percent"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_profile_form" model="ir.ui.view">
+    <field name="name">scs.employee.profile.form</field>
+    <field name="model">scs.employee.profile</field>
+    <field name="arch" type="xml">
+      <form string="Employee Profile" class="o_form_full">
+        <header>
+          <!-- <button name="action_create_assessment"
+                  type="object"
+                  string="New Assessment"
+                  class="btn-primary oe_highlight"/>
+          <button name="action_generate_training_suggestions"
+                  type="object"
+                  string="Suggest Training"
+                  class="btn-primary"/> -->
+          <button name="%(action_report_profile)d"
+                  type="action"
+                  string="Print Gap Report"
+                  class="btn-primary"/>
+        </header>
+
+        <sheet>
+          <style>
+            .o_form_view:not(.o_field_highlight)
+            .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+            .o_input:not(:hover):not(:focus) {
+              --o-input-border-color: black !important;
+            }
+            .o_form_view:not(o_field_highlight)
+            .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+            .note-editable:not(:focus) {
+              border-color: black !important;
+            }
+            .form-check:not(:hover),
+            .form-check:not(:hover) .form-check-input:not(:disabled),
+            .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+              border-color: black !important;
+            }
+          </style>
+          <div class="oe_title pe-0">
+            <h1 class="d-flex flex-row justify-content-between">
+              <field name="name" placeholder="Employee - Role"/>
+            </h1>
+          </div>
+          <group>
+            <group string="Employee Information">
+              <field name="role_id" options="{'no_open': True, 'no_create': True}" required="1"/>
+              <field name="employee_id" options="{'no_open': True, 'no_create': True}" required="1"/>
+            </group>
+            <group string="Key Indicators">
+              <group>
+                <field name="total_competencies" readonly="1"/>
+                <field name="met_count" readonly="1"/>
+                <field name="gap_count" readonly="1"/>
+                <field name="gap_percent" readonly="1" widget="percentage"/>
+              </group>
+            </group>
+          </group>
+
+          <notebook>
+            <page string="Competencies">
+                <field name="requirement_ids" nolabel="1">
+                  <tree editable="top">
+                    <field name="competency_id" readonly="1"/>
+                    <field name="required_level" readonly="1"/>
+                  </tree>
+                </field>
+            </page>
+
+          <!-- <notebook>
+            <page string="Competencies">
+              <group>
+                <field name="requirement_ids" nolabel="1" mode="tree,form" >
+                <field name="requirement_ids" nolabel="1">
+                  <tree editable="top">
+                    <field name="competency_id"/>
+                    <field name="required_level"/>
+                  </tree>
+                  <form>
+                    <group>
+                      <field name="competency_id" readonly="1"/>
+                      <field name="required_level" readonly="1"/>
+                    </group>
+                  </form>
+                </field>
+              </group>
+            </page> -->
+
+            <page string="Assessments">
+              <group>
+                <button name="action_create_assessment"
+                        type="object"
+                        string="New Assessment"
+                        class="btn-primary oe_highlight"/>
+                </group>
+              <field name="assessment_ids">
+                <tree>
+                  <field name="name"/>
+                  <field name="state"/>
+                  <field name="create_date"/>
+                </tree>
+              </field>
+            </page>
+
+            <!-- <page string="Assessments">
+              <field name="assessment_ids">
+                <tree string="Assessments" editable="bottom">
+                  <field name="name"/>
+                  <field name="state"/>
+                  <field name="create_date"/>
+                </tree>
+
+                <kanban>
+                  <templates>
+                    <t t-name="kanban-box">
+                      <div class="o_kanban_record_top">
+                        <strong><field name="name"/></strong>
+                      </div>
+                      <div>
+                        <span class="o_tag o_tag_sm"><field name="state"/></span>
+                        <div class="text-muted small"><field name="create_date"/></div>
+                      </div>
+                    </t>
+                  </templates>
+                </kanban>
+
+                <form string="Assessment">
+                  <sheet>
+                    <group>
+                      <field name="name"/>
+                      <field name="state" widget="statusbar"/>
+                      <field name="employee_id" readonly="1"/>
+                      <field name="role_id" readonly="1"/>
+                    </group>
+                    <field name="line_ids">
+                      <tree editable="bottom">
+                        <field name="competency_id"/>
+                        <field name="required_level"/>
+                        <field name="self_level"/>
+                        <field name="manager_level"/>
+                        <field name="final_level"/>
+                        <field name="gap"/>
+                      </tree>
+                    </field>
+                  </sheet>
+                </form>
+              </field>
+            </page> -->
+
+            <page string="Training Actions">
+              <group>
+                <button name="action_generate_training_suggestions"
+                        type="object"
+                        string="Suggest Training"
+                        class="btn-primary"/>
+              </group>
+              <field name="training_actions_ids" nolabel="1" delete="1">
+                <!-- We reuse assessment lines to display suggested training if needed.
+                     Alternatively you may reference scs.training.action via a dedicated relation. -->
+                <tree>
+                  <field name="name"/>
+                  <!-- <field name="employee_id"/> -->
+                  <field name="competency_id"/>
+                  <!-- <field name="training_actions_employee_profile_id"/> -->
+                  <field name="state"/>
+                  <field name="suggested"/>
+                  <field name="create_date"/>
+                </tree>
+              </field>
+            </page>
+
+          </notebook>
+        </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids"/>
+          <field name="activity_ids"/>
+          <field name="message_ids"/>
+        </div>
+      </form>
+    </field>
+  </record>
+
+</odoo>

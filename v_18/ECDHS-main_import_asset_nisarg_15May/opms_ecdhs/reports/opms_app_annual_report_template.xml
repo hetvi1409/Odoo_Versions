@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_opms_app_annual_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .opms-app-report-title {
+                            color: #079c4b;
+                            font-size: 20px;
+                            font-weight: 700;
+                            margin-bottom: 8px;
+                            text-transform: uppercase;
+                        }
+                        .opms-app-report-subtitle {
+                            font-size: 11px;
+                            margin-bottom: 4px;
+                        }
+                        .opms-app-report-subtitle strong {
+                            font-weight: 700;
+                        }
+                        .opms-app-report-caption {
+                            font-size: 11px;
+                            font-weight: 700;
+                            margin-bottom: 8px;
+                        }
+                        .opms-app-report-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            table-layout: fixed;
+                            font-size: 9px;
+                        }
+                        .opms-app-report-table th,
+                        .opms-app-report-table td {
+                            border: 1px solid #4a4a4a;
+                            padding: 2px 3px;
+                            vertical-align: top;
+                            line-height: 1.2;
+                            word-wrap: break-word;
+                            overflow-wrap: break-word;
+                            white-space: normal;
+                            hyphens: none;
+                            -webkit-hyphens: none;
+                            -moz-hyphens: none;
+                        }
+                        .opms-app-report-table thead th {
+                            background: #079c4b;
+                            color: #ffffff;
+                            text-align: center;
+                            font-size: 8px;
+                            font-weight: 700;
+                            padding: 3px 2px;
+                            word-wrap: break-word;
+                            overflow-wrap: break-word;
+                            hyphens: none;
+                            -webkit-hyphens: none;
+                            -moz-hyphens: none;
+                        }
+                        .opms-app-report-table thead .center {
+                            text-align: center;
+                        }
+                        .opms-app-report-table tbody td {
+                            background: #efefef;
+                        }
+                        .opms-app-report-table tbody td.outcome-cell {
+                            background: #079c4b;
+                            color: #ffffff;
+                            font-weight: 700;
+                            text-align: left;
+                        }
+                        .opms-app-report-table tbody td.numeric-cell {
+                            text-align: left;
+                        }
+                    </style>
+
+                    <h2 class="opms-app-report-title">
+                        <t t-esc="programme_title or '-'"/>
+                    </h2>
+
+                    <p class="opms-app-report-subtitle">
+                        <strong>Purpose:</strong>
+                        <t t-esc="purpose_text or '-'"/>
+                    </p>
+                    <p class="opms-app-report-caption">Outcomes, Outputs, Performance Indicators and Targets</p>
+
+                    <table class="opms-app-report-table">
+                        <colgroup>
+                            <col style="width: 8%;"/>
+                            <col style="width: 14%;"/>
+                            <col style="width: 19%;"/>
+                            <t t-foreach="ordered_years" t-as="year">
+                                <col style="width: 7.375%;"/>
+                            </t>
+                        </colgroup>
+
+                        <thead>
+                            <tr>
+                                <th rowspan="3" style="border: 1px solid #000; padding: 5px; text-align: left;">Outcome</th>
+                                <th rowspan="3" style="border: 1px solid #000; padding: 5px;">Outputs</th>
+                                <th rowspan="3" style="border: 1px solid #000; padding: 5px;">Output Indicators</th>
+                                <t t-if="ordered_years">
+                                    <th class="center" t-att-colspan="len(ordered_years)" style="border: 1px solid #000; padding: 5px;">Annual Targets</th>
+                                </t>
+                            </tr>
+
+                            <tr t-if="ordered_years">
+                                <t t-if="aud_years">
+                                    <th class="center" t-att-colspan="len(aud_years)" style="border: 1px solid #000; padding: 5px;">Audited/Actual performance</th>
+                                </t>
+                                <t t-if="est_years">
+                                    <th class="center" t-att-colspan="len(est_years)" style="border: 1px solid #000; padding: 5px;">Estimated performance</th>
+                                </t>
+                                <t t-if="mtdp_years">
+                                    <th class="center" t-att-colspan="len(mtdp_years)" style="border: 1px solid #000; padding: 5px;">MTDP Period</th>
+                                </t>
+                            </tr>
+
+                            <tr t-if="ordered_years">
+                                <t t-foreach="ordered_years" t-as="year">
+                                    <th class="center" style="border: 1px solid #000; padding: 5px;">
+                                        <t t-esc="year"/>
+                                    </th>
+                                </t>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <t t-if="rows">
+                                <t t-foreach="rows" t-as="row">
+                                    <tr>
+                                        <td class="outcome-cell">
+                                            <t t-esc="row.get('outcome_label')"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="row.get('output_name')"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="row.get('indicator_name')"/>
+                                        </td>
+                                        <t t-foreach="ordered_years" t-as="year">
+                                            <td class="numeric-cell">
+                                                <t t-esc="row.get('targets', {}).get(year, '-')"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </t>
+                            <t t-if="not rows">
+                                <tr>
+                                    <td style="border: 1px solid #000; padding: 5px;" colspan="3">No output indicators found for this programme.</td>
+                                    <t t-foreach="ordered_years" t-as="year">
+                                        <td style="border: 1px solid #000; padding: 5px; text-align: center;">-</td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

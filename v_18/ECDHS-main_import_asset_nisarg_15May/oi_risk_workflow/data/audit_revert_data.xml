@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="internal_audit_management.email_template_audit_revert_to_review" model="mail.template">
+        <field name="name">Audit Revert</field>
+        <field name="model_id" ref="internal_audit_management.model_audit_revert"/>
+        <field name="subject">Audit Revert : Review</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                  Audit revert was created against the
+                    <b>
+                        <t t-if="object.reference_type not in ['oi_risk_management_risk','oi_risk_management_activity','complaince_assessment','complaince_treatment','professional_development', 'audit_finding', 'audit_followup', 'audit_action_plan', 'project_checklist', 'quality_assurance', 'client_survey']">
+                            <t t-out="object.reference.name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'professional_development'">
+                            <t t-out="object.reference.subject"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_followup'">
+                            <t t-out="object.reference.followup_name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_finding'">
+                            <t t-out="object.reference.finding_name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'client_survey'">
+                            <t t-out="object.reference.subject"/>
+                        </t>
+                        <t t-if="object.reference_type == 'quality_assurance'">
+                            <t t-out="object.reference.assurance_number"/>
+                        </t>
+                        <t t-if="object.reference_type == 'project_checklist'">
+                            <t t-out="object.reference.project_title"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_action_plan'">
+                            <t t-out="object.reference.requirements"/>
+                        </t>
+
+                    </b>Please review this.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="internal_audit_management.email_template_audit_revert_review" model="mail.template">
+        <field name="name">Audit Revert</field>
+        <field name="model_id" ref="internal_audit_management.model_audit_revert"/>
+        <field name="subject">Audit Revert : Completed</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                  Audit revert was completed against the
+                    <b>
+                        <t t-if="object.reference_type not in ['oi_risk_management_risk','oi_risk_management_activity','complaince_assessment','complaince_treatment','professional_development', 'audit_finding', 'audit_followup', 'audit_action_plan', 'project_checklist', 'quality_assurance', 'client_survey']">
+                            <t t-out="object.reference.name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'professional_development'">
+                            <t t-out="object.reference.subject"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_followup'">
+                            <t t-out="object.reference.followup_name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_finding'">
+                            <t t-out="object.reference.finding_name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'client_survey'">
+                            <t t-out="object.reference.subject"/>
+                        </t>
+                        <t t-if="object.reference_type == 'quality_assurance'">
+                            <t t-out="object.reference.assurance_number"/>
+                        </t>
+                        <t t-if="object.reference_type == 'project_checklist'">
+                            <t t-out="object.reference.project_title"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_action_plan'">
+                            <t t-out="object.reference.requirements"/>
+                        </t>
+                    </b>Please review this.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="internal_audit_management.email_template_audit_revert_rejected" model="mail.template">
+        <field name="name">Audit Revert</field>
+        <field name="model_id" ref="internal_audit_management.model_audit_revert"/>
+        <field name="subject">Audit Revert : Rejected</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                  Audit revert was rejected against the
+                    <b>
+                        <t t-if="object.reference_type not in ['oi_risk_management_risk','oi_risk_management_activity','complaince_assessment','complaince_treatment','professional_development', 'audit_finding', 'audit_followup', 'audit_action_plan', 'project_checklist', 'quality_assurance', 'client_survey']">
+                            <t t-out="object.reference.name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'professional_development'">
+                            <t t-out="object.reference.subject"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_followup'">
+                            <t t-out="object.reference.followup_name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_finding'">
+                            <t t-out="object.reference.finding_name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'client_survey'">
+                            <t t-out="object.reference.subject"/>
+                        </t>
+                        <t t-if="object.reference_type == 'quality_assurance'">
+                            <t t-out="object.reference.assurance_number"/>
+                        </t>
+                        <t t-if="object.reference_type == 'project_checklist'">
+                            <t t-out="object.reference.project_title"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_action_plan'">
+                            <t t-out="object.reference.requirements"/>
+                        </t>
+                    </b>Please review this.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="internal_audit_management.email_template_audit_revert_ongoing" model="mail.template">
+        <field name="name">Audit Revert</field>
+        <field name="model_id" ref="internal_audit_management.model_audit_revert"/>
+        <field name="subject">Audit Revert : Ongoing</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                  Audit revert was created against the
+                    <b>
+                        <t t-if="object.reference_type not in ['oi_risk_management_risk','oi_risk_management_activity','complaince_assessment','complaince_treatment','professional_development', 'audit_finding', 'audit_followup', 'audit_action_plan', 'project_checklist', 'quality_assurance', 'client_survey']">
+                            <t t-out="object.reference.name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'professional_development'">
+                            <t t-out="object.reference.subject"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_followup'">
+                            <t t-out="object.reference.followup_name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_finding'">
+                            <t t-out="object.reference.finding_name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_finding'">
+                            <t t-out="object.reference.finding_name"/>
+                        </t>
+                        <t t-if="object.reference_type == 'client_survey'">
+                            <t t-out="object.reference.subject"/>
+                        </t>
+                        <t t-if="object.reference_type == 'quality_assurance'">
+                            <t t-out="object.reference.assurance_number"/>
+                        </t>
+                        <t t-if="object.reference_type == 'project_checklist'">
+                            <t t-out="object.reference.project_title"/>
+                        </t>
+                        <t t-if="object.reference_type == 'audit_action_plan'">
+                            <t t-out="object.reference.requirements"/>
+                        </t>
+                    </b>Please review this.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+</odoo>

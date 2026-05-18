@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+       <record id="overdue_return" model="ir.cron">
+           <field name="name">Overdue for Return</field>
+           <field name="model_id" ref="model_fuel_card_transaction"/>
+           <field name="state">code</field>
+           <field name="code">model.send_mail()</field>
+           <field name="user_id" ref="base.user_root"/>
+           <field name='interval_number'>1</field>
+           <field name='interval_type'>days</field>
+           <field name="nextcall"
+                  eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 12:00:00')"/>
+           <field name="priority">1</field>
+       </record>
+   </data>
+    <record id="print_fleet_tank_report" model="ir.actions.report">
+        <field name="name">Fuel Tank Report</field>
+        <field name="model">fuel.tank</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">fuel_card_register.report_fuel_tank</field>
+        <field name="report_file">fuel_card_register.report_fuel_tank</field>
+        <field name="binding_model_id" ref="fuel_card_register.model_fuel_tank"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

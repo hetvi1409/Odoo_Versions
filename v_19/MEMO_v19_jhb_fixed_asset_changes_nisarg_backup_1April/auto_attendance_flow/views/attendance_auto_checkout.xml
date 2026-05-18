@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.attendance.inherit</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="80"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='hr_attendance']" position="inside">
+
+                <block title="Auto Check-in / Checkout">
+
+                    <setting string="Enable Auto Check-in / Checkout"
+                             help="Automatically check-in and check-out employees based on defined rules.">
+                        <field name="auto_checkin_enabled"/>
+                    </setting>
+
+                    <setting string="Default Auto Check-out Time"
+                             help="Default time at which employees will be automatically checked out."
+                             invisible="not auto_checkin_enabled">
+                        <field name="hr_attendance_end_time"
+                               placeholder="18:00:00"/>
+                    </setting>
+
+                </block>
+
+                <block title="Overtime Rates Configuration">
+
+                    <setting string="Weekday Overtime Rate"
+                             help="Set the overtime rate applied on weekdays.">
+                        <field name="weekday_ot_rate"/>
+                        <span class="ms-2">/ hour</span>
+                    </setting>
+
+                    <setting string="Weekend Overtime Rate"
+                             help="Set the overtime rate applied on weekends.">
+                        <field name="weekend_ot_rate"/>
+                        <span class="ms-2">/ hour</span>
+                    </setting>
+
+                    <setting string="Holiday Overtime Rate"
+                             help="Set the overtime rate applied on public holidays.">
+                        <field name="holiday_ot_rate"/>
+                        <span class="ms-2">/ hour</span>
+                    </setting>
+
+                </block>
+
+                <block title="Overtime Limits">
+
+                    <setting string="Overtime Time Limit"
+                             help="Maximum allowed overtime difference before validation.">
+                        <field name="ot_time_limit"/>
+                        <span class="ms-2">Minutes</span>
+                    </setting>
+
+                </block>
+
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_client_sat_survey" model="ir.actions.act_window">
+        <field name="name">Satisfaction Survey</field>
+        <field name="res_model">client.survey</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Client Survey
+            </p>
+            <p>
+                Create and manage the Client Survey
+            </p>
+        </field>
+    </record>
+    <record id="survey_tree_custom" model="ir.ui.view">
+        <field name="name">survey.view.form</field>
+        <field name="model">client.survey</field>
+        <field name="arch" type="xml">
+            <tree duplicate="0">
+                <field name="auditee"/>
+                <field name="subject"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_print_survey" model="ir.actions.report">
+        <field name="name">Client Satisfaction Survey</field>
+        <field name="model">ir.actions.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">
+            internal_audit_management.report_client_template
+        </field>
+        <field name="print_report_name">'Client Satisfaction Survey Report'
+        </field>
+    </record>
+    <record id="survey_form_custom" model="ir.ui.view">
+        <field name="name">view.survey.form.custom</field>
+        <field name="model">client.survey</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" />
+                    <button name="action_preparer" type="object"
+                            string="Preparer"
+                            class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_review" type="object"
+                            string="Reviewed"
+                            class="oe_highlight" attrs="{'invisible': [('state', '!=', 'preparer')]}"/>
+                    <button name="action_approve" type="object"
+                           
+                            string="Approved" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+                    <button name="action_send_client" type="object"
+                           
+                            string="Send to Client" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'completed')]}"/>
+                    <button name="action_revert" type="object"
+                            string="Revert"
+                            class="oe_highlight" attrs="{'invisible': [('state', 'in', ['rejected', 'reverted', 'draft'])]}"/>
+                    <button name="action_print_client_survey" type="object"
+                            string="Print" class="oe_highlight"/>
+                    <button name="action_mark_discrepancy" type="object"
+                            string="Reject"
+                            class="oe_highlight" attrs="{'invisible': [('state', 'in', ['rejected', 'reverted', 'draft', 'preparer'])]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <div style="width:100%">
+                        <table border="1" style="width:100%">
+                            <tr>
+                                <td>
+                                    <h3 style="text-align:left;">Umzimkhulu
+                                        Municipality
+                                    </h3>
+                                </td>
+                                <!--                                <td rowspan="3" style="vertical-align:middle"><img src="/internal_audit_management/static/src/image/img.png" style="height:90px; width:150px;" alt="Document"/></td>-->
+                                <td>
+                                    <strong>W/P Reference:
+                                        <field name="survey_number" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h5 style="text-align:left;">Internal Audit
+                                        Unit
+                                    </h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h4 style="text-align:left;">CUSTOMER
+                                        SATISFACTION SURVEY
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Auditee:
+                                        <field name="auditee" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>Project:
+                                        <field name="project" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>Team Leader:
+                                        <field name="team_leader" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Subject:
+                                        <field name="subject" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>Project Name:
+                                        <field name="project" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>Reviewer:
+                                        <field name="reviewer" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+                    <div style="width:100%; border:1px solid black; padding:12px; margin-bottom:20px;">
+
+                        <h3 style="text-align:center; margin-bottom:10px; font-weight: 800;">
+                            INTERNAL AUDIT UNIT
+                        </h3>
+
+                        <table style="width:100%; margin-bottom:10px;">
+                                <tr>
+                                    <td style="width:33%;">
+                                        <strong>Enquiries</strong>
+                                        <br/>
+                                        Imibuzo: <field name="enquiries_person" nolabel="1" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                        <br/>
+                                        Navrae
+                                    </td>
+                                    <td style="width:33%;">
+                                        <strong>Reference</strong>
+                                        <br/>
+                                        Inkomba: <field name="reference_number" nolabel="1" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                        <br/>
+                                        Verwysing
+                                    </td>
+                                    <td style="width:33%;">
+                                        <strong>Your reference</strong>
+                                        <br/>
+                                        Inkombayakho: <field name="your_reference" nolabel="1" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                        <br/>
+                                        Uverwysing
+                                    </td>
+                                </tr>
+                            </table>
+
+                        <p style="text-align:right;">
+                            <strong>Date:</strong>
+                                <span style="margin-left: 10px;">
+                                    <field name="date" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                </span>
+                        </p>
+
+                        <p>
+                            The Municipal Manager
+                            <br/>
+                            Umzimkhulu Municipality
+                            <br/>
+                            P.O. Box 53
+                            <br/>
+                            UMZIMKHULU
+                            <br/>
+                            3297
+                        </p>
+
+                        <p>
+                            <strong>For attention :
+                                <field name="municipal_manager_name"
+                                placeholder="Name of the Municipal Manager"
+                                attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                            </strong>
+                        </p>
+
+                        <p>
+                            <strong>CLIENT SATISFACTION QUESTIONNAIRE :
+                                <field name="client_id"
+                                       placeholder="Name of the Client" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                            </strong>
+                        </p>
+                        <field name="intro_content" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                        <br/>
+
+                        <p>
+                            __________________________
+                            <br/>
+                            <strong>HEAD: INTERNAL AUDIT UNIT</strong>
+                        </p>
+
+                    </div>
+
+                    <!-- NEW QUESTIONNAIRE SECTION WITH RADIO BUTTONS -->
+                    <div style="width:100%; border:2px solid black; padding:15px; margin-bottom:20px;">
+                        <div style="
+                            width: 100%;
+                            text-align: center;
+                            padding: 10px;
+                            margin-bottom: 16px;
+                        ">
+                            <div style="
+                                display: inline-block;
+                                padding: 10px 20px;
+                                background: linear-gradient(180deg, #cfe4ff, #bcd7ff);
+                                border: 3px solid #2f2bbd;
+                                box-shadow: inset 0 0 0 3px #7aa0ff;
+                                border-radius: 4px;
+                            ">
+                                <p style="
+                                    margin: 0;
+                                    font-size: 22px;
+                                    font-weight: 800;
+                                    letter-spacing: 1px;
+                                    color: #000;
+                                    text-transform: uppercase;
+                                    font-family: Arial, Helvetica, sans-serif;
+                                ">
+                                    Client Satisfaction Questionnaire
+                                </p>
+                            </div>
+                        </div>
+                        <field name="questionnaire_content" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+
+                        <div style="margin-bottom:15px;">
+                            <p>
+                                <strong>Client Name:</strong>
+                                <span style="border-bottom:1px solid black; display:inline-block; width:80%;">
+                                    <field name="client_id"
+                                          
+                                           style="border:none; width:100%;"
+                                           placeholder="" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                </span>
+                            </p>
+                        </div>
+
+                        <div style="margin-bottom:20px;">
+                            <p>
+                                <strong>Project Number / Description:</strong>
+                                <span style="border-bottom:1px solid black; display:inline-block; width:70%;">
+                                    <field name="project"
+                                          
+                                           style="border:none; width:100%;"
+                                           placeholder="" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}"/>
+                                </span>
+                            </p>
+                        </div>
+
+<!--                     Questions Table -->
+                        <field name="response_ids"
+                              
+                               widget="section_and_note_one2many" nolabel="1" attrs="{'readonly': [('state', 'in', ['submitted', 'completed'])]}">
+                            <tree editable="bottom">
+                                <control>
+                                    <create name="add_product_control" string="Add a Line"/>
+                                    <create name="add_section_control"
+                                            string="Add a section"
+                                            context="{'default_display_type': 'line_section'}"/>
+                                </control>
+                                <!-- Hidden fields for grouping -->
+                                <field name="display_type"
+                                       attrs="{'column_invisible': True}"/>
+                                <field name="survey_id" attrs="{'column_invisible': True}"/>
+                                <field name="sequence" widget="handle"/>
+                                <!-- Question column -->
+                                <field name="question_id"
+                                       string="Questions"
+                                      
+                                       options="{'no_open': True}" attrs="{'required': [('display_type', '!=', False)]}"/>
+                                <field name="name"
+                                       widget="section_and_note_text" nolabel="1"/>
+
+                                <!-- Rating columns -->
+                                <field name="check_1"
+                                       string="Inadequate (1)"
+                                      
+                                       widget="boolean_toggle"
+                                 attrs="{'required': [('display_type', '!=', False)]}"/>
+                                <field name="check_2"
+                                       string="Marginal (2)"
+                                      
+                                       widget="boolean_toggle" attrs="{'required': [('display_type', '!=', False)]}"/>
+                                <field name="check_3"
+                                       string="Satisfactory (3)"
+                                      
+                                       widget="boolean_toggle" attrs="{'required': [('display_type', '!=', False)]}"/>
+                                <field name="check_4"
+                                       string="Very Good (4)"
+                                      
+                                       widget="boolean_toggle" attrs="{'required': [('display_type', '!=', False)]}"/>
+                                <field name="check_5"
+                                       string="Excellent (5)"
+                                      
+                                       widget="boolean_toggle" attrs="{'required': [('display_type', '!=', False)]}"/>
+                            </tree>
+                        </field>
+
+                        <!-- Where could we improve section -->
+                        <div style="margin-bottom:15px;">
+                            <p>
+                                <strong>Where could we improve our service?
+                                </strong>
+                            </p>
+                            <field name="improvement_suggestions" widget="text"
+                                   placeholder=""/>
+                        </div>
+
+                        <!-- Other comments section -->
+                        <div style="margin-bottom:15px;">
+                            <p>
+                                <strong>Other comments:</strong>
+                            </p>
+                            <field name="other_comments" widget="text"
+                                   placeholder=""/>
+                        </div>
+
+                        <!-- Signature section -->
+                        <table style="width:100%; margin-top:20px;">
+                            <tr>
+                                <td style="width:40%;">
+                                    <p>
+                                        <strong>Completed by:</strong>
+                                        <span style="border-bottom:1px solid black; display:inline-block; width:60%;">
+                                            <field name="questionnaire_completed_by"
+                                                   style="border:none; width:100%;"
+                                                   placeholder=""/>
+                                        </span>
+                                    </p>
+                                </td>
+                                <td style="width:30%;">
+                                    <p>
+                                        <strong>Signed:</strong>
+                                        <span style="border-bottom:1px solid black; display:inline-block; width:60%;">
+                                            <field name="questionnaire_signature"
+                                                   style="border:none; width:100%;"
+                                                   placeholder=""/>
+                                        </span>
+                                    </p>
+                                </td>
+                                <td style="width:30%;">
+                                    <p>
+                                        <strong>Date:</strong>
+                                        <field name="questionnaire_date"/>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- END OF NEW QUESTIONNAIRE SECTION -->
+
+                    <notebook>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                        <page string="Documents">
+                            <field name="document_ids"
+                                   widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+    <!-- Question Tree View -->
+    <record id="view_survey_questions_tree" model="ir.ui.view">
+        <field name="name">survey.questions.tree</field>
+        <field name="model">survey.questions</field>
+        <field name="arch" type="xml">
+            <tree string="Survey Questions">
+                <field name="sequence" widget="handle"/>
+                <field name="name" widget="text"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Question Form View -->
+    <record id="view_survey_questions_form" model="ir.ui.view">
+        <field name="name">survey.questions.form</field>
+        <field name="model">survey.questions</field>
+        <field name="arch" type="xml">
+            <form string="Survey Question">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" widget="text"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Help">
+                            <div class="alert alert-info">
+                                <p><strong>Tips:</strong></p>
+                                <ul>
+                                    <li>Questions are displayed in the order of their sequence number</li>
+                                    <li>To group questions, assign them to the same section</li>
+                                    <li>To ungroup, remove the section (leave blank)</li>
+                                    <li>Use the drag handle (☰) in list view to reorder</li>
+                                    <li>Deactivate questions instead of deleting to preserve historical data</li>
+                                </ul>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Question Action -->
+    <record id="action_survey_questions" model="ir.actions.act_window">
+        <field name="name">Survey Questions</field>
+        <field name="res_model">survey.questions</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first survey question
+            </p>
+            <p>
+                Questions can be grouped into sections or left ungrouped.
+                Drag and drop to reorder, or assign to sections to organize your questionnaire.
+            </p>
+        </field>
+    </record>
+
+</odoo>

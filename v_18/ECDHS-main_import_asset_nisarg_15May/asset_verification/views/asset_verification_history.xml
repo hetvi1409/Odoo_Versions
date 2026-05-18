@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_account_asset_verification_history" model="ir.ui.view">
+            <field name="name">asset.verification.history.view.form</field>
+            <field name="model">asset.verification.history</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Asset Verification" name="verification">
+                            <group>
+                                <field name="is_verified"/>
+                                <field name="parent_barcode"/>
+                                 <field name="past_year"/>
+                                <field name="this_year"/>
+                                <!-- <field name="comments"/> -->
+                                <field name="condition" widget="many2many_tags"/>
+                                <field name="date_verification"/>
+                                <field name="asset_verification_user_id"/>
+                                <field name="location_id"/>
+                            </group>
+                            <group>
+                                <field name="major_group_description"/>
+                                <field name="current_condition_this_year"/>
+                                <field name="name_installation"/>
+                                <field name="asset_make_type"/>
+                                <field name="barcode_past_year"/>
+                                <field name="current_condition_past_year"/>
+                                <field name="asset_component"/>
+                                <field name="asset_size"/>
+                                <field name="estimated_useful_life_month"/>
+                                <field name="inspector"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- list view -->
+        <record id="view_account_asset_verification_history_list" model="ir.ui.view">
+            <field name="name">asset.verification.history.view.list</field>
+            <field name="model">asset.verification.history</field>
+            <field name="arch" type="xml">
+                <list string="Asset Verification History">
+                    <field name="is_verified"/>
+                    <field name="parent_barcode"/>
+                    <field name="past_year"/>
+                    <field name="this_year"/>
+                    <field name="condition" widget="many2many_tags"/>
+                    <field name="date_verification"/>
+                    <field name="asset_verification_user_id"/>
+                    <field name="location_id"/>
+                    <field name="create_date" string="TimeStamps"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="action_asset_verification_history" model="ir.actions.act_window">
+            <field name="name">Asset Verification History</field>
+            <field name="res_model">asset.verification.history</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="view_asset_verification_history_search_view" model="ir.ui.view">
+            <field name="name">asset.verification.history.search.view</field>
+            <field name="model">asset.verification.history</field>
+            <field name="arch" type="xml">
+                <search string="Asset Verification History">
+                    <group>
+                            <filter name="group_by_condition" string="Condition" context="{'group_by':'condition'}"/>
+                    </group>
+                </search>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+    <record id="rental_contract_form_view" model="ir.ui.view">
+        <field name="name">rental.contract.view.form</field>
+        <field name="model">rental.contract</field>
+        <field name="inherit_id" ref="itsys_real_estate.rental_contract_form_view"/>
+        <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_open_reading" string="Reading" type="object"
+                        icon="fa-bar-chart" invisible="not reading_count">
+                    <field name="reading_count" invisible="True"/>
+                </button>
+                <button name="action_open_meter" string="Meter" type="object"
+                        icon="fa-bar-chart" invisible="not meter_count">
+                    <field name="meter_count" invisible="True"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- https://www.odoo.com/documentation/14.0/howtos/backend.html -->
+<odoo>
+
+		<!-- Inherit Contact list View -->
+        <!-- <record id="partner_list_inherit" model="ir.ui.view">
+            <field name="name">res.partner.list.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_list"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='display_name']" position="before">
+                    <header>
+                        <button name="action_bulk_create_invoices_button" type="object" string="Bulk Create Invoices" class="btn-primary"/>
+                    </header>
+                </xpath>
+                <xpath expr="//field[@name='display_name']" position="after">
+                    <field name="ref" string="ID Number" required="1"/>
+                    <field name="mobile" required="1"/>
+                </xpath>
+            </field>
+        </record> -->
+
+		<!-- Inherit Contact Form View -->
+        <record id="sagovres_partner_form_inherit" model="ir.ui.view">
+            <field name="name">sagovres.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_type']" position="attributes">
+                    <attribute name="force_save">1</attribute>
+                    <attribute name="required">True</attribute>
+                </xpath>
+                <xpath expr="//page[@name='internal_notes']" position="after">
+                    <page string="Supplier SCM Details" name="sagov_supplier_scm_details">
+                        <group>
+                            <group>
+                                <field name="supplier_rank" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="is_company" readonly="1"/>
+                            </group>
+                            <group string="CSD Details">
+                                <field name="csd_registered"/>
+                                <field name="csd_number"/>
+                                <field name="csd_registration_date"/>
+                            </group>
+                            <group string="Tax Clearance Details">
+                                <field name="tax_clearance_number"/>
+                                <field name="tax_clearance_expiry"/>
+                                <field name="tax_compliant"/>
+                            </group>
+                            <group string="COID Details">
+                                <field name="coid_number"/>
+                                <field name="coid_compliant"/>
+                            </group>
+                            <group string="B-BBEE Details">
+                                <field name="bbbee_level"/>
+                                <field name="bbbee_certificate_number"/>
+                                <field name="bbbee_certificate_date"/>
+                                <field name="bbbee_expiry_date"/>
+                                <field name="bbbee_valid"/>
+                            </group>
+                            <group string="Tendering Details">
+                                <field name="sagovtender_bid_count"/>
+                                <field name="sagovtender_award_count"/>
+                                <field name="total_tender_value"/>
+                            </group>
+                            <group string="Blacklist Details">
+                                <field name="is_blacklisted"/>
+                                <field name="blacklist_date"/>
+                                <field name="blacklist_reason"/>
+                            </group>
+                        </group>
+                            <field name="sagovtender_bid_ids" string="Tender Bids"/>
+                    </page>
+                </xpath>
+                <!-- <xpath expr="//span[@name='address_name']" position="before">
+                    <xpath expr="//field[@name='ref']" position="move"/>
+                </xpath> -->
+                <!-- <xpath expr="//field[@name='parent_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath> -->
+            </field>
+        </record>
+
+		<!-- Inherit Contact Kanban View -->
+        <!-- https://www.slideshare.net/slideshow/views-in-odoo-17-kanban-view-in-odoo-17/267108550 -->
+        <!-- https://www.odoo.com/forum/help-1/order-the-kanban-view-of-the-crm-lead-module-based-on-a-date-234806 -->
+        <!-- <record id="partner_kanban_inherit" model="ir.ui.view">
+            <field name="name">res.partner.kanban.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban" position="attributes">
+                    <attribute name="default_order">name desc</attribute>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_kanban_details')]" position="inside">
+                    <field name="ref"/>
+                    <field name="company_type"/>
+                </xpath>
+            </field>
+        </record> -->
+
+        <!--https://openerp-server.readthedocs.io/en/latest/03_module_dev_04.html-->
+        <record model="ir.actions.act_window" id="action_sagov_suppliers">
+            <field name="name">Suppliers</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,list,form,activity,map</field>
+            <field name="domain">[('is_company','=',True),('supplier_rank','>',0)]</field>
+            <field name="context">{'default_is_company': True, 'default_supplier_rank': 1}</field>
+        </record>
+
+        <!--https://openerp-server.readthedocs.io/en/latest/03_module_dev_04.html-->
+        <!-- <record model="ir.actions.act_window" id="contacts.action_contacts">
+            <field name="view_mode">list,kanban,form,activity</field>
+            <field name="search_view_id" ref="partner_plots_view_search"/>
+            <field name="view_ids"
+                eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'list', 'view_id': ref('ethical_micro_insurance.plots_list_view')})
+                        (0, 0, {'view_mode': 'list', 'view_id': ref('base.view_partner_list')}),
+                        (0, 0, {'view_mode': 'kanban', 'view_id': ref('base.res_partner_kanban_view')}),
+                        (0, 0, {'view_mode': 'form', 'view_id': ref('base.view_partner_form')})
+                        ]"/>
+        </record> -->
+
+</odoo>

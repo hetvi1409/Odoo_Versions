@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+		<record id="email_template_partner_statement" model="mail.template">
+            <field name="name">Partners - Statements by Email</field>
+            <!-- Jinja is OK in these header fields -->
+            <field name="email_from">{{ (user.email_formatted or object.user_id.email_formatted) }}</field>
+            <field name="subject">Activity Statement</field>
+            <!-- Ensure this external id exists; otherwise change module prefix accordingly -->
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="auto_delete" eval="False"/>
+
+            <!-- body_html is QWeb -->
+            <field name="body_html" type="html">
+                <div>
+                    <table border="0" width="100%" cellpadding="0" bgcolor="#ededed"
+                        style="padding: 20px; background-color: #ededed; border-collapse:separate;"
+                        summary="o_mail_notification">
+                        <tbody>
+
+                            
+                            <!-- CONTENT -->
+                            <tr>
+                                <td align="center" style="min-width: 590px;">
+                                    <table width="590" border="0" cellpadding="0" bgcolor="#ffffff"
+                                        style="min-width: 590px; background-color: rgb(255, 255, 255); padding: 20px; border-collapse:separate;">
+                                        <tbody>
+                                            <tr>
+                                                <td valign="top" style="font-family:Arial,Helvetica,sans-serif; color: #555; font-size: 14px;">
+                                                    <p>Dear Sir/Madam,</p>
+                                                    <p>Please find attached your account statement. If you have any queries, please feel free to contact us.</p>
+                                                    <br/>
+                                                    <p>Regards,</p>
+                                                    <br/>
+                                                    <p>Finance</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </field>
+
+            <!-- Jinja is OK here -->
+            <field name="lang">{{ user.lang }}</field>
+        </record>
+
+
+    </data>
+</odoo>

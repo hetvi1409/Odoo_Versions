@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_account_form" model="ir.ui.view">
+        <field name="name">account.account.view.form</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="Account Asset Details">
+                    <group>
+                        <group>
+                            <field name="project"/>
+                            <field name="item"/>
+                            <field name="fund"/>
+                            <field name="function"/>
+                            <field name="region"/>
+                            <field name="cost"/>
+                            <field name="msc"/>
+                        </group>
+                        <group>
+                            <field name="project_scoa_account"/>
+                            <field name="item_scoa_account"/>
+                            <field name="fund_scoa_account"/>
+                            <field name="function_scoa_account"/>
+                            <field name="region_scoa_account"/>
+                            <field name="cost_scoa_account"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Segments">
+                    <group string="Project">
+                        <field name="project"/>
+                        <field name="project_type"/>
+                    </group>
+                    <group attrs="{'invisible': [('project_type','!=','Capital')]}">
+                        <group>
+                            <field name="capital_type"/>
+                            <field name="capital_id"
+                                   attrs="{'invisible': [('project_type','!=', 'Capital')]}"/>
+                            <field name="capital_ids" widget="many2many_tags"
+                                   invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="infrastructure_type"
+                                   attrs="{'invisible': [('capital_type','!=','Infrastructure')]}"/>
+                            <field name="non_infrastructure_type"
+                                   attrs="{'invisible': [('capital_type','!=','Non Infrastructure')]}"/>
+                            <field name="capital_type_id"
+                                   attrs="{'invisible': [('project_type','!=', 'Capital')]}"/>
+                        </group>
+
+                    </group>
+                    <group string="Item">
+                        <field name="item"/>
+                        <field name="item_type"/>
+                    </group>
+                    <group attrs="{'invisible': [('item_type','!=', 'Asset')]}">
+                        <group>
+                            <field name="asset_type_"/>
+                            <field name="work_progress_type"
+                                   attrs="{'invisible': [('non_current_asset_type','!=', 'Construction Work-in-progress')]}"/>
+                            <field name="equipment_type"
+                                   attrs="{'invisible': [('non_current_asset_type','!=', 'Property, Plant and Equipment')]}"/>
+                            <field name="use_type"
+                                   attrs="{'invisible': [('cost_model_type','=', False)]}"/>
+                            <field name="cost_type_1"
+                                   attrs="{'invisible': [('use_type','=', False)]}"/>
+
+                        </group>
+                        <group>
+                            <field name="non_current_asset_type"
+                                   attrs="{'invisible': [('asset_type_','!=', 'Non Current Asset')]}"/>
+                            <field name="acquisitions_type"
+                                   attrs="{'invisible': [('work_progress_type','!=', 'Acquisitions')]}"/>
+                            <field name="cost_model_type"
+                                   attrs="{'invisible': [('equipment_type','!=', 'Cost Model')]}"/>
+                            <field name="cost_type"
+                                   attrs="{'invisible': [('use_type','=', False)]}"/>
+                        </group>
+                    </group>
+                    <group string="Fund">
+                        <field name="fund"/>
+                        <field name="fund_type"/>
+                    </group>
+                    <group attrs="{'invisible': [('fund_type','!=', 'Capital')]}">
+                        <group>
+                            <field name="fund_operational_type"/>
+                            <field name="fund_monetary_type"
+                                   attrs="{'invisible': [('fund_subsidies_type','!=', 'Monetary Allocations')]}"/>
+                            <field name="fund_allocation_type"
+                                   attrs="{'invisible': [('fund_subsidies_type','!=', 'Allocations In-kind')]}"/>
+                        </group>
+                        <group>
+                            <field name="fund_subsidies_type"
+                                   attrs="{'invisible': [('fund_operational_type','!=', 'Transfers and Subsidies')]}"/>
+                            <field name="fund_subname"
+                                   attrs="{'invisible': [('fund_monetary_type','=', False), ('fund_subsidies_type','!=', 'Monetary Allocations')]}"/>
+                            <field name="fund_subname_"
+                                   attrs="{'invisible': [('fund_allocation_type','=', False), ('fund_subsidies_type','!=', 'Allocations In-kind')]}"/>
+
+                        </group>
+                    </group>
+                    <group string="Function">
+                        <field name="function"/>
+                        <field name="function_type"/>
+                    </group>
+                    <group attrs="{'invisible': [('function_type','=', False)]}">
+                        <group>
+                            <field name="function_core_type"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

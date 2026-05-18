@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_template_id">
+    <t t-call="web.external_layout">
+      <t t-call="web.html_container">
+        <div class="page">
+          <h2 style="color: green;">
+            <t t-esc="portfolio_name"/>
+          </h2>
+          <p>
+            <strong>Purpose:</strong>
+            <t t-raw="description"/>
+          </p>
+
+        <!-- Collect ALL unique target years (keep even if no numeric value) -->
+        <t t-set="year_headers" t-value="[]"/>
+        <t t-foreach="outcomes" t-as="oc">
+          <t t-set="outputs" t-value="env['performance.output'].sudo().search([('outcome_id', '=', oc.id)])"/>
+          <t t-foreach="outputs" t-as="out">
+            <t t-foreach="out.indicator_ids" t-as="ind">
+              <t t-foreach="ind.target_ids" t-as="tgt">
+                <t t-set="yr" t-value="tgt.target_name_id.name"/>
+                <t t-if="yr and yr not in year_headers">
+                  <t t-set="year_headers" t-value="year_headers + [yr]"/>
+                </t>
+              </t>
+            </t>
+          </t>
+        </t>
+        <!-- Sort years (string sort works fine for YYYY/YY) -->
+        <t t-set="year_headers" t-value="sorted(year_headers)"/>
+
+        <!-- Split into groups to match Screenshot 2 -->
+        <t t-set="MTEF_COUNT" t-value="3"/>
+        <t t-set="EST_COUNT" t-value="1"/>
+        <t t-set="mtef_years" t-value="year_headers[-MTEF_COUNT:] if len(year_headers) >= MTEF_COUNT else []"/>
+        <t t-set="est_years"
+          t-value="year_headers[-(MTEF_COUNT+EST_COUNT):-MTEF_COUNT] if len(year_headers) >= (MTEF_COUNT+EST_COUNT) else []"/>
+        <t t-set="aud_years" t-value="year_headers[:len(year_headers) - len(mtef_years) - len(est_years)]"/>
+
+        <table style="width:100%; border-collapse:collapse; font-size:12px;">
+          <thead style="background-color:#253B88; color:#fff; text-align:center;">
+            <!-- Row 1 -->
+            <tr>
+              <th rowspan="3" style="border:1px solid #000; padding:5px;">Outcomes</th>
+              <th rowspan="3" style="border:1px solid #000; padding:5px;">Outputs</th>
+              <th rowspan="3" style="border:1px solid #000; padding:5px;">Output Indicators</th>
+              <t t-if="year_headers">
+                <th t-att-colspan="len(aud_years)+len(est_years)+len(mtef_years)"
+                    style="border:1px solid #000; padding:5px;">ANNUAL TARGETS</th>
+              </t>
+            </tr>
+
+            <!-- Row 2 -->
+            <tr t-if="year_headers">
+              <t t-if="aud_years">
+                <th t-att-colspan="len(aud_years)" style="border:1px solid #000; padding:5px;">AUDITED PERFORMANCE</th>
+              </t>
+              <t t-if="est_years">
+                <th t-att-colspan="len(est_years)" style="border:1px solid #000; padding:5px;">ESTIMATED PERFORMANCE</th>
+              </t>
+              <t t-if="mtef_years">
+                <th t-att-colspan="len(mtef_years)" style="border:1px solid #000; padding:5px;">MTEF PERIOD</th>
+              </t>
+            </tr>
+
+            <!-- Row 3 (years under each group) -->
+            <tr t-if="year_headers">
+              <t t-foreach="aud_years" t-as="y">
+                <th style="border:1px solid #000; padding:5px;"><t t-esc="y"/></th>
+              </t>
+              <t t-foreach="est_years" t-as="y">
+                <th style="border:1px solid #000; padding:5px;"><t t-esc="y"/></th>
+              </t>
+              <t t-foreach="mtef_years" t-as="y">
+                <th style="border:1px solid #000; padding:5px;"><t t-esc="y"/></th>
+              </t>
+            </tr>
+          </thead>
+
+          <tbody>
+            <t t-foreach="outcomes" t-as="outcome">
+              <t t-set="outputs" t-value="env['performance.output'].sudo().search([('outcome_id', '=', outcome.id)])"/>
+              <t t-set="first_outcome_row" t-value="True"/>
+              <t t-if="outputs">
+                <t t-foreach="outputs" t-as="output">
+                  <t t-foreach="output.indicator_ids" t-as="indicator">
+                    <tr>
+                      <!-- Outcome (only on first row of the block; remove if you prefer explicit rowspans) -->
+                      <td style="border:1px solid #000; padding:5px;">
+                        <t t-if="first_outcome_row">
+                          <t t-esc="outcome.name"/>
+                          <t t-set="first_outcome_row" t-value="False"/>
+                        </t>
+                      </td>
+
+                      <!-- Output -->
+                      <td style="border:1px solid #000; padding:5px;"><t t-esc="output.name"/></td>
+
+                      <!-- Indicator -->
+                      <td style="border:1px solid #000; padding:5px;"><t t-esc="indicator.name"/></td>
+
+                      <!-- All year cells in the desired order: Audited -> Estimated -> MTEF -->
+                      <t t-foreach="aud_years + est_years + mtef_years" t-as="year">
+                        <td style="border:1px solid #000; padding:5px; text-align:center;">
+                          <t t-set="matched" t-value="False"/>
+                          <t t-foreach="indicator.target_ids" t-as="target">
+                            <t t-if="target.target_name_id.name == year and not matched">
+                              <!-- Use numeric if available; optionally fall back to a text field if your model has it -->
+                              <t t-esc="target.target_numeric if target.target_numeric not in (False, None) else '-'"/>
+                              <t t-set="matched" t-value="True"/>
+                            </t>
+                          </t>
+                          <t t-if="not matched">-</t>
+                        </td>
+                      </t>
+                    </tr>
+                  </t>
+                </t>
+              </t>
+              <t t-if="not outputs">
+                <tr>
+                  <td style="border:1px solid #000; padding:5px;"><t t-esc="outcome.name"/></td>
+                  <td style="border:1px solid #000; padding:5px;">-</td>
+                  <td style="border:1px solid #000; padding:5px;">-</td>
+                  <t t-foreach="aud_years + est_years + mtef_years" t-as="year">
+                    <td style="border:1px solid #000; padding:5px;">-</td>
+                  </t>
+                </tr>
+              </t>
+            </t>
+          </tbody>
+        </table>
+        </div>
+      </t>
+    </t>
+  </template>
+</odoo>

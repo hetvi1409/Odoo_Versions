@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_email_applicant_interview_letter_form" model="ir.ui.view">
+        <field name="name">applicant.interview.letter.wizard.form</field>
+        <field name="model">applicant.interview.letter.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Edit Email Content">
+                <group>
+                    <field name="subject"/>
+                    <field name="body_html"/>
+                </group>
+                <footer>
+                    <button string="Send" type="object" name="send_email" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_email_interview_letter_wizard" model="ir.actions.act_window">
+        <field name="name">Send Email</field>
+        <field name="res_model">applicant.interview.letter.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_email_applicant_interview_letter_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

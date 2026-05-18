@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_move_form">
+        <field name="name">account.move.view.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_post']" position="after">
+                <button type="object" name="action_approve_credict_clerk" class="oe_highlight"
+                        string="Approve" groups="invoice_management_update.group_senior_credict_clerk"
+                        invisible="state != 'draft' or move_type != 'out_refund'"/>
+                <button type="object" name="action_refuse_credict_clerk"
+                        string="Refuse" groups="invoice_management_update.group_senior_credict_clerk"
+                        invisible="state != 'draft' or move_type != 'out_refund'"/>
+                <button type="object" name="action_approve_finance_manager" class="oe_highlight"
+                        string="Approve" groups="invoice_management_update.group_senior_credict_clerk"
+                        invisible="state != 'approve' or move_type != 'out_refund'"/>
+                <button type="object" name="action_refuse_finance_manager"
+                        string="Refuse" groups="invoice_management_update.group_senior_credict_clerk"
+                        invisible="state != 'approve' or move_type != 'out_refund'"/>
+                <button name="action_checklist_compliance"
+                        string="Update Check List" class="oe_highlight"
+                        type="object"
+                        groups="invoice_management_update.group_credict_clerk"
+                        invisible="state != 'draft' or move_type != 'out_invoice' or compliance != False"/>
+                <button name="action_amendments_bill" class="oe_highlight"
+                        type="object" string="Any Amendments"
+                        groups="invoice_management_update.group_debtors_administrator" invisible="state != 'draft' or move_type != 'in_invoice' or any_amendments == True"/>
+                <button name="action_approve_bill" class="oe_highlight"
+                        type="object" string="Approve"
+                        groups="account.group_account_manager"
+                        invisible="state != 'draft' or move_type != 'in_invoice' or any_amendments != True"/>
+                <button name="action_refuse_bill" class="oe_highlight"
+                        type="object" string="Refuse"
+                        groups="account.group_account_manager"
+                        invisible="state != 'draft' or move_type != 'in_invoice' or any_amendments != True"/>
+                <button name="action_approve_bill_second" class="oe_highlight"
+                        type="object" string="Approve"
+                        groups="account.group_account_manager" invisible="state != 'approve' or move_type != 'in_invoice'"/>
+                <button name="action_refuse_bill_second" class="oe_highlight"
+                        type="object" string="Refuse"
+                        groups="account.group_account_manager"
+                        invisible="state != 'approve' or move_type != 'in_invoice'"/>
+
+            </xpath>
+            <xpath expr="//button[@name='action_post']" position="attributes">
+                <attribute name="groups">account.group_account_invoice,invoice_management_update.group_senior_credict_clerk</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="compliance" invisible="1"/>
+                <field name="is_refused" invisible="1"/>
+                <field name="any_amendments" invisible="1"/>
+                <field name="process_pre_billing" invisible="move_type != 'in_invoice'"/>
+                <field name="pre_bill_report"
+                       invisible="move_type != 'in_invoice'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

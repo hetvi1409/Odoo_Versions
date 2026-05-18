@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="">
+        <record id="ir_cron_unpublish_expired_jobs" model="ir.cron">
+            <field name="name">Unpublish Expired Job Positions</field>
+            <field name="model_id" ref="hr.model_hr_job"/>
+            <field name="state">code</field>
+            <field name="code">model._publish_unpublish_jobs()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+        <record model="ir.actions.server" id="action_pre_screening">
+            <field name="name">Pre-screening</field>
+            <field name="model_id" ref="model_hr_applicant"/>
+            <field name="binding_model_id" ref="model_hr_applicant"/>
+            <field name="binding_type">action</field>
+            <field name="state">code</field>
+            <field name="code">
+                action = records.calculate_screening_point()
+            </field>
+        </record>
+        <record id="ir_cron_move_applications_to_staging" model="ir.cron">
+            <field name="name">Move Applications to Staging</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="state">code</field>
+            <field name="code">model.move_to_staging()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="ir_cron_auto_reject_applications" model="ir.cron">
+            <field name="name">Auto Reject Job Applications</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="state">code</field>
+            <field name="code">model.auto_reject_old_applications()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="ir_cron_auto_reject_staging_applicantions" model="ir.cron">
+            <field name="name">Auto Reject Staging Applications</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="state">code</field>
+            <field name="code">model.check_staging_applications()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

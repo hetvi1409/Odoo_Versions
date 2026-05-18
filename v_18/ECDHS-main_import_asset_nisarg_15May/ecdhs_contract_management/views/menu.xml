@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <!-- ================================================================
+           Additional actions for extended menu coverage
+     ================================================================= -->
+     <record id="action_ecdhs_contract_draft" model="ir.actions.act_window">
+          <field name="name">Draft Contracts</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">list,kanban,form</field>
+          <field name="domain">[('state','in',['draft','verified','contract_drafted'])]</field>
+          <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+     </record>
+
+     <record id="action_ecdhs_contract_under_approval" model="ir.actions.act_window">
+          <field name="name">Under Approval</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">list,kanban,form</field>
+          <field name="domain">[('state','in',['legal_review','approved','signing'])]</field>
+          <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+     </record>
+
+     <record id="action_ecdhs_contract_suspended" model="ir.actions.act_window">
+          <field name="name">Suspended Contracts</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">list,kanban,form</field>
+          <field name="domain">[('kanban_state','=','blocked'),('state','not in',['terminated','cancelled'])]</field>
+          <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+     </record>
+
+     <record id="action_ecdhs_contract_closed" model="ir.actions.act_window">
+          <field name="name">Closed Contracts</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">list,kanban,form</field>
+          <field name="domain">[('state','in',['terminated','cancelled'])]</field>
+          <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+     </record>
+
+     <record id="action_ecdhs_contract_delayed_milestones" model="ir.actions.act_window">
+          <field name="name">Delayed Milestones</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">list,kanban,form</field>
+          <field name="domain">[('kanban_state','=','blocked'),('state','not in',['terminated','cancelled'])]</field>
+          <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+     </record>
+
+     <record id="action_ecdhs_contract_budget_vs_spend" model="ir.actions.act_window">
+          <field name="name">Budget vs Spend</field>
+          <field name="res_model">ecdhs.contract.payment</field>
+          <field name="view_mode">list,form</field>
+                <field name="domain">[('state','in',['verified','paid'])]</field>
+     </record>
+
+     <record id="action_ecdhs_contract_compliance_alerts" model="ir.actions.act_window">
+          <field name="name">Compliance Alerts</field>
+          <field name="res_model">ecdhs.contract.monitoring</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('non_compliance_found','=',True)]</field>
+     </record>
+
+     <record id="action_ecdhs_contract_create_new" model="ir.actions.act_window">
+          <field name="name">Create New Contract</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">form</field>
+          <field name="target">current</field>
+          <field name="context">{'form_view_initial_mode': 'edit'}</field>
+     </record>
+
+     <record id="action_ecdhs_contract_create_from_tender" model="ir.actions.act_window">
+          <field name="name">Create from Tender/Award</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">form</field>
+          <field name="target">current</field>
+          <field name="context">{'default_notes': 'Created from tender/award process', 'form_view_initial_mode': 'edit'}</field>
+     </record>
+
+     <record id="action_ecdhs_contract_documents" model="ir.actions.act_window">
+          <field name="name">Contract Documents</field>
+          <field name="res_model">ecdhs.contract.document.upload</field>
+          <field name="view_mode">list,form</field>
+     </record>
+
+     <record id="action_ecdhs_contract_supporting_documents" model="ir.actions.act_window">
+          <field name="name">Supporting Documents</field>
+          <field name="res_model">ecdhs.contract.document.upload</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('document_type','=','supporting')]</field>
+     </record>
+
+     <record id="action_ecdhs_contract_scanned_documents" model="ir.actions.act_window">
+          <field name="name">Scanned Documents</field>
+          <field name="res_model">ecdhs.contract.document.upload</field>
+          <field name="view_mode">list,form</field>
+     </record>
+
+     <record id="action_ecdhs_contract_archived" model="ir.actions.act_window">
+          <field name="name">Archived Contracts</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">list,kanban,form</field>
+          <field name="domain">[('active','=',False)]</field>
+          <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+     </record>
+
+     <record id="action_ecdhs_contract_progress_updates" model="ir.actions.act_window">
+          <field name="name">Progress Updates</field>
+          <field name="res_model">ecdhs.contract.monitoring</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('state','in',['submitted','acknowledged'])]</field>
+     </record>
+
+     <record id="action_ecdhs_contract_deliverables_register" model="ir.actions.act_window">
+          <field name="name">Deliverables Register</field>
+          <field name="res_model">ecdhs.contract.monitoring</field>
+          <field name="view_mode">list,form</field>
+          <field name="context">{'group_by': 'contract_id'}</field>
+     </record>
+
+     <record id="action_ecdhs_contract_financial_contract_value" model="ir.actions.act_window">
+          <field name="name">Contract Value</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">list,kanban,form</field>
+          <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+     </record>
+
+     <record id="action_ecdhs_contract_invoices" model="ir.actions.act_window">
+          <field name="name">Invoices</field>
+          <field name="res_model">ecdhs.contract.payment</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('vendor_bill_id','!=',False)]</field>
+     </record>
+
+     <record id="action_ecdhs_contract_retention_management" model="ir.actions.act_window">
+          <field name="name">Retention Management</field>
+          <field name="res_model">ecdhs.contract.payment</field>
+          <field name="view_mode">list,form</field>
+     </record>
+
+     <record id="action_ecdhs_contract_budget_linkages" model="ir.actions.act_window">
+          <field name="name">Budget Linkages</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">list,kanban,form</field>
+          <field name="context">{'group_by': 'end_user_department_id'}</field>
+          <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+     </record>
+
+     <record id="action_ecdhs_contract_variation_orders" model="ir.actions.act_window">
+          <field name="name">Variation Orders (VO)</field>
+          <field name="res_model">ecdhs.contract.addendum</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('addendum_type','=','price_variation')]</field>
+     </record>
+
+     <record id="action_ecdhs_contract_eot" model="ir.actions.act_window">
+          <field name="name">Extension of Time (EOT)</field>
+          <field name="res_model">ecdhs.contract.addendum</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('addendum_type','=','date_extension')]</field>
+     </record>
+
+     <record id="action_ecdhs_contract_scope_changes" model="ir.actions.act_window">
+          <field name="name">Scope Changes</field>
+          <field name="res_model">ecdhs.contract.addendum</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('addendum_type','=','scope')]</field>
+     </record>
+
+     <record id="action_ecdhs_contract_amendment_approval_tracking" model="ir.actions.act_window">
+          <field name="name">Approval Tracking</field>
+          <field name="res_model">ecdhs.contract.addendum</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('state','in',['submitted','approved'])]</field>
+     </record>
+
+     <record id="action_ecdhs_contract_sla_definitions" model="ir.actions.act_window">
+          <field name="name">SLA Definitions</field>
+          <field name="res_model">ecdhs.contract.template</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('name','ilike','SLA')]</field>
+     </record>
+
+     <record id="action_ecdhs_contract_kpi_tracking" model="ir.actions.act_window">
+          <field name="name">KPI Tracking</field>
+          <field name="res_model">ecdhs.contract.monitoring</field>
+          <field name="view_mode">list,form</field>
+     </record>
+
+     <record id="action_ecdhs_contractor_performance" model="ir.actions.act_window">
+          <field name="name">Contractor Performance</field>
+          <field name="res_model">ecdhs.contract.monitoring</field>
+          <field name="view_mode">list,form</field>
+          <field name="context">{'group_by': 'contract_id'}</field>
+     </record>
+
+     <record id="action_ecdhs_non_compliance_logs" model="ir.actions.act_window">
+          <field name="name">Non-Compliance Logs</field>
+          <field name="res_model">ecdhs.contract.monitoring</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('non_compliance_found','=',True)]</field>
+     </record>
+
+     <record id="action_ecdhs_compliance_checklist" model="ir.actions.act_window">
+          <field name="name">Compliance Checklist</field>
+          <field name="res_model">ecdhs.contract.monitoring</field>
+          <field name="view_mode">list,form</field>
+     </record>
+
+     <record id="action_ecdhs_audit_trail_logs" model="ir.actions.act_window">
+          <field name="name">Audit Trail Logs</field>
+          <field name="res_model">mail.message</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('model','in',['ecdhs.contract','ecdhs.contract.addendum','ecdhs.contract.monitoring','ecdhs.contract.payment'])]</field>
+     </record>
+
+     <record id="action_ecdhs_risk_flags" model="ir.actions.act_window">
+          <field name="name">Risk Flags</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">list,kanban,form</field>
+          <field name="domain">[('kanban_state','=','blocked')]</field>
+          <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+     </record>
+
+     <record id="action_ecdhs_document_verification" model="ir.actions.act_window">
+          <field name="name">Document Verification</field>
+          <field name="res_model">ecdhs.contract.payment</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('state','in',['pending','verified'])]</field>
+     </record>
+
+     <record id="action_ecdhs_stakeholder_contractors" model="ir.actions.act_window">
+          <field name="name">Contractors / Service Providers</field>
+          <field name="res_model">res.partner</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('supplier_rank','&gt;',0)]</field>
+     </record>
+
+     <record id="action_ecdhs_stakeholder_beneficiaries" model="ir.actions.act_window">
+          <field name="name">Beneficiaries</field>
+          <field name="res_model">res.partner</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('customer_rank','&gt;',0)]</field>
+     </record>
+
+     <record id="action_ecdhs_stakeholder_departments" model="ir.actions.act_window">
+          <field name="name">Departments / Units</field>
+          <field name="res_model">hr.department</field>
+          <field name="view_mode">list,form</field>
+     </record>
+
+     <record id="action_ecdhs_stakeholder_external_partners" model="ir.actions.act_window">
+          <field name="name">External Partners</field>
+          <field name="res_model">res.partner</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('is_company','=',True)]</field>
+     </record>
+
+     <record id="action_ecdhs_contract_types" model="ir.actions.act_window">
+          <field name="name">Contract Types</field>
+          <field name="res_model">ecdhs.contract</field>
+          <field name="view_mode">list,kanban,form</field>
+          <field name="context">{'group_by': 'contract_type'}</field>
+          <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+     </record>
+
+     <record id="action_ecdhs_approval_workflows" model="ir.actions.act_window">
+          <field name="name">Approval Workflows</field>
+          <field name="res_model">ecdhs.contract.signatory</field>
+          <field name="view_mode">list,form</field>
+     </record>
+
+     <record id="action_ecdhs_sla_rules" model="ir.actions.act_window">
+          <field name="name">SLA Rules</field>
+          <field name="res_model">ecdhs.contract.clause</field>
+          <field name="view_mode">list,form</field>
+     </record>
+
+     <record id="action_ecdhs_file_plan_setup" model="ir.actions.act_window">
+          <field name="name">File Plan Setup</field>
+          <field name="res_model">ecdhs.contract.document.upload</field>
+          <field name="view_mode">list,form</field>
+     </record>
+
+     <record id="action_ecdhs_numbering_sequences" model="ir.actions.act_window">
+          <field name="name">Numbering Sequences</field>
+          <field name="res_model">ir.sequence</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('code','ilike','ecdhs_contract')]</field>
+     </record>
+
+     <record id="action_ecdhs_user_roles_permissions" model="ir.actions.act_window">
+          <field name="name">User Roles &amp; Permissions</field>
+          <field name="res_model">res.groups</field>
+          <field name="view_mode">list,form</field>
+          <field name="domain">[('name','ilike','Contract')]</field>
+     </record>
+
+        <record id="action_ecdhs_res_province" model="ir.actions.act_window">
+                <field name="name">Province</field>
+                <field name="res_model">res.province</field>
+                <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="action_ecdhs_res_region" model="ir.actions.act_window">
+                <field name="name">Region</field>
+                <field name="res_model">res.region</field>
+                <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="action_ecdhs_res_municipality" model="ir.actions.act_window">
+                <field name="name">Municipality</field>
+                <field name="res_model">res.municipality</field>
+                <field name="view_mode">list,form</field>
+        </record>
+
+    <!-- ================================================================
+        Root application menu
+    ================================================================= -->
+    <!-- <menuitem id="menu_ecdhs_contract_root"
+            name="Contracts Management"
+            action="action_ecdhs_contract_dashboard"
+            web_icon="ecdhs_contract_management,static/description/icon2.png"
+            sequence="90"/> -->
+
+    <menuitem id="menu_ecdhs_contract_root"
+            name="Contracts Management"
+            action="action_ecdhs_contract"
+            web_icon="ecdhs_contract_management,static/description/icon2.png"
+            sequence="90"/>
+    <!-- ================================================================
+        Top-level navigation hubs (reduced clutter)
+    ================================================================= -->
+    <menuitem id="menu_ecdhs_all_contracts_root"
+            name="All Contracts"
+            parent="menu_ecdhs_contract_root"
+            action="action_ecdhs_contract"
+            sequence="1"/>
+
+    <menuitem id="menu_ecdhs_documents_records"
+            name="Documents &amp; Records"
+            parent="menu_ecdhs_contract_root"
+            sequence="2"/>
+
+    <menuitem id="menu_ecdhs_variations_root"
+            name="Variations &amp; Amendments"
+            parent="menu_ecdhs_contract_root"
+            sequence="3"/>
+
+    <menuitem id="menu_ecdhs_notifications_root"
+            name="Alerts &amp; Exceptions"
+            parent="menu_ecdhs_contract_root"
+            sequence="10"/>
+
+    <menuitem id="menu_ecdhs_delivery_hub"
+            name="Delivery"
+            parent="menu_ecdhs_contract_root"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_governance_hub"
+            name="Governance"
+            parent="menu_ecdhs_contract_root"
+            sequence="30"/>
+
+    <menuitem id="menu_ecdhs_config_hub"
+            name="Administration"
+            parent="menu_ecdhs_contract_root"
+            sequence="40"/>
+
+    <!-- ================================================================
+        Workspace
+    ================================================================= -->
+
+    <menuitem id="menu_ecdhs_expiry_alerts"
+            name="Expiry Alerts"
+            parent="menu_ecdhs_notifications_root"
+            action="action_ecdhs_contract_expiring"
+            sequence="10"/>
+
+    <menuitem id="menu_ecdhs_approval_requests"
+            name="Approval Requests"
+            parent="menu_ecdhs_notifications_root"
+            action="action_ecdhs_contract_under_approval"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_sla_breaches"
+            name="SLA Breaches"
+            parent="menu_ecdhs_notifications_root"
+            action="action_ecdhs_non_compliance_logs"
+            sequence="30"/>
+
+    <menuitem id="menu_ecdhs_milestone_reminders"
+            name="Milestone Reminders"
+            parent="menu_ecdhs_notifications_root"
+            action="action_ecdhs_contract_delayed_milestones"
+            sequence="40"/>
+
+    <!-- <menuitem id="menu_ecdhs_contracts"
+            name="Contracts"
+            parent="menu_ecdhs_workspace_hub"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_contract_status_filters"
+            name="Quick Filters"
+            parent="menu_ecdhs_contracts"
+            sequence="20"/> -->
+
+    <menuitem id="menu_ecdhs_contract_register"
+            name="All Contracts"
+            parent="menu_ecdhs_all_contracts_root"
+            action="action_ecdhs_contract"
+            sequence="6"/>
+
+    <menuitem id="menu_ecdhs_configuration_contract_types"
+            name="Contracts By Type"
+            parent="menu_ecdhs_all_contracts_root"
+            action="action_ecdhs_contract_types"
+            sequence="10"/>
+
+    <menuitem id="menu_ecdhs_contract_draft"
+            name="Draft Contracts"
+            parent="menu_ecdhs_all_contracts_root"
+            action="action_ecdhs_contract_draft"
+            sequence="11"/>
+
+    <menuitem id="menu_ecdhs_contract_under_approval"
+            name="Under Approval"
+            parent="menu_ecdhs_all_contracts_root"
+            action="action_ecdhs_contract_under_approval"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_contract_active"
+            name="Active Contracts"
+            parent="menu_ecdhs_all_contracts_root"
+            action="action_ecdhs_contract_active"
+            sequence="30"/>
+
+    <menuitem id="menu_ecdhs_contract_suspended"
+            name="Suspended Contracts"
+            parent="menu_ecdhs_all_contracts_root"
+            action="action_ecdhs_contract_suspended"
+            sequence="40"/>
+
+    <menuitem id="menu_ecdhs_contract_expiring"
+            name="Expiring Contracts"
+            parent="menu_ecdhs_all_contracts_root"
+            action="action_ecdhs_contract_expiring"
+            sequence="50"/>
+
+    <menuitem id="menu_ecdhs_contract_closed"
+            name="Closed Contracts"
+            parent="menu_ecdhs_all_contracts_root"
+            action="action_ecdhs_contract_closed"
+            sequence="60"/>
+
+    <menuitem id="menu_ecdhs_archived_contracts"
+            name="Archived Contracts"
+            parent="menu_ecdhs_all_contracts_root"
+            action="action_ecdhs_contract_archived"
+            sequence="70"/>
+
+    <!-- ================================================================
+        Delivery
+    ================================================================= -->
+
+    <menuitem id="menu_ecdhs_addenda"
+            name="Addendums / Amendments"
+            parent="menu_ecdhs_documents_records"
+            action="action_ecdhs_contract_addendum"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_supporting_documents"
+            name="Supporting Documents"
+            parent="menu_ecdhs_documents_records"
+            action="action_ecdhs_contract_supporting_documents"
+            sequence="30"/>
+
+    <menuitem id="menu_ecdhs_contract_documents"
+            name="Contract Documents"
+            parent="menu_ecdhs_documents_records"
+            action="action_ecdhs_contract_documents"
+            sequence="40"/>
+
+    <menuitem id="menu_ecdhs_scanned_documents"
+            name="Scanned Documents"
+            parent="menu_ecdhs_documents_records"
+            action="action_ecdhs_contract_scanned_documents"
+            sequence="50"/>
+
+    <menuitem id="menu_ecdhs_monitoring_root"
+            name="Milestones &amp; Deliverables"
+            parent="menu_ecdhs_delivery_hub"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_monitoring_reports"
+            name="Milestones Tracking"
+            parent="menu_ecdhs_monitoring_root"
+            action="action_ecdhs_contract_monitoring"
+            sequence="10"/>
+
+    <menuitem id="menu_ecdhs_deliverables_register"
+            name="Deliverables Register"
+            parent="menu_ecdhs_monitoring_root"
+            action="action_ecdhs_contract_deliverables_register"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_progress_updates"
+            name="Progress Updates"
+            parent="menu_ecdhs_monitoring_root"
+            action="action_ecdhs_contract_progress_updates"
+            sequence="30"/>
+
+    <menuitem id="menu_ecdhs_monitoring_delayed"
+            name="Delayed Milestones"
+            parent="menu_ecdhs_monitoring_root"
+            action="action_ecdhs_contract_delayed_milestones"
+            sequence="40"/>
+
+    <menuitem id="menu_ecdhs_variation_orders"
+            name="Variation Orders (VO)"
+            parent="menu_ecdhs_variations_root"
+            action="action_ecdhs_contract_variation_orders"
+            sequence="10"/>
+
+    <menuitem id="menu_ecdhs_eot"
+            name="Extension of Time (EOT)"
+            parent="menu_ecdhs_variations_root"
+            action="action_ecdhs_contract_eot"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_scope_changes"
+            name="Scope Changes"
+            parent="menu_ecdhs_variations_root"
+            action="action_ecdhs_contract_scope_changes"
+            sequence="30"/>
+
+    <menuitem id="menu_ecdhs_approval_tracking"
+            name="Approval Tracking"
+            parent="menu_ecdhs_variations_root"
+            action="action_ecdhs_contract_amendment_approval_tracking"
+            sequence="40"/>
+
+    <menuitem id="menu_ecdhs_financials_root"
+            name="Financials"
+            parent="menu_ecdhs_delivery_hub"
+            sequence="40"/>
+
+    <menuitem id="menu_ecdhs_financial_contract_value"
+            name="Contract Value"
+            parent="menu_ecdhs_financials_root"
+            action="action_ecdhs_contract_financial_contract_value"
+            sequence="10"/>
+
+    <menuitem id="menu_ecdhs_payment_verifications"
+            name="Payment Certificates"
+            parent="menu_ecdhs_financials_root"
+            action="action_ecdhs_contract_payment"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_financial_invoices"
+            name="Invoices"
+            parent="menu_ecdhs_financials_root"
+            action="action_ecdhs_contract_invoices"
+            sequence="30"/>
+
+    <menuitem id="menu_ecdhs_financial_retention"
+            name="Retention Management"
+            parent="menu_ecdhs_financials_root"
+            action="action_ecdhs_contract_retention_management"
+            sequence="40"/>
+
+    <menuitem id="menu_ecdhs_financial_budget_linkages"
+            name="Budget Linkages"
+            parent="menu_ecdhs_financials_root"
+            action="action_ecdhs_contract_budget_linkages"
+            sequence="50"/>
+
+    <!-- ================================================================
+        Governance
+    ================================================================= -->
+    <menuitem id="menu_ecdhs_performance_root"
+            name="Performance &amp; SLA"
+            parent="menu_ecdhs_governance_hub"
+            sequence="10"/>
+
+    <menuitem id="menu_ecdhs_sla_definitions"
+            name="SLA Definitions"
+            parent="menu_ecdhs_performance_root"
+            action="action_ecdhs_contract_sla_definitions"
+            sequence="10"/>
+
+    <menuitem id="menu_ecdhs_kpi_tracking"
+            name="KPI Tracking"
+            parent="menu_ecdhs_performance_root"
+            action="action_ecdhs_contract_kpi_tracking"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_contractor_performance"
+            name="Contractor Performance"
+            parent="menu_ecdhs_performance_root"
+            action="action_ecdhs_contractor_performance"
+            sequence="30"/>
+
+    <menuitem id="menu_ecdhs_non_compliance_logs"
+            name="Non-Compliance Logs"
+            parent="menu_ecdhs_performance_root"
+            action="action_ecdhs_non_compliance_logs"
+            sequence="40"/>
+
+    <menuitem id="menu_ecdhs_compliance_root"
+            name="Compliance &amp; Audit"
+            parent="menu_ecdhs_governance_hub"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_compliance_checklist"
+            name="Compliance Checklist"
+            parent="menu_ecdhs_compliance_root"
+            action="action_ecdhs_compliance_checklist"
+            sequence="10"/>
+
+    <menuitem id="menu_ecdhs_audit_trails"
+            name="Audit Trail Logs"
+            parent="menu_ecdhs_compliance_root"
+            action="action_ecdhs_audit_trail_logs"
+            sequence="20"/>
+
+    <menuitem id="menu_ecdhs_risk_flags"
+            name="Risk Flags"
+            parent="menu_ecdhs_compliance_root"
+            action="action_ecdhs_risk_flags"
+            sequence="30"/>
+
+    <menuitem id="menu_ecdhs_document_verification"
+            name="Document Verification"
+            parent="menu_ecdhs_compliance_root"
+            action="action_ecdhs_document_verification"
+            sequence="40"/>
+
+    <menuitem id="menu_ecdhs_stakeholders_root"
+            name="Stakeholders"
+            parent="menu_ecdhs_governance_hub"
+            sequence="30"/>
+
+    <menuitem id="menu_ecdhs_stakeholders_contractors"
+            name="Contractors / Service Providers"
+            parent="menu_ecdhs_stakeholders_root"
+            action="action_ecdhs_stakeholder_contractors"
+            sequence="10"/>
+
+    <!-- <menuitem id="menu_ecdhs_stakeholders_beneficiaries"
+            name="Beneficiaries (if applicable)"
+            parent="menu_ecdhs_stakeholders_root"
+            action="action_ecdhs_stakeholder_beneficiaries"
+            sequence="20"/> -->
+
+    <menuitem id="menu_ecdhs_stakeholders_departments"
+            name="Departments / Units"
+            parent="menu_ecdhs_stakeholders_root"
+            action="action_ecdhs_stakeholder_departments"
+            sequence="30"/>
+
+    <!-- <menuitem id="menu_ecdhs_stakeholders_external"
+            name="External Partners"
+            parent="menu_ecdhs_stakeholders_root"
+            action="action_ecdhs_stakeholder_external_partners"
+            sequence="40"/> -->
+
+    <!-- ================================================================
+        Administration
+    ================================================================= -->
+    <menuitem id="menu_ecdhs_configurations"
+            name="Configuration"
+            parent="menu_ecdhs_config_hub"
+            sequence="10"/>
+
+    <!-- <menuitem id="menu_ecdhs_configuration_approval_workflows"
+            name="Approval Workflows"
+            parent="menu_ecdhs_configurations"
+            action="action_ecdhs_approval_workflows"
+            sequence="20"/> -->
+
+    <!-- <menuitem id="menu_ecdhs_configuration_sla_rules"
+            name="SLA Rules"
+            parent="menu_ecdhs_configurations"
+            action="action_ecdhs_sla_rules"
+            sequence="30"/> -->
+<!--
+    <menuitem id="menu_ecdhs_configuration_file_plan"
+            name="File Plan Setup"
+            parent="menu_ecdhs_configurations"
+            action="action_ecdhs_file_plan_setup"
+            sequence="40"/> -->
+
+    <!-- <menuitem id="menu_ecdhs_configuration_sequences"
+            name="Numbering Sequences"
+            parent="menu_ecdhs_configurations"
+            action="action_ecdhs_numbering_sequences"
+            sequence="50"/> -->
+<!--
+    <menuitem id="menu_ecdhs_configuration_user_roles"
+            name="User Roles &amp; Permissions"
+            parent="menu_ecdhs_configurations"
+            action="action_ecdhs_user_roles_permissions"
+            sequence="60"/> -->
+
+    <menuitem id="menu_ecdhs_contract_templates"
+            name="Contract Templates"
+            parent="menu_ecdhs_configurations"
+            action="action_ecdhs_contract_template"
+            sequence="70"/>
+
+    <menuitem id="menu_ecdhs_email_templates"
+            name="Email Templates Preview"
+            parent="menu_ecdhs_configurations"
+            action="action_ecdhs_mail_template_preview_open"
+            sequence="81"/>
+
+    <menuitem id="menu_ecdhs_email_templates_filtered"
+            name="Email Templates"
+            parent="menu_ecdhs_configurations"
+            action="action_ecdhs_mail_template_filtered_open"
+            sequence="80"/>
+
+    <menuitem id="menu_ecdhs_configuration_province"
+            name="Province"
+            parent="menu_ecdhs_configurations"
+            action="action_ecdhs_res_province"
+            sequence="90"/>
+
+    <menuitem id="menu_ecdhs_configuration_region"
+            name="Region"
+            parent="menu_ecdhs_configurations"
+            action="action_ecdhs_res_region"
+            sequence="100"/>
+
+    <menuitem id="menu_ecdhs_configuration_municipality"
+            name="Municipality"
+            parent="menu_ecdhs_configurations"
+            action="action_ecdhs_res_municipality"
+            sequence="110"/>
+
+</odoo>

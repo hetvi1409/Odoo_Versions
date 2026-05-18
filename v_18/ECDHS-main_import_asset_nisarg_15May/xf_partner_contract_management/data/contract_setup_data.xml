@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Contract Setup Data
+    ===================
+    Loaded on module INSTALL and UPGRADE (listed under 'data' in __manifest__.py).
+
+    Section 1 - Contract Templates  (noupdate="0"  - refreshed on every upgrade)
+    Section 2 - Demo Users, Group Assignments and Approval Teams
+                (noupdate="1"  - created once, never overwritten on upgrade)
+
+    Login Credentials:
+      hod              / HOD@1234      - Head of Department      (Manager)
+      mm               / MM@1234       - Municipal Manager        (Manager)
+      ceo              / CEO@1234      - Chief Executive Officer  (CFO group - top)
+      cfo              / CFO@1234      - Chief Financial Officer  (CFO group - top)
+      deputy           / Deputy@1234   - Deputy Director          (Deputy group)
+      legal            / Legal@1234    - Legal Services Officer   (Legal Advisor group)
+      contract_manager / Manager@1234  - Contract Manager         (Manager group)
+      contract_user    / User@1234     - Contract User            (User group)
+      approver         / Approver@1234 - Generic Approver         (Team Leader group)
+-->
+<odoo>
+
+    <!-- ================================================================
+         SECTION 1 — CONTRACT TEMPLATES
+         noupdate="0" so default scope/TOR text is refreshed on upgrade.
+         ================================================================ -->
+    <data noupdate="0">
+
+        <!-- ── 1. Service Level Agreement (SLA) ── -->
+        <record id="contract_template_sla" model="contract.template">
+            <field name="name">Service Level Agreement (SLA)</field>
+            <field name="contract_type">purchase</field>
+            <field name="description">Standard SLA for service providers – defines uptime, response times and KPIs.</field>
+                        <field name="body_html"><![CDATA[<h3>Service Level Agreement</h3>
+<p>This Service Level Agreement ("Agreement") is entered into between <strong>{{client_name}}</strong> ("Client") and <strong>{{service_provider_name}}</strong> ("Service Provider") effective from <strong>{{effective_date}}</strong>.</p>
+<p>The Service Provider shall render the services described in this Agreement and its annexures, subject to the required service levels, governance and reporting obligations.</p>
+<p>This Agreement remains valid for <strong>{{contract_term_months}}</strong> months unless terminated in accordance with the termination clause.</p>]]></field>
+            <field name="scope_of_work"><![CDATA[<h3>Scope of Work</h3>
+<p>The Service Provider shall deliver the following services in accordance with the agreed Service Level Agreement:</p>
+<ol>
+  <li>Maintain continuous service availability in line with the agreed uptime targets.</li>
+  <li>Respond to incidents within stipulated response times:
+    <ul>
+      <li><strong>Priority 1 (Critical):</strong> 1 hour</li>
+      <li><strong>Priority 2 (High):</strong> 4 hours</li>
+      <li><strong>Priority 3 (Medium):</strong> 24 hours</li>
+      <li><strong>Priority 4 (Low):</strong> 72 hours</li>
+    </ul>
+  </li>
+  <li>Submit monthly performance/availability reports to the Contract Manager by the 5th of each month.</li>
+  <li>Maintain suitably qualified and experienced personnel for the full duration of the agreement.</li>
+  <li>Ensure data security, confidentiality and integrity in compliance with POPIA and applicable information security standards.</li>
+  <li>Attend quarterly service review meetings with the Client's designated representative.</li>
+</ol>]]></field>
+            <field name="terms_of_reference"><![CDATA[<h3>Terms of Reference (TOR) — Service Level Agreement</h3>
+
+<h4>1. Background</h4>
+<p>The Client requires reliable and measurable service delivery standards with clearly defined performance outcomes and accountability mechanisms.</p>
+
+<h4>2. Objectives</h4>
+<ul>
+  <li>Define minimum service levels and measurable performance metrics.</li>
+  <li>Establish clear accountability structures and escalation procedures.</li>
+  <li>Govern reporting, monitoring and remediation processes.</li>
+</ul>
+
+<h4>3. Key Performance Indicators (KPIs)</h4>
+<p>Performance shall be measured monthly against KPIs agreed between the Parties and annexed to this agreement as <em>Annexure A – KPI Schedule</em>.</p>
+
+<h4>4. Penalties &amp; Service Credits</h4>
+<p>Non-compliance with agreed service levels shall attract penalties / service credits as stipulated in <em>Annexure B – Penalty Schedule</em>. Cumulative non-compliance may lead to contract termination with 30 days' notice.</p>
+
+<h4>5. Change Management</h4>
+<p>Changes to service scope, KPIs or performance thresholds shall be effected by written amendment signed by both Parties.</p>
+
+<h4>6. Dispute Resolution</h4>
+<p>Any dispute arising from this agreement shall first be subjected to internal negotiation (30 days), and failing that, to independent mediation in terms of the applicable legislation.</p>]]></field>
+        </record>
+
+        <!-- ── 2. Service Agreement ── -->
+        <record id="contract_template_service_agreement" model="contract.template">
+            <field name="name">Service Agreement</field>
+            <field name="contract_type">purchase</field>
+            <field name="description">General professional services agreement for consultants, contractors and specialists.</field>
+                        <field name="body_html"><![CDATA[<h3>Service Agreement</h3>
+<p>This Service Agreement is concluded between <strong>{{client_name}}</strong> and <strong>{{service_provider_name}}</strong> for professional services effective from <strong>{{effective_date}}</strong>.</p>
+<p>The service fee shall be <strong>{{contract_value}}</strong> and payment shall be made in accordance with agreed milestones and valid tax invoices.</p>
+<p>The Parties agree to perform their obligations in good faith and in compliance with applicable laws and policies.</p>]]></field>
+            <field name="scope_of_work"><![CDATA[<h3>Scope of Work</h3>
+<p>The Service Provider is appointed to render the following professional services to the Client:</p>
+<ol>
+  <li>Conduct a needs assessment and deliver a detailed implementation plan within 30 calendar days of commencement.</li>
+  <li>Provide all labour, materials, equipment and expertise necessary for successful and timely delivery.</li>
+  <li>Liaise with the designated Client representative(s) on a weekly basis or as otherwise agreed.</li>
+  <li>Submit written progress reports on a monthly basis, or at agreed intervals.</li>
+  <li>Obtain prior written approval from the Client before entering into any sub-contracting arrangements.</li>
+  <li>Ensure quality assurance measures are in place throughout the duration of the contract.</li>
+</ol>]]></field>
+            <field name="terms_of_reference"><![CDATA[<h3>Terms of Reference (TOR) — Service Agreement</h3>
+
+<h4>1. Background &amp; Rationale</h4>
+<p>This agreement governs the provision of professional services by the Service Provider to the Client for the duration specified in the contract header.</p>
+
+<h4>2. Deliverables</h4>
+<ul>
+  <li>Inception Report (within 15 days of commencement)</li>
+  <li>Monthly Progress Reports</li>
+  <li>Draft Final Report (for Client comment)</li>
+  <li>Final Deliverable / Project Completion Report</li>
+</ul>
+
+<h4>3. Duration</h4>
+<p>Services shall be rendered for the period specified in this agreement, unless earlier terminated or extended by mutual written agreement.</p>
+
+<h4>4. Governance &amp; Compliance</h4>
+<p>All work shall comply with applicable national legislation, municipal by-laws and the Client's Supply Chain Management Policy.</p>
+
+<h4>5. Intellectual Property</h4>
+<p>All deliverables, reports and outputs produced under this agreement shall vest in the Client upon full payment, unless otherwise agreed in writing.</p>
+
+<h4>6. Liability</h4>
+<p>The Service Provider shall maintain professional indemnity insurance appropriate to the nature of services rendered for the duration of this agreement.</p>]]></field>
+        </record>
+
+        <!-- ── 3. Funding Agreement ── -->
+        <record id="contract_template_funding_agreement" model="contract.template">
+            <field name="name">Funding Agreement</field>
+            <field name="contract_type">purchase</field>
+            <field name="description">Funding / grant disbursement agreement for recipient organisations.</field>
+                        <field name="body_html"><![CDATA[<h3>Funding Agreement</h3>
+<p>This Funding Agreement is entered into between <strong>{{funder_name}}</strong> ("Funder") and <strong>{{recipient_name}}</strong> ("Recipient") effective on <strong>{{effective_date}}</strong>.</p>
+<p>The Funder approves a total grant amount of <strong>{{grant_amount}}</strong> for the approved programme, subject to the terms and reporting requirements in this Agreement.</p>
+<p>The Recipient shall only use funds for approved purposes and comply with all applicable regulatory requirements.</p>]]></field>
+            <field name="scope_of_work"><![CDATA[<h3>Scope of Work</h3>
+<p>The Recipient Organisation shall utilise the funding exclusively for the following approved purposes:</p>
+<ol>
+  <li>Implement the programme / project described in the approved Business Plan (<em>Annexure A</em>).</li>
+  <li>Maintain accurate and complete financial records; submit quarterly financial statements to the Funder within 30 days of each quarter-end.</li>
+  <li>Permit the Funder or its authorised representatives to conduct audits, inspections and site visits at any reasonable time with 5 working days' notice.</li>
+  <li>Report on programme outcomes against agreed indicators, targets and milestones.</li>
+  <li>Return any unspent funds (with supporting reconciliation) to the Funder at the end of the funding period.</li>
+  <li>Acknowledge the Funder's contribution in all communications, publications and public events related to the funded programme.</li>
+</ol>]]></field>
+            <field name="terms_of_reference"><![CDATA[<h3>Terms of Reference (TOR) — Funding Agreement</h3>
+
+<h4>1. Purpose of Funding</h4>
+<p>Funds are disbursed to support the implementation of approved community development / service delivery initiatives as outlined in the approved project plan and budget.</p>
+
+<h4>2. Conditions of Grant</h4>
+<ul>
+  <li>Funds must be used strictly for approved purposes and in accordance with the approved budget.</li>
+  <li>Any variation exceeding 10% of a budget line item requires prior written approval from the Funder.</li>
+  <li>Receipts, invoices and supporting documentation must be retained for a minimum of 5 years post-project.</li>
+  <li>The funded organisation must not divert funds to activities not covered by this agreement.</li>
+</ul>
+
+<h4>3. Reporting Requirements</h4>
+<p>Quarterly narrative and financial reports are due within 30 days of each quarter-end. A final evaluation report shall be submitted within 60 days of project completion.</p>
+
+<h4>4. Compliance</h4>
+<p>The Recipient shall comply with the Public Finance Management Act (PFMA), Municipal Finance Management Act (MFMA), and all applicable legislation governing the use of public funds.</p>
+
+<h4>5. Termination &amp; Recovery</h4>
+<p>The Funder reserves the right to suspend or terminate funding and recover disbursed amounts in the event of material breach, misappropriation of funds, or persistent failure to report.</p>]]></field>
+        </record>
+
+        <!-- ── 4. Memorandum of Understanding (MOU) ── -->
+        <record id="contract_template_mou" model="contract.template">
+            <field name="name">Memorandum of Understanding (MOU)</field>
+            <field name="contract_type">purchase</field>
+            <field name="description">Inter-institutional cooperation / partnership MOU template.</field>
+                        <field name="body_html"><![CDATA[<h3>Memorandum of Understanding</h3>
+<p>This Memorandum of Understanding is made between <strong>{{party_a_name}}</strong> and <strong>{{party_b_name}}</strong> to formalise areas of collaboration from <strong>{{effective_date}}</strong>.</p>
+<p>The Parties will collaborate on jointly identified initiatives and maintain regular governance meetings to monitor implementation.</p>
+<p>This MOU is valid for <strong>{{mou_term_years}}</strong> years unless terminated earlier by written notice.</p>]]></field>
+            <field name="scope_of_work"><![CDATA[<h3>Scope of Cooperation</h3>
+<p>The Parties agree to cooperate in the following areas for the mutual benefit of both organisations and the communities they serve:</p>
+<ol>
+  <li>Share relevant information, data and resources in support of mutually agreed objectives.</li>
+  <li>Designate liaison officers responsible for day-to-day coordination between the Parties.</li>
+  <li>Conduct joint planning and review sessions at least twice per annum.</li>
+  <li>Develop and implement joint programmes or initiatives as agreed in writing by both Parties.</li>
+  <li>Review the MOU annually and amend by mutual written agreement where circumstances require.</li>
+  <li>Coordinate communications to present a unified public message on areas of joint cooperation.</li>
+</ol>]]></field>
+            <field name="terms_of_reference"><![CDATA[<h3>Terms of Reference (TOR) — Memorandum of Understanding</h3>
+
+<h4>1. Nature of Agreement</h4>
+<p>This MOU records the intentions and commitments of the Parties to cooperate in pursuit of shared objectives. It is not intended to be a legally binding commercial contract but represents the good faith of both Parties.</p>
+
+<h4>2. Responsibilities</h4>
+<ul>
+  <li>Each Party shall appoint a dedicated relationship manager / focal point.</li>
+  <li>Costs incurred by each Party in fulfilling their obligations shall be borne by that Party unless otherwise agreed in writing.</li>
+  <li>Neither Party shall commit the other to financial obligations without prior written consent.</li>
+</ul>
+
+<h4>3. Duration</h4>
+<p>This MOU shall remain in force for a period of <strong>3 years</strong> from the date of signature, unless extended by mutual written agreement or terminated earlier by either Party on <strong>30 days' written notice</strong>.</p>
+
+<h4>4. Confidentiality</h4>
+<p>Both Parties agree to maintain the confidentiality of sensitive information shared under this MOU in compliance with applicable law, including POPIA.</p>
+
+<h4>5. Dispute Resolution</h4>
+<p>The Parties shall endeavour to resolve any disagreement amicably through good-faith engagement before resorting to formal dispute resolution processes.</p>]]></field>
+        </record>
+
+        <!-- ── 5. Retainer Agreement ── -->
+        <record id="contract_template_retainer" model="contract.template">
+            <field name="name">Retainer Agreement</field>
+            <field name="contract_type">purchase</field>
+            <field name="description">On-call professional retainer for specialists, legal counsel, etc.</field>
+                        <field name="body_html"><![CDATA[<h3>Retainer Agreement</h3>
+<p>This Retainer Agreement is entered into by <strong>{{client_name}}</strong> and <strong>{{consultant_name}}</strong> effective from <strong>{{effective_date}}</strong>.</p>
+<p>The Consultant is appointed on a monthly retainer of <strong>{{monthly_retainer_fee}}</strong> for up to 40 billable hours per month, excluding approved out-of-scope services.</p>
+<p>All services will be rendered professionally and in accordance with agreed turnaround times and reporting obligations.</p>]]></field>
+            <field name="scope_of_work"><![CDATA[<h3>Scope of Work</h3>
+<p>The Consultant is retained on a monthly basis to provide the following on-call professional services:</p>
+<ol>
+  <li>Provide specialist advice and written recommendations upon request, within agreed response times.</li>
+  <li>Attend meetings, workshops, hearings and site visits as required by the Client (maximum 5 days per month inclusive).</li>
+  <li>Review, advise on and draft documents, reports, legal instruments and correspondence referred by the Client.</li>
+  <li>Maintain availability during normal business hours (08:00–17:00, Monday to Friday, excluding public holidays).</li>
+  <li>Prepare written opinions, memoranda and reports within agreed turnaround times.</li>
+  <li>Disclose and manage any actual or perceived conflicts of interest promptly.</li>
+</ol>]]></field>
+            <field name="terms_of_reference"><![CDATA[<h3>Terms of Reference (TOR) — Retainer Agreement</h3>
+
+<h4>1. Retainer Basis</h4>
+<p>The Consultant is engaged on a monthly retainer basis. The monthly retainer fee covers a maximum of <strong>40 billable hours</strong> per month. Hours in excess thereof shall be invoiced at the agreed hourly rate as per <em>Annexure A – Fee Schedule</em>.</p>
+
+<h4>2. Scope Limitations</h4>
+<p>Services outside the agreed retainer scope require a separate written instruction and additional fee arrangement before commencement.</p>
+
+<h4>3. Exclusivity</h4>
+<p>Unless otherwise agreed in writing, this retainer is non-exclusive and the Consultant may provide similar services to other clients, provided there is no conflict of interest with the Client's interests.</p>
+
+<h4>4. Invoicing</h4>
+<p>The Consultant shall submit monthly tax invoices by the last working day of each month, accompanied by a schedule of work and time performed during that month.</p>
+
+<h4>5. Termination</h4>
+<p>Either Party may terminate this agreement with <strong>30 calendar days' written notice</strong>. The Client shall pay for all work performed up to the effective date of termination.</p>]]></field>
+        </record>
+
+        <!-- ── 6. Deed of Sale ── -->
+        <record id="contract_template_deed_of_sale" model="contract.template">
+            <field name="name">Deed of Sale</field>
+            <field name="contract_type">purchase</field>
+            <field name="description">Property or asset sale and transfer agreement.</field>
+                        <field name="body_html"><![CDATA[<h3>Deed of Sale</h3>
+<p>This Deed of Sale is entered into by <strong>{{seller_name}}</strong> ("Seller") and <strong>{{purchaser_name}}</strong> ("Purchaser") on <strong>{{effective_date}}</strong>.</p>
+<p>The Seller sells and the Purchaser purchases the property / asset described in Annexure A for a purchase price of <strong>{{purchase_price}}</strong>, subject to agreed conditions precedent.</p>
+<p>Transfer and registration shall proceed in accordance with this Agreement and applicable conveyancing requirements.</p>]]></field>
+            <field name="scope_of_work"><![CDATA[<h3>Scope of Transaction</h3>
+<p>The Seller agrees to sell, and the Purchaser agrees to purchase, the property / asset described in this agreement on the following basis:</p>
+<ol>
+  <li>Transfer of ownership of the property / asset as described in <em>Annexure A – Property Schedule</em>.</li>
+  <li>The Seller warrants that the property is free from encumbrances, liens and third-party claims, save as disclosed herein.</li>
+  <li>The Purchaser shall take possession on the date of registration / payment of the full purchase consideration.</li>
+  <li>All risk in and benefit from the property shall pass to the Purchaser on the date of possession.</li>
+  <li>Transfer costs shall be borne by the Purchaser unless otherwise agreed.</li>
+</ol>]]></field>
+            <field name="terms_of_reference"><![CDATA[<h3>Terms of Reference (TOR) — Deed of Sale</h3>
+
+<h4>1. Purchase Consideration</h4>
+<p>The purchase price is as stated in this agreement and shall be payable in the manner described in <em>Clause 4 – Payment Terms</em>.</p>
+
+<h4>2. Conditions Precedent</h4>
+<ul>
+  <li>This sale is subject to the conditions precedent listed in <em>Annexure B</em>, which must be fulfilled within the stipulated period.</li>
+  <li>Should any condition not be fulfilled in time, either Party may elect to waive it (if capable of waiver) or cancel the agreement.</li>
+</ul>
+
+<h4>3. Voetstoots</h4>
+<p>The property is sold voetstoots (as-is). The Seller discloses all known latent and patent defects in <em>Annexure C – Disclosure Schedule</em>.</p>
+
+<h4>4. Transfer &amp; Registration</h4>
+<p>Transfer shall be attended to by the Conveyancers nominated by the Client as soon as practicable after fulfilment of all conditions precedent and payment of the purchase price.</p>
+
+<h4>5. Breach</h4>
+<p>Should either Party breach this agreement and fail to remedy such breach within 7 days of written notice, the innocent Party may cancel the agreement and claim damages.</p>]]></field>
+        </record>
+
+        <record id="contract_template_sla_var_client_name" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_sla"/>
+            <field name="sequence">10</field>
+            <field name="placeholder">{{client_name}}</field>
+            <field name="label">Client Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_sla_var_service_provider" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_sla"/>
+            <field name="sequence">20</field>
+            <field name="placeholder">{{service_provider_name}}</field>
+            <field name="label">Service Provider Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_sla_var_effective_date" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_sla"/>
+            <field name="sequence">30</field>
+            <field name="placeholder">{{effective_date}}</field>
+            <field name="label">Effective Date</field>
+            <field name="field_type">date</field>
+            <field name="required" eval="True"/>
+        </record>
+
+        <record id="contract_template_service_var_client_name" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_service_agreement"/>
+            <field name="sequence">10</field>
+            <field name="placeholder">{{client_name}}</field>
+            <field name="label">Client Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_service_var_service_provider" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_service_agreement"/>
+            <field name="sequence">20</field>
+            <field name="placeholder">{{service_provider_name}}</field>
+            <field name="label">Service Provider Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_service_var_contract_value" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_service_agreement"/>
+            <field name="sequence">30</field>
+            <field name="placeholder">{{contract_value}}</field>
+            <field name="label">Contract Value</field>
+            <field name="field_type">float</field>
+            <field name="required" eval="True"/>
+        </record>
+
+        <record id="contract_template_funding_var_funder_name" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_funding_agreement"/>
+            <field name="sequence">10</field>
+            <field name="placeholder">{{funder_name}}</field>
+            <field name="label">Funder Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_funding_var_recipient_name" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_funding_agreement"/>
+            <field name="sequence">20</field>
+            <field name="placeholder">{{recipient_name}}</field>
+            <field name="label">Recipient Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_funding_var_grant_amount" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_funding_agreement"/>
+            <field name="sequence">30</field>
+            <field name="placeholder">{{grant_amount}}</field>
+            <field name="label">Grant Amount</field>
+            <field name="field_type">float</field>
+            <field name="required" eval="True"/>
+        </record>
+
+        <record id="contract_template_mou_var_party_a" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_mou"/>
+            <field name="sequence">10</field>
+            <field name="placeholder">{{party_a_name}}</field>
+            <field name="label">Party A Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_mou_var_party_b" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_mou"/>
+            <field name="sequence">20</field>
+            <field name="placeholder">{{party_b_name}}</field>
+            <field name="label">Party B Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_mou_var_effective_date" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_mou"/>
+            <field name="sequence">30</field>
+            <field name="placeholder">{{effective_date}}</field>
+            <field name="label">Effective Date</field>
+            <field name="field_type">date</field>
+            <field name="required" eval="True"/>
+        </record>
+
+        <record id="contract_template_retainer_var_client_name" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_retainer"/>
+            <field name="sequence">10</field>
+            <field name="placeholder">{{client_name}}</field>
+            <field name="label">Client Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_retainer_var_consultant_name" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_retainer"/>
+            <field name="sequence">20</field>
+            <field name="placeholder">{{consultant_name}}</field>
+            <field name="label">Consultant Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_retainer_var_monthly_fee" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_retainer"/>
+            <field name="sequence">30</field>
+            <field name="placeholder">{{monthly_retainer_fee}}</field>
+            <field name="label">Monthly Retainer Fee</field>
+            <field name="field_type">float</field>
+            <field name="required" eval="True"/>
+        </record>
+
+        <record id="contract_template_sale_var_seller_name" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_deed_of_sale"/>
+            <field name="sequence">10</field>
+            <field name="placeholder">{{seller_name}}</field>
+            <field name="label">Seller Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_sale_var_purchaser_name" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_deed_of_sale"/>
+            <field name="sequence">20</field>
+            <field name="placeholder">{{purchaser_name}}</field>
+            <field name="label">Purchaser Name</field>
+            <field name="field_type">char</field>
+            <field name="required" eval="True"/>
+        </record>
+        <record id="contract_template_sale_var_purchase_price" model="contract.template.variable">
+            <field name="template_id" ref="contract_template_deed_of_sale"/>
+            <field name="sequence">30</field>
+            <field name="placeholder">{{purchase_price}}</field>
+            <field name="label">Purchase Price</field>
+            <field name="field_type">float</field>
+            <field name="required" eval="True"/>
+        </record>
+
+    </data>
+
+    <!-- ================================================================
+         SECTION 2 — DEMO USERS, GROUP ASSIGNMENTS & APPROVAL TEAMS
+         noupdate="1" → records are created on install; never overwritten
+         on upgrade (preserves any password/config changes made in-app).
+         ================================================================ -->
+    <data noupdate="1">
+
+        <!-- ────────────────────────────────────────────────────────────
+             USERS
+             Group hierarchy (lowest → highest):
+               User → Team Leader → Manager → Deputy → Admin Officer
+               → Legal Advisor → CFO
+             ──────────────────────────────────────────────────────────── -->
+
+        <!-- 1. Head of Department  |  Login: hod  |  Password: HOD@1234 -->
+        <record id="user_contract_hod" model="res.users">
+            <field name="name">Head of Department</field>
+            <field name="login">hod</field>
+            <field name="password">HOD@1234</field>
+            <field name="email">hod@ecdhs.gov.za</field>
+            <field name="groups_id" eval="[
+                (4, ref('base.group_user')),
+                (4, ref('xf_partner_contract.group_xf_partner_contract_manager')),
+            ]"/>
+        </record>
+
+        <!-- 2. Municipal Manager  |  Login: mm  |  Password: MM@1234 -->
+        <record id="user_contract_mm" model="res.users">
+            <field name="name">Municipal Manager</field>
+            <field name="login">mm</field>
+            <field name="password">MM@1234</field>
+            <field name="email">mm@ecdhs.gov.za</field>
+            <field name="groups_id" eval="[
+                (4, ref('base.group_user')),
+                (4, ref('xf_partner_contract.group_xf_partner_contract_manager')),
+            ]"/>
+        </record>
+
+        <!-- 3. Chief Executive Officer  |  Login: ceo  |  Password: CEO@1234 -->
+        <record id="user_contract_ceo" model="res.users">
+            <field name="name">Chief Executive Officer</field>
+            <field name="login">ceo</field>
+            <field name="password">CEO@1234</field>
+            <field name="email">ceo@ecdhs.gov.za</field>
+            <field name="groups_id" eval="[
+                (4, ref('base.group_user')),
+                (4, ref('xf_partner_contract_management.group_xf_partner_contract_cfo')),
+            ]"/>
+        </record>
+
+        <!-- 4. Chief Financial Officer  |  Login: cfo  |  Password: CFO@1234 -->
+        <record id="user_contract_cfo" model="res.users">
+            <field name="name">Chief Financial Officer</field>
+            <field name="login">cfo</field>
+            <field name="password">CFO@1234</field>
+            <field name="email">cfo@ecdhs.gov.za</field>
+            <field name="groups_id" eval="[
+                (4, ref('base.group_user')),
+                (4, ref('xf_partner_contract_management.group_xf_partner_contract_cfo')),
+            ]"/>
+        </record>
+
+        <!-- 5. Deputy Director  |  Login: deputy  |  Password: Deputy@1234 -->
+        <record id="user_contract_deputy" model="res.users">
+            <field name="name">Deputy Director</field>
+            <field name="login">deputy</field>
+            <field name="password">Deputy@1234</field>
+            <field name="email">deputy@ecdhs.gov.za</field>
+            <field name="groups_id" eval="[
+                (4, ref('base.group_user')),
+                (4, ref('xf_partner_contract_management.group_xf_partner_contract_deputy')),
+            ]"/>
+        </record>
+
+        <!-- 6. Legal Services Officer  |  Login: legal  |  Password: Legal@1234 -->
+        <record id="user_contract_legal" model="res.users">
+            <field name="name">Legal Services Officer</field>
+            <field name="login">legal</field>
+            <field name="password">Legal@1234</field>
+            <field name="email">legal@ecdhs.gov.za</field>
+            <field name="groups_id" eval="[
+                (4, ref('base.group_user')),
+                (4, ref('xf_partner_contract_management.group_xf_partner_contract_admin_legal_advisor')),
+            ]"/>
+        </record>
+
+        <!-- 7. Contract Manager  |  Login: contract_manager  |  Password: Manager@1234 -->
+        <record id="user_contract_manager" model="res.users">
+            <field name="name">Contract Manager</field>
+            <field name="login">contract_manager</field>
+            <field name="password">Manager@1234</field>
+            <field name="email">contract.manager@ecdhs.gov.za</field>
+            <field name="groups_id" eval="[
+                (4, ref('base.group_user')),
+                (4, ref('xf_partner_contract.group_xf_partner_contract_manager')),
+            ]"/>
+        </record>
+
+        <!-- 8. Contract User  |  Login: contract_user  |  Password: User@1234 -->
+        <record id="user_contract_user" model="res.users">
+            <field name="name">Contract User</field>
+            <field name="login">contract_user</field>
+            <field name="password">User@1234</field>
+            <field name="email">contract.user@ecdhs.gov.za</field>
+            <field name="groups_id" eval="[
+                (4, ref('base.group_user')),
+                (4, ref('xf_partner_contract.group_xf_partner_contract_user')),
+            ]"/>
+        </record>
+
+        <!-- 9. Generic Approver  |  Login: approver  |  Password: Approver@1234 -->
+        <record id="user_contract_approver" model="res.users">
+            <field name="name">Contract Approver</field>
+            <field name="login">approver</field>
+            <field name="password">Approver@1234</field>
+            <field name="email">approver@ecdhs.gov.za</field>
+            <field name="groups_id" eval="[
+                (4, ref('base.group_user')),
+                (4, ref('xf_partner_contract.group_xf_partner_contract_team_leader')),
+            ]"/>
+        </record>
+
+        <!-- ────────────────────────────────────────────────────────────
+             APPROVAL TEAMS
+             ──────────────────────────────────────────────────────────── -->
+
+        <!-- ══ TEAM 1: Standard Governance Approval Chain ══
+             Sequence: HOD (10) → MM (20) → CEO (30) → CFO (40)
+             Suitable for: general contracts, SLAs, service agreements -->
+        <record id="contract_team_governance" model="xf.partner.contract.team">
+            <field name="name">Standard Governance Approval Chain</field>
+            <field name="user_id" ref="user_contract_hod"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="contract_team_gov_approver_hod" model="xf.partner.contract.team.approver">
+            <field name="team_id" ref="contract_team_governance"/>
+            <field name="sequence">10</field>
+            <field name="user_id" ref="user_contract_hod"/>
+            <field name="role">Head of Department (HOD)</field>
+            <field name="can_edit" eval="True"/>
+        </record>
+        <record id="contract_team_gov_approver_mm" model="xf.partner.contract.team.approver">
+            <field name="team_id" ref="contract_team_governance"/>
+            <field name="sequence">20</field>
+            <field name="user_id" ref="user_contract_mm"/>
+            <field name="role">Municipal Manager (MM)</field>
+        </record>
+        <record id="contract_team_gov_approver_ceo" model="xf.partner.contract.team.approver">
+            <field name="team_id" ref="contract_team_governance"/>
+            <field name="sequence">30</field>
+            <field name="user_id" ref="user_contract_ceo"/>
+            <field name="role">Chief Executive Officer (CEO)</field>
+        </record>
+        <record id="contract_team_gov_approver_cfo" model="xf.partner.contract.team.approver">
+            <field name="team_id" ref="contract_team_governance"/>
+            <field name="sequence">40</field>
+            <field name="user_id" ref="user_contract_cfo"/>
+            <field name="role">Chief Financial Officer (CFO) – Final Finance Sign-off</field>
+        </record>
+
+        <!-- ══ TEAM 2: Legal &amp; Finance Approval Team ══
+             Sequence: Deputy Director (10) → Legal Services (20) → CFO (30)
+             Suitable for: funding agreements, MOUs, deeds of sale -->
+        <record id="contract_team_legal_finance" model="xf.partner.contract.team">
+            <field name="name">Legal and Finance Approval Team</field>
+            <field name="user_id" ref="user_contract_deputy"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="contract_team_lf_approver_deputy" model="xf.partner.contract.team.approver">
+            <field name="team_id" ref="contract_team_legal_finance"/>
+            <field name="sequence">10</field>
+            <field name="user_id" ref="user_contract_deputy"/>
+            <field name="role">Deputy Director</field>
+            <field name="can_edit" eval="True"/>
+        </record>
+        <record id="contract_team_lf_approver_legal" model="xf.partner.contract.team.approver">
+            <field name="team_id" ref="contract_team_legal_finance"/>
+            <field name="sequence">20</field>
+            <field name="user_id" ref="user_contract_legal"/>
+            <field name="role">Legal Services Officer</field>
+        </record>
+        <record id="contract_team_lf_approver_cfo" model="xf.partner.contract.team.approver">
+            <field name="team_id" ref="contract_team_legal_finance"/>
+            <field name="sequence">30</field>
+            <field name="user_id" ref="user_contract_cfo"/>
+            <field name="role">Chief Financial Officer (CFO)</field>
+        </record>
+
+        <!-- ══ TEAM 3: SCM / Procurement Review Team ══
+             Sequence: Contract Manager (10) → HOD (20) → CFO (30) → CEO (40)
+             Suitable for: procurement-linked contracts, retainers -->
+        <record id="contract_team_scm" model="xf.partner.contract.team">
+            <field name="name">SCM Procurement Review Team</field>
+            <field name="user_id" ref="user_contract_manager"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="contract_team_scm_approver_mgr" model="xf.partner.contract.team.approver">
+            <field name="team_id" ref="contract_team_scm"/>
+            <field name="sequence">10</field>
+            <field name="user_id" ref="user_contract_manager"/>
+            <field name="role">Contract Manager</field>
+            <field name="can_edit" eval="True"/>
+        </record>
+        <record id="contract_team_scm_approver_hod" model="xf.partner.contract.team.approver">
+            <field name="team_id" ref="contract_team_scm"/>
+            <field name="sequence">20</field>
+            <field name="user_id" ref="user_contract_hod"/>
+            <field name="role">Head of Department (HOD)</field>
+        </record>
+        <record id="contract_team_scm_approver_cfo" model="xf.partner.contract.team.approver">
+            <field name="team_id" ref="contract_team_scm"/>
+            <field name="sequence">30</field>
+            <field name="user_id" ref="user_contract_cfo"/>
+            <field name="role">Chief Financial Officer (CFO)</field>
+        </record>
+        <record id="contract_team_scm_approver_ceo" model="xf.partner.contract.team.approver">
+            <field name="team_id" ref="contract_team_scm"/>
+            <field name="sequence">40</field>
+            <field name="user_id" ref="user_contract_ceo"/>
+            <field name="role">Chief Executive Officer (CEO) – Final Authorisation</field>
+        </record>
+
+    </data>
+
+</odoo>

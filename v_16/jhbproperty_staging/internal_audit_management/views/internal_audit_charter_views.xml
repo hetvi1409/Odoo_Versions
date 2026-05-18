@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_internal_audit_charter" model="ir.actions.act_window">
+        <field name="name">Internal Audit Charter</field>
+        <field name="res_model">internal.audit.charter</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Charter
+            </p>
+            <p>
+                Create and manage the Internal Audit Charter;
+            </p>
+        </field>
+    </record>
+    <record id="internal_audit_charter_view_form" model="ir.ui.view">
+        <field name="name">internal.audit.charter.view.form</field>
+        <field name="model">internal.audit.charter</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                           
+                            string="1st Review" class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'preparer')]}"/>
+                    <button name="action_2nd_review" type="object"
+                           
+                            string="2nd Review" class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'first_reviewer')]}"/>
+                    <button name="action_revert" type="object"
+                           
+                            string="Revert" class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'first_reviewer')]}"/>
+                    <button name="action_approve" type="object"
+                           
+                            string="Approve" class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'second_reviewer')]}"/>
+                    <button name="action_revert" type="object"
+                           
+                            string="Revert" class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'second_reviewer')]}"/>
+                    <button name="action_reject" type="object"
+                           
+                            string="Reject" class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'second_reviewer')]}"/>
+                    <button name="action_revert" type="object"
+                           
+                            string="Move to Prepare" class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'rejected')]}"/>
+<!--                    <button name="action_update" type="object"-->
+<!--                            invisible="stages != 'reverted' or uid != user_preparer_ids"-->
+<!--                            string="Updated" class="oe_highlight"/>-->
+                    <field name="stages" widget="statusbar"/>
+<!--                    <button name="action_review" type="object"-->
+<!--                            invisible="state != 'new'"-->
+<!--                            string="Review" class="oe_highlight"/>-->
+<!--                    <button name="action_approve" type="object"-->
+<!--                            invisible="state != 'review'"-->
+<!--                            string="Approve" class="oe_highlight"/>-->
+<!--                    <button name="action_mark_discrepancy" type="object"-->
+<!--                            invisible="state != 'review'"-->
+<!--                            string="Refuse"/>-->
+<!--                    <button name="action_send_back_review" type="object"-->
+<!--                            invisible="state != 'refuse'"-->
+<!--                            string="Move To Review" class="oe_highlight"/>-->
+<!--                    <button name="action_send_back_new" type="object"-->
+<!--                            invisible="state != 'refuse'"-->
+<!--                            string="Move To New" class="oe_highlight"/>-->
+<!--                    <field name="state" widget="statusbar"/>-->
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence_no"/>
+                            <field name="requirements" style="height: 105px;"/>
+                            <field name="user_id" invisible="1"/>
+                            <field name="record_work_done" style="height: 105px;"/>
+                            <field name="conclusion" style="height: 105px;"/>
+<!--                            <field name="feedback"/>-->
+                        </group>
+                        <group>
+<!--                            <field name="team_id"/>-->
+                            <field name="user_preparer_ids"
+                                   widget="many2one_avatar_user"/>
+<!--                            <field name="user_reviewer_1_ids"-->
+<!--                                   widget="many2one_avatar_user"  attrs="{'readonly': [('stages', '=', 'approved')]}"/>-->
+<!--                            <field name="user_reviewer_2_ids"-->
+<!--                                   widget="many2one_avatar_user"  attrs="{'readonly': [('stages', '=', 'approved')]}" />-->
+<!--                            <field name="user_approver_ids"-->
+<!--                                   widget="many2one_avatar_user"  attrs="{'readonly': [('stages', '=', 'approved')]}"/>-->
+                            <field name="user_ids" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Upload Internal Audit Charter">
+                            <group>
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </group>
+                            <group>
+                                <button name="action_view_documents"
+                                       
+                                        type="object" icon="fa-file-text-o"
+                                        string="Open Documents" attrs="{'invisible': [('attachment_ids', '!=', False)]}"/>
+                            </group>
+                        </page>
+                        <page string="Documents">
+                            <group>
+                                <group>
+                                    <field name="document_ids"
+                                           widget="many2many_binary">
+                                    </field>
+                                </group>
+                                <group>
+                                    <button name="action_view_documents"
+                                           
+                                            type="object" icon="fa-file-text-o"
+                                            string="Open Documents" attrs="{'invisible': [('document_ids', '!=', False)]}"/>
+                                </group>
+                            </group>
+                        </page>
+<!--                        <page string="Internal Audit Charter Templates"-->
+<!--                              name="notes">-->
+<!--                            <div class="d-flex justify-content-end">-->
+<!--                                <button name="action_edit_note"-->
+<!--                                        type="object"-->
+<!--                                        invisible="not note_id"-->
+<!--                                        string="Edit"-->
+<!--                                        class="btn btn-primary oe_rightalign"/>-->
+<!--                                <button name="action_create_note"-->
+<!--                                        type="object"-->
+<!--                                        invisible="note_id != False"-->
+<!--                                        string="Create"-->
+<!--                                        class="btn btn-primary oe_rightalign"/>-->
+<!--                            </div>-->
+<!--                            <group>-->
+<!--                                <field name="note_id" invisible="1"/>-->
+<!--                                <field name="notes"/>-->
+<!--                            </group>-->
+<!--                        </page>-->
+<!--                        <page string="Comments">-->
+<!--&lt;!&ndash;                            <field name="comment_ids"&ndash;&gt;-->
+<!--&lt;!&ndash;                                   readonly="state not in ['new']">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <tree editable="bottom">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="name"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </tree>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </field>&ndash;&gt;-->
+<!--                        </page>-->
+                        <page string="Tracking"
+                              name="audit_charter_ids">
+                            <field name="audit_charter_ids"
+                                   options="{'no_create_edit': True, 'no_quick_create': True, 'no_open': True}">
+                                <tree editable="bottom" create="0" edit="0">
+                                    <field name="user_id"/>
+                                    <field name="previous_stage_id"/>
+                                    <field name="new_stage_id"/>
+                                    <field name="comment"/>
+                                    <field name="date"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+    <record id="internal_audit_charter_view_tree" model="ir.ui.view">
+        <field name="name">internal.audit.charter.view.tree</field>
+        <field name="model">internal.audit.charter</field>
+        <field name="arch" type="xml">
+            <tree duplicate="0">
+                <field name="requirements"/>
+                <field name="team_id"/>
+                <!--                <field name="role_id"/>-->
+                <field name="state" widget="badge"
+                       decoration-info="state in ('new')"
+                       decoration-warning="state in ('review')"
+                       decoration-success="state in ('approve')"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_audit_charter_note" model="ir.actions.act_window">
+        <field name="name">Internal Audit Charter Report</field>
+        <field name="res_model">audit.charter.note</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Internal Audit Charter Report
+            </p>
+            <p>
+                Create and manage the Internal Audit Charter Report;
+            </p>
+        </field>
+    </record>
+    <record id="audit_charter_note_view_form" model="ir.ui.view">
+        <field name="name">audit.charter.note.view.form</field>
+        <field name="model">audit.charter.note</field>
+        <field name="arch" type="xml">
+            <form string="Methodology" duplicate="0">
+                <header>
+                    <button name="action_review" type="object"
+                           
+                            string="Review" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'new')]}"/>
+                    <button name="action_approve" type="object"
+                           
+                            string="Approve" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'review')]}"/>
+                    <button name="action_mark_discrepancy" type="object"
+                           
+                            string="Refuse" attrs="{'invisible': [('state', '!=', 'review')]}"/>
+                    <button name="action_send_back_review" type="object"
+                           
+                            string="Move To Review" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'refuse')]}"/>
+                    <button name="action_send_back_new" type="object"
+                           
+                            string="Move To New" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'refuse')]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="internal_audit_charter_id"
+                                 />
+                            <field name="create_uid"/>
+                        </group>
+                        <group>
+                            <field name="create_date"/>
+                            <field name="approver_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+    <record id="audit_charter_note_view_tree" model="ir.ui.view">
+        <field name="name">audit.charter.note.view.tree</field>
+        <field name="model">audit.charter.note</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="create_date"/>
+                <field name="internal_audit_charter_id"/>
+                <field name="create_uid"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('new')"
+                       decoration-warning="state in ('review', 'refuse')"
+                       decoration-success="state in ('approve')"/>
+            </tree>
+        </field>
+    </record>
+    <menuitem id="high_charter_menu"
+              name="Charter"
+              parent="internal_audit_management.high_level_documents_menu"
+              sequence="6"/>
+    <menuitem id="committee_charter_root_menu"
+              name="Audit Process"
+              parent="project.menu_project_config"
+              sequence="4"/>
+<!--    <menuitem id="audit_charter_note_menu"-->
+<!--              name="Internal Audit Charter Report"-->
+<!--              parent="committee_charter_root_menu"-->
+<!--              action="action_audit_charter_note"-->
+<!--              sequence="4"/>-->
+
+</odoo>

@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tender List Page -->
+    <template id="tender_list_page" name="Open Tenders">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="mb-4">Tenders</h1>
+
+                            <!-- Filter Tabs -->
+                            <ul class="nav nav-tabs mb-4" role="tablist">
+                                <li class="nav-item">
+                                    <a t-attf-class="nav-link #{(not status or status == 'open') and 'active' or ''}"
+                                    t-attf-href="/sagovtenders?status=open#{search and '&amp;search=' + search or ''}">
+                                        Open Tenders
+                                        <span class="badge badge-success ml-2"><t t-esc="open_count"/></span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a t-attf-class="nav-link #{status == 'closed' and 'active' or ''}"
+                                    t-attf-href="/sagovtenders?status=closed#{search and '&amp;search=' + search or ''}">
+                                        Closed Tenders
+                                        <span class="badge badge-danger ml-2"><t t-esc="closed_count"/></span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a t-attf-class="nav-link #{status == 'all' and 'active' or ''}"
+                                    t-attf-href="/sagovtenders?status=all#{search and '&amp;search=' + search or ''}">
+                                        All Tenders
+                                        <span class="badge badge-secondary ml-2"><t t-esc="total_count"/></span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <!-- Search Bar -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <form method="get" action="/sagovtenders" class="form-inline">
+                                        <input type="hidden" name="status" t-att-value="status"/>
+                                        <div class="input-group w-100">
+                                            <input type="text" name="search" id="tender_search" class="form-control"
+                                                   placeholder="Search tenders by number, title, or description..."
+                                                   t-att-value="search"/>
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fa fa-search"/> Search
+                                                </button>
+                                                <a t-attf-href="/sagovtenders?status=#{status}" class="btn btn-secondary"
+                                                   title="Clear search and show all records">
+                                                    <i class="fa fa-times"/> Clear
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <t t-if="search">
+                                        <small class="text-muted mt-2 d-block">
+                                            Searching for: <strong><t t-esc="search"/></strong>
+                                            <a t-attf-href="/sagovtenders?status=#{status}" class="ml-2">Reset</a>
+                                        </small>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- Tenders List -->
+                            <t t-if="tenders">
+                                <div class="row">
+                                    <t t-foreach="tenders" t-as="tender">
+                                        <div class="col-lg-12 mb-4">
+                                            <div class="card h-100 shadow-sm">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <h4 class="card-title">
+                                                                <a t-attf-href="/sagovtender/#{tender.access_token}"
+                                                                   class="text-primary">
+                                                                    <t t-esc="tender.title or 'Untitled Tender'"/>
+                                                                </a>
+                                                            </h4>
+                                                            <p class="text-muted mb-2">
+                                                                <strong>Tender No:</strong> <t t-esc="tender.name"/>
+                                                            </p>
+                                                            <p class="card-text">
+                                                                <t t-if="tender.description">
+                                                                    <t t-raw="tender.description[:200]"/>
+                                                                    <t t-if="len(tender.description) > 200">...</t>
+                                                                </t>
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-md-3 text-right">
+                                                            <!-- Status Badge -->
+                                                            <t t-set="state_classes" t-value="{
+                                                                'advertised': 'success',
+                                                                'briefing': 'info',
+                                                                'bid_submission': 'success',
+                                                                'opening': 'warning',
+                                                                'evaluation': 'warning',
+                                                                'awarding': 'warning',
+                                                                'awarded': 'primary',
+                                                                'closed': 'secondary',
+                                                                'cancelled': 'danger'
+                                                            }"/>
+                                                            <span t-attf-class="badge badge-#{state_classes.get(tender.state, 'secondary')} badge-pill mb-2 d-block">
+                                                                <t t-esc="dict(tender._fields['state'].selection).get(tender.state)"/>
+                                                            </span>
+
+                                                            <!-- Tender Status Indicator -->
+                                                            <t t-if="tender.state in ['advertised', 'briefing', 'bid_submission'] and tender.closing_date and tender.closing_date > datetime.datetime.now()">
+                                                                <span class="badge badge-success mb-2 d-block">
+                                                                    <i class="fa fa-check-circle"/> Open for Bids
+                                                                </span>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <span class="badge badge-secondary mb-2 d-block">
+                                                                    <i class="fa fa-lock"/> Closed
+                                                                </span>
+                                                            </t>
+
+                                                            <t t-if="tender.estimated_value">
+                                                                <p class="text-muted mb-1">
+                                                                    <strong>Est. Value:</strong><br/>
+                                                                    <span class="text-success h5">
+                                                                        <t t-esc="'{:,.2f}'.format(tender.estimated_value)"/>
+                                                                        <t t-esc="tender.currency_id.symbol"/>
+                                                                    </span>
+                                                                </p>
+                                                            </t>
+                                                        </div>
+                                                    </div>
+                                                    <hr/>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <small class="text-muted">
+                                                                <i class="fa fa-calendar"/> Published:
+                                                                <t t-esc="tender.publication_date and tender.publication_date.strftime('%d %B %Y') or 'N/A'"/>
+                                                            </small>
+                                                        </div>
+                                                        <div class="col-md-6 text-right">
+                                                            <t t-if="tender.closing_date">
+                                                                <small t-attf-class="#{tender.closing_date > datetime.datetime.now() and 'text-success' or 'text-danger'}">
+                                                                    <i class="fa fa-clock-o"/>
+                                                                    <t t-if="tender.closing_date > datetime.datetime.now()">
+                                                                        Closes:
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        Closed:
+                                                                    </t>
+                                                                    <t t-esc="tender.closing_date.strftime('%d %B %Y %H:%M')"/>
+                                                                </small>
+                                                            </t>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer bg-white">
+                                                    <a t-attf-href="/sagovtender/#{tender.access_token}"
+                                                       class="btn btn-primary btn-sm">
+                                                        <i class="fa fa-eye"/> View Details
+                                                    </a>
+                                                    <t t-if="tender.state in ['advertised', 'briefing', 'bid_submission'] and tender.closing_date and tender.closing_date > datetime.datetime.now()">
+                                                        <a t-attf-href="/sagovtender/#{tender.access_token}/bid"
+                                                           class="btn btn-success btn-sm ml-2">
+                                                            <i class="fa fa-file-text-o"/> Submit Bid
+                                                        </a>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <button class="btn btn-secondary btn-sm ml-2" disabled="disabled">
+                                                            <i class="fa fa-lock"/> Bid Submission Closed
+                                                        </button>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+
+                                <!-- Pagination -->
+                                <div class="row mt-4">
+                                    <div class="col-lg-12">
+                                        <t t-call="website.pager"/>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <!-- No Tenders Found -->
+                            <t t-if="not tenders">
+                                <div class="alert alert-info text-center mt-5">
+                                    <h4>No Tenders Available</h4>
+                                    <p>There are currently no tenders matching your search criteria.</p>
+                                    <t t-if="search">
+                                        <a t-attf-href="/sagovtenders?status=#{status}" class="btn btn-primary mt-2">
+                                            <i class="fa fa-refresh"/> Clear Search
+                                        </a>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Tender Detail Page -->
+    <template id="tender_detail_page" name="Tender Details">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- Back Button -->
+                            <a href="/sagovtenders" class="btn btn-secondary mb-3">
+                                <i class="fa fa-arrow-left"/> Back to Tenders
+                            </a>
+
+                            <!-- Tender Header -->
+                            <div class="card mb-4">
+                                <div class="card-header bg-primary text-white">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <h2 class="mb-0">
+                                                <t t-esc="tender.title or 'Untitled Tender'"/>
+                                            </h2>
+                                            <p class="mb-0 mt-2">
+                                                <strong>Tender Number:</strong> <t t-esc="tender.name"/>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-2 text-right">
+                                            <t t-set="state_badge_classes" t-value="{
+                                                'advertised': 'success',
+                                                'briefing': 'info',
+                                                'bid_submission': 'success',
+                                                'opening': 'warning',
+                                                'evaluation': 'warning',
+                                                'awarding': 'warning',
+                                                'awarded': 'light',
+                                                'closed': 'secondary',
+                                                'cancelled': 'danger'
+                                            }"/>
+                                            <span t-attf-class="badge badge-#{state_badge_classes.get(tender.state, 'secondary')} badge-pill">
+                                                <t t-esc="dict(tender._fields['state'].selection).get(tender.state)"/>
+                                            </span>
+                                            <br/>
+                                            <t t-if="is_open">
+                                                <span class="badge badge-success badge-pill mt-2">
+                                                    <i class="fa fa-unlock"/> OPEN
+                                                </span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge badge-danger badge-pill mt-2">
+                                                    <i class="fa fa-lock"/> CLOSED
+                                                </span>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5>Tender Information</h5>
+                                            <table class="table table-sm">
+                                                <tr>
+                                                    <th width="40%">Status:</th>
+                                                    <td>
+                                                        <span t-attf-class="badge badge-#{state_badge_classes.get(tender.state, 'secondary')}">
+                                                            <t t-esc="dict(tender._fields['state'].selection).get(tender.state)"/>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr t-if="tender.estimated_value">
+                                                    <th>Estimated Value:</th>
+                                                    <td class="text-success font-weight-bold">
+                                                        <t t-esc="'{:,.2f}'.format(tender.estimated_value)"/>
+                                                        <t t-esc="tender.currency_id.symbol"/>
+                                                    </td>
+                                                </tr>
+                                                <tr t-if="tender.publication_date">
+                                                    <th>Publication Date:</th>
+                                                    <td><t t-esc="tender.publication_date.strftime('%d %B %Y')"/></td>
+                                                </tr>
+                                                <tr t-if="tender.closing_date">
+                                                    <th>Closing Date/Time:</th>
+                                                    <td t-attf-class="#{is_open and 'text-success' or 'text-danger'} font-weight-bold">
+                                                        <t t-esc="tender.closing_date.strftime('%d %B %Y %H:%M')"/>
+                                                        <t t-if="is_open">
+                                                            <span class="badge badge-success ml-2">OPEN</span>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <span class="badge badge-danger ml-2">CLOSED</span>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                                <tr t-if="tender.validity_period">
+                                                    <th>Validity Period:</th>
+                                                    <td><t t-esc="tender.validity_period"/> days</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Tender Details</h5>
+                                            <table class="table table-sm">
+                                                <tr t-if="tender.tender_type_id">
+                                                    <th width="40%">Tender Type:</th>
+                                                    <td><t t-esc="tender.tender_type_id.name"/></td>
+                                                </tr>
+                                                <tr t-if="tender.procurement_method">
+                                                    <th>Procurement Method:</th>
+                                                    <td><t t-esc="dict(tender._fields['procurement_method'].selection).get(tender.procurement_method)"/></td>
+                                                </tr>
+                                                <tr t-if="tender.preference_system">
+                                                    <th>Preference System:</th>
+                                                    <td><t t-esc="dict(tender._fields['preference_system'].selection).get(tender.preference_system)"/></td>
+                                                </tr>
+                                                <tr t-if="tender.has_functionality">
+                                                    <th>Functionality:</th>
+                                                    <td>
+                                                        Required (Threshold: <t t-esc="tender.functionality_threshold"/>%)
+                                                    </td>
+                                                </tr>
+                                                <tr t-if="tender.department_id">
+                                                    <th>Department:</th>
+                                                    <td><t t-esc="tender.department_id.name"/></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tender Description -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h4 class="mb-0">Tender Description</h4>
+                                </div>
+                                <div class="card-body">
+                                    <t t-if="tender.description">
+                                        <t t-raw="tender.description"/>
+                                    </t>
+                                    <t t-else="">
+                                        <p class="text-muted">No description available.</p>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- Tender Documents -->
+                            <t t-if="tender.sagovtender_document_ids">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h4 class="mb-0">
+                                            <i class="fa fa-files-o"/> Tender Documents
+                                        </h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="list-group">
+                                            <t t-foreach="tender.sagovtender_document_ids" t-as="doc">
+                                                <div class="list-group-item">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <h6><t t-esc="doc.name"/></h6>
+                                                            <t t-if="doc.description">
+                                                                <small class="text-muted">
+                                                                    <t t-esc="doc.description"/>
+                                                                </small>
+                                                            </t>
+                                                        </div>
+                                                        <div class="col-md-4 text-right">
+                                                            <t t-if="doc.public and doc.attachment_id">
+                                                                <div class="btn-group" role="group">
+                                                                    <a t-attf-href="/web/content/#{doc.attachment_id.id}"
+                                                                       class="btn btn-sm btn-secondary" target="_blank">
+                                                                        <i class="fa fa-eye"/> View
+                                                                    </a>
+                                                                    <a t-attf-href="/web/content/#{doc.attachment_id.id}?download=true"
+                                                                       class="btn btn-sm btn-primary" target="_blank">
+                                                                        <i class="fa fa-download"/> Download
+                                                                    </a>
+                                                                </div>
+                                                            </t>
+                                                            <t t-elif="doc.attachment_id">
+                                                                <span class="text-muted">Restricted document</span>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <span class="text-muted">No file uploaded</span>
+                                                            </t>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <!-- Briefing Sessions -->
+                            <t t-if="tender.briefing_session_ids and tender.has_briefing_session">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h4 class="mb-0">
+                                            <i class="fa fa-users"/> Briefing Sessions
+                                        </h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <t t-foreach="tender.briefing_session_ids" t-as="session">
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <h5><t t-esc="session.name"/></h5>
+                                                    <p class="mb-2">
+                                                        <strong>Date:</strong>
+                                                        <t t-esc="session.session_date and session.session_date.strftime('%d %B %Y %H:%M') or 'TBD'"/>
+                                                    </p>
+                                                    <t t-if="session.venue">
+                                                        <p class="mb-2">
+                                                            <strong>Venue:</strong> <t t-esc="session.venue"/>
+                                                        </p>
+                                                    </t>
+                                                    <t t-if="session.venue_address">
+                                                        <p class="mb-2">
+                                                            <strong>Address:</strong> <t t-esc="session.venue_address"/>
+                                                        </p>
+                                                    </t>
+                                                    <t t-if="session.is_compulsory">
+                                                        <span class="badge badge-warning">Compulsory Attendance</span>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <!-- User's Bid Status -->
+                            <t t-if="user_bid">
+                                <div class="alert alert-success">
+                                    <h5><i class="fa fa-check-circle"/> You Have Already Submitted a Bid</h5>
+                                    <p class="mb-2">
+                                        <strong>Bid Reference:</strong> <t t-esc="user_bid.name"/><br/>
+                                        <strong>Submission Date:</strong> <t t-esc="user_bid.submission_date.strftime('%d %B %Y %H:%M')"/><br/>
+                                        <strong>Bid Amount:</strong> <t t-esc="'{:,.2f}'.format(user_bid.bid_amount)"/>
+                                        <t t-esc="user_bid.currency_id.symbol"/>
+                                    </p>
+                                    <a href="/my/bids" class="btn btn-primary btn-sm">View My Bids</a>
+                                </div>
+                            </t>
+
+                            <!-- Bid Action Button -->
+                            <t t-if="not user_bid and is_open">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h4>Ready to Submit Your Bid?</h4>
+                                        <p class="text-muted">
+                                            Please ensure you have all required documents before proceeding.
+                                        </p>
+                                        <a t-attf-href="/sagovtender/#{tender.access_token}/bid"
+                                           class="btn btn-success btn-lg">
+                                            <i class="fa fa-file-text-o"/> Submit Bid
+                                        </a>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <!-- Tender Closed Message -->
+                            <t t-if="not is_open">
+                                <div class="alert alert-warning text-center">
+                                    <h5><i class="fa fa-exclamation-triangle"/> This Tender is Closed</h5>
+                                    <p>The closing date for bid submissions has passed.</p>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Tender Not Available Page -->
+    <template id="tender_not_available" name="Tender Not Available">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-5 mb-5">
+                    <div class="alert alert-warning text-center">
+                        <h2><i class="fa fa-exclamation-triangle"/> Tender Not Available</h2>
+                        <p class="lead"><t t-esc="message"/></p>
+                        <a href="/sagovtenders" class="btn btn-primary mt-3">
+                            <i class="fa fa-arrow-left"/> Back to Tenders
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="building_form_approval">
+            <field name="name">building.approval.form</field>
+            <field name="model">building.approval</field>
+            <field name="priority">1</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Real Estate" create="false">
+                    <header>
+                        <button name="action_approve" string="Approve"
+                                type="object"
+                                class="oe_highlight"
+                                states="send"/>
+                        <button name="action_reject" string="Reject"
+                                type="object"
+                                states="send"/>
+                        <button name="action_submit_for_approval"
+                                string="Submit For Approval" type="object"
+                                states="draft"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                          <style>
+                    .o_form_view:not(.o_field_highlight)
+                    .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                    .o_input:not(:hover):not(:focus) {
+                              --o-input-border-color: black !important;
+                              }
+                  </style>
+                        <field name="asset_id" invisible="1"/>
+                        <div class="oe_button_box" name="button_box">
+                            <!-- Smart button to view the created building -->
+                            <button name="action_view_building" type="object"
+                                    class="oe_stat_button"
+                                    attrs="{'invisible': [('asset_id', '=', False)]}"
+                                    icon="fa-building">
+                                <span>Building</span>
+                            </button>
+                        </div>
+                        <group attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <group>
+                                    <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="code" requied="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="region_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="partner_id"
+                                       context="{'res_partner_search_mode': 'is_owner', 'default_is_owner':True,}"
+                                        domain="[('is_owner','=',True)]"
+                                        attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                    <field name="purchase_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="launch_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+
+                                    <field name="account_analytic_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="company_id"
+                                        groups="base.group_multi_company"
+                                        attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+<!--                                <field name="company_id"/>-->
+                                    <field name="latitude" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="longitude" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="document_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </group>
+                        <group string="Property Details" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <group>
+                                <field name="location" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="zoning" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="ward" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="area" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="title_deed_number" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="sg_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="value" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </group>
+                        <group attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <field name="comments" nolabel="1" colspan="2" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+
+                        <notebook colspan="4">
+                            <page string="invisible" invisible="1"/>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="building_tree_approval">
+            <field name="name">building.approval.tree</field>
+            <field name="model">building.approval</field>
+            <field name="priority">1</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Real Estate" create="false">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="region_id"/>
+                    <field name="partner_id"/>
+                    <field name="location" optional="hide"/>
+                    <field name="zoning" optional="hide"/>
+                    <field name="area" optional="hide"/>
+                    <field name="value" optional="hide"/>
+                    <field name="purchase_date"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="bulk_import_id" optional="show"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_building_approval" model="ir.actions.act_window">
+            <field name="name">Building Approval</field>
+            <field name="res_model">building.approval</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'create': False}</field>
+        </record>
+
+
+        <record model="ir.ui.view" id="building_removal_form_approval">
+            <field name="name">building.removal.approval.form</field>
+            <field name="model">building.removal.approval</field>
+            <field name="priority">1</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Building Removal Approval">
+                    <header>
+                        <button name="action_approve" string="Approve"
+                                type="object"
+                                class="oe_highlight"
+                                states="send"/>
+                        <button name="action_reject" string="Reject"
+                                type="object"
+                                states="send"/>
+                        <button name="action_submit_for_approval"
+                                string="Submit For Approval" type="object"
+                                states="draft"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <group>
+                                <field name="building_id" string="Building" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="jmc_number" string="JMC Number" readonly="1"/>
+                                <field name="removal_reason"
+                                       string="Reason for Removal"
+                                       widget="text"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="disposal_method" widget="radio"  options="{'horizontal': true}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                                <field name="selling_input" attrs="{'invisible': [('disposal_method', '!=', 'sale')], 'readonly': [('state', '!=', 'draft')]}"/>
+
+                                <field name="document_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="attachment_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="user_id" string="Submitted By"
+                                       readonly="1"/>
+                                <field name="removal_date"
+                                        string="Removal Date"
+                                        attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </group>
+                        <group string="Property Details" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <group>
+                                <field name="asset_description" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="location" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="zoning" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="title_deed_number" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="historical_book_value" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </group>
+
+                        <notebook colspan="4">
+                            <page string="Condition of Property">
+                                <field name="notes" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View for Building Removal Approval -->
+        <record model="ir.ui.view" id="building_removal_tree_approval">
+            <field name="name">building.removal.approval.tree</field>
+            <field name="model">building.removal.approval</field>
+            <field name="priority">1</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Building Removal Approval">
+                    <field name="building_id" string="Building"/>
+                    <field name="jmc_number" string="JMC Number"/>
+                    <field name="asset_description" optional="hide"/>
+                    <field name="location" optional="hide"/>
+                    <field name="zoning" optional="hide"/>
+                    <field name="removal_date"/>
+                    <field name="user_id" string="Submitted By"/>
+                    <field name="disposal_method"/>
+                    <field name="selling_input" optional="show"/>
+                    <field name="historical_book_value" optional="hide"/>
+                    <field name="bulk_import_id" optional="show"/>
+                    <field name="state" string="Status"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action for Building Removal Approval -->
+        <record id="action_building_removal_approval"
+                model="ir.actions.act_window">
+            <field name="name">Building Removal Approval</field>
+            <field name="res_model">building.removal.approval</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="view_building_removal" model="ir.ui.view">
+            <field name="name">building.removal.form</field>
+            <field name="model">building</field>
+            <field name="inherit_id"
+                   ref="itsys_real_estate.building_form"/> <!-- Use the correct reference -->
+            <field name="arch" type="xml">
+                <!-- Add the new tab 'Windeed' inside the notebook tag -->
+                <xpath expr="//header" position="inside">
+                    <button name="action_remove_asset" string="Dispose Asset"
+                            type="object" class="btn-danger"
+                            attrs="{'invisible':[('active','=',False)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

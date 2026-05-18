@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="condition_disposal" model="asset.condition">
+        <field name="name">Disposal</field>
+    </record>
+    <record id="condition_return" model="asset.condition">
+        <field name="name">Return</field>
+    </record>
+    <record id="condition_good" model="asset.condition">
+        <field name="name">Good</field>
+    </record>
+    <record id="condition_bad" model="asset.condition">
+        <field name="name">Bad</field>
+    </record>
+
+    <record id="server_action_asset_submit_approval_id" model="ir.actions.server">
+        <field name="name">Asset Submit For Approval</field>
+        <field name="model_id" ref="asset_verification.model_asset_verification_staging"/>
+        <field name="binding_model_id" ref="asset_verification.model_asset_verification_staging"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = {
+        'type': 'ir.actions.act_window',
+        'res_model': 'asset.submit.approval.wizard',
+        'view_mode': 'form',
+        'target': 'new',
+        'context': {
+            'default_asset_ids': records.ids,
+        },
+    }
+        </field>
+    </record>
+
+    <record id="server_action_asset_confirm" model="ir.actions.server">
+        <field name="name">Asset Approval</field>
+        <field name="model_id" ref="asset_verification.model_asset_verification_staging"/>
+        <field name="binding_model_id" ref="asset_verification.model_asset_verification_staging"/>
+        <field name="groups_id" eval="[(4, ref('asset_verification.group_staging_approval_manager'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = {
+        'type': 'ir.actions.act_window',
+        'res_model': 'asset.submit.confirmation.wizard',
+        'view_mode': 'form',
+        'target': 'new',
+        'context': {
+            'default_asset_ids': records.ids,
+        },
+    }
+        </field>
+    </record>
+</odoo>

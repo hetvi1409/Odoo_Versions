@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Record for asset addition -->
+   <record id="asset_addition_view_form" model="ir.ui.view">
+       <field name="name">asset.addition.view.form</field>
+       <field name="model">asset.addition</field>
+       <field name="arch" type="xml">
+           <form>
+               <group>
+                   <group>
+                       <field name="asset_ids" widget="many2many_tags"/>
+                       <field name="type"/>
+                       <field name="invoice_number"/>
+                       <field name="purchase_order_id"
+                              attrs="{'invisible': [('cash_type', '!=', 'purchase')]}"/>
+                       <field name="maintenance_id"
+                              attrs="{'invisible': [('cash_type', '!=', 'maintenance')]}"/>
+                       <field name="best_fair"
+                              attrs="{'invisible': [('non_cash_type', '!=', 'donated')], 'required': [('non_cash_type', '=', 'donated')]}"/>
+                       <field name="deprecated_replacement"
+                              attrs="{'invisible': [('non_cash_type', '!=', 'newly_asset')], 'required': [('non_cash_type', '=', 'newly_asset')]}"/>
+                   </group>
+                   <group>
+                       <field name="asset_id_no"/>
+                       <field name="supplier_id"/>
+                       <field name="voucher_number"/>
+                       <field name="cash_type" attrs="{'invisible': [('type', '!=', 'cash')], 'required': [('type', '=', 'cash')]}"/>
+                       <field name="purchase_amount"
+                              attrs="{'invisible': [('cash_type', '!=', 'purchase')], 'required': [('cash_type', '=', 'purchase')]}"/>
+                       <field name="maintenance_amount"
+                              attrs="{'invisible': [('cash_type', '!=', 'maintenance')], 'required': [('cash_type', '=', 'maintenance')]}"/>
+                       <field name="non_cash_type" attrs="{'invisible': [('type', '!=', 'non_cash')], 'required': [('type', '=', 'non_cash')]}"/>
+                   </group>
+                   <field name="asset_id" invisible="1"/>
+                   <field name="currency_id" invisible="1"/>
+               </group>
+               <footer>
+                   <button name="action_asset_addition" string="Confirm" type="object"
+                             default_focus="1" class="oe_highlight"/>
+                   <button string="Cancel" class="btn btn-default" special="cancel"/>
+               </footer>
+           </form>
+       </field>
+   </record>
+
+    <record id="asset_addition_action" model="ir.actions.act_window">
+        <field name="name">Asset Addition</field>
+        <field name="res_model">asset.addition</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="asset_addition_view_form"/>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_asset_addition"
+              name="Asset Addition"
+              action="asset_addition_action"
+              parent="account.menu_finance_entries_management"/>
+</odoo>

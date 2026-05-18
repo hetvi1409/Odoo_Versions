@@ -1,0 +1,30 @@
+<odoo>
+    <record id="view_valuation_roll_import_wizard_form" model="ir.ui.view">
+        <field name="name">valuation.roll.import.wizard.form</field>
+        <field name="model">valuation.roll.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Valuation Roll Import XML File">
+                <group>
+                    <field name="csv_file" filename="xml_filename" required="1"/>
+                </group>
+                <footer>
+                    <button string="Import" type="object" name="action_import_csv" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_valuation_roll_import_wizard" model="ir.actions.act_window">
+        <field name="name">Valuation Roll Import Wizard Action</field>
+        <field name="res_model">valuation.roll.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_valuation_roll_import"
+                name="Valuation Roll Import"
+                parent="itsys_real_estate.menu_itsys_real_estate"
+                action="action_valuation_roll_import_wizard"
+                sequence="23"/>
+</odoo>

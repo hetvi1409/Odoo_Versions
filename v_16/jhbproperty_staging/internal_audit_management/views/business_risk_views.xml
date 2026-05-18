@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_business_risk_tree" model="ir.ui.view">
+        <field name="name">business.risk.tree</field>
+        <field name="model">business.risk</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" readonly="1"/>
+                <!--                <field name="audit_universe_entity_ids" widget="many2many_tags"/>-->
+                <field name="category" widget="many2many_tags"/>
+                <field name="inherent_risk_score"/>
+                <field name="control_effectiveness"/>
+                <field name="residual_risk_score"/>
+                <field name="owner"/>
+                <field name="severity" optional="show"/>
+                <field name="status" optional="show"/>
+                <field name="next_date" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_business_risk_form" model="ir.ui.view">
+        <field name="name">business.risk.form</field>
+        <field name="model">business.risk</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="summary"/>
+                            <field name="owner"/>
+                            <field name="probability"/>
+                            <field name="impact"/>
+                            <field name="severity"/>
+                            <field name="inherent_risk_score"/>
+                            <field name="residual_risk_score"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                            <!--                            <field name="audit_universe_entity_ids" widget="many2many_tags"/>-->
+                            <field name="last_date"/>
+                            <field name="next_date"/>
+                            <field name="category" widget="many2many_tags"
+                                   options="{'color_field': 'color'}"/>
+                            <field name="control_effectiveness"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description"
+                                   placeholder="Please enter a description"/>
+                        </page>
+                        <page string="Mitigation" name="action">
+                            <field name="action"
+                                   placeholder="Please enter a mitigation strategy and/or actions"/>
+                        </page>
+                        <page string="Risk Matrix" name="matrix">
+                            <h2>Risk Matrix</h2>
+
+                            <table style="width:100%" border="1" align="center"
+                                   bordercolor="black">
+                                <tr align="center">
+                                    <th colspan="2" rowspan="2">
+                                        <strong>Matrix</strong>
+                                    </th>
+                                    <th bgcolor="purple" colspan="5">
+                                        <font color="white">Probability</font>
+                                    </th>
+
+                                </tr>
+                                <tr align="center">
+                                    <th>Low</th>
+                                    <th>Low-Medium</th>
+                                    <th>Medium</th>
+                                    <th>Medium-High</th>
+                                    <th>High</th>
+                                </tr>
+                                <tr align="center">
+                                    <th bgcolor="blue" rowspan="5">
+                                        <font color="white">Impact</font>
+                                    </th>
+                                    <td>
+                                        <Strong>High</Strong>
+                                    </td>
+                                    <td bgcolor="yellow">Medium</td>
+                                    <td bgcolor="orange">Medium-High</td>
+                                    <td bgcolor="red">High</td>
+                                    <td bgcolor="red">High</td>
+                                    <td bgcolor="red">High</td>
+                                </tr>
+                                <tr align="center">
+                                    <td>
+                                        <Strong>Medium-High</Strong>
+                                    </td>
+                                    <td bgcolor="limegreen">Low-Medium</td>
+                                    <td bgcolor="yellow">Medium</td>
+                                    <td bgcolor="orange">Medium-High</td>
+                                    <td bgcolor="red">High</td>
+                                    <td bgcolor="red">High</td>
+                                </tr>
+                                <tr align="center">
+                                    <td>
+                                        <Strong>Medium</Strong>
+                                    </td>
+                                    <td bgcolor="limegreen">Low-Medium</td>
+                                    <td bgcolor="limegreen">Low-Medium</td>
+                                    <td bgcolor="yellow">Medium</td>
+                                    <td bgcolor="orange">Medium-High</td>
+                                    <td bgcolor="orange">Medium-High</td>
+                                </tr>
+                                <tr align="center">
+                                    <td>
+                                        <Strong>Low-Medium</Strong>
+                                    </td>
+                                    <td bgcolor="lime">Low</td>
+                                    <td bgcolor="lime">Low</td>
+                                    <td bgcolor="limegreen">Low-Medium</td>
+                                    <td bgcolor="yellow">Medium</td>
+                                    <td bgcolor="orange">Medium-High</td>
+                                </tr>
+                                <tr align="center">
+                                    <td>
+                                        <Strong>Low</Strong>
+                                    </td>
+                                    <td bgcolor="lime">Low</td>
+                                    <td bgcolor="lime">Low</td>
+                                    <td bgcolor="lime">Low</td>
+                                    <td bgcolor="limegreen">Low-Medium</td>
+                                    <td bgcolor="yellow">Medium</td>
+                                </tr>
+                            </table>
+                        </page>
+                    </notebook>
+                </sheet>
+            <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_business_risk_search" model="ir.ui.view">
+        <field name="name">business.risk.search</field>
+        <field name="model">business.risk</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="owner"/>
+                <field name="status"/>
+                <filter name="group_by_owner" context="{'group_by': 'owner'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_business_risk" model="ir.actions.act_window">
+        <field name="name">Risk</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">business.risk</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+
+            <p class="'o_view_nocontent_smiling_face">
+                Create your Business Risk !
+            </p>
+        </field>
+    </record>
+
+
+    <record id="view_risk_category_tree" model="ir.ui.view">
+        <field name="name">risk.category.tree</field>
+        <field name="model">risk.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_risk_category_form" model="ir.ui.view">
+        <field name="name">risk.category.form</field>
+        <field name="model">risk.category</field>
+        <field name="arch" type="html">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="color" widget="color_picker"/>
+                            <field name="color_2" widget="color"
+                                   groups="base.group_no_one"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_risk_category" model="ir.actions.act_window">
+        <field name="name">Risk Category</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">risk.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+
+            <p class="'o_view_nocontent_smiling_face">
+                Create your first Risk Category !
+            </p>
+        </field>
+    </record>
+    <menuitem
+            id="menu_risk_category"
+            name="Risk Categories"
+            action="action_risk_category"
+            parent="internal_audit_management.committee_charter_root_menu"
+            />
+
+</odoo>

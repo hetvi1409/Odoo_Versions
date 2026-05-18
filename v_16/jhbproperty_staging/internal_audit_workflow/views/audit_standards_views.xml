@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="audit_standards_view_form" model="ir.ui.view">
+        <field name="name">audit_standards_view_form</field>
+        <field name="model">audit.standards</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="internal_audit_management.audit_standards_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="replace">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar" options="{'clickable': '1'}"
+                               statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>
+                        <button name="action_review" type="object"
+                               
+                                string="Preparer" class="oe_highlight" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('preparer_id', '!=', uid)]}"/>
+                        <button name="action_2nd_review" type="object"
+                                string="Reviewer"
+                                class="oe_highlight" attrs="{'invisible': ['|', ('state', '!=', 'preparer'), ('reviewer_id', '!=', uid)]}"/>
+                        <button name="action_approve" type="object"
+                               
+                                string="Approve" class="oe_highlight" attrs="{'invisible': ['|', ('state', '!=', 'second_reviewer'), ('approver_id', '!=', uid)]}"/>
+                        <button name="action_mark_discrepancy" type="object"
+                               
+                                string="Refuse" attrs="{'invisible': [('state', '=', 'rejected')]}"/>
+                        <button name="action_send_back_review" type="object"
+                               
+                                string="Revert" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['draft', 'rejected', 'reverted', 'approved'])]}"/>
+                        <button name="action_send_back_new" type="object"
+                               
+                                string="Move To New" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'rejected')]}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_records" type="object"
+                                    string="Revert Records"
+                                    class="oe_stat_button" icon="fa-book">
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"
+                                       attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                                <field name="sequence_no" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                                <field name="requirements"
+                                       style="height: 105px;" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                                <field name="record_work_done"
+                                       style="height: 105px;" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                                <field name="conclusion"
+                                       style="height: 105px;" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                            </group>
+                            <group>
+                                <field name="can_edit" invisible="1"/>
+                                <field name="preparer_id" widget="many2one_avatar_user"/>
+                                <field name="reviewer_id" widget="many2one_avatar_user"/>
+                                <field name="approver_id" widget="many2one_avatar_user"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Documents">
+                                <group>
+                                    <field name="document_ids"
+                                           widget="many2many_binary" attrs="{'readonly': [('can_edit', '!=', False)]}">
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Audit Reverts/ Review Notes">
+                                <group>
+                                    <field name="feedback" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+                </form>
+            </xpath>
+        </field>
+    </record>
+</odoo>

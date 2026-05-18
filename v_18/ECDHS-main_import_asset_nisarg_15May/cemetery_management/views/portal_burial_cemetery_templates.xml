@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="portal_my_home_menu_cemetery_application"
+              name="Portal layout : sign menu entries"
+              inherit_id="portal.portal_breadcrumbs" priority="60">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'burial_application' or burial_application"
+                t-attf-class="breadcrumb-item #{'active ' if not burial_application else ''}">
+                <a t-if="application"
+                   t-attf-href="/my/burial?{{ keep_query() }}">Application
+                </a>
+                <t t-else="">Burial Application</t>
+            </li>
+            <li t-if="page_name == 'cremation_application' or cremation_application"
+                t-attf-class="breadcrumb-item #{'active ' if not cremation_application else ''}">
+                <a t-if="cremation_application"
+                   t-attf-href="/my/cremation?{{ keep_query() }}">Application
+                </a>
+                <t t-else="">Cremation Application</t>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_cemetery_application"
+              name="Show Burial/Cremation Application" customize_show="True"
+              inherit_id="portal.portal_my_home" priority="20">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_client_category_enable" t-value="True"/>
+            <t t-set="portal_alert_category_enable" t-value="True"/>
+        </xpath>
+        <div id="portal_client_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon"
+                   t-value="'/cemetery_management/static/src/img/cemetery_application.svg'"/>
+                <t t-set="title">Burial Application</t>
+                <t t-set="url" t-value="'/my/burial'"/>
+                <t t-set="text">Follow, view your burial application</t>
+                <t t-set="placeholder_count" t-value="'burial_application'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon"
+                   t-value="'/cemetery_management/static/src/img/cemetery_application.svg'"/>
+                <t t-set="title">Cremation Application</t>
+                <t t-set="url" t-value="'/my/cremation'"/>
+                <t t-set="text">Follow, view your Cremation application</t>
+                <t t-set="placeholder_count" t-value="'cremation_application'"/>
+            </t>
+        </div>
+    </template>
+
+    <template id="my_portal_burial_applications" name="Applications">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Burial Application</t>
+            </t>
+            <t t-if="applications" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Applications #</th>
+                        <th class="text-end">Date Received</th>
+                        <th class="text-end">Undertaker</th>
+                        <th class="text-end">Cemetery</th>
+                        <th class="text-end">Section</th>
+                        <th class="text-end">State</th>
+                    </tr>
+                </thead>
+                <t t-foreach="applications" t-as="application">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/burial_portal/#{application.id}">
+                                <t t-out="application.name"/>
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="application.date_issue"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="application.undertaker_id.sudo().full_name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="application.cemetery_id.name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="application.section_id.name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="application.state"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no applications .</p>
+        </t>
+    </template>
+    <template id="my_portal_burial_applications_details" name="Applications">
+        <t t-call="portal.portal_layout">
+            <div class="card col-12 col-lg justify-content-end"
+                 style="padding: 10px;">
+                <div class="pb-2 pt-3" style="
+                        display: flex;
+                        justify-content: center;">
+                    <h2 class="my-0" style="    font-family: ui-monospace;
+                            color: #0a0a09;
+                            background-color: #c1c6de;
+                            display: flex;
+                            border-radius: 5px; padding: 5px;
+                            justify-content: center;">
+                        Burial Application:
+                        <em t-esc="burial_application.name"/>
+                    </h2>
+                </div>
+                <table class="table table-striped align_center">
+                    <tr t-if="burial_application.user_type == 'undertaker'">
+                        <th>Undertaker Name:</th>
+                        <td>
+                            <t t-esc="burial_application.undertaker_id.sudo().full_name"/>
+                        </td>
+                        <th>ID Number:</th>
+                        <td>
+                            <t t-esc="burial_application.undertaker_id_number"/>
+                        </td>
+                    </tr>
+                    <tr t-if="burial_application.user_type != 'undertaker'">
+                        <th>Applicant Name:</th>
+                        <td>
+                            <t t-esc="burial_application.arranger_name"/>
+                        </td>
+                        <th>ID Number:</th>
+                        <td>
+                            <t t-esc="burial_application.undertaker_id_number"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Serial Number of DHA:</th>
+                        <td>
+                            <t t-esc="burial_application.serial_number"/>
+                        </td>
+                        <th>Barcode Number of DHA:</th>
+                        <td>
+                            <t t-esc="burial_application.barcode_number"/>
+                        </td>
+                    </tr>
+                </table>
+                <h4 class="my-0" style="font-family: ui-monospace;
+                            color: #0a0a09;
+                            background-color: #c1c6de;
+                            display: flex;
+                            border-radius: 5px; padding: 5px;
+                            justify-content: center;">
+                        Deceased Person Details:
+                    </h4>
+                <table class="table table-striped align_center">
+                    <tr>
+                        <th>Surname:</th>
+                        <td>
+                            <t t-esc="burial_application.deceased_surname"/>
+                        </td>
+                        <th>First Name:</th>
+                        <td>
+                            <t t-esc="burial_application.deceased_firstname"/>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table table-striped align_center">
+                    <tr>
+                        <th>Address:</th>
+                        <td>
+                            <t t-if="burial_application.street">
+                                <t t-esc="burial_application.street"/>,
+                            </t>
+                            <t t-if="burial_application.street2">
+                                <t t-esc="burial_application.street2"/>,
+                            </t>
+                            <t t-if="burial_application.city">
+                                <t t-esc="burial_application.city"/>,
+                            </t>
+                            <t t-if="burial_application.municipality_id">
+                                <t t-esc="burial_application.municipality_id.sudo().name"/>,
+                            </t>
+                            <t t-if="burial_application.province_id">
+                                <t t-esc="burial_application.province_id.sudo().name"/>,
+                            </t>
+                            <t t-if="burial_application.country_id">
+                                <t t-esc="burial_application.country_id.name"/>
+                            </t>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table table-striped align_center">
+                    <tr>
+                        <th>Date Of Birth:</th>
+                        <td>
+                            <t t-esc="burial_application.date_of_birth"/>
+                        </td>
+                        <th>Cause Of Death:</th>
+                        <td>
+                            <t t-esc="burial_application.cause_of_death_id.name"/>
+                        </td>
+                        <th>Gender:</th>
+                        <td>
+                            <t t-esc="burial_application.gender"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Religion:</th>
+                        <td>
+                            <t t-esc="burial_application.religion"/>
+                        </td>
+                        <th>ID Number:</th>
+                        <td>
+                            <t t-esc="burial_application.id_number"/>
+                        </td>
+                        <th>Date of Death:</th>
+                        <td>
+                            <t t-esc="burial_application.date_of_death"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Grave Number for Memorial:</th>
+                        <td>
+                            <t t-esc="burial_application.grave_number_memorial"/>
+                        </td>
+                        <th>Place of death (City/Town):</th>
+                        <td>
+                            <t t-esc="burial_application.place_of_death"/>
+                        </td>
+                        <th>Place of burial (City/Town):</th>
+                        <td>
+                            <t t-esc="burial_application.place_of_burial"/>
+                        </td>
+                    </tr>
+
+                </table>
+                <h4 class="my-0" style="font-family: ui-monospace;
+                            color: #0a0a09;
+                            background-color: #c1c6de;
+                            display: flex;
+                            border-radius: 5px; padding: 5px;
+                            justify-content: center;">
+                    Cemetery Details:
+                </h4>
+                <table class="table table-striped align_center">
+                    <tr>
+                        <th>Cemetery:</th>
+                        <td>
+                            <t t-esc="burial_application.cemetery_id.name"/>
+                        </td>
+                        <th>Section:</th>
+                        <td>
+                            <t t-esc="burial_application.section_id.name"/>
+                        </td>
+                        <th>Grave:</th>
+                        <td>
+                            <t t-esc="burial_application.section_id.name"/>
+                        </td>
+                    </tr>
+                </table>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <p>Your application is currently in the
+                            <span t-field="burial_application.state"/>
+                            state.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="service_order_communication" class="mt-4">
+                <h2>History</h2>
+                <t t-call="portal.message_thread">
+                    <t t-set="object" t-value="burial_application"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="my_portal_cremation_applications" name="Applications">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Cremation Application</t>
+            </t>
+            <t t-if="applications" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Applications #</th>
+                        <th class="text-end">Date Received</th>
+                        <th class="text-end">Undertaker</th>
+                        <th class="text-end">State</th>
+                    </tr>
+                </thead>
+                <t t-foreach="applications" t-as="application">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/cremation_portal/#{application.id}">
+                                <t t-out="application.name"/>
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="application.date_issue"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="application.undertaker_id.sudo().full_name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="application.state"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no applications .</p>
+        </t>
+    </template>
+    <template id="my_portal_cremation_applications_details" name="Applications">
+        <t t-call="portal.portal_layout">
+            <div class="card col-12 col-lg justify-content-end"
+                 style="padding: 10px;">
+                <div class="pb-2 pt-3" style="
+                        display: flex;
+                        justify-content: center;">
+                    <h2 class="my-0" style="    font-family: ui-monospace;
+                            color: #0a0a09;
+                            background-color: #c1c6de;
+                            display: flex;
+                            border-radius: 5px; padding: 5px;
+                            justify-content: center;">
+                        Cremation Application:
+                        <em t-esc="cremation_application.name"/>
+                    </h2>
+                </div>
+                <table class="table table-striped align_center">
+                    <tr t-if="cremation_application.user_type == 'undertaker'">
+                        <th>Undertaker Name:</th>
+                        <td>
+                            <t t-esc="cremation_application.undertaker_id.sudo().full_name"/>
+                        </td>
+                        <th>ID Number:</th>
+                        <td>
+                            <t t-esc="cremation_application.undertaker_id_number"/>
+                        </td>
+                    </tr>
+                    <tr t-if="cremation_application.user_type != 'undertaker'">
+                        <th>Applicant Name:</th>
+                        <td>
+                            <t t-esc="cremation_application.arranger_name"/>
+                        </td>
+                        <th>ID Number:</th>
+                        <td>
+                            <t t-esc="cremation_application.undertaker_id_number"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Serial Number of DHA:</th>
+                        <td>
+                            <t t-esc="cremation_application.serial_number"/>
+                        </td>
+                        <th>Barcode Number of DHA:</th>
+                        <td>
+                            <t t-esc="cremation_application.barcode_number"/>
+                        </td>
+                    </tr>
+                </table>
+                <h4 class="my-0" style="font-family: ui-monospace;
+                            color: #0a0a09;
+                            background-color: #c1c6de;
+                            display: flex;
+                            border-radius: 5px; padding: 5px;
+                            justify-content: center;">
+                        Deceased Person Details:
+                    </h4>
+                <table class="table table-striped align_center">
+                    <tr>
+                        <th>Surname:</th>
+                        <td>
+                            <t t-esc="cremation_application.deceased_surname"/>
+                        </td>
+                        <th>First Name:</th>
+                        <td>
+                            <t t-esc="cremation_application.deceased_firstname"/>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table table-striped align_center">
+                    <tr>
+                        <th>Address:</th>
+                        <td>
+                            <t t-if="cremation_application.street">
+                                <t t-esc="cremation_application.street"/>,
+                            </t>
+                            <t t-if="cremation_application.street2">
+                                <t t-esc="cremation_application.street2"/>,
+                            </t>
+                            <t t-if="cremation_application.city">
+                                <t t-esc="cremation_application.city"/>,
+                            </t>
+                            <t t-if="cremation_application.municipality_id">
+                                <t t-esc="cremation_application.municipality_id.sudo().name"/>,
+                            </t>
+                            <t t-if="cremation_application.province_id">
+                                <t t-esc="cremation_application.province_id.sudo().name"/>,
+                            </t>
+                            <t t-if="cremation_application.country_id">
+                                <t t-esc="cremation_application.country_id.name"/>
+                            </t>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table table-striped align_center">
+                    <tr>
+                        <th>Date Of Birth:</th>
+                        <td>
+                            <t t-esc="cremation_application.date_of_birth"/>
+                        </td>
+                        <th>Cause Of Death:</th>
+                        <td>
+                            <t t-esc="cremation_application.cause_of_death_id.name"/>
+                        </td>
+                        <th>Gender:</th>
+                        <td>
+                            <t t-esc="cremation_application.gender"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Religion:</th>
+                        <td>
+                            <t t-esc="cremation_application.religion"/>
+                        </td>
+                        <th>ID Number:</th>
+                        <td>
+                            <t t-esc="cremation_application.id_number"/>
+                        </td>
+                        <th>Date of Death:</th>
+                        <td>
+                            <t t-esc="cremation_application.date_of_death"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Grave Number for Memorial:</th>
+                        <td>
+                            <t t-esc="cremation_application.grave_number_memorial"/>
+                        </td>
+                        <th>Place of death (City/Town):</th>
+                        <td>
+                            <t t-esc="cremation_application.place_of_death"/>
+                        </td>
+                        <th>Place of burial (City/Town):</th>
+                        <td>
+                            <t t-esc="cremation_application.place_of_burial"/>
+                        </td>
+                    </tr>
+
+                </table>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <p>Your application is currently in the
+                            <span t-field="cremation_application.state"/>
+                            state.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="service_order_communication" class="mt-4">
+                <h2>History</h2>
+                <t t-call="portal.message_thread">
+                    <t t-set="object" t-value="cremation_application"/>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="maintenance_team_kanban" model="ir.ui.view">
+        <field name="name">maintenance.team.view.form</field>
+        <field name="model">maintenance.team</field>
+        <field name="inherit_id"
+               ref="maintenance.maintenance_team_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="inside">
+                <field name="completed_request_count"/>
+                <field name="in_progress_request_count"/>
+                <field name="new_request_count"/>
+            </xpath>
+            <xpath expr="//div[hasclass('o_kanban_primary_left')]"
+                   position="inside">
+                <div t-if="record.completed_request_count.raw_value > 0">
+                    <a name="%(maintenance.hr_equipment_todo_request_action_from_dashboard)d" type="action" context="{'search_default_completed': 1}">
+                        <t t-esc="record.completed_request_count.value"/>
+                        Completed
+                    </a>
+                </div>
+                <div t-if="record.in_progress_request_count.raw_value > 0">
+                    <a name="%(maintenance.hr_equipment_todo_request_action_from_dashboard)d" type="action" context="{'search_default_is_in_progress': 1}">
+                        <t t-esc="record.in_progress_request_count.value"/>
+                        In Progress
+                    </a>
+                </div>
+                <div t-if="record.new_request_count.raw_value > 0">
+                    <a name="action_view_new_request" type="object">
+                        <t t-esc="record.new_request_count.value"/>
+                        New request
+                    </a>
+                </div>
+
+
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

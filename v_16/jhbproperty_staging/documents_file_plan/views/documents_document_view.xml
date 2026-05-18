@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="documents_documents_view_list_inherit" model="ir.ui.view">
+        <field name="name">documents.document.list</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.documents_view_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="reference_month" string="Month"/>
+                <field name="reference_year" string="Year"/>
+            </xpath>
+            <field name="url" position="attributes">
+                <attribute name="string">URL</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="documents_document_model_list_view" model="ir.ui.view">
+        <field name="name">documents.document.list.fileplan</field>
+        <field name="model">documents.document</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false"
+                  decoration-info="type == 'empty'"
+                  sample="1">
+                <field name="id" optional="hide"/>
+                <field name="name" string="Document" required="True"/>
+                <field name="reference_month" string="Month"/>
+                <field name="reference_year" string="Year"/>
+                <field name="url" optional="hide" string="URL"/>
+                <field name="tag_ids" widget="documents_many2many_tags" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="owner_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="lock_uid" optional="hide"/>
+                <field name="type" optional="show"/>
+                <field name="checksum" invisible="1"/>
+                <field name="create_date" widget="date" optional="show"/>
+                <field name="activity_exception_decoration" widget="activity_exception" nolabel="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="document_view_form_new_file" model="ir.ui.view">
+        <field name="name">documents.document.form</field>
+        <field name="model">documents.document</field>
+        <field name="arch" type="xml">
+            <form create="true">
+                <header>
+                    <button type="object" name="access_content" string="Access" class="oe_highlight" attrs="{'invisible': [('url', '=', False)]}"/>
+                    <button type="object" name="access_content" string="Download" class="oe_highlight" attrs="{'invisible': [('type', '!=', 'binary')]}"/>
+                    <button type="object" name="create_share" string="Share"/>
+                    <button type="object" name="toggle_lock" string="Lock" attrs="{'invisible': [('lock_uid', '!=', False)]}"/>
+                    <button type="object" name="toggle_lock" string="Unlock" attrs="{'invisible': [('lock_uid', '=', False)]}"/>
+                    <button type="object" name="toggle_active" string="Archive" attrs="{'invisible': [('active', '=', False)]}"/>
+                    <button type="object" name="toggle_active" string="Restore" attrs="{'invisible': [('active', '=', True)]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="open_resource" type="object" class="oe_stat_button" icon="fa-external-link" attrs="{'invisible': ['|', ('res_id', '=', False), ('res_model', 'in', [False, 'documents.document'])]}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Related <br/> Record</span>
+                            </div>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="thumbnail" nolabel="1" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;:&quot;thumbnail&quot;}" attrs="{ 'invisible' : [('thumbnail', '=', False)]}"/>
+                    <div class="oe_title" aria-label="Name">
+                        <h1>
+                            <field name="name" class="oe_inline" placeholder="Document Name" attrs="{'readonly': [('is_locked', '=', True)]}" required="True"/> <i class="fa fa-lock oe_inline" title="Locked" attrs="{'invisible': [('lock_uid', '=', False)]}"/>
+                        </h1>
+                    </div>
+                    <field name="is_locked" invisible="1"/>
+                    <field name="active" invisible="1"/>
+                    <field name="res_id" invisible="1"/>
+                    <field name="res_model" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="datas" string="File" filename="name" attrs="{'invisible':[('type','=','url')], 'readonly': [('is_locked', '=', True)]}"/>
+                            <field name="url" attrs="{ 'invisible' : [('type', '!=', 'url')], 'readonly': [('is_locked', '=', True)]}"/>
+                            <field name="folder_id" attrs="{'readonly': [('is_locked', '=', True)]}"/>
+                            <field name="sender_id"/>
+                            <field name="receiver_id"/>
+                            <field name="location_id"/>
+                            <field name="department_id"/>
+                            <field name="submission_date"/>
+                        </group>
+                        <group>
+                            <field name="type" readonly="1" invisible="1"/>
+                            <field name="create_date"/>
+                            <field name="create_uid" widget="many2one_avatar_user"/>
+                            <field name="lock_uid" readonly="1" attrs="{'invisible': [('lock_uid', '=', False)]}"/>
+                            <field name="reference_month"/>
+                            <field name="reference_year"/>
+<!--                            <field name="d_number"/>-->
+<!--                            <field name="umz_number"/>-->
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description_1" class="oe-bordered-editor" placeholder="Description 1..."/>
+                        <field name="description_2" class="oe-bordered-editor" placeholder="Description 2..."/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="documents_document_view_search_inherit" model="ir.ui.view">
+        <field name="name">documents.document.search.view.inherit</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.document_view_search"/>
+        <field name="arch" type="xml">
+            <field name="create_uid" position="after">
+                <field name="attachment_id" string="File"/>
+                <field name="folder_id" string="Folder"/>
+                <field name="reference_month" string="Month"/>
+                <field name="reference_year" string="Year"/>
+            </field>
+            <xpath expr="//filter[@name='filter_create_date']" position="after">
+                <filter string="Month" name="filter_reference_month" domain="[]"
+                        context="{'group_by': 'reference_month'}"/>
+                <filter string="Year" name="filter_reference_year" domain="[]"
+                        context="{'group_by': 'reference_year'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="document_submission_action" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">documents.document</field>
+        <field name="view_mode">tree,form,kanban,activity</field>
+        <field name="domain">[('type', '=', 'binary')]</field>
+        <field name="context">{'default_type': 'binary'}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('documents_file_plan.documents_document_model_list_view')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('documents_file_plan.document_view_form_new_file')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('documents.document_view_kanban')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Upload <span class="fw-normal">a file or</span> drag
+                <span class="fw-normal">it here.</span>
+            </p>
+        </field>
+    </record>
+
+    <record id="documents_request_form_view_inherit" model="ir.ui.view">
+        <field name="name">documents.request_wizard.form</field>
+        <field name="model">documents.request_wizard</field>
+        <field name="inherit_id" ref="documents.documents_request_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button type="object" name="request_document" string="Request" class="oe_highlight"/>
+                </header>
+            </xpath>
+            <field name="tag_ids" position="after">
+                <field name="department_id"/>
+                <field name="location_id"/>
+<!--                <field name="d_number"/>-->
+<!--                <field name="umz_number"/>-->
+                <field name="requester_id"/>
+                <field name="request_date"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="documents_request_list_view" model="ir.ui.view">
+        <field name="name">documents.request_wizard.list</field>
+        <field name="model">documents.request_wizard</field>
+        <field name="arch" type="xml">
+            <tree string="Work Location">
+                <field name="name"/>
+                <field name="requester_id"/>
+                <field name="owner_id" string="Request To"/>
+                <field name="folder_id"/>
+                <field name="department_id"/>
+                <field name="location_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_request_wizard">
+        <field name="name">Request a file</field>
+        <field name="res_model">documents.request_wizard</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'form_view_ref': 'documents.documents_request_form_view'}</field>
+    </record>
+
+    <menuitem id="menu_file_submission" parent="documents.menu_root" name="File Submission"
+              action="document_submission_action" sequence="2"/>
+    <menuitem id="menu_file_request" parent="documents.menu_root" name="File Request" action="action_request_wizard"
+              sequence="3"/>
+
+
+</odoo>

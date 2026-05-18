@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="documents_document_model_list_view" model="ir.ui.view">
+        <field name="name">documents.document.list</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.documents_view_list_main"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='owner_id']" position="after">
+                <field name="retention_type"/>
+                <field name="retention_frame"/>
+                <field name="retention_unit" nolabel="1"/>
+                <field name="time_remaining" invisible="0"/>
+                <field name="retention_end_date"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="document_view_form_new_folder" model="ir.ui.view">
+        <field name="name">documents.document.list</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.document_view_form_new_folder"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div" position="after">
+                <group string="Configure Retention Policy">
+                    <field name="enabled"/>
+                    <field name="is_permanent"
+                           invisible="enabled != True"/>
+                    <label for="retention_duration_unit"
+                           invisible="enabled != True or is_permanent == True"/>
+                    <div>
+                        <field name="retention_duration_unit" class="oe_inline"
+                               style="vertical-align:baseline"
+                               invisible="enabled != True or is_permanent == True"/>
+                    </div>
+                    <label for="retention_periods"
+                           invisible="enabled != True or is_permanent == True"/>
+                    <div>
+                        <field name="retention_periods" class="oe_inline"
+                               style="vertical-align:baseline"
+                               invisible="enabled != True or is_permanent == True"/>
+                    </div>
+                    <label for="retention_duration_in_days" invisible="1"/>
+                    <div>
+                        <field name="retention_duration_in_days"
+                               class="oe_inline"
+                               style="vertical-align:baseline" invisible="1"/>
+                    </div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record id="document_view_form_rename" model="ir.ui.view">
+        <field name="name">documents.document.list</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.document_view_form_rename"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div" position="after">
+                <group string="Configure Retention Policy">
+                    <field name="enabled"/>
+                    <field name="is_permanent"
+                           invisible="enabled != True"/>
+                    <label for="retention_duration_unit"
+                           invisible="enabled != True or is_permanent == True"/>
+                    <div>
+                        <field name="retention_duration_unit" class="oe_inline"
+                               style="vertical-align:baseline"
+                               invisible="enabled != True or is_permanent == True"/>
+                    </div>
+                    <label for="retention_periods"
+                           invisible="enabled != True or is_permanent == True"/>
+                    <div>
+                        <field name="retention_periods" class="oe_inline"
+                               style="vertical-align:baseline"
+                               invisible="enabled != True or is_permanent == True"/>
+                    </div>
+                    <label for="retention_duration_in_days" invisible="1"/>
+                    <div>
+                        <field name="retention_duration_in_days"
+                               class="oe_inline"
+                               style="vertical-align:baseline" invisible="1"/>
+                    </div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

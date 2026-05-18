@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Preview</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="excel.js"></script>
+</head>
+<body>
+<div id="excel" style="width: 100vw; height: 100vh"></div>
+<script>
+    const myExcelPreviewer = jsPreviewExcel.init(document.getElementById('excel'));
+    const id = getQueryParam('id'); // 替换paramName为你想获取
+    const url = '/web/content/' + id
+    myExcelPreviewer.preview(url).then(()=>{
+        console.log('预览完成');
+    }).catch(e=>{
+        console.log('预览失败', e);
+    })
+
+
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="menu_property_enquiry" model="website.menu">
+        <field name="name">Maintenance Request</field>
+        <field name="url">/maintenance_request</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">30</field>
+    </record>
+    <template id="maintenance_request_form" name="Enquiry">
+        <t t-call="website.layout">
+            <div id="warp">
+
+            </div>
+        </t>
+    </template>
+    <template id="maintenance_form_1" name="Maintenance">
+        <t t-call="website.layout">
+            <div id="warp">
+                <section
+                        class="s_title parallax s_parallax_is_fixed bg-black-50"
+                        data-vcss="001" data-snippet="s_title"
+                        data-scroll-background-ratio="1"
+                        style="padding-bottom: 143px !important;padding-top: 35px !important;">
+                    <span class="s_parallax_bg oe_img_bg"
+                          style="background-image: url('/property_maintenance_management/static/src/img/maintanence_request_background.jpg'); background-position: 85% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container" style="text-align: right;">
+                        <h1 style="font-family: monospace;">MAINTENANCE
+                            REQUEST
+                        </h1>
+                    </div>
+                </section>
+
+                <section class="s_text_block pt40 pb40 o_colored_level "
+                         data-snippet="s_text_block">
+                    <div class="container s_allow_columns">
+                        <div class="row">
+                            <div class="col-lg-8 mt-4 mt-lg-0">
+<!--                                <section class="s_website_form" data-vcss="001"-->
+<!--                                         data-snippet="s_website_form">-->
+                                    <div class="container">
+                                        <form action="/maintenance/submit-1"
+                                              method="post"
+                                              enctype="multipart/form-data"
+                                              class="o_mark_required"
+                                              data-mark="*">
+                                            <input type="hidden"
+                                                   name="csrf_token"
+                                                   t-att-value="request.csrf_token()"/>
+                                            <input type="hidden"
+                                                   t-att-value="maintenance"
+                                                   name="maintenance"/>
+                                            <p>
+                                                Contact details of the
+                                                individual submitting the
+                                                request
+                                            </p>
+                                            <hr/>
+                                            <div class="s_website_form_rows row s_col_no_bgcolor">
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="surname">
+                                                            <span class="s_website_form_label_content">
+                                                                Surname
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="surname"
+                                                                   t-att-value="surname"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="surname"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="title">
+                                                            <span class="s_website_form_label_content">
+                                                                Title
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="title"
+                                                                    id="title "
+                                                                    t-att-value="title"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value=""/>
+                                                                <option value="Mr"
+                                                                        t-att-selected="Mr">
+                                                                    Mr
+                                                                </option>
+                                                                <option value="Mrs"
+                                                                        t-att-selected="Mrs">
+                                                                    Mrs
+                                                                </option>
+                                                                <option value="Ms"
+                                                                        t-att-selected="Ms">
+                                                                    Ms
+                                                                </option>
+                                                                <option value="Miss"
+                                                                        t-att-selected="Miss">
+                                                                    Miss
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="first_name">
+                                                            <span class="s_website_form_label_content">
+                                                                First Name
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="first_name"
+                                                                   t-att-value="first_name"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="first_name"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="cell_phone">
+                                                            <span class="s_website_form_label_content">
+                                                                Cellphone number
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="cell_phone"
+                                                                   t-att-value="cell_phone"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="cell_phone"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="email">
+                                                            <span class="s_website_form_label_content">
+                                                                Email
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="email"
+                                                                   t-att-value="email"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="email"
+                                                                   required=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <p>
+                                                Property Maintenance Details
+                                            </p>
+                                            <hr/>
+                                            <div class="s_website_form_rows row s_col_no_bgcolor">
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="property_name">
+                                                            <span class="s_website_form_label_content">
+                                                                Property
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <t t-set="buildings"
+                                                               t-value="request.env['building'].sudo().search([], limit=1000)"/>
+                                                            <select name="property_name"
+                                                                    placeholder="Building"
+                                                                    style="margin-bottom: 10px;"
+                                                                    class="form-control country">
+                                                                <option/>
+                                                                <t t-foreach="buildings or []"
+                                                                   t-as="building">
+                                                                    <option t-att-value="building.id">
+                                                                        <t t-esc="building.jmc_number"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+<!--                                                            <input id="property_name"-->
+<!--                                                                   t-att-value="property_name"-->
+<!--                                                                   type="text"-->
+<!--                                                                   class="form-control s_website_form_input"-->
+<!--                                                                   name="property_name"-->
+<!--                                                                   required=""/>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="jmc_number">
+                                                            <span class="s_website_form_label_content">
+                                                                JMC Number
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="jmc_number"
+                                                                   t-att-value="jmc_number"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="jmc_number"
+                                                                   required=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                    <label class="col-form-label col-sm-auto s_website_form_label"
+                                                           style="width: 200px"
+                                                           for="title">
+                                                        <span class="s_website_form_label_content">
+                                                            Type
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-sm">
+                                                        <select name="type"
+                                                                id="type "
+                                                                t-att-value="type"
+                                                                style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                            <option value=""/>
+                                                            <option value="major"
+                                                                    t-att-selected="major">
+                                                                Major
+                                                            </option>
+                                                            <option value="emergency"
+                                                                    t-att-selected="emergency">
+                                                                Emergency
+                                                            </option>
+                                                            <option value="minor"
+                                                                    t-att-selected="minor">
+                                                                Minor
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="subject">
+                                                            <span class="s_website_form_label_content">
+                                                                Subject
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="subject"
+                                                                   t-att-value="subject"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="subject"
+                                                                   required=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="description">
+                                                            <span class="s_website_form_label_content">
+                                                                Description
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="description"
+                                                                   t-att-value="description"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="description"
+                                                                   required=""
+                                                                   style="height: 100px; resize: vertical;"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="street">
+                                                            <span class="s_website_form_label_content">
+                                                                Address
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="street"
+                                                                   t-att-value="street"
+                                                                   type="text"
+                                                                   style="margin-bottom: 10px;"
+                                                                   placeholder="Street.."
+                                                                   class="form-control s_website_form_input"
+                                                                   name="street"
+                                                                   required=""/>
+                                                            <input id="street_1"
+                                                                   t-att-value="street_1"
+                                                                   type="text"
+                                                                   style="margin-bottom: 10px;"
+                                                                   placeholder="Street2..."
+                                                                   class="form-control s_website_form_input"
+                                                                   name="street_1"
+                                                                   required=""/>
+                                                            <input id="city"
+                                                                   t-att-value="city"
+                                                                   type="text"
+                                                                   style="margin-bottom: 10px;"
+                                                                   placeholder="City..."
+                                                                   class="form-control s_website_form_input"
+                                                                   name="city"
+                                                                   required=""/>
+                                                            <input id="zip_code"
+                                                                   t-att-value="zip_code"
+                                                                   type="text"
+                                                                   style="margin-bottom: 10px;"
+                                                                   placeholder="Zip..."
+                                                                   class="form-control s_website_form_input"
+                                                                   name="zip_code"
+                                                                   required=""/>
+                                                            <t t-set="countries"
+                                                               t-value="request.env['res.country'].sudo().search([])"/>
+                                                            <select name="country"
+                                                                    placeholder="Country..."
+                                                                    style="margin-bottom: 10px;"
+                                                                    class="form-control country">
+                                                                <option/>
+                                                                <t t-foreach="countries or []"
+                                                                   t-as="country">
+                                                                    <option t-att-value="country.id">
+                                                                        <t t-esc="country.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                            <t t-set="states"
+                                                               t-value="request.env['res.country.state'].sudo().search([])"/>
+                                                            <select name="states"
+                                                                    placeholder="State..."
+                                                                    class="form-control country">
+                                                                <option/>
+                                                                <t t-foreach="states or []"
+                                                                   t-as="state">
+                                                                    <option t-att-value="state.id">
+                                                                        <t t-esc="state.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-0 py-2 col-12 s_website_form_submit"
+                                                 data-name="Submit Button">
+                                                <button style="width:30%;"
+                                                        type="submit"
+                                                        class="btn btn-primary btn-lg">
+                                                    Submit
+                                                </button>
+
+                                                <div class="alert alert-danger"
+                                                     style="display: inline-flex;margin-left: 10px;"
+                                                     t-if="error" role="alert">
+                                                    <t t-esc="error"/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+<!--                                </section>-->
+                            </div>
+
+                            <div class="col-lg-4 mt-4 mt-lg-0">
+                                <ul class="list-unstyled mb-0 ps-2">
+                                    <li>
+                                        <t t-esc="request.env.company.name"/>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-map-marker fa-fw me-2"/>
+                                        <span class="o_force_ltr">
+                                            <t t-esc="request.env.company.zip"/>
+                                            <t t-esc="request.env.company.street"/>
+                                            <t t-esc="request.env.company.street2"/>
+                                            <t t-esc="request.env.company.city"/>
+                                            <t t-esc="request.env.company.state_id.name"/>
+                                            <t t-esc="request.env.company.country_id.name"/>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-phone fa-fw me-2"/>
+                                        <span class="o_force_ltr">
+                                            <t t-esc="request.env.company.phone"/>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-1x fa-fw fa-envelope me-2"/>
+                                        <span>
+                                            <t t-esc="request.env.company.email"/>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+    <template id="maintenance_form_submit" name="Maintenance">
+        <t t-call="website.layout">
+            <div id="warp">
+                <section
+                        class="s_title parallax s_parallax_is_fixed bg-black-50"
+                        data-vcss="001" data-snippet="s_title"
+                        data-scroll-background-ratio="1"
+                        style="padding-bottom: 143px !important;padding-top: 35px !important;">
+                    <!--                                    <span class="s_parallax_bg"-->
+                    <!--                                          style='background-image: url("JPC/client_enquiry/static/src/img/pexels-peter-olexa-4012966.jpg"); background-position: 85% 0;'/>-->
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container" style="text-align: right;">
+                        <h1 style="font-family: monospace;">Maintenance</h1>
+                    </div>
+                </section>
+
+                <section class="s_text_block pt40 pb40 o_colored_level "
+                         data-snippet="s_text_block">
+                    <div id="wrap" class="oe_structure oe_empty">
+                        <section class="s_text_block pt40 pb40 o_colored_level "
+                                 data-snippet="s_text_block">
+                            <div class="container s_allow_columns">
+                                <div class="row">
+                                    <div class="col-lg-7 col-xl-6 me-lg-auto">
+                                        <span class="d-block fa fa-4x fa-thumbs-up mx-auto rounded-circle bg-primary"/>
+                                        <br/>
+                                        <h1 class="text-center">Thank You!</h1>
+                                        <div class="pb16 pt16 s_hr"
+                                             data-snippet="s_hr"
+                                             data-name="Separator">
+                                            <hr class="mx-auto border-top w-50 border-dark text-center"/>
+                                        </div>
+                                        <h5 class="text-center">
+                                            <span class="fa fa-check-circle"/>
+                                            <span>Your message has been sent
+                                                <b>successfully</b>
+                                            </span>
+                                        </h5>
+                                        <p class="text-cThank You!enter">We will
+                                            get back to you shortly.
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-4 mt-4 mt-lg-0">
+                                        <ul class="list-unstyled mb-0 ps-2">
+                                            <li>
+                                                <t t-esc="request.env.company.name"/>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-map-marker fa-fw me-2"/>
+                                                <span class="o_force_ltr">
+                                                    <t t-esc="request.env.company.zip"/>
+                                                    <t t-esc="request.env.company.street"/>
+                                                    <t t-esc="request.env.company.street2"/>
+                                                    <t t-esc="request.env.company.city"/>
+                                                    <t t-esc="request.env.company.state_id.name"/>
+                                                    <t t-esc="request.env.company.country_id.name"/>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-phone fa-fw me-2"/>
+                                                <span class="o_force_ltr">
+                                                    <t t-esc="request.env.company.phone"/>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-1x fa-fw fa-envelope me-2"/>
+                                                <span>
+                                                    <t t-esc="request.env.company.email"/>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="memo_memo_form_inherit_contract_links" model="ir.ui.view">
+        <field name="name">memo.memo.form.inherit.contract.links</field>
+        <field name="model">memo.memo</field>
+        <field name="inherit_id" ref="e_system.view_memo_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='version_ids']/ancestor::page[1]" position="after">
+                <page string="Contracts Linked">
+                    <field name="contract_selection_ids"
+                           mode="list"
+                           domain="['|', ('memo_id', '=', False), ('memo_id', '=', id)]"
+                           options="{'no_create': True, 'no_create_edit': True}"
+                           context="{'search_default_filter_my': 0}">
+                        <list>
+                            <field name="name" readonly="1"/>
+                            <field name="subject" readonly="1"/>
+                            <field name="contract_type" readonly="1"/>
+                            <field name="service_provider_id" readonly="1" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="date_start" readonly="1"/>
+                            <field name="date_end" readonly="1"/>
+                            <field name="state" readonly="1" widget="badge"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

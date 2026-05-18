@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    Template for vehicle inspection report-->
+    <template id="report_vehicle_inspection">
+        <t t-call="web.external_layout">
+            <t t-call="web.html_container">
+                <div class="page">
+                    <div class="float-left">
+                        <t t-if="logo">
+                            <img t-attf-src="data:image/png;base64,{{logo}}"
+                                 style="max-height:5cm; max-width:5cm;"
+                                 margin="left"/>
+                        </t>
+                        <br/>
+                    </div>
+                    <div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td style="text-align: center;"
+                                        colspan="4">
+                                        <strong>
+                                            <t t-esc="records[0]['name']"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>Vehicle</strong>
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <t t-esc="records[0]['vehicle_id'][1]"/>
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        <strong>Create Date:</strong>
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <t t-esc="records[0]['create_date']"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <strong>Model</strong>
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <t t-esc="model_id"/>
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        <strong>License Plate:</strong>
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <t t-esc="license_plate"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <strong>Inspection Date</strong>
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <t t-esc="records[0]['inspection_date']"/>
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        <strong>Inspection Supervisor</strong>
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <t t-esc="user_id"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h3>Images</h3>
+                    <table>
+                        <t t-foreach="images" t-as="rec">
+                            <t t-if="rec">
+                                <img t-attf-src="data:image/png;base64,{{rec}}"
+                                     style="max-height:5cm; max-width:5cm;margin-right:5px;padding-top:10px;"
+                                     margin="left"/>
+                            </t>
+
+                        </t>
+
+                    </table>
+                    <br/>
+                    <br/>
+                    <h3>Inspection Checklist</h3>
+
+                    <h4>Exterior Inspection (360 Walk Around)</h4>
+                    <table class="table table-bordered" style="width: 100%;">
+                        <tbody>
+                            <tr>
+                                <td>Is the vehicle exterior free of visible damage?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_visible_damage_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_visible_damage_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Do all four tyres look to be properly inflated?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_four_tyres_inflated_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_four_tyres_inflated_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are there any signs of fluid leakage underneath vehicle?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_fluid_leakage_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_fluid_leakage_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is the vehicle clean in appearance?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_clean_appearance_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_clean_appearance_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are all four tyres inflated by gauge? PSI?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_four_tyres_inflated_gauge_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_four_tyres_inflated_gauge_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is tyre tread depth &amp; tread wearing acceptable?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_tread_depth_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_tread_depth_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are wiper blades adequate?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_wiper_blades_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['exterior_wiper_blades_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Interior Inspection</h4>
+                    <table class="table table-bordered" style="width: 100%;">
+                        <tbody>
+                            <tr>
+                                <td>Is the vehicle's interior clean of debris?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_clean_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_clean_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is the interior of the vehicle free of visible damage?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_visible_damage_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_visible_damage_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are safety belts working properly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_safety_belts_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_safety_belts_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is a first aid kit available?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_first_aid_kit_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_first_aid_kit_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is the emergency kit available?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_emergency_kit_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_emergency_kit_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is the vehicle registration easily accessible?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_registration_accessible_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_registration_accessible_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is the vehicle insurance information accessible?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_insurance_accessible_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_insurance_accessible_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is spare tyre available &amp; inflated?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_spare_tyre_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_spare_tyre_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is jack system available?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_jack_system_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_jack_system_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is owner's manual available?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_owner_manual_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_owner_manual_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is accident kit available?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_accident_kit_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['interior_accident_kit_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Operating Inspection</h4>
+                    <table class="table table-bordered" style="width: 100%;">
+                        <tbody>
+                            <tr>
+                                <td>Are headlights working properly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_headlights_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_headlights_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are taillights working properly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_taillights_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_taillights_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are brake lights working properly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_brake_lights_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_brake_lights_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are backup lights working properly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_backup_lights_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_backup_lights_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are interior lights working properly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_interior_lights_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_interior_lights_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are windscreen wipers working properly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_windscreen_wipers_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_windscreen_wipers_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is horn working properly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_horn_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_horn_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are mirrors adjusted and in good condition?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_mirrors_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_mirrors_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is parking brake functional?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_parking_brake_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_parking_brake_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are turn signals working properly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_turn_signals_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_turn_signals_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is sun visor working properly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_sun_visor_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_sun_visor_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is heating/cooling system working properly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_heating_cooling_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_heating_cooling_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Is fuel tank properly secured?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_fuel_tank_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['operating_fuel_tank_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Under-The Hood Inspection</h4>
+                    <table class="table table-bordered" style="width: 100%;">
+                        <tbody>
+                            <tr>
+                                <td>Engine oil level &amp; condition</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_engine_oil_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_engine_oil_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Windshield fluid level</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_windshield_fluid_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_windshield_fluid_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Power steering fluid level</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_power_steering_fluid_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_power_steering_fluid_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Transmission fluid level</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_transmission_fluid_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_transmission_fluid_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Brake fluid level</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_brake_fluid_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_brake_fluid_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Coolant level</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_coolant_level_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_coolant_level_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Belt condition</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_belt_condition_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['underhood_belt_condition_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Post-Trip Inspection</h4>
+                    <table class="table table-bordered" style="width: 100%;">
+                        <tbody>
+                            <tr>
+                                <td>Is the vehicle still operating correctly?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['posttrip_vehicle_operate_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['posttrip_vehicle_operate_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are there any warning lights on?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['posttrip_warning_lights_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['posttrip_warning_lights_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Does warning light display system work?</td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['posttrip_warning_light_display_check'] == 'yes'">✔</t>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-if="records[0]['posttrip_warning_light_display_check'] == 'no'">x</t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br/>
+                    <br/>
+                    <div class="mt32 mb32">
+                        <div class="col-xs-6 text-left">
+                            <strong>Supervisor Signature:____________________
+                            </strong>
+                            <br/>
+                            <br/>
+                            <strong>Date:____________________</strong>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

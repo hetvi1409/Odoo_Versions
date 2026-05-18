@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="crm_lead_view_form" model="ir.ui.view">
+        <field name="name">crm.lead.view.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_rental_contract" string="Create Contract"
+                        type="object" class="oe_highlight"
+                        invisible="won_status != 'won' or type == 'lead'"/>
+            </xpath>
+            <xpath expr="//group[@name='lead_info']/field[@name='is_blacklisted']" position="before">
+                <field name="contact_surname"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="action_view_contract"
+                        invisible="not contract_id"
+                        icon="fa-tags">
+                    Rental Contract
+                </button>
+                <button class="oe_stat_button" type="object"
+                        name="action_view_ownership_contract"
+                        invisible="not ownership_contract_id"
+                        icon="fa-tags">
+                    Ownership Contract
+                </button>
+            </xpath>
+            <xpath expr="//group[@name='opportunity_partner']/field[@name='is_blacklisted']" position="before">
+                <field name="contact_surname"/>
+                <field name="contract_id" invisible="1"/>
+                <field name="ownership_contract_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Enquiry Details">
+                    <group invisible="not enquiry_comments">
+                        <field name="enquiry_comments"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="district_id"/>
+                            <field name="city_id"/>
+                            <field name="date"/>
+                            <field name="property_id"/>
+                            <field name="building_id"
+                                   context="{'form_view_ref': 'itsys_real_estate.building_unit_form'}"/>
+                        </group>
+                        <group>
+                            <field name="enquiry_type"/>
+                            <field name="property_type"/>
+                            <field name="mooring_length" invisible="property_type != 'mooring'"/>
+                            <field name="mooring_width" invisible="property_type != 'mooring'"/>
+                            <field name="min_area" invisible="property_type == 'mooring'"/>
+                            <field name="max_area" invisible="property_type == 'mooring'"/>
+                        </group>
+                    </group>
+                    <group string="Current Business Operations">
+                        <group>
+                            <field name="business_type"/>
+                            <field name="operations_began_date"/>
+                        </group>
+                        <group>
+                            <field name="business_status"/>
+                            <field name="nature_of_business"/>
+                        </group>
+                    </group>
+                    <group string="Marketing Intelligence">
+                        <group>
+                            <field name="heard_about_us"/>
+                            <field name="communication_method"/>
+                        </group>
+                        <group>
+                            <field name="medium_name"/>
+                        </group>
+                    </group>
+
+                </page>
+                <page string="Client Details" name="client">
+                    <group>
+                        <group>
+                            <field name="company_type"/>
+                        </group>
+                        <group invisible="company_type != 'company'">
+                            <field name="reg_number"/>
+                            <field name="vat"/>
+                        </group>
+                        <group invisible="company_type != 'person'">
+                            <field name="id_number"/>
+                            <field name="passport_number"/>
+                        </group>
+                        <group invisible="company_type != 'trust'">
+                            <field name="trust_number"/>
+                        </group>
+
+                    </group>
+
+                    <group invisible="company_type != 'company'"
+                           string="Documents">
+                        <group>
+                            <field name="cipc_certificate"/>
+                            <field name="moi_founding_statement"/>
+                            <field name="utility_bill_lease"/>
+                        </group>
+                        <group>
+                            <field name="notice_cipc_certificate"/>
+                            <field name="id_proof_address"/>
+                            <field name="sars_certificate"/>
+                        </group>
+                    </group>
+                    <group invisible="company_type != 'person'"
+                           string="Documents">
+                        <group>
+                            <field name="id_passport_copy"/>
+                            <field name="utility_bill_lease_bank_statement"/>
+                        </group>
+                        <group>
+                            <field name="home_affairs_immigration"/>
+                            <field name="sars_document"/>
+                        </group>
+                    </group>
+                    <group invisible="company_type != 'trust'"
+                           string="Documents">
+                        <group>
+                            <field name="certified_trust_deed"/>
+                            <field name="trustee_id_proof_address"/>
+                        </group>
+                        <group>
+                            <field name="master_letter_authority"/>
+                        </group>
+                    </group>
+
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

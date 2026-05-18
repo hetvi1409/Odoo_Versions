@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Termination Wizard  –  Form View
+    ================================================================= -->
+    <record id="ecdhs_contract_terminate_wizard_view_form" model="ir.ui.view">
+        <field name="name">ecdhs.contract.terminate.wizard.form</field>
+        <field name="model">ecdhs.contract.terminate.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Terminate Contract">
+                <style>
+                    .o_form_view:not(.o_field_highlight)
+                    .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                    .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                    }
+                    .o_form_view:not(o_field_highlight)
+                    .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                    .note-editable:not(:focus) {
+                        border-color: black !important;
+                    }
+                    .form-check:not(:hover),
+                    .form-check:not(:hover) .form-check-input:not(:disabled),
+                    .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                    }
+                </style>
+                <group>
+                    <group string="Contract">
+                        <field name="contract_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="Termination Details">
+                        <field name="termination_date"/>
+                        <field name="termination_reason"/>
+                    </group>
+                    <group string="Notification">
+                        <field name="notify_provider" widget="boolean_toggle"/>
+                    </group>
+                </group>
+                <group string="Detailed Explanation  (required for termination memo)">
+                    <field name="termination_notes" nolabel="1" colspan="2"
+                           placeholder="Provide full context as required by the contract termination memo…"/>
+                </group>
+                <footer>
+                    <button name="action_terminate" type="object"
+                            string="Terminate Contract" class="btn-danger"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Window action (opened programmatically; record required for dialog target) -->
+    <record id="action_ecdhs_contract_terminate_wizard" model="ir.actions.act_window">
+        <field name="name">Terminate Contract</field>
+        <field name="res_model">ecdhs.contract.terminate.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

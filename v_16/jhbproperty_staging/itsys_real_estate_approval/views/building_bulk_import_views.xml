@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_building_approval_bulk_import_tree" model="ir.ui.view">
+            <field name="name">building.approval.bulk.import.tree</field>
+            <field name="model">building.approval.bulk.import</field>
+            <field name="arch" type="xml">
+                <tree string="Building Approval Bulk Imports">
+                    <field name="name"/>
+                    <field name="import_type"/>
+                    <field name="imported_count"/>
+                    <field name="failed_count"/>
+                    <field name="skipped_count"/>
+                    <field name="state"/>
+                    <field name="create_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_building_approval_bulk_import_form" model="ir.ui.view">
+            <field name="name">building.approval.bulk.import.form</field>
+            <field name="model">building.approval.bulk.import</field>
+            <field name="arch" type="xml">
+                <form string="Building Approval Bulk Import">
+                    <header>
+                        <div>
+                            <button name="action_import_file"
+                                    string="Import"
+                                    type="object"
+                                    class="btn-primary"
+                                    attrs="{'invisible': ['|', '|', ('state', '!=', 'draft'), ('import_type', '=', False), ('upload_file', '=', False)]}"/>
+                        </div>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_imported_acquisition"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-list"
+                                    attrs="{'invisible': [('import_type', '!=', 'acquisition')]}">
+                                <field name="imported_count" string="Acquisition Records" widget="statinfo"/>
+                            </button>
+                            <button name="action_view_imported_disposal"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-list"
+                                    attrs="{'invisible': [('import_type', '!=', 'disposal')]}">
+                                <field name="imported_count" string="Disposal Records" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" attrs="{'invisible': [('state', '=', 'draft')], 'readonly': [('state', '=', 'imported')]}"/>
+                                <field name="import_type" widget="radio" options="{'horizontal': false}" attrs="{'readonly': [('state', '=', 'imported')]}"/>
+                                <field name="upload_file"
+                                       filename="upload_filename"
+                                       attrs="{'invisible': [('import_type', '=', False)], 'readonly': [('state', '=', 'imported')]}"/>
+                                <field name="upload_filename" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="imported_count" readonly="1"/>
+                                <field name="failed_count" readonly="1"/>
+                                <field name="skipped_count" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Acquisition Records"
+                                  attrs="{'invisible': [('import_type', '!=', 'acquisition')]}">
+                                <field name="acquisition_line_ids" nolabel="1" attrs="{'readonly': [('state', '=', 'imported')]}">
+                                    <tree editable="top" open_form_view="1">
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="region_id"/>
+                                        <field name="partner_id"/>
+                                        <field name="purchase_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Disposal Records"
+                                  attrs="{'invisible': [('import_type', '!=', 'disposal')]}">
+                                <field name="disposal_line_ids" nolabel="1" attrs="{'readonly': [('state', '=', 'imported')]}">
+                                    <tree editable="top" open_form_view="1">
+                                        <field name="building_id"/>
+                                        <field name="jmc_number"/>
+                                        <field name="removal_date"/>
+                                        <field name="removal_reason"/>
+                                        <field name="disposal_method"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Failed Import Status">
+                                <field name="failed_status_line_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <field name="row_number"/>
+                                        <field name="reference"/>
+                                        <field name="display_name"/>
+                                        <field name="status"/>
+                                        <field name="message"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_building_approval_bulk_import" model="ir.actions.act_window">
+            <field name="name">Building Approval Bulk Import</field>
+            <field name="res_model">building.approval.bulk.import</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

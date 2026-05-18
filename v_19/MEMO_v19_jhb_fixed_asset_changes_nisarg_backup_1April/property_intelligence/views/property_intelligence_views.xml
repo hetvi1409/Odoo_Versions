@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_property_intelligence_tree" model="ir.ui.view">
+        <field name="name">property.intelligence.list</field>
+        <field name="model">property.intelligence</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="query_details"/>
+                <field name="requester_id"/>
+                <field name="property_id"/>
+                <field name="property_id"/>
+                <field name="erf_number"/>
+                <field name="jmc_number"/>
+                <field name="date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_property_intelligence_form" model="ir.ui.view">
+        <field name="name">property.intelligence.form</field>
+        <field name="model">property.intelligence</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button id="button_draft" name="action_draft" string="Draft"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'block'"/>
+
+                    <button id="button_submit" name="action_submit"
+                            string="Confirm"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+
+                    <button id="button_send" name="action_send" string="Send"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'confirm'"/>
+
+                    <button id="button_completed" name="action_completed"
+                            string="Investigation Completed"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'send'"/>
+                    <button id="button_memo" name="action_create_memo"
+                            string="Submit Memo"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'completed'" groups="property_intelligence.group_general_manager"/>
+
+                    <button id="button_block" name="action_block"
+                            string="Block Property"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'completed'" groups="property_intelligence.group_general_manager"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft, confirm, block, memo"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_approval_request"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-square" invisible="approval_request_count == 0">
+                            <field name="approval_request_count"
+                                   widget="statinfo" string="Approval Request" invisible="approval_request_count == 0"/>
+                        </button>
+                    </div>
+                    <h1>
+                        <field name="query_details"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="requester_id"/>
+                            <field name="property_id"/>
+                            <field name="owner_id"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="address"/>
+                            <field name="erf_number"/>
+                            <field name="jmc_number"/>
+                            <field name="owner_id_number"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Supporting Documents">
+                            <group>
+                                <field name="supporting_document_ids"
+                                       widget="many2many_binary"/>
+                            </group>
+                        </page>
+                        <page string="Investigation Team" invisible="state in 'draft'">
+                            <group>
+                                <field name="team_id"/>
+                                <field name="member_ids" widget="many2many_tags"
+                                       domain="[('sale_team_id', '=', team_id)]"/>
+                            </group>
+                        </page>
+                        <page string="investigation Reports" invisible="state in ['draft','confirm']">
+                            <group>
+                                <group>
+                                    <field name="capture_document_ids"
+                                           widget="many2many_binary"/>
+                                </group>
+                                <group>
+                                    <field name="image_ids"
+                                           widget="many2many_binary"/>
+
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Detailed Report" invisible="state in ['draft','confirm']">
+                            <group>
+                                <field name="detailed_report"/>
+                            </group>
+                        </page>
+                        <page string="Feedback Report" invisible="state != 'feedback'">
+                            <group>
+                                <field name="feedback_document_ids" widget="many2many_binary"/>
+                            </group>
+                        </page>
+                        <page string="GEOLIS">
+                            <iframe id="custom_src" name="custom_src"
+                                    src="https://ags.joburg.org.za/cgis/index.aspx"
+                                    width="100%" height="500"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_property_intelligence" model="ir.actions.act_window">
+        <field name="name">Property Intelligence</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">property.intelligence</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_property_intelligence"
+              name="Property Intelligence (Fraud)"
+              parent="client_enquiry.property_land_process_menu"
+              action="action_property_intelligence"
+              sequence="117"/>
+</odoo>

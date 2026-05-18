@@ -1,0 +1,696 @@
+<odoo>
+    <template id="report_memo_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="memo">
+                <!-- Custom External Layout Start -->
+                <div class="header o_company_custom_layout" style="padding-top: 5px;">
+                    <t t-set="company" t-value="memo.company_id"/>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <img t-if="company.logo" class="o_company_logo_big" t-att-src="image_data_uri(company.logo)"
+                             alt="Logo"/>
+                        <t t-if="memo.submission_type == 'memo'">
+                            <h4 class="mb-3" style="text-align:right;">Memo
+                            </h4>
+                        </t>
+                        <t t-if="memo.submission_type == 'circular'">
+                            <h4 class="mb-3" style="text-align:right;">Circular
+                            </h4>
+                        </t>
+                        <t t-if="memo.submission_type == 'procurement'">
+                            <h4 class="mb-3" style="text-align:right;">Procurement
+                            </h4>
+                        </t>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <img src="/e_system/static/description/line.png" style="height:5px;width: 850px;"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 justify-content-between align-items-center" name="custom_requester_address"
+                             style="text-align: center;">
+                            <!--                            <t t-set="employee" t-value="memo.chief_directorate_id"/>-->
+                            <ul class="list-unstyled" name="requester_address_list">
+                                <li style="color:green; font-size: larger;" class="text-uppercase">
+                                    <span t-if="memo.chief_directorate_id" t-esc="memo.chief_directorate_id.name"/>&#160;
+                                </li>
+                                <li style="color:black; font-size: medium;">
+                                    <strong>
+                                        <span t-if="memo.department_detail_street"
+                                              t-esc="memo.department_detail_street"/>&#160;
+                                        <span t-if="memo.department_detail_street2"
+                                              t-esc="memo.department_detail_street2"/>&#160;
+                                        <span t-if="memo.department_detail_city"
+                                              t-esc="memo.department_detail_city"/>&#160;
+                                        <span t-if="memo.department_detail_state_id"
+                                              t-esc="memo.department_detail_state_id.name"/>&#160;
+                                        <span t-if="memo.department_detail_zip"
+                                              t-esc="memo.department_detail_zip"/>&#160;
+                                        <span t-if="memo.department_detail_country_id"
+                                              t-esc="memo.sudo().department_detail_country_id.name"/>&#160;
+                                    </strong>
+                                </li>
+                                <li style="color:black;">
+                                    <strong>Office No:</strong>
+                                    <span t-if="memo.department_detail_phone"
+                                          t-esc="memo.department_detail_phone"/>&#160;<strong>Fax No:
+                                </strong>
+                                    <span t-if="memo.department_detail_phone"
+                                          t-esc="memo.department_detail_phone"/>&#160;<strong>Cell No:
+                                </strong>
+                                    <span t-if="memo.department_detail_mobile"
+                                          t-esc="memo.department_detail_mobile"/>&#160;<strong>Email:
+                                </strong>
+                                    <span t-if="memo.department_detail_email"
+                                          t-esc="memo.department_detail_email"/>&#160;
+                                </li>
+                            </ul>
+                            <!--                            <ul class="list-unstyled" name="requester_address_list">-->
+                            <!--                                <t t-set="partner" t-value="memo.requester_id.partner_id"/>-->
+                            <!--                                <t t-if="partner">-->
+                            <!--                                    <li>-->
+                            <!--                                        <span t-if="partner.street" t-esc="partner.street"/>&#160;-->
+                            <!--                                        <span t-if="partner.street2" t-esc="partner.street2"/>&#160;-->
+                            <!--                                        <span t-if="partner.city" t-esc="partner.city"/>&#160;-->
+                            <!--                                        <span t-if="partner.state_id">&#160;-->
+                            <!--                                            <t t-esc="partner.state_id.name"/>&#160;-->
+                            <!--                                        </span>-->
+                            <!--                                        <span t-if="partner.zip" t-esc="partner.zip"/>&#160;-->
+                            <!--                                        <span t-if="partner.country_id" t-esc="partner.country_id.name"/>-->
+                            <!--                                    </li>-->
+                            <!--                                    <li>-->
+                            <!--                                        <t t-if="partner.email">Email:-->
+                            <!--                                            <span t-esc="partner.email"/>&#160;&#160;-->
+                            <!--                                        </t>-->
+                            <!--                                        <t t-if="partner.phone">Phone:-->
+                            <!--                                            <span t-esc="partner.phone"/>-->
+                            <!--                                        </t>-->
+                            <!--                                    </li>-->
+                            <!--                                </t>-->
+                            <!--                            </ul>-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article o_report_layout_standard o_table_standard o_company_custom_layout o_snail_mail mt-5">
+                    <div class="page o_content_pdf">
+                        <!--                        <t t-if="memo.submission_type == 'general'">-->
+                        <!--                            <h2 class="mb-3 border-bottom border-2 border-dark" style="text-align:center;">General-->
+                        <!--                            </h2>-->
+                        <!--                        </t>-->
+                        <!--                        <t t-if="memo.submission_type == 'memo'">-->
+                        <!--                            <h2 class="mb-3 border-bottom border-2 border-dark" style="text-align:center;">Memo-->
+                        <!--                            </h2>-->
+                        <!--                        </t>-->
+                        <!--                        <t t-if="memo.submission_type == 'circular'">-->
+                        <!--                            <h2 class="mb-3 border-bottom border-2 border-dark" style="text-align:center;">Circular-->
+                        <!--                            </h2>-->
+                        <!--                        </t>-->
+                        <!--                        <t t-if="memo.submission_type == 'procurement'">-->
+                        <!--                            <h2 class="mb-3 border-bottom border-2 border-dark" style="text-align:center;">Procurement-->
+                        <!--                            </h2>-->
+                        <!--                        </t>-->
+                        <t t-if="memo.submission_type != 'general'">
+                            <!--                            <h2 class="mt-5 mb-3" style="text-align:center;">-->
+                            <!--                                <strong>-->
+                            <!--                                    <span t-field="memo.subject"/>-->
+                            <!--                                </strong>-->
+                            <!--                            </h2>-->
+                            <br/>
+                            <table class="table table-sm o_main_table table-bordered mt-2 mb-2">
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>REF:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <span t-field="memo.memo_number"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>TO:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <!--                                            <t t-if="memo.approver_id.employee_id and memo.approver_id.employee_id.job_id">-->
+                                            <!--                                                <span t-field="memo.approver_id.employee_id.job_id.name"/>:-->
+                                            <!--                                            </t>-->
+                                            <!--                                            <span t-field="memo.approver_id.employee_id.sudo().department_id.name"></span>-->
+                                            <span t-field="memo.recipient"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>FROM:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <!--                                            <t t-if="memo.requester_id.employee_id and memo.requester_id.employee_id.job_id">-->
+                                            <!--                                                <span t-field="memo.requester_id.employee_id.job_id.name"/>:-->
+                                            <!--                                            </t>-->
+                                            <!--                                            <span t-field="memo.requester_id.employee_id.sudo().department_id.name"></span>-->
+                                            <t t-if="memo.requester_id.sudo().employee_id and memo.requester_id.sudo().employee_id.name">
+                                                <t t-set="emp" t-value="memo.requester_id.sudo().employee_id"/>
+                                                <span t-esc="emp.name"/>
+                                                <t t-if="emp.sur_name and emp.sur_name not in emp.name">
+                                                    <span t-esc="emp.sur_name"/>
+                                                </t>
+                                            </t>
+                                            <t t-else="">
+                                                <span t-field="memo.create_uid.name"></span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>CHIEF DIRECTORATE:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.chief_directorate_id">
+                                                <span t-field="memo.chief_directorate_id.name"></span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>DIRECTORATE:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <!--                                            <t t-if="memo.directorate.job_id">-->
+                                            <!--                                                <span t-field="memo.directorate.job_id.name"/>:-->
+                                            <!--                                            </t>-->
+                                            <span t-field="memo.directorate_id.name"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>DATE:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <span t-field="memo.date"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>SUBJECT:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <span t-field="memo.subject"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>ENQUIRIES:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.enquiries">
+                                                <span t-field="memo.enquiries"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>RECORD SECURITY:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.record_security">
+                                                <span t-field="memo.record_security"></span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <div class="oe_structure"></div>
+                        <br/>
+                        <t t-if="memo.purpose_body and memo.submission_type != 'general'">
+                            <h4 class="mb-3" style="text-align:left;">PURPOSE</h4>
+                            <div id="memo_purpose_body mt-2 mb-2" class="clearfix">
+                                <div class="justify-text">
+                                    <p t-if="not is_html_empty(memo.purpose_body)" name="purpose_body" class="mb-2">
+                                        <span t-field="memo.purpose_body"/>
+                                    </p>
+                                </div>
+                            </div>
+                            <br/>
+                        </t>
+                        <t t-if="memo.background_body">
+                            <t t-if="memo.submission_type != 'general'">
+                                <!-- <h4 class="mb-3" style="text-align:left;">BACKGROUND</h4> -->
+                            </t>
+                            <div id="memo_background_body mt-2 mb-2" class="clearfix">
+                                <div class="justify-text">
+                                    <p t-if="not is_html_empty(memo.background_body)" name="background_body"
+                                       class="mb-2">
+                                        <span t-field="memo.background_body"/>
+                                    </p>
+                                </div>
+                            </div>
+                            <br/>
+                        </t>
+                        <t t-if="memo.project_status and memo.submission_type != 'general' and memo.is_project_status">
+                            <h4 class="mb-3" style="text-align:left;">PROGRESS TO DATE</h4>
+                            <div id="memo_project_status mt-2 mb-2" class="clearfix">
+                                <div class="justify-text">
+                                    <p t-if="not is_html_empty(memo.project_status)" name="project_status"
+                                       class="mb-2">
+                                        <span t-field="memo.project_status"/>
+                                    </p>
+                                </div>
+                            </div>
+                            <br/>
+                        </t>
+                        <t t-if="memo.motivation_body and memo.submission_type != 'general'">
+                            <!-- <h4 class="mb-3" style="text-align:left;">MOTIVATION</h4> -->
+                            <div id="memo_motivation_body mt-2 mb-2" class="clearfix">
+                                <div class="justify-text">
+                                    <p t-if="not is_html_empty(memo.motivation_body)" name="motivation_body"
+                                       class="mb-2">
+                                        <span t-field="memo.motivation_body"/>
+                                    </p>
+                                </div>
+                            </div>
+                            <br/>
+                        </t>
+
+                        <t t-if="memo.submission_type != 'general'">
+                            <t t-if="memo.is_financial">
+                                <h4 class="mb-3" style="text-align:left;">FINANCIAL IMPLICATIONS</h4>
+                            </t>
+                            <t t-if="memo.financial_sentence">
+                                <div id="memo_financial_sentence mt-2 mb-2" class="clearfix">
+                                    <div class="justify-text">
+                                        <p name="financial_sentence" class="mb-2">
+                                            <span t-field="memo.financial_sentence"/>
+                                        </p>
+                                    </div>
+                                </div>
+                                <br/>
+                            </t>
+
+                            <t t-if="memo.is_financial">
+                                <table class="table table-borderless mt-2 mb-2">
+                                    <tbody>
+                                        <tr t-if="memo.funds">
+                                            <td style="text-align:left;width:40%;">
+                                                <strong>
+                                                    <span>Funds:</span>
+                                                </strong>
+                                            </td>
+                                            <td style="text-align:left;width:60%;">
+                                                <t t-if="memo.funds">
+                                                    <span t-field="memo.funds"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="memo.responsibility">
+                                            <td style="text-align:left;width:40%;">
+                                                <strong>
+                                                    <span>Responsibility:</span>
+                                                </strong>
+                                            </td>
+                                            <td style="text-align:left;width:60%;">
+                                                <t t-if="memo.responsibility">
+                                                    <span t-field="memo.responsibility"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="memo.objective">
+                                            <td style="text-align:left;width:40%;">
+                                                <strong>
+                                                    <span>Objective:</span>
+                                                </strong>
+                                            </td>
+                                            <td style="text-align:left;width:60%;">
+                                                <t t-if="memo.objective">
+                                                    <span t-field="memo.objective"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="memo.item">
+                                            <td style="text-align:left;width:40%;">
+                                                <strong>
+                                                    <span>Item:</span>
+                                                </strong>
+                                            </td>
+                                            <td style="text-align:left;width:60%;">
+                                                <t t-if="memo.item">
+                                                    <span t-field="memo.item"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="memo.project">
+                                            <td style="text-align:left;width:40%;">
+                                                <strong>
+                                                    <span>Project:</span>
+                                                </strong>
+                                            </td>
+                                            <td style="text-align:left;width:60%;">
+                                                <t t-if="memo.project">
+                                                    <span t-field="memo.project"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="memo.asset">
+                                            <td style="text-align:left;width:40%;">
+                                                <strong>
+                                                    <span>Asset:</span>
+                                                </strong>
+                                            </td>
+                                            <td style="text-align:left;width:60%;">
+                                                <t t-if="memo.asset">
+                                                    <span t-field="memo.asset"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="memo.regional_identifier">
+                                            <td style="text-align:left;width:40%;">
+                                                <strong>
+                                                    <span>Regional Identifier:</span>
+                                                </strong>
+                                            </td>
+                                            <td style="text-align:left;width:60%;">
+                                                <t t-if="memo.regional_identifier">
+                                                    <span t-field="memo.regional_identifier"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="memo.amount_paid">
+                                            <td style="text-align:left;width:40%;">
+                                                <strong>
+                                                    <span>Amount Paid:</span>
+                                                </strong>
+                                            </td>
+                                            <td style="text-align:left;width:60%;">
+                                                <t t-if="memo.amount_paid">
+                                                    <span t-field="memo.amount_paid"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="memo.service_provider">
+                                            <td style="text-align:left;width:40%;">
+                                                <strong>
+                                                    <span>Service Provider:</span>
+                                                </strong>
+                                            </td>
+                                            <td style="text-align:left;width:60%;">
+                                                <t t-if="memo.service_provider">
+                                                    <span t-field="memo.service_provider"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="memo.infrastructure">
+                                            <td style="text-align:left;width:40%;">
+                                                <strong>
+                                                    <span>Infrastructure:</span>
+                                                </strong>
+                                            </td>
+                                            <td style="text-align:left;width:60%;">
+                                                <t t-if="memo.infrastructure">
+                                                    <span t-field="memo.infrastructure"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br/>
+                            </t>
+                        </t>
+                        <t t-if="memo.submission_type not in ['general','circular']">
+                            <br/>
+                            <span class="mb-3" style="text-align:left;">
+                                <strong>Responsible Officer:</strong>
+                            </span>
+                            <table class="table table-borderless" style="align:center;width:100%;">
+                                <span t-if="memo.requester_sign">
+                                    <tr>
+                                        <td style="font-size:130%;width:45%;text-align:left;">
+                                            <t t-if="memo.requester_sign">
+                                                <img t-att-src="image_data_uri(memo.requester_sign)"
+                                                     style="width:300px;height:70px;"/>
+                                            </t>
+                                            <hr size="2" width="50%" color="black"
+                                                style="margin-bottom: 0rem;"/>
+                                            <span>
+                                                <span t-field="memo.requester_id.name"></span>
+                                                <br/>
+                                                <t t-if="memo.requester_id.sudo().employee_id.job_title">
+                                                    <span t-field="memo.requester_id.sudo().employee_id.job_title"></span>
+                                                </t>
+                                                <!--                                                <span t-field="memo.requester_id.employee_id.sudo().department_id.name"></span>-->
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </span>
+                            </table>
+                            <br/>
+                            <t t-if="memo.recommendation">
+                                <span class="mb-3" style="text-align:left;">
+                                    <strong>RECOMMENDATION</strong>
+                                </span>
+                                <div id="recommendation mt-2 mb-2" class="clearfix">
+                                    <div class="justify-text">
+                                        <p name="recommendation" class="mb-2">
+                                            <span t-field="memo.recommendation"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </t>
+                            <br/>
+                            <table class="table table-borderless avoid-page-break-inside"
+                                   style="align:center;width:100%;">
+                                <t t-foreach="memo.recommender_ids" t-as="recommender">
+                                    <t t-if="recommender.status == 'Recommended'">
+                                        <tr>
+                                            <td>
+                                                <span>
+                                                    <strong>Recommended</strong>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                        <tr>
+                                            <td>
+                                                <span>
+                                                    <strong>Not Recommended</strong>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="recommender.comment">
+                                        <tr>
+                                            <td>
+                                                <div class="justify-text">
+                                                    <p name="comment" class="mb-2">
+                                                        <span t-field="recommender.comment"/>
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                    <!--                                    <t t-if="recommender.sign_initials">-->
+                                    <tr>
+                                        <td style="font-size:130%;width:45%;text-align:left;">
+                                            <t t-if="recommender.sign_initials">
+                                                <img t-att-src="image_data_uri(recommender.sign_initials)"
+                                                     style="width:300px;height:70px;"/>
+                                            </t>
+                                            <hr size="2" width="50%" color="black"
+                                                style="margin-bottom: 0rem;"/>
+                                            <span>
+                                                <span t-field="recommender.user_id.name"></span>
+                                                <br/>
+                                                <t t-if="recommender.user_id.sudo().employee_id.job_title">
+                                                    <span t-field="recommender.user_id.sudo().employee_id.job_title"></span>
+                                                </t>
+                                                <!--                                                <span t-field="recommender.user_id.employee_id.sudo().department_id.name"></span>-->
+                                            </span>
+                                        </td>
+                                        <td style="font-size:130%;width:45%;text-align:left;">
+                                            <!--                                            <span t-field="recommender.date"></span>-->
+                                            <div style="width:300px;height:70px;">
+                                                <span t-field="recommender.date"></span>
+                                            </div>
+                                            <hr size="2" width="50%" color="black"
+                                                style="margin-bottom: 0rem;"/>
+                                            <span>
+                                                <span>Date</span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <!--                                    </t>-->
+                                </t>
+                            </table>
+                        </t>
+                        <br/>
+                        <table class="table table-borderless avoid-page-break-inside"
+                                   style="align:center;width:100%;">
+                            <!--                            <span t-if="memo.approver_sign">-->
+                            <t t-if="memo.state in ['approved']">
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Approved</strong>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-else="">
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Not Approved</strong>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="memo.approve_comment">
+                                <tr>
+                                    <td>
+                                        <div class="justify-text">
+                                            <p name="approve_comment" class="mb-2">
+                                                <span t-field="memo.approve_comment"/>
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr>
+                                <td style="font-size:130%;width:45%;text-align:left;">
+                                    <t t-if="memo.approver_sign">
+                                        <img t-att-src="image_data_uri(memo.approver_sign)"
+                                             style="width:300px;height:50px;"/>
+                                    </t>
+                                    <hr size="2" width="50%" color="black"
+                                        style="margin-bottom: 0rem;"/>
+                                    <span>
+                                        <span t-field="memo.approver_id.name"></span>
+                                        <br/>
+                                        <t t-if="memo.approver_id.sudo().employee_id.job_title">
+                                            <span t-field="memo.approver_id.sudo().employee_id.job_title"></span>
+                                        </t>
+                                        <!--                                        <span t-field="memo.approver_id.employee_id.sudo().department_id.name"></span>-->
+                                    </span>
+                                </td>
+                                <td style="font-size:130%;width:45%;text-align:left;">
+                                    <!--                                            <span t-field="recommender.date"></span>-->
+                                    <div style="width:300px;height:50px;">
+                                        <span t-field="memo.approve_date"></span>
+                                    </div>
+                                    <hr size="2" width="50%" color="black"
+                                        style="margin-bottom: 0rem;"/>
+                                    <span>
+                                        <span>Date</span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <!--                            </span>-->
+                        </table>
+                        <br/>
+                        <t t-if="memo.ack_required">
+                            <div class="row" style="page-break-before:always;">
+                                <div class="col-12" style="border:1px solid black;" id="acknowledged_block">
+                                    <h4 class="mb-3" style="text-align:left;">ACKNOWLEDGEMENT</h4>
+                                    <br/>
+                                    <div id="memo_acknowledged_body mt-2 mb-2" class="clearfix"
+                                         style="margin-right: 2px;margin-left:2px;">
+                                        <div class="justify-text">
+                                            <p t-if="not is_html_empty(memo.acknowledged_body)" name="acknowledged_body"
+                                               class="mb-2">
+                                                <span t-field="memo.acknowledged_body"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <table class="table table-borderless" style="align:center;width:100%;">
+                                        <span t-if="memo.acknowledged_sign">
+                                            <tr>
+                                                <td style="font-size:130%;width:45%;text-align:left;">
+                                                    <t t-if="memo.acknowledged_sign">
+                                                        <img t-att-src="image_data_uri(memo.acknowledged_sign)"
+                                                             style="width:300px;height:50px;"/>
+                                                    </t>
+                                                    <hr size="2" width="50%" color="black"
+                                                        style="margin-bottom: 0rem;"/>
+                                                    <span>
+                                                        <span t-field="memo.acknowledged_ids[0].name"></span>
+                                                        <br/>
+                                                        <t t-if="memo.acknowledged_ids[0].sudo().employee_id.job_title">
+                                                            <span t-field="memo.acknowledged_ids[0].sudo().employee_id.job_title"></span>
+                                                        </t>
+                                                        <!--                                                        <span t-field="memo.acknowledged_ids[0].employee_id.sudo().department_id.name"></span>-->
+                                                    </span>
+                                                </td>
+                                                <td style="font-size:130%;width:10%;text-align:left;"></td>
+                                                <td style="font-size:130%;width:45%;text-align:left;">
+                                                    <!--                                            <span t-field="recommender.date"></span>-->
+                                                    <div style="width:300px;height:50px;">
+                                                        <span t-field="memo.acknowledged_date"></span>
+                                                    </div>
+                                                    <hr size="2" width="50%" color="black"
+                                                        style="margin-bottom: 0rem;"/>
+                                                    <span>
+                                                        <span>Date</span>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </span>
+                                    </table>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+                <div class="footer o_company_custom_layout text-muted">
+                    <div class="row">
+                        <div class="col-8 text-end">
+                            <img src="/e_system/static/description/line.png" style="height:5px;width: 350px;"
+                                 loading="lazy"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 justify-content-between align-items-center" name="custom_requester_address"
+                             style="text-align: center;">
+                            <span t-field="memo.subject"></span>
+                        </div>
+                    </div>
+                    <div class="row" style="float: right;">
+                        <img class="mr32 mt-n3" src="/e_system/static/description/footer.png"
+                             style="height: 100px;width: 150px;" loading="lazy"/>
+                    </div>
+                </div>
+                <!--                <div class="footer o_company_custom_layout">-->
+                <!--                    <div class="o_footer_content d-flex border-top pt-2">-->
+                <!--                        <div class="flex-grow-1 text-start me-2" t-field="company.report_footer"/>-->
+                <!--                        <div class="d-flex justify-content-between align-items-center">-->
+                <!--                            <img src="/e_system/static/description/line.png" style="height:5px;width:50%"/>-->
+                <!--                        </div>-->
+                <!--                        <div class="row">-->
+                <!--                            <div class="d-flex justify-content-between align-items-end text-end mb-2">-->
+                <!--                                <img class="o_company_logo_small"-->
+                <!--                                     src="/e_system/static/description/footer.png" style="height:100%;width:100%;"/>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+            </t>
+        </t>
+    </template>
+</odoo>

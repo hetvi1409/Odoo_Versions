@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_audit_action_plan" model="ir.actions.act_window">
+        <field name="name">Internal Audit Action Plan</field>
+        <field name="res_model">audit.action.plan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('type','=', 'internal')]</field>
+        <field name="context">{'default_type': 'internal'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Internal Audit Action Plan
+            </p>
+            <p>
+                Create and manage the Internal Audit Action Plan;
+            </p>
+        </field>
+    </record>
+    <record id="action_external_audit_action_plan" model="ir.actions.act_window">
+        <field name="name">External Audit Action Plan</field>
+        <field name="res_model">audit.action.plan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('type','=', 'external')]</field>
+        <field name="context">{'default_type': 'external'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Internal Audit Action Plan
+            </p>
+            <p>
+                Create and manage the Internal Audit Action Plan;
+            </p>
+        </field>
+    </record>
+    <record id="audit_action_plan_search_view" model="ir.ui.view">
+        <field name="name">audit.action.plan.search.view</field>
+        <field name="model">audit.action.plan</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="archived" string="Closed" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+    <record id="audit_action_plan_view_form" model="ir.ui.view">
+        <field name="name">audit.action.plan.view.form</field>
+        <field name="model">audit.action.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                            string="1st Review"
+                            class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'preparer')]}"/>
+                    <button name="action_2nd_review" type="object"
+                            string="2nd Review"
+                            class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'first_reviewer')]}"/>
+                    <button name="action_revert" type="object"
+                            string="Revert"
+                            class="oe_highlight" attrs="{'invisible': [('stages', 'not in', ['second_reviewer', 'first_reviewer'])]}"/>
+                    <button name="action_approve" type="object"
+                            string="Approve"
+                            class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'second_reviewer')]}"/>
+                    <button name="action_reject" type="object"
+                            string="Reject"
+                            class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'second_reviewer')]}"/>
+                    <field name="stages" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" text="Closed" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <group>
+                        <group>
+                            <field name="active" invisible="1"/>
+                            <field name="type"/>
+                            <field name="requirements" attrs="{'readonly': [('stages', 'in', ['approve', 'refuse'])]}"/>
+                            <field name="user_id" attrs="{'readonly': [('stages', 'in', ['approve', 'refuse'])]}"/>
+                            <field name="team_id" attrs="{'readonly': [('stages', 'in', ['approve', 'refuse'])]}"/>
+                            <!--                        <field name="user_id" attrs="{'readonly': [('stages', 'in', ['approve', 'refuse'])]}"/>-->
+                            <field name="record_work_done" attrs="{'readonly': [('stages', 'in', ['approve', 'refuse'])]}"/>
+                            <field name="conclusion" attrs="{'readonly': [('stages', 'in', ['approve', 'refuse'])]}"/>
+                            <field name="feedback" attrs="{'invisible': [('stages', 'not in', ['refuse'])]}"/>
+                        </group>
+                        <group>
+                            <field name="rating"/>
+                            <field name="deficiency"/>
+                            <field name="department_id"/>
+                            <!--                            <field name="preparer"/>-->
+                            <field name="start_date"/>
+                            <field name="manager_id"/>
+                            <field name="user_preparer_ids" widget="many2one_avatar_user"/>
+<!--                                                        <field name="user_reviewer_1_ids" widget="many2one_avatar_user"/>-->
+<!--                                                        <field name="user_reviewer_2_ids" widget="many2one_avatar_user"/>-->
+<!--                                                        <field name="user_approver_ids" widget="many2one_avatar_user"/>-->
+                            <field name="project_id"/>
+                            <field name="project_task"/>
+                            <field name="audit_type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="finding"/>
+                            <field name="impact"/>
+                            <field name="recommendation"/>
+                            <field name="section"/>
+                            <field name="reviewer"/>
+                            <field name="completion_date"/>
+                            <field name="resolved"/>
+                        </group>
+
+                    </group>
+                    <group>
+                        <field name="attachment_ids" widget="many2many_binary"/>
+                        <field name="blockages"/>
+                        <field name="proposed_completion_date"/>
+                        <field name="auditor_conclusion"/>
+                    </group>
+                    <notebook>
+                        <page string="Audit Action" name="audit">
+                            <field name="audit_details"/>
+                        </page>
+                    </notebook>
+                    <notebook>
+                        <page string="Record of Work Done" name="record_of_work_ids">
+                            <field name="record_of_work_ids">
+                                <tree editable="bottom">
+                                    <field name="audit_area"/>
+                                    <field name="title_of_finding"/>
+                                    <field name="recommendation"/>
+                                    <field name="mgmt_action_plan"/>
+                                    <field name="action_date"/>
+                                    <field name="implemented_not"/>
+                                    <field name="follow_up"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Documents" name="documents">
+                            <field name="attachment_doc_ids" widget="many2many_binary"/>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+    <record id="audit_action_plan_view_tree" model="ir.ui.view">
+        <field name="name">audit.action.plan.view.form</field>
+        <field name="model">audit.action.plan</field>
+        <field name="arch" type="xml">
+            <tree duplicate="0">
+                <field name="requirements"/>
+                <field name="stages" widget="badge"
+                       decoration-info="stages in ('preparer')"
+                       decoration-warning="stages in ('rejected')"
+                       decoration-success="stages in ('approved')"/>
+            </tree>
+        </field>
+    </record>
+    <menuitem id="follow_up_update"
+              name="Follow Up Update"
+              parent="project.menu_main_pm"
+              sequence="3"/>
+    <menuitem id="audit_action_plan_menu"
+              name="Internal Audit Action Plan"
+              parent="internal_audit_management.follow_up_update"
+              action="action_audit_action_plan"
+              sequence="2"/>
+    <menuitem id="external_audit_action_plan_menu"
+              name="External Audit Action Plan"
+              parent="internal_audit_management.follow_up_update"
+              action="action_external_audit_action_plan"
+              sequence="2"/>
+</odoo>

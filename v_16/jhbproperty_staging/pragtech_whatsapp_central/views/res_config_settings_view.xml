@@ -1,0 +1,132 @@
+<odoo>
+    <data>
+        <record id="whatsapp_survey_configuration_inherit" model="ir.ui.view">
+            <field name="name">res.config.settings.form.inherit</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block"
+                         data-string="Whatsapp Central"
+                         string="Whatsapp Central"
+                         data-key="whatsapp_survey"
+                         >
+
+                        <h2>Whatsapp Integration</h2>
+                        <div class="row mt16 o_settings_container" name="whatsapp_survey">
+                            <div class="col-12 col-lg-12 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <group>
+                                        <field name="whatsapp_greeting"/>
+                                    </group>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <group>
+                                        <field name="whatsapp_ending"/>
+                                    </group>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+
+                                        <group>
+                                            <field name="whatsapp_integrators" class="oe_inline"/>
+                                        </group>
+                                        
+                                        <group attrs="{'invisible':[('whatsapp_integrators', '!=', 'gupshup')]}">
+                                            <field name="whatsapp_gupshup_api" class="oe_inline" />
+                                        </group>
+
+                                        <group attrs="{'invisible':[('whatsapp_integrators', '=', 'chatapi')]}">
+                                            <field name="whatsapp_client" class="oe_inline" attrs="{'invisible':[('whatsapp_integrators', '!=', 'apichat')]}"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('whatsapp_integrators', '=', 'chatapi')]}">
+                                            <field name="whatsapp_secret" password="True" class="oe_inline" attrs="{'invisible':[('whatsapp_integrators', '!=', 'apichat')]}"/>
+                                        </group>
+
+                                        <group attrs="{'invisible':[('whatsapp_integrators', '!=', 'meta')]}">
+                                            <field name="meta_phone_number_id" class="oe_inline"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('whatsapp_integrators', '!=', 'meta')]}">
+                                            <field name="meta_api_token" password="True" class="oe_inline"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('whatsapp_integrators', '!=', 'meta')]}">
+                                            <field name="meta_webhook" password="True" class="oe_inline"/>
+                                        </group>
+
+                                        <group attrs="{'invisible':[('whatsapp_integrators', '!=', 'chatapi')]}">
+                                            <field name="whatsapp_endpoint" class="oe_inline" />
+                                        </group>
+                                        <group attrs="{'invisible':[('whatsapp_integrators', '!=', 'chatapi')]}">
+                                            <field name="whatsapp_token" password="True" class="oe_inline" />
+                                        </group>
+
+                                        <group attrs="{'invisible':[('whatsapp_integrators', '!=', 'apichat')]}">
+                                            <div class="col-lg-6 col-12 o_setting_box">
+                                                <!--<button string="Get API Chat QR Code" type="object" class="oe_highlight"
+                                                        name="action_get_qr_code_w_survey"/>-->
+                                            </div>
+                                        </group>
+
+                                        <group>
+                                            <field name="whatsapp_authenticate" class="oe_inline" invisible="1"/>
+                                            <div class="col-lg-12 col-12 o_setting_box" attrs="{'invisible': [('whatsapp_authenticate','!=',False)]}">
+                                                <!--<button string="Get Chat API QR Code" type="object" class="oe_highlight" name="action_get_chat_api_qr_code"
+                                                        attrs="{'invisible': ['|', ('whatsapp_authenticate','=',True), ('whatsapp_integrators', '=', 'apichat')]}"/>-->
+                                            </div>
+                                        </group>
+                                        <group>
+                                            <div class="col-lg-6 col-12 o_setting_box" attrs="{'invisible': [('whatsapp_authenticate','=',False)]}">
+                                                <!--<button string="Logout Chat API" type="object" class="oe_highlight" name="action_chat_api_logout_from_whatsapp"
+                                                        attrs="{'invisible': ['|', ('whatsapp_authenticate','!=',True), ('whatsapp_integrators', '=', 'apichat')]}"/>-->
+
+                                                <div class="text-muted">
+                                                    This will take 1 or 2 minutes to logout from whatsapp
+                                                </div>
+                                            </div>
+                                        </group>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <group>
+                                            <field name="starting_message" class="oe_inline"/>
+                                        </group>
+                                        <group>
+                                            <field name="main_menu_prefix" class="oe_inline"/>
+                                        </group>
+                                        <group>
+                                            <field name="previous_menu_prefix" class="oe_inline"/>
+                                        </group>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="whatsapp_config_settings_action" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_id" ref="whatsapp_survey_configuration_inherit"/>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'whatsapp_survey', 'bin_size': False}</field>
+        </record>
+
+        <menuitem id="menu_config_whatsapp_helpdesk"
+                  name="Settings" sequence="10"
+                  action="whatsapp_config_settings_action"
+                  parent="menu_whatsapp_helpdesk_messages_main"/>
+
+    </data>
+</odoo>

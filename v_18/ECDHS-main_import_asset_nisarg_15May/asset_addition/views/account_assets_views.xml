@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_account_asset_form_inherit">
+        <field name="name">account.asset.view.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id"
+               ref="assets_disposal.view_account_asset_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_asset_disposal']"
+                   position="replace">
+                <button name="action_asset_disposal" type="object" string="Dispose asset"
+                        invisible="state not in ('damaged','cancelled','open')"
+                        groups="fixed_assets.group_fixed_asset_approver"/>
+            </xpath>
+            <xpath expr="//button[@name='action_custom_draft']" position="after">
+                <button name="action_remove_asset" type="object" string="Remove Asset"
+                        invisible="state not in ('open')"
+                        groups="fixed_assets.group_fixed_asset_approver"/>
+            </xpath>
+            <xpath expr="//button[@name='action_custom_validate']" position="attributes">
+                <attribute name="invisible">state in ('open','damaged','cancelled','draft','asset_disposed', 'close')</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

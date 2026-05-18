@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="conversation.Discuss" owl="1">
+        <div class="o_Discuss"
+            t-att-class="{
+                'o-adding-item': discuss ? discuss.isAddingChannel or discuss.isAddingChat : false,
+                'o-mobile': env.messaging ? env.messaging.device.isMobile : false,
+            }"
+        >
+            <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"/> -->
+            <script>
+                function hasClass(element, clsName) {
+                    return(' ' + element.className + ' ').indexOf(' ' + clsName + ' ') > -1;
+                }
+                function closeNav() {
+                    console.log((' '+document.getElementById("fullSidebar").className+' ').indexOf(' '+"collapsed"+' '));
+                    if ((' '+document.getElementById("fullSidebar").className+' ').indexOf(' '+"collapsed"+' ') === -1){
+                        console.log("not collapsed");
+                        document.getElementById("fullSidebar").style.width = "49px";
+                        document.getElementById("fullSidebar").className += " collapsed";
+                        if (document.getElementById("Facebookmenu")){
+<!--                            document.getElementById("Facebooktext").remove();-->
+                            const drop = document.getElementById("Facebookmenu");
+                            drop.style.left = "42px";
+                            drop.style.top = "-1px";
+                        }
+                        if (document.getElementById("Instagrammenu")){
+<!--                            document.getElementById("Instagramtext").remove();-->
+                            const dropInsta = document.getElementById("Instagrammenu");
+                            dropInsta.style.left = "42px";
+                        }
+                        if (document.getElementById("Whatsappmenu")){
+<!--                            document.getElementById("Whatsapptext").remove();-->
+                            const dropWhat = document.getElementById("Whatsappmenu");
+                            dropWhat.style.zIndex = "1";
+                            dropWhat.style.width = "42px";
+                        }
+                    } else {
+                        document.getElementById("fullSidebar").style.width = "237px";
+                        document.getElementById("fullSidebar").style.backgroundColor = "#354052";
+                        document.getElementById("fullSidebar").style.color = "#dee2e6";
+                        document.getElementById("fullSidebar").style.paddingTop = "10px";
+                        document.getElementById("fullSidebar").className -= " collapsed";
+                        if (document.getElementById("Facebookmenu")){
+                            const drop = document.getElementById("Facebookmenu");
+                            drop.style.left = "230px";
+                            drop.style.top = "-1px";
+                        }
+                        if (document.getElementById("Instagrammenu")){
+                            const dropInsta = document.getElementById("Instagrammenu");
+                            dropInsta.style.left = "230px";
+                        }
+                        if (document.getElementById("Whatsappmenu")){
+                            const dropWhat = document.getElementById("Whatsappmenu");
+                            dropWhat.style.zIndex = "1";
+                            dropWhat.style.width = "237px";
+                            if (document.getElementsByClassName("o_DiscussSidebarItem_name")){
+                                const dropWhatText = document.getElementsByClassName("o_DiscussSidebarItem_name");
+                                var num = dropWhatText.length;
+                                console.log(dropWhatText.length);
+                                var i;
+                                <!-- for (var i = 0; i < dropWhatText.length; i++) {
+                                    console.log(i);     
+                                    console.log(dropWhatText[i]);
+                                    
+                                } -->
+                            }
+                            <!-- dropWhatText.forEach(
+                                function myFunction(item) {
+                                    item.style.display = "none";
+                                }
+                            ); -->
+                        }
+                    }
+                }
+            </script>
+            <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+            <t t-if="!discussView or !messaging.isInitialized">
+                <div class="o_Discuss_messagingNotInitialized"><i class="o_Discuss_messagingNotInitializedIcon fa fa-spinner fa-spin"/>Please wait...</div>
+            </t>
+            <t t-else="">
+                <t t-if="!messaging.device.isMobile">
+                    <DiscussConversationSidebar class="o_Discuss_sidebar" localId="discussView.localId"/>
+                </t>
+                <t t-if="messaging.device.isMobile" t-call="conversation.Discuss.content"/>
+                <t t-else="">
+                    <div class="o_Discuss_content" id="inner_content">
+                        <t t-call="conversation.Discuss.content"/>
+                    </div>
+                </t>
+                <t t-if="discussView.hasModerationDiscardDialog">
+                    <ModerationDiscardDialog messageLocalIds="discussView.threadView.checkedMessages.map(message => message.localId)" t-on-dialog-closed="_onDialogClosedModerationDiscard"/>
+                </t>
+                <t t-if="discussView.hasModerationRejectDialog">
+                    <ModerationRejectDialog messageLocalIds="discussView.threadView.checkedMessages.map(message => message.localId)" t-on-dialog-closed="_onDialogClosedModerationReject"/>
+                </t>
+            </t>
+            <div class="vl"></div>
+            <div class="o_notebook" style="overflow-y: scroll; width: 43%;">
+                <div class="o_notebook_headers">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a data-toggle="tab" disable_anchor="true" class="nav-link active" id="nav_tabs_link_1661215776203_43" href="#nav_tabs_content_1661215776203_43" role="tab" aria-controls="nav_tabs_content_1661215776203_45"><i class="fa fa-shopping-basket"></i> Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="tab" disable_anchor="true" class="nav-link" id="nav_tabs_link_1661215776203_42" href="#nav_tabs_content_1661215776203_42" role="tab" aria-controls="nav_tabs_content_1661215776203_42"><i class="fa fa-exchange"></i> Purchases</a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="tab" disable_anchor="true" class="nav-link" id="nav_tabs_link_1661215776203_41" href="#nav_tabs_content_1661215776203_41" role="tab"><i class="fa fa-book"></i> Invoicing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="tab" disable_anchor="true" class="nav-link" id="nav_tabs_link_1661215776203_40" href="#nav_tabs_content_1661215776203_40" role="tab"><i class="fa fa-fw o_button_icon fa-usd"></i> Sales</a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="tab" disable_anchor="true" class="nav-link" id="nav_tabs_link_1661215776203_39" href="#nav_tabs_content_1661215776203_39" role="tab"><i class="fa fa-address-book"></i> Contacts</a>
+                        </li>
+                    </ul>
+                    <div class="hr"/>
+                </div>
+                <div class="o_notebook_content tab-content" id="inner_content">
+                    <div class="tab-pane fade active show" id="nav_tabs_content_1661215776203_43" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_43">
+                        <div class="oe_structure oe_empty">
+                            <section class="s_text_block" style="background-image: none;" data-name="Text">
+                                <div class="container s_allow_columns">
+                                    <Views />
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav_tabs_content_1661215776203_42" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_42">
+                        <div class="oe_structure oe_empty">
+                            <section class="s_text_block" style="background-image: none;" data-name="Text">
+                                <div class="container s_allow_columns">
+                                    <PurchaseViews />
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav_tabs_content_1661215776203_41" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_41">
+                        <div class="oe_structure oe_empty">
+                            <section class="s_text_block" style="background-image: none;" data-name="Text">
+                                <div class="container s_allow_columns">
+                                    <InvoicingViews />
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav_tabs_content_1661215776203_40" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_40">
+                        <div class="oe_structure oe_empty">
+                            <section class="s_text_block" style="background-image: none;" data-name="Text">
+                                <div class="container s_allow_columns">
+                                    <SalesViews />
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav_tabs_content_1661215776203_39" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_39">
+                        <div class="oe_structure oe_empty">
+                            <section class="s_text_block" style="background-image: none;" data-name="Text">
+                                <div class="container s_allow_columns">
+                                    <ContactViews />
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <!-- <t t-call="web.ListView"/> -->
+                </div>
+            </div>
+        </div>
+    </t>
+
+
+    <t t-name="conversation.Discuss.content" owl="1">
+        <t t-if="messaging.device.isMobile and discuss.activeMobileNavbarTabId === 'mailbox'">
+            <DiscussMobileMailboxSelection class="o_Discuss_mobileMailboxSelection"/>
+        </t>
+        <t t-if="messaging.device.isMobile and (discussView.isAddingChannel or discussView.isAddingChat)">
+            <div class="o_Discuss_mobileAddItemHeader">
+                <AutocompleteInput
+                    class="o_Discuss_mobileAddItemHeaderInput"
+                    isFocusOnMount="true"
+                    isHtml="discussView.isAddingChannel"
+                    placeholder="discussView.isAddingChannel ? addChannelInputPlaceholder : addChatInputPlaceholder"
+                    select="_onMobileAddItemHeaderInputSelect"
+                    source="_onMobileAddItemHeaderInputSource"
+                    t-on-o-hide="_onHideMobileAddItemHeader"
+                />
+            </div>
+        </t>
+        <t t-if="discussView.threadView">
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-3 static-top shadow" style="height: 60px; width: 100%; max-height: 60px; min-height: 60px;">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" onclick="closeNav()" class="btn btn-link rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <div class="sidebar_toggle" style="padding: 0 15px; color: #678098; background: transparent; color: #678098; border-color: #678098;">
+                    <a href="javascript:void(0)" onclick="closeNav()"><i class="icon-menu" style="font-weight: 400;"></i></a>
+                </div>
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto" style="right: 2px;">
+
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item no-arrow">
+                        <a class="nav-link" href="#" id="userDropdown" role="button" style="color: #678098; font-size: 14px; font-weight: 500;"><!-- data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"-->
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" style="font-size: 14px; font-weight: 500; font-family: rosemary;"><t t-esc="discussView.thread.displayName"></t></span>
+                            <t t-if="discussView.thread.members[0]">
+                                <img class="img-profile rounded-circle" style="position: relative; height: 36px; width: 36px;" t-att-src="messaging.discuss.thread.members[0].avatarUrl"/><!--/web/image/res.partner/${this.id}/image_128 {{env.messaging.discuss.thread.messagingCurrentPartner.avatarUrl}}-->
+                            </t>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <ThreadViewDashboard
+                class="o_Discuss_thread"
+                t-att-class="{ 'o-mobile': messaging.device.isMobile }"
+                style="border-radius: 12px;"
+                hasComposerCurrentPartnerAvatar="!messaging.device.isMobile"
+                hasComposerDiscardButton="discussView.thread === messaging.inbox"
+                hasComposerThreadName="discussView.thread === messaging.inbox"
+                hasComposerThreadTyping="true"
+                threadViewLocalId="discussView.threadView.localId"
+            />
+        </t>
+        <t t-if="messaging.device.isMobile and discussView.activeMobileNavbarTabId !== 'mailbox'">
+            <div class="o_Discuss_noThread">
+                No conversation selected.
+            </div>
+        </t>
+        <t t-if="messaging.device.isMobile and discussView.activeMobileNavbarTabId !== 'mailbox'">
+            <NotificationList
+                class="o_Discuss_notificationList"
+                filter="discussView.activeMobileNavbarTabId"
+            />
+        </t>
+        <t t-if="messaging.device.isMobile and !(discussView.threadView and discussView.threadView.replyingToMessageView)">
+            <MobileMessagingNavbar
+                class="o_Discuss_mobileNavbar"
+                activeTabId="discussView.activeMobileNavbarTabId"
+                tabs="mobileNavbarTabs()"
+                t-on-o-select-mobile-messaging-navbar-tab="_onSelectMobileNavbarTab"
+            />
+        </t>
+        <!-- <t t-if="discuss.isReplyingToMessage">
+            <Composer
+                class="o_Discuss_replyingToMessageComposer"
+                composerLocalId="discuss.replyingToMessage.originThread.composer.localId"
+                hasCurrentPartnerAvatar="!env.messaging.device.isMobile"
+                hasDiscardButton="true"
+                hasThreadName="true"
+                isDoFocus="discuss.isDoFocus"
+                textInputSendShortcuts="['ctrl-enter', 'meta-enter']"
+                t-on-o-focusin-composer="_onFocusinComposer"
+                t-on-o-message-posted="_onReplyingToMessageMessagePosted"
+                t-ref="composer"
+            />
+        </t> -->
+    </t>
+
+</templates>

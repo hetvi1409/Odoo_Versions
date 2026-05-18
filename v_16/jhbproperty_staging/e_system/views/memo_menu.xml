@@ -1,0 +1,113 @@
+<odoo>
+    <menuitem id="menu_memo_root" name="Memos" web_icon="e_system,static/description/icon.png"
+              groups="base.group_user,e_system.group_memo_requester,e_system.group_memo_approver,e_system.group_memo_quality_assurance,e_system.group_memo_recommenders"/>
+
+    <record id="action_memo_list" model="ir.actions.act_window">
+        <field name="name">Memos</field>
+        <field name="res_model">memo.memo</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p>Create and manage internal memos requiring approval, signature, and acknowledgment.</p>
+        </field>
+    </record>
+
+    <record id="action_memo_dashboard" model="ir.actions.act_window">
+        <field name="name">Memo Dashboard</field>
+        <field name="res_model">memo.memo</field>
+<!--        <field name="domain">[('submission_type', '=', 'memo')]</field>-->
+        <field name="domain">[]</field>
+<!--        <field name="context">{'default_submission_type': 'memo'}</field>-->
+        <field name="context">{}</field>
+        <field name="view_mode">kanban,tree,form,graph</field>
+        <field name="search_view_id" ref="e_system.view_memo_search"/>
+    </record>
+
+<!--    <menuitem id="memo_menu_memos" name="Memos" sequence="1" parent="e_system.menu_memo_root" action="e_system.action_memo_list"/>-->
+
+    <menuitem id="memo_menu_dashboard" name="Memos" sequence="0"
+              parent="e_system.menu_memo_root" action="e_system.action_memo_dashboard"/>
+
+    <record id="action_circular_dashboard" model="ir.actions.act_window">
+        <field name="name">Circular Dashboard</field>
+        <field name="res_model">memo.memo</field>
+        <field name="domain">[('submission_type', '=', 'circular')]</field>
+        <field name="context">{'default_submission_type': 'circular'}</field>
+        <field name="view_mode">kanban,tree,form,graph</field>
+        <field name="search_view_id" ref="e_system.view_circular_search"/>
+    </record>
+
+    <menuitem id="circular_menu_dashboard" name="Circular" sequence="1" active="False"
+              parent="" action="e_system.action_circular_dashboard"/>
+
+    <record id="action_procurement_dashboard" model="ir.actions.act_window">
+        <field name="name">Procurement Dashboard</field>
+        <field name="res_model">memo.memo</field>
+        <field name="domain">[('submission_type', '=', 'procurement')]</field>
+        <field name="context">{'default_submission_type': 'procurement'}</field>
+        <field name="view_mode">kanban,tree,form,graph</field>
+        <field name="search_view_id" ref="e_system.view_procurement_search"/>
+    </record>
+
+    <menuitem id="procurement_menu_dashboard" name="Procurement" sequence="2" active="False"
+              parent="" action="e_system.action_procurement_dashboard"/>
+
+    <menuitem id="e_system_menu_configuration" name="Configuration" sequence="4"
+              parent="e_system.menu_memo_root"/>
+
+    <record id="action_memo_dashboard_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_memo_list"/>
+        <field name="act_window_id" ref="action_memo_dashboard"/>
+    </record>
+    <record id="action_circular_dashboard_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_circular_list"/>
+        <field name="act_window_id" ref="action_circular_dashboard"/>
+    </record>
+    <record id="action_procurement_dashboard_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_procurement_list"/>
+        <field name="act_window_id" ref="action_procurement_dashboard"/>
+    </record>
+
+    <record id="action_memo_dashboard_view_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_memo_kanban"/>
+        <field name="act_window_id" ref="action_memo_dashboard"/>
+    </record>
+    <record id="action_circular_dashboard_view_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_circular_kanban"/>
+        <field name="act_window_id" ref="action_circular_dashboard"/>
+    </record>
+    <record id="action_procurement_dashboard_view_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_procurement_kanban"/>
+        <field name="act_window_id" ref="action_procurement_dashboard"/>
+    </record>
+
+    <record id="action_memo_dashboard_view_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_memo_graph"/>
+        <field name="act_window_id" ref="action_memo_dashboard"/>
+    </record>
+    <record id="action_circular_dashboard_view_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_circular_graph"/>
+        <field name="act_window_id" ref="action_circular_dashboard"/>
+    </record>
+    <record id="action_procurement_dashboard_view_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_procurement_graph"/>
+        <field name="act_window_id" ref="action_procurement_dashboard"/>
+    </record>
+</odoo>

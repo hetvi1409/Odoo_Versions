@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_asset_verification_image_form" model="ir.ui.view">
+        <field name="name">asset.verification.image.form</field>
+        <field name="model">asset.verification.image</field>
+        <field name="arch" type="xml">
+            <form string="Asset Verification Image">
+                <sheet>
+                    <group>
+                        <field name="verification_id" invisible="1"/>
+                        <field name="image" widget="image"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- list view -->
+    <record id="view_asset_verification_image_list" model="ir.ui.view">
+        <field name="name">asset.verification.image.list</field>
+        <field name="model">asset.verification.image</field>
+        <field name="arch" type="xml">
+            <list string="Asset Verification Image">
+                <field name="verification_id" invisible="1"/>
+                <field name="history_id" invisible="1"/>
+                <field name="verification_id" invisible="1"/>
+                <!-- <field name="new_asset_verification" invisible="1"/> -->
+                <field name="image" widget="image"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- kanban view -->
+    <record id="view_asset_verification_image_kanban" model="ir.ui.view">
+        <field name="name">asset.verification.image.kanban</field>
+        <field name="model">asset.verification.image</field>
+        <field name="arch" type="xml">
+            <kanban string="Asset Verification Image">
+                <field name="image"/>
+                <field name="name"/>
+                <field name="history_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card text-center p-2">
+                            <t t-if="record.image.raw_value">
+                                <img
+                                    t-att-src="'/web/image/asset.verification.image/' + record.id.raw_value + '/image'"
+                                    style="
+                                        width:315px;
+                                        height:134px;
+                                        object-fit:cover;
+                                        border-radius:8px;
+                                        border:1px solid #ddd;"
+                                />
+                            </t>
+                            <t t-else="">
+                                <div style="
+                                    width:120px;
+                                    height:120px;
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    background:#f5f5f5;
+                                    border-radius:8px;
+                                    border:1px dashed #ccc;">
+                                    <i class="fa fa-camera text-muted"/>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_asset_verification_image" model="ir.actions.act_window">
+        <field name="name">Asset Verification Image</field>
+        <field name="res_model">asset.verification.image</field>
+        <field name="view_mode">list,form,kanban</field>
+    </record>
+
+
+</odoo>

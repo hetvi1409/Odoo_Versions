@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_purchase_requisition">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="web.external_layout">
+					<center>
+						<h2>Purchase Requisition Spec</h2>
+					</center>
+					<br/>
+					<p style="margin-left: 40px;">
+						Name:
+						<br/>
+						<span t-field="o.name"/>
+					</p>
+					<div style="margin-left: 40px;">
+						Requisition Date:
+						<t t-raw="o.requisition_date"/>
+					</div>
+					<div style="margin-left: 40px;">
+						Customer:
+						<t t-raw="o.partner_id"/>
+					</div>
+
+					<table class="table table-bordered mt32">
+						<thead>
+							<tr>
+								<th class="text-center">
+									<span>Product</span>
+								</th>
+								<th class="text-center">
+									<span>Description</span>
+								</th>
+								<th class="text-center">
+									<span>Quantity</span>
+								</th>
+								<th class="text-center">
+									<span>Amount</span>
+								</th>
+								<th class="text-center">
+									<span>Sub total</span>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="text-center" t-foreach="o.line_ids"
+								t-as="line">
+								<td>
+									<span t-field="line.product_id.name"/>
+								</td>
+								<td>
+									<span t-field="line.description"/>
+								</td>
+								<td>
+									<span t-field="line.quantity"/>
+								</td>
+								<td>
+									<span t-field="line.amount"/>
+								</td>
+								<td>
+									<span t-field="line.sub_total"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</t>
+			</t>
+		</t>
+	</template>
+	<record id="action_report_purchase_requisition" model="ir.actions.report">
+		<field name="name">Spec Report</field>
+		<field name="model">purchase.requisition</field>
+		<field name="report_type">qweb-pdf</field>
+		<field name="report_name">supply_chain_management.report_purchase_requisition</field>
+		<field name="report_file">supply_chain_management.report_purchase_requisition</field>
+		<field name="binding_model_id" ref="model_purchase_requisition"/>
+		<field name="binding_type">report</field>
+		<field name="print_report_name">'Spec Report - %s' % (object.name)</field>
+	</record>
+
+</odoo>

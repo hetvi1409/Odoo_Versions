@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_applicant_form_recruitment_enhancement" model="ir.ui.view">
+        <field name="name">hr.applicant.form.recruitment.enhancement</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="before">
+                <style>
+                        .o_form_view .o_field_widget:not(.o_field_many2one):not(.o_field_one2many):not(.o_field_many2many_avatar_user):not(.o_field_many2many_tags):not(.o_field_many2one_avatar_user):not(.o_field_many2many_tags_avatar) .o_input {
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_many2one_avatar_user{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_many2many_avatar_user{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_many2many_tags{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_many2one{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+            </xpath>
+
+            <!-- hide button -->
+            <xpath expr="//button[@name='action_makeMeeting']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_interviews" type="object" class="oe_stat_button" icon="fa-calendar">
+                    <field name="interview_count" widget="statinfo" string="Interviews"/>
+                </button>
+                <button name="action_view_meetings" type="object" class="oe_stat_button" icon="fa-calendar">
+                    <field name="meeting_count" widget="statinfo" string="Meetings"/>
+                </button>
+                <button name="action_view_background_checks" type="object" class="oe_stat_button" icon="fa-shield">
+                    <field name="background_check_count" widget="statinfo" string="Background Checks"/>
+                </button>
+                <button name="action_open_pre_screening_answer" type="object" class="oe_stat_button"
+                        icon="fa-id-card-o">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Pre-Screening</span>
+                    </div>
+                </button>
+
+                <button name="action_view_job_offer_letter"
+                        string="View Job Offer Letter"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-file-pdf-o"
+                        attrs="{'invisible': [('is_offer_stage', '=', False)]}"/>
+                <field name="is_offer_stage" invisible="1"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="JPC Compliance">
+                    <group>
+                        <group>
+                            <field name="candidate_pool"/>
+                            <field name="ee_category"/>
+                            <field name="pre_screening_state" widget="badge"
+                                   decoration-success="pre_screening_state == 'done'"
+                                   decoration-info="pre_screening_state == 'in_progress'"/>
+                            <field name="screening_point"/>
+                        </group>
+                        <group>
+                            <field name="declaration_information_accurate"/>
+                            <field name="declaration_interview_fair"/>
+                            <field name="declaration_conflict_of_interest"/>
+                        </group>
+                    </group>
+                    <field name="declaration_conflict_details"
+                           attrs="{'invisible': [('declaration_conflict_of_interest', '=', False)]}"/>
+                </page>
+                <page string="Evaluation">
+                    <group>
+                        <field name="evaluation_line_ids">
+                            <tree editable="bottom">
+                                <!-- <field name="applicant_id" /> -->
+                                <field name="interviewer_id"/>
+                                <field name="technical_score" required="True"/>
+                                <field name="communication_score" required="True"/>
+                                <field name="experience_score"/>
+                                <field name="cultural_fit_score"/>
+                                <field name="total_score"/>
+                                <field name="recommendation" optional="hide"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='categ_ids']" position="after">
+                <field name="approved_by"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="approved_button" string="Approved" type="object"
+                        attrs="{'invisible': ['|', ('pre_screening_state', '!=', 'done'), ('approved_by', '!=', False)]}"
+                        groups="recruitment_enhancement.group_recruitment_head_of_department_custom,recruitment_enhancement.group_recruitment_line_manager_custom"/>
+            </xpath>
+            <!-- <xpath expr="//sheet" position="inside">
+                <widget name="web_ribbon" title="Approved"
+                        attrs="{'invisible': [('approved_by', '=', False)]}"/>
+            </xpath> -->
+
+            <!-- <xpath expr="//button[@name='archive_applicant']" position="replace"/> -->
+            <xpath expr="//header/field[@name='stage_id']" position="after">
+                <button name="%(action_recruitment_requisition_interview_wizard)d" type="action" string="Interview"
+                        class="btn-primary"
+                        attrs="{'invisible': ['|', ('approved_by', '=', False), ('interview_count', '>', 0)]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_send_survey']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+                       <!-- <xpath expr="//button[@name='action_send_survey']" position="replace">
+                           <button name="action_send_interview_letter" string="Send Interview Letter" type="object"/>
+                        </xpath> -->
+            <xpath expr="//button[@name='create_employee_from_applicant']" position="after">
+                <button name="send_offer_letter" string="Send Offer Letter" type="object" class="btn-primary"
+                        attrs="{'invisible': [('emp_id', '=', False)]}"/>
+            </xpath>
+              <xpath expr="//field[@name='email_cc']" position="attributes">
+                    <attribute name="attrs">{}</attribute>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_mobile']" position="attributes">
+                    <attribute name="attrs">{}</attribute>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='interviewer_ids']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='interviewer_ids']" position="before">
+                    <xpath expr="//field[@name='priority']" position="move"/>
+                    <xpath expr="//field[@name='job_id']" position="move"/>
+                    <xpath expr="//field[@name='user_id']" position="move"/>
+                </xpath>
+                <xpath expr="//field[@name='ref_user_id']" position="attributes">
+                    <attribute name="attrs">{}</attribute>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="attrs">{}</attribute>
+                    <!-- <attribute name="invisible">1</attribute> -->
+                    <attribute name="required">0</attribute>
+                </xpath>
+
+                <xpath expr="//group[@name='recruitment_contract']" position="attributes">
+                    <attribute name="string">Salary Package</attribute>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]" position="attributes">
+                    <attribute name="string">Note</attribute>
+                </xpath>
+                <!-- <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+                    <page string="Details" name="details">
+                    <group>
+                        <group name="Applicants" string="Applicant"/>
+                    </group>
+                    </page>
+                </xpath>
+                <xpath expr="//group[@name='Applicants']" position="inside">
+                    <xpath expr="//field[@name='type_id']" position="move"/>
+                    <xpath expr="//field[@name='availability']" position="move"/>
+                </xpath>
+                <xpath expr="//group[@name='Applicants']" position="inside">
+                    <group name="Job" string="Job"/>
+                </xpath>
+                <xpath expr="//group[@name='Job']" position="inside">
+                    <xpath expr="//field[@name='department_id']" position="move"/>
+                </xpath>
+                <xpath expr="//page[@name='details']" position="inside">
+                    <group name="Sourcing">
+                        <group name="Sourcing" string="Sourcing"/>
+                    </group>
+                </xpath>
+                <xpath expr="//group[@name='Sourcing']" position="inside">
+                    <xpath expr="//field[@name='source_id']" position="move"/>
+                    <xpath expr="//field[@name='medium_id']" position="move"/>
+                </xpath> -->
+                <xpath expr="//field[@name='job_id']" position="attributes">
+                    <attribute name="string">Job Position</attribute>
+                </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_contract_salary_hr_applicant_form_recruitment_enhancement" model="ir.ui.view">
+        <field name="name">hr.applicant.form</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_contract_salary.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(hr_contract_salary.generate_offer_link_action)d']" position="before">
+                <field name="is_contract_proposal_stage" invisible="1"/>
+                <field name="has_shortlisted_second_interview" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='%(hr_contract_salary.generate_offer_link_action)d']" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', ('active', '=', False), '&amp;',
+                    ('is_contract_proposal_stage', '=', False), ('has_shortlisted_second_interview', '=', False)]}
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="crm_case_list_view_job" model="ir.ui.view">
+        <field name="name">hr.applicant.list</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='priority']" position="before">
+                <field name="user_role_id"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='application_status']" position="after">
+                <field name="pre_screening_state" widget="badge"
+                       decoration-success="pre_screening_state == 'done'"
+                       decoration-warning="pre_screening_state == 'new'"
+                       decoration-info="pre_screening_state == 'in_progress'" optional="show"/>
+                <!-- <field name="overall_performance" widget="progressbar"
+                       optional="show"/> -->
+                <field name="screening_point" widget="progressbar"/>
+                <field name="matching_skill_ids" widget="many2many_tags"/>
+                <field name="missing_skill_ids" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_kanban_view_applicant" model="ir.ui.view">
+        <field name="name">hr.applicant.kanban</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_kanban_view_applicant"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='refuse_reason_id']" position="after">
+                <field name="overall_performance"/>
+            </xpath>
+            <xpath expr="//field[@name='categ_ids']" position="after">
+                <!-- <div>
+                    Overall Progress:
+                    <field name="overall_performance" widget="progressbar"/>
+                </div> -->
+                <div>
+                    Screening points:
+                    <field name="screening_point" widget="progressbar"/>
+                </div>
+
+            </xpath>
+            <xpath expr="//a[@name='action_makeMeeting']" position="after">
+                <a role="menuitem" name="action_add_performance" type="object"
+                   class="dropdown-item">Add Performance
+                </a>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_applicant_view_search_bis" model="ir.ui.view">
+        <field name="name">hr.applicant.search</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_search_bis"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//filter[@name='message_needaction']" position="after">
+
+                <separator string="Performance"/>
+
+                <filter string="High Performance (≥ 90%)"
+                        name="high_performance"
+                        domain="[('overall_performance', '>=', 90)]"/>
+
+                <filter string="Above 75% Performance"
+                        name="above_75_performance"
+                        domain="[('overall_performance', '>=', 75)]"/>
+
+                <filter string="Above 50% Performance"
+                        name="above_50_performance"
+                        domain="[('overall_performance', '>=', 50)]"/>
+
+                <separator string="Matching Score"/>
+
+                <filter string="Matching Score ≥ 70"
+                        name="matching_score_above_70"
+                        domain="[('matching_score', '>=', 70)]"/>
+
+                <filter string="Matching Score ≥ 60"
+                        name="matching_score_above_60"
+                        domain="[('matching_score', '>=', 60)]"/>
+
+                <filter string="Matching Score ≥ 50"
+                        name="matching_score_above_50"
+                        domain="[('matching_score', '>=', 50)]"/>
+
+                <group >
+                    <filter string="Matching Score"
+                            name="group_by_matching_score"
+                            context="{'group_by': 'matching_score'}"/>
+                </group>
+
+            </xpath>
+        </field>
+    </record>
+    <record id="action_hr_applications_failed" model="ir.actions.act_window">
+        <field name="name">Failed Applications</field>
+        <field name="res_model">hr.applicant</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('stage_id.name', 'ilike', 'Staging'), ('job_id', '=', active_id)]</field>
+        <field name="context">{'default_job_id': active_id}</field>
+    </record>
+
+</odoo>

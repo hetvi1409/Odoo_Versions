@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="document_approval.DocumentsViews.ControlPanel"
+       t-inherit="documents.DocumentsViews.ControlPanel"
+       t-inherit-mode="extension"
+       owl="1">
+
+        <!-- Inject buttons inside the New dropdown -->
+        <xpath expr="//Dropdown/t[@t-set-slot='content']" position="inside">
+
+            <div role="separator" class="dropdown-divider"/>
+
+            <DropdownItem
+                tag="'button'"
+                class="'btn btn-link o_documents_approval_create'"
+                onSelected="onClickCreateRequest"
+                attrs="{'data-hotkey': 'p'}">
+                <i class="fa fa-check-square-o fa-fw me-1"/>
+                <span>Create Approval Request</span>
+            </DropdownItem>
+
+            <DropdownItem
+                tag="'button'"
+                class="'btn btn-link o_documents_approval_view'"
+                onSelected="onClickViewRequest"
+                attrs="{'data-hotkey': 'v'}">
+                <i class="fa fa-eye fa-fw me-1"/>
+                <span>View Approval Request</span>
+            </DropdownItem>
+
+        </xpath>
+
+    </t>
+
+</templates>

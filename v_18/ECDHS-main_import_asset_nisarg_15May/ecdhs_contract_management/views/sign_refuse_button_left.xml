@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Move desktop Refuse button to the left header area to avoid crowding signer status -->
+    <template id="sign_doc_sign_move_refuse_left" inherit_id="sign.doc_sign">
+        <!-- Remove the desktop refuse button from the right action group -->
+        <xpath expr="//div[contains(@class, 'dropdown d-flex btn-group m-1')]/button[contains(@class, 'o_sign_refuse_document_button') and contains(@class, 'mobile-tablet-hide')]" position="replace"/>
+
+        <!-- Insert desktop refuse button to the right of the company logo -->
+        <xpath expr="//div[contains(@class, 'o_logo_wrapper justify-content-start d-flex')]/div[contains(@class, 'o_logo d-flex')]" position="after">
+            <button t-if="current_request_item and current_request_item.state == 'sent'"
+                    class="btn btn-primary o_sign_refuse_document_button o_sign_refuse_document_button_left mobile-tablet-hide"
+                    aria-label="Refuse Document"
+                    title="Refuse Document">
+                Click to Refuse Document
+            </button>
+        </xpath>
+    </template>
+</odoo>

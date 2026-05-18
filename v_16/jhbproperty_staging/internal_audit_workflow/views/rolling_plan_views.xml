@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="internal_audit_rolling_plan_view_form" model="ir.ui.view">
+        <field name="name">internal_audit_rolling_plan_view_form</field>
+        <field name="model">rolling.plan</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="internal_audit_management.internal_audit_rolling_plan_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="replace">
+                <header>
+                    <field name="stages" widget="statusbar" options="{'clickable': '1'}" statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>
+                    <button name="action_2nd_review" type="object" string="Prepare"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('stages', '!=', 'preparer'), ('preparer_id', '!=', uid)]}"/>
+                    <button name="action_approve" type="object" string="Reviewed"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('stages', '!=', 'second_reviewer'), ('reviewer_id', '!=', uid)]}"/>
+                    <button name="action_revert" type="object"
+                           
+                            string="Revert" class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'second_reviewer')]}"/>
+                    <button name="action_reject" type="object"
+                           
+                            string="Reject" class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'second_reviewer')]}"/>
+                    <button name="action_revert" type="object"
+                           
+                            string="Move to Prepare" class="oe_highlight" attrs="{'invisible': [('stages', '!=', 'rejected')]}"/>
+                    <button name="action_send_sign" type="object" string="Send For Sign" class="oe_highlight"/>
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="can_edit" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='user_preparer_ids']" position="replace">
+                <field name="preparer_id" widget="many2one_avatar_user"/>
+                <field name="reviewer_id" widget="many2one_avatar_user"/>
+                <field name="approver_id" widget="many2one_avatar_user"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sequence_no']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='plan_id']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='department_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='arp_year_id']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='start_date']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='description']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='operational_plan_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='rolling_plan_tracking']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='attachment_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='project_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='feedback']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

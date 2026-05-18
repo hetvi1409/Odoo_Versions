@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="asset_type_tree_view" model="ir.ui.view">
+        <field name="name">asset.type.tree.view</field>
+        <field name="model">asset.type</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="asset_type_action" model="ir.actions.act_window">
+        <field name="name">Asset Type</field>
+        <field name="res_model">asset.type</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new Asset Type.
+            </p>
+        </field>
+    </record>
+    <menuitem parent="account.menu_finance_entries_management"
+          id="menu_asset_type" name="Asset Type"
+          action="asset_type_action" sequence="101"/>
+</odoo>

@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Bid Submission Form Page -->
+    <template id="tender_bid_form_page" name="Submit Bid">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-lg-8 offset-lg-2">
+                            <!-- Back Button -->
+                            <a t-attf-href="/sagovtender/#{tender.access_token}" class="btn btn-secondary mb-3">
+                                <i class="fa fa-arrow-left"/> Back to Tender
+                            </a>
+
+                            <!-- Tender Summary -->
+                            <div class="card mb-4">
+                                <div class="card-header bg-primary text-white">
+                                    <h3 class="mb-0">Submit Bid</h3>
+                                </div>
+                                <div class="card-body">
+                                    <h5><t t-esc="tender.title"/></h5>
+                                    <p class="mb-0">
+                                        <strong>Tender No:</strong> <t t-esc="tender.name"/><br/>
+                                        <strong>Closing Date:</strong>
+                                        <span class="text-danger font-weight-bold">
+                                            <t t-esc="tender.closing_date.strftime('%d %B %Y %H:%M')"/>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Company Information -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Your Company Information</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <th width="40%">Company Name:</th>
+                                            <td><t t-esc="partner.name"/></td>
+                                        </tr>
+                                        <tr t-if="partner.csd_number">
+                                            <th>CSD Number:</th>
+                                            <td><t t-esc="partner.csd_number"/></td>
+                                        </tr>
+                                        <tr t-if="partner.company_registration_number">
+                                            <th>Registration Number:</th>
+                                            <td><t t-esc="partner.company_registration_number"/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Email:</th>
+                                            <td><t t-esc="partner.email"/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Phone:</th>
+                                            <td><t t-esc="partner.phone"/></td>
+                                        </tr>
+                                    </table>
+                                    <a href="/supplier/profile" class="btn btn-sm btn-secondary">
+                                        <i class="fa fa-edit"/> Update Profile
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Bid Form -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Bid Details</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form method="post" t-attf-action="/sagovtender/#{tender.access_token}/bid/submit"
+                                          enctype="multipart/form-data">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                        <!-- Bid Amount -->
+                                        <div class="form-group">
+                                            <label for="bid_amount" class="required">
+                                                Bid Amount (<t t-esc="tender.currency_id.symbol"/>)
+                                            </label>
+                                            <input type="number" name="bid_amount" id="bid_amount"
+                                                   class="form-control" step="0.01" min="0.01" required="required"
+                                                   placeholder="Enter your bid amount"/>
+                                            <small class="form-text text-muted">
+                                                Enter the total amount for your bid (excluding VAT unless specified).
+                                            </small>
+                                        </div>
+
+                                        <!-- Validity Period -->
+                                        <div class="form-group">
+                                            <label for="validity_period">Bid Validity Period (Days)</label>
+                                            <input type="number" name="validity_period" id="validity_period"
+                                                   class="form-control" t-att-value="tender.validity_period or 90"
+                                                   min="1" required="required" readonly="readonly"/>
+                                            <small class="form-text text-muted">
+                                                Number of days your bid will remain valid.
+                                            </small>
+                                        </div>
+
+                                        <!-- Standard Bidding Documents (SBD) Checklist -->
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Standard Bidding Documents (SBD) Checklist</label>
+                                            <p class="text-muted small">
+                                                Please confirm which SBD documents you have completed and will submit:
+                                            </p>
+
+                                            <div class="form-row align-items-center mb-3">
+                                                <div class="col-md-7">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input sbd-complete"
+                                                               id="sbd1_complete" name="sbd1_complete" onclick="return false;"/>
+                                                        <label class="custom-control-label" for="sbd1_complete">
+                                                            SBD 1 - Invitation to Bid
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <input type="file" name="sbd1_file" id="sbd1_file"
+                                                           class="form-control-file sbd-file" data-checkbox-id="sbd1_complete"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row align-items-center mb-3">
+                                                <div class="col-md-7">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input sbd-complete"
+                                                               id="sbd2_complete" name="sbd2_complete" onclick="return false;"/>
+                                                        <label class="custom-control-label" for="sbd2_complete">
+                                                            SBD 2 - Tax Clearance Certificate Requirements
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <input type="file" name="sbd2_file" id="sbd2_file"
+                                                           class="form-control-file sbd-file" data-checkbox-id="sbd2_complete"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row align-items-center mb-3">
+                                                <div class="col-md-7">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input sbd-complete"
+                                                               id="sbd3_complete" name="sbd3_complete" onclick="return false;"/>
+                                                        <label class="custom-control-label" for="sbd3_complete">
+                                                            SBD 3 - Pricing Schedule
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <input type="file" name="sbd3_file" id="sbd3_file"
+                                                           class="form-control-file sbd-file" data-checkbox-id="sbd3_complete"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row align-items-center mb-3">
+                                                <div class="col-md-7">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input sbd-complete"
+                                                               id="sbd4_complete" name="sbd4_complete" onclick="return false;"/>
+                                                        <label class="custom-control-label" for="sbd4_complete">
+                                                            SBD 4 - Declaration of Interest
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <input type="file" name="sbd4_file" id="sbd4_file"
+                                                           class="form-control-file sbd-file" data-checkbox-id="sbd4_complete"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row align-items-center mb-3">
+                                                <div class="col-md-7">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input sbd-complete"
+                                                               id="sbd6_complete" name="sbd6_complete" onclick="return false;"/>
+                                                        <label class="custom-control-label" for="sbd6_complete">
+                                                            SBD 6.1 - Preference Points Claim Form
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <input type="file" name="sbd6_file" id="sbd6_file"
+                                                           class="form-control-file sbd-file" data-checkbox-id="sbd6_complete"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row align-items-center mb-3">
+                                                <div class="col-md-7">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input sbd-complete"
+                                                               id="sbd7_complete" name="sbd7_complete" onclick="return false;"/>
+                                                        <label class="custom-control-label" for="sbd7_complete">
+                                                            SBD 7 - Contract Form - Part 1
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <input type="file" name="sbd7_file" id="sbd7_file"
+                                                           class="form-control-file sbd-file" data-checkbox-id="sbd7_complete"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row align-items-center mb-3">
+                                                <div class="col-md-7">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input sbd-complete"
+                                                               id="sbd8_complete" name="sbd8_complete" onclick="return false;"/>
+                                                        <label class="custom-control-label" for="sbd8_complete">
+                                                            SBD 8 - Declaration of Past Supply Chain Management Practices
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <input type="file" name="sbd8_file" id="sbd8_file"
+                                                           class="form-control-file sbd-file" data-checkbox-id="sbd8_complete"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row align-items-center mb-3">
+                                                <div class="col-md-7">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input sbd-complete"
+                                                               id="sbd9_complete" name="sbd9_complete" onclick="return false;"/>
+                                                        <label class="custom-control-label" for="sbd9_complete">
+                                                            SBD 9 - Certificate of Independent Bid Determination
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <input type="file" name="sbd9_file" id="sbd9_file"
+                                                           class="form-control-file sbd-file" data-checkbox-id="sbd9_complete"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Additional Document Uploads -->
+                                        <div class="form-group">
+                                            <label for="additional_documents">Additional Bid Documents (Optional)</label>
+                                            <input type="file" name="additional_documents" id="additional_documents"
+                                                   class="form-control-file" multiple="multiple"/>
+                                            <small class="form-text text-muted">
+                                                Upload any other required documents (e.g. technical specifications,
+                                                company profile, pricing schedules). You can select multiple files.
+                                            </small>
+                                        </div>
+
+                                        <!-- Terms and Conditions -->
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input"
+                                                       id="accept_terms" required="required"/>
+                                                <label class="custom-control-label font-weight-bold" for="accept_terms">
+                                                    I confirm that all information provided is accurate and complete,
+                                                    and I accept the terms and conditions of this tender.
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div class="form-group text-center mt-4">
+                                            <button type="submit" class="btn btn-success btn-lg">
+                                                <i class="fa fa-check"/> Submit Bid
+                                            </button>
+                                            <a t-attf-href="/sagovtender/#{tender.access_token}"
+                                               class="btn btn-secondary btn-lg ml-2">
+                                                <i class="fa fa-times"/> Cancel
+                                            </a>
+                                        </div>
+
+                                        <!-- Important Notice -->
+                                        <div class="alert alert-warning mt-3">
+                                            <strong><i class="fa fa-exclamation-triangle"/> Important:</strong>
+                                            <ul class="mb-0 pl-3">
+                                                <li>Ensure all required documents are uploaded before submission.</li>
+                                                <li>Once submitted, your bid cannot be modified or withdrawn.</li>
+                                                <li>Late bids will not be accepted after the closing date.</li>
+                                            </ul>
+                                        </div>
+                                    </form>
+                                    <script type="text/javascript">
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            var fileInputs = document.querySelectorAll('.sbd-file');
+                                            fileInputs.forEach(function (input) {
+                                                var checkboxId = input.getAttribute('data-checkbox-id');
+                                                var checkbox = checkboxId ? document.getElementById(checkboxId) : null;
+                                                if (!checkbox) {
+                                                    return;
+                                                }
+                                                var sync = function () {
+                                                    checkbox.checked = !!(input.files &amp;&amp; input.files.length);
+                                                };
+                                                input.addEventListener('change', sync);
+                                                sync();
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Bid Submission Success Page -->
+    <template id="bid_submission_success" name="Bid Submitted Successfully">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="text-success mb-4">
+                                        <i class="fa fa-check-circle" style="font-size: 80px;"/>
+                                    </div>
+                                    <h2 class="text-success">Bid Submitted Successfully!</h2>
+                                    <p class="lead">Your bid has been received and recorded.</p>
+
+                                    <div class="card bg-light mt-4 mb-4">
+                                        <div class="card-body text-left">
+                                            <h5>Bid Summary</h5>
+                                            <table class="table table-sm mb-0">
+                                                <tr>
+                                                    <th width="40%">Bid Reference:</th>
+                                                    <td><strong><t t-esc="bid.name"/></strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tender:</th>
+                                                    <td><t t-esc="tender.title"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tender Number:</th>
+                                                    <td><t t-esc="tender.name"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Bid Amount:</th>
+                                                    <td class="text-success font-weight-bold">
+                                                        <t t-esc="'{:,.2f}'.format(bid.bid_amount)"/>
+                                                        <t t-esc="bid.currency_id.symbol"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Submission Date:</th>
+                                                    <td><t t-esc="bid.submission_date.strftime('%d %B %Y %H:%M')"/></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <p class="text-muted mb-4">
+                                        You will be notified via email about the status of your bid.
+                                        Please keep your bid reference number for future correspondence.
+                                    </p>
+
+                                    <div class="btn-group" role="group">
+                                        <a href="/my/bids" class="btn btn-primary">
+                                            <i class="fa fa-list"/> View My Bids
+                                        </a>
+                                        <a href="/sagovtenders" class="btn btn-secondary">
+                                            <i class="fa fa-arrow-left"/> Back to Tenders
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Bid Submission Error Page -->
+    <template id="bid_submission_error" name="Bid Submission Error">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="text-danger mb-4">
+                                        <i class="fa fa-exclamation-circle" style="font-size: 80px;"/>
+                                    </div>
+                                    <h2 class="text-danger">Bid Submission Error</h2>
+                                    <p class="lead">There was a problem submitting your bid.</p>
+
+                                    <div class="alert alert-danger text-left mt-4">
+                                        <strong>Error Details:</strong><br/>
+                                        <t t-esc="error"/>
+                                    </div>
+
+                                    <p class="text-muted">
+                                        Please try again or contact support if the problem persists.
+                                    </p>
+
+                                    <div class="btn-group" role="group">
+                                        <a t-attf-href="/sagovtender/#{tender.access_token}/bid"
+                                           class="btn btn-primary">
+                                            <i class="fa fa-arrow-left"/> Try Again
+                                        </a>
+                                        <a t-attf-href="/sagovtender/#{tender.access_token}"
+                                           class="btn btn-secondary">
+                                            Back to Tender
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Bid Already Submitted Page -->
+    <template id="bid_already_submitted" name="Bid Already Submitted">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-3">
+                            <div class="alert alert-info text-center">
+                                <h3><i class="fa fa-info-circle"/> Bid Already Submitted</h3>
+                                <p class="lead">
+                                    You have already submitted a bid for this tender.
+                                </p>
+
+                                <div class="card bg-light mt-3 mb-3">
+                                    <div class="card-body text-left">
+                                        <h5>Your Bid Details</h5>
+                                        <table class="table table-sm mb-0">
+                                            <tr>
+                                                <th width="40%">Bid Reference:</th>
+                                                <td><strong><t t-esc="bid.name"/></strong></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Submission Date:</th>
+                                                <td><t t-esc="bid.submission_date.strftime('%d %B %Y %H:%M')"/></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Bid Amount:</th>
+                                                <td class="font-weight-bold">
+                                                    <t t-esc="'{:,.2f}'.format(bid.bid_amount)"/>
+                                                    <t t-esc="bid.currency_id.symbol"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="btn-group" role="group">
+                                    <a href="/my/bids" class="btn btn-primary">
+                                        <i class="fa fa-list"/> View My Bids
+                                    </a>
+                                    <a t-attf-href="/sagovtender/#{tender.access_token}"
+                                       class="btn btn-secondary">
+                                        Back to Tender
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- My Bids Page -->
+    <template id="my_bids_page" name="My Bids">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-5 mb-5">
+                    <h1 class="mb-4">My Submitted Bids</h1>
+
+                    <!-- Filter Tabs -->
+                    <ul class="nav nav-tabs mb-4">
+                        <li class="nav-item">
+                            <a class="nav-link" t-attf-class="nav-link #{status == 'all' and 'active' or ''}" href="/my/bids?status=all">
+                                All Bids
+                                <span class="badge badge-secondary ml-1">
+                                    <t t-esc="total_count"/>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" t-attf-class="nav-link #{status == 'open' and 'active' or ''}" href="/my/bids?status=open">
+                                Open Tenders
+                                <span class="badge badge-success ml-1">
+                                    <t t-esc="open_count"/>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" t-attf-class="nav-link #{status == 'closed' and 'active' or ''}" href="/my/bids?status=closed">
+                                Closed Tenders
+                                <span class="badge badge-danger ml-1">
+                                    <t t-esc="closed_count"/>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Search Bar -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <form method="get" action="/my/bids" class="form-inline">
+                                <input type="hidden" name="status" t-att-value="status"/>
+                                <div class="input-group w-100">
+                                    <input type="text" name="search" id="bid_search" class="form-control"
+                                           placeholder="Search bids by reference, tender number, or title..."
+                                           t-att-value="search"/>
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-search"/> Search
+                                        </button>
+                                        <a t-attf-href="/my/bids?status=#{status}" class="btn btn-secondary"
+                                           title="Clear search and show all records">
+                                            <i class="fa fa-times"/> Clear
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                            <t t-if="search">
+                                <small class="text-muted mt-2 d-block">
+                                    Searching for: <strong><t t-esc="search"/></strong>
+                                    <a t-attf-href="/my/bids?status=#{status}" class="ml-2">Reset</a>
+                                </small>
+                            </t>
+                        </div>
+                    </div>
+
+                    <t t-if="bids">
+                        <div class="row">
+                            <t t-foreach="bids" t-as="bid">
+                                <t t-set="tender_is_open" t-value="bid.tender_id.state in ['advertised', 'briefing', 'bid_submission']"/>
+                                <div class="col-lg-12 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <h5>
+                                                        <a t-attf-href="/my/bid/#{bid.id}">
+                                                            <t t-esc="bid.tender_id.title"/>
+                                                        </a>
+                                                    </h5>
+                                                    <p class="text-muted mb-2">
+                                                        <strong>Bid Ref:</strong> <t t-esc="bid.name"/> |
+                                                        <strong>Tender No:</strong> <t t-esc="bid.tender_id.name"/>
+                                                    </p>
+                                                    <p class="mb-2">
+                                                        <strong>Submitted:</strong>
+                                                        <t t-esc="bid.submission_date.strftime('%d %B %Y %H:%M')"/>
+                                                    </p>
+                                                    <p class="mb-0">
+                                                        <strong>Tender Status:</strong>
+                                                        <t t-if="tender_is_open">
+                                                            <span class="badge badge-success">OPEN</span>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <span class="badge badge-danger">CLOSED</span>
+                                                        </t>
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-4 text-right">
+                                                    <p class="text-success h5 mb-2">
+                                                        <t t-esc="'{:,.2f}'.format(bid.bid_amount)"/>
+                                                        <t t-esc="bid.currency_id.symbol"/>
+                                                    </p>
+                                                    <t t-if="bid.state">
+                                                        <span class="badge badge-info">
+                                                            <t t-esc="dict(bid._fields['state'].selection).get(bid.state)"/>
+                                                        </span>
+                                                    </t>
+                                                    <br/>
+                                                    <a t-attf-href="/my/bid/#{bid.id}"
+                                                       class="btn btn-sm btn-primary mt-2">
+                                                        <i class="fa fa-eye"/> View Details
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="row mt-4">
+                            <div class="col-lg-12">
+                                <t t-call="website.pager"/>
+                            </div>
+                        </div>
+                    </t>
+
+                    <t t-if="not bids">
+                        <div class="alert alert-info text-center">
+                            <h4>No Bids Submitted Yet</h4>
+                            <p>You haven't submitted any bids yet.</p>
+                            <a href="/sagovtenders" class="btn btn-primary mt-3">
+                                <i class="fa fa-search"/> Browse Open Tenders
+                            </a>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- My Bid Detail Page -->
+    <template id="my_bid_detail_page" name="Bid Details">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container mt-5 mb-5">
+                    <a href="/my/bids" class="btn btn-secondary mb-3">
+                        <i class="fa fa-arrow-left"/> Back to My Bids
+                    </a>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Bid Details</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Bid Information</h5>
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <th width="40%">Bid Reference:</th>
+                                            <td><strong><t t-esc="bid.name"/></strong></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Submission Date:</th>
+                                            <td><t t-esc="bid.submission_date.strftime('%d %B %Y %H:%M')"/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Bid Amount:</th>
+                                            <td class="text-success font-weight-bold">
+                                                <t t-esc="'{:,.2f}'.format(bid.bid_amount)"/>
+                                                <t t-esc="bid.currency_id.symbol"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Validity Period:</th>
+                                            <td><t t-esc="bid.validity_period"/> days</td>
+                                        </tr>
+                                        <tr t-if="bid.state">
+                                            <th>Status:</th>
+                                            <td>
+                                                <span class="badge badge-info">
+                                                    <t t-esc="dict(bid._fields['state'].selection).get(bid.state)"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Tender Information</h5>
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <th width="40%">Tender Title:</th>
+                                            <td><t t-esc="bid.tender_id.title"/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tender Number:</th>
+                                            <td><t t-esc="bid.tender_id.name"/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Closing Date:</th>
+                                            <td>
+                                                <t t-esc="bid.tender_id.closing_date and bid.tender_id.closing_date.strftime('%d %B %Y %H:%M') or 'N/A'"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <a t-attf-href="/sagovtender/#{bid.tender_id.access_token}"
+                                       class="btn btn-sm btn-secondary">
+                                        <i class="fa fa-eye"/> View Tender
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SBD Checklist -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">SBD Documents Checklist</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <i t-attf-class="fa #{bid.sbd1_complete and 'fa-check-square text-success' or 'fa-square-o text-muted'}"/>
+                                            SBD 1 - Invitation to Bid
+                                        </li>
+                                        <li>
+                                            <i t-attf-class="fa #{bid.sbd2_complete and 'fa-check-square text-success' or 'fa-square-o text-muted'}"/>
+                                            SBD 2 - Tax Clearance
+                                        </li>
+                                        <li>
+                                            <i t-attf-class="fa #{bid.sbd3_complete and 'fa-check-square text-success' or 'fa-square-o text-muted'}"/>
+                                            SBD 3 - Pricing Schedule
+                                        </li>
+                                        <li>
+                                            <i t-attf-class="fa #{bid.sbd4_complete and 'fa-check-square text-success' or 'fa-square-o text-muted'}"/>
+                                            SBD 4 - Declaration of Interest
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <i t-attf-class="fa #{bid.sbd6_complete and 'fa-check-square text-success' or 'fa-square-o text-muted'}"/>
+                                            SBD 6.1 - Preference Points
+                                        </li>
+                                        <li>
+                                            <i t-attf-class="fa #{bid.sbd7_complete and 'fa-check-square text-success' or 'fa-square-o text-muted'}"/>
+                                            SBD 7 - Contract Form
+                                        </li>
+                                        <li>
+                                            <i t-attf-class="fa #{bid.sbd8_complete and 'fa-check-square text-success' or 'fa-square-o text-muted'}"/>
+                                            SBD 8 - Past SCM Practices
+                                        </li>
+                                        <li>
+                                            <i t-attf-class="fa #{bid.sbd9_complete and 'fa-check-square text-success' or 'fa-square-o text-muted'}"/>
+                                            SBD 9 - Independent Bid Determination
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

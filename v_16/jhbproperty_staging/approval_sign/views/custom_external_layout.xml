@@ -1,0 +1,145 @@
+<odoo>
+    <data noupdate="0">
+
+        <!-- Custom Header Template -->
+        <template id="custom_header_and_footer"
+                  inherit_id="web.external_layout_standard">
+            <!-- Custom Header -->
+            <xpath expr="//div[@t-attf-class='header o_company_#{company.id}_layout']"
+                   position="replace">
+                <div t-attf-class="header o_company_#{company.id}_layout"
+                     t-att-style="report_header_style">
+                    <div class="row align-items-center">
+                        <!-- Logo Section -->
+                        <div class="col-3 text-left">
+                            <t t-if="company.header_image">
+                                <img t-att-src="image_data_uri(company.header_image)"
+                                     style="max-height:75px; max-width:150px;"
+                                     alt="Company Logo"/>
+                            </t>
+                        </div>
+
+                        <!-- Company Details Section -->
+                        <div class="col-9 text-center">
+                            <h3 style="font-weight: bold; color: #343a40; margin-bottom: 5px;">
+                                City of Joburg Property Company SOC Ltd.
+                            </h3>
+                            <hr style="border: 2px solid #ffde21; width: 60%; margin: 5px auto;"/>
+
+                            <div class="row">
+                                <!-- Address Section -->
+                                <div class="col-4 text-left"
+                                     style="font-size: 12px;">
+                                    <p style="margin: 0;">3rd Floor, Forum 1,
+                                        Braam Park
+                                    </p>
+                                    <p style="margin: 0;">33 Hoofd Street,
+                                        Braamfontein
+                                    </p>
+                                    <p style="margin: 0;">2017</p>
+                                </div>
+
+                                <!-- Postal Section -->
+                                <div class="col-4 text-left"
+                                     style="font-size: 12px;">
+                                    <p style="margin: 0;">PO Box 31565</p>
+                                    <p style="margin: 0;">Braamfontein</p>
+                                    <p style="margin: 0;">2017</p>
+                                </div>
+
+                                <!-- Contact Section -->
+                                <div class="col-4 text-left"
+                                     style="font-size: 12px;">
+                                    <p style="margin: 0;">Tel: +27(0) 10 219
+                                        9000
+                                    </p>
+                                    <p style="margin: 0;">Fax: +27(0) 10 219
+                                        9400
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+
+            <!-- Custom Footer -->
+            <xpath expr="//div[@t-attf-class='footer o_standard_footer o_company_#{company.id}_layout']" position="replace">
+                <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+                    <div class="row align-items-center">
+                        <!-- Logo Section -->
+                        <div class="col-3 text-left">
+                            <t t-if="company.logo">
+                                <img t-att-src="image_data_uri(company.logo)"
+                                     style="max-height:75px; max-width:150px;"
+                                     alt="Company Logo"/>
+                            </t>
+                        </div>
+
+                        <!-- Footer Details -->
+                        <div class="col-9 text-right" style="font-size: 12px;display: flex; justify-content: flex-end;">
+                            <!-- border: 1px solid #666; -->
+                            <div style="float: right;">
+                            <p style="margin: 0;">
+                                <strong>Non-Executive Directors:</strong>
+                                <t t-esc="company.non_executive_director_1.name"/>
+                                |
+                                <t t-esc="company.non_executive_director_2.name"/>
+                                |
+                                <t t-esc="company.non_executive_director_3.name"/>
+                                |
+                                <t t-esc="company.non_executive_director_4.name"/>
+                                |
+                                <t t-esc="company.non_executive_director_5.name"/>
+                                |
+                                <t t-esc="company.non_executive_director_6.name"/>
+                                |
+                                <t t-esc="company.non_executive_director_7.name"/>
+                                |
+                                <t t-esc="company.non_executive_director_8.name"/>
+                                |
+                                <t t-esc="company.non_executive_director_9.name"/>
+                                |
+                                <t t-esc="company.non_executive_director_10.name"/>
+                                |
+                                <t t-esc="company.non_executive_director_11.name"/>
+                            </p>
+
+                            <p style="margin: 0;">
+                                <strong>Executive Director:</strong>
+                                <t t-esc="company.executive_director_1.name"/>
+                                |
+                                <t t-esc="company.executive_director_2.name"/>
+                            </p>
+
+                            <p style="margin: 0;">
+                                <strong>Company Secretary:</strong>
+                                <t t-esc="company.company_secretory.name"/>
+                            </p>
+
+                            <p style="margin: 0;">
+                                <strong>City of Joburg Property Company SOC
+                                    Ltd.
+                                </strong>
+                            </p>
+                            <p style="margin: 0;">
+                                <strong>Company Registration Number:</strong>
+                                <t t-esc="company.company_registration_number"/>
+                            </p>
+                           </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Numbering -->
+                    <div class="text-center mt-1"
+                         style="border-top: 2px solid #343a40; padding-top: 6px; font-size: 12px;">
+                        Page
+                        <span class="page"/>
+                        /
+                        <span class="topage"/>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

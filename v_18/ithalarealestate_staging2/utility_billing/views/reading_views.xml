@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_utility_reading_form" model="ir.ui.view">
+        <field name="name">utility.meter.reading.form</field>
+        <field name="model">utility.meter.reading</field>
+        <field name="arch" type="xml">
+            <form string="Meter Reading">
+                <sheet>
+                    <group>
+                    <group>
+                        <field name="meter_id"/>
+                        <field name="partner_id" readonly="1"/>
+                        <field name="utility_type" readonly="1"/>
+                        <field name="company_id" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="reading_date"/>
+                        <field name="billing_period_start"/>
+                        <field name="billing_period_end"/>
+                        <field name="invoice_amount"/>
+                    </group>
+                    </group>
+                    <group>
+                        <field name="previous_reading" readonly="1"/>
+                        <field name="reading"/>
+                        <field name="consumption" readonly="1"/>
+                        <field name="invoice_id" readonly="1"/>
+                    </group>
+
+                    <!-- Monitoring & Alerts -->
+                    <group string="Monitoring &amp; Alerts">
+                        <field name="abnormal_usage" widget="boolean_toggle"/>
+                        <button name="action_generate_alert" type="object" string="Generate Alert" class="btn-danger"/>
+                    </group>
+
+                    <!-- Integration -->
+                    <group string="Integration">
+                        <field name="integration_source"/>
+                        <field name="external_sync_id"/>
+                        <field name="sync_status"/>
+                    </group>
+
+                    <!-- Sustainability -->
+                    <group string="Sustainability">
+                        <field name="renewable_share"/>
+                        <field name="carbon_emission" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_utility_reading_list" model="ir.ui.view">
+        <field name="name">utility.meter.reading.list</field>
+        <field name="model">utility.meter.reading</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="meter_id"/>
+                <field name="partner_id"/>
+                <field name="reading_date"/>
+                <field name="billing_period_start"/>
+                <field name="billing_period_end"/>
+                <field name="previous_reading"/>
+                <field name="reading"/>
+                <field name="consumption"/>
+                <field name="invoice_amount"/>
+                <field name="abnormal_usage"/>
+                <field name="sync_status"/>
+                <field name="renewable_share"/>
+                <field name="carbon_emission"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_utility_readings" model="ir.actions.act_window">
+        <field name="name">Meter Readings</field>
+        <field name="res_model">utility.meter.reading</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="whatsapp.NotificationMessageView" owl="1">
+        <t t-if="notificationMessageView.message.author === messaging.currentPartner">
+            <div class="o_NotificationMessageView d-flex justify-content-center" style="margin-left: auto;">
+                <style>
+                    .o_Message_content2_wp > p:last-of-type {
+                        margin-bottom: 2px;
+                        background-color: inherit;
+                        overflow-x: visible;
+                    }
+                    .o_Message_content2_wp .o_mail_notification {
+                        margin-bottom: 2px;
+                        background-color: inherit;
+                        overflow-x: visible;
+                    }
+                </style>
+                <div class="flex-grow-1"/>
+                <!-- <div class="o_Message_header ml-2">
+                    <div class="o_Message_authorName o_Message_authorRedirect" style="font-family: rosemary;">
+                        <t t-esc="notificationMessageView.message.authorName"/> 
+                    </div>
+                </div> -->
+                
+                <MessageSeenDashboard className="'o_Message_seenIndicator ms-1'" record="notificationMessageView.message.localId"/>
+                
+                <div class="o_Message_content2_wp mx-2" style="word-break: normal; word-wrap: normal; max-width: 300px; overflow-x: visible; margin: 15px 35px; background-color: #e3effd; border-radius: 12px; padding: 10px 2px 10px 2px;">
+                    
+                    <t t-if="notificationMessageView.message.body.includes('map')">
+                        <iframe t-attf-src="{{rawBody}}" width="350" height="280"/>
+                    </t>
+                    <t t-else="">
+                        <t t-out="notificationMessageView.message.prettyBodyAsMarkup"/>
+                    </t>
+                </div>
+                <div class="flex-grow-1"/>
+            </div>
+            
+        </t>
+        <t t-else="">
+            <div class="o_NotificationMessageView d-flex justify-content-center" style="margin-right: auto;">
+                <style>
+                    .o_Message_content2_wp > p:last-of-type {
+                        margin-bottom: 2px;
+                        background-color: inherit;
+                        overflow-x: visible;
+                    }
+                    .o_Message_content2_wp .o_mail_notification {
+                        margin-bottom: 2px;
+                        background-color: inherit;
+                        overflow-x: visible;
+                    }
+                </style>
+                <div class="flex-grow-1"/>
+                <!-- <div class="o_Message_header ml-2">
+                    <div class="o_Message_authorName o_Message_authorRedirect" style="font-family: rosemary;">
+                        <t t-esc="notificationMessageView.message.authorName"/> 
+                    </div>
+                </div> -->
+                <div class="o_Message_content2_wp mx-2" style="word-break: normal; word-wrap: normal; max-width: 300px; overflow-x: visible; margin: 15px 35px; background-color: #f6f6f6; border-radius: 12px; padding: 10px 2px 10px 2px;">
+                    <t t-out="notificationMessageView.message.prettyBodyAsMarkup"/>
+                    
+                </div>
+                <div class="flex-grow-1"/>
+            </div>           
+        </t>
+    </t>
+</templates>

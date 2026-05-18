@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!-- activity tree view  -->
+        <record model="ir.ui.view" id="oi_risk_management.activities_tree">
+            <field name="name">oi_risk_management.activity.view.tree</field>
+            <field name="model">oi_risk_management.activity</field>
+            <field name="arch" type="xml">
+                <tree string="Events/Activities">
+                    <field name="sequence"/>
+                    <field name="name" string="Risk Factor"/>
+                    <field name="risks_count"/>
+                    <field name="department_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- activity form view  -->
+        <record model="ir.ui.view" id="oi_risk_management.activity_form">
+            <field name="name">oi_risk_management.activity.view.form</field>
+            <field name="model">oi_risk_management.activity</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="factor_state" widget="statusbar" readonly="1"/>
+                        <field name="workflow_states" invisible="1"/>
+                        <field name="user_can_approve" invisible="1"/>
+                        <field name="button_approve_enabled" invisible="1"/>
+                        <field name="button_forward_enabled" invisible="1"/>
+                        <field name="button_return_enabled" invisible="1"/>
+                        <field name="button_transfer_enabled" invisible="1"/>
+                        <field name="approve_button_wizard" invisible="1"/>
+                        <field name="approve_button_name" invisible="1"/>
+                        <field name="approve_confirm_msg" invisible="1"/>
+                        <field name="reject_button_wizard" invisible="1"/>
+                        <field name="reject_button_name" invisible="1"/>
+                        <field name="reject_confirm_msg" invisible="1"/>
+
+                        <button name="action_risk_prepare" type="object" string="Prepare"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('factor_state', '!=', 'draft')]}"/>
+                        <button name="action_risk_reviewed" type="object" string="Reviewed"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('factor_state', '!=', 'prepared')]}"/>
+                        <button name="action_risk_approved" type="object" string="Approved"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('factor_state', '!=', 'reviewed')]}"/>
+                        <button name="action_risk_rejected" type="object" string="Rejected"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('factor_state', '!=', 'reviewed')]}"/>
+
+<!--                        <button name="action_approve" type="object" string="Confirm"-->
+<!--                                class="oe_highlight" invisible="state != 'draft'"/>-->
+<!--                        <button name="action_approve_wizard" type="object" string="Approve"-->
+<!--                                class="oe_highlight oe_workflow_approve"-->
+<!--                                invisible="(user_can_approve == False) or (approve_button_name == False) or (approve_button_wizard == False)"/>-->
+<!--                        <button name="action_approve" type="object" string="Approve"-->
+<!--                                class="oe_highlight oe_workflow_approve"-->
+<!--                                invisible="user_can_approve == False or approve_button_name == False or approve_button_wizard == True"/>-->
+<!--                        <button name="action_reject_wizard" type="object" string="Reject" class="oe_workflow_reject"-->
+<!--                                invisible="user_can_approve == False or reject_button_name == False or approve_button_wizard == False"/>-->
+<!--                        <button name="action_reject" type="object" string="Reject" class="oe_workflow_reject"-->
+<!--                                invisible="user_can_approve == False or reject_button_name == False or reject_button_wizard == True"/>-->
+<!--                        <button name="action_draft" type="object"-->
+<!--                                confirm="Reset to draft ?"-->
+<!--                                string="Reset to draft"-->
+<!--                                invisible="state not in ['approved', 'rejected']"/>-->
+<!--                        <button name="action_forward" type="object" string="Forward"-->
+<!--                                invisible="button_forward_enabled == False"/>-->
+<!--                        <button name="action_return" type="object" string="Return"-->
+<!--                                invisible="button_return_enabled == False"/>-->
+<!--                        <button name="action_transfer" type="object" string="Transfer"-->
+<!--                                invisible="button_transfer_enabled == False"/>-->
+                    </header>
+                    <sheet>
+                                                <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_risks"
+                                    class="oe_stat_button"
+                                    icon="fa-pencil-square-o">
+                                <field name="risks_count" widget="statinfo" string="Risks"/>
+                                <field name='risk_ids' invisible="1"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="sequence"/>
+                                <field name="name" string="Risk Factor"
+                                       attrs="{'readonly': [('factor_state', 'not in', ['draft'])]}"/>
+<!--                                       attrs="{'readonly': [('factor_state', 'not in', ['draft'])]}"/>-->
+                                <field name="description" string="Details"
+                                       attrs="{'readonly': [('factor_state', '!=', 'draft')]}"/>
+<!--                                       attrs="{'readonly': [('factor_state', 'not in', ['draft'])]}"/>-->
+                            </group>
+                            <group>
+                                <field name="department_id"
+                                       attrs="{'readonly': [('factor_state', '!=', 'draft')]}"/>
+<!--                                       attrs="{'readonly': [('factor_state', 'not in', ['draft'])]}"/>-->
+                            </group>
+                        </group>
+                        <group string="Risks">
+                            <field name="risk_ids" nolabel="1" colspan="2">
+                                <tree editable="bottom">
+                                    <field name="name" string="Risk"/>
+
+                                    <field name="department_id" options="{'no_create': True, 'no_edit': True}"/>
+                                    <field name="category_id"/>
+                                    <field name="tag_ids" widget="many2many_tags" string="tags"/>
+
+<!--                                    <button name="action_open_risk_form" type="object" string="Open Assessment Form"-->
+<!--                                            class="float-right btn-primary"/>-->
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="message_follower_ids" widget="mail_followers"/>-->
+<!--                        <field name="activity_ids" widget="mail_activity"/>-->
+<!--                        <field name="message_ids" widget="mail_thread"/>-->
+<!--                    </div>-->
+                </form>
+            </field>
+        </record>
+
+
+        <!-- reporting view -->
+        <record model="ir.ui.view" id="oi_risk_management.reporting_graph">
+            <field name="name">oi_risk_management.activity.reporting.view.graph</field>
+            <field name="model">oi_risk_management.activity</field>
+            <field name="arch" type="xml">
+                <graph string="Event/Activity Risks Statistics">
+                    <field name="name"/>
+                    <field name="risks_count" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

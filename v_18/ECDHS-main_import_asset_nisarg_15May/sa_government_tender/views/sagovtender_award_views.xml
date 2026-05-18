@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sagovtender_award_list" model="ir.ui.view">
+        <field name="name">sagovtender.award.list</field>
+        <field name="model">sagovtender.award</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="tender_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                <field name="awarded_bid_id" domain="[('tender_id', '=', tender_id)]" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                <field name="awarded_partner_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                <field name="award_value" widget="monetary"/>
+                <field name="currency_id" invisible="0" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="award_date"/>
+                <field name="bec_score"/>
+                <field name="contract_start_date"/>
+                <field name="contract_end_date"/>
+                <field name="contract_duration"/>
+                <field name="contract_number"/>
+                <field name="purchase_order_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="po_created" invisible="0"/>
+                <field name="published"/>
+                <field name="publication_date"/>
+                <field name="award_letter_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="signed_contract_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sagovtender_award_form" model="ir.ui.view">
+        <field name="name">sagovtender.award.form</field>
+        <field name="model">sagovtender.award</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm_award" string="Confirm Award" type="object" class="btn-success" invisible="state != 'draft'"/>
+                    <button name="action_publish_award" string="Publish Award" type="object" invisible="state not in ['awarded']"/>
+                    <button name="action_create_purchase_order" string="Create PO" type="object" invisible="po_created or state != 'awarded'"/>
+                    <button name="action_mark_contract_signed" string="Contract Signed" type="object" invisible="state not in ['awarded', 'published']"/>
+                    <button name="action_complete" string="Complete Award" type="object" invisible="state != 'contract_signed'"/>
+                    <button name="action_view_purchase_order" string="View PO" type="object" class="btn-success" invisible="not po_created or state not in ['contract_signed','completed']"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="tender_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                            <field name="awarded_bid_id" domain="[('tender_id', '=', tender_id)]" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                            <field name="awarded_partner_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="award_value" widget="monetary"/>
+                            <field name="currency_id" invisible="0" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="award_date"/>
+                            <field name="bec_score"/>
+                            <field name="purchase_order_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="po_created" invisible="0"/>
+                        </group>
+                    </group>
+                    <group string="Contract Details">
+                        <group>
+                            <field name="contract_start_date"/>
+                            <field name="contract_end_date"/>
+                        </group>
+                        <group>
+                            <field name="contract_number"/>
+                            <field name="contract_duration"/>
+                        </group>
+                    </group>
+                    <group string="Award Justification">
+                        <field name="award_justification" widget="html"/>
+                    </group>
+                    <group string="Publication">
+                        <group>
+                            <field name="published"/>
+                            <field name="publication_date"/>
+                        </group>
+                        <group>
+                            <field name="publication_url"/>
+                        </group>
+                    </group>
+                    <group string="Documents">
+                        <group>
+                            <field name="award_letter_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="signed_contract_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sagovtender_award" model="ir.actions.act_window">
+        <field name="name">Tender Awards</field>
+        <field name="res_model">sagovtender.award</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

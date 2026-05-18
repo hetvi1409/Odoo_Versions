@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_calendar_event_form">
+        <field name="name">calendar.event.view.form.board.management.system</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_send_mail" string="Send Mail" type="object" class="btn btn-primary"
+                            invisible="active == False" />
+<!--                    attrs="{'invisible': [('active', '=', False)]}"/>/>-->
+                </header>
+            </xpath>
+<!--            &lt;!&ndash; Agenda Section &ndash;&gt;-->
+            <xpath expr="//page[@name='page_invitations']" position="after">
+                <page name="agenda" string="Agenda">
+                    <group>
+                        <field name="agenda"/>
+                        <field name="agenda_document_id" invisible="1"/>
+                        <field name="agenda_attachment_id" invisible="1"/>
+                        <field name="need_section" invisible="1"/>
+                        <field name="agenda_ids" mode="kanban"  invisible="need_section == False">
+<!--                               attrs="{'invisible': [('need_section', '=', False)]}">-->
+                            <kanban>
+                                <field name="name"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div t-attf-class="oe_kanban_global_click">
+                                            <div>
+                                                <strong>
+                                                    <t t-out="record.name.value"/>
+                                                </strong>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                            <form>
+                                <group>
+                                    <field name="name"/>
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+                </page>
+
+                <!-- MOM Section -->
+                <page name="mom" string="Minutes Of Meetings">
+                    <button name="action_share_mom" string="Share MOM" type="object" class="btn btn-primary"
+                            invisible="mom == False"/>
+<!--                            attrs="{'invisible': [('mom', '=', False)]}"/>-->
+                    <group>
+                        <field name="mom"/>
+                        <field name="mom_document_id" invisible="1"/>
+                        <field name="mom_attachment_id" invisible="1"/>
+                    </group>
+                </page>
+
+                <!-- Vote Section -->
+                <page name="vote" string="Vote">
+                    <button name="action_create_survey" string="Create New Vote" type="object" class="btn btn-primary"
+                            invisible="survey_id != False"/>
+<!--                            attrs="{'invisible': [('survey_id', '!=', False)]}"/>-->
+                    <button name="action_edit_survey" string="Edit Vote" type="object" class="btn btn-primary"
+                            invisible="survey_id == False"/>
+<!--                            attrs="{'invisible': [('survey_id', '=', False)]}"/>-->
+                    <group>
+                        <field name="survey_id" readonly="1"/>
+                    </group>
+                </page>
+
+                 Document Library Section
+                <page name="documents" string="Document Library">
+                    <group>
+                        <field name="attachment_ids" widget="many2many_binary"/>
+                        <field name="document_folder_id" invisible="1"/>
+                    </group>
+                </page>
+            </xpath>
+
+<!--            &lt;!&ndash; Smart Button for Documents &ndash;&gt;-->
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button icon="fa-file-text-o" type="object" name="action_view_documents"
+                        invisible="document_folder_id == False">
+<!--                        attrs="{'invisible': [('document_folder_id', '=', False)]}">-->
+                    Documents
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

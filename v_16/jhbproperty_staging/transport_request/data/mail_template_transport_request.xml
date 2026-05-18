@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="mail_template_transport_request" model="mail.template">
+        <field name="name">Transport Request</field>
+        <field name="model_id" ref="transport_request.model_transport_request"/>
+        <field name="subject"> Approval Required: Transport Request {{ object.name or 'n/a' }}</field>
+        <field name="description">Notification to Approver</field>
+        <field name="email_to">{{object.approver_id.work_email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi,<br/>
+                    <p>A new transport request requires your approval. The details are as follows:</p>
+                    <ul>
+                        <li><strong>Location Details:</strong>
+                            <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                <p t-if="object.street"><t t-esc="object.street"/></p>
+                                <p t-if="object.street2"><t t-esc="object.street2"/></p>
+                                <p>
+                                    <t t-if="object.city"><t t-esc="object.city"/></t>
+                                    <t t-if="object.state_id">, <t t-esc="object.state_id.name"/></t>
+                                    <t t-if="object.zip"> - <t t-esc="object.zip"/></t>
+                                </p>
+                                <p t-if="object.country_id"><t t-esc="object.country_id.name"/></p>
+                            </div>
+                        </li>
+                        <li><strong>Purpose:</strong> <t t-out="object.purpose"/></li>
+                    </ul>
+                    <p>Please review and take the necessary action.</p>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_request_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="mail_template_transport_approval" model="mail.template">
+        <field name="name">Notify Transport Officer - Assignment Required</field>
+        <field name="model_id" ref="transport_request.model_transport_request"/>
+        <field name="subject"> Action Required: Assign Vehicle/Driver for Request  {{ object.name or 'n/a' }}</field>
+        <field name="description">Notification to Transport Officer</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi,<br/>
+                    <p>The following transport request has been approved and now requires vehicle and driver assignment:</p>
+                    <ul>
+                        <li><strong>Location Details:</strong>
+                            <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                <p t-if="object.street"><t t-esc="object.street"/></p>
+                                <p t-if="object.street2"><t t-esc="object.street2"/></p>
+                                <p>
+                                    <t t-if="object.city"><t t-esc="object.city"/></t>
+                                    <t t-if="object.state_id">, <t t-esc="object.state_id.name"/></t>
+                                    <t t-if="object.zip"> - <t t-esc="object.zip"/></t>
+                                </p>
+                                <p t-if="object.country_id"><t t-esc="object.country_id.name"/></p>
+                            </div>
+                        </li>
+                        <li><strong>Purpose:</strong> <t t-out="object.purpose"/></li>
+                    </ul>
+                    <p>Please review and take the necessary action.</p>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_request_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="mail_template_notify_requester_assignment" model="mail.template">
+        <field name="name">Transport Assigned - Notification to Requester</field>
+        <field name="model_id" ref="transport_request.model_transport_request"/>
+        <field name="subject"> Your Transport Request {{ object.name }} has been Assigned</field>
+        <field name="description">Notification to Requester</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi,<br/>
+                    <p>Your transport request <strong><t t-out="object.name"/></strong> has been assigned with the following details:</p>
+                    <ul>
+                        <li><strong>Location Details:</strong>
+                            <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                <p t-if="object.street"><t t-esc="object.street"/></p>
+                                <p t-if="object.street2"><t t-esc="object.street2"/></p>
+                                <p>
+                                    <t t-if="object.city"><t t-esc="object.city"/></t>
+                                    <t t-if="object.state_id">, <t t-esc="object.state_id.name"/></t>
+                                    <t t-if="object.zip"> - <t t-esc="object.zip"/></t>
+                                </p>
+                                <p t-if="object.country_id"><t t-esc="object.country_id.name"/></p>
+                            </div>
+                        </li>
+                        <li><strong>Purpose:</strong> <t t-out="object.purpose"/></li>
+                    </ul>
+                    <p>Please review and take the necessary action.</p>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_request_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="mail_template_notify_driver_assignment" model="mail.template">
+        <field name="name">Transport Assigned - Notification to Driver</field>
+        <field name="model_id" ref="transport_request.model_transport_request"/>
+        <field name="subject">New Assignment: Request {{ object.name }}</field>
+        <field name="email_to">{{ object.assigned_driver_id.work_email }}</field>
+        <field name="description">Notification to Requester</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi,<br/>
+                    <p>Your transport request <strong><t t-out="object.name"/></strong> has been assigned with the following details:</p>
+                    <ul>
+                        <li><strong>Location Details:</strong>
+                            <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                <p t-if="object.street"><t t-esc="object.street"/></p>
+                                <p t-if="object.street2"><t t-esc="object.street2"/></p>
+                                <p>
+                                    <t t-if="object.city"><t t-esc="object.city"/></t>
+                                    <t t-if="object.state_id">, <t t-esc="object.state_id.name"/></t>
+                                    <t t-if="object.zip"> - <t t-esc="object.zip"/></t>
+                                </p>
+                                <p t-if="object.country_id"><t t-esc="object.country_id.name"/></p>
+                            </div>
+                        </li>
+                        <li><strong>Purpose:</strong> <t t-out="object.purpose"/></li>
+                    </ul>
+                    <p>Please review and take the necessary action.</p>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_request_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="mail_template_transport_completion" model="mail.template">
+        <field name="name">Transport Request Completed - Notification to Requester</field>
+        <field name="model_id" ref="transport_request.model_transport_request"/>
+        <field name="subject">Transport Request {{ object.name }} Completed</field>
+        <field name="email_to">{{ object.requester_id.work_email }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi,<br/>
+                    <p>Your transport request <strong><t t-out="object.name"/></strong> has been successfully completed.</p>
+                    <ul>
+                        <li><strong>Location Details:</strong>
+                            <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                <p t-if="object.street"><t t-esc="object.street"/></p>
+                                <p t-if="object.street2"><t t-esc="object.street2"/></p>
+                                <p>
+                                    <t t-if="object.city"><t t-esc="object.city"/></t>
+                                    <t t-if="object.state_id">, <t t-esc="object.state_id.name"/></t>
+                                    <t t-if="object.zip"> - <t t-esc="object.zip"/></t>
+                                </p>
+                                <p t-if="object.country_id"><t t-esc="object.country_id.name"/></p>
+                            </div>
+                        </li>
+                        <li><strong>Purpose:</strong> <t t-out="object.purpose"/></li>
+                    </ul>
+                    <p>Thank you for using the transport service.</p>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_request_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="mail_template_transport_rejection" model="mail.template">
+        <field name="name">Transport Request Rejected - Notification to Requester</field>
+        <field name="model_id" ref="transport_request.model_transport_request"/>
+        <field name="subject">Transport Request {{ object.name }} Rejected</field>
+        <field name="email_to">{{ object.requester_id.work_email }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi,<br/>
+                    <p>Your transport request <strong><t t-out="object.name"/></strong> has been rejected.</p>
+                    <ul>
+                        <li><strong>Reason for Rejection:</strong> <t t-out="object.rejection_reason"/></li>
+                    </ul>
+                    <p>Please contact the transport office for further clarification if needed.</p>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_request_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+</odoo>

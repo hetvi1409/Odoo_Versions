@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="action_asset_location_history" model="ir.actions.act_window">
+        <field name="name">Asset Location History</field>
+        <field name="res_model">asset.location.history</field>
+        <field name="view_mode">list</field>
+    </record>
+
+<!--                  parent="fixed_assets.menu_action_fixed_assets"-->
+    <menuitem id="asset_location_history_sub_menu"
+              parent="account.account_reports_management_menu"
+              action="action_asset_location_history"/>
+
+    <record id="view_asset_location_history_tree" model="ir.ui.view">
+        <field name="name">asset.location.history.tree</field>
+        <field name="model">asset.location.history</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" >
+                <field name="asset_id"/>
+                <field name="old_location_id"/>
+                <field name="new_location_id"/>
+                <field name="changed_by"/>
+                <field name="date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_asset_location_history_search" model="ir.ui.view">
+        <field name="name">asset.location.history.search</field>
+        <field name="model">asset.location.history</field>
+        <field name="arch" type="xml">
+            <search string="Search Asset Location History">
+
+                <!-- Main search fields -->
+                <field name="asset_id"/>
+                <field name="old_location_id"/>
+                <field name="new_location_id"/>
+                <field name="changed_by"/>
+
+                <!-- Date filters -->
+<!--                <filter name="on_today" string="Today" domain="[('date', '&gt;', datetime.datetime.combine(context_today() - relativedelta(days=1), datetime.time(23, 59, 59)).to_utc())]"/>-->
+<!--                <filter name="on_last_7_days" string="Last 7 Days" domain="[('date', '&gt;', datetime.datetime.combine(context_today() - relativedelta(days=7), datetime.time(23, 59, 59)).to_utc())]"/>-->
+<!--                &lt;!&ndash; Group By options &ndash;&gt;-->
+<!--                <group expand="0" string="Group By">-->
+<!--                    <filter string="Asset" name="group_asset" context="{'group_by': 'asset_id'}"/>-->
+<!--                    <filter string="Old Location" name="group_old_location" context="{'group_by': 'old_location_id'}"/>-->
+<!--                    <filter string="New Location" name="group_new_location" context="{'group_by': 'new_location_id'}"/>-->
+<!--                    <filter string="Changed By" name="group_changed_by" context="{'group_by': 'changed_by'}"/>-->
+<!--                    <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>-->
+<!--                </group>-->
+            </search>
+        </field>
+    </record>
+
+</odoo>

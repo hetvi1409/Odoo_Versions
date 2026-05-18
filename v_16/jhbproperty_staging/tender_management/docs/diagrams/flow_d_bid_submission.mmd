@@ -1,0 +1,25 @@
+flowchart LR
+  subgraph V[Portal User]
+    A([Start]) --> B[Open tender detail]
+    B --> C[Click Next]
+    C --> D[Upload bid documents]
+    D --> E[Submit form]
+  end
+  subgraph R[Submit Controller]
+    E --> F[Auth and CSRF check]
+    F --> G[Rate-limit check]
+    G --> H[Validate tender and file rules]
+    H --> I{Valid?}
+    I -->|No| X[Render error page]
+  end
+  subgraph M[Models and Documents]
+    I -->|Yes| J[Create tender.bid]
+    J --> K[Create attachments and tender.document]
+    K --> L[Create documents.document records]
+    L --> N[Set bid state submitted]
+  end
+  subgraph W[Website]
+    N --> O[Render thank-you page with reference]
+    O --> P([End])
+    X --> P
+  end

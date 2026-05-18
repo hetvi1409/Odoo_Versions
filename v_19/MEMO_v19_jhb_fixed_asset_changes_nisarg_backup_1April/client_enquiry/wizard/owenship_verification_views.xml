@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ownership_verification_view_form" model="ir.ui.view">
+        <field name="name">ownership.verification.form.view</field>
+        <field name="model">ownership.verification</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="type" widget="radio" options="{'horizontal': true}"/>
+                        <field name="jmc_number"/>
+                        <field name="attachment_ids" widget="many2many_binary"/>
+                           <field name="upload_document_name" invisible="1"/>
+                            <field name="attachment_image_ids" filename="upload_document_name" widget="many2many_binary"/>
+                        <field name="comments"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_submit"
+                            string="Submit"
+                            type="object"
+                            class="btn-primary"
+                            data-hotkey="t"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

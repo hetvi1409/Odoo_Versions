@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Preview</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="docx.js"></script>
+</head>
+<body>
+<div id="docx"></div>
+
+<script>
+    const myDocxPreviewer = jsPreviewDocx.init(document.getElementById('docx'));
+    const id = getQueryParam('id'); // 替换paramName为你想获取
+    const url = '/web/content/' + id
+    //传递要预览的文件地址即可
+    myDocxPreviewer.preview(url).then(()=>{
+        console.log('预览完成');
+    }).catch(e=>{
+        console.log('预览失败', e);
+    })
+
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+</script>
+</body>
+</html>

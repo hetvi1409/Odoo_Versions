@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="property_enquiry_view_form" model="ir.ui.view">
+        <field name="name">property.enquiry.view.form</field>
+        <field name="model">property.enquiry</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_send_enquiry_acknowledgement" type="object" string="Submit"
+                            invisible="state not in  ['draft']"/>
+                    <button name="action_proceed_availability" type="object"
+                            class="btn btn-primary"
+                            groups="itsys_real_estate.group_units_structure"
+                            string="Proceed Availability/Tenant Mix Criteria"
+                            invisible="state != 'pending'"/>
+                    <button name="action_decline_availability" type="object" string="Decline"
+                            groups="itsys_real_estate.group_units_structure"
+                            invisible="state != 'pending'"/>
+                    <button name="action_reject_facility_suitable" type="object"
+                            string="Suitable for Nature of Business"
+                            groups="property_management_system.group_facilities_management"
+                            class="btn btn-primary"
+                            invisible="state != 'proceed'  or facility != 'yes'"/>
+                    <button name="action_revert_back" type="object"
+                            string="Revert And Send for Manager approval"
+                            groups="property_management_system.group_facilities_management"
+                            class="btn btn-primary"
+                            invisible="state != 'proceed'  or facility != 'yes'"/>
+                    <button name="action_approve_for_site_visit" type="object"
+                            string="Approve for Site Visit"
+                            groups="property_management_system.group_facilities_management"
+                            class="btn btn-primary"
+                            invisible="((state != 'proceed' or facility != 'no') and state != 'approve')"/>
+
+                    <button name="action_approve" type="object"
+                            string="Confirmed Suitability"
+                            groups="property_management_system.group_facilities_management"
+                            class="btn btn-primary"
+                            invisible="state != 'confirm_suitability'"/>
+                    <button name="action_approves" type="object"
+                            string="Proceed"
+                            groups="itsys_real_estate.group_real_estate_admin"
+                            class="btn btn-primary"
+                            invisible="state != 'to_approve'"/>
+                    <button name="action_decline" type="object"
+                            string="Not Proceed"
+                            groups="itsys_real_estate.group_real_estate_admin"
+                            class="btn btn-primary"
+                            invisible="state != 'to_approve'"/>
+                    <button name="action_approve_site_visit" type="object"
+                            string="Approve"
+                            class="btn btn-primary"
+                            invisible="state != 'site_visit'"/>
+                    <button name="action_approve_site_visit" type="object"
+                            string="Reject"
+                            class="btn btn-primary"
+                            invisible="state != 'site_visit'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,proceed,approve,site_visit,approved"/>
+                </header>
+
+                    <div class="alert alert-warning w-100 d-flex align-items-center gap-1" invisible="state != 'proceed'" role="alert">
+                        <span>Please Check: Is input Form Facility is required. Please update that field: </span>
+                        <field name="facility" string="Facility"/>
+                    </div>
+                <sheet>
+
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_booking"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-id-card-o"
+                            invisible="not booking_id">
+                            Booking
+                        </button>
+                        <button name="action_view_rental_contract"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-id-card-o"
+                            invisible="rental_contract_id">
+                            Rental Contact
+                        </button>
+                    </div>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="district_id"/>
+                            <field name="city_id"/>
+                            <field name="date"/>
+                            <field name="property_id"/>
+                            <field name="building_id"
+                                   context="{'form_view_ref': 'itsys_real_estate.building_unit_form'}"/>
+                            <field name="property_state" widget="badge"
+                                   decoration-warning="property_state == 'reserved'"
+                                   decoration-success="property_state == 'free'"
+                                   decoration-danger="property_state in ['on_lease', 'sold']"
+                                   invisible="state == 'draft'"/>
+
+                        </group>
+                        <group>
+                            <field name="property_type"/>
+                            <field name="mooring_length" invisible="property_type != 'mooring'"/>
+                            <field name="mooring_width" invisible="property_type != 'mooring'"/>
+                            <field name="min_area" invisible="property_type == 'mooring'"/>
+                            <field name="max_area" invisible="property_type == 'mooring'"/>
+                            <field name="facility"/>
+                        </group>
+                    </group>
+                    <group string="Enquirer Details">
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="title_id"/>
+                            <field name="contact_surname"/>
+                            <field name="phone"/>
+                        </group>
+                        <group>
+                            <field name="capacity"/>
+                            <field name="contact_name"/>
+                            <field name="email"/>
+                            <field name="callback_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Enquiry Details" name="enquiry_details">
+                            <group string="Current Business Operations">
+                                <group>
+                                    <field name="business_type"/>
+                                    <field name="operations_began_date"/>
+                                </group>
+                                <group>
+                                    <field name="business_status"/>
+                                    <field name="nature_of_business"/>
+                                </group>
+                            </group>
+                            <group string="Marketing Intelligence">
+                        <group>
+                            <field name="heard_about_us"/>
+                            <field name="communication_method"/>
+                        </group>
+                        <group>
+                            <field name="medium_name"/>
+                        </group>
+                    </group>
+                        </page>
+                        <page string="Building Details" name="building_details" invisible="state == 'draft'">
+                            <group>
+                                <group>
+                                    <field name="ptype"/>
+                                    <field name="building_area"/>
+                                    <field name="building_area_net"/>
+                                </group>
+                                <group>
+                                    <field name="status"/>
+                                    <field name="land_area"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Availability/Tenant Mix Criteria" name="tenant_mix" invisible="state in ['draft', 'pending']">
+                            <group>
+                                <field name="comments"/>
+                            </group>
+                        </page>
+                        <page string="Facilities" name="tenant_mix" invisible="state in ['draft', 'pending'] or facility != 'yes'">
+                            <field name="facilities_ids">
+                                <list editable="bottom">
+                                    <field name="type"/>
+                                    <field name="facility"/>
+                                    <field name="feedback"/>
+                                    <field name="suitable"/>
+                                </list>
+                            </field>
+                            <group>
+                                <field name="facility_comments"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <record id="property_enquiry_view_tree" model="ir.ui.view">
+        <field name="name">property.enquiry.view.tree</field>
+        <field name="model">property.enquiry</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="property_id"/>
+                <field name="building_id"/>
+                <field name="district_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_property_enquiry_kanban" model="ir.ui.view">
+        <field name="name">property.enquiry.kanban</field>
+        <field name="model">property.enquiry</field>
+        <field name="arch" type="xml">
+            <kanban class="property_enquiry">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="property_id"/>
+                <field name="building_id"/>
+                <field name="contact_name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="date"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_details">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <b>
+                                        <span t-if="record.name.raw_value"
+                                              class="o_kanban_record_subtitle">
+                                            <field name="name"/>
+                                        </span>
+                                    </b>
+                                </div>
+                            </div>
+                            <div class="text-muted small">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p><strong>Property:</strong> <field name="property_id"/></p>
+                                        <p><strong>Building:</strong> <field name="building_id"/></p>
+                                        <p><strong>Enquirer:</strong> <field name="contact_name"/></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>Email:</strong> <field name="email"/></p>
+                                        <p><strong>Phone:</strong> <field name="phone"/></p>
+                                        <p><strong>Date:</strong> <field name="date"/></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_property_enquiry_search" model="ir.ui.view">
+        <field name="name">property.enquiry.search</field>
+        <field name="model">property.enquiry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="contact_name"/>
+                <field name="contact_surname"/>
+                <field name="property_id"/>
+                <field name="building_id"/>
+                <field name="district_id"/>
+                <field name="city_id"/>
+                <field name="state"/>
+
+                <filter string="Approved" name="approved" domain="[('state','=','approve')]"/>
+                <filter string="Pending" name="pending" domain="[('state','=','pending')]"/>
+                <filter string="Declined" name="declined" domain="[('state','=','declined')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="District" name="group_district" context="{'group_by': 'district_id'}"/>
+                    <filter string="City" name="group_city" context="{'group_by': 'city_id'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Property Type" name="group_property_type" context="{'group_by': 'property_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_property_enquiry" model="ir.actions.act_window">
+        <field name="name">Property Enquiry</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">property.enquiry</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Enquiry
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="audit_strategy_view_form_1" model="ir.ui.view">
+        <field name="name">audit_strategy_view_form</field>
+        <field name="model">audit.strategy</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="internal_audit_management.audit_strategy_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="replace">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar" options="{'clickable': '1'}"
+                               statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>
+                        <button name="action_review" type="object" invisible="state != 'draft' or uid != preparer_id"
+                                string="Prepare" class="oe_highlight"/>
+                        <button name="action_2nd_review" type="object"
+                                invisible="state != 'preparer' or uid != reviewer_id" string="Review"
+                                class="oe_highlight"/>
+                        <button name="action_revert" type="object" invisible="state != 'preparer' or uid != reviewer_id"
+                                string="Revert" class="oe_highlight"/>
+                        <button name="action_approve" type="object"
+                                invisible="state != 'second_reviewer' or uid != approver_id" string="Approve"
+                                class="oe_highlight"/>
+                        <button name="action_reject" type="object"
+                                invisible="state != 'second_reviewer' or uid != approver_id" string="Reject"
+                                class="oe_highlight"/>
+                        <button name="action_update" type="object"
+                                invisible="state != 'reverted' or uid != preparer_id"
+                                string="Updated" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_records" type="object"
+                                    string="Revert Records"
+                                    class="oe_stat_button" icon="fa-book">
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"
+                                       readonly="not can_edit"/>
+                                <field name="requirements"
+                                       readonly="not can_edit"/>
+                                <field name="user_id"
+                                       readonly="not can_edit"/>
+                                <field name="record_work_done"
+                                       readonly="not can_edit"/>
+                                <field name="conclusion"
+                                       readonly="not can_edit"/>
+                            </group>
+                            <group>
+                                <field name="user_ids" invisible="1"/>
+                                <field name="team_id"
+                                       readonly="not can_edit"/>
+                                <field name="can_edit" invisible="1"/>
+                                <field name="preparer_id" widget="many2one_avatar_user"/>
+                                <field name="reviewer_id" widget="many2one_avatar_user"/>
+                                <field name="approver_id" widget="many2one_avatar_user"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="attachment_ids" widget="many2many_binary"
+                                   readonly="not can_edit"/>
+                            <field name="feedback" readonly="not can_edit"
+                                   invisible="state not in ['reverted']"/>
+                        </group>
+                        <notebook>
+                            <page string="Tracking"
+                                  name="audit_strategy_tracking_ids">
+                                <field name="audit_strategy_tracking_ids" readonly="not can_edit"
+                                       options="{'no_create_edit': True, 'no_quick_create': True, 'no_open': True}">
+                                    <list editable="bottom" create="0" edit="0">
+                                        <field name="user_id"/>
+                                        <field name="previous_stage_id"/>
+                                        <field name="new_stage_id"/>
+                                        <field name="comment"/>
+                                        <field name="date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </xpath>
+<!--            <xpath expr="//header" position="replace">-->
+<!--                <header>-->
+<!--                    <field name="state" widget="statusbar" options="{'clickable': '1'}"-->
+<!--                           statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>-->
+<!--                    <button name="action_review" type="object" invisible="state != 'draft' or uid != preparer_id"-->
+<!--                            string="Prepare" class="oe_highlight"/>-->
+<!--                    <button name="action_2nd_review" type="object" invisible="state != 'preparer' or uid != reviewer_id"-->
+<!--                            string="Review" class="oe_highlight"/>-->
+<!--                    <button name="action_revert" type="object" invisible="state != 'preparer' or uid != reviewer_id"-->
+<!--                            string="Revert" class="oe_highlight"/>-->
+<!--                    <button name="action_approve" type="object"-->
+<!--                            invisible="state != 'second_reviewer' or uid != approver_id" string="Approve"-->
+<!--                            class="oe_highlight"/>-->
+<!--                    <button name="action_reject" type="object"-->
+<!--                            invisible="state != 'second_reviewer' or uid != approver_id" string="Reject"-->
+<!--                            class="oe_highlight"/>-->
+<!--                    <button name="action_update" type="object"-->
+<!--                            invisible="state != 'reverted' or uid != preparer_id"-->
+<!--                            string="Updated" class="oe_highlight"/>-->
+<!--                </header>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='user_preparer_ids']" position="replace">-->
+<!--                <field name="preparer_id" widget="many2one_avatar_user"/>-->
+<!--                <field name="reviewer_id" widget="many2one_avatar_user"/>-->
+<!--                <field name="approver_id" widget="many2one_avatar_user"/>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+</odoo>

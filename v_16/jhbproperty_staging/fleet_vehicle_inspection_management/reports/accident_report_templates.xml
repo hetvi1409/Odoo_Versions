@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Accident Report Template -->
+    <template id="report_accident_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="text-center">
+                            <strong>VEHICLE ACCIDENT REPORT</strong>
+                        </h2>
+                    </div>
+                </div>
+
+                <table class="table table-bordered mt-3">
+                    <tbody>
+                        <tr>
+                            <th style="width: 25%;">Report No</th>
+                            <td style="width: 25%;"><span t-field="o.name"/></td>
+                            <th style="width: 25%;">Date of Accident</th>
+                            <td style="width: 25%;"><span t-field="o.accident_date"/></td>
+                        </tr>
+                        <tr>
+                            <th>Vehicle</th>
+                            <td><span t-field="o.vehicle_id.name"/></td>
+                            <th>Driver</th>
+                            <td><span t-field="o.driver_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <th>Odometer Reading</th>
+                            <td><span t-field="o.odometer"/> km</td>
+                            <th>Location</th>
+                            <td><span t-field="o.location"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Insurance Information</strong></h5>
+                    </div>
+                </div>
+
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th style="width: 25%;">Policy Number</th>
+                            <td style="width: 25%;"><span t-field="o.policy_number"/></td>
+                            <th style="width: 25%;">Claim Number</th>
+                            <td style="width: 25%;"><span t-field="o.claim_number"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Accident Description</strong></h5>
+                        <p t-field="o.accident_description"/>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Damage Details</strong></h5>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <strong>Damage to Vehicle:</strong>
+                        <p t-field="o.damage_to_vehicle"/>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <strong>Damage to Other Vehicles:</strong>
+                        <p t-field="o.other_vehicles"/>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Injuries</strong></h5>
+                        <p t-field="o.injuries"/>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Witness Information</strong></h5>
+                        <p t-field="o.witness_details"/>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Police Information</strong></h5>
+                    </div>
+                </div>
+
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th style="width: 25%;">Police Called</th>
+                            <td style="width: 25%;"><span t-field="o.police_called"/></td>
+                            <th style="width: 25%;">Police Report No</th>
+                            <td style="width: 25%;"><span t-field="o.police_report_number"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Action Taken</strong></h5>
+                        <p t-field="o.action_taken"/>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-6 text-center">
+                        <p>_____________________</p>
+                        <p><strong>Driver Signature</strong></p>
+                    </div>
+                    <div class="col-6 text-center">
+                        <p>_____________________</p>
+                        <p><strong>Office Signature</strong></p>
+                    </div>
+                </div>
+
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_accident">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="fleet_vehicle_inspection_management.report_accident_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

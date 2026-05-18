@@ -1,0 +1,9 @@
+flowchart LR
+  A[Copy module to addons path] --> B[Update Apps list]
+  B --> C[Install/Upgrade module]
+  C --> D{documents_fleet installed?}
+  D -->|Yes| E[pre_init_hook marks documents for install]
+  D -->|No| F[No change]
+  E --> G[Restart Odoo]
+  F --> G
+  G --> H[Verify menus, sequences, assets]

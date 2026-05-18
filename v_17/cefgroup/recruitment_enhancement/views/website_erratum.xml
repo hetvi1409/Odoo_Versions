@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_website_erratum_tree" model="ir.ui.view">
+        <field name="name">website.erratum.tree</field>
+        <field name="model">website.erratum</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="title"/>
+                <field name="description"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_website_erratum_form" model="ir.ui.view">
+        <field name="name">website.erratum.form</field>
+        <field name="model">website.erratum</field>
+        <field name="arch" type="xml">
+            <form string="Erratum">
+                <sheet>
+                    <group>
+                        <field name="title"/>
+                        <field name="description"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_website_erratum_search" model="ir.ui.view">
+        <field name="name">website.erratum.search</field>
+        <field name="model">website.erratum</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="title"/>
+                <filter string="Active" name="active"
+                        domain="[('active', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_website_erratum" model="ir.actions.act_window">
+        <field name="name">Erratum</field>
+        <field name="res_model">website.erratum</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_create">
+                Click to create an erratum entry.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_website_erratum" name="Erratum"
+              parent="hr_recruitment.menu_hr_recruitment_configuration"
+              action="recruitment_enhancement.action_website_erratum"
+              sequence="10"/>
+</odoo>

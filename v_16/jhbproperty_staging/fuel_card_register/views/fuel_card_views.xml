@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="fuel_card_form">
+        <field name="name">fuel.card.view.form</field>
+        <field name="model">fuel.card</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Card number/identifier"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="active"/>
+                            <field name="assigned_vehicle_id"/>
+                            <field name="status"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="fuel_card_tree">
+        <field name="name">fuel.card.view.tree</field>
+        <field name="model">fuel.card</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="active"/>
+                <field name="assigned_vehicle_id"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+    <record id="fuel_card_action" model="ir.actions.act_window">
+        <field name="name">Fuel Card</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fuel.card</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="menu_fuel_card"
+              action="fuel_card_action"
+              name="Fuel Card"
+              parent="fleet.fleet_configuration"
+              sequence="10"
+    />
+</odoo>

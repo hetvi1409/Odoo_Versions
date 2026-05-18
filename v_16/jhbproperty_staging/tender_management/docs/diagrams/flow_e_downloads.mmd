@@ -1,0 +1,15 @@
+flowchart LR
+  subgraph U1[User]
+    A([Start]) --> B[Click download link]
+  end
+  subgraph D1[Download Controller]
+    B --> C[Resolve target record]
+    C --> D{Authorized?}
+    D -->|No| E[Render unauthorized error]
+    D -->|Yes| F[Return file or zip stream]
+  end
+  subgraph CL[Client Browser]
+    E --> G([End])
+    F --> H[Download prompt shown]
+    H --> G
+  end

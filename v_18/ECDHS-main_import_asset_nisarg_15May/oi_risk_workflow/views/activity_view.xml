@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="activity_form" model="ir.ui.view">
+        <field name="name">oi_risk_management.activity.view.form.</field>
+        <field name="model">oi_risk_management.activity</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="oi_risk_management.activity_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_risk_prepare']" position="replace">
+                <button name="action_risk_prepare" type="object" string="Prepare"
+                        class="oe_highlight"
+                        invisible="factor_state != 'draft' or uid != preparer_id"/>
+            </xpath>
+            <xpath expr="//button[@name='action_risk_reviewed']" position="replace">
+                <button name="action_risk_reviewed" type="object" string="Reviewed"
+                        class="oe_highlight"
+                        invisible="factor_state != 'prepared' or uid != reviewer_id"/>
+                <button name="action_activity_revert" type="object"
+                        invisible="factor_state not in ['prepared','reviewed']"
+                        string="Revert" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//button[@name='action_risk_approved']" position="replace">
+                <button name="action_risk_approved" type="object" string="Approved"
+                        class="oe_highlight"
+                        invisible="factor_state != 'reviewed' or uid != approver_id"/>
+            </xpath>
+            <xpath expr="//button[@name='action_risk_rejected']" position="replace">
+                <button name="action_risk_rejected" type="object" string="Rejected"
+                        class="oe_highlight"
+                        invisible="factor_state != 'reviewed' or uid != approver_id"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_records" type="object"
+                        class="oe_stat_button" icon="fa-book">Revert Records
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="can_edit" invisible="1"/>
+                <field name="preparer_id" widget="many2one_avatar_user"/>
+                <field name="reviewer_id" widget="many2one_avatar_user"/>
+                <field name="approver_id" widget="many2one_avatar_user"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                <page string="Reverts/ Review Notes">
+                    <group>
+                        <field name="feedback" readonly="not can_edit"/>
+                    </group>
+                </page>
+                </notebook>
+            </xpath>
+            <xpath expr="//field[@name='sequence']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">state not in ['draft'] or not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='description']" position="attributes">
+                <attribute name="readonly">state not in ['draft'] or not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="attributes">
+                <attribute name="readonly">state not in ['draft'] or not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='risk_ids']" position="attributes">
+                <attribute name="readonly">state not in ['draft'] or not can_edit</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>]
+    <record id="action_financial_statement" model="ir.actions.act_window">
+        <field name="name">Council Resolution</field>
+        <field name="res_model">financial.statement</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Methodology
+            </p>
+            <p>
+                Create and manage the Internal Audit Methodology and other information;
+            </p>
+        </field>
+    </record>
+    <record id="financial_statement_view_form" model="ir.ui.view">
+        <field name="name">financial.statement.view.form</field>
+        <field name="model">financial.statement</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                            invisible="state != 'preparer'"
+                            string="Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object" invisible="state != 'first_reviewer' or uid != user_reviewer_2_ids" string="2nd Review" class="oe_highlight"/>
+                    <button name="action_approve" type="object"
+                            invisible="state != 'second_reviewer'"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_mark_discrepancy" type="object"
+                            invisible="state in ['reverted', 'rejected']"
+                            string="Refuse"/>
+                    <button name="action_send_back_review" type="object"
+                            invisible="state in ['rejected','preparer','reverted','approved']"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_send_back_new" type="object"
+                            invisible="state != 'rejected'"
+                            string="Move To New" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"
+                                   readonly="state in ('approved','rejected')"/>
+
+                            <field name="is_current_user_reviewer2" invisible="1"/>
+
+                            <field name="sequence_no"/>
+
+                            <field name="requirements"
+                                   style="height:105px"
+                                   readonly="state in ('approved','rejected')"/>
+
+                            <field name="record_work_done"
+                                   style="height:105px"
+                                   readonly="state in ('approved','rejected')"/>
+
+                            <field name="conclusion"
+                                   style="height:105px"
+                                   readonly="state in ('approved','rejected')"/>
+                        </group>
+
+                        <group>
+                            <field name="user_preparer_ids" widget="many2one_avatar_user"/>
+                            <field name="user_reviewer_1_ids" widget="many2one_avatar_user"/>
+                            <field name="user_reviewer_2_ids" widget="many2one_avatar_user"/>
+                            <field name="user_approver_ids" widget="many2one_avatar_user"/>
+                            <field name="user_ids" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+
+                        <page string="Documents">
+                            <group>
+                                <field name="document_ids" widget="many2many_binary"/>
+                            </group>
+                        </page>
+
+                        <page string="Tracking" name="financial_statement_tracking">
+                            <field name="financial_statement_tracking_ids"
+                                   options="{'no_create_edit': True, 'no_quick_create': True, 'no_open': True}">
+                                <list editable="bottom" create="0" edit="0">
+                                    <field name="user_id"/>
+                                    <field name="previous_stage_id"/>
+                                    <field name="new_stage_id"/>
+                                    <field name="comment"/>
+                                    <field name="date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="financial_statement_view_list" model="ir.ui.view">
+        <field name="name">financial.statement.view.list</field>
+        <field name="model">financial.statement</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="sequence_no"/>
+                <field name="requirements"/>
+                <field name="team_id"/>
+                <field name="state"
+                       widget="badge"
+                       decoration-info="state == 'preparer'"
+                       decoration-warning="state == 'rejected'"
+                       decoration-success="state == 'approved'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="audit_financial_statement_menu"
+              name="Council Resolutions"
+              parent="internal_audit_management.internal_audit_universe"
+              action="action_financial_statement"
+              sequence="2"/>
+
+</odoo>

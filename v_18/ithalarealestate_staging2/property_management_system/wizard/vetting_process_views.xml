@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_lead_networth_wizard_form" model="ir.ui.view">
+        <field name="name">vetting.process.wizard.form</field>
+        <field name="model">vetting.process.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Net Worth Capture">
+                <group string="Assets">
+                    <group string="Cash &amp; Cash Equivalents">
+                        <field name="bank_accounts"/>
+                        <field name="savings_accounts"/>
+                        <field name="cash_other"/>
+                    </group>
+                    <group string="Investments">
+                        <field name="stock_investment"/>
+                        <field name="unit_trusts"/>
+                        <field name="brokerage_other1"/>
+                        <field name="brokerage_other2"/>
+                    </group>
+                    <group string="Property">
+                        <field name="primary_residence"/>
+                        <field name="secondary_residence"/>
+                        <field name="rental_property"/>
+                        <field name="investment_property"/>
+                        <field name="vehicle_1"/>
+                        <field name="vehicle_2"/>
+                        <field name="property_other"/>
+                    </group>
+                    <group string="Other Assets">
+                        <field name="life_cash_value"/>
+                        <field name="furnishings"/>
+                        <field name="other_asset1"/>
+                        <field name="other_asset2"/>
+                    </group>
+                </group>
+
+                <group string="Liabilities">
+                    <group string="Short Term">
+                        <field name="credit_card1"/>
+                        <field name="credit_card2"/>
+                        <field name="credit_card3"/>
+                        <field name="short_term_other"/>
+                    </group>
+                    <group string="Loans &amp; Mortgages">
+                        <field name="loan_primary"/>
+                        <field name="loan_secondary"/>
+                        <field name="loan_rental"/>
+                        <field name="loan_investment"/>
+                        <field name="loan_vehicle1"/>
+                        <field name="loan_vehicle2"/>
+                        <field name="student_loans"/>
+                        <field name="business_loans"/>
+                        <field name="loan_other"/>
+                    </group>
+                    <group string="Other Liabilities">
+                        <field name="other_liability1"/>
+                        <field name="other_liability2"/>
+                        <field name="other_liability3"/>
+                    </group>
+                </group>
+
+                <separator string="Totals"/>
+                <group>
+                    <field name="total_assets" readonly="1"/>
+                    <field name="total_liabilities" readonly="1"/>
+                    <field name="net_worth" readonly="1"/>
+                </group>
+
+                <footer>
+                    <button string="Apply to Lead" type="object" name="action_apply_to_lead" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

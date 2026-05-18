@@ -1,0 +1,94 @@
+<odoo>
+    <record id="mail_activity_app_review" model="mail.activity.type">
+        <field name="name">APP Review Request</field>
+        <field name="icon">fa-check-circle</field>
+        <field name="summary">APP review request is awaiting your sign.</field>
+        <field name="sequence">4</field>
+        <field name="active">False</field>
+        <field name="res_model">annual.procurement.plan</field>
+    </record>
+
+    <record id="mail_template_app_submit" model="mail.template">
+            <field name="name">APP Submit Notification</field>
+            <field name="model_id" ref="sa_government_tender.model_annual_procurement_plan"/>
+            <field name="subject">{{ object.name }}</field>
+            <field name="email_from">{{ object.initiator_id.email or 'noreply@example.com' }}</field>
+            <field name="partner_to">{{ ctx.get('partner_ids') }}</field>
+            <field name="email_cc">{{ object.create_uid.email_formatted }}</field>
+            <!--<field name="description">Sent manually to selected partners when memo is assigned/shared</field>-->
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello <t t-out="ctx.get('approve_user', 'Approve User')">Approver</t>,
+                        <br/>
+                        <br/>
+                        <p>You have received a Annual Procurement Plan titled
+                            <strong>
+                                <t t-out="object.name or ''">pp-Title</t>
+                            </strong>
+                            <t t-out="ctx.get('request', 'approve')"/>
+                            request
+                            <br/>
+                            You can find the APP link below.
+                            <br/>
+                            <br/>
+                            <a t-att-href="ctx.get('url')"
+                               style="background-color: #E8B90E; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                Open APP
+                            </a>
+                        </p>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="object.initiator_id.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+    <record id="mail_template_app_rejection" model="mail.template">
+            <field name="name">APP Rejection Notification</field>
+            <field name="model_id" ref="sa_government_tender.model_annual_procurement_plan"/>
+            <field name="subject">APP {{ object.name or 'N/A' }} has been Rejected</field>
+            <field name="email_from">{{ user.email or 'noreply@example.com' }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello <t t-out="ctx.get('initiator_name', 'User')">Initiator</t>,
+                        <br/>
+                        <br/>
+                        <p>The Annual Procurement Plan
+                            <strong>
+                                <t t-out="ctx.get('app_name', 'N/A')">APP Name</t>
+                            </strong>
+                            has been rejected because of reason:
+                            <br/>
+                            <br/>
+                            <div style="padding: 10px; background-color: #f8f9fa; border-left: 4px solid #dc3545; margin: 10px 0;">
+                                <strong>Rejection Reason:</strong>
+                                <br/>
+                                <t t-out="ctx.get('rejection_reason', 'No reason provided')"/>
+                            </div>
+                            <br/>
+                            You can find the APP link below.
+                            <br/>
+                            <br/>
+                            <a t-att-href="ctx.get('app_url', '#')"
+                               style="background-color: #E8B90E; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                Open APP
+                            </a>
+                        </p>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="user.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+</odoo>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_job_card">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <center>
+                            <h4>JOB CARD REPORT</h4>
+                        </center>
+                        <br/>
+                        <br/>
+                        <table class="table table-bordered">
+                            <tbody class="order_body">
+                                <tr>
+                                    <td>
+                                        <strong>JOB CARD NUMBER</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>TECHNICIAN</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.technician.name"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                        <center>
+                            <h6>JOB DESCRIPTION:
+                                <span t-field="o.job_description"/>
+                            </h6>
+                        </center>
+                        <br/>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="text-center">
+                                    <th class="text-right">Material Used
+                                        (Description)
+                                    </th>
+                                    <th class="text-right">Quantity</th>
+                                    <th class="text-right">Size</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.required_inventory_ids"
+                                    t-as="product">
+                                    <td>
+                                        <span t-esc="product.product_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="product.product_uom_qty"/>
+                                    </td>
+                                    <td>
+                                        <!--                                        <span t-esc="product.depreciation_value"/>-->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

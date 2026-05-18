@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_matters_form">
+        <field name="name">project.project.case.view.form</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="law_firm_bits.view_matters_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="state" widget="statusbar"/>
+                <button name="action_assign" string="Assigned" type="object"
+                                attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                <button name="action_missing_documents" string="Missing Documents" type="object"
+                                attrs="{'invisible': [('state', '!=', 'assigned')]}"/>
+                <button name="action_create_default_tasks" string="Create Task" type="object"
+                                attrs="{'invisible': [('state', '!=', 'prepare_task')]}"/>
+                <button name="action_create_default_tasks" string="Create Task" type="object"
+                                attrs="{'invisible': [('state', '!=', 'task')]}"/>
+            </xpath>
+            <xpath expr="//field[@name='task_template_id']" position="after">
+                     <field name="court_id"/>
+                 <field name="matter_name"/>
+                 <field name="status"/>
+                <field name="ref"/>
+                <field name="internal_reference_no"/>
+                <field name="total_expense"/>
+            </xpath>
+             <xpath expr="//sheet" position="inside">
+                  <style>
+                    .o_form_view:not(.o_field_highlight)
+                    .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                    .o_input:not(:hover):not(:focus) {
+                              --o-input-border-color: black !important;
+                              }
+                  </style>
+             </xpath>
+
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="legal_manager_id"/>
+                <field name="date_created"/>
+                <field name="date_estimated"/>
+            </xpath>
+            <xpath expr="//page[@name='documents']" position="after">
+                <page string="Missing Documents">
+<!--                    <group>-->
+<!--                        <field name="missing_document"/>-->
+<!--                        <field name="conveyancing_comment"/>-->
+<!--                    </group>-->
+                    <group>
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </group>
+                            <group>
+                                <button name="action_view_documents"
+                                        type="object" icon="fa-file-text-o"
+                                        string="Request Documents"/>
+                            </group>
+                    <group>
+                        <field name="missing_document"/>
+                        <field name="conveyancing_comment"/>
+                    </group>
+                </page>
+                <page string="GEOLIS">
+                    <iframe id="custom_src" name="custom_src"
+                            src="https://ags.joburg.org.za/cgis/index.aspx"
+                            width="100%" height="500"/>
+                </page>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_view_property" type="object"
+                        class="oe_stat_button"
+                        attrs="{'invisible': [('property_id', '=', False)]}">
+                    <i class="fa fa-edit o_button_icon"/>
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Property</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="before">
+                <group string="Property Details">
+                    <group>
+                        <field name="property_id"/>
+                        <field name="jmc_number"/>
+<!--                        <field name="jmc_numbers" widget="Many2one" context="{'jmc_field_value':True}" />-->
+                        <field name="owner_id"/>
+                    </group>
+                    <group>
+                        <field name="address"/>
+                        <field name="stand_number"/>
+                        <field name="price"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

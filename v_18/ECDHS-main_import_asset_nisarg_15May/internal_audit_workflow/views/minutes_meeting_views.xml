@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="minute_meeting_view_form" model="ir.ui.view">
+        <field name="name">minute_meeting_view_form</field>
+        <field name="model">minutes.meeting</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="internal_audit_management.minute_meeting_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="replace">
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}" statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>
+                    <button name="action_2nd_review" type="object" string="Prepare"
+                            class="oe_highlight"
+                            invisible="state != 'preparer' or uid != preparer_id"/>
+                    <button name="action_approve" type="object" string="Reviewed"
+                            class="oe_highlight"
+                            invisible="state != 'second_reviewer' or uid != reviewer_id"/>
+                    <button name="action_mark_discrepancy" type="object"
+                            invisible="state == 'rejected'"
+                            string="Refuse"/>
+                    <button name="action_send_back_review" type="object"
+                            invisible="state != 'second_reviewer'"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_send_back_new" type="object"
+                            invisible="state != 'rejected'"
+                            string="Move To New" class="oe_highlight"/>
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='user_preparer_ids']" position="replace">
+                <field name="can_edit" invisible="1"/>
+                <field name="preparer_id" widget="many2one_avatar_user"/>
+                <field name="reviewer_id" widget="many2one_avatar_user"/>
+                <field name="approver_id" widget="many2one_avatar_user"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='requirements']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='record_work_done']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='conclusion']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='document_ids']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='feedback']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

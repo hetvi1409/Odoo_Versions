@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_death_register_form" model="ir.ui.view">
+        <field name="name">death.register.form</field>
+        <field name="model">death.register</field>
+        <field name="arch" type="xml">
+            <form string="Death_Register">
+                <sheet>
+                    <field name="image" widget="image" class="oe_avatar"
+                           options="{&quot;preview_image&quot;: &quot;avatar_128&quot;}"/>
+                    <group>
+                        <field name="surname"/>
+                        <field name="date_of_death"/>
+                        <field name="date_of_birth"/>
+                        <field name="age"/>
+                        <field name="place_of_death"/>
+                    </group>
+                    <group string="Cemetery Details">
+                        <field name="municipality_id"/>
+                        <field name="cemetery_id"/>
+                        <field name="section_id" domain="[('cemetery_id', '=', cemetery_id)]"/>
+                        <field name="grave_id" />
+                    </group>
+                    <notebook>
+                        <page string="Details of the Deceased">
+                            <group string="A. PARTICULARS OF THE DECEASED">
+                                <group>
+<!--                                    <field name="is_death" widget="radio"/>-->
+<!--                                    <field name="identification"-->
+<!--                                           widget="radio"/>-->
+<!--                                    <field name="unidentifiable_reason"-->
+<!--                                           invisible="identification != 'unidentifiable'"/>-->
+                                    <field name="date_of_death"/>
+                                    <field name="place_of_death"/>
+                                    <field name="province_of_death_id"/>
+                                    <field name="place_of_registration"/>
+                                    <field name="hours_alive"/>
+                                    <field name="home_phone" widget="phone"/>
+                                    <field name="is_foreigner"/>
+                                    <field name="identity_no"
+                                           invisible="is_foreigner"/>
+                                    <field name="id_number_passport"
+                                           invisible="not is_foreigner"/>
+                                    <field name="date_of_birth"
+                                           invisible="not is_foreigner"/>
+                                </group>
+                                <group>
+                                    <field name="gender" widget="radio"/>
+                                    <field name="surname"/>
+                                    <field name="previous_surname"/>
+                                    <field name="forenames"/>
+                                    <field name="citizenship_id"/>
+                                    <field name="is_abroad"/>
+                                    <field name="place_of_birth"
+                                           invisible="not is_abroad"/>
+                                    <field name="province_of_birth"
+                                           invisible="not is_abroad"/>
+                                    <field name="marital_status"
+                                           widget="radio"/>
+<!--                                    <field name="education_level"/>-->
+<!--                                    <field name="occupation"/>-->
+<!--                                    <field name="business_industry"/>-->
+<!--                                    <field name="regular_smoker"/>-->
+                                </group>
+                                <span class="o_form_label o_td_label"
+                                      name="address_name">
+                                    <b>Residential Address:
+                                    </b>
+                                </span>
+                                <div class="o_address_format">
+                                    <field name="residential_street"
+                                           placeholder="Street..."
+                                           class="o_address_street"/>
+                                    <field name="residential_town"
+                                           placeholder="Town..."
+                                           class="o_address_street"/>
+                                    <field name="residential_province"
+                                           placeholder="Province..."
+                                           class="o_address_city"/>
+                                    <field name="residential_postal_code"
+                                           placeholder="Postal code..."
+                                           class="o_address_zip"/>
+                                </div>
+                            </group>
+                        </page>
+<!--                        <page string="Medical Practitioner/Professional Nurse Certification">-->
+<!--                            <group>-->
+<!--                                &lt;!&ndash; Section B: CERTIFICATE BY ATTENDING MEDICAL PRACTITIONER / PROFESSIONAL NURSE &ndash;&gt;-->
+<!--                                <group string="Section B: CERTIFICATE BY ATTENDING MEDICAL PRACTITIONER / PROFESSIONAL NURSE">-->
+<!--                                    <field name="certificate_by_attend_mp"/>-->
+<!--                                    <field name="not_certified_by_mp"/>-->
+<!--                                    <field name="hpcsa_registration_no"/>-->
+<!--                                    <field name="attending_mp_surname"/>-->
+<!--                                    <field name="attending_mp_forenames"/>-->
+<!--                                    <field name="health_facility_practice_name"/>-->
+<!--                                    <field name="facility_practice_no"/>-->
+<!--                                    <span class="o_form_label o_td_label"-->
+<!--                                          name="address_name">-->
+<!--                                        <b>Business Address-->
+<!--                                        </b>-->
+<!--                                    </span>-->
+<!--                                    <div class="o_address_format">-->
+<!--                                        <field name="business_street"-->
+<!--                                               placeholder="Street..."-->
+<!--                                               class="o_address_street"/>-->
+<!--                                        <field name="business_town"-->
+<!--                                               placeholder="Town..."-->
+<!--                                               class="o_address_street"/>-->
+<!--                                        <field name="business_province"-->
+<!--                                               placeholder="Province"-->
+<!--                                               class="o_address_city"/>-->
+<!--                                        <field name="business_postal_code"-->
+<!--                                               placeholder="Postal Code"-->
+<!--                                               class="o_address_zip"/>-->
+<!--                                    </div>-->
+<!--                                    <field name="office_telephone_no"-->
+<!--                                           widget="phone"/>-->
+<!--                                    <field name="declaration_date_signed"/>-->
+<!--                                    <field name="signature"/>-->
+<!--                                    <field name="office_stamp"/>-->
+<!--                                </group>-->
+<!--                                &lt;!&ndash; Section C: CERTIFICATE BY MEDICAL PRACTITIONER/ FORENSIC PATHOLOGIST &ndash;&gt;-->
+<!--                                <group string="Section C: CERTIFICATE BY MEDICAL PRACTITIONER/ FORENSIC PATHOLOGIST">-->
+<!--                                    <field name="certificate_by_medical_practitioner"/>-->
+<!--                                    <field name="date_of_postmortem"/>-->
+<!--                                    <field name="medico_legal_mortuary_name"/>-->
+<!--                                    <field name="mortuary_no"/>-->
+<!--                                    <field name="mortuary_reference_no"/>-->
+<!--                                    <field name="saps_case_no"/>-->
+<!--                                    <field name="medical_practitioner_hpcsa_no"/>-->
+<!--                                    <field name="name_of_police_station"/>-->
+<!--                                    <field name="medical_practitioner_surname"/>-->
+<!--                                    <field name="medical_practitioner_forenames"/>-->
+<!--                                    <span class="o_form_label o_td_label"-->
+<!--                                          name="address_name_practitioner">-->
+<!--                                        <b>Business Address-->
+<!--                                        </b>-->
+<!--                                    </span>-->
+<!--                                    <div class="o_address_format">-->
+<!--                                        <field name="business_street_practitioner"-->
+<!--                                               placeholder="Street..."-->
+<!--                                               class="o_address_street"/>-->
+<!--                                        <field name="business_town_practitioner"-->
+<!--                                               placeholder="Town..."-->
+<!--                                               class="o_address_street"/>-->
+<!--                                        <field name="business_province_practitioner"-->
+<!--                                               placeholder="Province"-->
+<!--                                               class="o_address_city"/>-->
+<!--                                        <field name="business_postal_code_practitioner"-->
+<!--                                               placeholder="Postal Code"-->
+<!--                                               class="o_address_zip"/>-->
+<!--                                    </div>-->
+<!--                                    <field name="medical_practitioner_office_telephone_no"/>-->
+<!--                                    <field name="signature_date_signed"/>-->
+<!--                                    <field name="medical_practitioner_signature"/>-->
+<!--                                    <field name="office_stamp_of_mortuary"/>-->
+<!--                                </group>-->
+<!--                            </group>-->
+<!--                        </page>-->
+                        <page string="Cause of Death">
+                            <group string="CAUSE OF DEATH">
+                                <field name="cause_death_id"/>
+                            </group>
+                        </page>
+                        <page string="Informant Details">
+                            <group string="PARTICULARS OF INFORMANT">
+                                <group>
+                                <!-- Fields for Particulars of Informant -->
+                                <field name="is_informant_foreigner"/>
+                                <field name="informant_identity_no"
+                                       invisible="is_informant_foreigner"/>
+                                <field name="passport_informant_no"
+                                       invisible="not is_informant_foreigner"/>
+                                <field name="informant_date_of_birth"/>
+                                <field name="informant_citizenship_id"/>
+                                <field name="informant_surname"/>
+                                <field name="informant_forenames"/>
+                                <span class="o_form_label o_td_label"
+                                      name="address_name_practitioner">
+                                    <b>Residential Address
+                                    </b>
+                                </span>
+                                <div class="o_address_format">
+                                    <field name="informant_residential_street"
+                                           placeholder="Street..."
+                                           class="o_address_street"/>
+                                    <field name="informant_residential_town"
+                                           placeholder="Town..."
+                                           class="o_address_street"/>
+                                    <field name="informant_residential_province"
+                                           placeholder="Province"
+                                           class="o_address_city"/>
+                                    <field name="informant_residential_postal_code"
+                                           placeholder="Postal Code"
+                                           class="o_address_zip"/>
+                                </div>
+                                    </group>
+                                <group>
+                                <field name="informant_home_phone"/>
+                                <field name="informant_cellphone_no"/>
+                                <field name="informant_relationship"/>
+                                <field name="informant_relationship_other"
+                                       invisible="informant_relationship != 'other'"/>
+                                <field name="informant_signature" widget="signature"/>
+                                <field name="informant_left_thumbprint" widget="image"/>
+                                <field name="informant_date_signed"/>
+                                <field name="informant_place_signed"/>
+                                    </group>
+                            </group>
+                        </page>
+<!--                        <page string="Funeral Undertaker Details">-->
+<!--                            <group string="Particulars of Funeral Undertaker">-->
+<!--                                &lt;!&ndash; Fields for Particulars of Funeral Undertaker &ndash;&gt;-->
+<!--                                <group>-->
+<!--                                    <field name="personal_no"/>-->
+<!--                                    <field name="funeral_parlour_id"/>-->
+<!--                                    <field name="dha_designation_no"/>-->
+<!--                                    <field name="company_reg_no"/>-->
+<!--                                    <field name="sars_reg_no"/>-->
+<!--                                    <field name="is_undertaker_foreigner"/>-->
+<!--                                    <field name="undertaker_identity_no"-->
+<!--                                           invisible="is_undertaker_foreigner"/>-->
+<!--                                    <field name="passport_undertaker"-->
+<!--                                           invisible="not is_undertaker_foreigner"/>-->
+<!--                                    <field name="undertaker_surname"/>-->
+<!--                                    <field name="undertaker_forenames"/>-->
+<!--                                    <span class="o_form_label o_td_label"-->
+<!--                                          name="address_name_practitioner">-->
+<!--                                        <b>Business Address-->
+<!--                                        </b>-->
+<!--                                    </span>-->
+<!--                                    <div class="o_address_format">-->
+<!--                                        <field name="undertaker_street"-->
+<!--                                               placeholder="Street..."-->
+<!--                                               class="o_address_street"/>-->
+<!--                                        <field name="undertaker_town"-->
+<!--                                               placeholder="Town..."-->
+<!--                                               class="o_address_street"/>-->
+<!--                                        <field name="undertaker_province"-->
+<!--                                               placeholder="Province"-->
+<!--                                               class="o_address_city"/>-->
+<!--                                        <field name="undertaker_postal_code"-->
+<!--                                               placeholder="Postal Code"-->
+<!--                                               class="o_address_zip"/>-->
+<!--                                    </div>-->
+<!--                                    <field name="office_phone_no"/>-->
+<!--                                    <field name="undertaker_cellphone_no"/>-->
+<!--                                    <field name="date_of_collection_of_corpse"/>-->
+<!--                                </group>-->
+<!--                                <group>-->
+<!--                                    <field name="interment_type"/>-->
+<!--                                    <field name="date_of_cremation"-->
+<!--                                           invisible="interment_type != 'cremation'"/>-->
+<!--                                    <field name="place_of_burial"-->
+<!--                                           invisible="interment_type != 'burial'"/>-->
+<!--                                    <field name="date_of_burial"-->
+<!--                                           invisible="interment_type != 'burial'"/>-->
+<!--                                    <field name="is_grave_available"/>-->
+<!--                                    <field name="grave_no"-->
+<!--                                           invisible="not is_grave_available"/>-->
+<!--                                    <field name="collector_name"/>-->
+<!--                                    <field name="is_collector_foreigner"/>-->
+<!--                                    <field name="collector_identity_no"-->
+<!--                                           invisible="is_collector_foreigner"/>-->
+<!--                                    <field name="collector_passport_number"-->
+<!--                                           invisible="not is_collector_foreigner"/>-->
+<!--                                    <field name="collector_surname"/>-->
+<!--                                    <field name="collector_forenames"/>-->
+<!--                                    <field name="undertaker_place_signed"/>-->
+<!--                                    <field name="undertaker_date_signed"/>-->
+<!--                                    <field name="undertaker_signature"/>-->
+<!--                                    <field name="undertaker_left_thumbprint"/>-->
+<!--                                    <field name="office_stamp"/>-->
+<!--                                </group>-->
+<!--                            </group>-->
+<!--                        </page>-->
+                    </notebook>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+    <record id="view_death_register_tree" model="ir.ui.view">
+        <field name="name">death.register.list</field>
+        <field name="model">death.register</field>
+        <field name="arch" type="xml">
+            <list string="Death Registers">
+                <field name="surname"/>
+                <field name="forenames"/>
+                <field name="date_of_death"/>
+                <field name="date_of_birth"/>
+                <field name="place_of_death"/>
+                <field name="interment_type"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_death_register" model="ir.actions.act_window">
+        <field name="name">Death Register</field>
+        <field name="res_model">death.register</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="death_register_action_menu" name="Death Register"
+              parent="menu_cemetery_management_system" sequence="4"
+              action="action_death_register"/>
+</odoo>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_bec_evaluation_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>BID EVALUATION COMMITTEE (BEC) REPORT</h2>
+                            <h3 t-field="o.name"/>
+                            <h4 t-field="o.title"/>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <p><strong>Tender Number:</strong> <span t-field="o.name"/></p>
+                                <p><strong>Department:</strong> <span t-field="o.department_id.name"/></p>
+                                <p><strong>BEC Committee:</strong> <span t-field="o.bec_committee_id.name"/></p>
+                            </div>
+                            <div class="col-6">
+                                <p><strong>Estimated Value:</strong> <span t-field="o.estimated_value"/></p>
+                                <p><strong>Closing Date:</strong> <span t-field="o.closing_date"/></p>
+                                <p><strong>Preference System:</strong> <span t-field="o.preference_point_system_config_id.name"/></p>
+                            </div>
+                        </div>
+
+                        <h4 class="mt-4">1. Introduction</h4>
+                        <p>This report presents the findings of the Bid Evaluation Committee (BEC) for the above-mentioned sagovtender.</p>
+
+                        <h4 class="mt-3">2. Bids Received</h4>
+                        <p><strong>Total Bids Received:</strong> <t t-esc="o.bid_count"/></p>
+                        <p><strong>Compliant Bids:</strong> <t t-esc="o.compliant_bid_count"/></p>
+
+                        <h4 class="mt-3">3. Evaluation Summary</h4>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Bidder</th>
+                                    <th>Bid Amount</th>
+                                    <th t-if="o.has_functionality">Functionality</th>
+                                    <th>Price Score</th>
+                                    <th>B-BBEE Score</th>
+                                    <th>Total Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="evaluations" t-value="o.evaluation_ids.filtered(lambda e: e.state == 'completed').sorted(key=lambda e: e.total_score, reverse=True)"/>
+                                <tr t-foreach="evaluations" t-as="eval">
+                                    <td><t t-esc="eval_index + 1"/></td>
+                                    <td><span t-field="eval.partner_id.name"/></td>
+                                    <td><span t-field="eval.bid_amount"/></td>
+                                    <td t-if="o.has_functionality">
+                                        <span t-field="eval.functionality_score"/>%
+                                        <t t-if="eval.functionality_passed"> ✓</t>
+                                        <t t-else=""> ✗</t>
+                                    </td>
+                                    <td><span t-field="eval.price_score"/></td>
+                                    <td><span t-field="eval.bbbee_score"/></td>
+                                    <td><strong><span t-field="eval.total_score"/></strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 class="mt-3">4. BEC Recommendation</h4>
+                        <t t-set="top_eval" t-value="evaluations[0] if evaluations else None"/>
+                        <t t-if="top_eval">
+                            <p>The BEC recommends that the tender be awarded to:</p>
+                            <div class="alert alert-success">
+                                <p><strong>Recommended Bidder:</strong> <span t-field="top_eval.partner_id.name"/></p>
+                                <p><strong>Bid Amount:</strong> <span t-field="top_eval.bid_amount"/></p>
+                                <p><strong>Total Score:</strong> <span t-field="top_eval.total_score"/></p>
+                            </div>
+                        </t>
+
+                        <h4 class="mt-3">5. Committee Members</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr t-foreach="o.bec_committee_id.member_ids" t-as="member">
+                                    <td><span t-field="member.user_id.name"/></td>
+                                    <td><span t-field="member.role"/></td>
+                                    <td t-if="member.is_chairperson">(Chairperson)</td>
+                                    <td>Signature: _____________________</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

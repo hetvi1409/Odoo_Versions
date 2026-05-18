@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_minutes_meeting" model="ir.actions.act_window">
+        <field name="name">Minutes of Meeting</field>
+        <field name="res_model">minutes.meeting</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Minutes of Meeting
+            </p>
+            <p>
+                Create and manage the Minutes of Meeting.
+            </p>
+        </field>
+    </record>
+    <record id="minute_meeting_view_form" model="ir.ui.view">
+        <field name="name">Minutes of Meeting</field>
+        <field name="model">minutes.meeting</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                            invisible="state != 'preparer'"
+                            string="Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object" invisible="state != 'first_reviewer'" string="2nd Review" class="oe_highlight"/>
+                    <button name="action_approve" type="object"
+                            invisible="state != 'second_reviewer'"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_mark_discrepancy" type="object"
+                            invisible="state == 'rejected'"
+                            string="Refuse"/>
+                    <button name="action_send_back_review" type="object"
+                            invisible="state in ['rejected','preparer','reverted','approved']"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_send_back_new" type="object"
+                            invisible="state != 'rejected'"
+                            string="Move To New" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"
+                                   readonly="state in ['approved', 'rejected']"/>
+                            <field name="sequence_no"/>
+                            <field name="requirements"
+                                   readonly="state in ['approved', 'rejected']" style="height: 105px;"/>
+                            <field name="record_work_done"
+                                   readonly="state in ['approved', 'rejected']" style="height: 105px;"/>
+                            <field name="conclusion"
+                                   readonly="state in ['approved', 'rejected']" style="height: 105px;"/>
+                        </group>
+                        <group>
+                            <field name="user_preparer_ids" widget="many2one_avatar_user"/>
+<!--                            <field name="user_reviewer_1_ids" widget="many2one_avatar_user"/>-->
+<!--                            <field name="user_reviewer_2_ids" widget="many2one_avatar_user"/>-->
+<!--                            <field name="user_approver_ids" widget="many2one_avatar_user"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Documents">
+                            <group>
+                                <field name="document_ids"
+                                       widget="many2many_binary">
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="minutes_meeting_view_tree" model="ir.ui.view">
+        <field name="name">Minutes Meeting</field>
+        <field name="model">minutes.meeting</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="sequence_no"/>
+                <field name="requirements"/>
+            </list>
+        </field>
+    </record>
+<!--    <menuitem id="minutes_meeting_menu"-->
+<!--              name="Minutes Of Meeting"-->
+<!--              parent="internal_audit_management.high_charter_menu"-->
+<!--              action="action_minutes_meeting"-->
+<!--              sequence="4"/>-->
+</odoo>

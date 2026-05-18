@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Contract Review –  Form View
+    ================================================================= -->
+    <record id="ecdhs_contract_monitoring_view_form" model="ir.ui.view">
+        <field name="name">ecdhs.contract.monitoring.form</field>
+        <field name="model">ecdhs.contract.monitoring</field>
+        <field name="arch" type="xml">
+            <form string="Contract Contract Review">
+                <header>
+                    <button name="action_submit" type="object"
+                            string="Submit to Deputy Director"
+                            invisible="state != 'draft'" class="btn-primary"/>
+                    <button name="action_acknowledge" type="object"
+                            string="Acknowledge"
+                            invisible="state != 'submitted'" class="btn-primary"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,acknowledged"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                            --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                            border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                            border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_title">
+                        <label for="display_name"/>
+                        <h1><field name="display_name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Report Header">
+                            <field name="contract_id" readonly="state != 'draft'" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="monitoring_date"/>
+                            <field name="monitoring_type"/>
+                            <field name="conducted_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="meeting_minutes_ref"/>
+                        </group>
+                        <group string="Non-Compliance &amp; Penalties">
+                            <field name="non_compliance_found"   widget="boolean_toggle"/>
+                            <field name="penalty_applicable"
+                                   widget="boolean_toggle"
+                                   invisible="not non_compliance_found"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="penalty_amount" widget="monetary"
+                                   invisible="not penalty_applicable"/>
+                            <field name="penalty_letter_sent" widget="boolean_toggle"
+                                   invisible="not non_compliance_found"/>
+                            <field name="termination_recommended" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+
+                    <!-- SOP Step 23 checklist questions -->
+                    <group>
+                        <group string="SLA Compliance Checklist  –  SOP Step 18 &amp; 23">
+                            <field name="sla_compliant"               widget="boolean_toggle"/>
+                            <field name="noncompliance_steps"
+                                invisible="sla_compliant"
+                                placeholder="Describe corrective steps taken…"/>
+                            <field name="pm_monitoring_regular"       widget="boolean_toggle"/>
+                            <field name="monitoring_reports_available" widget="boolean_toggle"/>
+                            <separator/>
+                            <field name="service_needed_after_expiry" widget="boolean_toggle"/>
+                            <field name="procurement_start_date"
+                                invisible="not service_needed_after_expiry"/>
+                            <field name="provider_performance_comments"
+                                placeholder="Overall performance of the service provider…"/>
+                        </group>
+                        <group string="Summary of Findings">
+                            <field name="findings" nolabel="1" colspan="2"
+                                placeholder="Summarise all findings from this monitoring review…"/>
+
+                            <group string="Additional Notes">
+                                <field name="notes" nolabel="1" colspan="2"
+                                placeholder="Additional Notes…"/>
+                            </group>
+
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Letters/Reports" name="letters_reports_tab">
+                            <field name="letter_report_document_upload_ids"
+                                   mode="list,form"
+                                   context="{'default_document_type': 'monitoring_letter_report', 'default_monitoring_id': id}">
+                                <list editable="bottom" decoration-info="sequence">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="document_type" column_invisible="1"/>
+                                    <field name="attachment_id" column_invisible="1"/>
+                                    <field name="file_name" column_invisible="1"/>
+                                    <field name="datas" filename="file_name" string="File"/>
+                                    <field name="name" string="Document Name" readonly="1"/>
+                                    <field name="annexure_sequence_name" string="Letter / Report" readonly="1"/>
+                                    <button name="action_preview_document" type="object" string="Preview"
+                                            class="btn-primary" invisible="attachment_id == False"/>
+                                </list>
+                                <form>
+                                    <field name="document_type" invisible="1"/>
+                                    <field name="sequence"/>
+                                    <field name="attachment_id" invisible="1"/>
+                                    <field name="file_name" invisible="1"/>
+                                    <field name="annexure_sequence_name" readonly="1"/>
+                                    <field name="datas"/>
+                                    <field name="name" readonly="1"/>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Contract Review –  List View
+    ================================================================= -->
+    <record id="ecdhs_contract_monitoring_view_list" model="ir.ui.view">
+        <field name="name">ecdhs.contract.monitoring.list</field>
+        <field name="model">ecdhs.contract.monitoring</field>
+        <field name="arch" type="xml">
+            <list string="Contract Reviews"
+                  decoration-danger="non_compliance_found"
+                  decoration-muted="state == 'acknowledged'">
+                <field name="display_name" string="Reference"/>
+                <field name="contract_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="monitoring_date"/>
+                <field name="monitoring_type"/>
+                <field name="conducted_by_id" optional="hide" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="sla_compliant" widget="boolean"/>
+                <field name="non_compliance_found" widget="boolean"/>
+                <field name="penalty_amount" widget="monetary" optional="show"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="termination_recommended" widget="boolean" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'acknowledged'"
+                       decoration-warning="state == 'submitted'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Window Action
+    ================================================================= -->
+    <record id="action_ecdhs_contract_monitoring" model="ir.actions.act_window">
+        <field name="name">Contract Reviews</field>
+        <field name="res_model">ecdhs.contract.monitoring</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No contract reviews found</p>
+            <p>Contract reviews are created from the contract record.</p>
+        </field>
+    </record>
+
+</odoo>

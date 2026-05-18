@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="cemetery_gravesite_availability_report_view_list" model="ir.ui.view">
+        <field name="name">cemetery.gravesite.availability.report.view.list</field>
+        <field name="model">cemetery.gravesite.availability.report</field>
+            <field name="arch" type="xml">
+                <list string="Graves Report">
+                    <field name="cemetery_id" optional="show"/>
+                    <field name="section_id" optional="show"/>
+                    <field name="grave_id" optional="show"/>
+<!--                    <field name="submitted_cremation_total_count" optional="show"/>-->
+<!--                    <field name="verified_cremation_total_count" optional="show"/>-->
+<!--                    <field name="approved_cremation_total_count" optional="show"/>-->
+<!--                    <field name="rejected_cremation_total_count" optional="show"/>-->
+<!--                    <field name="application_id" optional="show"/>-->
+<!--                    <field name="date_of_birth" optional="show"/>-->
+<!--                    <field name="age" optional="show"/>-->
+                </list>
+            </field>
+    </record>
+    <record id="cemetery_gravesite_availability_report_view_search" model="ir.ui.view">
+        <field name="name">cemetery.gravesite.availability.report.view.search</field>
+        <field name="model">cemetery.gravesite.availability.report</field>
+        <field name="arch" type="xml">
+            <search string="Total Burial per Cemetery">
+                <group expand="0" string="Extended Filters">
+                    <filter string="Cemetery" name="group_cemetery_id" domain="[]"
+                            context="{'group_by':'cemetery_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_cemetery_gravesite_availability_report" model="ir.actions.act_window">
+        <field name="name">Total Available Gravesite Per Cemetery Report</field>
+        <field name="res_model">cemetery.gravesite.availability.report</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="cemetery_gravesite_availability_report_view_search"/>
+        <field name="context">{'search_default_group_cemetery_id':1}</field>
+    </record>
+
+</odoo>

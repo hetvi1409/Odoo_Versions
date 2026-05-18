@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_hr_timesheet_generator_form" model="ir.ui.view">
+        <field name="name">hr.timesheet.generator.form</field>
+        <field name="model">hr.timesheet.generator</field>
+        <field name="arch" type="xml">
+            <form string="Timesheet Generator">
+                <header>
+                    <button name="action_generate_timesheets"
+                            string="Generate Timesheets"
+                            type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_reset_to_draft"
+                            string="Reset to Draft"
+                            type="object" invisible="state != 'generated'"/>
+                    <button name="action_approve_timesheet" type="object" class="btn-primary"
+                            string="Sign &amp; Approve"
+                            invisible="state != 'generated'"/>
+                    <button name="action_open_reject_wizard" type="object" class="btn-primary" string="Reject"
+                            invisible="state != 'generated'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated"/>
+                </header>
+                <sheet>
+                    <!-- Employee Information Section -->
+                    <group string="Employee Information">
+                        <group>
+                            <field name="month"/>
+                            <field name="year"/>
+                            <field name="name"/>
+                            <field name="surname"/>
+                            <field name="initials"/>
+                            <field name="rejection_reason" invisible="state != 'rejected'"/>
+                        </group>
+                        <group>
+                            <field name="employee_id" invisible="1"/>
+                            <field name="sap_employee_number"/>
+                            <field name="contact_phone" widget="phone"/>
+                            <field name="department_id"/>
+                            <field name="branch_directorate_id"/>
+                            <field name="show_manager_tree" invisible="1"/>
+                            <field name="show_user_tree" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Attendance Lines -->
+                    <notebook>
+                        <page string="Generated Timesheets">
+                            <field name="attendance_ids" groups="hr.group_hr_user,hr.group_hr_manager,base.group_system"
+                                   context="{'default_employee_id': employee_id}" readonly="state != 'generated'"
+                                   invisible="not show_manager_tree" options="{'no_create': False, 'no_create_edit': False}">
+                                <list editable="bottom" decoration-danger="is_weekend_or_holiday">
+                                    <field name="is_overtime" invisible="1"/>
+                                    <field name="employee_id" invisible="0" readonly="1"/>
+                                    <field name="worked_hours" widget="float_time" readonly="1"/>
+                                    <field name="validated_overtime_hours" widget="float_time" readonly="1"/>
+                                    <field name="check_in"
+                                           readonly="is_weekend_or_holiday == True and not is_overtime"/>
+                                    <field name="check_out"
+                                           readonly="check_in == False or (is_weekend_or_holiday == True and not is_overtime)"/>
+                                    <field name="is_overtime"/>
+                                    <field name="approved_document_id" domain="[('id', '=', False)]"
+                                           column_invisible="not is_overtime" required="is_overtime == True"/>
+                                    <field name="overtime_approved"
+                                           groups="hr.group_hr_user,hr.group_hr_manager,base.group_system"/>
+                                    <field name="time_off_type_id"/>
+                                    <field name="timesheet_status"/>
+                                    <field name="overtime_status"/>
+                                    <field name="is_weekend_or_holiday" invisible="1"/>
+                                </list>
+                            </field>
+                            <field name="attendance_ids"
+                                   groups="base.group_user,hr_attendance.group_hr_attendance_kiosk"
+                                   context="{'default_employee_id': employee_id}" readonly="state != 'generated'"
+                                   invisible="not show_user_tree" options="{'no_create': True, 'no_delete': True}">
+                                <list editable="bottom" decoration-danger="is_weekend_or_holiday">
+                                    <field name="is_overtime" invisible="1"/>
+                                    <field name="employee_id" invisible="0" readonly="1"/>
+                                    <field name="worked_hours" widget="float_time" readonly="1"/>
+                                    <field name="validated_overtime_hours" widget="float_time" readonly="1"/>
+                                    <field name="check_in"
+                                           readonly="is_weekend_or_holiday == True and not is_overtime"/>
+                                    <field name="check_out"
+                                           readonly="check_in == False or (is_weekend_or_holiday == True and not is_overtime)"/>
+                                    <field name="is_overtime"/>
+                                    <field name="approved_document_id" domain="[('id', '=', False)]"
+                                           column_invisible="not is_overtime" required="is_overtime == True"/>
+                                    <field name="overtime_approved" groups="base.group_user"/>
+                                    <field name="time_off_type_id"/>
+                                    <field name="timesheet_status" readonly="1"/>
+                                    <field name="overtime_status" readonly="1"/>
+                                    <field name="is_weekend_or_holiday" invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Manager Signature">
+                            <group>
+                                <group>
+                                    <field name="manager_id"/>
+                                    <field name="manager_surname"/>
+                                    <field name="manager_initials"/>
+                                </group>
+                                <group>
+                                    <field name="manager_sap_employee_number"/>
+                                    <field name="manager_contact_phone" widget="phone"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="signature" widget="signature"/>
+                                <field name="signature_date"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <!-- No Employee Record Message -->
+                <div class="alert alert-warning" role="alert" invisible="employee_id != False">
+                    <strong>No Employee Record Found!</strong>
+                    <br/>
+                    You do not have an employee record linked to your user account.
+                    Please contact your administrator to create your employee record.
+                </div>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_hr_timesheet_generator_tree" model="ir.ui.view">
+        <field name="name">hr.timesheet.generator.list</field>
+        <field name="model">hr.timesheet.generator</field>
+        <field name="arch" type="xml">
+            <list string="Timesheet Generators">
+                <field name="employee_id"/>
+                <field name="name"/>
+                <field name="surname"/>
+                <field name="month"/>
+                <field name="year"/>
+                <field name="state"/>
+                <field name="signature_date"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_hr_timesheet_generator_search" model="ir.ui.view">
+        <field name="name">hr.timesheet.generator.search</field>
+        <field name="model">hr.timesheet.generator</field>
+        <field name="arch" type="xml">
+            <search string="Search Timesheet Generators">
+                <field name="employee_id"/>
+                <field name="name"/>
+                <field name="surname"/>
+                <field name="month"/>
+                <field name="year"/>
+                <field name="department_id"/>
+
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Generated" name="generated" domain="[('state', '=', 'generated')]"/>
+
+                <group>
+                    <filter string="Employee" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Department" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Month" name="group_month" context="{'group_by': 'month'}"/>
+                    <filter string="Year" name="group_year" context="{'group_by': 'year'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hr_timesheet_generator" model="ir.actions.act_window">
+        <field name="name">Timesheet Generator</field>
+        <field name="res_model">hr.timesheet.generator</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="auto_attendance_flow.view_hr_timesheet_generator_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new timesheet generator
+            </p>
+            <p>
+                Generate monthly timesheets automatically based on working days,
+                excluding weekends and holidays.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_hr_timesheet_generator"
+              name="Timesheet Generator"
+              parent="hr_attendance.menu_hr_attendance_root"
+              action="action_hr_timesheet_generator"
+              sequence="0"/>
+
+</odoo>

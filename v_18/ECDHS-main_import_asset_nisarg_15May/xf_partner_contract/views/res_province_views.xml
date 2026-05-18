@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_province_tree" model="ir.ui.view">
+        <field name="name">res_province_tree</field>
+        <field name="model">res.province</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="country_id"/>
+                <field name="province"/>
+            </list>
+        </field>
+    </record>
+    <record id="res_region_tree" model="ir.ui.view">
+        <field name="name">res_region_tree</field>
+        <field name="model">res.region</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="country_id"/>
+                <field name="province_id"/>
+                <field name="region"/>
+            </list>
+        </field>
+    </record>
+    <record id="res_municipality_tree" model="ir.ui.view">
+        <field name="name">res_municipality_tree</field>
+        <field name="model">res.municipality</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="municipality"/>
+                <field name="province_id"/>
+                <field name="region_id"/>
+                <field name="country_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="res_province_act_window" model="ir.actions.act_window">
+        <field name="name">Province</field>
+        <field name="res_model">res.province</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your Provinces
+            </p>
+        </field>
+    </record>
+    <record id="res_region_act_window" model="ir.actions.act_window">
+        <field name="name">Region</field>
+        <field name="res_model">res.region</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your Regions
+            </p>
+        </field>
+    </record>
+    <record id="res_municipality_act_window" model="ir.actions.act_window">
+        <field name="name">Municipality</field>
+        <field name="res_model">res.municipality</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your Municipality
+            </p>
+        </field>
+    </record>
+    <menuitem id="res_province_menuitem"
+              name="Province"
+              action="res_province_act_window"
+              parent="xf_partner_contract.xf_partner_contract_config_menuitem"
+              sequence="1"/>
+    <menuitem id="res_region_menuitem"
+              name="Region"
+              action="res_region_act_window"
+              parent="xf_partner_contract.xf_partner_contract_config_menuitem"
+              sequence="2"/>
+    <menuitem id="res_municipality_menuitem"
+              name="Municipality"
+              action="res_municipality_act_window"
+              parent="xf_partner_contract.xf_partner_contract_config_menuitem"
+              sequence="3"/>
+
+</odoo>

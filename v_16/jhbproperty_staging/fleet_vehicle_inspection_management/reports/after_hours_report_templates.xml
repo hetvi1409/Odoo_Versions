@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- After-Hours Authorization Report Template -->
+    <template id="report_after_hours_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="text-center">
+                            <strong>FLEET VEHICLE USAGE AFTER BUSINESS HOURS</strong>
+                        </h2>
+                    </div>
+                </div>
+
+                <table class="table table-bordered mt-3">
+                    <tbody>
+                        <tr>
+                            <td><strong>Authorization No</strong></td>
+                            <td><span t-field="o.name"/></td>
+                            <td><strong>Status</strong></td>
+                            <td><span t-field="o.state"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Requester</strong></td>
+                            <td><span t-field="o.requester_id.name"/></td>
+                            <td><strong>Vehicle</strong></td>
+                            <td><span t-field="o.vehicle_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Start Date/Time</strong></td>
+                            <td><span t-field="o.start_datetime"/></td>
+                            <td><strong>End Date/Time</strong></td>
+                            <td><span t-field="o.end_datetime"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vehicle Request</strong></td>
+                            <td colspan="3"><span t-field="o.request_id.name"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Reason for After-Hours Use</strong></h5>
+                        <p t-field="o.reason"/>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-6 text-center">
+                        <p>_____________________</p>
+                        <p><strong>Department Manager</strong></p>
+                    </div>
+                    <div class="col-6 text-center">
+                        <p>_____________________</p>
+                        <p><strong>Fleet Office</strong></p>
+                    </div>
+                </div>
+
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_after_hours">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="fleet_vehicle_inspection_management.report_after_hours_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

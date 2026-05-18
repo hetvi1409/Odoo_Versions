@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="asset_transfer_view_form" model="ir.ui.view">
+        <field name="name">asset.transfer.view.form</field>
+        <field name="model">asset.transfer</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                    <field name="asset_ids" widget="many2many_tags"/>
+                        </group>
+                    <group>
+                    <field name="asset_id_no"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="date"/>
+                    <field name="asset_barcode"/>
+                    <field name="department"/>
+                    <field name="transfer_description"/>
+                    <field name="asset_category_id"/>
+                    <field name="transfer_condition"/>
+                    <field name="reason"/>
+                </group>
+                <group string="Requesting official">
+                    <field name="name_surname"/>
+                    <field name="sign_signature" widget="signature" options="{'size': [200,'']}"/>
+                </group>
+                <group>
+                    <group>
+                        <field name="current_location"/>
+                        <field name="current_department"/>
+                        <field name="current_unit"/>
+                        <field name="transferring_official"/>
+                        <field name="transferring_official_signature" widget="signature" options="{'size': [200,'']}"/>
+                    </group>
+                    <group>
+                        <field name="new_location"/>
+                        <field name="new_department"/>
+                        <field name="new_unit"/>
+                        <field name="receiving_official"/>
+                    </group>
+                </group>
+                <group>
+                    <group>
+                        <field name="gm_name_surname"/>
+                        <field name="gm_signature" widget="signature" options="{'size': [200,'']}"/>
+                        <field name="date_transferred"/>
+                    </group>
+                    <group>
+                        <field name="new_gm_name_surname"/>
+                        <field name="new_gm_signature" widget="signature" options="{'size': [200,'']}"/>
+                        <field name="date_received"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_asset_transfer" string="Confirm"
+                            type="object"
+                            default_focus="1" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="asset_transfer_action" model="ir.actions.act_window">
+        <field name="name">Asset Transfer</field>
+        <field name="res_model">asset.transfer</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="asset_transfer_view_form"/>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_asset_transfer"
+              name="Asset Movement"
+              action="asset_transfer_action"
+              parent="account.menu_finance_entries_management"/>
+</odoo>

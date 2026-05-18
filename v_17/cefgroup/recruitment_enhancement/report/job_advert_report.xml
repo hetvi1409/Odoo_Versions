@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_job_advert">
+            <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page o_content_pdf">
+                        <h2 class="mb-3 border-bottom border-2 border-dark" style="text-align:center;">Job Advert Report
+                        </h2>
+                        <table class="table table-sm o_main_table table-bordered mt-2 mb-2">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Company Name:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.company_id.name"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Job Title:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.name"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Company Overview:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Job Purpose:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.purpose_job_main"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Required Qualifications &amp; Experience:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <t t-if="o.required_experience">
+                                            <strong>
+                                                <span t-field="o.required_experience"></span>
+                                            </strong>
+                                        </t>
+                                        <t t-if="o.minimum_qualifications">
+                                            <strong>-
+                                                <span t-field="o.minimum_qualifications"></span>
+                                            </strong>
+                                        </t>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Desired Skills &amp; Competencies:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <!--                                    <t t-set="skills" t-value=""/>-->
+                                        <!--                                    <t t-foreach="o.skill_ids" t-as="skill">-->
+                                        <!--                                        <t t-set="skills" t-value="skills + skill.name"/>-->
+                                        <!--                                    </t>-->
+                                        <t t-if="o.skill_ids">
+                                            <strong>
+                                                <span t-esc="o.skill_ids.mapped('name')"></span>
+                                            </strong>
+                                        </t>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Key Performance Indicators (KPIs):</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Application Closing Date:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.end_date"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Additional Notes (Equal opportunity statements, background checks,
+                                                etc.):
+                                            </span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="oe_structure"></div>
+                        <h4 class="mb-3" style="text-align:center;">Job Description</h4>
+                        <div id="job_description mt-2 mb-2" class="clearfix">
+                            <div class="justify-text">
+                                <p t-if="not is_html_empty(o.description)" name="description" class="mb-2">
+                                    <span t-field="o.description"/>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_hr_job_advert" model="ir.actions.report">
+        <field name="name">Job Advert Report</field>
+        <field name="model">hr.job</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">recruitment_enhancement.report_job_advert</field>
+        <field name="report_file">recruitment_enhancement.report_job_advert</field>
+        <field name="print_report_name">'Job - %s' % (object.name)</field>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+</odoo>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View for Tender Bid -->
+    <record id="view_tender_bid_form" model="ir.ui.view">
+        <field name="name">tender.bid.form</field>
+        <field name="model">tender.bid</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_bid_publish" string="Publish"
+                            type="object" invisible="1"
+                            class="oe_highlight"/>
+                    <button name="action_submit" string="Submit"
+                            type="object" invisible="state != 'draft'"
+                            class="oe_highlight"/>
+                    <button name="action_start_compliance_review" string="Compliance Review" type="object" invisible="state != 'submitted'" class="oe_highlight"/>
+                    <button name="action_approve_compliance_review" string="Compliance Review Approve" type="object" invisible="state != 'compliance_review_pending'" class="oe_highlight"/>
+                    <button name="action_reject_compliance_review" string="Reject" type="object" invisible="state != 'compliance_review_pending'"/>
+                    <button name="action_start_evaluation" string="Start Evaluation" type="object" invisible="state != 'compliance_review_approved'"/>
+                    <button name="action_completed_evaluation" string="Evaluation Complete" type="object" invisible="state != 'evaluation_started'"/>
+                    <button name="action_adjudication_pending" string="Set Adjudication Status" type="object" invisible="state != 'evaluation_completed'"/>
+                    <button name="action_adjudication_approve" string="Adjudication Approve" type="object" invisible="state != 'adjudication_pending'"/>
+                    <button name="action_adjudication_reject" string="Reject" type="object" invisible="state != 'adjudication_pending'"/>
+                    <button name="action_done_tender" string="Done" type="object" invisible="state != 'adjudication_approved'"/>
+                    <button name="action_cancel_tender" string="Cancel" type="object" invisible="state != 'adjudication_approved'"/>
+                    <button name="action_create_award_letter" string="Create Award Letter" type="object" invisible="state != 'done'"/>
+                    <button name="create_rfq" string="Create RFQ" type="object" invisible="state != 'award_letter_sent' or is_rfq_created != False"/>
+                    <field name="state" widget="statusbar"
+                    statusbar_visible="draft,submitted,compliance_review_approved,evaluation_completed,adjudication_approved,done"/>
+                </header>
+
+                <sheet>
+<!--                    <div class="oe_title">-->
+<!--                        <group>-->
+<!--                        <field name="set_adjudication_status" widget="boolean_toggle" invisible="state != 'evaluation_completed'"/>-->
+<!--                        </group>-->
+<!--                    </div>-->
+
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" invisible="is_bid_published != True">
+                            <span class="fa fa-lg fa-globe" style="color: green;">
+                                Bid Published
+                            </span>
+                        </button>
+                            <button class="oe_stat_button"
+                                    name="action_view_documents"
+                                    type="object"
+                                    icon="fa-file-text-o">
+                                Documents
+                            </button>
+                            <button class="oe_stat_button"
+                                    name="action_view_tender"
+                                    type="object"
+                                    icon="fa-file-text-o">
+                                Tender
+                            </button>
+                            <button class="oe_stat_button"
+                                    name="action_view_award_letter"
+                                    type="object"
+                                    invisible="state not in ('done', 'approved', 'award_letter_sent', 'purchase')"
+                                    icon="fa-file-text-o">
+                                Create Award Letter
+                            </button>
+                            <button class="oe_stat_button"
+                                    name="action_view_rfq"
+                                    type="object"
+                                    invisible="is_rfq_created != True"
+                                    icon="fa-file-text-o">
+                                RFQ
+                            </button>
+
+                    </div>
+<!--                    <group>-->
+<!--                        <field name="start_compliance_review"-->
+<!--                               widget="boolean_toggle"-->
+<!--                               invisible="state != 'submitted'"/>-->
+<!--                    </group>-->
+
+                    <group>
+                        <div class="oe_title">
+                            <h1 class="d-flex justify-content-between align-items-center">
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="award_letter_id"/>
+                            <field name="is_rfq_created" invisible="1"/>
+                            <field name="start_evaluation" invisible="1"/>
+                            <field name="is_bid_published" invisible="1"/>
+                            <field name="tender_id"/>
+                            <field name="bid_name"/>
+                            <field name="bid_type" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="vendor_id"/>
+                            <!--                        <field name="bid_amount"/> -->
+                            <field name="submission_deadline"/>
+                            <!--                        <field name="compliance_status"/>-->
+                            <field name="evaluation_score" readonly="1"/>
+                            <!--                        <field name="adjudication_status" widget="radio"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Documents">
+                            <field name="document_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="file"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Evaluation Results"
+                              invisible="start_evaluation != True">
+                            <group>
+                                <group>
+                                    <field name="evaluation_score"/>
+                                    <field name="comments"/>
+                                </group>
+                                <group>
+                                    <field name="evaluation_progress"
+                                           widget="progressbar"/>
+                                </group>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for Tender Bid -->
+    <record id="view_tender_bid_tree" model="ir.ui.view">
+        <field name="name">tender.bid.list</field>
+        <field name="model">tender.bid</field>
+        <field name="arch" type="xml">
+            <list>
+            <!-- Define the header with a button -->
+                <header>
+                    <button name="action_create_rfqs" type="object" string="Create RFQ" class="btn-primary" icon="fa-file"/>
+                </header>
+                <field name="name"/>
+                <field name="bid_name"/>
+                <field name="tender_id"/>
+                <field name="bid_type"/>
+                <field name="submission_deadline"/>
+<!--                <field name="compliance_status"/>-->
+                <field name="vendor_id"/>
+                <field name="evaluation_score"/>
+                <field name="evaluation_progress"
+                       widget="progressbar"/>
+
+                <!--                <field name="bid_amount"/>-->
+                <field name="state"/>
+                <!-- Add tick and cross buttons -->
+            <button name="action_done" type="object" icon="fa-check"/>
+            <button name="action_cancel" type="object" icon="fa-times"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search View for Tender Bid -->
+    <record id="view_tender_bid_search" model="ir.ui.view">
+        <field name="name">tender.bid.search</field>
+        <field name="model">tender.bid</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="bid_name"/>
+                <field name="tender_id"/>
+                <field name="bid_type"/>
+                <field name="submission_deadline"/>
+<!--                <field name="compliance_status"/>-->
+                <field name="vendor_id"/>
+                <field name="evaluation_score"/>
+                <field name="evaluation_progress"
+                       widget="progressbar"/>
+                <field name="state"/>
+                    <filter name="group_by_tender" string="Tender" domain="[]" context="{'group_by': 'tender_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action for Tender Bid -->
+    <record id="action_tender_bid" model="ir.actions.act_window">
+        <field name="name">Bids</field>
+        <field name="res_model">tender.bid</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_tender_bid_search"/>
+        <field name="context">{'group_by': 'tender_id'}</field>
+    </record>
+
+    <menuitem id="menu_bid_specification"
+              name="Bid Specification"
+              sequence="5"
+              parent="tender_management.menu_tender_management_root"/>
+    <!-- Menu Item for Tender Bid -->
+    <menuitem id="menu_tender_bids" name="Bids" parent="menu_bid_specification"
+              action="action_tender_bid"/>
+</odoo>

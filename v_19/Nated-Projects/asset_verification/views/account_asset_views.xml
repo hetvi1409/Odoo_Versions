@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.view.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="asset_registration.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='asset_details']" position="after">
+                <page string="Asset Verification" name="verification">
+                    <group>
+                        <group>
+                            <field name="is_verified"/>
+                            <field name="major_group_description"/>
+                            <field name="alternative_ref"/>
+                            <field name="current_condition_this_year"/>
+                            <field name="name_installation"/>
+                            <field name="parent_barcode"/>
+                            <field name="asset_make_type"/>
+                            <field name="date_verification"/>
+                            <field name="asset_verification_user_id"/>
+                            <field name="job_location_id"/>
+
+                        </group>
+                        <group>
+                            <field name="barcode_past_year"/>
+                            <field name="current_condition_past_year"/>
+                            <field name="asset_component"/>
+                            <field name="asset_size"/>
+                            <field name="estimated_useful_life_month"/>
+                            <field name="comments"/>
+                            <field name="inspector"/>
+                            <field name="custodian_id"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//button[@name='open_entries']" position="after">
+                <button name="open_employee_record" type="object" class="oe_stat_button" icon="fa-address-card-o" attrs="{'invisible':[('custodian_id','=',False)]}">
+                <span>Employee</span>
+                </button>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_account_asset_purchase_tree" model="ir.ui.view">
+        <field name="name">account.asset.view.tree</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_purchase_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='acquisition_date']" position="after">
+                <field name="is_verified"/>
+                <field name="date_verification"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

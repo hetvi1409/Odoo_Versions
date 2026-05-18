@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_job_approval_form_inherit" model="ir.ui.view">
+        <field name="name">hr.job.approval.form.inherit</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+
+<!--            <header position="inside">-->
+<!--                &lt;!&ndash; Start Approval: only when not yet started &ndash;&gt;-->
+<!--                <button name="action_start_approval_process"-->
+<!--                        string="Start Approval Process"-->
+<!--                        type="object"-->
+<!--                        class="btn-primary"-->
+<!--                        invisible="approval_status != 'not_started'"/>-->
+
+<!--                &lt;!&ndash; Approve: only for current approver when partially approved &ndash;&gt;-->
+<!--                <button name="action_approve_requisition_flow"-->
+<!--                        string="Approve"-->
+<!--                        type="object"-->
+<!--                        class="btn-success"-->
+<!--                        invisible="not is_current_approver or approval_status != 'partially_approved'"/>-->
+
+<!--                &lt;!&ndash; Reject: only for current approver when partially approved &ndash;&gt;-->
+<!--                <button name="action_reject_requisition_flow"-->
+<!--                        string="Reject"-->
+<!--                        type="object"-->
+<!--                        class="btn-danger"-->
+<!--                        invisible="not is_current_approver or approval_status != 'partially_approved'"/>-->
+<!--            </header>-->
+
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="is_current_approver" invisible="1"/>
+                <field name="approval_status" readonly="1"/>
+                <field name="current_approver_id" readonly="1"/>
+            </xpath>
+
+            <!-- User already has an Approval Lines notebook page in v17 hr_job_views.xml, we will just add the approval_team field above it -->
+            <!--            <xpath expr="//field[@name='approval_line_ids']" position="before">-->
+            <!--                <group>-->
+            <!--                    <field name="approval_team_id" options="{'no_create': True}"/>-->
+            <!--                </group>-->
+            <!--            </xpath>-->
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,952 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="cemetery_application_form" name="Application">
+        <t t-call="website.layout">
+            <header id="home" class="hero-section">
+                <div class="container">
+                    <h1>Death Register Form</h1>
+                    <p>You can create your application form from here</p>
+                    <a href="/cemetery" class="btn">Cemeteries</a>
+                </div>
+            </header>
+            <div id="wrap" class="oe_structure oe_empty cemetery_application">
+                <form action="/cemetery-submit"
+                      enctype="multipart/form-data"
+                      class="o_mark_required" data-mark="*"
+                      data-model_name="" method="post">
+                    <div id="multistepsform">
+                        <ul id="progressbar">
+                            <li class="active" id="undertaker-section"
+                                t-value="undertaker">Deceased Details
+                            </li>
+                            <li class="" id="interment-type-section">Interment
+                                Type
+                            </li>
+                            <!--                            <li class="" id="burial">Burial</li>-->
+                            <!--                            <li class="" id="plot">Plot Requirements</li>-->
+                            <li class="" id="documents">Documents</li>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="page"
+                           t-att-value="page" id="page-name"/>
+                    <input type="hidden"
+                           name="application"
+                           t-att-value="application"/>
+                    <input type="hidden"
+                           name="types"
+                           id="types"
+                           t-att-value="types"/>
+
+                    <t t-if="page == 'first'">
+                        <section class="s_text_block pt40 pb40 o_colored_level"
+                                 data-vcss="001" data-snippet="s_text_block">
+                            <div class="container s_allow_columns">
+                                <div class="row">
+                                    <div class="form-application-border">
+                                        <input type="hidden" name="page"
+                                               t-att-value="page"/>
+                                        <input type="hidden" name="csrf_token"
+                                               t-att-value="request.csrf_token()"/>
+                                        <div class="s_website_form_rows row s_col_no_bgcolor">
+                                            <div class="form-group form-application-group col-12 s_website_form_field s_website_form_required"
+                                                 data-type="char"
+                                                 data-name="Field">
+                                                <input type="hidden"
+                                                       name="application"
+                                                       t-att-value="application"/>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Surname
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="deceased_surname"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="deceased_surname"
+                                                                   name="deceased_surname"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                First Name
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="deceased_firstname"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="deceased_firstname"
+                                                                   name="deceased_firstname"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Preferred Name
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="deceased_preferred_name"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="deceased_preferred_name"
+                                                                   name="deceased_preferred_name"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="address row">
+                                                    <br/>
+                                                    <div style="font-size: 20px; font-weight: normal; margin-top: 10px;">
+                                                        Last Location
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Street
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="street"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="street"
+                                                                   name="street"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                City
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="city"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="city"
+                                                                   name="city"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="address row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Municipality
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="municipality_id"
+                                                                    id="municipality_id"
+                                                                    t-att-value="municipality_id"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="municipalities"
+                                                                   t-as="municipality">
+                                                                    <option t-att-value="municipality.id"
+                                                                            t-att-selected="municipality.id == data.get('municipality')">
+                                                                        <t t-esc="municipality.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Province
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="province_id"
+                                                                    id="province_id"
+                                                                    t-att-value="data.get('province')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="provinces"
+                                                                   t-as="province">
+                                                                    <option t-att-value="province.id"
+                                                                            t-att-selected="province.id == data.get('province')">
+                                                                        <t t-esc="province.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!--                                                    <div class="col s_col_no_resize s_col_no_bgcolor">-->
+                                                    <!--                                                        <label class="col-form-label col-sm-auto s_website_form_label"-->
+                                                    <!--                                                               style="width: 200px"-->
+                                                    <!--                                                               for="studio1">-->
+                                                    <!--                                                            <span class="s_website_form_label_content">-->
+                                                    <!--                                                                State-->
+                                                    <!--                                                            </span>-->
+                                                    <!--                                                        </label>-->
+                                                    <!--&lt;!&ndash;                                                        <div class="col-sm">&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                            <select name="state_id"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                                    id="state_id"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                                    t-att-value="state_id"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                                <option t-att-selected=""/>&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                                <t t-foreach="states"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                                   t-as="state">&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                                    <option t-att-value="state.id"&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                                            t-att-selected="state.id == data['state']">&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                                        <t t-esc="state.name"/>&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                                    </option>&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                                </t>&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                            </select>&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+                                                    <!--                                                    </div>-->
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Country
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="country_id"
+                                                                    id="country_id"
+                                                                    t-att-value="data.get('country')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="countries"
+                                                                   t-as="country">
+                                                                    <option t-att-value="country.id"
+                                                                            t-att-selected="country.id == data.get('country')">
+                                                                        <t t-esc="country.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Date of Birth
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="date_of_birth"
+                                                                   type="date"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="date_of_birth"
+                                                                   name="date_of_birth"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Gender
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="gender"
+                                                                    id="gender"
+                                                                    t-att-value="gender"
+                                                                    style="width:100%; background: white; border: 1px solid #CED4DA; height: 38px; border-radius: 4px;">
+                                                                <option value="">Select Gender</option>
+                                                                <option value="female"
+                                                                        t-att-selected="gender == 'female'">Female
+                                                                </option>
+                                                                <option value="male"
+                                                                        t-att-selected="gender == 'male'">Male
+                                                                </option>
+                                                                <option value="other"
+                                                                        t-att-selected="gender == 'other'">Other
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Is Foreigner
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input type="radio"
+                                                                   class="foreigner"
+                                                                   id="foreigner_yes"
+                                                                   t-on-click="_oNClickForeigner"
+                                                                   t-att-checked="foreigner == 'yes'"
+                                                                   value="yes"
+                                                                   name="foreigner"/>
+                                                            <label for="foreigner_yes">
+                                                                Yes
+                                                            </label>
+
+                                                            <input type="radio"
+                                                                   class="foreigner"
+                                                                   id="foreigner_no"
+                                                                   t-att-checked="foreigner == 'no'"
+                                                                   value="no"
+                                                                   t-on-click="_oNClickForeigner"
+                                                                   name="foreigner"/>
+                                                            <label for="foreigner_no">
+                                                                No
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor"
+                                                         id="passport_number">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Passport Number
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="passport_number"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="passport_number"
+                                                                   name="passport_number"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor d-none" id="id_number_">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                ID Number
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="id_number"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="id_number"
+                                                                   name="id_number"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Date of Death
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="date_of_death"
+                                                                   type="date"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="date_of_death"
+                                                                   name="date_of_death"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Cause of Death
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="cause_of_death_id"
+                                                                    id="cause_of_death_id"
+                                                                    t-att-value="cause_of_death_id"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="cause_of_death_id"
+                                                                   t-as="cause">
+                                                                    <option t-att-value="cause.id"
+                                                                            t-att-selected="cause.id == data.get('cause')">
+                                                                        <t t-esc="cause.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Place of death
+                                                                (City/Town)'
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="place_of_death"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="place_of_death"
+                                                                   name="place_of_death"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Province
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="death_province_id"
+                                                                    id="death_province_id"
+                                                                    t-att-value="death_province_id"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="death_provinces"
+                                                                   t-as="death_province">
+                                                                    <option t-att-value="death_province.id"
+                                                                            t-att-selected="death_province.id == data.get('death_province')">
+                                                                        <t t-esc="death_province.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Place of burial
+                                                                (City/Town)'
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="place_of_burial"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="place_of_burial"
+                                                                   name="place_of_burial"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Province
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="burial_province_id"
+                                                                    id="burial_province_id"
+                                                                    t-att-value="burial_province_id"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="burial_provinces"
+                                                                   t-as="burial_province">
+                                                                    <option t-att-value="burial_province.id"
+                                                                            t-att-selected="burial_province.id == data.get('burial_province')">
+                                                                        <t t-esc="burial_province.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div t-if="error"
+                                                 class="form-group col-12 d-flex justify-content-center s_website_form_submit"
+                                                 data-name="Submit Button">
+                                                <div class="alert alert-danger"
+                                                     style="display: inline-flex;margin-left: 10px;"
+                                                     t-if="error" role="alert">
+                                                    <t t-esc="error"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-12 d-flex justify-content-end s_website_form_submit"
+                                                     data-name="Submit Button">
+                                                    <button type="submit"
+                                                            class="btn btn-primary click-next"
+                                                            t-on-click.prevent="() => _onClickNext(page, 'next')">
+                                                        Next
+                                                        <i class="fa fa-long-arrow-right"
+                                                           aria-label="Arrow icon"
+                                                           title="Arrow"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </t>
+                    <t t-if="page == 'second'">
+                        <section class="s_text_block pt40 pb40 o_colored_level" data-vcss="001"
+                                 data-snippet="s_text_block">
+                            <div class="container s_allow_columns">
+                                <div class="row">
+                                    <div class="form-application-border">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <div class="s_website_form_rows row s_col_no_bgcolor">
+                                            <div class="form-group form-application-group col-12 s_website_form_field s_website_form_required"
+                                                 data-type="char" data-name="Field">
+                                                <input type="hidden" name="cemeteries" t-att-value="cemeteries"/>
+                                                <input type="hidden" name="cemeteries_section"
+                                                       t-att-value="cemeteries_section"/>
+                                                <input type="hidden" name="graves" t-att-value="graves"/>
+                                                <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label for="interment_type"
+                                                               class="col-form-label col-sm-auto s_website_form_label">
+                                                            Interment Type
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="interment_type" id="interment_type"
+                                                                    class="form-control" t-att-value="interment_type">
+                                                                <option value="burial"
+                                                                        t-att-selected="interment_type == 'burial'">
+                                                                    Burial
+                                                                </option>
+                                                                <option value="cremation"
+                                                                        t-att-selected="interment_type == 'cremation'">
+                                                                    Cremation
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                <div class="row" id="burial_details">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px">
+                                                            <span class="s_website_form_label_content">Serial Number of
+                                                                DHA
+                                                            </span>
+                                                            <span class="s_website_form_mark" style="color: red;">*
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="serial_number" type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="serial_number" name="serial_number"
+                                                                   />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px">
+                                                            <span class="s_website_form_label_content">Barcode Number of
+                                                                DHA
+                                                            </span>
+                                                            <span class="s_website_form_mark" style="color: red;">*
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="barcode_number" type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="barcode_number" name="barcode_number"
+                                                                   />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" id="cemetery_details">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px">
+                                                            <span class="s_website_form_label_content">Cemetery</span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="cemetery_id" id="cemetery_id"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value="">Select</option>
+                                                                <t t-foreach="cemeteries" t-as="cemetery">
+                                                                    <option t-att-value="cemetery.id"
+                                                                            t-att-selected="cemetery.id == int(data.get('cemetery')) if data.get('cemetery') else False">
+                                                                        <t t-esc="cemetery.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px">
+                                                            <span class="s_website_form_label_content">Cemetery
+                                                                Section
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="section_id" id="section_id"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value="">Select</option>
+                                                                <t t-foreach="cemeteries_section" t-as="section">
+                                                                    <option t-att-value="section.id"
+                                                                            t-att-selected="section.id == int(data.get('section')) if data.get('section') else False">
+                                                                        <t t-esc="section.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px">
+                                                            <span class="s_website_form_label_content">Grave</span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="grave_id" id="grave_id"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value="">Select</option>
+                                                                <t t-foreach="graves" t-as="grave">
+                                                                    <option t-att-value="grave.id"
+                                                                            t-att-selected="grave.id == int(data.get('graves')) if data.get('graves') else False">
+                                                                        <t t-esc="grave.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px">
+                                                            <span class="s_website_form_label_content">Is Deceased
+                                                            </span>
+                                                            <span class="s_website_form_mark" style="color: red;">*
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input type="radio" id="is_deceased_yes" name="is_deceased"
+                                                                   value="yes"
+                                                                   t-att-checked="'checked' if is_deceased == 'yes' else None"/>
+                                                            <label for="is_deceased_yes">Yes</label>
+                                                            <input type="radio" id="is_deceased_no" name="is_deceased"
+                                                                   value="no"
+                                                                   t-att-checked="'checked' if is_deceased == 'no' else None"/>
+                                                            <label for="is_deceased_no">No</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div t-if="error"
+                                                 class="form-group col-12 d-flex justify-content-center s_website_form_submit">
+                                                <div class="alert alert-danger"
+                                                     style="display: inline-flex;margin-left: 10px;" role="alert">
+                                                    <t t-esc="error"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+<!--                                                <div class="form-group col d-flex justify-content-start s_website_form_submit">-->
+<!--                                                    <div class="s_website_form_label"/>-->
+<!--                                                    <a t-attf-href="/previous-first-page/#{application}"-->
+<!--                                                       class="btn btn-primary">-->
+<!--                                                        <i class="fa fa-long-arrow-left" aria-label="Arrow icon"-->
+<!--                                                           title="Arrow"/>-->
+<!--                                                        Previous-->
+<!--                                                    </a>-->
+<!--                                                </div>-->
+
+                                                <div class="form-group col d-flex justify-content-end s_website_form_submit">
+                                                    <div class="s_website_form_label"/>
+                                                    <button type="submit" class="btn btn-primary">
+                                                        Next
+                                                        <i class="fa fa-long-arrow-right" aria-label="Arrow icon"
+                                                           title="Arrow"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </t>
+                    <t t-if="page == 'fifth'">
+                        <section class="s_text_block pt40 pb40 o_colored_level"
+                                 data-vcss="001" data-snippet="s_text_block">
+                            <div class="container s_allow_columns">
+                                <div class="row">
+                                    <div class="form-application-border">
+                                        <input type="hidden" name="page"
+                                               t-att-value="page"/>
+                                        <input type="hidden" name="csrf_token"
+                                               t-att-value="request.csrf_token()"/>
+                                        <div class="s_website_form_rows row s_col_no_bgcolor">
+                                            <div class="form-group form-application-group col-12 s_website_form_field s_website_form_required"
+                                                 data-type="char"
+                                                 data-name="Field">
+                                                <input type="hidden"
+                                                       name="application"
+                                                       t-att-value="application"/>
+                                            </div>
+                                            <div class="row">
+                                                <div class="row s_col_no_resize s_col_no_bgcolor" data-type="binary"
+                                                     data-name="Field">
+                                                    <label class="col-form-label col-sm-auto s_website_form_label"
+                                                           style="width: 200px"
+                                                           for="deceased_id">
+                                                        <span class="s_website_form_label_content">
+                                                            Certified Copy of Deceased ID
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-sm">
+                                                        <input id="deceased_id"
+                                                               type="file"
+                                                               class="form-control s_website_form_input o_resume_input"
+                                                               name="deceased_id"
+                                                               multiple="true"/>
+                                                    </div>
+                                                </div>
+                                                <div class="row s_col_no_resize s_col_no_bgcolor" data-type="binary"
+                                                     data-name="Field">
+                                                    <label class="col-form-label col-sm-auto s_website_form_label"
+                                                           style="width: 200px"
+                                                           for="next_of_kin_id">
+                                                        <span class="s_website_form_label_content">
+                                                            Certified Copy of Next of Kin ID
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-sm">
+                                                        <input id="next_of_kin_id"
+                                                               type="file"
+                                                               class="form-control s_website_form_input o_resume_input"
+                                                               name="next_of_kin_id"
+                                                               multiple="true"/>
+                                                    </div>
+                                                </div>
+                                                <div class="row s_col_no_resize s_col_no_bgcolor" data-type="binary"
+                                                     data-name="Field">
+                                                    <label class="col-form-label col-sm-auto s_website_form_label"
+                                                           style="width: 200px"
+                                                           for="death_certificate">
+                                                        <span class="s_website_form_label_content">
+                                                            Certified Copy of Death Certificate
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-sm">
+                                                        <input id="death_certificate"
+                                                               type="file"
+                                                               class="form-control s_website_form_input o_resume_input"
+                                                               name="death_certificate"
+                                                               multiple="true"/>
+                                                    </div>
+                                                </div>
+                                                <div class="row s_col_no_resize s_col_no_bgcolor" data-type="binary"
+                                                     data-name="Field">
+                                                    <label class="col-form-label col-sm-auto s_website_form_label"
+                                                           style="width: 200px"
+                                                           for="burial_order">
+                                                        <span class="s_website_form_label_content">
+                                                            Burial Order
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-sm">
+                                                        <input id="burial_order"
+                                                               type="file"
+                                                               class="form-control s_website_form_input o_resume_input"
+                                                               name="burial_order"
+                                                               multiple="true"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div t-if="error"
+                                                     class="form-group col-12 d-flex justify-content-center s_website_form_submit"
+                                                     data-name="Submit Button">
+                                                    <div class="alert alert-danger"
+                                                         style="display: inline-flex;margin-left: 10px;"
+                                                         t-if="error"
+                                                         role="alert">
+                                                        <t t-esc="error"/>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+<!--                                                    <div class="form-group col d-flex justify-content-start s_website_form_submit"-->
+<!--                                                         data-name="Submit Button">-->
+<!--                                                        <div class="s_website_form_label"/>-->
+<!--                                                        <a t-attf-href="/previous-third-page/#{application}"-->
+<!--                                                           class="btn btn-primary">-->
+<!--                                                            <i class="fa fa-long-arrow-left"-->
+<!--                                                               aria-label="Arrow icon"-->
+<!--                                                               title="Arrow"/>-->
+<!--                                                            Previous-->
+<!--                                                        </a>-->
+<!--                                                    </div>-->
+                                                    <!---->
+                                                    <div class="form-group col d-flex justify-content-end s_website_form_submit"
+                                                         data-name="Submit Button">
+                                                        <div class="s_website_form_label"/>
+                                                        <button type="submit"
+                                                                class="btn btn-primary">
+                                                            Next
+                                                            <i class="fa fa-long-arrow-right"
+                                                               aria-label="Arrow icon"
+                                                               title="Arrow"/>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </t>
+                </form>
+            </div>
+        </t>
+    </template>
+    <template id="cemetery_application_form_not_allowed" name="Application">
+        <t t-call="website.layout">
+            <header id="home" class="hero-section">
+                <div class="container">
+                    <h1>Death register</h1>
+                    <p>You can create your application form from here</p>
+                    <a href="#cemteries" class="btn">Cemeteries</a>
+                </div>
+            </header>
+
+            <section class="s_text_block pt40 pb40 o_colored_level"
+                     data-snippet="s_text_block">
+                <div class="container s_allow_columns">
+                    <div class="row">
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <h4>Death Register Form</h4>
+                            <p>You can create your application form from here
+                            </p>
+                        </div>
+                        <div class="col-lg-8 mt-4 mt-lg-0 form-application-border">
+                            <div class=" d-flex flex-column align-items-center justify-content-center">
+                                <p class="display-6">Something went wrong!</p>
+                                <p>You are not allowed to
+                                    access to it. Only an undertaker can access
+                                    to the application form
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </t>
+    </template>
+    <template id="cemetery_application_form_completed" name="Application">
+        <t t-call="website.layout">
+            <header id="home" class="hero-section">
+                <div class="container">
+                    <h1>Death Register Form</h1>
+                </div>
+            </header>
+            <section class="s_text_block pt40 pb40 o_colored_level"
+                     data-snippet="s_text_block">
+                <div class="container s_allow_columns">
+                    <div class="row">
+                        <div class="col mt-4 mt-lg-0 form-application-border">
+                            <div class=" d-flex flex-column align-items-center justify-content-center">
+                                <p class="display-6">Application Submitted
+                                </p>
+                                <p>
+                                    Reference number is
+                                    <t t-out="name"/>
+                                    .
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </t>
+    </template>
+    <data noupdate="1">
+        <record id="website_menu_cemetery_parent_menu" model="website.menu">
+            <field name="name">Application</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">4</field>
+        </record>
+
+        <record id="website_menu_cemetery_application" model="website.menu">
+            <field name="name">Cemetery Application</field>
+            <field name="url">/cemetery-application</field>
+            <field name="parent_id" ref="cemetery_management.website_menu_cemetery_parent_menu"/>
+            <field name="sequence" type="int">12</field>
+        </record>
+    </data>
+</odoo>

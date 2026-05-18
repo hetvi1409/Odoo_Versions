@@ -1,0 +1,154 @@
+<template>
+    <div t-name="SETAConfigAnalysis" class="seta_config_analysis">
+        <div class="seta_select_analysis_container">
+            <div class="seta_select_analysis seta_p20" title="Click to select or create analysis">
+                <div class="seta_title">Select Analysis</div>
+                <div class="seta_subtitle">
+                    Click to select or create analysis
+                </div>
+            </div>
+            <div class="seta_select_analysis_button_container flex-column">
+                <div class="seta_block_left seta_dropdown dropdown">
+                    <span class="material-icons dropdown-toggle" data-toggle="dropdown" t-esc="'edit'"/>
+                    <div class="dropdown-menu seta_dropdown_menu_top_right">
+                        <a class="dropdown-item seta_select_analysis_edit">Configuration</a>
+                        <a class="dropdown-item seta_action_open_data_script_editor">Data Script Editor</a>
+                        <a class="dropdown-item seta_action_open_visual_script_editor">Visual Script Editor</a>
+                    </div>
+                </div>
+                <div class="seta_block_left seta_dropdown dropdown">
+                    <span class="material-icons dropdown-toggle" data-toggle="dropdown" t-esc="'magic_button'"/>
+                    <div class="dropdown-menu seta_dropdown_menu_top_right">
+                        <a class="dropdown-item seta_select_analysis_insight">Get Insights</a>
+                        <a class="dropdown-item seta_select_analysis_explore">Explore Variations</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="seta_blank_divider seta_divider"/>
+
+        <!-- Data / Visual -->
+        <div class="seta_config_analysis_tab">
+            <div class="seta_tab seta_tab_data active">
+                Data
+            </div>
+            <div class="seta_tab seta_tab_visual">
+                Visual
+            </div>
+            <div style="clear:both"/>
+        </div>
+
+        <!-- Data -->
+        <div id="seta_accordion" class="seta_tab_content_data">
+            <div class="card seta_white seta_divider">
+                <div class="card-header seta_white seta_p10_20">
+                    <div class="seta_current_metric"/>
+                    <div class="seta_add_metric seta_btn seta_btn_wpb collapsed" data-toggle="collapse" data-target="#collapseMetric" aria-expanded="false" aria-controls="collapseMetric">
+                        <span class="material-icons seta_btn_icon_left" t-esc="'numbers'"/> Add Metrics
+                    </div>
+                </div>
+                <div id="collapseMetric" class="collapse" data-parent="#seta_accordion">
+                    <div class="card-body seta_white seta_p10_20 seta_pt0">
+                        <div class="seta_select_metric_container"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card seta_white seta_divider">
+                <div class="card-header seta_white seta_p10_20">
+                    <div class="seta_current_dimension"/>
+                    <div class="seta_add_dimension seta_btn seta_btn_wbb collapsed" data-toggle="collapse" data-target="#collapseDimension" aria-expanded="false" aria-controls="collapseDimension">
+                        <span class="material-icons seta_btn_icon_left" t-esc="'show_chart'"/> Add Dimensions
+                    </div>
+                </div>
+                <div id="collapseDimension" class="collapse" data-parent="#seta_accordion">
+                    <div class="card-body seta_white seta_p10_20 seta_pt0">
+                        <div class="seta_select_dimension_container"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card seta_white seta_divider" style="display: none;">
+                <div class="card-header seta_white seta_p10_20">
+                    <div class="seta_current_filter" id="seta_accordion_current_filter"/>
+                    <div class="seta_add_filter seta_btn seta_btn_wctb collapsed" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                        <span class="material-icons seta_btn_icon_left" t-esc="'tune'"/> Add Filters
+                    </div>
+                </div>
+                <div id="collapseFilter" class="collapse" data-parent="#seta_accordion">
+                    <div class="card-body seta_white seta_p10_20 seta_pt0">
+                        <div class="seta_select_filter_container" id="seta_accordion_select_filter"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card seta_white seta_divider">
+                <div class="card-header seta_white seta_p10_20">
+                    <div class="seta_current_sort"/>
+                    <div class="seta_add_sort seta_btn seta_btn_wdab collapsed" data-toggle="collapse" data-target="#collapseSort" aria-expanded="false" aria-controls="collapseSort">
+                        <span class="material-icons seta_btn_icon_left" t-esc="'swap_vert'"/> Add Sort
+                    </div>
+                </div>
+                <div id="collapseSort" class="collapse" data-parent="#seta_accordion">
+                    <div class="card-body seta_white seta_p10_20 seta_pt0">
+                        <div class="seta_select_sort_container"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card seta_white seta_divider seta_change_limit_container" style="display:none;">
+                <div class="card-header seta_white seta_p10_20">
+                    <div class="flex-body">
+                        <label for="seta_change_limit" class="flex-1 col-form-label seta_subtitle">Limit</label>
+                        <div class="input-group flex-1">
+                            <input type="number" class="form-control seta_change_limit" id="seta_change_limit" min="0"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card seta_white seta_divider seta_add_dashboard_container" style="display: none">
+                <div class="card-header seta_white seta_p10_20">
+                    <input type="hidden" class="seta_wfull seta_mb10 seta_select2" id="seta_select2_dashboard"/>
+                    <div class="seta_add_dashboard_block seta_btn seta_btn_wbb">
+                        <span class="material-icons seta_btn_icon_left" t-esc="'add'"/> Add to Dashboard
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual -->
+        <div id="seta_accordion" class="seta_tab_content_visual" style="display:none;">
+            <div class="card seta_white seta_divider">
+                <div class="seta_select_visual_container card-body seta_white seta_p10_20 seta_pt0 flex-body">
+                </div>
+                <div class="seta_select_visual_config_container card-body seta_white seta_p10_20 seta_pb0"></div>
+            </div>
+        </div>
+
+        <!-- Insights -->
+        <div id="seta_accordion" class="seta_tab_content_insight" style="display:none;">
+            <div class="card seta_white">
+                <div class="seta_tab_content_insight_title_container" style="display: flex;">
+                    <h4>Insights</h4>
+                    <div style="display: flex;width: 120px;align-items: center;" class="ms-3">
+                        <input type="text" class="form-control" value="English" id="seta_selected_languange" disabled="1"/>
+                        <div class="seta_languange dropdown seta_dropdown">
+                            <span class="material-icons-outlined dropdown-toggle show" data-toggle="dropdown">translate</span>
+                            <div class="dropdown-menu"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="seta_exit_insight">
+                    <span class="material-icons">close</span>
+                </div>
+                <div class="seta_tab_content_insight_container">
+                    
+                </div>
+                <div class="seta_p10_20">
+                    <span class="spinner-border spinner-border-small" style="display:none;"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

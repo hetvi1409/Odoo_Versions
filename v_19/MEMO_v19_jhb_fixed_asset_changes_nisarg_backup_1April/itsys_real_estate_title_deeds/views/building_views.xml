@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="building_model_view" model="ir.ui.view">
+        <field name="name">building.model.view.form</field>
+        <field name="model">building</field>
+        <field name="inherit_id"
+               ref="itsys_real_estate.building_base_pages_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='building_documents']" position="after">
+                <page string="Trim Documents" name="trim_document">
+                    <field name="trim_document_ids" context="{'default_type': 'trim'}">
+                        <list create="1" delete="True">
+                            <field name="name"/>
+                            <field name="type" invisible="1"/>
+                            <field name="building_id" invisible="1"/>
+                            <field name="jmc_number" invisible="1"/>
+                            <field name="file_path" invisible="1"/>
+                            <button name="open_trim_images" type="object" string="Open File" icon="fa-folder-open"/>
+                            <button name="download_tiff" type="object" icon="fa-download" string="Download"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+             <xpath expr="//field[@name='launch_date']" position="after">
+                 <field name="type_of_take"/>
+             </xpath>
+            <xpath expr="//page[@name='contracts']" position="after">
+                <page string="Title Deeds" name="title_trim_document">
+                    <field name="title_deeds_ids" context="{'default_type': 'title'}">
+                        <list create="1" delete="True" write="1" editable="bottom">
+                            <field name="name"/>
+                            <field name="file" widget="binary" readonly="id != False and type == 'title'" filename="filename"/>
+                            <field name="type" invisible="1"/>
+                            <field name="filename" invisible="1"/>
+                            <field name="building_id" invisible="1"/>
+                            <field name="jmc_number" invisible="1"/>
+                            <field name="file_path" invisible="1"/>
+                            <button name="action_open_trim_file" type="object" string="Open File" class="oe_highlight" invisible="1"/>
+<!--                            <button name="open_trim_images" type="object" string="Open File" class="oe_highlight"/>-->
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="building_list" model="ir.ui.view">
+        <field name="name">building.model.view.list</field>
+        <field name="model">building</field>
+        <field name="inherit_id"
+               ref="property_update.building_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='property_condition']" position="after">
+                <field name="rental_attachment_document_ids" string="Lease Document"/>
+                <field name="trim_document_ids"/>
+                <field name="title_deeds_ids" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,51 @@
+<odoo>
+    <record id="view_app_import_wizard" model="ir.ui.view">
+        <field name="name">app.import.wizard.form</field>
+        <field name="model">app.import.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="file" filename="filename"/>
+                </group>
+
+                <footer>
+                    <button string="Import" type="object" name="action_import_app" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_app_import" model="ir.actions.act_window">
+        <field name="name">Import APP</field>
+        <field name="res_model">app.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_app_line_import_wizard" model="ir.ui.view">
+        <field name="name">app.line.import.wizard.form</field>
+        <field name="model">app.line.import.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="plan_id" invisible="0" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="file" filename="filename"/>
+                </group>
+
+                <footer>
+                    <button string="Import" type="object" name="action_import_lines" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_app_line_import" model="ir.actions.act_window">
+        <field name="name">Import APP Lines</field>
+        <field name="res_model">app.line.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="email_template_circulation_comments_assigned" model="mail.template">
+            <field name="name">Circulation Comments Assigned</field>
+            <field name="model_id" ref="client_enquiry.model_circulation_comments"/>
+            <field name="subject"> The Circulation Comments {{ object.name or 'n/a' }} is Assigned.</field>
+            <field name="email_to">{{object.user_id.partner_id.email}}</field>
+            <field name="description">send to the users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.user_id.name" /><br/>
+                        The Circulation Comments <t t-out="object.name"/> is assigned for you.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+
+                </div>
+            </field>
+        </record>
+        <record id="email_template_circulation_comments_objection" model="mail.template">
+            <field name="name">Circulation Comments Objections</field>
+            <field name="model_id" ref="client_enquiry.model_circulation_comments"/>
+            <field name="subject"> Circulation Comments {{ object.name or 'n/a' }}: Objections</field>
+            <field name="description">send to the users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <br/>
+                        An Objections is raised against the  Circulation Comments <t t-out="object.name"/>.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+
+                </div>
+            </field>
+        </record>
+        <record id="email_template_circulation_comments_terminated" model="mail.template">
+            <field name="name">Circulation Comments Objections</field>
+            <field name="model_id" ref="client_enquiry.model_circulation_comments"/>
+            <field name="subject"> Circulation Comments {{ object.name or 'n/a' }}: Terminated</field>
+            <field name="description">send to the users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <br/>
+                        An Objections is raised against the  Circulation Comments <t t-out="object.name"/>. Circulation was terminated
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+
+                </div>
+            </field>
+        </record>
+        <record id="email_template_circulation_comments_report" model="mail.template">
+            <field name="name">Assessment: Circulation Comments</field>
+            <field name="model_id" ref="client_enquiry.model_circulation_comments"/>
+            <field name="subject"> {{ object.name or 'n/a' }} :  Add Circulation Comments</field>
+            <field name="description">Send to the external users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        <div>
+                            Hi,
+                            <table class="table table-bordered" style="width: 50%;" >
+                                <tr>
+                                    <td><b>Property Name:</b></td>
+                                    <td><t t-out="object.property_id.sudo().name"/></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Address:</b></td>
+                                    <td><t t-out="object.address"/></td>
+                                </tr>
+                                <tr>
+                                    <td><b>JMC Number:</b></td>
+                                    <td><t t-out="object.jmc_number"/></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Township Name:</b></td>
+                                    <td><t t-out="object.address"/></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Stand Number:</b></td>
+                                    <td><t t-out="object.stand_number"/> </td>
+                                </tr>
+<!--                                <tr>-->
+<!--                                    <td><b>Zoning:</b></td>-->
+<!--                                    <td><t t-out="object.property_id.sudo().zoning_id.name"/></td>-->
+<!--                                </tr>-->
+                                <tr>
+                                    <td><b>Proposal:</b></td>
+                                    <td><t t-out="object.proposal"/> </td>
+                                </tr>
+
+                            </table>
+                         In terms of Section 14(2) of Municipal Finance
+                         Management Act (MFMA), you are requested to comment
+                         on the subject property indicating whether the
+                         proposal is supported or not by your Department and
+                         advice if any services will be affected by this
+                         proposal.
+                            <br/>
+                        Should your comment not be received by the
+                         %s, JPC will proceed to obtain Council
+                         approval for alienation.
+                            <div style="margin: 16px 0px 16px 0px;">
+                                <a t-att-href="(object.get_list_url())"
+                                   style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                    <t>
+                                        Open
+                                        <t t-out="object.name"/>
+                                    </t>
+                                </a>
+                            </div>
+                        </div>
+                    </p>
+                </div>
+            </field>
+<!--            <field name="report_name">Assessment{{ (object.name or '').replace('/','_') }}</field>-->
+            <field name="lang">{{ object.enquiry_id.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_transaction_send_to_sign_report" model="mail.template">
+            <field name="name">Transaction: Send To Sign</field>
+            <field name="model_id" ref="client_enquiry.model_client_transaction"/>
+            <field name="subject"> {{ object.name or 'n/a' }} :  Sign the Transaction</field>
+            <field name="description">Send to the external users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.user_id.name" /><br/>
+                        Sign the transaction <t t-out="object.name"/> report.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+
+                </div>
+            </field>
+<!--            <field name="report_name">{{ (object.name or '').replace('/','_') }}</field>-->
+            <field name="lang">{{ object.enquiry_id.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+        <record id="email_template_transaction_send_to_section_79" model="mail.template">
+            <field name="name">Transaction: Section 79</field>
+            <field name="model_id" ref="client_enquiry.model_client_transaction"/>
+            <field name="subject"> {{ object.name or 'n/a' }} :  Section 79</field>
+            <field name="description">Send to the external users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.user_id.name" /><br/>
+                        Please check the transaction <t t-out="object.name"/> and do the Section 79.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+
+                </div>
+            </field>
+<!--            <field name="report_name">{{ (object.name or '').replace('/','_') }}</field>-->
+            <field name="lang">{{ object.enquiry_id.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

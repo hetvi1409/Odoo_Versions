@@ -1,0 +1,39 @@
+from odoo import models, fields, api
+
+
+class ApprovalSettingsStatus(models.Model):
+    _name = 'approval.settings.state'
+    _description = 'Approval Workflow Static Status'
+    _order = 'type desc,sequence'
+
+    settings_id = fields.Many2one('approval.settings', required=True, ondelete='cascade', string='Model Settings')
+    sequence = fields.Integer(default=0, required=True, copy=False)
+    state = fields.Char(required=True)
+    name = fields.Char(required=True, translate=True)
+    active = fields.Boolean(default=True)
+    type = fields.Selection([('before', 'Before Approval'), ('after', 'After Approval')], required=True)
+    reject_state = fields.Boolean()
+
+    _state_uniq = models.Constraint(
+        'unique(settings_id, state)',
+        'The state should be unique !',
+    )
+
+    @api.onchange('sequence')
+    def _onchange_sequence(self):
+        if self.settings_id and not self.sequence:
+            sequences = self.mapped('settings_id.state_ids.sequence')
+            self.sequence = (sequences and max(sequences) or 0) + 1
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        self.env.registry.clear_cache()
+        return super(ApprovalSettingsStatus, self).create(vals_list)
+
+    def write(self, vals):
+        self.env.registry.clear_cache()
+        return super(ApprovalSettingsStatus, self).write(vals)
+
+    def unlink(self):
+        self.env.registry.clear_cache()
+        return super(ApprovalSettingsStatus, self).unlink()

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.view.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//span[@name='address_name']" position="before">
+                <field name="contact_surname"/>
+            </xpath>
+            <xpath expr="//div[contains(@class, 'oe_title')]" position="after">
+                <div>
+                    <label for="is_trust"/>
+                </div>
+
+                <field name="is_trust" widget="boolean_toggle"/>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Client Details">
+                    <group invisible="company_type != 'company'">
+                        <field name="reg_number"/>
+                        <field name="vat"/>
+                    </group>
+                    <group invisible="company_type != 'person'">
+                        <field name="id_number"/>
+                        <field name="passport_number"/>
+                    </group>
+                    <group invisible="not is_trust">
+                        <field name="trust_number"/>
+                    </group>
+
+                    <group invisible="company_type != 'company'"
+                           string="Documents">
+                        <group>
+                            <field name="cipc_certificate"/>
+                            <field name="moi_founding_statement"/>
+                            <field name="utility_bill_lease"/>
+                        </group>
+                        <group>
+                            <field name="notice_cipc_certificate"/>
+                            <field name="id_proof_address"/>
+                            <field name="sars_certificate"/>
+                        </group>
+                    </group>
+                    <group invisible="company_type != 'person'"
+                           string="Documents">
+                        <group>
+                            <field name="id_passport_copy"/>
+                            <field name="utility_bill_lease_bank_statement"/>
+                        </group>
+                        <group>
+                            <field name="home_affairs_immigration"/>
+                            <field name="sars_document"/>
+                        </group>
+                    </group>
+                    <group invisible="not is_trust"
+                           string="Documents">
+                        <group>
+                            <field name="certified_trust_deed"/>
+                            <field name="trustee_id_proof_address"/>
+                        </group>
+                        <group>
+                            <field name="master_letter_authority"/>
+                        </group>
+                    </group>
+
+                </page>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

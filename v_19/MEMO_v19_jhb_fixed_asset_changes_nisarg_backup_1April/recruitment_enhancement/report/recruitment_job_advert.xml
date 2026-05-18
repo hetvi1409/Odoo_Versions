@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_recruitment_requisition_job_advert">
+        <t t-foreach="docs" t-as="o">
+
+            <t t-set="company" t-value="o.company_id"/>
+
+            <t t-call="web.external_layout_standard">
+
+                <main>
+                    <div style="font-family: Arial, sans-serif; font-size: 10pt;">
+
+                        <!-- ===== PERSONNEL REQUISITION FORM TITLE ===== -->
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <strong style="font-size: 12pt; text-decoration: underline;">
+                                PERSONNEL REQUISITION FORM
+                            </strong>
+                        </div>
+
+                        <!-- ===== EXISTING POSITIONS SECTION ===== -->
+                        <div style="margin-bottom: 10px;">
+                            <strong style="text-decoration: underline;">EXISTING POSITIONS</strong>
+                        </div>
+
+                        <div style="margin-bottom: 10px;">
+                            Please note that the following requirements must be met for a personnel requisition to be accepted for approval:
+                        </div>
+
+                        <ul style="margin-top: 0; margin-bottom: 10px; padding-left: 30px;">
+                            <li>An approved Organogram</li>
+                            <li>A approved Job description, Job level, and Grade</li>
+                            <li>The position must have been budgeted for.</li>
+                        </ul>
+
+                        <div style="margin-bottom: 14px;">
+                            The completed documents must be submitted directly to the HR Department (once both the General Manager
+                            and the Finance department have authorized)
+                        </div>
+
+                        <!-- ===== NEW POSITION(S) SECTION ===== -->
+                        <div style="margin-bottom: 8px;">
+                            <strong style="text-decoration: underline;">NEW POSITION(S)</strong>
+                        </div>
+
+                        <div style="margin-bottom: 4px;">
+                            In case of a NEW position(s), in addition to the above-completed documents.
+                        </div>
+                        <ul style="margin-top: 0; margin-bottom: 16px; padding-left: 30px;">
+                            <li>The official grading results based on the Job Description</li>
+                        </ul>
+
+                        <!-- ===== MAIN DETAILS TABLE ===== -->
+                        <div style="margin-bottom: 6px;">
+                            <strong>Kindly complete all sections in the table below</strong>
+                        </div>
+
+                        <table class="table table-sm o_main_table table-bordered" style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+                            <colgroup>
+                                <col style="width: 40%;"/>
+                                <col style="width: 60%;"/>
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <strong>Job Title</strong>
+                                    </td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <span t-field="o.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <strong>Job Grade</strong>
+                                    </td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <span t-field="o.job_grade"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <strong>Department /Unit</strong>
+                                    </td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <span t-field="o.department_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <strong>This position reports to</strong>
+                                    </td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <span t-field="o.hr_coordinator_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <strong>Is this is a new or existing position</strong>
+                                    </td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <span t-field="o.position_type"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <strong>If existing, indicate Name of previous incumbent</strong>
+                                    </td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <span t-field="o.previous_incumbent"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        <strong>External and Internal advert required?</strong>
+                                    </td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;">
+                                        YES &#160;&#160;&#160;&#160; NO
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- ===== BUSINESS ALIGNMENT SECTION ===== -->
+                        <div style="margin-bottom: 8px;">
+                            <strong>
+                                Briefly indicated how is this position aligned to the Business Strategy and its support to the overall
+                                functioning of this department?
+                            </strong>
+                        </div>
+
+                        <div style="margin-bottom: 6px;">
+                            <strong>Insert Motivation(attach a report)</strong>
+                        </div>
+
+                        <!-- Motivation lines -->
+                        <div style="border-bottom: 1px solid #000; margin-bottom: 6px; height: 18px;"></div>
+                        <div style="border-bottom: 1px solid #000; margin-bottom: 6px; height: 18px;"></div>
+                        <div style="border-bottom: 1px solid #000; margin-bottom: 20px; height: 18px;"></div>
+
+                        <!-- ===== EE TARGET ===== -->
+                        <div style="margin-bottom: 16px;">
+
+                            <strong>EE Target:
+                                <t t-if="o.ee_target_youth">Youth</t>
+                                <t t-if="o.ee_target_women">
+                                    <t t-if="o.ee_target_youth"> / </t>Women
+                                </t>
+                                <t t-if="o.ee_target_pwd">
+                                    <t t-if="o.ee_target_youth or o.ee_target_women"> / </t>PWD
+                                </t>
+                            </strong>
+                        </div>
+
+                        <!-- ===== MEDIA ADVERTISING TABLE ===== -->
+                        <table class="table table-sm o_main_table table-bordered" style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+                            <thead>
+                                <tr>
+                                    <th style="border: 1px solid #000; padding: 5px 8px; background-color: #ffffff;">
+                                        Media Advertising<br/>Please indicate with an "X"
+                                    </th>
+                                    <th style="border: 1px solid #000; padding: 5px 8px; text-align: center; background-color: #ffffff;">
+                                        The Star
+                                    </th>
+                                    <th style="border: 1px solid #000; padding: 5px 8px; text-align: center; background-color: #ffffff;">
+                                        Sunday Times
+                                    </th>
+                                    <th style="border: 1px solid #000; padding: 5px 8px; text-align: center; background-color: #ffffff;">
+                                        Websites
+                                    </th>
+                                    <th style="border: 1px solid #000; padding: 5px 8px; text-align: center; background-color: #ffffff;">
+                                        Online Hub Spot<br/>(10 days)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="border: 1px solid #000; padding: 5px 8px; height: 22px;"></td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;"></td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;"></td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;"></td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; padding: 5px 8px; height: 22px;"></td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;"></td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;"></td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;"></td>
+                                    <td style="border: 1px solid #000; padding: 5px 8px;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Page break -->
+                        <div style="page-break-after: always;"></div>
+
+                        <!-- ===== APPROVING SIGNATORIES - DYNAMIC ===== -->
+                        <table class="table table-sm o_main_table table-bordered" style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+                            <thead>
+                                <tr>
+                                    <th colspan="4" style="border: 1px solid #000; padding: 6px 8px; text-align: center; background-color: #FFC000; color: #000000; font-size: 11pt;">
+                                        Approving Signatories
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <!-- If NO approval lines exist, show empty table body -->
+                                <t t-if="not o.approval_line_ids">
+                                    <tr>
+                                        <td colspan="4" style="border: 1px solid #000; padding: 10px 8px; text-align: center; color: #999;">
+                                            No approving signatories defined.
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <!-- If approval lines exist, render each one dynamically -->
+                                <t t-if="o.approval_line_ids">
+                                    <t t-foreach="o.approval_line_ids" t-as="line">
+                                        <t t-set="line_index" t-value="line_index + 1"/>
+
+                                        <!-- Role / Title Header Row -->
+                                        <tr>
+                                            <td rowspan="2" style="border: 1px solid #000; padding: 5px 8px; vertical-align: middle; width: 5%; text-align: center;">
+                                                <t t-esc="line_index"/>.
+                                            </td>
+                                            <td colspan="3" style="border: 1px solid #000; padding: 5px 8px;">
+                                                <strong>
+                                                    <t t-esc="line.approver_role_id.name if line.approver_role_id else 'N/A'"/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Name & Surname / Signature Row -->
+                                        <tr>
+                                            <td style="border: 1px solid #000; padding: 5px 8px; width: 35%;">
+                                                <t t-if="line.status == 'approved'">
+                                                    <span style="color: green;">&#10003; Approved</span>
+                                                </t>
+                                                <t t-elif="line.status == 'rejected'">
+                                                    <span style="color: red;">&#10007; Rejected</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color: #999;">Pending</span>
+                                                </t>
+                                            </td>
+                                            <td style="border: 1px solid #000; padding: 5px 8px; width: 30%; background-color: #FFF2CC;">
+                                                <!-- Name from related user on line if available -->
+                                                <t t-if="line.user_id and line.user_id.name">
+                                                    <t t-esc="line.user_id.name"/>
+                                                </t>
+                                                <t t-else="">
+                                                    Name &amp; Surname
+                                                </t>
+                                            </td>
+                                            <td style="border: 1px solid #000; padding: 5px 8px; width: 15%; background-color: #FFF2CC; text-align: center;">
+                                                <t t-if="line.signature">
+                                                    <img t-att-src="'data:image/png;base64,' + line.signature.decode('utf-8') if line.signature else ''"
+                                                        style="max-height: 40px; max-width: 100px;"/>
+                                                </t>
+                                                <t t-else="">
+                                                    Signature
+                                                </t>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Date Row -->
+                                        <tr>
+                                            <td style="border: 0; padding: 0;"></td>
+                                            <td style="border: 0; padding: 0;"></td>
+                                            <td style="border: 0; padding: 0;"></td>
+                                            <td style="border: 1px solid #000; padding: 5px 8px; background-color: #FFF2CC;">
+                                                <t t-if="line.approval_date">
+                                                    <span t-field="line.approval_date" t-options='{"widget": "date"}'/>
+                                                </t>
+                                                <t t-else="">
+                                                    Date
+                                                </t>
+                                            </td>
+                                        </tr>
+
+                                    </t>
+                                </t>
+
+                            </tbody>
+                        </table>
+
+
+
+
+
+                        <!-- ===== HUMAN CAPITAL MANAGEMENT CHECKLIST ===== -->
+                        <div style="margin-bottom: 6px;">
+                            <strong style="text-decoration: underline;">Human Capital Management Checklist:</strong>
+                        </div>
+
+                        <div style="margin-bottom: 4px;">Completed by: ___________________________</div>
+                        <div style="margin-bottom: 4px;">Date: DD/Month/ Year</div>
+                        <div style="margin-bottom: 14px;">Signature: ____________________</div>
+
+                        <!-- ===== CHECKLIST BOX ===== -->
+                        <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+                            <tbody>
+                                <tr>
+                                    <td colspan="2" style="padding: 8px 12px; border-bottom: 0;">
+                                        <table style="width: 100%; border-collapse: collapse;">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 3px 0; width: 50%;">
+                                                        &#10003; &#160; Job description received
+                                                    </td>
+                                                    <td style="padding: 3px 0;">
+                                                        YES ____&#160; NO ____
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 3px 0;">
+                                                        &#10003; &#160; <span style="text-decoration: underline;">Organogram</span>
+                                                    </td>
+                                                    <td style="padding: 3px 0;">
+                                                        YES ____&#160; NO ____
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 3px 0;">
+                                                        &#10003; &#160; Approval by Finance
+                                                    </td>
+                                                    <td style="padding: 3px 0;">
+                                                        YES ____&#160; NO ____
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 3px 0;">
+                                                        &#10003; &#160; Approval by General Manager
+                                                    </td>
+                                                    <td style="padding: 3px 0;">
+                                                        YES ____&#160; NO ____
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 3px 0;">
+                                                        &#10003; &#160; All signatories have Signed
+                                                    </td>
+                                                    <td style="padding: 3px 0;">
+                                                        YES ____&#160; NO ____
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="padding: 6px 12px;">
+                                        <strong>Other comments:</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="padding: 4px 12px; border-top: 1px solid #ccc;">
+                                        <div style="border-bottom: 1px solid #aaa; margin-bottom: 8px; height: 18px;"></div>
+                                        <div style="border-bottom: 1px solid #aaa; margin-bottom: 8px; height: 18px;"></div>
+                                        <div style="border-bottom: 1px solid #aaa; margin-bottom: 8px; height: 18px;"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </main>
+
+            </t>
+
+        </t>
+    </template>
+
+
+    <record id="action_report_recruitment_requisition_job_advert" model="ir.actions.report">
+        <field name="name">Recruitment requisition - Job Advert</field>
+        <field name="model">recruitment.requisition</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">recruitment_enhancement.report_recruitment_requisition_job_advert</field>
+        <field name="report_file">recruitment_enhancement.report_recruitment_requisition_job_advert</field>
+        <field name="print_report_name">'Requisition - %s' % (object.name)</field>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+</odoo>

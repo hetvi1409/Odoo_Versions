@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_asset_movement_report" model="ir.actions.report">
+        <field name="name">Asset Movement Report</field>
+        <field name="model">asset.location.history</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">asset_verification_report.asset_movement_report</field>
+        <field name="report_file">asset_verification_report.asset_movement_report</field>
+<!--        <field name="binding_model_id" ref="account_asset.model_account_asset"/>-->
+        <field name="binding_type">report</field>
+    </record>
+    <template id="asset_movement_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+
+                <div class="page" style="font-family: 'Poppins', sans-serif;">
+                    <h2 style="text-align:center; color:#008F30; margin-bottom:22px;">
+                        Asset Movement Report
+                    </h2>
+                    <table class="table table-sm o_main_table"
+                           style="width:100%; border-collapse:collapse; font-size:13px;">
+                        <thead>
+                            <tr style="background-color:#008F30; color:#FFFFFF; text-align:center;">
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Asset</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Old Location</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Old Location</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Changed By</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Changed On</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="docs" t-as="o">
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.asset_id"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.old_location_id"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.new_location_id"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.changed_by"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.date"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="res_config_edition" t-inherit-mode="extension">
+
+        <!-- Hide About heading block (version + expiration in enterprise) -->
+        <xpath expr="//div[hasclass('user-heading')]" position="attributes">
+            <attribute name="t-attf-class">user-heading #{replacePoweredBy ? 'd-none' : ''}</attribute>
+        </xpath>
+
+        <!-- Replace copyright text -->
+        <xpath expr="//*[hasclass('o_web_settings_compact_subtitle')]" position="replace">
+            <div role="tabpanel" id="settings" class="tab-pane active text-muted o_web_settings_compact_subtitle">
+                <t t-if="replacePoweredBy and poweredByText">
+                    <small>Copyright © <t t-esc="poweredByText"/></small>
+                </t>
+                <t t-else="">
+                    <small>Copyright © 2004 <a target="_blank" href="https://www.odoo.com" style="text-decoration: underline;">Odoo S.A.</a> <a id="license" target="_blank" href="https://www.odoo.com/documentation/latest/legal/licenses.html" style="text-decoration: underline;">Odoo Enterprise Edition License V1.0</a></small>
+                </t>
+            </div>
+        </xpath>
+
+    </t>
+
+</templates>

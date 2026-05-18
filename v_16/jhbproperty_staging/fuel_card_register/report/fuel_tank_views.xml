@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    Report Template-->
+    <template id="report_fuel_tank">
+        <t t-call="web.html_container">
+           <t t-foreach="docs" t-as="tank">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h2>Fuel Tank Report</h2>
+                        <table width="100%" style="margin-bottom: 20px;">
+                            <tr>
+                                <td style="background:#ccc; font-weight:bold; padding:5px;" colspan="2">Tank Details</td>
+                                <td style="background:#ccc; font-weight:bold; padding:5px;" colspan="2">Fuel Details</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Name:</strong></td>
+                                <td><t t-esc="tank.name"/></td>
+                                <td><strong>Type of Fuel:</strong></td>
+                                <td><t t-esc="tank.type_of_fuel and tank.type_of_fuel.name or ''"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Location:</strong></td>
+                                <td><t t-esc="tank.location"/></td>
+                                <td><strong>Capacity:</strong></td>
+                                <td><t t-esc="tank.capacity"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Last Clean Date:</strong></td>
+                                <td><t t-esc="tank.last_clean_date"/></td>
+                                <td><strong>Litres:</strong></td>
+                                <td><t t-esc="tank.liters"/></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td><strong>Average Price:</strong></td>
+                                <td><t t-esc="tank.average_price"/></td>
+                            </tr>
+
+                            <tr><td colspan="4" style="height: 15px;"></td></tr>
+
+                            <tr>
+                                <td style="background:#ccc; font-weight:bold; padding:5px;" colspan="2">Last Filling Details</td>
+                                <td style="background:#ccc; font-weight:bold; padding:5px;" colspan="2">Consumption Details</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Last Filling Date:</strong></td>
+                                <td><t t-esc="tank.last_filling_date"/></td>
+                                <td><strong>Total Filling Fuel:</strong></td>
+                                <td><t t-esc="tank.total_filling_fuel"/> %</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Last Filling Amount:</strong></td>
+                                <td><t t-esc="tank.last_filling_amount"/></td>
+                                <td><strong>Last Added Fuel Date:</strong></td>
+                                <td><t t-esc="tank.last_added_fuel_date"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Last Filling Price:</strong></td>
+                                <td><t t-esc="tank.last_filling_price"/> Per Liter</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                        <div style="background:#ccc; font-weight:bold; padding:5px; margin-bottom: 10px;">
+                            Fuel Filling History
+                        </div>
+                        <table width="100%" style="border-collapse:collapse;" border="1">
+                            <thead>
+                                <tr>
+                                    <th style="padding:5px;">Date</th>
+                                    <th style="padding:5px;">Price</th>
+                                    <th style="padding:5px;">Liters</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="tank.fuel_filling_history" t-as="line">
+                                    <tr>
+                                        <td style="padding:5px;"><t t-esc="line.fuel_filling_date"/></td>
+                                        <td style="padding:5px;"><t t-esc="line.price"/></td>
+                                        <td style="padding:5px;"><t t-esc="line.liters"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="indicator_dimension_view_form" model="ir.ui.view">
+        <field name="name">indicator.dimension.view.form</field>
+        <field name="model">indicator.dimension</field>
+        <field name="arch" type="xml">
+            <form string="Indicator Dimension">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="description"/>
+                            <field name="type"/>
+                        </group>
+                        <group>
+                            <field name="option_ids" widget="many2many_tags"/>
+                            <field name="user_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Details">
+                            <field name="line_ids">
+                                <list class="performance_management" editable="bottom">
+                                    <field name="name"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="indicator_dimension_view_list" model="ir.ui.view">
+        <field name="name">indicator.dimension.view.list</field>
+        <field name="model">indicator.dimension</field>
+        <field name="arch" type="xml">
+            <list class="performance_management" string="Indicator_dimension">
+                <field name="name"/>
+                <field name="indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                <field name="option_ids" widget="many2many_tags"/>
+                <field name="user_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="indicator_dimension_action" model="ir.actions.act_window">
+        <field name="name">Indicator Dimensions</field>
+        <field name="res_model">indicator.dimension</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first indicator dimension!
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="indicator_dimension_menu"
+              name="Indicator Disaggregations Dimensions"
+              action="indicator_dimension_action"
+              parent="governance.menu_configuration"
+              sequence="1"/>
+</odoo>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="custom_audit_request_view_form_probc">
+        <field name="name">audit.request.form</field>
+        <field name="model">custom.audit.request</field>
+        <field name="arch" type="xml">
+            <form string="Audit Request">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="a_draft,b_confirm,c_approve,d_done"/>
+                    <button name="custom_audit_action_confirm" string="Confirm" class="oe_highlight" type="object"
+                        attrs="{'invisible': [('state', 'in', ['b_confirm', 'c_approve',
+                        'd_done', 'e_cancel', 'f_refuse'])]}"/>
+                    <button name="custom_audit_action_approve" string="Approve" class="oe_highlight" type="object"
+                        attrs="{'invisible': [('state', 'in', ['c_approve', 'd_done',
+                        'e_cancel', 'a_draft', 'f_refuse'])]}" groups="odoo_audit_request_form.custom_group_audit_approve_probc"/>
+                    <button name="custom_audit_action_done" string="Audit Complete" class="oe_highlight"
+                        type="object" attrs="{'invisible': [('state', 'in', ['d_done',
+                        'e_cancel', 'a_draft', 'b_confirm', 'f_refuse'])]}" groups="odoo_audit_request_form.custom_group_audit_approve_probc"/>
+                    <button name="custom_audit_action_cancel" string="Cancel" type="object" states="a_draft"/>
+                    <button name="custom_audit_action_reset_draft" string="Reset to Draft" type="object"
+                        attrs="{'invisible': [('state', 'in', [ 'b_confirm', 'a_draft'])]}"/>
+                    <button name="%(custom_action_audit_refuse_reason_wizard_probc)d" string="Refuse"
+                        type="action" attrs="{'invisible': [('state', 'in', [ 'c_approve',
+                        'e_cancel', 'a_draft', 'f_refuse', 'd_done'])]}"/>
+                    <button name="custom_action_audit_send_mail" string="Send by Email" type="object"
+                        attrs="{'invisible': [('state', 'in', ['e_cancel', 'f_refuse'])]}"/>
+                </header>
+                <sheet>
+                    <div>
+                        <widget name="web_ribbon" text="Approved" attrs="{'invisible': [('state', '!=', 'c_approve')]}"/>
+                        <widget name="web_ribbon" text="Completed" attrs="{'invisible': [('state', '!=', 'd_done')]}"/>
+                        <widget name="web_ribbon" text="Refused" bg_color="bg-danger" attrs="{'invisible':
+                            [('state', '!=', 'f_refuse')]}"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="sequence_name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Audit Request Title" attrs="{'readonly': [('state',
+                                'in', ['d_done', 'e_cancel'])]}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group col="2">
+                            <field name="type" widget="radio" attrs="{'readonly': [('state', 'in', ['d_done',
+                                'e_cancel'])]}"/>
+                            <field name="audit_category_id" attrs="{'readonly': [('state', 'in', ['d_done', 'e_cancel'])]}"/>
+                            <field name="audit_user_id" attrs="{'readonly': [('state', 'in', ['d_done', 'e_cancel'])]}"/>
+                            <field name="deadline_date" attrs="{'readonly': [('state', 'in', ['d_done', 'e_cancel'])]}"/>
+                        </group>
+                        <group col="2">
+                            
+                            <field name="partner_id" attrs="{'invisible': [('type', '=', 'internal')], 'required':
+                                [('type', '=', 'external')], 'readonly': [('state',
+                                'in', ['d_done', 'e_cancel'])]}"/>
+                            <field name="responsible_user_id" attrs="{'readonly': [('state', 'in', ['d_done',
+                                'e_cancel'])]}"/>
+                            <field name="create_date" attrs="{'readonly': [('state', 'in', ['d_done', 'e_cancel'])]}"/>
+                            <field name="audit_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"
+                                attrs="{'readonly': [('state', 'in', ['d_done', 'e_cancel'])]}"/>
+                            <field name="audit_date" attrs="{'readonly': [('state', 'in', ['d_done', 'e_cancel'])]}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Audit Result" name="audit_result">
+                            <separator string="Audit Request Details"/>
+                            <!-- <group string="Audit Request Details"> -->
+                                <field name="audit_reason" nolabel="1" attrs="{'readonly': [('state', 'in', ['d_done',
+                                    'e_cancel'])]}"/>
+                            <!-- </group> -->
+                            <!-- <group string="Audit Expected Result"> -->
+                                <separator string="Audit Request Details"/>
+                                <field name="expected_result" nolabel="1" attrs="{'readonly': [('state', 'in', ['d_done',
+                                    'e_cancel'])]}"/>
+                            <!-- </group> -->
+                            <!-- <group string="Audit Result"> -->
+                                <separator string="Audit Result"/>
+                                <field name="request_for" nolabel="1" attrs="{'readonly': [('state', 'in', ['d_done',
+                                    'e_cancel'])]}"/>
+                            <!-- </group> -->
+                        </page>
+                        <page string="Other Information" name="other_information">
+                            <group>
+                                <group col="2">
+                                    <field name="confirm_user_id"/>
+                                    <field name="approve_user_id"/>
+                                    <field name="done_user_id"/>
+                                </group>
+                                <group col="2">
+                                    <field name="date_confirm"/>
+                                    <field name="date_approve"/>
+                                    <field name="date_done"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Refuse Information" name="refuse_information" attrs="{'invisible': [('state','!=',
+                            'f_refuse')]}">
+                            <group>
+                                <field name="refuse_user_id"/>
+                                <field name="date_refuse"/>
+                                <field name="refuse_reason"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    
+    <record model="ir.ui.view" id="custom_audit_request_view_tree_probc">
+        <field name="name">audit.request.tree</field>
+        <field name="model">custom.audit.request</field>
+        <field name="arch" type="xml">
+            <tree string="Audit Request">
+                <field name="sequence_name"/>
+                <field name="name"/>
+                <field name="type"/>
+                <field name="audit_category_id"/>
+                <field name="responsible_user_id"/>
+                <field name="create_date"/>
+                <field name="audit_user_id"/>
+                <field name="audit_date"/>
+                <field name="state"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="custom_view_audit_request_kanban_probc" model="ir.ui.view">
+        <field name="name">audit.request.kanban</field>
+        <field name="model">custom.audit.request</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column o_kanban_project_tasks">
+                <field name="name"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div>
+                                <strong>Audit Request Number:</strong>
+                                <field name="sequence_name"/>
+                            </div>
+                            <div>
+                                <strong>Audit Request Name:</strong>
+                                <field name="name"/>
+                            </div>
+                            <div>
+                                <strong>Created by:</strong>
+                                <field name="responsible_user_id"/>
+                            </div>
+                            <div>
+                                <strong>Audit Responsible:</strong>
+                                <field name="audit_user_id"/>
+                            </div>
+                            <div>
+                                <strong>State:</strong>
+                                <field name="state"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+    <record id="custom_view_audit_request_search_probc" model="ir.ui.view">
+        <field name="name">audit.request.search</field>
+        <field name="model">custom.audit.request</field>
+        <field name="arch" type="xml">
+            <search string="Search Audit Request">
+                <field name="name"/>
+                <field name="responsible_user_id"/>
+                <field name="audit_user_id"/>
+                <field name="state"/>
+                <field name="audit_tag_ids"/>
+                <filter string="Audit Method" name="method" context="{'group_by': 'type'}"/>
+                <filter string="Audit Category" name="category" context="{'group_by': 'audit_category_id'}"/>
+                <filter string="Audit Created by" name="create" context="{'group_by': 'responsible_user_id'}"/>
+                <filter string="Audit Responsible" name="responsible" context="{'group_by': 'audit_user_id'}"/>
+                <filter string="Audit Confirmed by" name="confirmby" context="{'group_by': 'confirm_user_id'}"/>
+                <filter string="Audit Approved by" name="approveby" context="{'group_by': 'approve_user_id'}"/>
+                <filter string="Audit Completed by" name="completeby" context="{'group_by': 'done_user_id'}"/>
+                <filter string="Audit Refused by" name="refuseby" context="{'group_by': 'refuse_user_id'}"/>
+                <filter string="Audit Status" name="status" context="{'group_by': 'state'}"/>
+                <filter string="Confirmed" name="confirm" domain="[('state', '=', 'b_confirm')]"/>
+                <filter string="Approved" name="approve" domain="[('state', '=', 'c_approve')]"/>
+                <filter string="Completed" name="done" domain="[('state', '=', 'd_done')]"/>
+                <filter string="Refused" name="refuse" domain="[('state', '=', 'f_refuse')]"/>
+            </search>
+        </field>
+    </record>
+    
+    <record id="custom_view_audit_request_calendar_probc" model="ir.ui.view">
+        <field name="name">audit.request.calendar</field>
+        <field name="model">custom.audit.request</field>
+        <field name="arch" type="xml">
+            <calendar string="Audit Request" date_start="audit_date" color="state" hide_time="true"
+                event_limit="5">
+                <field name="name"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+    
+    <record model="ir.ui.view" id="custom_view_audit_request_graph_probc">
+        <field name="name">audit.request.graph</field>
+        <field name="model">custom.audit.request</field>
+        <field name="arch" type="xml">
+            <graph string="Audit Request">
+                <field name="name"/>
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+    
+    <record model="ir.ui.view" id="custom_view_audit_request_pivot_probc">
+        <field name="name">audit.request.pivot</field>
+        <field name="model">custom.audit.request</field>
+        <field name="arch" type="xml">
+            <pivot string="Audit Request">
+                <field name="name"/>
+                <field name="state"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <record model="ir.actions.act_window" id="custom_action_audit_request_type_probc">
+        <field name="name">Audit Requests</field>
+        <field name="res_model">custom.audit.request</field>
+        <field name="view_mode">kanban,tree,form,calendar,graph,pivot</field>
+        <field name="context">{'search_default_status': 1}</field>
+    </record>
+    
+    <record model="ir.actions.act_window" id="custom_action_my_audit_request_type_probc">
+        <field name="name">My Audit Requests</field>
+        <field name="res_model">custom.audit.request</field>
+        <field name="view_mode">kanban,tree,form,calendar,graph,pivot</field>
+        <field name="context">{'search_default_status': 1}</field>
+        <field name="domain">[('responsible_user_id', '=', uid)]</field>
+    </record>
+    
+    <record model="ir.actions.act_window" id="custom_action_audit_request_toapprove_probc">
+        <field name="name">Audit Requests to Approve</field>
+        <field name="res_model">custom.audit.request</field>
+        <field name="view_mode">kanban,tree,form,calendar,graph,pivot</field>
+        <field name="context">{'search_default_state': 'b_confirm'}</field>
+    </record>
+    
+    <record model="ir.actions.act_window" id="custom_tocomplete_action_audit_request_probc">
+        <field name="name">Audit Requests to Complete</field>
+        <field name="res_model">custom.audit.request</field>
+        <field name="view_mode">kanban,tree,form,calendar,graph,pivot</field>
+        <field name="context">{'search_default_state': 'c_approve'}</field>
+    </record>
+    
+    <menuitem id="custom_audit_request_main_menu_root" name="Audit Requests"/>
+    
+    <menuitem id="custom_audit_request_configuration_menu" name="Configuration" parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+        groups="odoo_audit_request_form.custom_group_audit_approve_probc" sequence="2"/>
+    
+    <menuitem id="custom_audit_request_menu_probc" name="Audit Requests" parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+        action="odoo_audit_request_form.custom_action_audit_request_type_probc" sequence="1"/>
+    
+    <menuitem id="custom_my_audit_request_type_menu_probc" name="My Audit Requests" parent="odoo_audit_request_form.custom_audit_request_menu_probc"
+        action="odoo_audit_request_form.custom_action_my_audit_request_type_probc"
+        sequence="1"/>
+    
+    <menuitem id="custom_approve_my_audit_request_menu_probc" name="Audit Requests to
+        Approve" parent="odoo_audit_request_form.custom_audit_request_menu_probc"
+        action="odoo_audit_request_form.custom_action_audit_request_toapprove_probc"
+        sequence="2" groups="odoo_audit_request_form.custom_group_audit_approve_probc"/>
+    
+    <menuitem id="custom_complete_my_audit_request_menu_probc" name="Audit Requests to
+        Complete" parent="odoo_audit_request_form.custom_audit_request_menu_probc"
+        action="odoo_audit_request_form.custom_tocomplete_action_audit_request_probc"
+        sequence="3" groups="odoo_audit_request_form.custom_group_audit_approve_probc"/>
+    
+    <menuitem id="custom_my_audit_request_done_menu_probc" name="All Audit Requests" parent="odoo_audit_request_form.custom_audit_request_menu_probc"
+        action="odoo_audit_request_form.custom_action_audit_request_type_probc" sequence="4"
+        groups="odoo_audit_request_form.custom_group_audit_approve_probc"/>
+</odoo> 

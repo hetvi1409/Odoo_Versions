@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="action_account_asset_disposal_report"
+                model="ir.actions.report">
+            <field name="name">Asset Disposal report</field>
+            <field name="model">account.asset</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">asset_registration.account_asset_disposal_report</field>
+            <field name="report_file">asset_registration.account_asset_disposal_report</field>
+            <field name="print_report_name">'Asset Disposal - %s' % object.name</field>
+            <field name="binding_model_id" ref="model_account_asset"/>
+            <field name="binding_type">report</field>
+        </record>
+        <template id="account_asset_disposal_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div>
+                            <center><h2>Asset Disposal</h2></center>
+                            <table class="table">
+                                <tbody class="order_body">
+                                    <tr>
+                                        <td>
+                                            <strong>Name of asset:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.name"/>
+                                        </td>
+                                        <td>
+                                            <strong>Description:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.description"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Original value:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.original_value"/>
+                                        </td>
+                                        <td>
+                                            <strong>Acquisition Date:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.acquisition_date"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Opening Cost:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.opening_cost"/>
+                                        </td>
+                                        <td>
+                                            <strong>Not Depreciable Value:
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.salvage_value"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h3>Disposal Details</h3>
+                            <table class="table">
+                                <tbody class="order_body">
+                                    <tr>
+                                        <td>
+                                            <strong>Disposal type</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.disposal_type"/>
+                                        </td>
+                                        <td>
+                                            <strong>Cash type:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.cash_type"/>
+                                        </td>
+                                        <td>
+                                            <strong>Non-Cash type:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.non_cash_type"/>
+                                        </td>
+                                        <td>
+                                            <strong>Non-Cash type:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.direct_disposal_amount"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

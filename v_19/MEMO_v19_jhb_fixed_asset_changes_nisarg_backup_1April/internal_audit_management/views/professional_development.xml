@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_prof_dev" model="ir.actions.act_window">
+        <field name="name">Professional Development</field>
+        <field name="res_model">professional.development</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Professional Development
+            </p>
+            <p>
+                Create and manage the Professional Development
+            </p>
+        </field>
+    </record>
+    <record id="prof_dev_form" model="ir.ui.view">
+        <field name="name">Professional Development</field>
+        <field name="model">professional.development</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                            invisible="state != 'preparer'"
+                            string="Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object" invisible="state != 'first_reviewer'" string="2nd Review" class="oe_highlight"/>
+                    <button name="action_approve" type="object"
+                            invisible="state != 'second_reviewer'"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_send_back_review" type="object"
+                            invisible="state in ['rejected','preparer','reverted','approved']"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_update" type="object"
+                            invisible="state != 'reverted' or uid != user_preparer_ids"
+                            string="Updated" class="oe_highlight"/>
+                    <button name="action_send_back_new" type="object"
+                            invisible="state != 'rejected'"
+                            string="Move To New" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="is_current_user_preparer" invisible="1"/>
+                            <field name="wp_reference"/>
+                            <field name="project_id"/>
+                            <field name="subject"/>
+                            <label for="start_date" string="Period"/>
+                            <div>
+                                <field name="start_date" class="oe_inline"/>
+                                -
+                                <field name="end_date" class="oe_inline"/>
+                            </div>
+                            <field name="date_prof"/>
+                        </group>
+                        <group>
+                            <field name="user_preparer_ids"/>
+                            <field name="user_reviewer_1_ids"/>
+                            <field name="user_reviewer_2_ids"/>
+                            <field name="user_approver_ids"/>
+                        </group>
+                    </group>
+                    <h4><b>Team consists out of the following members: </b></h4>
+                    <notebook>
+                        <page string="Team Members">
+                            <field name="member_details">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="employee_number"/>
+                                    <field name="rank"/>
+                                    <field name="qualifications"/>
+                                    <field name="experience"/>
+                                    <field name="certifications"/>
+                                    <field name="training_attend"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Documents">
+                            <group>
+                                <group>
+                                    <field name="document_ids"
+                                           widget="many2many_binary">
+                                    </field>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_prof_tree" model="ir.ui.view">
+        <field name="name">Professional Development</field>
+        <field name="model">professional.development</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="subject"/>
+                <field name="wp_reference"/>
+            </list>
+        </field>
+    </record>
+    <menuitem id="prof_dev_menu"
+              name="Professional Development"
+              parent="internal_audit_management.high_charter_menu"
+              action="action_prof_dev"
+              sequence="2"/>
+</odoo>

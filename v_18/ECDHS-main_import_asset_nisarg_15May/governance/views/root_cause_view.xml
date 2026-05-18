@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_root_cause_tree" model="ir.ui.view">
+        <field name="name">root.cause.tree</field>
+        <field name="model">root.cause</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="ref" readonly="1"/>
+                <field name="type"/>
+                <field name="why1"/>
+                <field name="why2"/>
+                <field name="why3"/>
+                <field name="why4"/>
+                <field name="why5"/>
+            </list>
+        </field>
+    </record>
+       <record id="view_root_cause_form" model="ir.ui.view">
+        <field name="name">root.cause.form</field>
+        <field name="model">root.cause</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="ref" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="type"/>
+                            <field name="why1"/>
+                            <field name="why2"/>
+
+                        </group>
+                        <group>
+                            <field name="why3"/>
+                            <field name="why4"/>
+                            <field name="why5"/>
+                          </group>
+                        </group>
+                </sheet>
+            </form>
+        </field>
+       </record>
+  
+    <record id="action_root_cause" model="ir.actions.act_window">
+        <field name="name">Root Cause</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">root.cause</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+
+            <p class="'o_view_nocontent_smiling_face">
+                Create your Root Cause !
+            </p>
+        </field>
+    </record>
+    <menuitem
+            id="menu_root_cause"
+            name="Root Cause"
+            action="action_root_cause"
+            parent="menu_problem"
+            sequence="40"/>
+
+</odoo>

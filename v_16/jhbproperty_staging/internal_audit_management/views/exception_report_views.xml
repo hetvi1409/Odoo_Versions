@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    Exception Report __________________________-->
+
+    <record id="action_exception_report" model="ir.actions.act_window">
+        <field name="name">Exception Report</field>
+        <field name="res_model">exception.report</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Exception Report
+            </p>
+            <p>
+                Create and manage Exception Reports;
+            </p>
+        </field>
+    </record>
+
+    <record id="exception_report_note_view_form" model="ir.ui.view">
+        <field name="name">exception.report.view.form</field>
+        <field name="model">exception.report.note</field>
+        <field name="arch" type="xml">
+            <form string="Methodology" duplicate="0">
+                <header>
+                    <button name="action_review" type="object"
+                           
+                            string="Review" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'new')]}"/>
+                    <button name="action_approve" type="object"
+                           
+                            string="Approve" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'review')]}"/>
+                    <button name="action_mark_discrepancy" type="object"
+                           
+                            string="Refuse" attrs="{'invisible': [('state', '!=', 'review')]}"/>
+                    <button name="action_send_back_review" type="object"
+                           
+                            string="Move To Review" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'refuse')]}"/>
+                    <button name="action_send_back_new" type="object"
+                           
+                            string="Move To New" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'refuse')]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="exception_report_id"
+                                   attrs="{'readonly': [('state', '!=', 'new')]}"/>
+                            <field name="create_uid"/>
+                        </group>
+                        <group>
+                            <field name="create_date"/>
+                            <field name="approver_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="exception_report_view_form" model="ir.ui.view">
+        <field name="name">exception.report.view.form</field>
+        <field name="model">exception.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                           
+                            string="Review" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'new')]}"/>
+                    <button name="action_approve" type="object"
+                           
+                            string="Approve" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'review')]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="requirements"
+                               attrs="{'readonly': [('state', 'in', ['approve', 'refuse'])]}"/>
+                        <field name="record_work_done"
+                               attrs="{'readonly': [('state', 'in', ['approve', 'refuse'])]}"/>
+                        <field name="conclusion"
+                               attrs="{'readonly': [('state', 'in', ['approve', 'refuse'])]}"/>
+                        <field name="attachment_ids" widget="many2many_binary"
+                               attrs="{'readonly': [('state', 'in', ['approve', 'refuse'])]}"/>
+                    </group>
+                    <notebook>
+                        <page string="Exception Report">
+                            <div class="d-flex justify-content-end">
+                                <button name="action_edit_note" type="object"
+                                        string="Edit"
+                                        class="btn btn-primary oe_rightalign" attrs="{'invisible': [('note_id', '!=', False)]}"/>
+                                <button name="action_create_note" type="object"
+                                       
+                                        string="Create"
+                                        class="btn btn-primary oe_rightalign" attrs="{'invisible': [('note_id', '!=', False)]}"/>
+                            </div>
+                            <group>
+                                <field name="note_id" invisible="1"/>
+                                <field name="notes"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="exception_report_view_tree" model="ir.ui.view">
+        <field name="name">exception.report.view.tree</field>
+        <field name="model">exception.report</field>
+        <field name="arch" type="xml">
+            <tree duplicate="0">
+                <field name="requirements"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('new')"
+                       decoration-warning="state in ('review')"
+                       decoration-success="state in ('approve')"/>
+            </tree>
+        </field>
+    </record>
+    <menuitem id="exception_report_menu"
+              name="Exception Report"
+              parent="internal_audit_management.internal_audit_rolling_root_menu"
+              action="action_exception_report"
+              sequence="0"/>
+</odoo>

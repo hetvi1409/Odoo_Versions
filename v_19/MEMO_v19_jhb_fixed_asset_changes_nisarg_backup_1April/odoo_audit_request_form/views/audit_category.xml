@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="custom_audit_category_view_form_probc">
+        <field name="name">audit.category.form</field>
+        <field name="model">custom.audit.category</field>
+        <field name="arch" type="xml">
+            <form string="Audit Category">
+                <sheet>
+                    <group>
+                        <group col="2">
+                            <field name="name"/>
+                        </group>
+                        <group col="2">
+                            <field name="code"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record model="ir.ui.view" id="custom_audit_category_view_tree_probc">
+        <field name="name">audit.category.list</field>
+        <field name="model">custom.audit.category</field>
+        <field name="arch" type="xml">
+            <list string="Audit Category">
+                <field name="name"/>
+                <field name="code"/>
+            </list>
+        </field>
+    </record>
+    
+    <record model="ir.actions.act_window" id="custom_action_audit_category_probc">
+        <field name="name">Audit Category</field>
+        <field name="res_model">custom.audit.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    
+    <menuitem id="custom_audit_type_menu_probc" name="Audit Category" parent="odoo_audit_request_form.custom_audit_request_configuration_menu"
+        action="odoo_audit_request_form.custom_action_audit_category_probc"/>
+</odoo>

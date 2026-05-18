@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--<record id="sms_account_inuka_international" model="sms.account">-->
+        <!--<field name="name">INUKA International</field>-->
+        <!--<field name="account_gateway_id" ref="sms_clickatell"/>-->
+        <!--<field name="clicKatell_username">inukaclick</field>-->
+        <!--<field name="clicKatell_password">click2inuka@2015</field>-->
+        <!--<field name="clicKatell_api">3536578</field>-->
+    <!--</record>-->
+
+    <!--<record id="sms_number_inuka_international" model="sms.number">-->
+        <!--<field name="name">INUKA International</field>-->
+        <!--<field name="account_id" ref="sms_account_inuka_international"/>-->
+        <!--<field name="mobile_number">41798073057</field>-->
+    <!--</record>-->
+
+    <!--    Gateways-->
+    <record id="sms_gateway_clickatell" model="sms.gateway">
+        <field  name="name">Clickatel</field>
+        <field  name="gateway_model_name">sms.gateway.clickatell</field>
+    </record>
+    <record id="sms_gateway_sms_portal" model="sms.gateway">
+        <field  name="name">SMS Portal Api</field>
+        <field  name="gateway_model_name">sms.gateway.smsportal</field>
+    </record>
+    <record id="sms_gateway_sms_my_mobile" model="sms.gateway">
+        <field  name="name">My Mobile Api</field>
+        <field  name="gateway_model_name">sms.gateway.mymobileapi</field>
+    </record>
+
+    <!--    SMS Accounts-->
+    <record id="sms_account_default_account" model="sms.account">
+        <field name="name">SMS Account (SMS Portal)</field>
+        <field name="account_gateway_id" ref="sms_gateway_sms_portal"/>
+        <field name="client_id"></field>
+        <field name="secret_key"></field>
+        <field name="authentication_url">http://rest.smsportal.com/v1/Authentication</field>
+        <field name="message_url">https://rest.smsportal.com/v1/bulkmessages</field>
+    </record>
+
+    <record id="sms_account_my_mobile" model="sms.account">
+        <field name="name">SMS Account (My Mobile)</field>
+        <field name="account_gateway_id" ref="sms_gateway_sms_my_mobile"/>
+        <field name="client_id"></field>
+        <field name="secret_key"></field>
+        <field name="authentication_url">http://rest.mymobileapi.comv1/Authentication</field>
+        <field name="message_url">https://rest.mymobileapi.com/v1/bulkmessages</field>
+    </record>
+    <record id="account_clickatell" model="sms.account">
+        <field name="name">SMS Account (Clickatel)</field>
+        <field name="account_gateway_id" ref="sms_gateway_clickatell"/>
+        <field name="clicKatell_username"></field>
+        <field name="clicKatell_password"></field>
+        <field name="clicKatell_api"></field>
+    </record>
+
+    <!--SMS Numbers - Default is with SMS Portal-->
+    <record id="sms_number_default" model="sms.number">
+        <field name="name">SMS Number (Default)</field>
+        <field name="account_id" ref="sms_account_default_account"/>
+        <field name="mobile_number">42001</field>
+    </record>
+
+    <record id="sms_template_default" model="seta.sms.template">
+        <field name="name">Send SMS to Customer</field>
+        <field name="model_id" search="[('model', '=', 'res.partner')]"/>
+        <field name="from_mobile_verified_id" ref="sms_number_default"/>
+        <field name="from_mobile">0000000000</field>
+        <field name="template_body">Hello ${object.name}</field>
+    </record>
+
+    <record id="sms_template_reset_password" model="seta.sms.template">
+        <field name="name">Portal Password Reset</field>
+        <field name="model_id" search="[('model', '=', 'res.users')]"/>
+        <field name="from_mobile_verified_id" ref="sms_number_default"/>
+        <field name="from_mobile">0000000000</field>
+        <field name="template_body">Dear ${object.name}, A password reset was requested for your Portal. Change your
+            password by following this link which is valid for 24 hrs:
+            ${object.partner_id.signup_url}
+        </field>
+    </record>
+
+</odoo>

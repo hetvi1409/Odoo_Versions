@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="rule_committee_system" model="ir.rule">
+		<field name="name">Committee System</field>
+		<field name="model_id" ref="model_committee" />
+		<field name="groups" eval="[(4, ref('base.group_system'))]" />
+		<field name="domain_force">[(1,'=', 1)]</field>
+	</record>
+	
+	<record id="rule_committee_meeting_system" model="ir.rule">
+		<field name="name">Committee Meeting System</field>
+		<field name="model_id" ref="model_committee_meeting" />
+		<field name="groups" eval="[(4, ref('base.group_system'))]" />
+		<field name="domain_force">[(1,'=', 1)]</field>
+	</record>	
+	
+	<record id="rule_committee_meeting_committee_member" model="ir.rule">
+		<field name="name">Committee Meeting Committee Member</field>
+		<field name="model_id" ref="model_committee_meeting" />
+		<field name="groups" eval="[(4, ref('group_committee_member'))]" />
+		<field name="domain_force">[('committee_id.member_ids.employee_id.user_id','=', user.id)]</field>
+	</record>
+	
+	<record id="rule_committee_meeting_user" model="ir.rule">
+		<field name="name">Committee Meeting User</field>
+		<field name="model_id" ref="model_committee_meeting" />
+		<field name="groups" eval="[(4, ref('base.group_user'))]" />
+		<field name="domain_force">[(0,'=', 1)]</field>
+	</record>
+	
+</odoo>

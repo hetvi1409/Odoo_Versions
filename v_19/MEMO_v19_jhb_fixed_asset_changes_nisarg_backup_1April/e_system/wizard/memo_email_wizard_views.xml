@@ -1,0 +1,28 @@
+<odoo>
+    <record id="view_memo_email_wizard_form" model="ir.ui.view">
+        <field name="name">memo.memo.email.wizard.form</field>
+        <field name="model">memo.memo.email.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send Memo by Email">
+                <group>
+                    <field name="subject"/>
+                    <field name="recipient_ids" widget="many2many_tags"/>
+                    <field name="body_html" widget="html"/>
+                </group>
+                <footer>
+                    <button string="Send Email" type="object" name="send_email" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_memo_email_wizard" model="ir.actions.act_window">
+        <field name="name">Send Memo</field>
+        <field name="res_model">memo.memo.email.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_memo_id': active_id}</field>
+    </record>
+
+</odoo>

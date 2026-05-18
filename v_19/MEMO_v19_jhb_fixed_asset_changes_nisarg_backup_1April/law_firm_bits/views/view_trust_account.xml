@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="law_trust_account_form_view" model="ir.ui.view">
+            <field name="name">trust.account.form.view</field>
+            <field name="model">trust.account</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title mb24">
+                            <h1>
+                                <field class="text-break" name="name" placeholder="Trust Account"
+                                       default_focus="1" required="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id" required="1"
+                                       options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                                <field name="case_id"
+                                       options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                                <field name="matter_id"
+                                       options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                                <field name="amount" string="Total Amount"/>
+                                <field name="amount_due" string="Available Amount"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="attachment" string="Attachment">
+                                <field name="doc_attachment_ids" widget="many2many_binary" string="Documents"
+                                       style="width:100%;"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="law_trust_account_tree_view" model="ir.ui.view">
+            <field name="name">trust.account.list.view</field>
+            <field name="model">trust.account</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="law_trust_account_act_action" model="ir.actions.act_window">
+            <field name="name">Trust Account</field>
+            <field name="res_model">trust.account</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

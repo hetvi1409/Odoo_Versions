@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_opms_submission_reminder_wizard_form" model="ir.ui.view">
+            <field name="name">opms.submission.reminder.wizard.form</field>
+            <field name="model">opms.submission.reminder.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Send Submission Reminder">
+                    <sheet>
+                        <group>
+                            <field name="quarter_id"/>
+                            <field name="reminder_type"/>
+                            <field name="notification_date"/>
+                            <field name="custom_subject" placeholder="Optional custom subject"/>
+                            <field name="custom_note" placeholder="Optional additional note"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_send" type="object" string="Send Reminder" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_submission_reminder_wizard" model="ir.actions.act_window">
+            <field name="name">Send Submission Reminder</field>
+            <field name="res_model">opms.submission.reminder.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

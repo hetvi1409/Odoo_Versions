@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="approval_request_view_form" model="ir.ui.view">
+        <field name="name">approval.request.form</field>
+        <field name="model">approval.request</field>
+        <field name="inherit_id" ref="approvals.approval_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='approvers']" position="before">
+                <!--                <page name="Investigation Report" string="Investigation Report" attrs="{'invisible': [('category_id.name', 'ilike', 'Memo')]}">-->
+                <page name="investigation" string="Investigation Report">
+                    <group>
+                        <group>
+                            <field name="investigation_report_ids"
+                                   widget="many2many_binary"/>
+                        </group>
+                        <group>
+                            <field name="image_ids"
+                                   widget="many2many_binary"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

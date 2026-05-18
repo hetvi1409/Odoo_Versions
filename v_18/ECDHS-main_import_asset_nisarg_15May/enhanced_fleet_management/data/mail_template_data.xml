@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Email Template: Transport Request Submitted -->
+        <record id="email_template_transport_request_submitted" model="mail.template">
+            <field name="name">Transport Request: Submitted</field>
+            <field name="model_id" ref="model_fleet_transport_request"/>
+            <field name="subject">Transport Request ${object.reference} Submitted</field>
+            <field name="email_from">${object.company_id.email or ''}</field>
+            <field name="email_to">${object.manager_id.email or ''}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear ${object.manager_id.name or 'Manager'},<br/><br/>
+                        A new transport request has been submitted for your approval.<br/><br/>
+                        <strong>Request Details:</strong><br/>
+                        Reference: ${object.reference}<br/>
+                        Requester: ${object.requester_id.name}<br/>
+                        Date Required: ${object.date_required}<br/>
+                        Destination: ${object.destination}<br/>
+                        Purpose: ${object.purpose}<br/><br/>
+                        Please review and approve the request in the system.<br/><br/>
+                        Best regards,<br/>
+                        Fleet Management System
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <!-- Email Template: Lost/Theft Incident -->
+        <record id="email_template_lost_theft_incident" model="mail.template">
+            <field name="name">Lost/Theft Incident: Reported</field>
+            <field name="model_id" ref="model_fleet_lost_theft"/>
+            <field name="subject">URGENT: Fleet Incident Report ${object.reference}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px; color: red;">
+                        <strong>URGENT - Fleet Incident Reported</strong><br/><br/>
+                    </p>
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        An incident has been reported:<br/><br/>
+                        <strong>Incident Details:</strong><br/>
+                        Case Reference: ${object.reference}<br/>
+                        Incident Type: ${dict(object._fields['incident_type'].selection).get(object.incident_type)}<br/>
+                        Vehicle: ${object.vehicle_id.name} (${object.license_plate})<br/>
+                        Incident Date: ${object.incident_date}<br/>
+                        Location: ${object.incident_location}<br/>
+                        Reported By: ${object.reported_by_id.name}<br/><br/>
+                        Immediate action may be required.<br/><br/>
+                        Best regards,<br/>
+                        Fleet Management System
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <!-- Email Template: Accident Report -->
+        <record id="email_template_accident_report" model="mail.template">
+            <field name="name">Accident Report: Critical Notification</field>
+            <field name="model_id" ref="model_fleet_accident_report"/>
+            <field name="subject">CRITICAL: Accident Report ${object.reference}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px; color: red;">
+                        <strong>CRITICAL - Vehicle Accident Reported</strong><br/><br/>
+                    </p>
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        A vehicle accident has been reported:<br/><br/>
+                        <strong>Accident Details:</strong><br/>
+                        Reference: ${object.reference}<br/>
+                        Vehicle: ${object.vehicle_id.name} (${object.vehicle_registration})<br/>
+                        Driver: ${object.driver_id.name}<br/>
+                        Accident Date: ${object.accident_date}<br/>
+                        Location: ${object.accident_location}<br/>
+                        Accident Type: ${dict(object._fields['accident_type'].selection).get(object.accident_type)}<br/>
+                        Severity: ${dict(object._fields['severity_level'].selection).get(object.severity_level) if object.severity_level else 'Not Assessed'}<br/>
+                        Injuries: ${object.total_injuries} person(s)<br/><br/>
+                        Reported By: ${object.reported_by_id.name}<br/><br/>
+                        <strong>Immediate Actions Required:</strong><br/>
+                        - Ensure safety of all involved<br/>
+                        - Contact emergency services if needed<br/>
+                        - Secure the accident scene<br/>
+                        - Document with photos<br/>
+                        - Complete full investigation<br/><br/>
+                        Best regards,<br/>
+                        Fleet Management System
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <!-- Email Template: Relief Vehicle Approved -->
+        <record id="email_template_relief_approved" model="mail.template">
+            <field name="name">Vehicle Relief: Approved</field>
+            <field name="model_id" ref="model_fleet_vehicle_relief"/>
+            <field name="subject">Vehicle Relief Request ${object.reference} Approved</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear ${object.requester_id.name},<br/><br/>
+                        Your vehicle relief request has been approved.<br/><br/>
+                        <strong>Relief Details:</strong><br/>
+                        Reference: ${object.reference}<br/>
+                        Original Vehicle: ${object.original_registration}<br/>
+                        Relief Reason: ${dict(object._fields['relief_reason'].selection).get(object.relief_reason)}<br/>
+                        Start Date: ${object.start_date}<br/>
+                        Expected End Date: ${object.expected_end_date}<br/>
+                        Relief Vehicle: ${object.relief_registration if object.relief_vehicle_id else 'To Be Assigned'}<br/><br/>
+                        Approved By: ${object.approved_by_id.name}<br/>
+                        Approval Date: ${object.approval_date}<br/><br/>
+                        Please coordinate with the fleet department for vehicle handover.<br/><br/>
+                        Best regards,<br/>
+                        Fleet Management System
+                    </p>
+                </div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

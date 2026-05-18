@@ -1,0 +1,25 @@
+<odoo>
+    <record model="ir.module.category" id="fuel_card_register.module_fuel_card_register">
+        <field name="name">Fuel Card Register</field>
+        <field name="sequence">51</field>
+    </record>
+    <!-- Fleet Manager -->
+    <record id="group_fleet_manager" model="res.groups">
+        <field name="name">Fleet Manager</field>
+        <field name="category_id" ref="fuel_card_register.module_fuel_card_register"/>
+    </record>
+
+    <!-- Driver -->
+    <record id="group_driver" model="res.groups">
+        <field name="name">Driver</field>
+        <field name="category_id" ref="fuel_card_register.module_fuel_card_register"/>
+    </record>
+
+    <!-- Admin -->
+    <record id="group_fleet_admin" model="res.groups">
+        <field name="name">Admin</field>
+        <field name="category_id" ref="fuel_card_register.module_fuel_card_register"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+</odoo>

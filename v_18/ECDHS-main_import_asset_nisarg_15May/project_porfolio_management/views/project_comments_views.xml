@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    
+    <record id="project_comments_view_list" model="ir.ui.view">
+        <field name="name">project.comments.view.list</field>
+        <field name="model">project.comments</field>
+        <field name="arch" type="xml">
+            <list string="Project Comments">
+                <field name="project_id" options="{'no_create': True}"/>
+                <field name="title"/>
+                <field name="comments"/>
+                <field name="last_update"/>
+                <field name="overdue" widget="badge"
+                       decoration-success="overdue == 'update_current'"
+                       decoration-info="overdue == 'update_due_soon'"
+                       decoration-danger="overdue == 'overdue'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="project_comments_view_form" model="ir.ui.view">
+        <field name="name">project.comments.view.form</field>
+        <field name="model">project.comments</field>
+        <field name="arch" type="xml">
+            <form string="Project Comments">
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover),
+                        .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover)
+                        .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover)
+                        .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+
+                    <group string="Comments Information">
+                        <group>
+                            <field name="name"/>
+                            <field name="title"/>
+                            <field name="project_id" context="{'form_view_ref': 'project_porfolio_management.edit_project_ppe'}"
+                             options="{'no_create': True}"/>
+                            <field name="overdue" widget="badge"
+                                   decoration-success="overdue == 'update_current'"
+                                   decoration-info="overdue == 'update_due_soon'"
+                                   decoration-danger="overdue == 'overdue'"/>
+                            <field name="last_update"/>
+                        </group>
+                        <group>
+                            <field name="comments"/>
+                            <field name="previous_comments"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Comment Classification">
+                            <field name="type"/>
+                        </group>
+                        <group string="Update Details">
+                            <field name="logged_date"/>
+                            <field name="loaded_by_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_project_comments" model="ir.actions.act_window">
+        <field name="name">Project Comments</field>
+        <field name="res_model">project.comments</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Comments found. Let's create one!
+            </p>
+            <p>
+                Create Comments to organize your tasks. Define a different workflow for each project.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="action_project_comments_menu" name="Project Comments"
+              parent="menu_ppo_reporting"
+              action="action_project_comments"
+              sequence="5"/>
+</odoo>

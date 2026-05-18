@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_rental_contract_report" model="ir.actions.report">
+        <field name="name">Rental Contract OTL Report</field>
+        <field name="model">rental.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">real_estate_management.report_rental_contract_report</field>
+        <field name="report_file">real_estate_management.report_rental_contract_report</field>
+        <field name="binding_model_id" ref="model_rental_contract"/>
+    </record>
+    <template id="report_rental_contract_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <style>
+                    .section-title {
+                    border-bottom: 2px solid #6a1b9a;
+                    padding-bottom: 4px;
+                    margin-top: 20px;
+                    font-size: 15px;
+                    font-weight: 700;
+                    }
+                    .info-table {
+                    width: 100%;
+                    font-size: 13px;
+                    border-collapse: collapse;
+                    }
+                    .info-table td {
+                    padding: 6px 8px;
+                    }
+                    .info-table .label {
+                    width: 25%;
+                    font-weight: bold;
+                    }
+                    .info-table .value {
+                    color: red;
+                    }
+                    .shaded-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    background-color: #e8e3c9;
+                    font-size: 13px;
+                    margin-top: 10px;
+                    }
+                    .shaded-table td {
+                    padding: 6px 8px;
+                    }
+                    .right {
+                    text-align: right;
+                    }
+                    .bold {
+                    font-weight: bold;
+                    }
+                </style>
+
+                <div class="page">
+
+                    <h2 style="text-align:center; margin-top:0;">Rental
+                        Contract
+                    </h2>
+
+                    <t t-foreach="docs" t-as="doc">
+
+                        <!-- CLIENT INFORMATION -->
+                        <h4 class="section-title">Client Information: Tenant
+                        </h4>
+                        <table class="info-table">
+                            <tr>
+                                <td class="label">Company Name</td>
+                                <td class="value">
+                                    <span t-field="doc.company_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">Contact Name</td>
+                                <td class="value">
+                                    <span t-field="doc.partner_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">Address</td>
+                                <td class="value">
+                                    <address t-field="doc.partner_id"
+                                             t-options='{"widget":"contact","fields":["address","name"],"no_marker":True}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">Phone</td>
+                                <td class="value">
+                                    <span t-field="doc.partner_id.phone"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">Email</td>
+                                <td class="value">
+                                    <span t-field="doc.partner_id.email"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- SPECIFICATIONS HEADER -->
+                        <h4 class="section-title">Specifications</h4>
+
+                        <table class="shaded-table">
+                            <tr>
+                                <td class="bold" style="width:25%;">Property
+                                    Name
+                                </td>
+                                <td style="width:35%;">
+                                    <span t-field="doc.building_unit"/>
+                                </td>
+                                <td class="bold" style="width:20%;">Transaction
+                                    ID
+                                </td>
+                                <td style="width:20%;">
+                                    <span t-field="doc.name"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- SPECIFICATION GRID -->
+                        <table class="info-table" style="margin-top:10px;">
+                            <tr>
+                                <td class="label">Transaction Type</td>
+                                <td>Retail Lease</td>
+                                <td class="label">Section Number</td>
+                                <td>
+                                    <span t-field="doc.section_number"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">Floor</td>
+                                <td>
+                                    <span t-field="doc.floor"/>
+                                </td>
+                                <td class="label">Internal Area</td>
+                                <td>
+                                    <span t-field="doc.building_area"/>
+                                    m²
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">Additional Area</td>
+                                <td>
+                                    <span t-field="doc.additional_area"/>
+                                    m²
+                                </td>
+                                <td class="label">Annual Escalation</td>
+                                <td><span t-field="doc.annual_escalation"/>%
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- DATE OF OFFER ROW -->
+                        <table class="info-table" style="margin-top:10px;">
+                            <tr>
+                                <td class="label">Date of Offer</td>
+                                <td>
+                                    <span t-field="doc.date"/>
+                                </td>
+                                <td class="label">Offer Open Days</td>
+                                <td></td>
+                                <td class="label">Offer Expiry Date</td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                        <!-- RENT & COST TABLE -->
+                        <table class="shaded-table">
+                            <tr>
+                                <td></td>
+                                <td class="bold">Rates</td>
+                                <td class="bold right">Monthly</td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Net Rent</td>
+                                <td class="value">
+                                    <span t-field="doc.net_rent"/>
+                                </td>
+                                <td class="right">
+                                    <span t-field="doc.net_rent_monthly"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Additional Area</td>
+                                <td class="value">
+                                    <span t-field="doc.additional_area_rate"/>
+                                </td>
+                                <td class="right">
+                                    <span t-field="doc.additional_area_rate_monthly"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Marketing Fee</td>
+                                <td class="value"></td>
+                                <td class="right"></td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Rates &amp; Taxes</td>
+                                <td class="value">
+                                    <span t-field="doc.rates_tax"/>
+                                    p/m²
+                                </td>
+                                <td class="right">
+                                    <span t-field="doc.rates_tax_monthly"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Operating Costs</td>
+                                <td class="value">p/m²</td>
+                                <td class="right"></td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Gross Rent</td>
+                                <td></td>
+                                <td class="right bold"></td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Parking Bays</td>
+                                <td>
+                                    <span t-field="doc.parking"/>
+                                    ×
+                                    <span style="color:red;">R
+                                        <t t-esc="doc.parking_bays"/>
+                                    </span>
+                                    p/bay
+                                </td>
+                                <td class="right">
+                                    <span t-field="doc.parking_bays_monthly"/>
+                                </td>
+                            </tr>
+                            <tr style="border-top:2px solid #6a1b9a;">
+                                <td class="bold">Total Gross Rental</td>
+                                <td></td>
+                                <td class="right bold">
+                                    <span t-field="doc.rental_fee"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- LEASE PERIOD & DEPOSIT -->
+                        <table class="shaded-table">
+                            <tr>
+                                <td class="bold" style="width:40%;">Lease Period
+                                    (years)
+                                </td>
+                                <td class="value" style="width:60%;">
+                                    <span t-field="doc.lease_duration_years"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Beneficial Occupation Date</td>
+                                <td class="value">
+                                    <span t-field="doc.date_from"
+                                          t-options='{"widget":"date"}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Beneficial Period</td>
+                                <td class="value">
+                                    <span t-field="doc.beneficial_occupation_period"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Beneficial Occ. Period Days
+                                </td>
+                                <td>
+                                    <span t-field="doc.beneficial_occupation_period"/>
+                                    days
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Lease Commencement Date</td>
+                                <td>
+                                    <span t-field="doc.lease_comm_date"
+                                          t-options='{"widget":"date"}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Lease End Date</td>
+                                <td>
+                                    <span t-field="doc.date_to"
+                                          t-options='{"widget":"date"}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Total Lease Term</td>
+                                <td>
+                                    <span t-field="doc.lease_term"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Months of Deposit</td>
+                                <td class="value"></td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Deposit Amount</td>
+                                <td>R
+                                    <span t-field="doc.deposit_amount"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <t t-set="tc"
+                           t-value="request.env['ir.config_parameter'].sudo().get_param('real_estate_management.property_terms_condition_id')"/>
+
+                        <!-- TERMS & CONDITIONS FROM CONFIG PARAMETER -->
+                        <h4 class="section-title">Terms &amp; Conditions :</h4>
+                        <t t-if="tc">
+                            <t t-set="terms" t-value="request.env['property.terms.condition'].browse(int(tc)).content"/>
+                            <div t-raw="terms"
+                             style="margin-top:10px; font-size:13px; line-height:1.4;"/>
+                        </t>
+
+
+                        <!-- PROPERTY INFORMATION -->
+                        <h4 class="section-title">Property Information</h4>
+                        <table class="shaded-table">
+                            <tr>
+                                <td class="bold" style="width:25%;">Property
+                                    Description:
+                                </td>
+                                <td style="width:75%; color:red;">
+                                    <span t-field="doc.building_unit.description"/>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <!-- TENANT ACCEPTANCE -->
+                        <h4 class="section-title">Tenant Acceptance</h4>
+                        <table class="shaded-table">
+                            <tr>
+                                <td style="padding:8px 10px;">
+                                    Should you be interested in proceeding with
+                                    this proposal, kindly sign below and send it
+                                    back to:
+                                    <a href="mailto:invest@lushaka.co.za">
+                                        invest@lushaka.co.za
+                                    </a>
+                                    after which our standard Lease Agreement
+                                    shall be prepared.
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <!-- SIGNATURE BLOCK -->
+                        <table class="info-table"
+                               style="margin-top:20px; width:100%;">
+                            <tr>
+                                <td style="width:50%; border-top:1px solid #000; padding-top:6px;">
+                                    Signed by (authorised representative)
+                                </td>
+                                <td style="width:50%; border-top:1px solid #000; padding-top:6px;">
+                                    Date
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    </t>
+
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

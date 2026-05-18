@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_applicant_feedback" model="mail.template">
+            <field name="name"> Interview feedback</field>
+            <field name="email_from">{{ object.company_id.email or '' }}</field>
+            <field name="email_to">{{ object.email_from or '' }}</field>
+            <field name="subject"> Interview Feedback: {{object.job_id.name}}</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="lang">${object.partner_id.lang}</field>
+        </record>
+    </data>
+</odoo>

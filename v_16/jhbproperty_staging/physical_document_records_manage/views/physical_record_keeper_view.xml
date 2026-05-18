@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="custom_physical_record_custom_form_view">
+            <field name="name">physical.record.keeper.custom.form.view</field>
+            <field name="model">physical.record.keeper.custom</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_see_record_archived" icon="fa-archive">
+                            <div class="o_stat_info">
+                                <field name="active" invisible="1"/>
+                            </div>
+                        </button>
+                    </div>
+                        <div><h1><field name="title"/></h1></div>
+                        <group string="General Information">
+                            <group>
+                                <field name="record_id" />
+                            </group>
+                            <group>
+                                <field name="document_type" widget="radio"/>
+                                <field name="physical_record_id" attrs="{'invisible': [('document_type', '=', 'new')],'required': [('document_type', '=', 'transfer')]}"/>
+                            </group>
+                        </group>
+                        <group string="Location Details">
+                            <group>
+                                <field name="owner_id" />
+                                <field name="location_id" />
+                                <field name="record_type_id" />
+                                <field name="record_method_id" />
+                            </group>
+                            <group>
+                                <field name="department_id" />
+                                <field name="bin_number" />
+                                <field name="file_number" />
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" />
+                                <field name="company_id" />
+                            </group>
+                        </group>
+                        <group string="History Details">
+                            <group>
+                                <field name="date_create" />
+                            </group>
+                            <group>
+                                <field name="user_create_id" />
+                            </group>
+                        </group>
+                        <group string="Description" name="description">
+                            <field name="description" nolabel="1"/>
+                        </group>
+                        <group string="Internal Notes" name="notes">
+                            <field name="notes" nolabel="1"/>
+                        </group>                        
+                    </sheet>
+                    <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="custom_physical_record_keeper_tree_view">
+            <field name="name">physical.record.keeper.custom.tree</field>
+            <field name="model">physical.record.keeper.custom</field>
+            <field name="arch" type ="xml">
+                <tree>
+                    <field name="title"/>
+                    <field name="record_id" />
+                    <field name="document_type" />
+                    <!-- <field name="physical_record_id" /> -->
+                    <field name="location_id" />
+                    <field name="date_create" />
+                    <field name="user_create_id" />
+                    <field name="stage_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_physical_record_keeper_filter">
+            <field name="name">physical.record.keeper.custom.search.view</field>
+            <field name="model">physical.record.keeper.custom</field>
+            <field name="arch" type="xml">
+                <search string="Records">
+                    <field name="title"/>
+                    <field name="document_type" />
+                    <field name="bin_number" />
+                    <field name="location_id" />
+                    <field name="owner_id" />
+                    <field name="file_number" />
+                    <field name="date_create" />
+                    <field name="stage_id" />
+                    <field name='company_id' groups="base.group_multi_company"/>
+                    <group expand="0" string="Group By">
+                        <filter name="Record" context="{'group_by':'record_id'}"/>
+                        <filter name="Created by" context="{'group_by':'user_create_id'}"/>
+                        <filter name="Created Date" context="{'group_by':'date_create'}"/>
+                        <filter name="Record Type" context="{'group_by':'record_type_id'}"/>
+                        <filter name="Record Method" context="{'group_by':'record_method_id'}"/>
+                        <filter name="Company" context="{'group_by':'company_id'}"/>
+                        <filter name="Stage" context="{'group_by':'stage_id'}"/>
+                        <filter name="Records With" context="{'group_by':'document_type'}"/>
+                        <filter name="Physical Record" context="{'group_by':'physical_record_id'}"/>
+                        <filter name="Department" context="{'group_by':'department_id'}"/>
+                        <filter name="Location" context="{'group_by':'location_id'}"/>
+                        <filter name="Owner" context="{'group_by':'owner_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+  
+        <record id="action_custom_physical_record_keeper" model="ir.actions.act_window">
+            <field name="name">Physical Document Records</field>
+            <field name="res_model">physical.record.keeper.custom</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_physical_tag_form_view">
+            <field name="name">physical.tag.custom.form.view</field>
+            <field name="model">physical.tag.custom</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                            </group>
+                            <group>
+                                <field name="color" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="custom_physical_tag_tree_view">
+            <field name="name">physical.tag.custom.tree</field>
+            <field name="model">physical.tag.custom</field>
+            <field name="arch" type ="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="color" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_physical_tag_search_view">
+            <field name="name">physical.tag.custom.search</field>
+            <field name="model">physical.tag.custom</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="color" />
+                </search>
+            </field>
+        </record>
+  
+        <record id="action_custom_physical_tag" model="ir.actions.act_window">
+            <field name="name">Physical Tags</field>
+            <field name="res_model">physical.tag.custom</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_recordtype_form_view">
+            <field name="name">record.type.custom.form.view</field>
+            <field name="model">record.type.custom</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                            </group>
+                            <group>
+                                <field name="code" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_record_type_tree_view">
+            <field name="name">record.type.custom.tree.view</field>
+            <field name="model">record.type.custom</field>
+            <field name="arch" type ="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="code" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_record_type_search_view">
+            <field name="name">record.type.custom.search.view</field>
+            <field name="model">record.type.custom</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="code" />
+                </search>
+            </field>
+        </record>
+  
+        <record id="action_custom_record_types" model="ir.actions.act_window">
+            <field name="name">Record Types</field>
+            <field name="res_model">record.type.custom</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_recordmethod_form_view">
+            <field name="name">record.method.custom.form.view</field>
+            <field name="model">record.method.custom</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                            </group>
+                            <group>
+                                <field name="code" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_record_method_tree_view">
+            <field name="name">record.method.custom.tree.view</field>
+            <field name="model">record.method.custom</field>
+            <field name="arch" type ="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="code" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_record_method_search_view">
+            <field name="name">record.method.custom.search.view</field>
+            <field name="model">record.method.custom</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="code" />
+                </search>
+            </field>
+        </record>
+  
+        <record id="action_custom_record_methods" model="ir.actions.act_window">
+            <field name="name">Record Methods</field>
+            <field name="res_model">record.method.custom</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- <menuitem name="Records" 
+            groups="physical_document_records_manage.group_physical_records_custom"
+                  id="menu_physical_record_keeper_custom" 
+                  web_icon="physical_document_records_manage,static/description/icon.png"/> -->
+
+        <menuitem name="Records" groups="physical_document_records_manage.group_physical_record_custom"
+                  id="menu_physical_record_keeper_custom" 
+                  web_icon="physical_document_records_manage,static/description/icon.svg"/>  <!-- odoo13 -->
+
+        <menuitem name="Records" 
+                  id="menu_physical_record_main_custom"
+                  parent="menu_physical_record_keeper_custom" />
+
+        <menuitem name="Physical Document Records" 
+                  id="sub_menu_custom_precord_keepers" 
+                  parent="menu_physical_record_main_custom" 
+                  sequence="12" action="action_custom_physical_record_keeper"/>
+
+        <menuitem name="Configurations" id="menu_physical_configurations_custom" 
+                  parent="menu_physical_record_keeper_custom" sequence="18"/>
+
+        <menuitem name="Physical Tags" id="sub_menu_custom_physicaltags" 
+                  parent="menu_physical_configurations_custom" 
+                  sequence="19" action="action_custom_physical_tag"/>
+
+        <menuitem name="Record Types" id="sub_menu_custom_recordtypes" 
+                  parent="menu_physical_configurations_custom" 
+                  sequence="20" action="action_custom_record_types"/>
+
+        <menuitem name="Record Methods" id="sub_menu_custom_recordmethods" 
+                  parent="menu_physical_configurations_custom" 
+                  sequence="21" action="action_custom_record_methods"/>
+
+
+    </data>
+</odoo>

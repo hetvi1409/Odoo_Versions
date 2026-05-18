@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        <!-- <report
+                id="physical_record_report_custom"
+                model="physical.record.keeper.custom"
+                string="Physical Record"
+                name="physical_document_records_manage.physical_record_custom_view"
+                file="physical_document_records_manage.physical_record_custom_view"
+                report_type="qweb-pdf" /> -->
+        
+        <record id="physical_record_report_custom" model="ir.actions.report">
+            <field name="name">Physical Record</field>
+            <field name="model">physical.record.keeper.custom</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">physical_document_records_manage.physical_record_custom_view</field>
+            <field name="report_file">physical_document_records_manage.physical_record_custom_view</field>
+            <field name="binding_model_id" ref="model_physical_record_keeper_custom"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="physical_record_custom_view">
+            <t t-foreach="docs" t-as="doc">        
+            <t t-call="web.external_layout">
+            <t t-call="web.html_container">            
+            <div class="page">
+                <p><h2 align="center">Physical Document Record</h2></p>
+                <p><h2 align="center"><span t-field="doc.title"/></h2></p>
+                <table class="table .table-striped">
+                    <tr>
+                        <td colspan="4"><h4>General Information</h4></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Record</strong></td>
+                        <td><span t-field="doc.record_id"/></td>
+                        <td><strong>Stage</strong></td>
+                        <td>
+                            <span t-field="doc.stage_id"/>
+                        </td>                
+                    </tr>
+                    <tr>
+                        <td><strong>Record With</strong></td>
+                        <td><span t-field="doc.document_type"/></td>
+                        <td><strong>Transfer Document</strong></td>
+                        <td>
+                            <span t-field="doc.physical_record_id"/>
+                        </td>                
+                    </tr>
+                    <tr>
+                        <td colspan="4"><h4>Location Details</h4></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Owner</strong></td>
+                        <td><span t-field="doc.owner_id"/></td>
+                        <td><strong>Department</strong></td>
+                        <td>
+                            <span t-field="doc.department_id"/>
+                        </td>                
+                    </tr>
+                    <tr>
+                        <td><strong>Location</strong></td>
+                        <td><span t-field="doc.location_id"/></td>
+                        <td><strong>Bin Number</strong></td>
+                        <td>
+                            <span t-field="doc.bin_number"/>
+                        </td>                
+                    </tr>
+                    <tr>
+                        <td><strong>Record Type</strong></td>
+                        <td><span t-field="doc.record_type_id"/></td>
+                        <td><strong>File Number</strong></td>
+                        <td>
+                            <span t-field="doc.file_number"/>
+                        </td>                
+                    </tr>
+                    <tr>
+                        <td><strong>Record Method</strong></td>
+                        <td>
+                            <span t-field="doc.record_method_id"/>
+                        </td>
+                        <td><strong>Tags</strong></td>
+                        <td>
+                            <t t-foreach="doc.tag_ids" t-as="tag">
+                                <span t-field="tag.name"/>,
+                            </t>
+                        </td>              
+                    </tr>
+                    <tr>
+                        <td><strong>Company</strong></td>
+                        <td>
+                            <span t-field="doc.company_id"/>
+                        </td>
+                        <td></td>
+                        <td></td>   
+                    </tr>
+                    <tr>
+                        <td colspan="4"><h4>History Details</h4></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Created Date</strong></td>
+                        <td><span t-field="doc.date_create"/></td>
+                        <td><strong>Created by</strong></td>
+                        <td>
+                            <span t-field="doc.user_create_id"/>
+                        </td>                
+                    </tr>
+                    <tr>
+                        <td colspan="4"><h4>Description</h4></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><span t-field="doc.description"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><h4>Internal Note</h4></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><span t-field="doc.notes"/></td>
+                    </tr>
+                </table>
+            </div>
+            </t>
+            </t>
+            </t>
+        </template>
+    </data>
+</odoo>

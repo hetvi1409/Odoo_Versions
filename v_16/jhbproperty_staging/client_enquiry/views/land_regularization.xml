@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_view_land_regularization" model="ir.actions.act_window">
+        <field name="name">Land Regularization</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">land.regularization</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="land_regularization_view_form" model="ir.ui.view">
+        <field name="name">Land Regularization</field>
+        <field name="model">land.regularization</field>
+        <field name="arch" type="xml">
+            <form create="false">
+                <header>
+                    <field name="state" widget="statusbar"/>
+<!--                    <button name="action_create_regularisation" states="draft"-->
+<!--                            string="Create inquiry" type="object"-->
+<!--                            class="btn btn-primary"/>-->
+<!--                    <button name="action_create_assessment" states="inquiry"-->
+<!--                            string="Create Assessment" type="object"-->
+<!--                            class="btn btn-primary"/>-->
+                    <button name="action_request_document" states="assessment"
+                            string="Request Documents" type="object"
+                            class="btn btn-primary"/>
+                    <button name="action_review_document" states="requested_doc"
+                            string="Review Documents" type="object"
+                            class="btn btn-primary"/>
+                    <button name="action_send_document" states="review_doc"
+                            string="Send Documents" type="object"
+                            class="btn btn-primary"/>
+                </header>
+                <sheet>
+ <style>
+                    .o_form_view:not(.o_field_highlight)
+                    .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                    .o_input:not(:hover):not(:focus) {
+                              --o-input-border-color: black !important;
+                              }
+                  </style>
+                    <group>
+                        <group>
+    <!--                        <field name="name"/>-->
+                            <field name="type"/>
+                            <field name="date_regularisation"/>
+                            <field name="requester_infos"/>
+                        </group>
+                        <group>
+                            <field name="assessment_result"/>
+                            <field name="enquiry_id"/>
+                            <field name="assessment_id"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Supporting Documents">
+                            <group>
+                                <group>
+                                    <field name="church_const_doc" attrs="{'invisible': [('type', '=', 'shop')]}" widget="many2many_binary"/>
+                                    <field name="church_photo_doc" attrs="{'invisible': [('type', '=', 'shop')]}" widget="many2many_binary"/>
+                                    <field name="shop_license_doc" attrs="{'invisible': [('type', '=', 'church')]}" widget="many2many_binary"/>
+                                    <field name="shop_permit_doc" attrs="{'invisible': [('type', '=', 'church')]}" widget="many2many_binary"/>
+                                    <field name="shop_id_doc" attrs="{'invisible': [('type', '=', 'church')]}" widget="many2many_binary"/>
+                                </group>
+                                <group>
+                                    <field name="church_corner_doc" attrs="{'invisible': [('type', '=', 'shop')]}" widget="many2many_binary"/>
+                                    <field name="church_bishop_doc" attrs="{'invisible': [('type', '=', 'shop')]}" widget="many2many_binary"/>
+                                    <field name="church_other_doc" attrs="{'invisible': [('type', '=', 'shop')]}" widget="many2many_binary"/>
+                                    <field name="shop_death_doc" attrs="{'invisible': [('type', '=', 'church')]}" widget="many2many_binary"/>
+                                    <field name="shop_affidavit_doc" attrs="{'invisible': [('type', '=', 'church')]}" widget="many2many_binary"/>
+                                    <field name="shop_other_doc" attrs="{'invisible': [('type', '=', 'church')]}" widget="many2many_binary"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Title Deed" attrs="{'invisible': [('state', '!=', 'send_doc')]}">
+                            <field name="deed_details_id">
+                                <tree editable="bottom">
+                                    <field name="deed_number"/>
+                                    <field name="deed_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Handover Event" attrs="{'invisible': [('state', '!=', 'send_doc')]}">
+                            <field name="hand_over_ids">
+                                <tree editable="bottom">
+                                    <field name="hand_date"/>
+                                    <field name="participants"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Case Handling" attrs="{'invisible': [('state', '!=', 'send_doc')]}">
+                            <field name="case_handling_ids">
+                                <tree editable="bottom">
+                                    <field name="year"/>
+                                    <field name="procedure"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="GEOLIS">
+                            <iframe id="custom_src" name="custom_src"
+                                    src="https://ags.joburg.org.za/cgis/index.aspx"
+                                    width="100%" height="500"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="land_regularization_view_tree" model="ir.ui.view">
+        <field name="name">Land Regularization</field>
+        <field name="model">land.regularization</field>
+        <field name="arch" type="xml">
+            <tree create="false">
+                <field name="type"/>
+                <field name="date_regularisation"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="website_property_enquiry_template" name="Property Enquiry Form" >
+        <t t-call="website.layout">
+            <div class="container py-5">
+                <div class="card shadow-lg border-0 rounded-4">
+
+                    <div class="card-body px-5 py-4 property_enquiry" >
+                        <div class="d-flex justify-content-between mb-4">
+                            <a t-att-href="'/properties/%s' % property_id" class="btn btn-outline-secondary">
+                                <i class="fa fa-arrow-left me-2"></i> Back to Property
+                            </a>
+                        </div>
+                        <h1 class="text-center text-primary mb-4">
+                            <i class="fa fa-building me-2"></i>Property Enquiry Form
+                        </h1>
+                        <p class="text-center text-muted mb-5">
+                            Please fill in the details below and our team will contact you shortly.
+                        </p>
+
+
+                        <form action="/property/enquiry/submit" method="post"
+                              enctype="multipart/form-data"
+                              data-mark="*"
+                              class="enquiry_crm_form">
+                            <!-- Property Details -->
+                            <input type="hidden" name="property_id" t-att-value="property_id" class="form-control"/>
+                            <input type="hidden" name="partner" t-att-value="partner" class="form-control"/>
+                            <div class="mb-5">
+                                <h4 class="text-secondary border-bottom pb-2 mb-4">
+                                    <i class="fa fa-map-marker-alt me-2"></i>Property Details
+                                </h4>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">District</label>
+                                        <select name="district_id" class="form-select" required="true">
+                                            <option></option>
+                                            <t t-foreach="districts" t-as="d">
+                                                <option t-att-value="d.id"><t t-esc="d.name"/></option>
+                                            </t>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">City/Town</label>
+                                        <select name="city_id" class="form-select" required="true">
+                                            <option></option>
+                                            <t t-foreach="cities" t-as="c">
+                                                <option t-att-value="c.id"><t t-esc="c.name"/></option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Building</label>
+                                        <input type="text" readonly="true" name="building_name" t-att-value="building_name" class="form-control" placeholder="e.g. 100"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Property</label>
+                                        <input type="text" readonly="true" name="property_name" t-att-value="property_name" class="form-control" placeholder="e.g. 100"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Enquiry Type</label>
+                                        <select name="enquiry_type" id="enquiry_type" class="form-select" required="true">
+                                            <option/>
+                                            <option value="rent">Rent</option>
+                                            <option value="buy">Buy</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Property Type</label>
+                                        <select name="property_type" id="property_type" class="form-select" required="true">
+                                            <option value="industrial_smme">Industrial SMME</option>
+                                            <option value="industrial_light">Industrial - Light</option>
+                                            <option value="industrial_large">Industrial - Large</option>
+                                            <option value="retail">Retail</option>
+                                            <option value="mooring">Mooring</option>
+                                            <option value="commercial_office">Commercial / Office</option>
+                                            <option value="residential">Residential</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="mooring_fields" class="row g-3 mt-3 d-none">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Mooring Length</label>
+                                        <select name="mooring_length" class="form-select">
+                                            <option value="5m">5 m</option>
+                                            <option value="10m">10 m</option>
+                                            <option value="15m">15 m</option>
+                                            <option value="20m">20 m</option>
+                                            <option value="25m">25 m</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Mooring Width</label>
+                                        <select name="mooring_width" class="form-select">
+                                            <option value="2m">2 m</option>
+                                            <option value="3m">3 m</option>
+                                            <option value="4m">4 m</option>
+                                            <option value="5m">5 m</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="area_fields" class="row g-3 mt-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Minimum Area (m²)</label>
+                                        <input type="number" name="min_area" class="form-control" placeholder="e.g. 100"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Maximum Area (m²)</label>
+                                        <input type="number" name="max_area" class="form-control" placeholder="e.g. 500"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contact Details -->
+                            <div class="mb-5">
+                                <h4 class="text-secondary border-bottom pb-2 mb-4">
+                                    <i class="fa fa-user me-2"></i>Contact Details
+                                </h4>
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label class="form-label fw-semibold">Title</label>
+                                        <select name="title_id" class="form-select">
+                                            <option></option>
+                                            <t t-foreach="titles" t-as="t">
+                                                <option t-att-value="t.id" t-att-selected="t.id == int(title)"><t t-esc="t.name"/></option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-semibold">Name</label>
+                                        <input type="text" name="contact_name" t-att-value="contact_name" class="form-control" required="true"/>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="form-label fw-semibold">Surname</label>
+                                        <input type="text" name="contact_surname" t-att-value="contact_name" class="form-control" required="true"/>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Email</label>
+                                        <input type="email" name="email" t-att-value="email" class="form-control" placeholder="you@example.com"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Phone</label>
+                                        <input type="text" name="phone" t-att-value="phone" class="form-control" placeholder="+27..."/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Subject</label>
+                                        <input type="text" name="subject" t-att-value="subject" required="1" class="form-control" />
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Capacity</label>
+                                        <select name="capacity" class="form-select" required="true">
+                                            <option value="tenant">Tenant</option>
+                                            <option value="owner">Owner</option>
+                                            <option value="agent">Agent</option>
+                                            <option value="broker">Broker</option>
+                                            <option value="developer">Developer</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-semibold">Description</label>
+                                        <textarea name="description" class="form-control" rows="3" placeholder="Briefly describe your enquiry..."></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="mb-5">
+                                <h4 class="text-secondary border-bottom pb-2 mb-4">
+                                    <i class="fa fa-user me-2"></i>Client
+                                    Details
+                                </h4>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Company Type</label>
+                                    <select name="company_type" id="company_type" class="form-select">
+                                        <option/>
+                                        <option value="person" t-att-selected="company_type == 'person'">Person</option>
+                                        <option value="company" t-att-selected="company_type == 'company'">Company</option>
+                                        <option value="trust" t-att-selected="company_type == 'trust'">Trust</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-5 d-none" id="company_type_person">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">ID Number</label>
+                                        <input type="text" name="id_number" t-att-value="id_number" class="form-control" placeholder="e.g. 1234"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Passport Number</label>
+                                        <input name="passport_number" type="text" t-att-value="passport_number" class="form-control" placeholder="e.g. 1234"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-5 d-none" id="company_type_company">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Registration Number</label>
+                                        <input name="reg_number" type="text" t-att-value="reg_number" class="form-control" placeholder="e.g. 1234"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Vat</label>
+                                        <input name="vat" type="text" t-att-value="vat" class="form-control" placeholder="e.g. 1234"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-5 d-none" id="company_type_trust">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Trust Number</label>
+                                        <input name="trust_number" type="text" t-att-value="trust_number" class="form-control" placeholder="e.g. 1234"/>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-5">
+                                <h4 class="text-secondary border-bottom pb-2 mb-4">
+                                    <i class="fa fa-file me-2"></i>Documents
+                                </h4>
+                            </div>
+                            <div class="row g-3 mb-5  d-none" id="person_document_type">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">ID / Passport Copy
+                                    </label>
+                                    <input type="file" name="id_passport_copy"
+                                           t-att-value="id_passport_copy"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Home Affairs / Immigration Document
+                                    </label>
+                                    <input type="file" name="home_affairs_immigration"
+                                           t-att-value="home_affairs_immigration"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Utility Bill / Lease/ Bank Statement
+                                    </label>
+                                    <input type="file" name="utility_bill_lease_bank_statement"
+                                           t-att-value="utility_bill_lease_bank_statement"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">SARS Document
+                                    </label>
+                                    <input type="file" name="sars_document"
+                                           t-att-value="sars_document"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-5  d-none" id="company_document_type">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">CIPC Certificate
+                                    </label>
+                                    <input type="file" name="cipc_certificate"
+                                           t-att-value="cipc_certificate"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Notice of Registered Office Certificate
+                                    </label>
+                                    <input type="file" name="notice_cipc_certificate"
+                                           t-att-value="notice_cipc_certificate"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">MOI / Founding Statement
+                                    </label>
+                                    <input type="file" name="moi_founding_statement"
+                                           t-att-value="moi_founding_statement"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">ID + Proof of Address
+                                    </label>
+                                    <input type="file" name="id_proof_address"
+                                           t-att-value="id_proof_address"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Utility Bill / Lease
+                                    </label>
+                                    <input type="file" name="utility_bill_lease"
+                                           t-att-value="utility_bill_lease"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">SARS Certificate
+                                    </label>
+                                    <input type="file" name="sars_certificate"
+                                           t-att-value="sars_certificate"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-5  d-none" id="trust_document_type">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Certified Trust Deed
+                                    </label>
+                                    <input type="file" name="certified_trust_deed"
+                                           t-att-value="certified_trust_deed"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Master’s Letter of Authority
+                                    </label>
+                                    <input type="file" name="master_letter_authority"
+                                           t-att-value="master_letter_authority"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Trustee IDs and Proof of Address
+                                    </label>
+                                    <input type="file" name="trustee_id_proof_address"
+                                           t-att-value="trustee_id_proof_address"
+                                           class="form-control"
+                                           accept=".pdf,.png,.jpg,.jpeg"/>
+                                </div>
+                            </div>
+
+                            <!-- Business Operations -->
+                            <div class="mb-5">
+                                <h4 class="text-secondary border-bottom pb-2 mb-4">
+                                    <i class="fa fa-briefcase me-2"></i>Business Operations
+                                </h4>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Business Type</label>
+                                        <select name="business_type" class="form-select">
+                                            <option value="manufacturing">Manufacturing</option>
+                                            <option value="retail">Retail</option>
+                                            <option value="services">Services</option>
+                                            <option value="logistics">Logistics</option>
+                                            <option value="construction">Construction</option>
+                                            <option value="agriculture">Agriculture</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Business Status</label>
+                                        <select name="business_status" id="business_status" class="form-select">
+                                            <option value="new">New</option>
+                                            <option value="existing">Existing</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="operations_began_date_field" class="col-md-6" style="display:none;">
+                                        <label class="form-label fw-semibold">Date Operations Began</label>
+                                        <input type="date" name="operations_began_date" class="form-control"/>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-semibold">Nature of Business</label>
+                                        <textarea name="nature_of_business" class="form-control" rows="3" placeholder="Briefly describe your business..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Marketing Intelligence -->
+                            <div class="mb-5">
+                                <h4 class="text-secondary border-bottom pb-2 mb-4">
+                                    <i class="fa fa-bullhorn me-2"></i>Marketing Intelligence
+                                </h4>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">How did you hear about us?</label>
+                                        <select name="heard_about_us" class="form-select">
+                                            <option value="social_media">Social Media</option>
+                                            <option value="website">Ithala Website</option>
+                                            <option value="radio">Radio</option>
+                                            <option value="newspaper">Newspaper</option>
+                                            <option value="referral">Referral</option>
+                                            <option value="event">Event</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Name of Selected Medium</label>
+                                        <input type="text" name="medium_name" class="form-control" placeholder="e.g. Facebook, Newspaper name..."/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Preferred Communication Method</label>
+                                        <select name="communication_method" class="form-select">
+                                            <option value="sms">SMS</option>
+                                            <option value="email">E-mail</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Submit -->
+                            <div class="text-center mt-5">
+                                <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">
+                                    <i class="fa fa-paper-plane me-2"></i>Submit Enquiry
+                                </button>
+                                <div class="alert alert-danger"
+                                     style="display: inline-flex;margin-left: 10px;"
+                                     t-if="error" role="alert">
+                                    <t t-esc="error"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </t>
+    </template>
+
+    <template id="website_property_enquiry_success" name="Property Enquiry Success">
+        <t t-call="website.layout">
+            <div class="container my-5 text-center">
+                <div class="card shadow-lg border-0 rounded-4 p-5 mx-auto"
+                     style="max-width: 600px;">
+                    <div class="mb-4">
+                        <i class="fa fa-check-circle text-success" style="font-size: 80px; animation: pop 0.6s ease;"></i>
+                    </div>
+                    <h2 class="fw-bold mb-3 text-primary">Thank You!</h2>
+                    <p class="fs-5 text-muted mb-4">
+                        Your property enquiry has been submitted successfully.
+                        Our team will contact you shortly with more details.
+                    </p>
+                    <div class="alert alert-success fs-5 py-3 rounded-pill d-inline-block shadow-sm">
+                        <strong>Enquiry Reference Number:</strong>
+                        <span class="fw-bold text-dark">
+                            <t t-esc="enquiry_ref"/>
+                        </span>
+                    </div>
+                    <div class="mt-4">
+                        <a href="/"
+                           class="btn btn-primary px-4 py-2 rounded-pill">
+                            <i class="fa fa-home me-2"></i>Back to Home
+                        </a>
+                        <a href="/properties"
+                           class="btn btn-outline-primary px-4 py-2 rounded-pill ms-2">
+                            <i class="fa fa-file-alt me-2"></i>All Properties
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

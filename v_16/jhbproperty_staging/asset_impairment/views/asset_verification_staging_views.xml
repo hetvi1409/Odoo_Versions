@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_asset_verification_staging_form" model="ir.ui.view">
+        <field name="name">asset.verification.staging.form</field>
+        <field name="model">asset.verification.staging</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit_for_approval" string="Submit for Approval" type="object"
+                            class="oe_highlight" states="draft"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="oe_highlight" groups="asset_verification.group_staging_approval_manager"
+                            states="awaiting_approval"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            groups="asset_verification.group_staging_approval_manager"
+                            states="awaiting_approval"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,awaiting_approval,approved,rejected"/>
+                </header>
+                <sheet>
+                <group>
+                    <field name="name"/>
+                    <field name="barcode"/>
+                    <field name="description"/>
+                    <field name="allocation"/>
+                    <field name="location"/>
+                    <field name="verify"/>
+                    <field name="condition" widget="many2many_tags"/>
+                    <field name="category_id"/>
+                </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+     <record id="view_asset_verification_staging_tree" model="ir.ui.view">
+        <field name="name">asset.verification.staging.tree</field>
+        <field name="model">asset.verification.staging</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="barcode"/>
+                <field name="description"/>
+                <field name="verification_job_id"/>
+                <field name="category_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+     </record>
+
+      <!-- Define the search view with filters -->
+    <record id="view_asset_verification_staging_search" model="ir.ui.view">
+        <field name="name">asset.verification.staging.search</field>
+        <field name="model">asset.verification.staging</field>
+        <field name="arch" type="xml">
+            <search>
+                <!-- Filters for different states -->
+                <filter string="Draft" name="draft_state" domain="[('state', '=', 'draft')]"/>
+                <filter string="Awaiting Approval" name="awaiting_approval_state" domain="[('state', '=', 'awaiting_approval')]"/>
+                <filter string="Approved" name="approved_state" domain="[('state', '=', 'approved')]"/>
+                <filter string="Rejected" name="rejected_state" domain="[('state', '=', 'rejected')]"/>
+                <filter string="Archived" name="archived_state" domain="[('active', '=', False)]" />
+            </search>
+        </field>
+    </record>
+</odoo>

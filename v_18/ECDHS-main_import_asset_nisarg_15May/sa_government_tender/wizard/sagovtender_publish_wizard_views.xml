@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sagovtender_publish_wizard_form" model="ir.ui.view">
+        <field name="name">sagovtender.publish.wizard.form</field>
+        <field name="model">sagovtender.publish.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Publish Tender">
+                <group>
+                    <field name="tender_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="closing_date"/>
+                    <field name="opening_date"/>
+                    <field name="platform_ids" widget="many2many_tags"/>
+                </group>
+                <group>
+                    <field name="advertisement_text" widget="html"/>
+                </group>
+                <group>
+                    <field name="send_notification"/>
+                    <field name="notification_message" invisible="not send_notification"/>
+                </group>
+                <footer>
+                    <button name="action_publish" string="Publish" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="asset_form_approval_form_custom">
+        <field name="name">asset.removal.approval.form</field>
+        <field name="model">asset.removal.approvals</field>
+        <field name="priority">1</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Real Estate">
+                <header>
+                    <button name="action_approve" string="Approve"
+                            type="object"
+                            class="oe_highlight"
+                            groups="assets_disposal.group_asset_evaluator"
+                            invisible="state in ('rejected','approved','draft')"/>
+
+                    <button name="action_set_to_draft"
+                            string="Reset to Draft" type="object"
+                            invisible="state in ('draft','request_approval')"/>
+
+                    <button name="action_approve_request"
+                            class="oe_highlight"
+                            string="Submit for Approval" type="object"
+                            invisible="state != 'draft'"/>
+
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+
+                    <group>
+
+                        <group>
+                            <field name="assets_id" string="Asset"/>
+                            <field name="assets_ids" string=" Selected Asset" widget="many2many_tags"/>
+                            <field name="disposal_reason"/>
+                            <field name="disposal_method" widget="radio" options="{'horizontal': true}"/>
+                            <field name="transfer_department_id" invisible="disposal_method != 'transfer'"/>
+                            <field name="document_id"/>
+                            <field name="appointment_letter_id"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="state" widget="badge"
+                                   decoration-info="state in ('draft')"
+                                   decoration-warning="state in ('request_approval')"
+                                   decoration-success="state in ('approved')"/>
+                        </group>
+                    </group>
+
+                </sheet>
+                <chatter reload_on_follower="True"/>
+            </form>
+        </field>
+    </record>
+     <record id="action_asset_removal_wizard" model="ir.actions.act_window">
+    <field name="name">Asset Removal</field>
+    <field name="res_model">asset.removal.approvals</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_assets_id': active_id}</field>
+</record>
+</odoo>

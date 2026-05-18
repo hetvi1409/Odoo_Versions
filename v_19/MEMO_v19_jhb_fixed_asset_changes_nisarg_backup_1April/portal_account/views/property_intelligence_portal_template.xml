@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="portal_my_home_menu_property_intelligence"
+              name="Portal layout : Property Intelligence"
+              inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'property_intelligence' or property_intelligence"
+                t-attf-class="breadcrumb-item #{'active' if not property_intelligence else ''}">
+                <a t-if="property_intelligence"
+                   t-attf-href="/my/property_intelligence">
+                    Property Intelligence
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_property_intelligence" name="Property Intelligence"
+              customize_show="True" inherit_id="portal.portal_my_home"
+              priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <div id="portal_vendor_category">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Property Intelligence</t>
+                    <t t-set="url" t-value="'/my/property_intelligence'"/>
+                    <t t-set="placeholder_count"
+                       t-value="'property_intelligence_count'"/>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="my_property_intelligence" name="Property Intelligence">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Property intelligence</t>
+            </t>
+            <t t-if="not property_intelligence">
+                <p>There are currently no property intelligence for your account.
+                </p>
+            </t>
+            <t t-if="property_intelligence" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Property Intelligence #</th>
+                        <th>Requestor</th>
+                        <th>Owner</th>
+                        <th>Property</th>
+                        <th>ERF Number</th>
+                        <th>JMC Number</th>
+                        <th class="text-end">Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <t t-foreach="property_intelligence" t-as="res">
+                        <tr>
+                            <td>
+                                <a t-attf-href="/property_intelligence_details_portal/#{res.id}">
+                                    <t t-out="res.query_details"/>
+                                </a>
+                            </td>
+                            <td >
+                                <span t-field="res.requester_id.name"/>
+                            </td>
+                            <td >
+                                <span t-field="res.owner_id.name"/>
+                            </td>
+                            <td >
+                                <span t-field="res.property_id.name"/>
+                            </td>
+                            <td >
+                                <span t-field="res.property_id.name"/>
+                            </td>
+                            <td >
+                                <span t-field="res.jmc_number"/>
+                            </td>
+                            <td class="text-end">
+                                <span t-field="res.state"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+<!--    <template id="property_intelligence_details" name="EAC">-->
+<!--        <t t-call="portal.portal_layout">-->
+<!--            <div class="card col-12 col-lg justify-content-end"-->
+<!--                 style="padding: 10px;">-->
+<!--                <div class="pb-2 pt-3">-->
+<!--                    <h2 class="my-0">-->
+<!--                        Property Intelligence:-->
+<!--                        <em t-esc="property_intelligence.query_details"/>-->
+<!--                    </h2>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                    <div class="mb-3 col-6">-->
+<!--                        <p>Your property intelligence is currently in-->
+<!--                            <span t-field="property_intelligence.state"/>-->
+<!--                            State-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div id="service_order_communication" class="mt-4">-->
+<!--                <h2>History</h2>-->
+<!--                <t t-call="portal.message_thread">-->
+<!--                    <t t-set="object" t-value="property_intelligence"/>-->
+<!--                </t>-->
+<!--            </div>-->
+<!--        </t>-->
+<!--    </template>-->
+
+</odoo>

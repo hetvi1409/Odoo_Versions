@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        
+        <record id="oi_risk_management.module_category_risk_management" model="ir.module.category">
+            <field name="name">Risk Management</field>
+            <field name="description">Risk Management Module</field>
+            <field name="sequence">9</field>
+        </record>
+        
+        <record id="oi_risk_management.group_risk_manager" model="res.groups">
+            <field name="name">User</field>
+            <field name="comment">General access on risk management</field>
+            <!--<field name="implied_ids" eval="[(4, ref('oi_risk_management.group_risk_user'))]"/>-->
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="oi_risk_management.module_category_risk_management"/>
+        </record>
+        
+        <record id="oi_risk_management.group_risk_gm" model="res.groups">
+            <field name="name">GM</field>
+            <field name="comment">General manager access on risk management</field>
+            <field name="implied_ids" eval="[(4, ref('oi_risk_management.group_risk_manager'))]"/>
+            <field name="category_id" ref="oi_risk_management.module_category_risk_management"/>
+        </record>
+
+        <record id="oi_risk_management.group_risk_ceo" model="res.groups">
+            <field name="name">CEO</field>
+            <field name="comment">CEO access on risk management</field>
+            <field name="implied_ids" eval="[(4, ref('oi_risk_management.group_risk_gm'))]"/>
+            <field name="category_id" ref="oi_risk_management.module_category_risk_management"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+    </data>
+</odoo>

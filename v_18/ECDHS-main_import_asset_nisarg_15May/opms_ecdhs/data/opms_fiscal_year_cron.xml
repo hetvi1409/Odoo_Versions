@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_opms_ensure_fiscal_years" model="ir.cron">
+            <field name="name">OPMS Ensure Fiscal Years</field>
+            <field name="model_id" ref="model_opms_app_plan"/>
+            <field name="state">code</field>
+            <field name="code">model._ensure_opms_fiscal_years()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="ir_cron_opms_submission_periods" model="ir.cron">
+            <field name="name">OPMS Submission Period Automation</field>
+            <field name="model_id" ref="model_opms_quarter"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_process_submission_periods()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

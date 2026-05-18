@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="audit_meter_only_report_action" model="ir.actions.report">
+        <field name="name">Audit Meter Report</field>
+        <field name="model">audit.meter.only.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">audit_meter_report.audit_meter_only_report</field>
+        <field name="report_file">audit_meter_report.audit_meter_only_report</field>
+        <field name="binding_model_id" ref="model_audit_meter_only_report"/>
+        <field name="print_report_name">'Account Payable Reports'</field>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="audit_meter_only_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        thead { display: table-header-group; }
+                        .align_center { text-align: center; }
+                    </style>
+                    <h3>
+                        <center>
+                            <strong>Audit Meter</strong>
+                        </center>
+                    </h3>
+                    <br/>
+                   <table class="table table-condensed" cellspacing="0">
+                                                   <thead>
+                                <tr class="table_pr_head">
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Title
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Category
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Account
+                                        Number
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Serial Number
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Manufacturer
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Meter
+                                        Condition
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Condition
+                                        Comments
+                                    </th>
+                                </tr>
+                            </thead>
+                       <tbody>
+<!--                           <t t-foreach="report_data['report_lines']"-->
+<!--                              t-as="audit_meter"-->
+<!--                              t-key="audit_meter_index">-->
+<!--                           </t>-->
+                       </tbody>
+                   </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

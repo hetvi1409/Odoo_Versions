@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_risk">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 style="text-align: center;">Risk Report</h2>
+                        <br/>
+                        <table class="table table-bordered" style="width:100%; border-collapse: collapse;">
+                            <tbody>
+                                <tr t-if="o.summary">
+                                    <td style="font-weight: bold; width: 30%;">Title:</td>
+                                    <td t-esc="o.summary"/>
+                                </tr>
+                                <tr t-if="o.owner">
+                                    <td style="font-weight: bold;">Owner:</td>
+                                    <td t-esc="o.owner.name"/>
+                                </tr>
+                                <tr t-if="o.probability">
+                                    <td style="font-weight: bold;">Probability:</td>
+                                    <td t-esc="o.probability"/>
+                                </tr>
+                                <tr t-if="o.impact">
+                                    <td style="font-weight: bold;">impact:</td>
+                                    <td t-esc="o.impact"/>
+                                </tr>
+                                <tr t-if="o.inherent_risk_score">
+                                    <td style="font-weight: bold;">Inherent Risk Score:</td>
+                                    <td t-esc="o.inherent_risk_score"/>
+                                </tr>
+                                <tr t-if="o.residual_risk_score">
+                                    <td style="font-weight: bold;">Residual Risk Score:</td>
+                                    <td t-esc="o.residual_risk_score"/>
+                                </tr>
+                                <tr t-if="o.status">
+                                    <td style="font-weight: bold;">Status:</td>
+                                    <td t-esc="o.status"/>
+                                </tr>
+                                <tr t-if="o.last_date">
+                                    <td style="font-weight: bold;">Last Date:</td>
+                                    <td t-esc="o.last_date"/>
+                                </tr>
+                                <tr t-if="o.next_date">
+                                    <td style="font-weight: bold;">Next Date:</td>
+                                    <td t-esc="o.next_date"/>
+                                </tr>
+                                <tr t-if="o.category">
+                                    <td style="font-weight: bold;">Category:</td>
+                                    <td>
+                                        <t t-foreach="o.category" t-as="category">
+                                            <t t-esc="category.name"/>
+                                            <br/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr t-if="o.control_effectiveness">
+                                    <td style="font-weight: bold;">Control Effectiveness:</td>
+                                    <td t-esc="o.control_effectiveness"/>
+                                </tr>
+                                <tr t-if="o.description">
+                                    <td style="font-weight: bold;">Description:</td>
+                                    <td t-esc="o.description"/>
+                                </tr>
+                                 <tr t-if="o.action">
+                                    <td style="font-weight: bold;">Migration:</td>
+                                    <td t-esc="o.action"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

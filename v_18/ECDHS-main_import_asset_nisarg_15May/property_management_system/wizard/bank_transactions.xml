@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Bank Transaction Wizard Form -->
+    <record id="view_bank_transactions_form" model="ir.ui.view">
+        <field name="name">bank.transactions.form</field>
+        <field name="model">bank.transactions</field>
+        <field name="arch" type="xml">
+            <form string="Score Card - Bank Name - Date - Description">
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="description"/>
+                            <field name="amount"/>
+                            <field name="transaction_type"/>
+                            <field name="outside_of_approval_area"/>
+                        </group>
+
+                        <group>
+                            <field name="bank_name"/>
+                            <field name="score_card"/>
+                            <field name="company_id"/>
+                            <field name="ind_or_comp"/>
+                            <field name="weekend_weekday"/>
+                        </group>
+                    </group>
+
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <!-- Wizard Action -->
+    <record id="action_bank_transactions" model="ir.actions.act_window">
+        <field name="name">Create Alcohol Transactions</field>
+        <field name="res_model">bank.transactions</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

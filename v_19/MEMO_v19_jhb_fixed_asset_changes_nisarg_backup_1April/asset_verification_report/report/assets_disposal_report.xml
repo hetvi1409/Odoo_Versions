@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_asset_disposal_report" model="ir.actions.report">
+        <field name="name">Asset Disposal Report</field>
+        <field name="model">account.asset</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">asset_verification_report.asset_disposal_report</field>
+        <field name="report_file">asset_verification_report.asset_disposal_report</field>
+<!--        <field name="binding_model_id" ref="account_asset.model_account_asset"/>-->
+        <field name="binding_type">report</field>
+    </record>
+    <template id="asset_disposal_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+
+                <div class="page" style="font-family: 'Poppins', sans-serif;">
+                    <h2 style="text-align:center; color:#008F30; margin-bottom:22px;">
+                        Asset Disposal Report
+                    </h2>
+                    <table class="table table-sm o_main_table"
+                           style="width:100%; border-collapse:collapse; font-size:13px;">
+                        <thead>
+                            <tr style="background-color:#008F30; color:#FFFFFF; text-align:center;">
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Asset</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Barcode</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Disposal Date</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Disposal Method</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Disposal Value</th>
+
+
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Department</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Custodian</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="docs" t-as="o">
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.name"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.alternative_ref"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.disposal_date"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.disposal_method"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.disposal_price"/>
+                                </td>
+
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.custodian_department_id.name"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.custodian_id.name"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

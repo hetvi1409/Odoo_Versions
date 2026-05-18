@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <record id="view_funeral_parlour_form" model="ir.ui.view">
+            <field name="name">funeral.parlour.form</field>
+            <field name="model">funeral.parlour</field>
+            <field name="arch" type="xml">
+                <form string="Funeral Parlour">
+                    <sheet>
+                        <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="undertaker_ids" widget="many2many_tags"/>
+                            <span class="o_form_label o_td_label" name="address_name">
+                                <b>Contact details</b>
+                            </span>
+                            <div class="o_address_format">
+                                <field name="street" placeholder="Street..." class="o_address_street"/>
+                                <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="city" placeholder="City" class="o_address_city"/>
+                                <field name="ward_id" placeholder="Ward" class="o_address_city"/>
+                                <field name="municipality_id"
+                                       placeholder="Municipality..."
+                                       class="o_address_city"
+                                       options='{"no_open": True}'/>
+                                <field name="province_id" class="o_address_state" placeholder="Province" options="{'no_open': True, 'no_quick_create': True}"/>
+                                <field name="postal_code" placeholder="Postal Code" class="o_address_zip"/>
+                                <div name="partner_address_country" class="d-flex justify-content-between">
+                                    <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                </div>
+                            </div>
+                            <field name="email"/>
+                            <field name="phone"/>
+                        </group>
+                            <group>
+                                <field name="coc" widget="radio"/>
+                                <field name="premises_in_operation" widget="radio"/>
+
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    <record id="view_funeral_parlour_tree" model="ir.ui.view">
+        <field name="name">funeral.parlour.list</field>
+        <field name="model">funeral.parlour</field>
+        <field name="arch" type="xml">
+            <list string="Funeral Parlours">
+                <field name="name"/>
+                <field name="street" optional="show"/>
+                <field name="city" optional="hide"/>
+                <field name="municipality_id" optional="show"/>
+                <field name="postal_code" optional="hide"/>
+                <field name="country_id" optional="hide"/>
+                <field name="email"/>
+                <field name="phone"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_funeral_parlour" model="ir.actions.act_window">
+        <field name="name">Funeral Parlours</field>
+        <field name="res_model">funeral.parlour</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new funeral parlour.
+            </p>
+        </field>
+    </record>
+    <menuitem id="funeral_parlour_menu_id" name="Funeral Parlour" sequence="3"
+              parent="menu_cemetery_configuration"
+              action="action_funeral_parlour"/>
+
+</odoo>

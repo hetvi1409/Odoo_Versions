@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="xf_partner_contract_form" model="ir.ui.view">
+        <field name="name">xf_partner_contract_form</field>
+        <field name="model">xf.partner.contract</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!--                        <field name="company_id" invisible="1"/>-->
+                    <field name="has_access_field" invisible="1"/>
+                    <field name="can_edit" invisible="1"/>
+                    <field name="is_current_approver" invisible="1"/>
+                    <button name="action_confirm" type="object"
+                            string="Confirm"
+                            class="oe_highlight"
+                            invisible="['|', ('has_access', '!=', True), ('state', '!=', 'draft')]"/>
+                    <button name="action_approve" type="object"
+                            string="Approve"
+                            invisible="['|', (is_current_approver != True), (state not in 'approval')]"
+                            class="oe_highlight"
+                    />
+                    <button name="action_create_customer_invoice"
+                            type="object"
+                            string="Create Customer Invoice"
+                            class="oe_highlight"
+                            invisible="type != 'sale' and state not in 'running'"
+                    />
+                    <button name="action_create_vendor_bill" type="object"
+                            string="Create Vendor Bill"
+                            class="oe_highlight"
+                            invisible="['|', (type != 'purchase'), (state not in 'running')]"
+                    />
+                    <button name="action_return_for_correction_wizard"
+                            type="object"
+                            string="Return for Correction"
+                            invisible="['|', (has_access_field != True), (state not in 'running')]"
+                            data-hotkey="r"
+                    />
+                    <button name="action_draft" type="object"
+                            string="Reset to Draft"
+                            confirm="Please confirm that you want to reset this contract as draft to make it editable"
+                            invisible="has_access_field != True and state not in ['to_renew','cancelled']"
+                            data-hotkey="r"
+                    />
+                    <button name="action_renew" type="object"
+                            string="To Renew"
+                            confirm="Please confirm that you want to move this contract to the renewal stage and make it editable"
+                            invisible="['|', (has_access_field != True), (state not in ['expired','closed'])]"
+                            data-hotkey="r"
+                    />
+                    <button name="action_close" type="object"
+                            string="Close"
+                            confirm="Please confirm that you want to close this contract"
+                            invisible="['|', (has_access_field != True), (state not in ['running','expired','to_renew'])]"
+                            data-hotkey="shift+c"
+                    />
+                    <button name="action_cancel" type="object"
+                            string="Cancel"
+                            confirm="Please confirm that you want to cancel this contract"
+                            invisible="['|', (has_access_field != True), (state not in 'approval')]"
+                    />
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                name="action_view_invoice">
+                            <!--                                context="{'default_contract_id': self.id}">-->
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="invoice_ids_count"/>
+                                </span>
+                                <span class="o_stat_text">Invoices</span>
+                            </div>
+                        </button>
+                    </div>
+
+<!--                    <widget name="web_ribbon" title="Under Approval"-->
+<!--                            bg_color="bg-warning"-->
+<!--                            invisible="state != 'approval'"/>-->
+                    <widget name="web_ribbon" title="Running"
+                            bg_color="bg-success"
+                            invisible="state != 'running'"/>
+                    <widget name="web_ribbon" title="Expired"
+                            bg_color="bg-danger"
+                            invisible="state != 'expired'"/>
+                    <widget name="web_ribbon" title="Closed"
+                            bg_color="bg-danger"
+                            invisible="state != 'closed'"/>
+                    <widget name="web_ribbon" title="To Renew"
+                            bg_color="bg-info"
+                            invisible="state != 'to_renew'"/>
+
+                    <div class="oe_title pr-0" name="title">
+                        <h1 class="d-flex flex-row justify-content-between">
+                            <field name="name" class="text-truncate"
+                                   placeholder="Contract Title"
+                                   readonly="can_edit != True"/>
+                            <field name="kanban_state"
+                                   widget="state_selection"/>
+                        </h1>
+                        <div name="options_active">
+                            <div class="o_row">
+                                <span class="o_row">
+                                    <field name="use_lines"
+                                           readonly="can_edit != True"/>
+                                    <label for="use_lines"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="ref"/>
+                            <field name="type"/>
+                            <field name="partner_id"
+                                   readonly="can_edit != True" widget="res_partner_many2one"
+                                   context="{'res_partner_search_mode': 'supplier'}"/>
+                        </group>
+                        <group>
+                            <field name="user_id"
+                                   readonly="can_edit != True"/>
+                            <field name="company_id"
+                                   groups="base.group_multi_company"
+                                   options="{'no_create': True}"
+                                   readonly="can_edit != True"/>
+                            <field name="contract_approval"
+                                   invisible="True"/>
+                            <field name="approval_team_id"
+                                   options="{'no_create': True}"
+                                   invisible="contract_approval == 'no'"
+                                   required="contract_approval == 'required'"
+                                   readonly="can_edit != True"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="date_start"
+                                   readonly="can_edit != True"/>
+                            <field name="date_end"
+                                   readonly="can_edit != True"/>
+                        </group>
+                        <group>
+                            <field name="date_last_payment"
+                                   readonly="can_edit != True"/>
+                            <field name="expiring_state"/>
+                            <field name="date_doc_signed"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="currency_id"
+                                   readonly="can_edit != True"
+                                   groups="base.group_multi_currency"/>
+                            <field name="classification"/>
+                            <field name="tender_number"/>
+                            <field name="contract_amount_type"/>
+                            <field name="contract_duration"/>
+                            <field name="variation_order_amount"/>
+                            <field name="cost_based_progress" widget="percentage"/>
+                            <field name="remaining_contract_duration"/>
+                            <field name="scmu"/>
+                        </group>
+                        <group>
+                            <field name="raised_contract_amount"/>
+                            <field name="variation_order_percentage" widget="percentage"/>
+                            <field name="time_based_process" widget="percentage"/>
+                            <field name="extension_period"/>
+                            <field name="revised_end_date"/>
+                            <field name="region_id"/>
+                            <field name="municipality_id"/>
+                            <field name="project_id"/>
+                            <field name="project_description"/>
+                            <field name="date_doc_signed"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="lines" string="Lines"
+                              invisible="use_lines != True">
+                            <field name="line_ids" nolabel="1"
+                                   readonly="can_edit != True"
+                                   context="{'default_contract_type':type}">
+                                <list editable="bottom">
+                                    <field name="contract_id"
+                                           invisible="True"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="company_id"
+                                           invisible="True"/>
+                                    <field name="currency_id"
+                                           invisible="True"/>
+                                    <field name="product_id"
+                                           domain="context.get('default_contract_type') == 'sale'
+                                                                                and [('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]
+                                                                                or [('purchase_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]
+                                                                           "/>
+                                    <field name="name"/>
+                                    <field name="analytic_distribution"
+                                           widget="analytic_distribution"
+                                           optional="hide"
+                                           groups="analytic.group_analytic_accounting"
+                                           options="{'product_field': 'product_id'}"/>
+                                    <field name="quantity"/>
+<!--                                    <field name="product_uom_category_id"-->
+<!--                                           invisible="True"/>-->
+<!--                                    <field name="product_uom_id"-->
+<!--                                           string="UoM"-->
+<!--                                           groups="uom.group_uom"-->
+<!--                                           optional="show"/>-->
+                                    <field name="price_unit"
+                                           string="Price"/>
+                                    <field name="discount" string="Disc.%"
+                                           optional="show"/>
+                                    <field name="taxes_id"
+                                           widget="many2many_tags"
+                                           domain="[('type_tax_use','=',context.get('default_contract_type')), ('company_id', '=', parent.company_id)]"
+                                           context="{'default_type_tax_use': context.get('default_contract_type'), 'search_view_ref': 'account.account_tax_view_search'}"
+                                           options="{'no_create': True}"
+                                           optional="show"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <field name="company_id"
+                                               invisible="True"/>
+                                        <field name="currency_id"
+                                               invisible="True"/>
+                                        <field name="product_id"
+                                               domain="context.get('default_contract_type') == 'sale'
+                                                                                and [('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]
+                                                                                or [('purchase_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]
+                                                                           "/>
+                                        <field name="name"/>
+                                        <field name="analytic_distribution"
+                                               widget="analytic_distribution"
+                                               optional="hide"
+                                               groups="analytic.group_analytic_accounting"
+                                               options="{'product_field': 'product_id'}"/>
+                                        <field name="quantity"/>
+<!--                                        <field name="product_uom_category_id"-->
+<!--                                               invisible="True"/>-->
+<!--                                        <field name="product_uom_id"-->
+<!--                                               string="UoM"-->
+<!--                                               groups="uom.group_uom"-->
+<!--                                               optional="show"/>-->
+                                        <field name="price_unit"
+                                               string="Price"/>
+                                        <field name="discount"
+                                               string="Disc.%"
+                                               optional="show"/>
+                                        <field name="taxes_id"
+                                               widget="many2many_tags"
+                                               domain="[('type_tax_use','=',context.get('default_contract_type')), ('company_id', '=', parent.company_id)]"
+                                               context="{'default_type_tax_use': context.get('default_contract_type'), 'search_view_ref': 'account.account_tax_view_search'}"
+                                               options="{'no_create': True}"
+                                               optional="show"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page name="notes" string="Terms and Conditions">
+                            <group>
+                                <field name="payment_term_id"
+                                       readonly="can_edit != True"/>
+                                <field name="notes"
+                                       readonly="can_edit != True"/>
+                            </group>
+                        </page>
+                        <page name="approvers" string="Approval"
+                              groups="xf_partner_contract.group_xf_partner_contract_user"
+                              invisible="approval_team_id == False">
+                            <field name="approver_ids" nolabel="1">
+                                <list>
+                                    <field name="user_id"/>
+                                    <field name="role"/>
+                                    <field name="state"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <field name="user_id"/>
+                                        <field name="role"/>
+                                        <field name="state"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page name="settings" string="Settings"
+                              groups="xf_partner_contract.group_xf_partner_contract_user">
+                            <group>
+                                <field name="privacy_visibility"/>
+                            </group>
+                        </page>
+                        <page name="invoices" string="List of Invoices Raised"
+                              groups="xf_partner_contract.group_xf_partner_contract_user">
+                            <field name="invoice_ids" nolabel="1">
+                            </field>
+                        </page>
+                        <page name="documents" string="Documents"
+                              groups="xf_partner_contract.group_xf_partner_contract_user">
+                            <group>
+                                <field name="appointment_letter"/>
+                                <field name="acceptance_letter"/>
+                                <field name="sla_contract_signed"/>
+                                <field name="project_plan"/>
+                                <field name="terms_of_reference"/>
+                                <field name="public_liability"/>
+                                <field name="extension_of_time"/>
+                                <field name="penalties"/>
+                                <field name="completion_letter"/>
+                                <field name="arrival_letter"/>
+                                <field name="variation_orders"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="return_for_correction_wizard" model="ir.ui.view">
+        <field name="name">return_for_correction_wizard</field>
+        <field name="model">xf.partner.contract</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="comments"
+                           placeholder="Please enter comments..."
+                           readonly="False"
+                           required="True"/>
+                </group>
+                <footer>
+                    <button string="Return for Correction"
+                            name="action_return_for_correction"
+                            type="object"
+                            class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="xf_partner_contract_tree" model="ir.ui.view">
+        <field name="name">xf_partner_contract_tree</field>
+        <field name="model">xf.partner.contract</field>
+        <field name="arch" type="xml">
+            <list
+                    decoration-danger="days_left==0"
+                    decoration-muted="state=='closed'"
+            >
+                <field name="name"/>
+                <field name="ref"/>
+                <field name="partner_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="user_id"/>
+                <field name="type"/>
+                <field name="state"/>
+<!--                <field name="kanban_state" widget="state_selection"-->
+<!--                       readonly="1"/>-->
+                <field name="activity_exception_decoration"
+                       widget="activity_exception" optional="hide"/>
+                <field name="expiring_state" optional="hide"/>
+                <field name="payment_term_id" optional="hide"/>
+                <field name="amount" optional="show"/>
+                <field name="privacy_visibility" optional="hide"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="date_start" optional="show"/>
+                <field name="date_end" optional="show"/>
+                <field name="date_last_payment" optional="hide"/>
+                <field name="notes" optional="hide"/>
+                <field name="contract_approval" optional="hide"/>
+                <field name="approval_team_id" optional="hide"/>
+                <field name="has_access_field" optional="hide"/>
+                <field name="can_edit" optional="hide"/>
+                <field name="approver_ids" optional="hide"/>
+                <field name="current_approver" optional="hide"/>
+                <field name="next_approver" optional="hide"/>
+                <field name="comments" optional="hide"/>
+                <field name="use_lines" optional="hide"/>
+                <field name="invoice_ids_count" optional="hide"/>
+                <field name="classification" optional="hide"/>
+                <field name="tender_number" optional="hide"/>
+                <field name="contract_amount_type" optional="hide"/>
+                <field name="contract_duration" optional="hide"/>
+                <field name="variation_order_amount" optional="hide"/>
+                <field name="cost_based_progress" optional="hide"/>
+                <field name="variation_order_percentage" optional="hide"/>
+                <field name="raised_contract_amount" optional="hide"/>
+                <field name="remaining_contract_duration" optional="hide"/>
+                <field name="time_based_process" optional="hide"/>
+                <field name="extension_period" optional="hide"/>
+                <field name="revised_end_date" optional="hide"/>
+                <field name="region_id" optional="show"/>
+                <field name="municipality_id" optional="show"/>
+                <field name="project_id" optional="hide"/>
+                <field name="project_description" optional="hide"/>
+                <field name="date_doc_signed" optional="show"/>
+                <field name="scmu" optional="hide"/>
+                <field name="active" optional="hide"/>
+                <field name="days_left" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="xf_partner_contract_kanban" model="ir.ui.view">
+    <field name="name">xf_partner_contract_kanban</field>
+    <field name="model">xf.partner.contract</field>
+    <field name="arch" type="xml">
+        <kanban class="o_kanban_mobile" sample="1" quick_create="false">
+            <templates>
+                <t t-name="card">
+                    <div class="oe_kanban_card">
+                        <div class="o_kanban_record_title">
+                            <strong class="text-primary" style="display: -webkit-box;
+                                -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+                                overflow: hidden;">
+                                <field name="name"/>
+                            </strong>
+                        </div>
+                        <!-- Contract Period -->
+                        <div class="row">
+                            <div class="col-5">
+                                Date:
+                            </div>
+                            <div class="col-7 text-end">
+                                <span><field name="date_start"/> → <field name="date_end"/></span>
+                            </div>
+                        </div>
+
+                        <!-- Region -->
+                        <div class="row">
+                            <div class="col-5">
+                                Region:
+                            </div>
+                            <div class="col-7 text-end">
+                                <span><field name="region_id"/></span>
+                            </div>
+                        </div>
+
+                        <!-- Unique Identifier -->
+                        <div class="row">
+                            <div class="col-5">
+                                Ref:
+                            </div>
+                            <div class="col-7 text-end">
+                                <span><field name="ref"/></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7 text-end">
+                                <span><field widget="label_selection" name="state" options="{'classes': {'draft': 'default', 'running': 'success', 'expired':'danger'}}"/></span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+<!--        <record id="xf_partner_contract_kanban" model="ir.ui.view">-->
+<!--            <field name="name">xf_partner_contract_kanban</field>-->
+<!--            <field name="model">xf.partner.contract</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <field name="arch" type="xml">-->
+<!--                    <kanban class="o_kanban_mobile">-->
+<!--                        <templates>-->
+<!--                            <t t-name="card">-->
+<!--                                <div class="row">-->
+<!--                                    <div class="col-8">-->
+<!--                                        <field class="fw-bolder" name="name"/>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-4 text-end">-->
+<!--&lt;!&ndash;                                        <field class="badge rounded-pill" name="state"/>&ndash;&gt;-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div>-->
+<!--                                    <strong>Contract Number: </strong>-->
+<!--&lt;!&ndash;                                    <field name="ref"/>&ndash;&gt;-->
+<!--                                </div>-->
+<!--                            </t>-->
+<!--                        </templates>-->
+<!--                    </kanban>-->
+<!--                </field>-->
+<!--            </field>-->
+<!--        </record>-->
+
+    <record id="xf_partner_contract_search" model="ir.ui.view">
+        <field name="name">xf_partner_contract_search</field>
+        <field name="model">xf.partner.contract</field>
+        <field name="arch" type="xml">
+            <search string="Search Contract">
+                <field name="name" string="Contract"
+                       filter_domain="['|', '|', ('name', 'ilike', self), ('ref', 'ilike', self), ('partner_id', 'child_of', self)]"/>
+                <field name="partner_id" operator="child_of"/>
+                <field name="user_id"/>
+                <!--                    <field name="product_id"/>-->
+                <filter name="my_contracts" string="My Contracts"
+                        domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter invisible="1" string="Late Activities"
+                        name="activities_overdue"
+                        domain="[('my_activity_date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                        help="Show all records which has next action date is before today"/>
+                <filter invisible="1" string="Today Activities"
+                        name="activities_today"
+                        domain="[('my_activity_date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter invisible="1" string="Future Activities"
+                        name="activities_upcoming_all"
+                        domain="[('my_activity_date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter string="Running" name="running"
+                        domain="[('state', '=', 'running')]"/>
+                <filter string="Need Action" name="kanban_state_blocked"
+                        domain="['&amp;', ('state', '=', 'running'), ('kanban_state', '=', 'blocked')]"/>
+                <separator/>
+                <filter string="Warnings" name="activities_exception"
+                        domain="[('activity_exception_decoration', '!=', False)]"/>
+                <separator />
+                    <filter string="Partner" name="group_by_partner"
+                            domain="[]"
+                            context="{'group_by': 'partner_id'}"/>
+                    <filter string="Responsible Person" name="group_by_user"
+                            domain="[]" context="{'group_by': 'user_id'}"/>
+                    <filter string="Type" name="group_by_type" domain="[]"
+                            context="{'group_by': 'type'}"/>
+                    <filter string="State" name='group_by_state' domain="[]"
+                            context="{'group_by': 'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="xf_partner_contract_act_window"
+            model="ir.actions.act_window">
+        <field name="name">Contracts</field>
+        <field name="res_model">xf.partner.contract</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new account
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            id="xf_partner_contract_menuitem"
+            name="Contracts"
+            action="xf_partner_contract_act_window"
+            parent="xf_partner_contract.xf_partner_contract_root_menuitem"
+            sequence="1"
+    />
+
+
+</odoo>

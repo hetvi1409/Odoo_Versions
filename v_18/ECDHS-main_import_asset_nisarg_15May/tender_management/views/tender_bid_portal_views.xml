@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="portal_my_home_menu_bid_applications"
+              name="Portal layout : Bid Applications menu entries"
+              inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'bid_applications' or bidb_applications"
+                t-attf-class="breadcrumb-item #{'active' if not bid_applications else ''}">
+                <a t-attf-href="/my/bid_applications?{{ keep_query() }}">
+                    Bid Applications
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_bid_applications" name="Bid Applications"
+              customize_show="True" inherit_id="portal.portal_my_home"
+              priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_vendor_category_enable" t-value="True"/>
+        </xpath>
+        <div id="portal_vendor_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+<!--                <t t-set="icon" t-value="'/sale/static/src/img/bag.svg'"/>-->
+                <t t-set="title">Bid Applications</t>
+                <t t-set="text">Follow your Bid Applications</t>
+                <t t-set="url" t-value="'/my/bid_applications'"/>
+                <t t-set="placeholder_count"
+                   t-value="'bid_count'"/>
+            </t>
+        </div>
+    </template>
+
+        <template id="my_bid_applications" name="Bids">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Submitted Bid</t>
+            </t>
+            <t t-if="bid_applications" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Bid Name #</th>
+                        <th class="text-end">Tender</th>
+                        <th class="text-end">Type</th>
+                        <th class="text-end">Status</th>
+                    </tr>
+                </thead>
+                <t t-foreach="bid_applications" t-as="res">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/bid_application_details_portal/#{res.id}">
+                                <t t-out="res.name"/>
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="res.tender_id.name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="res.bid_type"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="res.state"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no bids submitted.</p>
+        </t>
+    </template>
+</odoo>

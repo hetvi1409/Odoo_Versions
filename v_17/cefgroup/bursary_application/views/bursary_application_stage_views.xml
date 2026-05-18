@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="bursary_application_stage_view_tree" model="ir.ui.view">
+        <field name="name">bursary.application.stage.view.tree</field>
+        <field name="model">bursary.application.stage</field>
+        <field name="arch" type="xml">
+            <tree string="Stages">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="fold"/>
+                <field name="hired_stage"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="bursary_application_stage_view_form" model="ir.ui.view">
+        <field name="name">bursary.application.stage.view.form</field>
+        <field name="model">bursary.application.stage</field>
+        <field name="arch" type="xml">
+            <form string="Stage">
+                <sheet>
+                    <group name="stage_definition" string="Stage Definition">
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence" groups="base.group_no_one"/>
+                            <!--                            <field name="template_id" domain= "[('model_id.model', '=', 'hr.applicant')]"/>-->
+                        </group>
+                        <group name="stage_details">
+                            <field name="fold"/>
+                            <field name="hired_stage"/>
+                        </group>
+                    </group>
+                    <separator string="Requirements"/>
+                    <field name="requirements"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="bursary_application_stage_act" model="ir.actions.act_window">
+        <field name="name">Stages</field>
+        <field name="res_model">bursary.application.stage</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

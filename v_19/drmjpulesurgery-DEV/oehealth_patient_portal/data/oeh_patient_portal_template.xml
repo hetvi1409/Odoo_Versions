@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="oeh_email_template_patient_portal" model="mail.template">
+        <field name="name">Patient Portal: Send by email</field>
+        <field name="model_id" ref="oehealth.model_oeh_medical_patient"/>
+        <field name="subject">Patient # : {{object.identification_code or 'n/a' }}</field>
+        <field name="email_from">{{ (user.email_formatted or '') }}</field>
+        <field name="partner_to">{{object.partner_id.id}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Dear  <t t-out="object.name or ''">,</t>
+                    <br/>
+                    <br/>
+                    Please Access your Patient Portal URL By Clicking On Following Button:
+                    <br/>
+                    <br/>
+                    Do not hesitate to contact us if you have any questions.
+                    <div style="margin: 32px 0px 32px 0px; text-align: center;">
+                       <a t-att-href="object.patient_url or '#'"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            View Now
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </field>
+        <!--                <field name="report_template" ref="action_oeh_medical_report_patient_prescriptions"/>-->
+        <!--                <field name="report_name">${(object.name or '').replace('/','_')}</field>-->
+        <!--                <field name="lang">${object.patient.partner_id.lang}</field>-->
+        <!--                <field name="auto_delete" eval="True"/>-->
+    </record>
+
+</odoo>

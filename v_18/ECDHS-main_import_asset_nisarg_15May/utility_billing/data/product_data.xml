@@ -1,0 +1,51 @@
+<odoo>
+    <!-- Create new Unit of Measure: kiloliters (kL) -->
+    <record id="uom_kiloliter" model="uom.uom">
+        <field name="name">kL</field>
+        <field name="category_id" ref="uom.product_uom_categ_vol"/>
+        <field name="factor_inv">1000</field> <!-- 1 kL = 1000 L -->
+        <field name="uom_type">bigger</field>
+        <field name="rounding">0.001</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- Water – Consumption -->
+    <record id="product_water_consumption" model="product.product">
+        <field name="name">Water – Consumption</field>
+        <field name="uom_id" ref="uom_kiloliter"/>
+        <field name="uom_po_id" ref="uom_kiloliter"/>
+        <field name="list_price">0</field>
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.vat_15')])]"/>
+    </record>
+
+    <!-- Electricity – Energy -->
+    <record id="product_electricity_energy" model="product.product">
+        <field name="name">Electricity – Energy</field>
+        <field name="uom_id" ref="uom.product_uom_kwh"/>
+        <field name="uom_po_id" ref="uom.product_uom_kwh"/>
+        <field name="list_price">0</field>
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.vat_15')])]"/>
+    </record>
+
+    <!-- Water Fixed Levy (monthly) -->
+    <record id="product_water_fixed_levy" model="product.product">
+        <field name="name">Water Fixed Levy (monthly)</field>
+        <field name="uom_id" ref="uom.product_uom_unit"/>
+        <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        <field name="list_price">0</field>
+        <field name="type">service</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.vat_15')])]"/>
+    </record>
+
+    <!-- Electricity Fixed Charge -->
+    <record id="product_electricity_fixed_charge" model="product.product">
+        <field name="name">Electricity Fixed Charge</field>
+        <field name="uom_id" ref="uom.product_uom_unit"/>
+        <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        <field name="list_price">0</field>
+        <field name="type">service</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.vat_15')])]"/>
+    </record>
+</odoo>

@@ -1,0 +1,324 @@
+<odoo>
+    <template id="emp201_report_template">
+        <t t-call="web.basic_layout">
+            <!--      <t t-foreach="docs" t-as="doc">-->
+            <div class="page">
+                <h2>EMP201 PAYE, SDL and UIF Return</h2>
+                <!--<p>Printed for payment period <strong></strong> for Employees with Current Month values</p>-->
+                <p>Printed for payment period <strong><t t-esc="month_label"/></strong> for Employees with Current Month values</p>
+                <p>Printed for
+                    <strong>
+                        <t t-esc="company_name"/>
+                    </strong>
+                    : Monthly
+                </p>
+                <!-- Table -->
+                <table class="table table-sm table-borderless" style="width:100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f0f0f0;">
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th colspan="3">Current Liability</th>
+                            <th colspan="3">Year to Date Liability</th>
+                        </tr>
+                        <tr style="background-color: #f0f0f0;">
+                            <th>Employee Code</th>
+                            <th>Employee Name</th>
+                            <th>ETI Amount</th>
+                            <th>PAYE</th>
+                            <th>SDL</th>
+                            <th>UIF</th>
+                            <th>PAYE</th>
+                            <th>SDL</th>
+                            <th>UIF</th>
+                        </tr>
+                        <tr style="background-color: #f0f0f0;">
+                            <th colspan="9">Year of Assessment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="employee_lines" t-as="line">
+                            <tr>
+                                <td>
+                                    <t t-esc="line['code']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['name']"/>
+                                </td>
+                                <td class="number">
+                                    <t t-esc="line['eti_amount']"/>
+                                </td>
+                                <td class="number">
+                                    <t t-esc="line['paye']"/>
+                                </td>
+                                <td class="number">
+                                    <t t-esc="line['sdl']"/>
+                                </td>
+                                <td class="number">
+                                    <t t-esc="line['uif']"/>
+                                </td>
+                                <td class="number">
+                                    <t t-esc="line['paye_ytd']"/>
+                                </td>
+                                <td class="number">
+                                    <t t-esc="line['sdl_ytd']"/>
+                                </td>
+                                <td class="number">
+                                    <t t-esc="line['uif_ytd']"/>
+                                </td>
+                            </tr>
+                        </t>
+                        <tr>
+                            <td>
+                                <strong>Total</strong>
+                            </td>
+                            <td></td>
+                            <td class="number">
+                                <t t-esc="'%.2f' % total_eti"/>
+                            </td>
+                            <td class="number">
+                                <t t-esc="'%.2f' % total_paye"/>
+                            </td>
+                            <td class="number">
+                                <t t-esc="'%.2f' % total_sdl"/>
+                            </td>
+                            <td class="number">
+                                <t t-esc="'%.2f' % total_uif"/>
+                            </td>
+                            <td class="number">
+                                <t t-esc="'%.2f' % total_paye_ytd"/>
+                            </td>
+                            <td class="number">
+                                <t t-esc="'%.2f' % total_sdl_ytd"/>
+                            </td>
+                            <td class="number">
+                                <t t-esc="'%.2f' % total_uif_ytd"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <br/>
+              <div class="text-left mb-4">
+                    <h3>Employment Tax Incentive (ETI) Summary</h3>
+                </div>
+              <table class="table table-sm table-borderled" style="width:100%; border-collapse: collapse;">
+                            <tr>
+                                <td>
+                                    <strong>Total calculated incentive</strong>
+                                </td>
+                                <td></td>
+                              <td>
+                                    <strong>Excess brought forward</strong>
+                                </td>
+                                <td></td>
+                              <td>
+                                    <strong>Total incentive amount (a)</strong>
+                                </td>
+                                <td></td>
+                              <td>
+                                    <strong>PAYE total</strong>
+                                </td>
+                                <td></td>
+                              <td>
+                                    <strong>Excess carried forward (b)</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="number text-end">
+                                <t t-esc="'%.2f' % total_eti"/>
+                            </td>
+                                <td>+</td>
+                              <td></td>
+                                <td>=</td>
+                              <td></td>
+                                <td>-</td>
+                             <td class="number text-end">
+                                <t t-esc="'%.2f' % total_paye"/>
+                            </td>
+                                <td>=</td>
+                              <td></td>
+                            </tr>
+                        </table>
+                <div class="row">
+                    <div class="col-4">
+                        <table class="table table-sm table-borderless" style="width:100%; border-collapse: collapse;">
+                            <tr>
+                                <td>
+                                    <strong>Total incentive amount (a):</strong>
+                                </td>
+                                <td>
+                                    ___________________________
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Excess carried forward (b):</strong>
+                                </td>
+                                <td>
+                                    ___________________________
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Incentive claimable this month (c):</strong>
+                                </td>
+                                <td>
+                                    ___________________________
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-8"></div>
+                </div>
+                <div class="text-left mb-4">
+                    <h3>Payment Summary</h3>
+                </div>
+                <table class="table table-sm table-borderless" style="width:100%; border-collapse: collapse;">
+                    <tr>
+                        <td>
+                            <strong>Company name:</strong>
+                        </td>
+                        <td>
+                            <span t-esc="company_name"/>
+                        </td>
+                        <td>
+                            <strong>Totals</strong>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Payment period:</strong>
+                        </td>
+                        <td>
+                            <!-- Shows payment period month -->
+                            <span><t t-esc="month_label"/></span>
+                        </td>
+                        <td>
+                            <strong>PAYE total</strong>
+                        </td>
+                        <td>
+                            <span>
+                                <t t-esc="'%.2f' % total_paye"/>
+                            </span>
+                        </td>
+                        <td>
+                            <strong>- Incentive claimable this month (c)</strong>
+                        </td>
+                        <td>____________________</td>
+                        <td>
+                            <strong>= Nett PAYE Total</strong>
+                        </td>
+                        <td>____________________</td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                            <span style="margin-left: 130px;">(Pay before this specific date)</span>
+                        </td>
+                        <td>
+                            <strong>+ SDL total</strong>
+                        </td>
+                        <td>
+                            <span>
+                                <t t-esc="'%.2f' % total_sdl"/>
+                            </span>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>PAYE reference number</strong>
+                        </td>
+                        <td>
+                            <!-- PAYE Number User Input -->
+                            <span t-esc="paye_number"/>
+                        </td>
+                        <td>
+                            <strong>+ UIF total</strong>
+                        </td>
+                        <td>
+                            <span>
+                                <t t-esc="'%.2f' % total_uif"/>
+                            </span>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>UIF reference number</strong>
+                        </td>
+                        <td>
+                            <!-- UIF Number User Input -->
+                            <span t-esc="uif_number"/>
+                        </td>
+                        <td>
+                            <strong>= Total</strong>
+                        </td>
+                        <td>
+                            <span>
+                                <t t-esc="'%.2f' % grand_total"/>
+                            </span>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>SDL reference number</strong>
+                        </td>
+                        <td>
+                            <!-- SDL Number User Input -->
+                            <span t-esc="sdl_number"/>
+                        </td>
+                        <td>
+                            <strong>- Incentive claimable this month (c)</strong>
+                        </td>
+                        <td>____________________</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <strong>= Total amount payable</strong>
+                        </td>
+                        <td>____________________</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+
+                <p class="text-right" style="font-size: smaller; margin-top: 20px;">
+                    Printed on
+                    <t t-esc="printed_date"/>
+                    — Page
+                    <t t-esc="page_number"/>
+                    of
+                    <t t-esc="page_count"/>
+                </p>
+            </div>
+            <!--      </t>-->
+        </t>
+    </template>
+</odoo>

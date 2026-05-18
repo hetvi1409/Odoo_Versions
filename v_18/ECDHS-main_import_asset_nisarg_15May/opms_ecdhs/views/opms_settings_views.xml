@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Standalone view: shown exclusively via OPMS menu — no other modules' blocks -->
+        <record id="view_opms_settings_standalone" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.opms.standalone</field>
+            <field name="model">res.config.settings</field>
+            <field name="arch" type="xml">
+                <form string="OPMS Terminology Settings" class="oe_form_configuration o_base_settings" js_class="base_settings">
+                    <app string="OPMS" data-string="OPMS" name="opms_ecdhs" logo="/opms_ecdhs/static/description/icon.png">
+
+                        <block title="Submission Features" name="opms_submission_features_block"
+                               help="Enable or disable optional features on submission forms and views.">
+                            <setting string="Enable Narratives" help="When enabled, the Narrative field appears on the portal submission form and Narrative columns are shown in the indicator results table.">
+                                <field name="opms_enable_narratives"/>
+                            </setting>
+                        </block>
+
+                        <block title="Import Performance" name="opms_import_performance_block"
+                               help="Tune progress feedback and batching for APP import, copy-previous, and demo seed operations.">
+                            <setting string="APP Import Progress Notify Step" help="Show a progress checkpoint after this many rows during manual or auto APP import.">
+                                <field name="opms_app_import_notify_step" class="w-100"/>
+                            </setting>
+                            <setting string="APP Import History Batch Size" help="Insert import history line records in batches of this size during APP import.">
+                                <field name="opms_app_import_history_batch_size" class="w-100"/>
+                            </setting>
+                            <setting string="Copy Previous Progress Notify Step" help="Show a progress checkpoint after this many APP Plans are processed during Copy Previous Period.">
+                                <field name="opms_copy_previous_notify_step" class="w-100"/>
+                            </setting>
+                            <setting string="Demo Seed Chunk Size" help="Create demo submissions in chunks of this size.">
+                                <field name="opms_demo_seed_chunk_size" class="w-100"/>
+                            </setting>
+                            <setting string="Demo Seed Preparation Notify Step" help="Show a preparation-stage progress checkpoint after this many targets are scanned for demo seed generation.">
+                                <field name="opms_demo_seed_prep_notify_step" class="w-100"/>
+                            </setting>
+                            <setting string="Demo Seed Create Notify Every Chunks" help="Show a creation-stage progress checkpoint after this many demo seed batches are written.">
+                                <field name="opms_demo_seed_create_notify_every_chunks" class="w-100"/>
+                            </setting>
+                        </block>
+
+                           <block title="OPMS User Data Access Controls" name="opms_access_controls_block"
+                               help="Control how OPMS data is limited for users. You can switch this on/off at any time.">
+                            <setting string="Data Access Level" help="Choose how strong OPMS data limits should be.">
+                                <field name="opms_access_level" class="w-100"/>
+                            </setting>
+                            <setting string="Apply Limits To" help="Choose which users should receive OPMS data limits.">
+                                <field name="opms_applies_to" class="w-100"/>
+                            </setting>
+                            <setting string="Require Active OPMS User Profile" help="If enabled, users without an active OPMS profile cannot access scoped OPMS data.">
+                                <field name="opms_require_active_profile"/>
+                            </setting>
+                            <setting string="Allow System Admin Users To See Everything" help="If enabled, system administrators are excluded from these limits.">
+                                <field name="opms_admin_bypass"/>
+                            </setting>
+                            <setting string="Limit Users To Their Assigned Areas" help="You can turn on multiple options at once. All active options work together.">
+                                <div class="content-group">
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <field name="opms_limit_company"/>
+                                            <label for="opms_limit_company" class="o_form_label">Region/Office</label>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <field name="opms_limit_programme"/>
+                                            <label for="opms_limit_programme" class="o_form_label">Programmes</label>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <field name="opms_limit_sub_programme"/>
+                                            <label for="opms_limit_sub_programme" class="o_form_label">Sub-Programmes</label>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <field name="opms_limit_directorate"/>
+                                            <label for="opms_limit_directorate" class="o_form_label">Directorates</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="If Nothing Is Assigned" help="Choose whether users with no assignment should see all or no OPMS data.">
+                                <field name="opms_empty_behavior" class="w-100"/>
+                            </setting>
+                            <setting string="Reset Access Controls" help="Reset all OPMS access control settings back to relaxed defaults in one click.">
+                                <div class="content-group">
+                                    <div class="d-flex flex-column gap-2 opms-settings-reset-panel">
+                                        <div class="text-muted">
+                                            This resets access controls to non-hardened defaults: no limits enabled, profile requirement off, and show-all when nothing is assigned.
+                                        </div>
+                                        <div>
+                                            <button
+                                                name="action_reset_opms_access_to_relaxed_defaults"
+                                                type="object"
+                                                string="Reset To Relaxed Defaults"
+                                                class="btn btn-secondary"
+                                                confirm="This will reset all OPMS access controls to relaxed defaults. Continue?"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                        </block>
+
+                        <block title="OPMS Dynamic Terminology" name="opms_dynamic_labels_block">
+                            <setting string="Reset Terminology" help="Restore all OPMS labels from module source and clear all custom terminology overrides.">                                <div class="content-group">
+                                    <div class="d-flex flex-column gap-2 opms-settings-reset-panel">
+                                        <div class="text-muted">
+                                            Use this action to rollback every OPMS terminology change and restore the shipped defaults across menus, forms, tabs, pages, and portal screens.
+                                        </div>
+                                        <div>
+                                            <button
+                                                name="action_reset_opms_labels_to_defaults"
+                                                type="object"
+                                                string="Reset To Defaults"
+                                                class="btn btn-secondary"
+                                                confirm="This will restore OPMS labels from module source and reset all terminology settings to defaults. Continue?"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                        </block>
+
+                        <block title="Planning Hierarchy" name="opms_planning_hierarchy_block"
+                               help="Configure naming used in plan and organisational structure levels.">
+                            <setting string="APP Plans" help="Rename APP Plan labels across OPMS backend and portal.">
+                                <div class="content-group opms-term-editor">
+                                    <label for="opms_app_plan_option" class="o_form_label">APP Plans options</label>
+                                    <field name="opms_app_plan_option" class="w-100"/>
+                                    <div class="row g-3 mt-1" invisible="opms_app_plan_option != 'other'">
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_app_plan_other_singular" class="o_form_label">Custom Singular</label>
+                                            <field name="opms_app_plan_other_singular" class="w-100" placeholder="e.g. Portfolio"/>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_app_plan_other_plural" class="o_form_label">Custom Plural</label>
+                                            <field name="opms_app_plan_other_plural" class="w-100" placeholder="e.g. Portfolios"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="Programmes" help="Rename Programme labels across OPMS backend and portal.">
+                                <div class="content-group opms-term-editor">
+                                    <label for="opms_programme_option" class="o_form_label">Programmes options</label>
+                                    <field name="opms_programme_option" class="w-100"/>
+                                    <div class="row g-3 mt-1" invisible="opms_programme_option != 'other'">
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_programme_other_singular" class="o_form_label">Custom Singular</label>
+                                            <field name="opms_programme_other_singular" class="w-100" placeholder="e.g. Project"/>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_programme_other_plural" class="o_form_label">Custom Plural</label>
+                                            <field name="opms_programme_other_plural" class="w-100" placeholder="e.g. Projects"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="Sub-Programmes" help="Rename Sub-Programme labels across OPMS backend and portal.">
+                                <div class="content-group opms-term-editor">
+                                    <label for="opms_sub_programme_option" class="o_form_label">Sub-Programmes options</label>
+                                    <field name="opms_sub_programme_option" class="w-100"/>
+                                    <div class="row g-3 mt-1" invisible="opms_sub_programme_option != 'other'">
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_sub_programme_other_singular" class="o_form_label">Custom Singular</label>
+                                            <field name="opms_sub_programme_other_singular" class="w-100" placeholder="e.g. Sub-Project"/>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_sub_programme_other_plural" class="o_form_label">Custom Plural</label>
+                                            <field name="opms_sub_programme_other_plural" class="w-100" placeholder="e.g. Sub-Projects"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="Directorates" help="Rename Directorate labels across OPMS backend and portal.">
+                                <div class="content-group opms-term-editor">
+                                    <label for="opms_directorate_option" class="o_form_label">Directorates options</label>
+                                    <field name="opms_directorate_option" class="w-100"/>
+                                    <div class="row g-3 mt-1" invisible="opms_directorate_option != 'other'">
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_directorate_other_singular" class="o_form_label">Custom Singular</label>
+                                            <field name="opms_directorate_other_singular" class="w-100" placeholder="e.g. Child-Sub-Project"/>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_directorate_other_plural" class="o_form_label">Custom Plural</label>
+                                            <field name="opms_directorate_other_plural" class="w-100" placeholder="e.g. Child-Sub-Projects"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                        </block>
+
+                        <block title="Performance Hierarchy" name="opms_performance_hierarchy_block"
+                               help="Configure naming for strategic results, outputs, and indicators.">
+                            <setting string="Outcomes" help="Rename Outcome labels across OPMS backend and portal.">
+                                <div class="content-group opms-term-editor">
+                                    <label for="opms_outcome_option" class="o_form_label">Outcomes options</label>
+                                    <field name="opms_outcome_option" class="w-100"/>
+                                    <div class="row g-3 mt-1" invisible="opms_outcome_option != 'other'">
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_outcome_other_singular" class="o_form_label">Custom Singular</label>
+                                            <field name="opms_outcome_other_singular" class="w-100" placeholder="e.g. Strategy"/>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_outcome_other_plural" class="o_form_label">Custom Plural</label>
+                                            <field name="opms_outcome_other_plural" class="w-100" placeholder="e.g. Strategies"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="Outputs" help="Rename Output labels across OPMS backend and portal.">
+                                <div class="content-group opms-term-editor">
+                                    <label for="opms_output_option" class="o_form_label">Outputs options</label>
+                                    <field name="opms_output_option" class="w-100"/>
+                                    <div class="row g-3 mt-1" invisible="opms_output_option != 'other'">
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_output_other_singular" class="o_form_label">Custom Singular</label>
+                                            <field name="opms_output_other_singular" class="w-100" placeholder="e.g. Goal"/>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_output_other_plural" class="o_form_label">Custom Plural</label>
+                                            <field name="opms_output_other_plural" class="w-100" placeholder="e.g. Goals"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="Output Indicators" help="Rename Output Indicator labels across OPMS backend and portal.">
+                                <div class="content-group opms-term-editor">
+                                    <label for="opms_output_indicator_option" class="o_form_label">Output Indicators options</label>
+                                    <field name="opms_output_indicator_option" class="w-100"/>
+                                    <div class="row g-3 mt-1" invisible="opms_output_indicator_option != 'other'">
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_output_indicator_other_singular" class="o_form_label">Custom Singular</label>
+                                            <field name="opms_output_indicator_other_singular" class="w-100" placeholder="e.g. Objective"/>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_output_indicator_other_plural" class="o_form_label">Custom Plural</label>
+                                            <field name="opms_output_indicator_other_plural" class="w-100" placeholder="e.g. Objectives"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                        </block>
+
+                        <block title="Time Periods" name="opms_time_periods_block"
+                               help="Configure naming for annual, quarterly, and period-specific targets.">
+                            <setting string="Annuals" help="Rename Annual labels across OPMS backend and portal.">
+                                <div class="content-group opms-term-editor">
+                                    <label for="opms_annual_option" class="o_form_label">Annuals options</label>
+                                    <field name="opms_annual_option" class="w-100"/>
+                                    <div class="row g-3 mt-1" invisible="opms_annual_option != 'other'">
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_annual_other_singular" class="o_form_label">Custom Singular</label>
+                                            <field name="opms_annual_other_singular" class="w-100" placeholder="e.g. Long Term Plan"/>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_annual_other_plural" class="o_form_label">Custom Plural</label>
+                                            <field name="opms_annual_other_plural" class="w-100" placeholder="e.g. Long Term Plans"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="Medium Term Plans / Quarterly Targets" help="Rename Medium Term Plan labels (maps to Quarterly Targets in the OPMS data model).">
+                                <div class="content-group opms-term-editor">
+                                    <label for="opms_quarterly_target_option" class="o_form_label">Medium Term Plans options</label>
+                                    <field name="opms_quarterly_target_option" class="w-100"/>
+                                    <div class="row g-3 mt-1" invisible="opms_quarterly_target_option != 'other'">
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_quarterly_target_other_singular" class="o_form_label">Custom Singular</label>
+                                            <field name="opms_quarterly_target_other_singular" class="w-100" placeholder="e.g. Medium Term Plan"/>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_quarterly_target_other_plural" class="o_form_label">Custom Plural</label>
+                                            <field name="opms_quarterly_target_other_plural" class="w-100" placeholder="e.g. Medium Term Plans"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="Quarters" help="Rename Quarter labels across OPMS backend and portal.">
+                                <div class="content-group opms-term-editor">
+                                    <label for="opms_quarter_option" class="o_form_label">Quarters options</label>
+                                    <field name="opms_quarter_option" class="w-100"/>
+                                    <div class="row g-3 mt-1" invisible="opms_quarter_option != 'other'">
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_quarter_other_singular" class="o_form_label">Custom Singular</label>
+                                            <field name="opms_quarter_other_singular" class="w-100" placeholder="e.g. Short Term Plan"/>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="opms_quarter_other_plural" class="o_form_label">Custom Plural</label>
+                                            <field name="opms_quarter_other_plural" class="w-100" placeholder="e.g. Short Term Plans"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                        </block>
+
+                        <block title="Custom Future Overrides" name="opms_custom_overrides_block"
+                               help="Optional JSON mapping for additional OPMS labels without code changes.">
+                            <setting string="Custom Label Overrides (JSON)" help="Map any existing OPMS label to a replacement using JSON key/value pairs.">
+                                <div class="content-group opms-term-editor">
+                                    <p class="text-muted mb-2">
+                                        Use JSON key/value pairs where the key is the <strong>exact existing label</strong> and the value is the replacement.
+                                        Keys are case-sensitive. Values must be non-empty strings. Only valid JSON object syntax is accepted.
+                                    </p>
+                                    <p class="text-muted mb-2">
+                                        Example: <code>{"Reporting Submissions": "Performance Submissions", "Narratives": "Progress Notes"}</code>
+                                    </p>
+                                    <field name="opms_custom_label_overrides" widget="text" class="w-100" placeholder='{"Existing Label": "New Label"}'/>
+                                </div>
+                            </setting>
+                        </block>
+
+                    </app>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_settings" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_opms_settings_standalone"/>
+            <field name="target">inline</field>
+            <field name="context">{'module': 'opms_ecdhs'}</field>
+        </record>
+
+        <record id="action_opms_email_templates" model="ir.actions.act_window">
+            <field name="name">Email Templates</field>
+            <field name="res_model">mail.template</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[("model_id.model", "like", "opms.%")]</field>
+        </record>
+
+        <record id="action_opms_emails" model="ir.actions.act_window">
+            <field name="name">OPMS Emails</field>
+            <field name="res_model">mail.mail</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="mail.view_mail_search"/>
+            <field name="domain">['|', '|', ('subject', 'ilike', 'OPMS'), ('body_html', 'ilike', 'ECDHS OPMS'), ('body_html', 'ilike', '/my/opms')]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record id="action_opms_user_management" model="ir.actions.act_url">
+            <field name="name">User Management</field>
+            <field name="url">/my/opms/user-management</field>
+            <field name="target">self</field>
+        </record>
+
+        <menuitem id="menu_opms_config_root" name="Configurations" parent="opms_ecdhs.menu_opms_root" sequence="70"/>
+        <menuitem id="menu_opms_settings" name="Settings" parent="menu_opms_config_root" action="action_opms_settings" sequence="10"/>
+        <menuitem id="menu_opms_user_management" name="User Management" parent="menu_opms_config_root" action="action_opms_user_management" sequence="20"/>
+        <menuitem id="menu_opms_email_templates" name="Email Templates" parent="menu_opms_config_root" action="action_opms_email_templates" sequence="30"/>
+        <menuitem id="menu_opms_emails" name="OPMS Emails" parent="menu_opms_config_root" action="action_opms_emails" sequence="35"/>
+    </data>
+</odoo>

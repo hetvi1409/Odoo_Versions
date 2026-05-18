@@ -1,0 +1,2028 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             APP PLAN
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_app_plan_list" model="ir.ui.view">
+            <field name="name">opms.app.plan.list</field>
+            <field name="model">opms.app.plan</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="code"/>
+                    <field name="status" widget="badge"
+                           decoration-success="status == 'active'"
+                           decoration-danger="status == 'inactive'"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_app_plan_form" model="ir.ui.view">
+            <field name="name">opms.app.plan.form</field>
+            <field name="model">opms.app.plan</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_annual_targets" type="object" class="oe_stat_button" icon="fa-bullseye">
+                                <field name="annual_target_count" widget="statinfo" string="Annual Targets"/>
+                            </button>
+                            <button name="action_view_quarters" type="object" class="oe_stat_button" icon="fa-calendar">
+                                <field name="quarter_count" widget="statinfo" string="Quarters"/>
+                            </button>
+                            <button name="action_view_quarterly_targets" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="quarterly_target_count" widget="statinfo" string="Quarterly Targets"/>
+                            </button>
+                            <button name="action_view_narratives" type="object" class="oe_stat_button" icon="fa-align-left">
+                                <field name="narrative_count" widget="statinfo" string="Narratives"/>
+                            </button>
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                            <button name="action_view_submissions" type="object" class="oe_stat_button" icon="fa-send">
+                                <field name="submission_count" widget="statinfo" string="Submissions"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="APP Plan Name"/>
+                            <h1><field name="name" placeholder="e.g. Annual Performance Plan 2025-26"/></h1>
+                        </div>
+                        <group string="Plan Details">
+                            <group>
+                                <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="code" placeholder="e.g. APP-2025"/>
+                            </group>
+                            <group>
+                                <field name="active" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+                        <group string="Notes">
+                            <field name="notes" nolabel="1" placeholder="Additional notes or description for this APP Plan…" widget="text"/>
+                        </group>
+                        <notebook>
+                            <page string="Annual Targets" name="annual_targets">
+                                <field name="annual_target_ids">
+                                    <list>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="target_value"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Quarters" name="quarters">
+                                <field name="quarter_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="submission_open_date"/>
+                                        <field name="submission_close_date"/>
+                                        <field name="submission_period_state" widget="badge"
+                                               decoration-success="submission_period_state == 'open'"
+                                               decoration-danger="submission_period_state == 'closed'"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Quarterly Targets" name="quarterly_targets">
+                                <field name="quarterly_target_ids">
+                                    <list>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="planned_target"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Narratives" name="narratives">
+                                <field name="narrative_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Reporting Submissions" name="submissions">
+                                <field name="reporting_submission_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="actual_value"/>
+                                        <field name="workflow_status" widget="badge"
+                                               decoration-success="workflow_status == 'approved'"
+                                               decoration-warning="workflow_status == 'director_review'"
+                                               decoration-info="workflow_status == 'submitted'"
+                                               decoration-muted="workflow_status == 'draft'"
+                                               decoration-danger="workflow_status == 'rejected'"/>
+                                        <field name="submission_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_app_plan" model="ir.actions.act_window">
+            <field name="name">APP Plans</field>
+            <field name="res_model">opms.app.plan</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'active_test': False}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             PROGRAMME
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_programme_list" model="ir.ui.view">
+            <field name="name">opms.programme.list</field>
+            <field name="model">opms.programme</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="sub_programme_count" string="Sub-Programmes"/>
+                    <field name="directorate_count" string="Directorates"/>
+                    <field name="output_indicator_count" string="Output Indicators"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_programme_form" model="ir.ui.view">
+            <field name="name">opms.programme.form</field>
+            <field name="model">opms.programme</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_sub_programmes" type="object" class="oe_stat_button" icon="fa-sitemap">
+                                <field name="sub_programme_count" widget="statinfo" string="Sub-Programmes"/>
+                            </button>
+                            <button name="action_view_directorates" type="object" class="oe_stat_button" icon="fa-building">
+                                <field name="directorate_count" widget="statinfo" string="Directorates"/>
+                            </button>
+                            <button name="action_view_outputs" type="object" class="oe_stat_button" icon="fa-tasks">
+                                <field name="output_count" widget="statinfo" string="Outputs"/>
+                            </button>
+                            <button name="action_view_output_indicators" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                                <field name="output_indicator_count" widget="statinfo" string="Indicators"/>
+                            </button>
+                            <button name="action_view_annual_targets" type="object" class="oe_stat_button" icon="fa-bullseye">
+                                <field name="annual_target_count" widget="statinfo" string="Annual Targets"/>
+                            </button>
+                            <button name="action_view_quarterly_targets" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="quarterly_target_count" widget="statinfo" string="Qtrly Targets"/>
+                            </button>
+                            <button name="action_view_narratives" type="object" class="oe_stat_button" icon="fa-align-left">
+                                <field name="narrative_count" widget="statinfo" string="Narratives"/>
+                            </button>
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                            <button name="action_view_submissions" type="object" class="oe_stat_button" icon="fa-send">
+                                <field name="submission_count" widget="statinfo" string="Submissions"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="Programme Name"/>
+                            <h1><field name="name" placeholder="e.g. Administration"/></h1>
+                        </div>
+                        <group string="Programme Details">
+                            <group>
+                                <field name="code" placeholder="e.g. P1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Sub-Programmes" name="sub_programmes">
+                                <field name="sub_programme_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="directorate_count" string="Directorates"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Directorates" name="directorates">
+                                <field name="directorate_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Outputs" name="outputs">
+                                <field name="output_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Output Indicators" name="output_indicators">
+                                <field name="output_indicator_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="indicator_type"/>
+                                        <field name="measurement_type"/>
+                                        <field name="output_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Annual Targets" name="annual_targets">
+                                <field name="annual_target_ids" readonly="1">
+                                    <list>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="target_value"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Quarterly Targets" name="quarterly_targets">
+                                <field name="quarterly_target_ids" readonly="1">
+                                    <list>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="planned_target"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Narratives" name="narratives">
+                                <field name="narrative_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Reporting Submissions" name="submissions">
+                                <field name="reporting_submission_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="actual_value"/>
+                                        <field name="workflow_status" widget="badge"
+                                               decoration-success="workflow_status == 'approved'"
+                                               decoration-warning="workflow_status == 'director_review'"
+                                               decoration-info="workflow_status == 'submitted'"
+                                               decoration-muted="workflow_status == 'draft'"
+                                               decoration-danger="workflow_status == 'rejected'"/>
+                                        <field name="submission_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_programme" model="ir.actions.act_window">
+            <field name="name">Programmes</field>
+            <field name="res_model">opms.programme</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             SUB-PROGRAMME
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_sub_programme_list" model="ir.ui.view">
+            <field name="name">opms.sub.programme.list</field>
+            <field name="model">opms.sub.programme</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="directorate_count" string="Directorates"/>
+                    <field name="output_indicator_count" string="Indicators"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_sub_programme_form" model="ir.ui.view">
+            <field name="name">opms.sub.programme.form</field>
+            <field name="model">opms.sub.programme</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_directorates" type="object" class="oe_stat_button" icon="fa-building">
+                                <field name="directorate_count" widget="statinfo" string="Directorates"/>
+                            </button>
+                            <button name="action_view_outputs" type="object" class="oe_stat_button" icon="fa-tasks">
+                                <field name="output_count" widget="statinfo" string="Outputs"/>
+                            </button>
+                            <button name="action_view_output_indicators" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                                <field name="output_indicator_count" widget="statinfo" string="Indicators"/>
+                            </button>
+                            <button name="action_view_annual_targets" type="object" class="oe_stat_button" icon="fa-bullseye">
+                                <field name="annual_target_count" widget="statinfo" string="Annual Targets"/>
+                            </button>
+                            <button name="action_view_quarterly_targets" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="quarterly_target_count" widget="statinfo" string="Qtrly Targets"/>
+                            </button>
+                            <button name="action_view_narratives" type="object" class="oe_stat_button" icon="fa-align-left">
+                                <field name="narrative_count" widget="statinfo" string="Narratives"/>
+                            </button>
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                            <button name="action_view_submissions" type="object" class="oe_stat_button" icon="fa-send">
+                                <field name="submission_count" widget="statinfo" string="Submissions"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="Sub-Programme Name"/>
+                            <h1><field name="name" placeholder="e.g. Executive Leadership"/></h1>
+                        </div>
+                        <group string="Sub-Programme Details">
+                            <group>
+                                <field name="code" placeholder="e.g. 1.1"/>
+                            </group>
+                        </group>
+                        <group string="Parent Hierarchy">
+                            <group>
+                                <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Directorates" name="directorates">
+                                <field name="directorate_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="output_count" string="Outputs"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Outputs" name="outputs">
+                                <field name="output_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Output Indicators" name="output_indicators">
+                                <field name="output_indicator_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="indicator_type"/>
+                                        <field name="measurement_type"/>
+                                        <field name="output_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Annual Targets" name="annual_targets">
+                                <field name="annual_target_ids" readonly="1">
+                                    <list>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="target_value"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Quarterly Targets" name="quarterly_targets">
+                                <field name="quarterly_target_ids" readonly="1">
+                                    <list>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="planned_target"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Narratives" name="narratives">
+                                <field name="narrative_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Reporting Submissions" name="submissions">
+                                <field name="reporting_submission_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="actual_value"/>
+                                        <field name="workflow_status" widget="badge"
+                                               decoration-success="workflow_status == 'approved'"
+                                               decoration-warning="workflow_status == 'director_review'"
+                                               decoration-info="workflow_status == 'submitted'"
+                                               decoration-muted="workflow_status == 'draft'"
+                                               decoration-danger="workflow_status == 'rejected'"/>
+                                        <field name="submission_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_sub_programme" model="ir.actions.act_window">
+            <field name="name">Sub-Programmes</field>
+            <field name="res_model">opms.sub.programme</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': ['programme_id']}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             DIRECTORATE
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_directorate_list" model="ir.ui.view">
+            <field name="name">opms.directorate.list</field>
+            <field name="model">opms.directorate</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="output_count" string="Outputs"/>
+                    <field name="output_indicator_count" string="Indicators"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_directorate_form" model="ir.ui.view">
+            <field name="name">opms.directorate.form</field>
+            <field name="model">opms.directorate</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_outputs" type="object" class="oe_stat_button" icon="fa-tasks">
+                                <field name="output_count" widget="statinfo" string="Outputs"/>
+                            </button>
+                            <button name="action_view_output_indicators" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                                <field name="output_indicator_count" widget="statinfo" string="Indicators"/>
+                            </button>
+                            <button name="action_view_annual_targets" type="object" class="oe_stat_button" icon="fa-bullseye">
+                                <field name="annual_target_count" widget="statinfo" string="Annual Targets"/>
+                            </button>
+                            <button name="action_view_quarterly_targets" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="quarterly_target_count" widget="statinfo" string="Qtrly Targets"/>
+                            </button>
+                            <button name="action_view_narratives" type="object" class="oe_stat_button" icon="fa-align-left">
+                                <field name="narrative_count" widget="statinfo" string="Narratives"/>
+                            </button>
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                            <button name="action_view_submissions" type="object" class="oe_stat_button" icon="fa-send">
+                                <field name="submission_count" widget="statinfo" string="Submissions"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="Directorate Name"/>
+                            <h1><field name="name" placeholder="e.g. Financial Management"/></h1>
+                        </div>
+                        <group string="Directorate Details">
+                            <group>
+                                <field name="code" placeholder="e.g. 1.3"/>
+                            </group>
+                        </group>
+                        <group string="Parent Hierarchy">
+                            <group>
+                                <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            <group>
+                                <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Outputs" name="outputs">
+                                <field name="output_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="output_indicator_count" string="Indicators"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Output Indicators" name="output_indicators">
+                                <field name="output_indicator_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="indicator_type"/>
+                                        <field name="measurement_type"/>
+                                        <field name="output_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Annual Targets" name="annual_targets">
+                                <field name="annual_target_ids" readonly="1">
+                                    <list>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="target_value"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Quarterly Targets" name="quarterly_targets">
+                                <field name="quarterly_target_ids" readonly="1">
+                                    <list>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="planned_target"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Narratives" name="narratives">
+                                <field name="narrative_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Reporting Submissions" name="submissions">
+                                <field name="reporting_submission_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="actual_value"/>
+                                        <field name="workflow_status" widget="badge"
+                                               decoration-success="workflow_status == 'approved'"
+                                               decoration-warning="workflow_status == 'director_review'"
+                                               decoration-info="workflow_status == 'submitted'"
+                                               decoration-muted="workflow_status == 'draft'"
+                                               decoration-danger="workflow_status == 'rejected'"/>
+                                        <field name="submission_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_directorate" model="ir.actions.act_window">
+            <field name="name">Directorates</field>
+            <field name="res_model">opms.directorate</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': ['programme_id', 'sub_programme_id']}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             OUTPUT
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_output_list" model="ir.ui.view">
+            <field name="name">opms.output.list</field>
+            <field name="model">opms.output</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="output_indicator_count" string="Indicators"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_output_form" model="ir.ui.view">
+            <field name="name">opms.output.form</field>
+            <field name="model">opms.output</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_output_indicators" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                                <field name="output_indicator_count" widget="statinfo" string="Indicators"/>
+                            </button>
+                            <button name="action_view_annual_targets" type="object" class="oe_stat_button" icon="fa-bullseye">
+                                <field name="annual_target_count" widget="statinfo" string="Annual Targets"/>
+                            </button>
+                            <button name="action_view_quarterly_targets" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="quarterly_target_count" widget="statinfo" string="Qtrly Targets"/>
+                            </button>
+                            <button name="action_view_narratives" type="object" class="oe_stat_button" icon="fa-align-left">
+                                <field name="narrative_count" widget="statinfo" string="Narratives"/>
+                            </button>
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                            <button name="action_view_submissions" type="object" class="oe_stat_button" icon="fa-send">
+                                <field name="submission_count" widget="statinfo" string="Submissions"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="Output Name"/>
+                            <h1><field name="name" placeholder="e.g. Effective financial reporting"/></h1>
+                        </div>
+                        <group string="Output Details">
+                            <group>
+                                <field name="code" placeholder="e.g. OUT-1.3.1"/>
+                            </group>
+                        </group>
+                        <group string="Parent Hierarchy">
+                            <group>
+                                <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            <group>
+                                <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Output Indicators" name="output_indicators">
+                                <field name="output_indicator_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="indicator_type"/>
+                                        <field name="measurement_type"/>
+                                        <field name="aggregation_rule"/>
+                                        <field name="annual_target_count" string="Annual Targets"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Annual Targets" name="annual_targets">
+                                <field name="annual_target_ids" readonly="1">
+                                    <list>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="target_value"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Quarterly Targets" name="quarterly_targets">
+                                <field name="quarterly_target_ids" readonly="1">
+                                    <list>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="planned_target"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Narratives" name="narratives">
+                                <field name="narrative_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Reporting Submissions" name="submissions">
+                                <field name="reporting_submission_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="actual_value"/>
+                                        <field name="workflow_status" widget="badge"
+                                               decoration-success="workflow_status == 'approved'"
+                                               decoration-warning="workflow_status == 'director_review'"
+                                               decoration-info="workflow_status == 'submitted'"
+                                               decoration-muted="workflow_status == 'draft'"
+                                               decoration-danger="workflow_status == 'rejected'"/>
+                                        <field name="submission_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_output" model="ir.actions.act_window">
+            <field name="name">Outputs</field>
+            <field name="res_model">opms.output</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': ['programme_id', 'sub_programme_id', 'directorate_id']}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             OUTPUT INDICATOR
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_output_indicator_list" model="ir.ui.view">
+            <field name="name">opms.output.indicator.list</field>
+            <field name="model">opms.output.indicator</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="indicator_type"/>
+                    <field name="measurement_type"/>
+                    <field name="aggregation_rule"/>
+                    <field name="comparison_direction"/>
+                    <field name="output_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="annual_target_count" string="Annual Targets"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_output_indicator_form" model="ir.ui.view">
+            <field name="name">opms.output.indicator.form</field>
+            <field name="model">opms.output.indicator</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_annual_targets" type="object" class="oe_stat_button" icon="fa-bullseye">
+                                <field name="annual_target_count" widget="statinfo" string="Annual Targets"/>
+                            </button>
+                            <button name="action_view_quarterly_targets" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="quarterly_target_count" widget="statinfo" string="Qtrly Targets"/>
+                            </button>
+                            <button name="action_view_narratives" type="object" class="oe_stat_button" icon="fa-align-left">
+                                <field name="narrative_count" widget="statinfo" string="Narratives"/>
+                            </button>
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                            <button name="action_view_submissions" type="object" class="oe_stat_button" icon="fa-send">
+                                <field name="submission_count" widget="statinfo" string="Submissions"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="Output Indicator"/>
+                            <h1><field name="name" placeholder="e.g. % of financial reports submitted on time"/></h1>
+                        </div>
+                        <group string="Indicator Classification">
+                            <group>
+                                <field name="indicator_type"/>
+                            </group>
+                        </group>
+                        <group string="Measurement Configuration">
+                            <group>
+                                <field name="measurement_type"/>
+                                <field name="measurement_unit" invisible="measurement_type != 'number'" placeholder="e.g. days, houses, km"/>
+                                <field name="aggregation_rule"/>
+                            </group>
+                            <group>
+                                <field name="comparison_direction"/>
+                            </group>
+                        </group>
+                        <group string="Parent Hierarchy">
+                            <group>
+                                <field name="output_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            <group>
+                                <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Annual Targets" name="annual_targets">
+                                <field name="annual_target_ids">
+                                    <list>
+                                        <field name="target_value"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="variance_display" string="Deviation"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Quarterly Targets" name="quarterly_targets">
+                                <div class="o_form_label mb-2">
+                                    <button name="action_compute_quarterly_targets" type="object" string="Compute / Reset Quarterly Targets" class="btn btn-primary"/>
+                                </div>
+                                <field name="quarterly_target_ids">
+                                    <list>
+                                        <field name="planned_target"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="variance_display" string="Deviation"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Narratives" name="narratives">
+                                <field name="narrative_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Reporting Submissions" name="submissions">
+                                <field name="reporting_submission_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="actual_value"/>
+                                        <field name="workflow_status" widget="badge"
+                                               decoration-success="workflow_status == 'approved'"
+                                               decoration-warning="workflow_status == 'director_review'"
+                                               decoration-info="workflow_status == 'submitted'"
+                                               decoration-muted="workflow_status == 'draft'"
+                                               decoration-danger="workflow_status == 'rejected'"/>
+                                        <field name="submitted_by" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="submission_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_output_indicator" model="ir.actions.act_window">
+            <field name="name">Output Indicators</field>
+            <field name="res_model">opms.output.indicator</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': ['programme_id', 'sub_programme_id', 'directorate_id', 'output_id']}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             INDICATOR YEAR (ANNUAL)
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_annual_list" model="ir.ui.view">
+            <field name="name">opms.annual.list</field>
+            <field name="model">opms.annual</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="annual_target_count" string="Annual Targets"/>
+                    <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="app_plan_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="name"/>
+                    <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="view_opms_annual_form" model="ir.ui.view">
+            <field name="name">opms.annual.form</field>
+            <field name="model">opms.annual</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_annual_targets" type="object" class="oe_stat_button" icon="fa-bullseye">
+                                <field name="annual_target_count" widget="statinfo" string="Annual Targets"/>
+                            </button>
+                            <button name="action_view_quarterly_targets" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="quarterly_target_count" widget="statinfo" string="Qtrly Targets"/>
+                            </button>
+                            <button name="action_view_narratives" type="object" class="oe_stat_button" icon="fa-align-left">
+                                <field name="narrative_count" widget="statinfo" string="Narratives"/>
+                            </button>
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                            <button name="action_view_submissions" type="object" class="oe_stat_button" icon="fa-send">
+                                <field name="submission_count" widget="statinfo" string="Submissions"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="Indicator Year"/>
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group string="Indicator Year Details">
+                            <group>
+                                <field name="app_plan_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            </group>
+                            <group>
+                                <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                        </group>
+                        <group string="Hierarchy Breadcrumb">
+                            <group>
+                                <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="output_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Annual Targets" name="annual_targets">
+                                <field name="annual_target_ids">
+                                    <list>
+                                        <field name="target_value"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="variance_display" string="Deviation"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Quarterly Targets" name="quarterly_targets">
+                                <field name="quarterly_target_ids">
+                                    <list>
+                                        <field name="planned_target"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="variance_display" string="Deviation"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Narratives" name="narratives">
+                                <field name="narrative_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Reporting Submissions" name="submissions">
+                                <field name="reporting_submission_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="actual_value"/>
+                                        <field name="workflow_status" widget="badge"
+                                               decoration-success="workflow_status == 'approved'"
+                                               decoration-warning="workflow_status == 'director_review'"
+                                               decoration-info="workflow_status == 'submitted'"
+                                               decoration-muted="workflow_status == 'draft'"
+                                               decoration-danger="workflow_status == 'rejected'"/>
+                                        <field name="submitted_by" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="submission_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_annual" model="ir.actions.act_window">
+            <field name="name">Indicator Years</field>
+            <field name="res_model">opms.annual</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': ['financial_year']}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             ANNUAL TARGET
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_annual_target_list" model="ir.ui.view">
+            <field name="name">opms.annual.target.list</field>
+            <field name="model">opms.annual.target</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="target_value"/>
+                    <field name="actual_value_display" string="Actual"/>
+                    <field name="variance_display" string="Deviation"/>
+                    <field name="achievement_status" widget="badge"
+                           decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                           decoration-warning="achievement_status == 'behind'"
+                           decoration-muted="achievement_status == 'unknown'"/>
+                    <field name="annual_id" string="Indicator Year" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_annual_target_form" model="ir.ui.view">
+            <field name="name">opms.annual.target.form</field>
+            <field name="model">opms.annual.target</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_quarterly_targets" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="quarterly_target_count" widget="statinfo" string="Qtrly Targets"/>
+                            </button>
+                            <button name="action_view_narratives" type="object" class="oe_stat_button" icon="fa-align-left">
+                                <field name="narrative_count" widget="statinfo" string="Narratives"/>
+                            </button>
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                            <button name="action_view_submissions" type="object" class="oe_stat_button" icon="fa-send">
+                                <field name="submission_count" widget="statinfo" string="Submissions"/>
+                            </button>
+                        </div>
+                        <group string="Target Details">
+                            <group>
+                                <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="app_plan_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            </group>
+                            <group>
+                                <field name="target_value"/>
+                                <field name="target_value_guidance" readonly="1" nolabel="1" widget="html"/>
+                                <field name="annual_id" string="Indicator Year" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Performance">
+                            <group>
+                                <field name="actual_value_display" readonly="1"/>
+                                <field name="variance_display" string="Deviation" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="achievement_status" readonly="1" widget="badge"
+                                       decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                       decoration-warning="achievement_status == 'behind'"
+                                       decoration-muted="achievement_status == 'unknown'"/>
+                            </group>
+                        </group>
+                        <group string="Comparison Notes" invisible="not comparison_note">
+                            <field name="comparison_note" readonly="1" nolabel="1" widget="text"/>
+                        </group>
+                        <group string="Hierarchy Breadcrumb">
+                            <group>
+                                <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="output_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Quarterly Targets" name="quarterly_targets">
+                                <field name="quarterly_target_ids">
+                                    <list>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="planned_target"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="variance_display" string="Deviation"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Narratives" name="narratives">
+                                <field name="narrative_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Reporting Submissions" name="submissions">
+                                <field name="reporting_submission_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="actual_value"/>
+                                        <field name="workflow_status" widget="badge"
+                                               decoration-success="workflow_status == 'approved'"
+                                               decoration-warning="workflow_status == 'director_review'"
+                                               decoration-info="workflow_status == 'submitted'"
+                                               decoration-muted="workflow_status == 'draft'"
+                                               decoration-danger="workflow_status == 'rejected'"/>
+                                        <field name="submitted_by" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="submission_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_annual_target" model="ir.actions.act_window">
+            <field name="name">Annual Targets</field>
+            <field name="res_model">opms.annual.target</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': ['financial_year']}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             QUARTER
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_quarter_list" model="ir.ui.view">
+            <field name="name">opms.quarter.list</field>
+            <field name="model">opms.quarter</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="app_plan_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="submission_period_state" widget="badge"
+                           decoration-success="submission_period_state == 'open'"
+                           decoration-danger="submission_period_state == 'closed'"/>
+                    <field name="submission_manual_override"/>
+                    <field name="manual_override_until" optional="show"/>
+                    <field name="submission_open_date"/>
+                    <field name="submission_close_date"/>
+                        <button name="action_force_open_selected_quarters" type="object" string="Open Now" icon="fa-unlock"
+                            invisible="submission_period_state == 'open'"/>
+                        <button name="action_force_close_selected_quarters" type="object" string="Close Now" icon="fa-lock"
+                            invisible="submission_period_state == 'closed'"/>
+                        <button name="action_reset_submission_automation" type="object" string="Reset Auto" icon="fa-refresh"
+                            invisible="not submission_manual_override"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_quarter_form" model="ir.ui.view">
+            <field name="name">opms.quarter.form</field>
+            <field name="model">opms.quarter</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_open_submission_period" type="object" class="oe_stat_button" icon="fa-unlock"
+                                    invisible="submission_period_state == 'open'">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Open Submissions</span>
+                                </div>
+                            </button>
+                            <button name="action_close_submission_period" type="object" class="oe_stat_button" icon="fa-lock"
+                                    invisible="submission_period_state == 'closed'">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Close Submissions</span>
+                                </div>
+                            </button>
+                            <button name="action_reset_submission_automation" type="object" class="oe_stat_button" icon="fa-refresh"
+                                    invisible="not submission_manual_override">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Reset Auto</span>
+                                </div>
+                            </button>
+                            <button name="action_open_submission_reminder_wizard" type="object" class="oe_stat_button" icon="fa-envelope">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Send Reminder</span>
+                                </div>
+                            </button>
+                            <button name="action_view_quarterly_targets" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="quarterly_target_count" widget="statinfo" string="Qtrly Targets"/>
+                            </button>
+                            <button name="action_view_narratives" type="object" class="oe_stat_button" icon="fa-align-left">
+                                <field name="narrative_count" widget="statinfo" string="Narratives"/>
+                            </button>
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                            <button name="action_view_submissions" type="object" class="oe_stat_button" icon="fa-send">
+                                <field name="submission_count" widget="statinfo" string="Submissions"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="Quarter"/>
+                            <h1><field name="name" placeholder="e.g. Q1"/></h1>
+                        </div>
+                        <group string="Quarter Details">
+                            <group>
+                                <field name="code"/>
+                                <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="app_plan_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                            </group>
+                        </group>
+                        <group string="Submission Period">
+                            <group>
+                                <field name="submission_open_date"/>
+                                <field name="submission_close_date"/>
+                            </group>
+                            <group>
+                                <field name="submission_period_state" widget="badge"
+                                    decoration-success="submission_period_state == 'open'"
+                                    decoration-danger="submission_period_state == 'closed'"/>
+                                <field name="submission_manual_override"/>
+                                <field name="manual_override_until"
+                                       invisible="not submission_manual_override"
+                                       help="Override auto-clears on this date and automatic scheduling resumes."/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Quarterly Targets" name="quarterly_targets">
+                                <field name="quarterly_target_ids">
+                                    <list>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="planned_target"/>
+                                        <field name="actual_value_display" string="Actual"/>
+                                        <field name="achievement_status" widget="badge"
+                                               decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                               decoration-warning="achievement_status == 'behind'"
+                                               decoration-muted="achievement_status == 'unknown'"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Narratives" name="narratives">
+                                <field name="narrative_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Reporting Submissions" name="submissions">
+                                <field name="reporting_submission_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="actual_value"/>
+                                        <field name="workflow_status" widget="badge"
+                                               decoration-success="workflow_status == 'approved'"
+                                               decoration-warning="workflow_status == 'director_review'"
+                                               decoration-info="workflow_status == 'submitted'"
+                                               decoration-muted="workflow_status == 'draft'"
+                                               decoration-danger="workflow_status == 'rejected'"/>
+                                        <field name="submitted_by" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="submission_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_quarter" model="ir.actions.act_window">
+            <field name="name">Quarters</field>
+            <field name="res_model">opms.quarter</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': ['financial_year']}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             QUARTERLY TARGET
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_quarterly_target_list" model="ir.ui.view">
+            <field name="name">opms.quarterly.target.list</field>
+            <field name="model">opms.quarterly.target</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="financial_year" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="planned_target"/>
+                    <field name="actual_value_display" string="Actual"/>
+                    <field name="variance_display" string="Deviation"/>
+                    <field name="achievement_status" widget="badge"
+                           decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                           decoration-warning="achievement_status == 'behind'"
+                           decoration-muted="achievement_status == 'unknown'"/>
+                    <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="annual_target_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_quarterly_target_form" model="ir.ui.view">
+            <field name="name">opms.quarterly.target.form</field>
+            <field name="model">opms.quarterly.target</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_narratives" type="object" class="oe_stat_button" icon="fa-align-left">
+                                <field name="narrative_count" widget="statinfo" string="Narratives"/>
+                            </button>
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                            <button name="action_view_reporting_submissions" type="object" class="oe_stat_button" icon="fa-send">
+                                <field name="reporting_submission_count" widget="statinfo" string="Submissions"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="Quarterly Target"/>
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group string="Target Details">
+                            <group>
+                                <field name="annual_target_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            <group>
+                                <field name="planned_target"/>
+                                <field name="planned_target_guidance" readonly="1" nolabel="1" widget="html"/>
+                                <field name="annual_id" string="Indicator Year" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Planned vs. Actual">
+                            <group>
+                                <field name="actual_value_display" readonly="1"/>
+                                <field name="variance_display" string="Deviation" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="achievement_status" readonly="1" widget="badge"
+                                       decoration-success="achievement_status == 'met' or achievement_status == 'exceeded'"
+                                       decoration-warning="achievement_status == 'behind'"
+                                       decoration-muted="achievement_status == 'unknown'"/>
+                            </group>
+                        </group>
+                        <group string="Comparison Notes" invisible="not comparison_note">
+                            <field name="comparison_note" readonly="1" nolabel="1" widget="text"/>
+                        </group>
+                        <group string="Hierarchy Breadcrumb">
+                            <group>
+                                <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="output_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}" readonly="1"/>
+                                <field name="app_plan_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Narratives" name="narratives">
+                                <field name="narrative_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="reporting_submission_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Reporting Submissions" name="submissions">
+                                <field name="reporting_submission_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="actual_value"/>
+                                        <field name="workflow_status" widget="badge"
+                                               decoration-success="workflow_status == 'approved'"
+                                               decoration-warning="workflow_status == 'director_review'"
+                                               decoration-info="workflow_status == 'submitted'"
+                                               decoration-muted="workflow_status == 'draft'"
+                                               decoration-danger="workflow_status == 'rejected'"/>
+                                        <field name="submitted_by" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="submission_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_quarterly_target" model="ir.actions.act_window">
+            <field name="name">Quarterly Targets</field>
+            <field name="res_model">opms.quarterly.target</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': ['financial_year', 'quarter_id']}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             NARRATIVE
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_narrative_list" model="ir.ui.view">
+            <field name="name">opms.narrative.list</field>
+            <field name="model">opms.narrative</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="quarterly_target_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_narrative_form" model="ir.ui.view">
+            <field name="name">opms.narrative.form</field>
+            <field name="model">opms.narrative</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="Narrative"/>
+                            <h1><field name="name" placeholder="e.g. Q1 Progress Narrative"/></h1>
+                        </div>
+                        <group string="Links">
+                            <group>
+                                <field name="quarterly_target_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            <group>
+                                <field name="reporting_submission_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                        </group>
+                        <group string="Hierarchy Breadcrumb">
+                            <group>
+                                <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="output_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="annual_id" string="Indicator Year" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="annual_target_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Narrative">
+                            <field name="narrative_text" nolabel="1" widget="text" placeholder="Describe progress, achievements, and context for this quarter…"/>
+                        </group>
+                        <notebook>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_narrative" model="ir.actions.act_window">
+            <field name="name">Narratives</field>
+            <field name="res_model">opms.narrative</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': ['financial_year', 'quarter_id']}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             EVIDENCE
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_evidence_list" model="ir.ui.view">
+            <field name="name">opms.evidence.list</field>
+            <field name="model">opms.evidence</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="file_name"/>
+                    <field name="quarterly_target_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="storage_path"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_evidence_form" model="ir.ui.view">
+            <field name="name">opms.evidence.form</field>
+            <field name="model">opms.evidence</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Evidence Name"/>
+                            <h1><field name="name" placeholder="e.g. Q1 Financial Report PDF"/></h1>
+                        </div>
+                        <group string="File">
+                            <group>
+                                <field name="file_name"/>
+                                <field name="file" filename="file_name"/>
+                            </group>
+                            <group>
+                                <field name="storage_path" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Links">
+                            <group>
+                                <field name="quarterly_target_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            <group>
+                                <field name="narrative_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="reporting_submission_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                        </group>
+                        <group string="Hierarchy Breadcrumb">
+                            <group>
+                                <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="output_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="annual_id" string="Indicator Year" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="annual_target_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_evidence" model="ir.actions.act_window">
+            <field name="name">Evidence</field>
+            <field name="res_model">opms.evidence</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': ['financial_year', 'quarter_id']}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             REPORTING SUBMISSION
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_reporting_submission_list" model="ir.ui.view">
+            <field name="name">opms.reporting.submission.list</field>
+            <field name="model">opms.reporting.submission</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="actual_value"/>
+                    <field name="actual_value_display" string="Actual Display"/>
+                    <field name="workflow_status" widget="badge"
+                           decoration-success="workflow_status == 'approved'"
+                           decoration-warning="workflow_status == 'director_review'"
+                           decoration-info="workflow_status == 'submitted'"
+                           decoration-muted="workflow_status == 'draft'"
+                           decoration-danger="workflow_status == 'rejected'"/>
+                    <field name="submitted_by" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="submission_date"/>
+                    <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_reporting_submission_form" model="ir.ui.view">
+            <field name="name">opms.reporting.submission.form</field>
+            <field name="model">opms.reporting.submission</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="workflow_status"
+                               widget="statusbar"
+                               statusbar_visible="draft,submitted,director_review,approved"
+                               options="{'clickable': 1}"/>
+                        <button name="action_reset_to_draft" type="object"
+                            string="Reset to Draft" class="btn btn-secondary"
+                            invisible="workflow_status != 'rejected'"
+                            confirm="This will move the submission back to Draft and clear the rejection reason."/>
+                        <button name="action_open_rejection_wizard" type="object"
+                                string="Reject" class="btn btn-danger"
+                                invisible="workflow_status == 'rejected' or workflow_status == 'draft'"
+                                confirm="This will open a dialog to capture the rejection reason."/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_narratives" type="object" class="oe_stat_button" icon="fa-align-left">
+                                <field name="narrative_count" widget="statinfo" string="Narratives"/>
+                            </button>
+                            <button name="action_view_evidence" type="object" class="oe_stat_button" icon="fa-paperclip">
+                                <field name="evidence_count" widget="statinfo" string="Evidence"/>
+                            </button>
+                            <button name="action_open_submission_notification_wizard" type="object" class="oe_stat_button" icon="fa-bell">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Send Notification</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="Submission"/>
+                            <h1><field name="name" placeholder="Submission title"/></h1>
+                        </div>
+                        <div class="alert alert-secondary" role="alert" invisible="workflow_status != 'draft'">
+                            <strong>Workflow Status:</strong>
+                            <field name="workflow_status" widget="badge" readonly="1" class="ms-2"
+                                   decoration-muted="workflow_status == 'draft'"/>
+                        </div>
+                        <div class="alert alert-info" role="alert" invisible="workflow_status != 'submitted'">
+                            <strong>Workflow Status:</strong>
+                            <field name="workflow_status" widget="badge" readonly="1" class="ms-2"
+                                   decoration-info="workflow_status == 'submitted'"/>
+                        </div>
+                        <div class="alert alert-warning" role="alert" invisible="workflow_status != 'director_review'">
+                            <strong>Workflow Status:</strong>
+                            <field name="workflow_status" widget="badge" readonly="1" class="ms-2"
+                                   decoration-warning="workflow_status == 'director_review'"/>
+                        </div>
+                        <div class="alert alert-success" role="alert" invisible="workflow_status != 'approved'">
+                            <strong>Workflow Status:</strong>
+                            <field name="workflow_status" widget="badge" readonly="1" class="ms-2"
+                                   decoration-success="workflow_status == 'approved'"/>
+                        </div>
+                        <div class="alert alert-danger" role="alert" invisible="workflow_status != 'rejected'">
+                            <strong>Workflow Status:</strong>
+                            <field name="workflow_status" widget="badge" readonly="1" class="ms-2"
+                                   decoration-danger="workflow_status == 'rejected'"/>
+                        </div>
+                        <group string="Submission Details">
+                            <group>
+                                <field name="quarterly_target_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="submitted_by" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="submission_date"/>
+                            </group>
+                            <group>
+                                <field name="workflow_status" widget="badge" readonly="1"
+                                       decoration-success="workflow_status == 'approved'"
+                                       decoration-warning="workflow_status == 'director_review'"
+                                       decoration-info="workflow_status == 'submitted'"
+                                       decoration-muted="workflow_status == 'draft'"
+                                       decoration-danger="workflow_status == 'rejected'"/>
+                                <field name="rejection_reason" readonly="1" invisible="not rejection_reason"/>
+                            </group>
+                        </group>
+                        <group string="Actual Output">
+                            <group>
+                                <field name="actual_value"/>
+                                <field name="actual_value_guidance" readonly="1" nolabel="1" widget="html"/>
+                                <field name="actual_value_display" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Hierarchy Breadcrumb">
+                            <group>
+                                <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="directorate_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="output_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="output_indicator_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="annual_id" string="Indicator Year" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="annual_target_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="quarter_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                                <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}" readonly="1"/>
+                                <field name="app_plan_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Progress Report">
+                            <field name="comments" nolabel="1" widget="text" placeholder="Describe progress made this quarter…" required="1"/>
+                        </group>
+                        <group string="Deviation Analysis" invisible="not reason_for_deviation and not remedial_actions">
+                            <group>
+                                <field name="reason_for_deviation" widget="text" placeholder="Explain any deviation from the planned target…"/>
+                            </group>
+                            <group>
+                                <field name="remedial_actions" widget="text" placeholder="Describe actions taken or planned to address the deviation…"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Narratives" name="narratives">
+                                <field name="narrative_ids">
+                                    <list>
+                                        <field name="name"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Evidence" name="evidence">
+                                <field name="evidence_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="file_name"/>
+                                        <button name="action_open_form" type="object" string="View" icon="fa-eye" class="btn-info btn-sm" title="View Evidence"/>
+                                        <button name="action_download_file" type="object" string="Download" icon="fa-download" class="btn-sm" title="Download File"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_reporting_submission" model="ir.actions.act_window">
+            <field name="name">Reporting Submissions</field>
+            <field name="res_model">opms.reporting.submission</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': ['financial_year', 'quarter_id']}</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             IMPORT HISTORY
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="view_opms_import_history_list" model="ir.ui.view">
+            <field name="name">opms.import.history.list</field>
+            <field name="model">opms.import.history</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="import_datetime"/>
+                    <field name="imported_by" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="import_mode"/>
+                    <field name="total_rows"/>
+                    <field name="success_rows"/>
+                    <field name="warning_rows"/>
+                    <field name="failed_rows"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_import_history_form" model="ir.ui.view">
+            <field name="name">opms.import.history.form</field>
+            <field name="model">opms.import.history</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Import Name"/>
+                            <h1><field name="name" placeholder="e.g. APP Import 2025-26"/></h1>
+                        </div>
+                        <group string="Import Details">
+                            <group>
+                                <field name="financial_year" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="import_mode"/>
+                                <field name="imported_by" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            <group>
+                                <field name="import_datetime"/>
+                            </group>
+                        </group>
+                        <group string="Summary">
+                            <group>
+                                <field name="total_rows"/>
+                                <field name="success_rows"/>
+                                <field name="warning_rows"/>
+                                <field name="failed_rows"/>
+                            </group>
+                        </group>
+                        <group string="Log">
+                            <field name="log" nolabel="1" readonly="1" widget="text"/>
+                        </group>
+                        <field name="line_ids">
+                            <list>
+                                <field name="row_number"/>
+                                <field name="row_reference"/>
+                                <field name="status" widget="badge"
+                                       decoration-success="status == 'success'"
+                                       decoration-danger="status == 'error'"/>
+                                <field name="message"/>
+                            </list>
+                        </field>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_opms_import_history_line_list" model="ir.ui.view">
+            <field name="name">opms.import.history.line.list</field>
+            <field name="model">opms.import.history.line</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="history_id"/>
+                    <field name="row_number"/>
+                    <field name="row_reference"/>
+                    <field name="status" widget="badge"
+                           decoration-success="status == 'success'"
+                           decoration-danger="status == 'error'"/>
+                    <field name="message"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_opms_import_history_line_form" model="ir.ui.view">
+            <field name="name">opms.import.history.line.form</field>
+            <field name="model">opms.import.history.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Row Details">
+                            <group>
+                                <field name="history_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="row_number"/>
+                                <field name="row_reference"/>
+                            </group>
+                            <group>
+                                <field name="status" widget="badge"
+                                       decoration-success="status == 'success'"
+                                       decoration-danger="status == 'error'"/>
+                            </group>
+                        </group>
+                        <group string="Message">
+                            <field name="message" nolabel="1" readonly="1" widget="text"/>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_import_history" model="ir.actions.act_window">
+            <field name="name">Import History</field>
+            <field name="res_model">opms.import.history</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="action_opms_import_history_line" model="ir.actions.act_window">
+            <field name="name">Import History Lines</field>
+            <field name="res_model">opms.import.history.line</field>
+            <field name="view_mode">list,form</field>
+        </record>
+    </data>
+</odoo>

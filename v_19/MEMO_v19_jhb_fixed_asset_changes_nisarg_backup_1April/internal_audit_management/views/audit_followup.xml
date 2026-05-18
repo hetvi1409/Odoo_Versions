@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_audit_follow_up" model="ir.actions.act_window">
+        <field name="name">Audit Followup</field>
+        <field name="res_model">audit.followup</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Audit Followup
+            </p>
+            <p>
+                Create and manage the Audit Followup.
+            </p>
+        </field>
+    </record>
+    <record id="audit_follow_up_view_tree" model="ir.ui.view">
+        <field name="name">Audit FollowUp</field>
+        <field name="model">audit.followup</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="followup_name"/>
+                <field name="audit_number"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_follow_up_view_form" model="ir.ui.view">
+        <field name="name">Audit FollowUp</field>
+        <field name="model">audit.followup</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                            invisible="stage != 'preparer'"
+                            string="1st Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object"
+                            invisible="stage != 'first_reviewer'"
+                            string="2nd Review" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stage not in ['first_reviewer', 'second_reviewer']"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_approve" type="object"
+                            invisible="stage != 'second_reviewer'"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_sent_manager" type="object"
+                            invisible="stage != 'follow_up'"
+                            string="Send To Auditee" class="oe_highlight"/>
+                    <button name="action_audit_conclusion" type="object"
+                            invisible="stage != 'audit_response'"
+                            string="Audit Conclusion" class="oe_highlight"/>
+                    <field name="stage" widget="statusbar" statusbar_visible="follow_up,audit_response,audit_conclusion"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <div class="pe-0 w-100">
+                        <h1 class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex w-100">
+                                <field name="followup_name"/>
+                            </div>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="audit_number"/>
+                            <field name="project_id"/>
+                            <label for="start_date" string="Period"/>
+                            <div>
+                                <field name="start_date" class="oe_inline"/>
+                                -
+                                <field name="end_date" class="oe_inline"/>
+                            </div>
+                            <field name="subject"/>
+                            <field name="date_audit"/>
+                        </group>
+                        <group>
+                            <field name="user_preparer_ids"/>
+                            <field name="user_reviewer_1_ids"/>
+                            <field name="user_reviewer_2_ids"/>
+                            <field name="user_approver_ids"/>
+                        </group>
+                    </group>
+                    <table style="width:100%" invisible="stage not in [('follow_up','audit_response','audit_conclusion')]">
+                        <tr>
+                            <th>
+                                <strong>AUDIT FOLLOW UP SETTING</strong>
+                            </th>
+                        </tr>
+                    </table>
+                    <notebook>
+                        <page string="INTERNAL AUDIT CAPTURING">
+                            <field name="follow_up_setting">
+                                <list editable="bottom">
+                                     <field name="main_stage" column_invisible="1"/>
+                                     <field name="follow_up_number"/>
+                                     <field name="audit_area" readonly="main_stage in ['audit_response','audit_conclusion']"/>
+                                     <field name="title_of_finding" readonly="main_stage in ['audit_response','audit_conclusion']"/>
+                                     <field name="recommendation" readonly="main_stage in ['audit_response','audit_conclusion']"/>
+                                     <field name="responsible_mngr" readonly="main_stage in ['audit_response','audit_conclusion']"/>
+<!--                                    modify this-->
+<!--                                     <field name="mgmt_action_plan" readonly="parent.stage not in ['audit_response','audit_conclusion']"/>-->
+<!--                                     <field name="poe" readonly="parent.stage not in ['audit_response','audit_conclusion']"/>-->
+<!--                                     <field name="action_date" readonly="parent.stage not in ['audit_response','audit_conclusion']"/>-->
+<!--                                     <field name="attach_poe" widget="many2many_binary" readonly="parent.stage not in ['audit_response','audit_conclusion']"/>-->
+<!--                                     <field name="implement_not_implement" readonly="parent.stage not in 'audit_conclusion'"/>-->
+<!--                                     <field name="follow_up" readonly="parent.stage not in 'audit_conclusion'"/>-->
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Documents">
+                            <field name="document_ids" widget="many2many_binary"/>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+    <menuitem id="audit_follow_up_plan_menu"
+              name="Audit Follow Up"
+              parent="internal_audit_management.follow_up_update"
+              action="action_audit_follow_up"
+              sequence="2"/>
+</odoo>

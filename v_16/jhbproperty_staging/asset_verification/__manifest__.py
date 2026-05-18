@@ -1,0 +1,40 @@
+{
+    'name': "Asset Verification",
+    'description': """Asset Verification""",
+    'summary': """Asset Verification""",
+    'version': '16.6.1.1.0',
+    'sequence': '20',
+    'category': 'Accounting',
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': 'https://natedsystems.co.za/',
+    'depends': ['base', 'account_asset', 'asset_registry', 'account','hr'],
+    'data': [
+        'security/ir.model.access.csv',
+        'security/security.xml',
+        'data/data.xml',
+        'data/mail_templates.xml',
+        'views/asset_verification_job_views.xml',
+        'views/asset_verification_job_location_views.xml',
+        'views/asset_verification_staging_views.xml',
+        'views/asset_verification_menus.xml',
+        'views/account_asset_views.xml',
+        'views/hr_employee_from_views.xml',
+        'wizard/asset_verification_views.xml',
+        'wizard/asset_verification_confirm_wizard_views.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'asset_verification/static/src/js/asset_verification.js',
+            'asset_verification/static/src/xml/asset_verification_templates.xml',
+            'asset_verification/static/src/css/asset_verification_style.scss'
+        ],
+    },
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+
+}

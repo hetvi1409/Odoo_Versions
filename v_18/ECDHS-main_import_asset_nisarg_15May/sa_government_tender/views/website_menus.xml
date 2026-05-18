@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Website Menu: Supplier Registration -->
+        <!-- Visible to public users only (not to authenticated users who are suppliers) -->
+        <record id="menu_supplier_registration" model="website.menu">
+            <field name="name">Supplier Registration</field>
+            <field name="url">/supplier/register</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">49</field>
+            <!-- Restrict to public group only - hide from authenticated users -->
+            <field name="group_ids" eval="[(4, ref('base.group_public'))]"/>
+        </record>
+
+        <!-- Website Menu: Tenders -->
+        <record id="menu_tenders" model="website.menu">
+            <field name="name">Tenders</field>
+            <field name="url">/sagovtenders</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">50</field>
+        </record>
+
+        <!-- Website Menu: My Bids (visible only to authenticated users) -->
+        <record id="menu_my_bids" model="website.menu">
+            <field name="name">My Bids</field>
+            <field name="url">/my/bids</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">52</field>
+            <field name="group_ids" eval="[(4, ref('base.group_user')), (4, ref('base.group_portal'))]"/>
+        </record>
+
+        <!-- Website Menu: Supplier Profile (visible only to authenticated users) -->
+        <record id="menu_supplier_profile" model="website.menu">
+            <field name="name">My Profile</field>
+            <field name="url">/supplier/profile</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">53</field>
+            <field name="group_ids" eval="[(4, ref('base.group_user')), (4, ref('base.group_portal'))]"/>
+        </record>
+
+        <!-- Website Snippet: Featured Tenders -->
+        <template id="s_sagovtender_featured" name="Featured Tenders">
+            <section class="s_sagovtender_featured pt-5 pb-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 text-center mb-4">
+                            <h2>Featured Open Tenders</h2>
+                            <p class="lead">Browse the latest government tender opportunities</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <t t-set="featured_tenders" t-value="request.env['sagovtender.tender'].sudo().search([('state', 'in', ['advertised', 'bid_submission'])], limit=3, order='publication_date desc')"/>
+                        <t t-foreach="featured_tenders" t-as="tender">
+                            <div class="col-lg-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <a t-attf-href="/sagovtender/#{tender.access_token}">
+                                                <t t-esc="tender.title or 'Untitled'"/>
+                                            </a>
+                                        </h5>
+                                        <p class="card-text small text-muted">
+                                            <strong>Tender No:</strong> <t t-esc="tender.name"/><br/>
+                                            <t t-if="tender.closing_date">
+                                                <strong>Closes:</strong> <t t-esc="tender.closing_date.strftime('%d %b %Y')"/>
+                                            </t>
+                                        </p>
+                                        <a t-attf-href="/sagovtender/#{tender.access_token}"
+                                           class="btn btn-primary btn-sm">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-12 text-center">
+                            <a href="/sagovtenders" class="btn btn-primary btn-lg">
+                                View All Open Tenders
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </template>
+
+        <!-- Homepage Snippet Options -->
+        <template id="s_sagovtender_options" inherit_id="website.snippet_options">
+            <xpath expr="." position="inside">
+                <div data-js="SagovTenderSnippet"
+                     data-selector=".s_sagovtender_featured">
+                    <we-button data-name="featured_tenders">Featured Tenders</we-button>
+                </div>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

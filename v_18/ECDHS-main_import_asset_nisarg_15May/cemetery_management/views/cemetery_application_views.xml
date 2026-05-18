@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_cemetery_application_form" model="ir.ui.view">
+        <field name="name">cemetery.application.form</field>
+        <field name="model">cemetery.application</field>
+        <field name="arch" type="xml">
+            <form string="Application">
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,verified,approved"/>
+                    <button name="action_submit"
+                            string="Submit" invisible="state != 'draft'"
+                            type="object" class="oe_highlight"/>
+                    <!--                    <button name="action_approve"-->
+                    <!--                            string="Approve" invisible="state != 'quotation_generated'"-->
+                    <!--                            type="object" class="oe_highlight"/>-->
+                    <button name="action_verify"
+                            string="Verify" invisible="state != 'submitted'"
+                            type="object" class="oe_highlight"
+                            groups="cemetery_management.group_cemetery_clerk"/>
+<!--                    <button name="create_quotation" string="Create Quotation"-->
+<!--                            class="oe_highlight"-->
+<!--                            type="object"-->
+<!--                            data-hotkey="q"-->
+<!--                            invisible="state != 'verified'"/>-->
+                    <button name="action_approve" string="Approve"
+                            class="oe_highlight"
+                            type="object"
+                            data-hotkey="q"
+                            invisible="state != 'verified'"/>
+                    <button name="action_reject" string="Reject"
+                            type="object"
+                            data-hotkey="q"
+                            invisible="state != 'quotation_generated'"/>
+
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_calender"
+                                icon="fa-calendar"
+                                invisible="state == 'draft'">
+                            Calendar
+                        </button>
+
+                        <button class="oe_stat_button"
+                                name="action_view_quotation"
+                                type="object"
+                                icon="fa-pencil-square-o"
+                                invisible="not has_quotation">
+                            Quotation
+                        </button>
+                        <button class="oe_stat_button"
+                                name="action_view_invoice"
+                                type="object"
+                                icon="fa-pencil-square-o"
+                                invisible="not has_invoice">
+                            Invoice
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Paid" invisible="not burial_invoice_paid"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" readonly="True" placeholder="Name"/>
+                        </h1>
+                    </div>
+                    <group string="Death Register" invisible="state != 'approved'">
+                        <group>
+                            <field name="death_register_id"/>
+                        </group>
+                    </group>
+                    <group string="Deceased Details">
+                        <group>
+                            <field name="deceased_surname"/>
+                            <field name="deceased_firstname"/>
+                            <field name="deceased_preferred_name"/>
+                        </group>
+                        <group>
+                            <label for="street" string="Last Location"/>
+                            <div class="o_address_format">
+                                <field name="street"
+                                       placeholder="Street..."
+                                       class="o_address_street"/>
+                                <field name="street2"
+                                       placeholder="Street 2..."
+                                       class="o_address_street"/>
+                                <field name="city" placeholder="City"
+                                       class="o_address_city"/>
+                                <field name="municipality_id"
+                                       placeholder="Municipality"
+                                       class="o_address_city"
+                                       options='{"no_open": True}'/>
+                                <field name="province_id"
+                                       class="o_address_state"
+                                       placeholder="Province"
+                                       options='{"no_open": True}'/>
+                                <field name="zip" placeholder="Postal Code"
+                                       class="o_address_zip"/>
+                                <field name="country_id"
+                                       placeholder="Country"
+                                       class="o_address_country"
+                                       options='{"no_open": True}'/>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="date_of_birth"/>
+<!--                            <field name="religion"/>-->
+                            <field name="id_number"/>
+                            <field name="undertaker_id"/>
+                        </group>
+                        <group>
+                            <field name="gender" widget="radio"
+                                   options="{'horizontal': True}"/>
+                            <field name="foreigner"
+                                   widget="boolean_toggle"/>
+                            <field name="passport_number"
+                                   invisible="not foreigner"/>
+                            <field name="citizenship_id"/>
+                        </group>
+                    </group>
+                    <group string="Documents">
+                        <group>
+                            <field name="burial_order"/>
+                            <field name="next_of_kin_id"/>
+                        </group>
+                        <group>
+                            <field name="deceased_id"/>
+                            <field name="death_certificate"/>
+                        </group>
+                    </group>
+                    <group string="Details Of Death">
+                        <group>
+                            <field name="date_of_death"/>
+                            <field name="place_of_burial"/>
+                            <field name="burial_province_id"/>
+<!--                            <field name="grave_number_memorial" invisible="interment_type != 'burial'"/>-->
+                        </group>
+                        <group>
+                            <field name="cause_of_death_id"/>
+                            <field name="place_of_death"/>
+                            <field name="death_province_id"/>
+
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page name="deceased"
+                              string="Interment/Burial/Grave Details">
+                            <group>
+                        <!-- Hidden technical fields -->
+                        <field name="has_quotation" invisible="1"/>
+                        <field name="has_invoice" invisible="1"/>
+                        <field name="burial_invoice_paid" invisible="1"/>
+
+                        <!-- Interment Information -->
+                        <group string="Interment Details">
+                            <field name="interment_type"/>
+                            <field name="crematorium_id" invisible="interment_type != 'cremation'"/>
+                            <field name="date_issue"/>
+                            <field name="undertaker_id_number"/>
+                            <field name="company_id"/>
+                        </group>
+
+                        <!-- Burial Details -->
+                        <group string="Burial" invisible="interment_type != 'burial'">
+                            <group>
+                                <field name="serial_number"/>
+                                <field name="is_deceased" widget="boolean_toggle"/>
+                            </group>
+                            <group>
+                                <field name="barcode_number"/>
+                            </group>
+                        </group>
+
+                        <!-- Grave Details for Undertakers Only -->
+                        <group string="Grave Details"
+                               invisible="interment_type != 'burial'">
+                            <group>
+                                <field name="cemetery_id"/>
+                                <field name="section_id"/>
+                            </group>
+                            <group>
+                                <field name="grave_id"/>
+                            </group>
+                        </group>
+                    </group>
+
+                        </page>
+                        <page name="instructions" string="Instructions">
+                            <group string="Burial/Memorial/Cremation Instructions">
+                                <group>
+                                    <field name="interment_date"/>
+                                    <field name="grave_preparation"
+                                           widget="radio"
+                                           options="{'horizontal': True}"/>
+                                </group>
+                                <group>
+                                    <field name="interment_time"
+                                           widget="float_time"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="memorial_epitaph"/>
+                                <field name="other_instructions"/>
+                            </group>
+                        </page>
+                        <page name="plot" string="Plot Requirements">
+                            <group>
+                                <group>
+
+                                </group>
+                                <group>
+                                </group>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="plot_cemetery_id"/>
+                                    <field name="plot_municipality_id"/>
+                                    <field name="subsequent_lease"/>
+                                    <field name="attended_by_family"/>
+                                </group>
+                                <group>
+                                    <field name="category" widget="radio"
+                                           options="{'horizontal': True}"/>
+                                    <field name="first_grave_lease"/>
+                                    <field name="pre_purchased_grave_plot"/>
+                                    <field name="number_of_attendants"/>
+                                </group>
+
+                            </group>
+                        </page>
+                        <!--                        <page name="arranger" string="Authorisation by Person Booking">-->
+                        <!--                            <group>-->
+                        <!--                                <group>-->
+                        <!--                                    <field name="arranger_name"/>-->
+                        <!--                                    <field name="arranger_email"/>-->
+                        <!--                                    <field name="arranger_phone"/>-->
+                        <!--                                    <field name="arranger_signature"/>-->
+                        <!--                                </group>-->
+                        <!--                                <group>-->
+                        <!--                                    <label for="street" string="Last Location"/>-->
+                        <!--                                    <div class="o_address_format">-->
+                        <!--                                        <field name="arranger_street"-->
+                        <!--                                               placeholder="Street..."-->
+                        <!--                                               class="o_address_street"/>-->
+                        <!--                                        <field name="arranger_street2"-->
+                        <!--                                               placeholder="Street 2..."-->
+                        <!--                                               class="o_address_street"/>-->
+                        <!--                                        <field name="arranger_city" placeholder="City"-->
+                        <!--                                               class="o_address_city"/>-->
+                        <!--                                        <field name="arranger_municipality_id"-->
+                        <!--                                               placeholder="Municipality"-->
+                        <!--                                               class="o_address_city"-->
+                        <!--                                               options='{"no_open": True}'/>-->
+                        <!--                                        <field name="arranger_state_id"-->
+                        <!--                                               class="o_address_state"-->
+                        <!--                                               placeholder="State"-->
+                        <!--                                               options='{"no_open": True}'/>-->
+                        <!--                                        <field name="arranger_province_id"-->
+                        <!--                                               class="o_address_state"-->
+                        <!--                                               placeholder="Province"-->
+                        <!--                                               options='{"no_open": True}'/>-->
+                        <!--                                        <field name="arranger_zip" placeholder="ZIP"-->
+                        <!--                                               class="o_address_zip"/>-->
+                        <!--                                        <field name="arranger_country_id"-->
+                        <!--                                               placeholder="Country"-->
+                        <!--                                               class="o_address_country"-->
+                        <!--                                               options='{"no_open": True}'/>-->
+                        <!--                                    </div>-->
+                        <!--                                </group>-->
+                        <!--                            </group>-->
+                        <!--                        </page>-->
+                        <!--                        <page name="processing" string="Processing of Booking">-->
+                        <!--                            <group>-->
+                        <!--                                <group>-->
+                        <!--                                    <field name="grave_allocation_method"/>-->
+                        <!--                                    <field name="grave_number"/>-->
+                        <!--                                    <field name="grave_row"/>-->
+                        <!--                                    <field name="confirmed_by"/>-->
+                        <!--                                    <field name="confirmation_date"/>-->
+                        <!--                                </group>-->
+                        <!--                                <group>-->
+                        <!--                                    <field name="grave_field"/>-->
+                        <!--                                    <field name="grave_section_id"/>-->
+                        <!--                                    <field name="grave_type"/>-->
+                        <!--                                    <field name="confirmation_signature"/>-->
+                        <!--                                    <field name="invoice_id"/>-->
+                        <!--                                </group>-->
+                        <!--                            </group>-->
+                        <!--                        </page>-->
+                        <!--                        <page name="superintendent" string="Superintendent Burial Confirmation and Booking Closure">-->
+                        <!--                            <group>-->
+                        <!--                                <group>-->
+                        <!--                                    <field name="burial_confirmation_number"/>-->
+                        <!--                                    <field name="burial_confirmation_row"/>-->
+                        <!--                                    <field name="burial_confirmation_type"/>-->
+                        <!--                                    <field name="burial_confirmation_date"/>-->
+                        <!--                                </group>-->
+                        <!--                                <group>-->
+                        <!--                                    <field name="burial_confirmation_field"/>-->
+                        <!--                                    <field name="burial_confirmation_section_id"/>-->
+                        <!--                                    <field name="burial_confirmed_by"/>-->
+                        <!--                                    <field name="burial_confirmation_signature"/>-->
+                        <!--                                </group>-->
+                        <!--                            </group>-->
+                        <!--                            <group>-->
+                        <!--                                <field name="notes"/>-->
+                        <!--                            </group>-->
+                        <!--                        </page>-->
+                        <!--                        <page name="documents" string="Documents"-->
+                        <!--                              invisible="interment_type != 'burial'">-->
+                        <!--                            <group>-->
+                        <!--                                <group>-->
+                        <!--                                    <field name="is_deceased_id_passport"-->
+                        <!--                                           widget="boolean_toggle"/>-->
+                        <!--                                    <field name="document_ids"-->
+                        <!--                                           widget="many2many_binary"-->
+                        <!--                                           invisible="not is_deceased_id_passport"/>-->
+                        <!--                                </group>-->
+                        <!--                                <group>-->
+                        <!--                                    <field name="is_informant_id_passport"-->
+                        <!--                                           widget="boolean_toggle"/>-->
+                        <!--                                    <field name="informant_document_ids"-->
+                        <!--                                           widget="many2many_binary"-->
+                        <!--                                           invisible="not is_informant_id_passport"/>-->
+                        <!--                                </group>-->
+                        <!--                            </group>-->
+                        <!--                        </page>-->
+                    </notebook>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cemetery_application_view_tree" model="ir.ui.view">
+        <field name="name">cemetery.application.form</field>
+        <field name="model">cemetery.application</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="undertaker_id"/>
+                <field name="interment_type"/>
+                <field name="state"/>
+                <field name="burial_status"
+                       invisible="interment_type != 'burial'"
+                       widget="badge"
+                       decoration-danger="burial_status == 'incomplete'"
+                       decoration-success="burial_status == 'complete'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_application" model="ir.actions.act_window">
+        <field name="name">All Applications</field>
+        <field name="res_model">cemetery.application</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_burial_application" model="ir.actions.act_window">
+        <field name="name">Burial Applications</field>
+        <field name="res_model">cemetery.application</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('interment_type', '=', 'burial')]</field>
+        <field name="context">{'default_interment_type': 'burial'}</field>
+    </record>
+    <record id="action_cremation_application" model="ir.actions.act_window">
+        <field name="name">Cremation Applications</field>
+        <field name="res_model">cemetery.application</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('interment_type', '=', 'cremation')]</field>
+        <field name="context">{'default_interment_type': 'cremation'}</field>
+    </record>
+
+</odoo>

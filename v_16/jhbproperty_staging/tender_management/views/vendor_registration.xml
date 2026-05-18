@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Vendor Registration Template -->
+    <template id="vendor_registration_template" name="Vendor Registration Form">
+        <t t-call="website.layout">
+            <div class="container mv64">
+                <h2 class="text-center mb-4">Vendor Registration Form</h2>
+                <t t-if="error_message">
+                    <div class="alert alert-danger" role="alert">
+                        <t t-esc="error_message"/>
+                    </div>
+                </t>
+                <form action="/vendor/registration/submit" method="post"
+                      enctype="multipart/form-data" class="o_mark_required"
+                      data-mark="*">
+                    <input type="hidden" name="csrf_token"
+                           t-att-value="request.csrf_token()"/>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="vendor_type">Vendor Type</label>
+                            <select class="form-control" id="vendor_type"
+                                    name="vendor_type">
+                                <option value="">Select Vendor Type</option>
+                                <option value="individual">Individual</option>
+                                <option value="company">Company</option>
+                            </select>
+                            <div class="invalid-feedback">Please select vendor
+                                type.
+                            </div>
+                        </div>
+                    </div>
+                    <div id="company_fields" style="display:none;">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="company_name">Company Name</label>
+                                <input type="text" class="form-control"
+                                       id="company_name" name="company_name"
+                                       placeholder="Enter your company name"/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="vat">VAT Number</label>
+                                <input type="text" class="form-control" id="vat"
+                                       name="vat"
+                                       placeholder="Enter your VAT number"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name"
+                                   name="name" placeholder="Enter your name"/>
+                            <div class="invalid-feedback">Please enter your
+                                name.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email"
+                                   name="email" placeholder="Enter your email"/>
+                            <div class="invalid-feedback">Please enter a valid
+                                email address.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="phone">Phone</label>
+                            <input type="tel" class="form-control" id="phone"
+                                   name="phone"
+                                   placeholder="Enter your phone number"/>
+                            <div class="invalid-feedback">Please enter your
+                                phone number.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="website">Website</label>
+                            <input type="url" class="form-control" id="website"
+                                   name="website"
+                                   placeholder="Enter your website"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="street">Street</label>
+                        <input type="text" class="form-control" id="street"
+                               name="street"
+                               placeholder="Enter your street address"/>
+                        <div class="invalid-feedback">Please enter your street
+                            address.
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="city">City</label>
+                            <input type="text" class="form-control" id="city"
+                                   name="city" placeholder="Enter your city"/>
+                            <div class="invalid-feedback">Please enter your
+                                city.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="state">State</label>
+                            <input type="text" class="form-control" id="state"
+                                   name="state" placeholder="Enter your state"/>
+                            <div class="invalid-feedback">Please enter your
+                                state.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="country_id">Country</label>
+                            <select class="form-control" id="country_id"
+                                    name="country_id">
+                                <option value="">Select your country</option>
+                                <t t-foreach="request.env['res.country'].sudo().search([])"
+                                   t-as="country">
+                                    <option t-att-value="country.id">
+                                        <t t-esc="country.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                            <div class="invalid-feedback">Please select your
+                                country.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description"
+                                  name="description" rows="3"
+                                  placeholder="Enter a brief description"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Submit
+                    </button>
+                    <br/>
+                    <br/>
+                </form>
+            </div>
+        </t>
+    </template>
+
+    <!-- Vendor Registration Success Template -->
+    <template id="vendor_registration_success"
+              name="Vendor Registration Success">
+        <t t-call="website.layout">
+            <div class="container">
+                <div class="alert alert-success text-center">
+                    <h2>Thank you for registering as a vendor!</h2>
+                    <p>We will review your information and get back to you
+                        shortly.
+                    </p>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Website Page for Vendor Registration -->
+    <record id="vendor_registration_page" model="website.page">
+        <field name="name">Vendor Registration</field>
+        <field name="url">/vendor/registration</field>
+        <field name="view_id"
+               ref="tender_management.vendor_registration_template"/>
+        <field name="website_published">True</field>
+    </record>
+
+    <!-- Menu Item for Vendor Registration -->
+    <record id="menu_vendor_registration" model="website.menu">
+        <field name="name">Vendor Registration Request</field>
+        <field name="url">/vendor/registration</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="page_id"
+               ref="tender_management.vendor_registration_page"/> <!-- Correct module name -->
+        <field name="sequence" type="int">5</field>
+<!--        <field name="groups_id"-->
+<!--               eval="[(4, ref('base.group_public'))]"/> &lt;!&ndash; Visible only to public users &ndash;&gt;-->
+    </record>
+</odoo>

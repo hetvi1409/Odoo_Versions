@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_request_file_wizard_form" model="ir.ui.view">
+        <field name="name">request.file.wizard.form</field>
+        <field name="model">request.file.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Request File">
+                <group>
+<!--                    <field name="document_name"/>-->
+                    <field name="location_id" readonly="1"/>
+                    <field name="receiver_id" readonly="1"/>
+                </group>
+                <group>
+                    <field name="requested_attachment_ids">
+                        <list create="false" edit="true" delete="false" editable="bottom">
+                            <field name="selected"/>
+                            <field name="name"/>
+                        </list>
+                    </field>
+                </group>
+                <footer>
+                    <button string="Send Request" type="object" name="action_confirm_request" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+sequenceDiagram
+    participant User
+    participant PhysicalRecord as Physical Record Keeper
+    participant SyncMethod as _sync_document_record()
+    participant Document as Documents Module
+    participant Attachment as Attachments
+
+    User->>PhysicalRecord: Create/Update Physical Record
+    Note over PhysicalRecord: Required: attachment_id,<br/>folder_id, month, year
+
+    PhysicalRecord->>SyncMethod: Trigger on create() or write()
+
+    SyncMethod->>Document: Search for existing document<br/>by attachment_id
+
+    alt Document Exists
+        Document-->>SyncMethod: Return existing document
+        SyncMethod->>Document: Update document with:<br/>- folder_id<br/>- reference_month<br/>- reference_year
+    else Document Not Found
+        SyncMethod->>Document: Create new document with:<br/>- name (from attachment)<br/>- attachment_id<br/>- folder_id<br/>- reference_month<br/>- reference_year
+    end
+
+    Document-->>User: Document ready in system
+    Note over Document: Document accessible via<br/>File Submission menu

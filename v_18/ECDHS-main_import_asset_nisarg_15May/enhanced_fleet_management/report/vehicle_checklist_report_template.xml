@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_vehicle_checklist_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>VEHICLE INSPECTION CHECKLIST</h2>
+                            <h3><t t-esc="o.reference"/></h3>
+                            <p><strong>Inspection Type:</strong> <t t-esc="dict(o._fields['inspection_type'].selection).get(o.inspection_type)"/></p>
+                        </div>
+
+                        <table class="table table-sm table-bordered mt-3">
+                            <tr>
+                                <td width="25%"><strong>Vehicle:</strong></td>
+                                <td><t t-esc="o.vehicle_id.name"/> (<t t-esc="o.license_plate"/>)</td>
+                                <td width="25%"><strong>Date:</strong></td>
+                                <td><t t-esc="o.inspection_date"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Driver:</strong></td>
+                                <td><t t-esc="o.driver_id.name"/></td>
+                                <td><strong>Inspector:</strong></td>
+                                <td><t t-esc="o.inspector_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Odometer:</strong></td>
+                                <td><t t-esc="o.odometer_reading"/> KM</td>
+                                <td><strong>Fuel Level:</strong></td>
+                                <td><t t-esc="dict(o._fields['fuel_level'].selection).get(o.fuel_level)"/></td>
+                            </tr>
+                        </table>
+
+                        <!-- Checklist Items -->
+                        <h4 class="mt-4">Exterior Checks</h4>
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td width="40%">Body Condition</td>
+                                <td><t t-esc="dict(o._fields['body_condition'].selection).get(o.body_condition) if o.body_condition else 'N/A'"/></td>
+                                <td width="40%">Headlights</td>
+                                <td><t t-esc="dict(o._fields['headlights'].selection).get(o.headlights) if o.headlights else 'N/A'"/></td>
+                            </tr>
+                            <tr>
+                                <td>Taillights</td>
+                                <td><t t-esc="dict(o._fields['taillights'].selection).get(o.taillights) if o.taillights else 'N/A'"/></td>
+                                <td>Indicators</td>
+                                <td><t t-esc="dict(o._fields['indicators'].selection).get(o.indicators) if o.indicators else 'N/A'"/></td>
+                            </tr>
+                            <tr>
+                                <td>Windscreen</td>
+                                <td><t t-esc="dict(o._fields['windscreen'].selection).get(o.windscreen) if o.windscreen else 'N/A'"/></td>
+                                <td>Wipers</td>
+                                <td><t t-esc="dict(o._fields['wipers'].selection).get(o.wipers) if o.wipers else 'N/A'"/></td>
+                            </tr>
+                        </table>
+
+                        <h4 class="mt-3">Tyres</h4>
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td width="40%">Front Left</td>
+                                <td><t t-esc="dict(o._fields['tyre_front_left'].selection).get(o.tyre_front_left) if o.tyre_front_left else 'N/A'"/></td>
+                                <td width="40%">Front Right</td>
+                                <td><t t-esc="dict(o._fields['tyre_front_right'].selection).get(o.tyre_front_right) if o.tyre_front_right else 'N/A'"/></td>
+                            </tr>
+                            <tr>
+                                <td>Rear Left</td>
+                                <td><t t-esc="dict(o._fields['tyre_rear_left'].selection).get(o.tyre_rear_left) if o.tyre_rear_left else 'N/A'"/></td>
+                                <td>Rear Right</td>
+                                <td><t t-esc="dict(o._fields['tyre_rear_right'].selection).get(o.tyre_rear_right) if o.tyre_rear_right else 'N/A'"/></td>
+                            </tr>
+                            <tr>
+                                <td>Spare Tyre</td>
+                                <td colspan="3"><t t-esc="dict(o._fields['spare_tyre'].selection).get(o.spare_tyre) if o.spare_tyre else 'N/A'"/></td>
+                            </tr>
+                        </table>
+
+                        <h4 class="mt-3">Under the Hood</h4>
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td width="40%">Engine Oil</td>
+                                <td><t t-esc="dict(o._fields['engine_oil_level'].selection).get(o.engine_oil_level) if o.engine_oil_level else 'N/A'"/></td>
+                                <td width="40%">Coolant</td>
+                                <td><t t-esc="dict(o._fields['coolant_level'].selection).get(o.coolant_level) if o.coolant_level else 'N/A'"/></td>
+                            </tr>
+                            <tr>
+                                <td>Brake Fluid</td>
+                                <td><t t-esc="dict(o._fields['brake_fluid_level'].selection).get(o.brake_fluid_level) if o.brake_fluid_level else 'N/A'"/></td>
+                                <td>Battery</td>
+                                <td><t t-esc="dict(o._fields['battery_condition'].selection).get(o.battery_condition) if o.battery_condition else 'N/A'"/></td>
+                            </tr>
+                        </table>
+
+                        <h4 class="mt-3">Safety Equipment</h4>
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td width="40%">Fire Extinguisher</td>
+                                <td><t t-esc="dict(o._fields['fire_extinguisher'].selection).get(o.fire_extinguisher) if o.fire_extinguisher else 'N/A'"/></td>
+                                <td width="40%">First Aid Kit</td>
+                                <td><t t-esc="dict(o._fields['first_aid_kit'].selection).get(o.first_aid_kit) if o.first_aid_kit else 'N/A'"/></td>
+                            </tr>
+                            <tr>
+                                <td>Warning Triangle</td>
+                                <td><t t-esc="dict(o._fields['warning_triangle'].selection).get(o.warning_triangle) if o.warning_triangle else 'N/A'"/></td>
+                                <td>Jack &amp; Tools</td>
+                                <td><t t-esc="dict(o._fields['jack_tools'].selection).get(o.jack_tools) if o.jack_tools else 'N/A'"/></td>
+                            </tr>
+                        </table>
+
+                        <h4 class="mt-3">Overall Assessment</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="30%"><strong>Vehicle Condition:</strong></td>
+                                <td><span t-attf-class="badge badge-{{ 'success' if o.overall_condition == 'excellent' else 'warning' if o.overall_condition == 'good' else 'danger' }}">
+                                    <t t-esc="dict(o._fields['overall_condition'].selection).get(o.overall_condition) if o.overall_condition else 'N/A'"/>
+                                </span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Vehicle Roadworthy:</strong></td>
+                                <td><span t-attf-class="badge badge-{{ 'success' if o.vehicle_roadworthy else 'danger' }}">
+                                    <t t-esc="'YES' if o.vehicle_roadworthy else 'NO'"/>
+                                </span></td>
+                            </tr>
+                            <tr t-if="o.issues_found">
+                                <td><strong>Issues Found:</strong></td>
+                                <td><t t-esc="o.issues_count"/> issue(s)</td>
+                            </tr>
+                        </table>
+
+                        <div t-if="o.defects_description" class="mt-3">
+                            <strong>Defects/Issues:</strong>
+                            <p><t t-esc="o.defects_description"/></p>
+                        </div>
+
+                        <div t-if="o.recommendations" class="mt-3">
+                            <strong>Recommendations:</strong>
+                            <p><t t-esc="o.recommendations"/></p>
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <div class="border-top pt-2 text-center">
+                                    <strong>Inspector Signature</strong><br/>
+                                    <t t-esc="o.inspector_id.name"/><br/>
+                                    Date: <t t-esc="o.inspection_date"/>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border-top pt-2 text-center">
+                                    <strong>Driver Signature</strong><br/>
+                                    <t t-esc="o.driver_id.name"/><br/>
+                                    Date: _______________
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

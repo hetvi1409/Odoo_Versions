@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="action_circulation_comments" model="ir.actions.act_window">
+        <field name="name">Circulation Comments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">circulation.comments</field>
+        <field name="view_mode">tree,kanban,form</field>
+    </record>
+
+    <record id="action_circulation_comments_send" model="ir.actions.act_window">
+        <field name="name">Circulation Comments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">circulation.comments</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'send')]</field>
+    </record>
+    <record id="action_circulation_comments_object" model="ir.actions.act_window">
+        <field name="name">Circulation Comments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">circulation.comments</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'objection')]</field>
+    </record>
+    <record id="action_circulation_comments_ptob" model="ir.actions.act_window">
+        <field name="name">Circulation Comments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">circulation.comments</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'create_ptob')]</field>
+    </record>
+    <record id="action_circulation_comments_valuation" model="ir.actions.act_window">
+        <field name="name">Circulation Comments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">circulation.comments</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'valuation')]</field>
+    </record>
+
+    <record id="circulation_comments_view_tree" model="ir.ui.view">
+        <field name="name">circulation.comments.view.tree</field>
+        <field name="model">circulation.comments</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="property_id"/>
+                <field name="jmc_number"/>
+                <field name="state"/>
+                <field name="last_stage_updated" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="circulation_comments_view_form" model="ir.ui.view">
+        <field name="name">circulation.comments.view.form</field>
+        <field name="model">circulation.comments</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_assigne_to_me"
+                            attrs="{'invisible': [('user_id', '!=', False)]}"
+                            string="Assign To Me" type="object"
+                            class="btn btn-secondary"/>
+                    <button name="send_compile_report"
+                            attrs="{'invisible': ['|', ('state', '!=', 'draft'),  ('user_id', '==', False)]}"
+                            string="Send For Circulation" type="object"
+                            class="btn btn-secondary"/>
+                    <button name="action_objection"
+                            attrs="{'invisible': ['|', ('state', '!=', 'send'),  ('user_id', '==', False)]}"
+                            string="Next" type="object"
+                            class="btn btn-secondary"/>
+                    <button name="action_negotiation"
+                            attrs="{'invisible': ['|', ('state', '!=', 'objection'),  ('user_id', '==', False)]}"
+                            string="Negotiation" type="object"
+                            class="btn btn-secondary"/>
+                    <button name="action_create_valuation"
+                            attrs="{'invisible': [('state', '!=', 'create_ptob')]}"
+                            string="Create Valuation" type="object"
+                            class="btn btn-secondary"/>
+                </header>
+                <sheet>
+                      <style>
+                    .o_form_view:not(.o_field_highlight)
+                    .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                    .o_input:not(:hover):not(:focus) {
+                              --o-input-border-color: black !important;
+                              }
+                  </style>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_transaction" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('transaction_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Transaction</span>
+                            </div>
+                        </button>
+                        <button name="action_view_valuation" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('valuation_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Valuation</span>
+                            </div>
+                        </button>
+                        <button name="action_view_assessment" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('assessment_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Assessment</span>
+                            </div>
+                        </button>
+                        <button name="action_view_enquiry" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('enquiry_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Enquiry</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="enquiry_id" invisible="1"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="valuation_id" readonly="1" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="assessment_id" invisible="1"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="transaction_id" readonly="1" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Circulation Comments">
+                        <group>
+                            <field name="property_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="jmc_number"/>
+                            <field name="stand_number"/>
+                            <field name="zoning_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="user_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="address"/>
+                            <field name="township"/>
+                            <field name="zoning_id"/>
+                            <field name="proposal"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Objection" attrs="{'invisible': [('objection', '==', False)]}">
+                            <group>
+                                <field name="objection" readonly="1"/>
+                                <field name="is_municipal_department" readonly="1"/>
+                                <field name="is_negotiation"
+                                       attrs="{'invisible': [('state', '!=', 'objection')], 'required': [('state', '==', 'objection')]}"/>
+                            </group>
+                        </page>
+                        <page string="Supporting Documents">
+                            <group>
+                                <field name="attachment_ids"
+                                       widget="many2many_binary"/>
+
+                                                      <button name="action_button_doc_view"
+                            string="Open Document" type="object"/>
+                            </group>
+                        </page>
+                        <page string="Comments">
+                            <field name="line_ids" widget="section_and_note_one2many">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+<!--                                    <field name="date"/>-->
+                                    <field name="author_id"/>
+                                    <field name="department_id"/>
+                                    <field name="attachment_ids"
+                                       widget="many2many_binary"/>
+                                    <control>
+                                    <create name="add_note_control"
+                                            string="Add a Comment"
+                                            context="{'default_display_type': 'line_note'}"/>
+                                </control>
+
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="GEOLIS">
+                            <iframe id="custom_src" name="custom_src"
+                                    src="https://ags.joburg.org.za/cgis/index.aspx"
+                                    width="100%" height="500"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+
+            </form>
+        </field>
+    </record>
+     <record id="view_circulation_comments_model_search" model="ir.ui.view">
+        <field name="name">circulation.comments.model.search</field>
+        <field name="model">circulation.comments</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="jmc_number"/>
+                <field name="property_id"/>
+                <field name="address"/>
+                <field name="state"/>
+<!--                <group expand="0" string="Group By...">-->
+<!--                        <filter string="Expense Account" name="account_depreciation_id" domain="[]" context="{'group_by':'account_depreciation_id'}"/>-->
+<!--                        <filter string="Deferred Expense Account" name="account_depreciation_expense_id" domain="[]" context="{'group_by':'account_depreciation_expense_id'}"/>-->
+<!--                        <filter string="Journal" name="journal_id" domain="[]" context="{'group_by':'journal_id'}"/>-->
+<!--                </group>-->
+            </search>
+        </field>
+    </record>
+    <menuitem id="client_circulation_comments_menu"
+              name="Circulation Comments"
+              action="action_circulation_comments"
+              parent="client_enquiry.client_enquiry_helpdesk_enquiries_menu"
+              sequence="24"/>
+
+</odoo>

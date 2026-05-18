@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="documents_folder_model_view" model="ir.ui.view">
+        <field name="name">documents.document.view.form</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.documents_upload_url_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Configure Retention Policy">
+<!--                    <div style="color: #999999;">Length of time document of this document type will be retained</div>-->
+                    <!--                    <group>-->
+                    <!--                        <field name="retention_duration_unit"/>-->
+                    <!--                        <field name="retention_periods"/>-->
+                    <!--                        <field name="retention_duration_in_days" readonly="1"/>-->
+                    <!--                    </group>-->
+
+                    <field name="enabled"/>
+                    <field name="is_permanent" invisible="enabled != True"/>
+                    <label for="retention_duration_unit" invisible="enabled != True or is_permanent == True"/>
+                    <div>
+                        <field name="retention_duration_unit" class="oe_inline"
+                               style="vertical-align:baseline" invisible="enabled != True or is_permanent == True"/>
+                    </div>
+                    <label for="retention_periods" invisible="enabled != True or is_permanent == True"/>
+                    <div>
+                        <field name="retention_periods" class="oe_inline"
+                               style="vertical-align:baseline" invisible="enabled != True or is_permanent == True"/>
+                    </div>
+                    <label for="retention_duration_in_days" invisible="1"/>
+                    <div>
+                        <field name="retention_duration_in_days"
+                               class="oe_inline"
+                               style="vertical-align:baseline" invisible="1"/>
+                    </div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="documents_folder_model_list_view" model="ir.ui.view">
+        <field name="name">documents.document.list.form</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.documents_view_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="retention_periods"/>
+                <field name="disposal_periods"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

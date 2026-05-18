@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="edit_project_form_view_inherit" model="ir.ui.view">
+        <field name="name">project.project.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet//field[@name='company_id']" position="after">
+<!--                <field name="region_id"/>-->
+                <field name="municipality_id"/>
+                <field name="intervention"/>
+                <field name="sub_intervention"/>
+            </xpath>
+            <xpath expr="//field[@name='date']" position="after">
+                <field name="hss_project_number"/>
+                <field name="total_annual_no_of_units"/>
+                <field name="total_annual_no_of_sites"/>
+                <field name="total_budget_amount"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_list_view_inherit_id" model="ir.ui.view">
+        <field name="name">project.project.list.inherit.id</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='last_update_status']" position="replace"/>
+            <xpath expr="//field[@name='user_id']" position="replace"/>
+            <xpath expr="//field[@name='company_id']" position="replace"/>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="account_id" optional="show"/>
+                <field name="intervention" optional="show"/>
+                <field name="sub_intervention" optional="show"/>
+                <field name="hss_project_number" optional="show"/>
+                <field name="description" optional="show"/>
+                <field name="total_annual_no_of_sites" optional="show"/>
+                <field name="total_annual_no_of_units" optional="show"/>
+                <field name="total_budget_amount" optional="hide"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='display_name']" position="replace"/>
+        </field>
+    </record>
+
+</odoo>

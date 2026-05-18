@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="job_card_view_form" model="ir.ui.view">
+        <field name="name">job.card.view.form</field>
+        <field name="model">job.card</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,waiting_approval,approve"/>
+                    <button name="action_inventory_approval_request"
+                            type="object"
+                            string="Request For Approval"
+                            attrs="{'invisible':[('state', '!=', 'draft')]}"
+                            class="btn-primary"/>
+                    <button name="action_resubmit_approval_request"
+                            type="object"
+                            string="Re-request For Approval"
+                            attrs="{'invisible':[('state', '!=', 'declined')]}"
+                            class="btn-primary"/>
+
+                    <button name="action_approve_inventory"
+                            type="object"
+                            string="Approve"
+                            groups="property_maintenance_management.facility_manager_access"
+                            class="btn-primary"
+                            attrs="{'invisible':[('state', '!=', 'waiting_approval')]}"/>
+                    <button name="action_decline_inventory"
+                            type="object"
+                            string="Decline"
+                            groups="property_maintenance_management.facility_manager_access"
+                            class="btn-secondary"
+                            attrs="{'invisible':[('state', '!=', 'waiting_approval')]}"/>
+                </header>
+                <sheet>
+                    <field name="job_card_id" invisible="1"/>
+                    <!--                    <field name="helpdesk_job_card_id" invisible="1"/>-->
+                    <field name="name" invisible="1"/>
+                    <field name="ticket_ref" invisible="1"/>
+                    <group>
+                        <group string="Property Details">
+                            <field name="property_name"/>
+                            <field name="jmc_number"/>
+                            <field name="location"/>
+                        </group>
+                        <group string="Customer Details" name="customer_details">
+                            <!--                                                <group>-->
+                            <field name="partner_id"/>
+
+                            <span class="o_form_label o_td_label"
+                                  name="address_name">
+                                <!--                                        <field name="type"-->
+                                <!--                                               attrs="{'invisible': [('is_company','=', True)], 'required': [('is_company','!=', True)], 'readonly': [('user_ids', '!=', [])]}"-->
+                                <!--                                               class="fw-bold"/>-->
+                                <b>
+                                    Address
+                                </b>
+                            </span>
+                            <div class="o_address_format">
+                                <field name="partner_street"
+                                       placeholder="Street..."
+                                       class="o_address_street"/>
+                                <field name="partner_street2"
+                                       placeholder="Street 2..."
+                                       class="o_address_street"/>
+                                <field name="partner_city"
+                                       placeholder="City"
+                                       class="o_address_city"/>
+                                <field name="partner_state_id"
+                                       class="o_address_state"
+                                       placeholder="State"
+                                       options="{'no_open': True, 'no_quick_create': True}"/>
+                                <field name="partner_zip" placeholder="ZIP"
+                                       class="o_address_zip"/>
+                                <div name="partner_address_country"
+                                     class="d-flex justify-content-between">
+                                    <field name="partner_country_id"
+                                           placeholder="Country"
+                                           class="o_address_country"
+                                           options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                </div>
+                                <div>
+                                    <button
+                                            name="action_location_navigate"
+                                            type="object"
+                                            class="btn btn-link ps-0 pt-0 pb-2"
+                                            icon="fa-arrow-right"
+                                            string="Navigate To" colspan="2"/>
+                                </div>
+
+                            </div>
+                            <!--                        </group>-->
+
+                            <!--                            <field name="appointment_date"/>-->
+                            <!--                            <field name="technician"/>-->
+                        </group>
+                    </group>
+                    <group string="Appointment Order">
+                        <group>
+                            <field name="appointment_date"/>
+                            <field name="technician"/>
+                        </group>
+                        <!--                        <group>-->
+                        <!--                            <field name="partner_id"/>-->
+
+                        <!--                            <span class="o_form_label o_td_label"-->
+                        <!--                                  name="address_name">-->
+                        <!--                                &lt;!&ndash;                                        <field name="type"&ndash;&gt;-->
+                        <!--                                &lt;!&ndash;                                               attrs="{'invisible': [('is_company','=', True)], 'required': [('is_company','!=', True)], 'readonly': [('user_ids', '!=', [])]}"&ndash;&gt;-->
+                        <!--                                &lt;!&ndash;                                               class="fw-bold"/>&ndash;&gt;-->
+                        <!--                                &lt;!&ndash;                                        <b attrs="{'invisible': [('is_company', '=', False)]}">&ndash;&gt;-->
+                        <!--                                &lt;!&ndash;                                            Address&ndash;&gt;-->
+                        <!--                                &lt;!&ndash;                                        </b>&ndash;&gt;-->
+                        <!--                            </span>-->
+                        <!--                            <div class="o_address_format">-->
+                        <!--                                <field name="partner_street"-->
+                        <!--                                       placeholder="Street..."-->
+                        <!--                                       class="o_address_street"/>-->
+                        <!--                                <field name="partner_street2"-->
+                        <!--                                       placeholder="Street 2..."-->
+                        <!--                                       class="o_address_street"/>-->
+                        <!--                                <field name="partner_city"-->
+                        <!--                                       placeholder="City"-->
+                        <!--                                       class="o_address_city"/>-->
+                        <!--                                <field name="partner_state_id"-->
+                        <!--                                       class="o_address_state"-->
+                        <!--                                       placeholder="State"-->
+                        <!--                                       options="{'no_open': True, 'no_quick_create': True}"/>-->
+                        <!--                                <field name="partner_zip" placeholder="ZIP"-->
+                        <!--                                       class="o_address_zip"/>-->
+                        <!--                                <div name="partner_address_country"-->
+                        <!--                                     class="d-flex justify-content-between">-->
+                        <!--                                    <field name="partner_country_id"-->
+                        <!--                                           placeholder="Country"-->
+                        <!--                                           class="o_address_country"-->
+                        <!--                                           options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </group>-->
+                        <group>
+                            <field name="partner_phone" widget="phone"/>
+                            <field name="partner_mobile" widget="phone"/>
+                            <field name="partner_email" widget="email"
+                                   context="{'gravatar_image': True}"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Is Inventory Required">
+                            <field name="is_inventory_required" widget="radio"/>
+                        </group>
+
+                        <group string="JOB DESCRIPTION">
+                            <field name="job_description" nolable="1"/>
+                            <field name="is_decline" invisible="1"/>
+                            <field name="helpdesk_job_card_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Inventory Required"
+                              name="required_inventories"
+                              attrs="{'invisible': [('is_inventory_required', '!=', 'yes')]}">
+                            <field name="required_inventory_ids"
+                                   nolabel="1">
+                                <tree string="Inventory Required Items"
+                                      editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <!--                                    <field name="price_unit"/>-->
+                                    <!--                                    <field name="price_subtotal"/>-->
+                                    <field name="required_inventory_job"
+                                           invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Decline Reason"
+                              name="decline_reason"
+                              attrs="{'invisible': [('is_decline', '!=', True)]}">
+                            <group>
+                                <field name="decline_reason"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+
+            </form>
+<!--            <xpath expr="//group[@name='customer_details']]" position="inside">-->
+<!--                -->
+<!--            </xpath>-->
+        </field>
+    </record>
+
+    <record id="action_job_card" model="ir.actions.act_window">
+        <field name="name">Job Card</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">job.card</field>
+        <field name="view_mode">tree,kanban,form</field>
+    </record>
+
+    <menuitem id="job_card_menu_main" name="Job card"
+              sequence="15" parent="helpdesk.menu_helpdesk_root"/>
+    <menuitem id="job_card_menu_my" name="My Job Cards"
+              sequence="10"
+              parent="property_maintenance_management.job_card_menu_main"
+              action="action_job_card"/>
+</odoo>

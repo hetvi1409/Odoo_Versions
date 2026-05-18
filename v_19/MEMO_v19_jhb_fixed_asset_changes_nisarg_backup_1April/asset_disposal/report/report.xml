@@ -1,0 +1,45 @@
+<odoo>
+    <record id="action_report_asset_impairment" model="ir.actions.report">
+        <field name="name">Asset Impairment Report</field>
+        <field name="model">account.asset</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">asset_impairment.report_asset_impairment</field>
+        <field name="report_file">asset_impairment.report_asset_impairment</field>
+        <field name="print_report_name">'Asset Impairment Report - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="account_asset.model_account_asset"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_asset_disposal_audit">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <h2>Asset Disposal Audit Report</h2>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Asset Name</th>
+                            <th>Disposal Method</th>
+                            <th>Disposal Date</th>
+                            <th>Carrying Amount</th>
+                            <th>Selling Price</th>
+                            <th>Profit/Loss</th>
+                            <th>State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="docs" t-as="o">
+                            <tr>
+                                <td><span t-field="o.name"/></td>
+                                <td><span t-field="o.disposal_method"/></td>
+                                <td><span t-field="o.disposal_date"/></td>
+                                <td><span t-field="o.carrying_amount"/></td>
+                                <td><span t-field="o.selling_price"/></td>
+                                <td><span t-field="o.audit_log" /></td>
+                                <td><span t-field="o.disposal_state"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

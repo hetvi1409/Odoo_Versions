@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_internal_audit_rolling_plan"
+            model="ir.actions.act_window">
+        <field name="name">Internal Audit Rolling Plan</field>
+        <field name="res_model">rolling.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_group_by_plan_id': 1,
+            'search_default_group_by_year_id': 1}
+        </field>
+
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Rolling Plan
+            </p>
+            <p>
+                Create and manage the Rolling Plan;
+            </p>
+        </field>
+    </record>
+    <record id="rolling_plan_view_search" model="ir.ui.view">
+        <field name="name">rolling.plan.view.form</field>
+        <field name="model">rolling.plan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="sequence_no"/>
+                <filter name="stages" string="Preparer"
+                        domain="[('stages', '=', 'preparer')]"/>
+                <filter name="stages" string="First Reviewer"
+                        domain="[('stages', '=', 'first_reviewer')]"/>
+                <filter name="stages" string="Second Reviewer"
+                        domain="[('stages', '=', 'second_reviewer')]"/>
+                <filter name="stages" string="Approved"
+                        domain="[('stages', '=', 'approved')]"/>
+                <filter name="stages" string="Reverted"
+                        domain="[('stages', '=', 'reverted')]"/>
+                <filter name="stages" string="Rejected"
+                        domain="[('stages', '=', 'rejected')]"/>
+                <separator/>
+                <filter name="group_by_plan_id"
+                        context="{'group_by': 'plan_id'}"/>
+                <filter name="group_by_year_id"
+                        context="{'group_by': 'arp_year_id'}"/>
+                <filter name="group_by_category_id"
+                        context="{'group_by': 'category_id'}"/>
+                <filter name="group_by_risk_priority_rating"
+                        context="{'group_by': 'risk_priority_rating'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="internal_audit_rolling_plan_view_form" model="ir.ui.view">
+        <field name="name">rolling.plan.view.form</field>
+        <field name="model">rolling.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                            invisible="stages != 'preparer' or uid != user_reviewer_1_ids"
+                            string="1st Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object"
+                            invisible="stages != 'first_reviewer' or uid != user_reviewer_2_ids"
+                            string="2nd Review" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'first_reviewer' or uid != user_reviewer_2_ids"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_approve" type="object"
+                            invisible="stages != 'second_reviewer' or uid != user_approver_ids"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'second_reviewer' or uid != user_approver_ids"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_reject" type="object"
+                            invisible="stages != 'second_reviewer' or uid != user_approver_ids"
+                            string="Reject" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'rejected' or uid != user_approver_ids"
+                            string="Move to Prepare" class="oe_highlight"/>
+<!--                    <button name="action_update" type="object"-->
+<!--                            invisible="stages != 'reverted' or uid != user_preparer_ids"-->
+<!--                            string="Updated" class="oe_highlight"/>-->
+                    <field name="stages" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1 class="d-flex flex-row">
+                            <field name="name" options="{'line_breaks': False}"
+                                   widget="text" class="o_text_overflow"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="is_current_user_approver" invisible="1"/>
+                            <field name="is_current_user_reviewer" invisible="1"/>
+                            <field name="is_current_user_reviewer2" invisible="1"/>
+                            <field name="rec_name" invisible="1"/>
+                            <field name="sequence_no"/>
+                            <field name="plan_id"/>
+                            <field name="category_id"/>
+                            <field name="year_ids" widget="many2many_tags"
+                                   invisible="1"/>
+                            <field name="department_ids"
+                                   widget="many2many_tags"/>
+                            <field name="start_date"
+                                   string="Planned Date"
+                                   widget="daterange"
+                                   options="{'end_date_field': 'date_end', 'always_range': 1}"
+                                   on_change="1"/>
+<!--                                   required="start_date or date_end"-->
+
+                            <!-- Invisible End Date to store the value -->
+                            <field name="date_end"
+                                   invisible="1"
+                                   required="start_date"
+                                   on_change="1"/>
+                            <field name="arp_year_id"
+                                   domain="[('id', 'in', year_ids)]"/>
+                            <field name="period"/>
+
+                        </group>
+                        <group>
+                            <field name="user_ids" widget="many2many_tags"
+                                   invisible="1"/>
+                            <field name="team_id" invisible="1"/>
+                            <field name="risk_priority_rating"/>
+                            <field name="user_preparer_ids"
+                                   widget="many2one_avatar_user"/>
+                            <field name="user_reviewer_1_ids"
+                                   widget="many2one_avatar_user"
+                                   readonly="stages == 'approved'"/>
+                            <field name="user_reviewer_2_ids"
+                                   widget="many2one_avatar_user"
+                                   readonly="stages == 'approved'"/>
+                            <field name="user_approver_ids"
+                                   widget="many2one_avatar_user"
+                                   readonly="stages == 'approved'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Internal Audit Operational Plan"
+                              name="operational_plan">
+                            <field name="operational_plan_ids">
+                                <list editable="bottom">
+                                    <field name="sequence_number"/>
+                                    <field name="name" string="AOP Name"/>
+                                    <field name="rolling_plan_id"
+                                           string="ARP Name"/>
+                                    <field name="plan_id" column_invisible="0"/>
+                                    <field name="description"/>
+                                    <field name="scope_of_work"/>
+                                    <field name="assurance_consulting"/>
+                                    <field name="department_ids"
+                                           widget="many2many_tags"/>
+                                    <field name="user_ids" column_invisible="1"
+                                           widget="many2many_tags"/>
+                                    <field name="start_date"
+                                           string="Start Date"/>
+                                    <field name="date_end"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description"
+                                   placeholer="Description..."/>
+                        </page>
+                        <page string="Tracking">
+                            <field name="rolling_plan_tracking">
+                                <list editable="bottom">
+                                    <field name="user_id"/>
+                                    <field name="previous"/>
+                                    <field name="new_state"/>
+                                    <field name="comment"/>
+                                    <field name="date_updated"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Upload Documents">
+                            <group>
+                                <group>
+                                    <field name="attachment_ids"
+                                           widget="many2many_binary"
+                                           readonly="stages in ['approved', 'rejected']"/>
+                                </group>
+                                <group>
+                                    <button name="action_view_documents"
+                                            invisible="not attachment_ids"
+                                            type="object" icon="fa-file-text-o"
+                                            string="Open Documents"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Projects">
+                            <field name="project_ids">
+                                <list create="0">
+                                    <field name="name"/>
+                                    <field name="department_id"/>
+                                    <field name="user_id"/>
+                                    <field name="date_start"/>
+                                    <field name="date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="internal_audit_rolling_plan_view_new_form" model="ir.ui.view">
+        <field name="name">rolling.plan.view.form</field>
+        <field name="model">rolling.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="stages" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1 class="d-flex flex-row">
+                            <field name="name" options="{'line_breaks': False}"
+                                   widget="text" class="o_text_overflow"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="sequence_no"/>
+                            <field name="category_id"/>
+                            <field name="department_ids"/>
+                            <field name="arp_year_id"/>
+                            <field name="period"/>
+                            <field name="user_preparer_ids"
+                                   widget="many2many_avatar_user"
+                                   invisible="1"/>
+                            <field name="user_reviewer_1_ids"
+                                   widget="many2many_avatar_user"
+                                   readonly="stages == 'approved'"
+                                   invisible="1"/>
+                            <field name="user_reviewer_2_ids"
+                                   widget="many2many_avatar_user"
+                                   readonly="stages == 'approved'"
+                                   invisible="1"/>
+                            <field name="user_approver_ids"
+                                   widget="many2many_avatar_user"
+                                   readonly="stages == 'approved'"
+                                   invisible="1"/>
+                        </group>
+                        <group>
+                            <!--                            <field name="user_id"-->
+                            <!--                                   widget="many2one_avatar_user"/>-->
+                            <field name="user_ids" invisible="1"/>
+                            <field name="start_date"
+                                   string="Planned Date"
+                                   widget="daterange"
+                                   options="{'end_date_field': 'date_end', 'always_range': 1}"
+                                   on_change="1"/>
+                            required="start_date or date_end"
+                            <!-- Invisible End Date to store the value -->
+                            <field name="date_end"
+                                   invisible="1"
+                                   required="start_date"
+                                   on_change="1"/>
+                            <field name="team_id" invisible="1"/>
+                            <!--                            <field name="team_members_ids"-->
+                            <!--                                   widget="many2many_tags" invisible=""/>-->
+                            <field name="risk_priority_rating"/>
+                            <!--                            <field name="q1_allocated_time"-->
+                            <!--                                   widget="timesheet_uom"/>-->
+                            <!--                            <field name="q2_allocated_time"-->
+                            <!--                                   widget="timesheet_uom"/>-->
+                            <!--                            <field name="q3_allocated_time"-->
+                            <!--                                   widget="timesheet_uom"/>-->
+                            <!--                            <field name="q4_allocated_time"-->
+                            <!--                                   widget="timesheet_uom"/>-->
+                            <!--                            <field name="allocated_hours"-->
+                            <!--                                   widget="timesheet_uom_no_toggle"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Internal Audit Operational Plan"
+                              name="operational_plan">
+                            <field name="operational_plan_ids">
+                                <list editable="bottom">
+                                    <field name="sequence_number"/>
+                                    <field name="name" string="AOP Name"/>
+                                    <field name="rolling_plan_id"
+                                           string="ARP Name"/>
+                                    <field name="plan_id" column_invisible="0"/>
+                                    <field name="description"/>
+                                    <field name="scope_of_work"/>
+                                    <field name="assurance_consulting"/>
+                                    <field name="department_ids"
+                                           widget="many2many_tags"/>
+                                    <field name="user_ids"
+                                           widget="many2many_tags"/>
+                                    <field name="start_date"
+                                           string="Start Date"/>
+                                    <field name="date_end"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description"
+                                   placeholer="Description..."/>
+                        </page>
+                        <page string="Tracking">
+                            <field name="rolling_plan_tracking">
+                                <list editable="bottom">
+                                    <field name="user_id"/>
+                                    <field name="previous"/>
+                                    <field name="new_state"/>
+                                    <field name="comment"/>
+                                    <field name="date_updated"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="internal_audit_rolling_plan_view_tree" model="ir.ui.view">
+        <field name="name">rolling.plan.view.list</field>
+        <field name="model">rolling.plan</field>
+        <field name="arch" type="xml">
+            <list duplicate="0" expand="1">
+                <field name="sequence_no"/>
+                <field name="category_id"/>
+                <field name="rec_name"/>
+                <field name="name" />
+                <field name="department_ids"/>
+                <field name="risk_priority_rating"/>
+                <field name="start_date" string="Start Date"/>
+                <field name="date_end"/>
+            </list>
+        </field>
+    </record>
+    <menuitem id="high_task_arp_menu"
+              name="Internal Audit Rolling Plan 1 year"
+              parent="internal_audit_management.high_level_documents_menu"
+              action="action_internal_audit_rolling_plan"
+              sequence="10"/>
+    <menuitem id="internal_audit_rolling_plan"
+              name="Internal Audit Rolling Plan"
+              parent="project.menu_project_config"
+              action="action_internal_audit_rolling_plan"
+              sequence="7"/>
+</odoo>

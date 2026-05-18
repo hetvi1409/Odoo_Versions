@@ -1,0 +1,17 @@
+flowchart LR
+  subgraph PU1[Portal User]
+    A([Start]) --> B["/my/bid_applications"]
+    B --> C[Open bid detail]
+  end
+  subgraph PC[Portal Controller]
+    C --> D[auth user route]
+    D --> E{Owner or internal?}
+    E -->|No| F[Render access denied]
+    E -->|Yes| G[Render bid detail with timer token]
+  end
+  subgraph UI1[Portal Frontend]
+    G --> H[Show bid data and docs]
+    H --> I[Optional download all bid docs]
+    F --> J([End])
+    I --> J
+  end

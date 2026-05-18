@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="risk_treatment_view_form" model="ir.ui.view">
+        <field name="name">oi_risk_management.risk.view.form.</field>
+        <field name="model">oi_risk_management.risk</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="oi_risk_management.risk_treatment_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="replace">
+                <header>
+                    <field name="risk_treatment_state" widget="statusbar" options="{'clickable': '1'}"/>
+
+                    <button name="action_risk_treatment_prepare" type="object" string="Prepare"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_treatment_state', '!=', 'draft'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_risk_treatment_reviewed" type="object" string="Reviewed"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_treatment_state', '!=', 'prepared'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_risk_treatment_approved" type="object" string="Approved"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_treatment_state', '!=', 'reviewed'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_risk_treatment_rejected" type="object" string="Rejected"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_treatment_state', '!=', 'reviewed'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_treatment_revert" type="object"
+                            string="Revert" class="oe_highlight"
+                            attrs="{'invisible': [('risk_treatment_state', 'not in', ['prepared', 'reviewed'])]}"/>
+                </header>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Approvers">
+                    <group>
+                        <group>
+                            <field name="can_edit" invisible="1"/>
+                            <field name="preparer_id" widget="many2one_avatar_user"/>
+                            <field name="reviewer_id" widget="many2one_avatar_user"/>
+                            <field name="approver_id" widget="many2one_avatar_user"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Reverts/ Review Notes">
+                    <group>
+                        <field name="feedback" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_records" type="object"
+                            class="oe_stat_button" icon="fa-book">Revert Records
+                    </button>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='activity_id']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_treatment_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='factor_sequence']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_treatment_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='sequence']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='risk_treatment_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="risk_assessment_view_form" model="ir.ui.view">
+        <field name="name">oi_risk_management.risk.view.form.</field>
+        <field name="model">oi_risk_management.risk</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="oi_risk_management.risk_assessment_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="replace">
+                <header>
+                    <field name="risk_assessment_state" widget="statusbar" options="{'clickable': '1'}"/>
+                    <button name="action_risk_assessment_prepare" type="object" string="Prepare"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_assessment_state', '!=', 'draft'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_risk_assessment_reviewed" type="object" string="Reviewed"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_assessment_state', '!=', 'prepared'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_risk_assessment_approved" type="object" string="Approved"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_assessment_state', '!=', 'reviewed'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_risk_assessment_rejected" type="object" string="Rejected"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_assessment_state', '!=', 'reviewed'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_assessment_revert" type="object"
+
+                            string="Revert" class="oe_highlight"
+                            attrs="{'invisible': [('risk_assessment_state', 'not in', ['prepared', 'reviewed'])]}"/>
+                </header>
+            </xpath>
+            <xpath expr="//page[@name='evaluation']" position="after">
+                <page string="Approvers">
+                    <group>
+                        <group>
+                            <field name="can_edit" invisible="1"/>
+                            <field name="preparer_id" widget="many2one_avatar_user"/>
+                            <field name="reviewer_id" widget="many2one_avatar_user"/>
+                            <field name="approver_id" widget="many2one_avatar_user"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Reverts/ Review Notes">
+                    <group>
+                        <field name="feedback" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_records" type="object"
+                            class="oe_stat_button" icon="fa-book">Revert Records
+                    </button>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='factor_sequence']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sequence']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='risk_evaluation_line_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_assessment_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='contributing_factor']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='current_control_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='control_effectiveness_id']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_assessment_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='document_attachment_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="risk_identification_form_view" model="ir.ui.view">
+        <field name="name">oi_risk_management.risk.view.form.</field>
+        <field name="model">oi_risk_management.risk</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="risk_universe_update.risk_identification_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_risk_prepare']" position="replace">
+                <button name="action_risk_prepare" type="object" string="Prepare"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', ('risk_state', '!=', 'draft'), ('can_edit', '!=', False)]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_risk_reviewed']" position="replace">
+                <button name="action_risk_reviewed" type="object" string="Reviewed"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', ('risk_state', '!=', 'prepared'), ('can_edit', '!=', False)]}"/>
+                <button name="action_risk_revert" type="object"
+
+                        string="Revert" class="oe_highlight"
+                        attrs="{'invisible': [('risk_state', 'not in', ['prepared', 'reviewed'])]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_risk_approved']" position="replace">
+                <button name="action_risk_approved" type="object" string="Approved"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', ('risk_state', '!=', 'reviewed'), ('can_edit', '!=', False)]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_risk_rejected']" position="replace">
+                <button name="action_risk_rejected" type="object" string="Rejected"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', ('risk_state', '!=', 'reviewed'), ('can_edit', '!=', False)]}"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_records" type="object"
+                            class="oe_stat_button" icon="fa-book">Revert Records
+                    </button>
+                </div>
+                <group>
+                    <group>
+                        <field name="can_edit" invisible="1"/>
+                        <field name="preparer_id" widget="many2one_avatar_user"/>
+                        <field name="reviewer_id" widget="many2one_avatar_user"/>
+                        <field name="approver_id" widget="many2one_avatar_user"/>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='factor_sequence']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='uncertainty']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='consequences']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='main_cause']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='sequence']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='activity_id']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <!--            <xpath expr="//field[@name='complaince_id']" position="attributes">-->
+            <!--                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>-->
+            <!--            </xpath>-->
+            <xpath expr="//field[@name='department_id']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='owner_id']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='risk_type_id']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="risk_form" model="ir.ui.view">
+        <field name="name">oi_risk_management.risk.view.form.</field>
+        <field name="model">oi_risk_management.risk</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="oi_risk_management.risk_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_risk_prepare']" position="replace">
+                <button name="action_risk_prepare" type="object" string="Prepare"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', ('risk_state', '!=', 'draft'), ('can_edit', '!=', False)]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_risk_reviewed']" position="replace">
+                <button name="action_risk_reviewed" type="object" string="Reviewed"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', ('risk_state', '!=', 'prepared'), ('can_edit', '!=', False)]}"/>
+                <button name="action_risk_revert" type="object"
+
+                        string="Revert" class="oe_highlight"
+                        attrs="{'invisible': [('risk_state', 'not in', ['prepared', 'reviewed'])]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_risk_approved']" position="replace">
+                <button name="action_risk_approved" type="object" string="Approved"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', ('risk_state', '!=', 'reviewed'), ('can_edit', '!=', False)]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_risk_rejected']" position="replace">
+                <button name="action_risk_rejected" type="object" string="Rejected"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', ('risk_state', '!=', 'reviewed'), ('can_edit', '!=', False)]}"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_records" type="object"
+                        class="oe_stat_button" icon="fa-book">Revert Records
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="can_edit" invisible="1"/>
+                <field name="preparer_id" widget="many2one_avatar_user"/>
+                <field name="reviewer_id" widget="many2one_avatar_user"/>
+                <field name="approver_id" widget="many2one_avatar_user"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Reverts/ Review Notes">
+                    <group>
+                        <field name="feedback" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='main_risk_total_score']" position="after">
+                <field name="can_edit" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='sequence']" position="attributes">
+                <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='uncertainty']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='main_cause']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='consequences']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='activity_id']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='owner_id']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='risk_analysis_line_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='risk_evaluation_line_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('risk_state','not in',['draft']),('can_edit', '=', False)]}
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

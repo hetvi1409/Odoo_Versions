@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <record id="view_asset_verification_import_wizard" model="ir.ui.view">
+        <field name="name">asset.import.wizard.form</field>
+        <field name="model">asset.import.wizard</field>
+        <field name="inherit_id" ref="asset_import.view_asset_import_wizard"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='file']" position="after">
+                <button name="action_download_template" type="object" string="Download Template" class="btn btn-outline-primary my8"
+                aria-label="Download" invisible="not context.get('show_download_template')">
+                    <i class="fa fa-download" aria-hidden="true"> Download Template </i>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='file']" position="attributes">
+                <attribute name="required">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+
+
+
+    <record id="action_asset_verification_import" model="ir.actions.act_window">
+        <field name="name">Import Asset Verification History</field>
+        <field name="res_model">asset.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'show_download_template': True}</field>
+    </record>
+
+
+
+    <menuitem id="asset_import.menu_asset_verification_import" name="Import Asset Verification"
+              parent="asset_import.menu_asset_import" action="asset_verification_import.action_asset_verification_import" sequence="14"/>
+
+</odoo>

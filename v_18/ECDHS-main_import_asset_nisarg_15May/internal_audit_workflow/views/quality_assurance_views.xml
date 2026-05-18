@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="quality_assurance_form" model="ir.ui.view">
+        <field name="name">quality_assurance_form</field>
+        <field name="model">quality.assurance</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="internal_audit_management.quality_assurance_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="replace">
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}" statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>
+                    <button name="action_2nd_review" type="object" string="Prepare"
+                            class="oe_highlight"
+                            invisible="state != 'preparer'"/>
+                    <button name="action_approve" type="object" string="Reviewed"
+                            class="oe_highlight"
+                            invisible="state != 'second_reviewer'"/>
+                    <button name="action_reject" type="object"
+                            invisible="state != 'second_reviewer'"
+                            string="Reject" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="state != 'second_reviewer'"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_update" type="object"
+                            invisible="state != 'reverted'"
+                            string="Updated" class="oe_highlight"/>
+                    <button name="action_print_quality_assurance" type="object" string="Print" class="oe_highlight"/>
+                </header>
+            </xpath>
+            <xpath expr="//table" position="replace">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                        </td>
+                        <td>
+                            <group><field name="subject" readonly="False"/></group>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <group><field name="assurance_number"/></group>
+                        </td>
+                        <td>
+                            Period:
+                            <field name="period_start"/> -->
+                            <field name="period_end"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <group>
+                                <field name="preparer_id"/>
+                            </group>
+                        </td>
+                        <td>
+                            <group>
+                                <field name="reviewer_id"/>
+                            </group>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <group>
+                                <field name="approver_id"/>
+                            </group>
+                        </td>
+                    </tr>
+                </table>
+            </xpath>
+        </field>
+    </record>
+</odoo>

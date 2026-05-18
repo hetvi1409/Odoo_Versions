@@ -1,0 +1,34 @@
+<template>
+    <div t-name="SETACurrentDimensionItem" class="seta_current_dimension_item seta_item seta_btn seta_btn_wlb seta_w100 seta_rd8 active" t-att-data-id="id" t-att-data-name="name">
+        <span t-if="field_type != 'date' &amp;&amp; field_type != 'datetime'" class="material-icons-outlined seta_btn_icon_left">
+            <t t-esc="field_icon"/>
+        </span>
+        <!-- Date Format -->
+        <div t-if="field_type == 'date' || field_type == 'datetime'" class="seta_dropdown seta_block_left dropdown seta_inline seta_inherit">
+            <button class="seta_btn seta_m0 seta_py0 seta_pl0 seta_btn_wlp dropdown-toggle seta_inherit seta_no_border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <t t-esc="field_format"/>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item seta_select_format" data-format="day" t-att-data-dimension="dimension_id">Date</a>
+                <a class="dropdown-item seta_select_format" data-format="week" t-att-data-dimension="dimension_id">Week</a>
+                <a class="dropdown-item seta_select_format" data-format="month" t-att-data-dimension="dimension_id">Month</a>
+                <a class="dropdown-item seta_select_format" data-format="quarter" t-att-data-dimension="dimension_id">Quarter</a>
+                <a class="dropdown-item seta_select_format" data-format="year" t-att-data-dimension="dimension_id">Year</a>
+            </div>
+        </div>
+        <span class="seta_text seta_block_left" t-att-title="name">
+            <t t-esc="name"/>
+        </span>
+        <span t-att-data-id="id" t-att-data-dimension="dimension_id" class="seta_remove_dimension_item material-icons seta_btn_icon_right seta_hover_highlight" t-esc="'highlight_off'"/>
+        <div style="clear:both"/>
+    </div>
+    <div t-name="SETASelectDimensionItem" class="seta_select_dimension_item seta_item seta_btn seta_btn_wlb seta_w100 seta_rd" t-att-data-id="id" t-att-data-name="name">
+        <span class="material-icons-outlined seta_btn_icon_left">
+            <t t-esc="field_icon"/>
+        </span>
+        <span class="seta_text seta_block_left" t-att-title="name">
+            <t t-esc="name"/>
+        </span>
+        <div style="clear:both"/>
+    </div>
+</template>

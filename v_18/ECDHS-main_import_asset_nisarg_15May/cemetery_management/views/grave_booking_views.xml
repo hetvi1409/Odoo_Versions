@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="grave_booking_view_form" model="ir.ui.view">
+        <field name="name">grave.booking.view.form</field>
+        <field name="model">grave.booking</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_submit" string="Submit" type="object"
+                            class="btn btn-primary" invisible="state != 'new'"/>
+                    <button name="action_verify" string="Verify" type="object"
+                            groups="cemetery_management.group_cemetery_admin"
+                            class="btn btn-primary"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_create_quote" string="Create Quotation"
+                            type="object"
+                            groups="cemetery_management.group_cemetery_admin"
+                            class="btn btn-primary"
+                            invisible="state != 'allocation'"/>
+                    <button name="action_approve" string="Approve"
+                            type="object"
+                            groups="cemetery_management.group_cemetery_office_manager"
+                            class="btn btn-primary"
+                            invisible="state != 'quotation' or invoice_paid_state != 'paid'"/>
+                    <button name="action_reject" string="Reject"
+                            type="object"
+                            groups="cemetery_management.group_cemetery_office_manager"
+                            class="btn btn-primary"
+                            invisible="state != 'quotation' or invoice_paid_state != 'paid'"/>
+                    <button name="action_quotation_send" string="Send Quotation"
+                            type="object"
+                            groups="cemetery_management.group_cemetery_admin"
+                            class="btn btn-secondary"
+                            invisible="state != 'quotation'"/>
+                    <button name="action_invoice_send" string="Send Invoices"
+                            type="object"
+                            groups="cemetery_management.group_cemetery_admin"
+                            class="btn btn-secondary"
+                            invisible="state != 'quotation' or invoice_count == False"/>
+                    <button name="action_allocation" string="Allocation"
+                            type="object"
+                            groups="cemetery_management.group_cemetery_admin"
+                            class="btn btn-primary"
+                            invisible="state != 'verified'"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Not Paid"
+                            bg_color="text-bg-danger"
+                            invisible="invoice_paid_state != 'not_paid' or invoice_count == False"/>
+                    <widget name="web_ribbon" title="Paid"
+                            bg_color="text-bg-success"
+                            invisible="invoice_paid_state != 'paid' or invoice_count == False"/>
+                    <widget name="web_ribbon" title="Partially"
+                            bg_color="text-bg-warning"
+                            invisible="invoice_paid_state != 'partially' or invoice_count == False"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_sale"
+                                icon="fa-pencil-square-o"
+                                invisible="sale_order_id == False">
+                            <field string="Quotation" name="sale_order_id"
+                                   widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_grave"
+                                icon="fa-pencil-square-o"
+                                invisible="allocated_grave_id == False">
+                            Grave
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_invoice"
+                                icon="fa-pencil-square-o"
+                                invisible="invoice_count == False">
+                            <field string="Invoice" name="invoice_count"
+                                   widget="statinfo"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" readonly="True"
+                                   placeholder="Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="type" required="True" widget="radio"
+                               options="{'horizontal': True}" invisible="0"/>
+                        <field name="date"/>
+                        <field name="company_id"/>
+                        <field name="sale_order_id" invisible="1"/>
+                        <field name="allocated_grave_id" invisible="1"/>
+                        <field name="invoice_count" invisible="1"/>
+                        <field name="invoice_paid_state" invisible="1"/>
+                    </group>
+                    <group string="Applicant’s Details">
+                        <group>
+                            <field name="applicant_name"/>
+                            <field name="applicant_email"/>
+                            <field name="applicant_phone"/>
+                        </group>
+                        <group>
+                            <label for="street" string="Address"/>
+                            <div class="o_address_format">
+                                <field name="street"
+                                       placeholder="Street..."
+                                       class="o_address_street"/>
+                                <field name="street2"
+                                       placeholder="Street 2..."
+                                       class="o_address_street"/>
+                                <field name="ward_id"
+                                       placeholder="Ward..."
+                                       class="o_address_street"/>
+                                <field name="city" placeholder="City"
+                                       class="o_address_city"/>
+                                <field name="applicant_municipality_id"
+                                       placeholder="Municipality"
+                                       class="o_address_city"
+                                       options='{"no_open": True}'/>
+                                <field name="province_id"
+                                       class="o_address_state"
+                                       placeholder="Province"
+                                       options='{"no_open": True}'/>
+                                <field name="zip" placeholder="Postal Code"
+                                       class="o_address_zip"/>
+                                <field name="country_id"
+                                       placeholder="Country"
+                                       class="o_address_country"
+                                       options='{"no_open": True}'/>
+                            </div>
+                        </group>
+
+                    </group>
+
+                    <notebook>
+                        <page name="plot" string="Plot requirements">
+                            <group>
+                                <group>
+                                    <field name="interment_type"/>
+                                    <field name="time_of_use" widget="radio"
+                                           options="{'horizontal': True}"/>
+
+                                </group>
+                                <group>
+                                    <field name="grave_number"
+                                           />
+                                    <field name="attended_by" widget="radio"
+                                           options="{'horizontal': True}"
+                                           invisible="interment_type != 'cremation'"/>
+                                    <field name="no_attendees"
+                                           invisible="(interment_type not in ['cremation', 'burial']) or (attended_by != 'family')"/>
+                                </group>
+                            </group>
+                            <group string="Documents">
+                                <group>
+                                    <field name="burial_order"/>
+                                    <field name="informant_id_card"/>
+                                </group>
+                                <group>
+                                    <field name="id_card"/>
+                                    <field name="death_certificate"/>
+                                </group>
+                            </group>
+                            <group string="Cemetery Details">
+                                <group>
+                                    <field name="municipality_id"/>
+                                    <field name="field"/>
+                                    <field name="category" widget="radio"
+                                           options="{'horizontal': True}"/>
+                                    <field name="other_specification"/>
+                                </group>
+                                <group>
+                                    <field name="cemetery_id"/>
+                                    <field name="section_id"/>
+                                    <field name="row"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Authorisation" name="Authorisation">
+                            <group>
+                                <group>
+                                    <field name="is_same"/>
+                                    <field name="authorisation_name"/>
+                                    <field name="authorisation_phone"/>
+                                    <field name="authorisation_email"/>
+                                </group>
+                                <group>
+                                    <label for="street" string="Address"/>
+                                    <div class="o_address_format">
+                                        <field name="authorisation_street"
+                                               placeholder="Street..."
+                                               class="o_address_street"/>
+                                        <field name="authorisation_street2"
+                                               placeholder="Street 2..."
+                                               class="o_address_street"/>
+                                        <field name="authorisation_city"
+                                               placeholder="City"
+                                               class="o_address_city"/>
+                                        <field name="authorisation_province_id"
+                                               class="o_address_state"
+                                               placeholder="Province"
+                                               options='{"no_open": True}'/>
+
+                                        <field name="authorisation_municipality_id"
+                                               placeholder="Municipality"
+                                               class="o_address_city"
+                                               options='{"no_open": True}'/>
+
+                                        <field name="authorisation_zip"
+                                               placeholder="Postal Code"
+                                               class="o_address_zip"/>
+                                        <field name="authorisation_country_id"
+                                               placeholder="Country"
+                                               class="o_address_country"
+                                               options='{"no_open": True}'/>
+                                    </div>
+                                </group>
+
+                            </group>
+                        </page>
+                        <page string="Parties with right of burial"
+                              name="parties">
+                            <field name="party_ids">
+                                <list>
+                                    <field name="first_name"/>
+                                    <field name="surname"/>
+                                    <field name="date_of_birth"/>
+                                    <field name="street"/>
+                                    <field name="cemetery_id"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="first_name"/>
+                                            <field name="surname"/>
+                                            <field name="date_of_birth"/>
+                                            <field name="cemetery_id"/>
+                                        </group>
+                                        <group>
+                                            <label for="street"
+                                                   string="Address"/>
+                                            <div class="o_address_format">
+                                                <field name="street"
+                                                       placeholder="Street..."
+                                                       class="o_address_street"/>
+                                                <field name="street2"
+                                                       placeholder="Street 2..."
+                                                       class="o_address_street"/>
+                                                <field name="city"
+                                                       placeholder="City"
+                                                       class="o_address_city"/>
+                                                <field name="municipality_id"
+                                                       placeholder="Municipality"
+                                                       class="o_address_city"
+                                                       options='{"no_open": True}'/>
+                                                <field name="province_id"
+                                                       class="o_address_state"
+                                                       placeholder="Province"
+                                                       options='{"no_open": True}'/>
+                                                <field name="zip"
+                                                       placeholder="Postal Code"
+                                                       class="o_address_zip"/>
+                                                <field name="country_id"
+                                                       placeholder="Country"
+                                                       class="o_address_country"
+                                                       options='{"no_open": True}'/>
+                                            </div>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Cemetery administration"
+                              invisible="state == 'new'">
+                            <field name="grave_administrator_ids">
+                                <list>
+                                    <field name="number"/>
+                                    <field name="document"/>
+                                    <field name="section_id"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <field name="number"/>
+                                        <field name="document"/>
+                                        <field name="section_id"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Office Manager declaration" invisible="state not in ('approved', 'rejected')">
+                            <group invisible="state not in ('approved')">
+                                <group>
+                                    <field name="approved_by_id"/>
+                                </group>
+                                <group>
+                                    <field name="approved_date"/>
+                                </group>
+                            </group>
+                            <group invisible="state not in ('rejected')">
+                                <group>
+                                    <field name="rejected_by_id"/>
+                                </group>
+                                <group>
+                                    <field name="rejected_date"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="grave_booking_view_tree" model="ir.ui.view">
+        <field name="name">grave.booking.view.list</field>
+        <field name="model">grave.booking</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="applicant_name"/>
+                <field name="municipality_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="grave_booking_action" model="ir.actions.act_window">
+        <field name="name">Grave Booking</field>
+        <field name="res_model">grave.booking</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="xml">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new Grave Booking
+            </p>
+        </field>
+    </record>
+<!--    <record id="grave_booking_purchase_action" model="ir.actions.act_window">-->
+<!--        <field name="name">Grave Purchase</field>-->
+<!--        <field name="res_model">grave.booking</field>-->
+<!--        <field name="view_mode">tree,form</field>-->
+<!--        <field name="domain">[('type', '=', 'purchase')]</field>-->
+<!--        <field name="context">{'default_type': 'purchase'}</field>-->
+<!--        <field name="help" type="xml">-->
+<!--            <p class="o_view_nocontent_smiling_face">-->
+<!--                Click to create a new Grave Purchase-->
+<!--            </p>-->
+<!--        </field>-->
+<!--    </record>-->
+<!--    <record id="grave_booking_lease_action" model="ir.actions.act_window">-->
+<!--        <field name="name">Grave Lease</field>-->
+<!--        <field name="res_model">grave.booking</field>-->
+<!--        <field name="view_mode">tree,form</field>-->
+<!--        <field name="domain">[('type', '=', 'lease')]</field>-->
+<!--        <field name="context">{'default_type': 'lease'}</field>-->
+<!--        <field name="help" type="xml">-->
+<!--            <p class="o_view_nocontent_smiling_face">-->
+<!--                Click to create a new Grave Lease-->
+<!--            </p>-->
+<!--        </field>-->
+<!--    </record>-->
+    <record id="grave_allocation_view_form" model="ir.ui.view">
+        <field name="name">grave.allocation.view.form</field>
+        <field name="model">grave.allocation</field>
+        <field name="arch" type="xml">
+            <form string="allocation">
+                <group>
+                    <group>
+                        <field name="cemetery_id"/>
+                        <field name="booking_id"/>
+                        <field name="type" widget="radio"
+                               options="{'horizontal': True}"/>
+
+                    </group>
+                    <group>
+                        <field name="section_id"/>
+                        <field name="grave_id"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_submit" string="Confirm" type="object"
+                            default_focus="1" class="oe_highlight"/>
+
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

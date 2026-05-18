@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="Dashboard">
+        <div class="oh_dashboards">
+            <h1>Dashboard</h1>
+            <div class="container-fluid my-5 o_hr_dashboard">
+                <t t-call="AssetTable"/>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="AssetTable">
+        <div class="row mt-5 px-4" id="graphs" t-ref="root">
+
+            <!-- 1. Movable Asset Table -->
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4 d-flex">
+                <div class="chart-container card-shadow o_dashboard_tile">
+                    <div class="o_tile_header bg-view">
+                        <h2>Movable Asset</h2>
+                    </div>
+                    <hr/>
+                    <div class="o_tile_body">
+                        <table class="table table-hover" id="movable_asset">
+                            <thead>
+                                <tr>
+                                    <th>Classification Name</th>
+                                    <th>Asset Count</th>
+                                    <th>Carrying value</th>
+                                </tr>
+                            </thead>
+                            <tbody class="storage"/>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Movable Asset Chart -->
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4 d-flex">
+                <div class="chart-container card-shadow o_dashboard_tile">
+                    <div class="o_tile_header bg-view d-flex justify-content-between">
+                        <h2>Movable Asset</h2>
+                        <table class="graph_details_table" id="pro_info">
+                            <tr>
+                                <th>Classification Name</th>
+                                <th>Carrying value</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr/>
+                    <div class="o_tile_body">
+                        <canvas id="canvas_movable" height="500px"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Overall Verification Table -->
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4 d-flex">
+                <div class="chart-container card-shadow o_dashboard_tile">
+                    <div class="o_tile_header bg-view">
+                        <h2>Overall Asset Verification Progress – Movable Assets</h2>
+                    </div>
+                    <hr/>
+                    <div class="o_tile_body">
+                        <table class="table table-hover" id="overall_verification">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Classification Name</th>
+                                    <th colspan="2">Not Verified</th>
+                                    <th colspan="2">Verified</th>
+                                    <th rowspan="2">Total Asset Count</th>
+                                    <th rowspan="2">Total Carry Value</th>
+                                </tr>
+                                <tr>
+                                    <th>Asset Count</th>
+                                    <th>Carry Value</th>
+                                    <th>Asset Count</th>
+                                    <th>Carry Value</th>
+                                </tr>
+                            </thead>
+                            <tbody class="storage"/>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Verification by Number -->
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4 d-flex">
+                <div class="chart-container card-shadow o_dashboard_tile">
+                    <div class="o_tile_header bg-view d-flex justify-content-between">
+                        <h2>Overall Asset verification progress by number</h2>
+                        <table class="graph_details_table" id="table_asset_verification_number">
+                            <!-- <tr><th>Key</th><th>Value</th></tr> -->
+                        </table>
+                    </div>
+                    <hr/>
+                    <div class="o_tile_body">
+                        <canvas id="asset_verification_number" height="500px"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Verification by Carrying Value -->
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4 d-flex">
+                <div class="chart-container card-shadow o_dashboard_tile">
+                    <div class="o_tile_header bg-view d-flex justify-content-between">
+                        <h2>Overall Asset verification progress by carrying value</h2>
+                        <table class="graph_details_table" id="table_asset_verification_carrying_value">
+                            <!-- <tr><th>Key</th><th>Value</th></tr> -->
+                        </table>
+                    </div>
+                    <hr/>
+                    <div class="o_tile_body">
+                        <canvas id="asset_verification_carrying_value" height="500px"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Condition for Verified Asset -->
+			<!-- REMAINING -->
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4 d-flex">
+                <div class="chart-container card-shadow o_dashboard_tile">
+                    <div class="o_tile_header bg-view d-flex justify-content-between">
+                        <h2>Condition for verified asset</h2>
+                        <table class="graph_details_table" id="table_condition_asset">
+                            <!-- <tr><th>Key</th><th>Value</th></tr> -->
+                        </table>
+                    </div>
+                    <hr/>
+                    <div class="o_tile_body">
+                        <canvas id="condition_asset" height="500px"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. Asset Verified Not in FAR -->
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4 d-flex">
+                <div class="chart-container card-shadow o_dashboard_tile">
+                    <div class="o_tile_header bg-view">
+                        <h2>Asset verified not in the fixed asset register</h2>
+                    </div>
+                    <hr/>
+                    <div class="o_tile_body">
+                        <table id="table_asset_verified">
+                            <tr><th>Type</th><th>Asset Count</th></tr>
+                        </table>
+                        <canvas id="graph_asset_verified" height="500px"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Asset Condition -->
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4 d-flex">
+                <div class="chart-container card-shadow o_dashboard_tile">
+                    <div class="o_tile_header bg-view">
+                        <h2>Latest Asset Condition</h2>
+                    </div>
+                    <hr/>
+                    <div class="o_tile_body">
+                        <table id="table_asset_verified_condition">
+                            <tr><th>Type</th><th>Asset Count</th></tr>
+                        </table>
+                        <canvas id="graph_asset_verified_condition" height="500px"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. Verification by Classification -->
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4 d-flex">
+                <div class="chart-container card-shadow o_dashboard_tile">
+                    <div class="o_tile_header bg-view">
+                        <h2>Asset Verification progress by classification</h2>
+                    </div>
+                    <hr/>
+                    <div class="o_tile_body">
+                        <table id="table_asset_verification_progress">
+                            <tr>
+                                <th>Type</th>
+                                <th>Asset Count</th>
+                                <th>Asset Verification Count</th>
+                            </tr>
+                        </table>
+                        <canvas id="graph_asset_verification_progress" height="500px"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. Verification by Location -->
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4 d-flex">
+                <div class="chart-container card-shadow o_dashboard_tile">
+                    <div class="o_tile_header bg-view">
+                        <h2>Asset Verification progress by location</h2>
+                    </div>
+                    <hr/>
+                    <div class="o_tile_body">
+                        <table id="table_asset_verification_location">
+                            <tr>
+                                <th>Type</th>
+                                <th>Asset Count</th>
+                                <th>Asset Verification Count</th>
+                            </tr>
+                        </table>
+                        <canvas id="graph_asset_verification_location" height="500px"/>
+                    </div>
+                </div>
+            </div>
+
+			<!-- 11. Minor Assets & Major Assets -->
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4 d-flex">
+                <div class="chart-container card-shadow o_dashboard_tile">
+                    <div class="o_tile_header bg-view d-flex justify-content-between">
+                        <h2>Asset Type</h2>
+                        <table class="graph_details_table" id="table_condition_asset">
+                            <!-- <tr><th>Key</th><th>Value</th></tr> -->
+                        </table>
+                    </div>
+                    <hr/>
+                    <div class="o_tile_body">
+                        <canvas id="asset_type" height="500px"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </t>
+</templates>
+
+
+
+<!--
+<templates id="template" xml:space="preserve">
+	<t t-name="Dashboard">
+		<div class="oh_dashboards">
+			<h1>Dashboard</h1>
+            <div class="container-fluid my-5 o_hr_dashboard">
+				<t t-call="AssetTable"/>
+			</div>
+		</div>
+	</t>
+    <t t-name="AssetTable" >
+		<div class="row mt-5 px-4" id="graphs" t-ref="root">
+			<div class="year_to_date_graph_div col-sm-12 col-md-6 my-4">
+				<div class="chart-container card-shadow" id="tiles">
+					<div style="height: 20px; max-height: 20px">
+						<h2>Movable Asset</h2>
+					</div>
+                    <hr/>
+                    <table style="margin-top: 30px;" class="table table-hover"
+                           id="movable_asset" >
+						<thead>
+							<tr>
+								<th>Classification Name</th>
+                                <th>Asset Count</th>
+                                <th>Carrying value</th>
+							</tr>
+						</thead>
+                        <tbody class="storage"></tbody>
+					</table>
+				</div>
+			</div>
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4">
+				<div class="chart-container card-shadow" id="tiles">
+					<div style="height: 15px; max-height: 15px;">
+						<h2>Movable Asset</h2>
+                        <table class="graph_details_table" id="pro_info">
+							<tr>
+								<th>Classification Name</th>
+                                <th>Carrying value</th>
+							</tr>
+						</table>
+					</div>
+                    <hr/>
+                    <div class="graph_canvas" style="margin-top: 30px;">
+						<canvas id="canvas_movable" height="500px"
+                                width="150px"/>
+					</div>
+				</div>
+			</div>
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4">
+				<div class="chart-container card-shadow" id="tiles">
+					<div style="height: 20px; max-height: 20px">
+						<h2>Overall Asset Verification Progress – Movable Assets</h2>
+					</div>
+                    <hr/>
+                    <table style="margin-top: 30px;" class="table table-hover"
+                           id="overall_verification">
+						<thead>
+							<tr>
+								<th rowspan="2">
+									Classification Name
+								</th>
+                                <th colspan="2">
+									Not Verified
+								</th>
+                                <th colspan="2">
+									Verified
+								</th>
+                                <th rowspan="2">
+									Total Asset Count
+								</th>
+                                <th rowspan="2">Total Carry Value
+								</th>
+							</tr>
+                            <tr>
+								<th>Asset Count
+								</th>
+                                <th>Carry Value</th>
+                                <th>Asset Count
+								</th>
+                                <th>Carry Value</th>
+							</tr>
+						</thead>
+                        <tbody class="storage"></tbody>
+					</table>
+				</div>
+			</div>
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4">
+				<div class="chart-container card-shadow" id="tiles">
+					<div style="height: 20px; max-height: 20px;"
+                         class="d-flex justify-content-between align-items-center">
+						<h2>Overall Asset verification progress by number</h2>
+                        <table class="graph_details_table"
+                               id="table_asset_verification_number">
+							<tr>
+								<th>key</th>
+                                <th>Value</th>
+							</tr>
+						</table>
+					</div>
+                    <hr/>
+                    <div class="graph_canvas" style="margin-top: 30px;">
+						<canvas id="asset_verification_number" height="500px"
+                                width="150px"/>
+					</div>
+				</div>
+			</div>
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4">
+				<div class="chart-container card-shadow" id="tiles">
+					<div style="height: 20px; max-height: 20px;"
+                         class="d-flex justify-content-between align-items-center">
+						<h2>Overall Asset verification progress by carrying value</h2>
+                        <table class="graph_details_table"
+                               id="table_asset_verification_carrying_value">
+							<tr>
+								<th>Key</th>
+                                <th>value</th>
+							</tr>
+						</table>
+					</div>
+                    <hr/>
+                    <div class="graph_canvas" style="margin-top: 30px;">
+						<canvas id="asset_verification_carrying_value" height="500px"
+                                width="150px"/>
+					</div>
+				</div>
+			</div>
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4">
+				<div class="chart-container card-shadow" id="tiles">
+					<div style="height: 20px; max-height: 20px;"
+                         class="d-flex justify-content-between align-items-center">
+						<h2>Condition for verified asset</h2>
+                        <table class="graph_details_table"
+                               id="table_condition_asset">
+							<tr>
+								<th>Key</th>
+                                <th>value</th>
+							</tr>
+						</table>
+					</div>
+                    <hr/>
+                    <div class="graph_canvas" style="margin-top: 30px;">
+						<canvas id="condition_asset" height="500px"
+                                width="150px"/>
+					</div>
+				</div>
+			</div>
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4">
+				<div class="chart-container card-shadow" id="tiles">
+					<div style="height: 15px; max-height: 15px;">
+						<h2>Asset verified not in the fixed asset register</h2>
+                        <table class="table_asset_verified" id="table_asset_verified">
+							<tr>
+								<th>Type</th>
+                                <th>Asset Count</th>
+							</tr>
+						</table>
+					</div>
+                    <hr/>
+                    <div class="graph_canvas" style="margin-top: 30px;">
+						<canvas id="graph_asset_verified" height="500px"
+                                width="150px"/>
+					</div>
+				</div>
+			</div>
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4">
+				<div class="chart-container card-shadow" id="tiles">
+					<div style="height: 15px; max-height: 15px;">
+						<h2>Asset Condition</h2>
+                        <table class="table_asset_verified_condition" id="table_asset_verified_condition">
+							<tr>
+								<th>Type</th>
+                                <th>Asset Count</th>
+							</tr>
+						</table>
+					</div>
+                    <hr/>
+                    <div class="graph_canvas" style="margin-top: 30px;">
+						<canvas id="graph_asset_verified_condition" height="500px"
+                                width="150px"/>
+					</div>
+				</div>
+			</div>
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4">
+				<div class="chart-container card-shadow" id="tiles">
+					<div style="height: 15px; max-height: 15px;">
+						<h2>Asset Verification progress by classification</h2>
+                        <table class="table_asset_verification_progress" id="table_asset_verification_progress">
+							<tr>
+								<th>Type</th>
+                                <th>Asset Count</th>
+                                <th>Asset Verification Count</th>
+							</tr>
+						</table>
+					</div>
+                    <hr/>
+                    <div class="graph_canvas" style="margin-top: 30px;">
+						<canvas id="graph_asset_verification_progress" height="500px"
+                                width="150px"/>
+					</div>
+				</div>
+			</div>
+            <div class="year_to_date_graph_div col-sm-12 col-md-6 my-4">
+				<div class="chart-container card-shadow" id="tiles">
+					<div style="height: 15px; max-height: 15px;">
+						<h2>Asset Verification progress by location</h2>
+                        <table class="table_asset_verification_location" id="table_asset_verification_location">
+							<tr>
+								<th>Type</th>
+                                <th>Asset Count</th>
+                                <th>Asset Verification Count</th>
+							</tr>
+						</table>
+					</div>
+                    <hr/>
+                    <div class="graph_canvas" style="margin-top: 30px;">
+						<canvas id="graph_asset_verification_location" height="500px"
+                                width="150px"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</t>
+</templates> -->

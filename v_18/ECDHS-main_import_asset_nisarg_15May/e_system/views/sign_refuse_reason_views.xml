@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add Refuse Reason column to Activity Logs inline list in sign.request form -->
+    <record id="sign_request_view_form_refuse_reason" model="ir.ui.view">
+        <field name="name">sign.request.form.refuse.reason</field>
+        <field name="model">sign.request</field>
+        <field name="inherit_id" ref="sign.sign_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='activity_logs']//field[@name='sign_log_ids']//field[@name='ip']" position="after">
+                <field name="refusal_reason" string="Refuse Reason" optional="show" class="o_refuse_reason_col"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

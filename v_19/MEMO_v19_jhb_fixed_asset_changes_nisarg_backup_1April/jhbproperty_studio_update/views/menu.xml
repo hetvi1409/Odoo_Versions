@@ -1,0 +1,852 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="accountant.menu_accounting" name="Fixed Assets"
+              groups="asset_impairment.group_asset_impairment_manager,asset_impairment.group_asset_impairment_user,asset_approval.group_asset_manager,client_enquiry.group_asset_evaluator,account.group_account_invoice,asset_registry.department_users_access,asset_registry.finance_managers_access,itsys_real_estate_approval.group_property_approval_manager,account.group_account_readonly,asset_verification.group_staging_approval_manager"
+              web_icon="accountant,static/description/icon.png"
+              sequence="60"/>
+
+    <menuitem id="asset_verification.menu_asset_verification_job_location" name="Asset Locations"
+              parent="accountant.menu_accounting" action="asset_verification.action_asset_verification_job_location"
+              sequence="11"/>
+
+    <menuitem id="asset_dashboard.asset_dashboard_menu" name="Overview"
+              action="asset_dashboard.asset_dashboard_action"
+              parent="accountant.menu_accounting" sequence="2"/>
+    <menuitem parent="accountant.menu_accounting" id="account_asset.menu_action_account_asset_form"
+              action="account_asset.action_account_asset_form" sequence="1" groups="account.group_account_readonly"/>
+    <menuitem parent="accountant.menu_accounting"
+              id="asset_registry.menu_asset_category_action_" name="Asset Category"
+              action="asset_registry.asset_category_action" sequence="3"/>
+    <menuitem id="fixed_assets_verification" name="Verification"
+              parent="accountant.menu_accounting" sequence="4"/>
+
+    <menuitem id="asset_verification.product_detail_search_barcode_menu" name="Asset Verification"
+              action="asset_verification.account_asset_action_barcode_search"
+              parent="jhbproperty_studio_update.fixed_assets_verification" sequence="0"/>
+    <menuitem id="asset_verification.menu_asset_verification_job" name="Verification Jobs"
+              action="asset_verification.action_asset_verification_job"
+              parent="jhbproperty_studio_update.fixed_assets_verification" sequence="1"/>
+    <menuitem id="asset_verification.menu_asset_verification_staging" name="Unverified Assets"
+              action="asset_verification.action_asset_verification_staging"
+              parent="jhbproperty_studio_update.fixed_assets_verification" sequence="2"/>
+    <record id="account.account_account_menu" model="ir.ui.menu">
+        <field name="sequence">4</field>
+    </record>
+    <record id="account.menu_finance_receivables" model="ir.ui.menu">
+        <field name="sequence">5</field>
+    </record>
+    <record id="account.menu_finance_payables" model="ir.ui.menu">
+        <field name="sequence">6</field>
+    </record>
+    <record id="account.menu_finance_configuration" model="ir.ui.menu">
+        <field name="sequence">9</field>
+    </record>
+    <record id="itsys_real_estate.menu_itsys_real_estate" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property</field>
+        <field name="parent_id" eval="False"/>
+        <field name="sequence">28</field>
+        <field name="web_icon">itsys_real_estate,static/description/icon.png</field>
+    </record>
+    <record id="menu_property" model="ir.ui.menu">
+        <field name="action" ref="base.action_open_website"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">9</field>
+    </record>
+    <record id="client_enquiry.property_land_process_menu" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property/Land Process</field>
+        <field name="parent_id" ref="jhbproperty_studio_update.menu_property"/>
+        <field name="sequence" eval="False"/>
+    </record>
+    <record id="client_enquiry.action_assessment_valuation_menu" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_assessment_valuation"/>
+        <field name="active" eval="True"/>
+        <field name="name">Valuation</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence">4</field>
+    </record>
+    <record id="client_enquiry.property_client_circulation_comments_menu" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_circulation_comments"/>
+        <field name="active" eval="True"/>
+        <field name="name">Circulation Comments</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence">3</field>
+    </record>
+    <record id="client_enquiry.client_circulation_comments_menu_valuation" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_circulation_comments_valuation"/>
+        <field name="active" eval="False"/>
+        <field name="name">Valuation</field>
+        <field name="parent_id" ref="client_enquiry.property_client_circulation_comments_menu"/>
+        <field name="sequence">5</field>
+    </record>
+    <record id="client_enquiry.client_enquiry_helpdesk_root_menu" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="group_ids"
+               eval="[(6, 0, [ref('client_enquiry.group_asset_evaluator'), ref('client_enquiry.group_cbo'), ref('client_enquiry.group_property_manager')])]"/>
+        <field name="name">CBO</field>
+        <field name="parent_id" eval="False"/>
+        <field name="sequence">52</field>
+        <field name="web_icon">client_enquiry,static/description/icon.png</field>
+    </record>
+    <record id="client_enquiry.enquiry_assessment_menu" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_enquiry_assessment"/>
+        <field name="active" eval="False"/>
+        <field name="name">All Assessment</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence">5</field>
+    </record>
+    <record id="client_enquiry.enquiry_assessment_my_property_menu" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_enquiry_assessment_my"/>
+        <field name="active" eval="False"/>
+        <field name="name">My Assessment</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence">3</field>
+    </record>
+    <record id="menu_real_estate_property" model="ir.ui.menu">
+        <field name="action" ref="base.action_open_website"/>
+        <field name="active" eval="False"/>
+        <field name="name">Property/Land Process</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">3</field>
+    </record>
+    <record id="client_enquiry.enquiry_assessment_property_menu" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_enquiry_assessment_property"/>
+        <field name="active" eval="True"/>
+        <field name="name">Assessment</field>
+        <field name="parent_id" ref="jhbproperty_studio_update.menu_real_estate_property"/>
+        <field name="sequence" eval="False"/>
+    </record>
+    <record id="client_enquiry.land_regularization" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_view_land_regularization"/>
+        <field name="active" eval="False"/>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_user')])]"/>
+        <field name="name">Land Regularization</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">5</field>
+    </record>
+    <record id="client_enquiry.property_client_transaction_menu" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_client_transaction"/>
+        <field name="active" eval="True"/>
+        <field name="name">Transaction</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence">5</field>
+    </record>
+    <record id="client_enquiry.property_eac_process_menu" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_eac_process"/>
+        <field name="active" eval="True"/>
+        <field name="name">EAC Process 2</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence">6</field>
+    </record>
+    <record id="client_enquiry.property_enquiry_assessment_property_menu" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_enquiry_assessment_property"/>
+        <field name="active" eval="False"/>
+        <field name="name">Assessment</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence">1</field>
+    </record>
+    <record id="client_enquiry.property_law_menu_matter" model="ir.ui.menu">
+        <field name="action" ref="law_firm_bits.action_view_all_matters"/>
+        <field name="active" eval="True"/>
+        <field name="name">Case Matter</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence">8</field>
+    </record>
+    <record id="client_enquiry.property_property_acquisition_menu" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_property_acquisition"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property Acquisition</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence">7</field>
+    </record>
+    <record id="folder_menu" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_studio_update.folder_action"/>
+        <field name="active" eval="True"/>
+        <field name="group_ids" eval="[(6, 0, [ref('documents.group_documents_manager')])]"/>
+        <field name="name">User Departments</field>
+        <field name="parent_id" ref="documents.Config"/>
+        <field name="sequence">1</field>
+    </record>
+    <record id="e_system.menu_memo_root" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="group_ids"
+               eval="[(6, 0, [ref('e_system.group_memo_approver'), ref('e_system.group_memo_quality_assurance'), ref('e_system.group_memo_recommenders'), ref('e_system.group_memo_requester'), ref('base.group_user')])]"/>
+        <field name="name">Memo/Report</field>
+        <field name="parent_id" eval="False"/>
+        <field name="sequence">10</field>
+        <field name="web_icon">e_system,static/description/icon.png</field>
+    </record>
+    <record id="itsys_real_estate.menu_settings" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_system')])]"/>
+        <field name="name">Settings</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">8</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_building_desc_form_action" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.building_desc_form_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property Description</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">16</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_building_list" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property Management</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence" eval="False"/>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_building_list_sub" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.building_act1"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property Asset Register</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_building_list"/>
+        <field name="sequence" eval="False"/>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_building_list_sub_unit" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.building_unit_act1"/>
+        <field name="active" eval="False"/>
+        <field name="name">Sub Property</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_building_list"/>
+        <field name="sequence">2</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_building_status_form_action" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.building_status_form_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property Status</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">17</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_building_type_form_action" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.building_type_form_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property Type</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">18</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_component_form_action" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.component_form_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Building Unit Component</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">22</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_contracts_main" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="False"/>
+        <field name="name">Leases</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">3</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_furniture_form" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.furniture_product"/>
+        <field name="active" eval="True"/>
+        <field name="group_ids" eval="[(6, 0, [ref('itsys_real_estate.group_real_estate_admin')])]"/>
+        <field name="name">Furnitures</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">19</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_installment_template_form_action" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.installment_template_form_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Installment Template</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence" eval="False"/>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_ownership_contract_form_action" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.ownership_contract_form_action"/>
+        <field name="active" eval="False"/>
+        <field name="name">Ownership Contract</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_contracts_main"/>
+        <field name="sequence">1</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_partners" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">Tenants</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">3</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_real_estate_config" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.action_real_estate_config"/>
+        <field name="active" eval="True"/>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_system')])]"/>
+        <field name="name">Settings</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">25</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_regions_form_action" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.regions_form_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Regions</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">20</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_rental_contract_form_action" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.rental_contract_form_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Portfolio Leases</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_contracts_main"/>
+        <field name="sequence">1</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_res_partners_owners" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.action_partner_form_owner"/>
+        <field name="active" eval="False"/>
+        <field name="name">Owners</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_partners"/>
+        <field name="sequence">100</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.menu_reservation_main" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate.unit_reservation_form_action"/>
+        <field name="active" eval="False"/>
+        <field name="name">Property Booking</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">3</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate.real_estate_report_menu" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="group_ids" eval="[(6, 0, [ref('itsys_real_estate.group_real_estate_reports')])]"/>
+        <field name="name">Reports</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">7</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate_conditional_assessment.menu_building_grading" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate_conditional_assessment.action_building_grading"/>
+        <field name="active" eval="True"/>
+        <field name="name">Building Grading</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">23</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate_conditional_assessment.menu_conditional_assessment" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate_conditional_assessment.action_conditional_assessment"/>
+        <field name="active" eval="True"/>
+        <field name="name">Conditional Assessments</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence">2</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="itsys_real_estate_conditional_assessment.menu_reason_inspection" model="ir.ui.menu">
+        <field name="action" ref="itsys_real_estate_conditional_assessment.action_reason_inspection"/>
+        <field name="active" eval="True"/>
+        <field name="name">Reason Inspections</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">21</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.land_process_menus" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_user'), ref('base.group_system')])]"/>
+        <field name="name">Land / Property Process</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">6</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.agreement_menu" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_land_process.action_instruction_request_view"/>
+        <field name="active" eval="True"/>
+        <field name="name">11. Agreement</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">10</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+
+    <record id="jhbproperty_land_process.assessment_menu" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_studio_update.all_assessment_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">2. Assessment</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">1</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.circulation_for_comment_menu" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">3. Circulation for Comment</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">2</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.committees_menu" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">6. Committees</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">5</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.conveyancing_menu" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_land_process.action_instruction_request_view"/>
+        <field name="active" eval="True"/>
+        <field name="name">14. Conveyancing</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">13</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.executive_adjudication_committee_menu" model="ir.ui.menu"
+    >
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">10. Executive Adjudication Committee</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">9</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.expropriation_menu" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_land_process.action_instruction_request_view"/>
+        <field name="active" eval="True"/>
+        <field name="name">13. Expropriation</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">12</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.instruction_request_menu" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_land_process.action_instruction_request_view"/>
+        <field name="active" eval="True"/>
+        <field name="name">1. Instruction/Request</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence" eval="False"/>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.offer_to_purchase_menu" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_land_process.action_instruction_request_view"/>
+        <field name="active" eval="True"/>
+        <field name="name">12. Offer to Purchase</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">11</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.ptob_menu" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_circulation_comments_ptob"/>
+        <field name="active" eval="True"/>
+        <field name="name">9. PTOB</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">8</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.section_79_notice_menu" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_land_process.action_instruction_request_view"/>
+        <field name="active" eval="True"/>
+        <field name="name">7. Section 79 Notice</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">6</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.tenant_contract_info_menu" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_land_process.action_instruction_request_view"/>
+        <field name="active" eval="True"/>
+        <field name="name">15. Tenant Contract Info</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">14</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.tender_menu" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">8. Tender</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">7</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.transaction_menu" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">5. Transaction</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">4</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="jhbproperty_land_process.valuation_menu" model="ir.ui.menu">
+        <field name="action" ref="client_enquiry.action_assessment_valuation"/>
+        <field name="active" eval="True"/>
+        <field name="name">4. Valuation</field>
+        <field name="parent_id" ref="jhbproperty_land_process.land_process_menus"/>
+        <field name="sequence">3</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="law_firm_bits.law_menu_client" model="ir.ui.menu">
+        <field name="action" ref="law_firm_bits.action_legal_res_partner_clients"/>
+        <field name="active" eval="True"/>
+        <field name="name">Departmental Units</field>
+        <field name="parent_id" ref="law_firm_bits.law_menu_root_bits"/>
+        <field name="sequence">10</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="law_firm_bits.law_menu_crime_type" model="ir.ui.menu">
+        <field name="action" ref="law_firm_bits.law_crime_type_act_action"/>
+        <field name="active" eval="False"/>
+        <field name="name">Crime Type</field>
+        <field name="parent_id" ref="law_firm_bits.law_menu_configuration"/>
+        <field name="sequence">10</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="law_firm_bits.law_menu_trust_fund" model="ir.ui.menu">
+        <field name="action" ref="law_firm_bits.law_trust_account_act_action"/>
+        <field name="active" eval="False"/>
+        <field name="name">Trust Funds</field>
+        <field name="parent_id" ref="law_firm_bits.law_menu_root_bits"/>
+        <field name="sequence">10</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_intelligence.menu_property_intelligence" model="ir.ui.menu">
+        <field name="action" ref="property_intelligence.action_property_intelligence"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property Intelligence</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">4</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_Lease_main" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">Outdoor Advertisement</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">1</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_arr_status" model="ir.ui.menu">
+        <field name="action" ref="property_update.arr_status_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Arr Status</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">11</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_creditor_region" model="ir.ui.menu">
+        <field name="action" ref="property_update.creditor_region_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Creditor Region</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">10</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_lease_type" model="ir.ui.menu">
+        <field name="action" ref="property_update.lease_type_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Lease Type</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">12</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_outdoor_advertisement" model="ir.ui.menu">
+        <field name="action" ref="property_update.outdoor_advertisement_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Outdoor Advertisement Register</field>
+        <field name="parent_id" ref="property_update.menu_Lease_main"/>
+        <field name="sequence">1</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_portfolio_category" model="ir.ui.menu">
+        <field name="action" ref="property_update.portfolio_category_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Portfolio Category</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">13</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_property_category" model="ir.ui.menu">
+        <field name="action" ref="property_update.property_category_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Category</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">7</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_property_category_amp" model="ir.ui.menu">
+        <field name="action" ref="property_update.property_category_amp_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Category AMP</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">8</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_property_department" model="ir.ui.menu">
+        <field name="action" ref="property_update.property_department_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Department</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">9</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_property_unit_type" model="ir.ui.menu">
+        <field name="action" ref="property_update.property_unit_type_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Unit Type</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">14</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_property_zoning" model="ir.ui.menu">
+        <field name="action" ref="property_update.property_zoning_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Zoning</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">6</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_rental_contract_outdoor_lease" model="ir.ui.menu">
+        <field name="action" ref="property_update.rental_contract_outdoor_lease_form_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Outdoor Advertisement Leases</field>
+        <field name="parent_id" ref="property_update.menu_Lease_main"/>
+        <field name="sequence">2</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_rental_contract_portfolio" model="ir.ui.menu">
+        <field name="action" ref="property_update.rental_contract_portfolio_form_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property Portfolio Leases</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_building_list"/>
+        <field name="sequence">1</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_rental_contract_trade_lease" model="ir.ui.menu">
+        <field name="action" ref="property_update.rental_contract_trade_lease_form_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Informal Trade Leases</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_building_list"/>
+        <field name="sequence">2</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.menu_township_township" model="ir.ui.menu">
+        <field name="action" ref="property_update.township_township_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Township</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">15</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.outdoor_advertisement_import_menu" model="ir.ui.menu">
+        <field name="action" ref="property_update.outdoor_advertisement_import_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Outdoor Advertisement Import</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">4</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.property_contract_import_menu" model="ir.ui.menu">
+        <field name="action" ref="property_update.property_contract_import_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property Contract Import</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">5</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.property_import_menu" model="ir.ui.menu">
+        <field name="action" ref="property_update.property_import_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Property Import</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">3</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.trade_rent_import_action_menu" model="ir.ui.menu">
+        <field name="action" ref="property_update.trade_rent_import_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Trade Import</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">1</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_update.trade_rent_menu" model="ir.ui.menu">
+        <field name="action" ref="property_update.trade_rent_action"/>
+        <field name="active" eval="False"/>
+        <field name="name">Informal Trade</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_building_list"/>
+        <field name="sequence">4</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="purchase.menu_purchase_root" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_system')])]"/>
+        <field name="name">SCM</field>
+        <field name="parent_id" eval="False"/>
+        <field name="sequence">135</field>
+        <field name="web_icon">purchase,static/description/icon.svg</field>
+    </record>
+    <record id="servitude_register.menu_servitude_register" model="ir.ui.menu">
+        <field name="action" ref="servitude_register.servitude_register_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">Servitude Register</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">2</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="sign.menu_document" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">Digital Signature</field>
+        <field name="parent_id" eval="False"/>
+        <field name="sequence">180</field>
+        <field name="web_icon">sign,static/description/icon.svg</field>
+    </record>
+    <record id="menu_ess_leave" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="name">ESS LEAVE</field>
+        <field name="parent_id" eval="False"/>
+        <field name="sequence">10</field>
+        <field name="web_icon">fa fa-briefcase,#FFAB4A,#34495e</field>
+    </record>
+    <!--    <record id="studio_customization.ess_leave_leave_b3d139ae-f990-4341-816a-ee5dac5e71cf" model="ir.ui.menu">-->
+    <!--    <field name="action" ref="studio_customization.leave_156a64ae-1649-4305-9c57-6062552817a9"/>-->
+    <!--    <field name="active" eval="False"/>-->
+    <!--    <field name="group_ids" eval="[(6, 0, [])]"/>-->
+    <!--    <field name="name">Leave</field>-->
+    <!--    <field name="parent_id" ref="jhbproperty_studio_update.menu_ess_leave"/>-->
+    <!--    <field name="sequence">10</field>-->
+    <!--    <field name="web_icon" eval="False"/>-->
+    <!--  </record>-->
+    <!--    <record id="studio_customization.fixed_assets_it_stor_544397c6-b153-4a9e-99ea-7bdd3238cd4c" model="ir.ui.menu">-->
+    <!--    <field name="action" ref="studio_customization.it_store_room_2024_736ce2ae-7d89-4e87-b37b-756b05c62f42"/>-->
+    <!--    <field name="active" eval="False"/>-->
+    <!--    <field name="group_ids" eval="[(6, 0, [])]"/>-->
+    <!--    <field name="name">IT Store Room 2024</field>-->
+    <!--    <field name="parent_id" ref="account_accountant.menu_accounting"/>-->
+    <!--    <field name="sequence">12</field>-->
+    <!--    <field name="web_icon" eval="False"/>-->
+    <!--  </record>-->
+    <record id="menu_jpc_intranet" model="ir.ui.menu"
+    >
+        <field name="active" eval="True"/>
+        <field name="name">JPC Intranet</field>
+        <field name="parent_id" eval="False"/>
+        <field name="sequence">1</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="menu_jpc_it_helpdesk" model="ir.ui.menu"
+    >
+        <field name="active" eval="True"/>
+        <field name="name">JPC IT Helpdesk</field>
+        <field name="parent_id" eval="False"/>
+        <field name="sequence">2</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="menu_land_process_dashboard" model="ir.ui.menu"
+    >
+        <field name="active" eval="True"/>
+        <field name="group_ids"
+               eval="[(6, 0, [ref('client_enquiry.group_general_manager'), ref('property_intelligence.group_general_manager'), ref('base.group_system')])]"/>
+        <field name="name">Dashboard- Property</field>
+        <field name="parent_id" eval="False"/>
+        <field name="sequence" eval="False"/>
+        <field name="web_icon">fa fa-institution,#0079BF,#F5F5F5</field>
+    </record>
+    <record id="menu_property_all_assessments" model="ir.ui.menu"
+    >
+        <field name="action" ref="jhbproperty_studio_update.all_assessment_action"/>
+        <field name="active" eval="True"/>
+        <field name="name">All Assessments</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence" eval="False"/>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="property_conditional_menu" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_studio_update.action_conditional_assessment"/>
+        <field name="active" eval="True"/>
+        <field name="name">Conditional Assessment</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">11</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="menu_property_conditional" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_studio_update.conditional_assessment_action"/>
+        <field name="active" eval="False"/>
+        <field name="name">Conditional Assessment</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_itsys_real_estate"/>
+        <field name="sequence">10</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="menu_property_my_assessment" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_studio_update.action_my_assessment"/>
+        <field name="active" eval="True"/>
+        <field name="name">My Assessments</field>
+        <field name="parent_id" ref="client_enquiry.property_land_process_menu"/>
+        <field name="sequence">1</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="menu_real_estate_grading" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_studio_update.action_building_grading"/>
+        <field name="active" eval="True"/>
+        <field name="name">Grading</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+        <field name="sequence">24</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="menu_real_estate_informal_trade_lease" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_studio_update.action_informal_trade_lease"/>
+        <field name="active" eval="True"/>
+        <field name="name">Informal Trade Lease</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_contracts_main"/>
+        <field name="sequence">2</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="menureal_estate_outdoor_advertisement_lease" model="ir.ui.menu">
+        <field name="action" ref="jhbproperty_studio_update.action_outdoor_advertisement_lease"/>
+        <field name="active" eval="True"/>
+        <field name="name">Outdoor Advertisement Lease</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_contracts_main"/>
+        <field name="sequence" eval="False"/>
+        <field name="web_icon" eval="False"/>
+    </record>
+    <record id="menu_sap_ess" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        <field name="name">SAP ESS</field>
+        <field name="parent_id" eval="False"/>
+        <field name="sequence">2</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+<!--    <record id="menu_windeed" model="ir.ui.menu">-->
+<!--        <field name="action" eval="False"/>-->
+<!--        <field name="active" eval="True"/>-->
+<!--        <field name="group_ids" eval="[(6, 0, [])]"/>-->
+<!--        <field name="name">Windeed</field>-->
+<!--        <field name="parent_id" eval="False"/>-->
+<!--        <field name="sequence">10</field>-->
+<!--        <field name="web_icon">fa fa-diamond,#f1c40f,#34495e</field>-->
+<!--    </record>-->
+    <!--    <record id="studio_customization.windeed_windeed_145cd516-1f93-42c1-88b7-3a2a58f2692b" model="ir.ui.menu">-->
+    <!--    <field name="action" ref="studio_customization.windeed_a58e6218-7b57-43a6-8694-e1002b37c5be"/>-->
+    <!--    <field name="active" eval="False"/>-->
+    <!--    <field name="group_ids" eval="[(6, 0, [])]"/>-->
+    <!--    <field name="name">Windeed</field>-->
+    <!--    <field name="parent_id" ref="studio_customization.windeed_cb4585ec-02c7-4247-aded-68e8637ce495"/>-->
+    <!--    <field name="sequence">10</field>-->
+    <!--    <field name="web_icon" eval="False"/>-->
+    <!--  </record>-->
+    <record id="valuation_roll_import.menu_valuation_roll_import" model="ir.ui.menu">
+        <field name="sequence">2</field>
+        <field name="parent_id" ref="itsys_real_estate.menu_settings"/>
+    </record>
+</odoo>

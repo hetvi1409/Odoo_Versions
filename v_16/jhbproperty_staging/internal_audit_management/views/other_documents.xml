@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_other_document" model="ir.actions.act_window">
+        <field name="name">Other Documents</field>
+        <field name="res_model">other.documents</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Other Documents
+            </p>
+            <p>
+                Create and manage the other documents.
+            </p>
+        </field>
+    </record>
+    <record id="other_documents_view_form" model="ir.ui.view">
+        <field name="name">Other Documents</field>
+        <field name="model">other.documents</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                           
+                            string="Review" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'preparer')]}"/>
+                    <button name="action_2nd_review" type="object" string="2nd Review" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'first_reviewer')]}"/>
+                    <button name="action_approve" type="object"
+                           
+                            string="Approve" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'second_reviewer')]}"/>
+                    <button name="action_mark_discrepancy" type="object"
+                           
+                            string="Refuse" attrs="{'invisible': [('state', '=', 'rejected')]}"/>
+                    <button name="action_send_back_review" type="object"
+                           
+                            string="Revert" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['rejected', 'preparer', 'reverted', 'approved'])]}"/>
+                    <button name="action_send_back_new" type="object"
+                           
+                            string="Move To New" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'rejected')]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"
+                                   attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                            <field name="sequence_no"/>
+                            <field name="requirements"
+                                   style="height: 105px;" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                            <field name="record_work_done"
+                                   style="height: 105px;" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                            <field name="conclusion"
+                                   style="height: 105px;" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                        </group>
+                        <group>
+                            <field name="user_preparer_ids" widget="many2one_avatar_user"/>
+<!--                            <field name="user_reviewer_1_ids" widget="many2one_avatar_user"/>-->
+<!--                            <field name="user_reviewer_2_ids" widget="many2one_avatar_user"/>-->
+<!--                            <field name="user_approver_ids" widget="many2one_avatar_user"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Documents">
+                            <group>
+                                <field name="document_ids"
+                                       widget="many2many_binary">
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+    <record id="other_documents_view_tree" model="ir.ui.view">
+        <field name="name">Other Documents</field>
+        <field name="model">other.documents</field>
+        <field name="arch" type="xml">
+            <tree duplicate="0">
+                <field name="sequence_no"/>
+                <field name="requirements"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

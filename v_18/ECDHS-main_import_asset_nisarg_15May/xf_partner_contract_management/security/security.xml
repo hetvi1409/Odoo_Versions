@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="group_xf_partner_contract_deputy" model="res.groups">
+            <field name="name">Deputy Director</field>
+            <field name="category_id" ref="xf_partner_contract.module_category_xf_partner_contract"/>
+            <field name="implied_ids" eval="[(4, ref('xf_partner_contract.group_xf_partner_contract_manager'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+        <record id="group_xf_partner_contract_admin_officer" model="res.groups">
+            <field name="name">Admin Officer</field>
+            <field name="category_id" ref="xf_partner_contract.module_category_xf_partner_contract"/>
+            <field name="implied_ids" eval="[(4, ref('xf_partner_contract_management.group_xf_partner_contract_deputy'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+        <record id="group_xf_partner_contract_admin_legal_advisor" model="res.groups">
+            <field name="name">Director Legal Advisor</field>
+            <field name="category_id" ref="xf_partner_contract.module_category_xf_partner_contract"/>
+            <field name="implied_ids" eval="[(4, ref('xf_partner_contract_management.group_xf_partner_contract_admin_officer'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+        <record id="group_xf_partner_contract_cfo" model="res.groups">
+            <field name="name">CFO</field>
+            <field name="category_id" ref="xf_partner_contract.module_category_xf_partner_contract"/>
+            <field name="implied_ids" eval="[(4, ref('xf_partner_contract_management.group_xf_partner_contract_admin_legal_advisor'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <!-- Rules -->
+    </data>
+</odoo>

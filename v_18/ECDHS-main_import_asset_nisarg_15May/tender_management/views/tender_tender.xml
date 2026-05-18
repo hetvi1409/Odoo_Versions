@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View for Tender -->
+    <record id="view_tender_form" model="ir.ui.view">
+        <field name="name">tender.tender.form</field>
+        <field name="model">tender.tender</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_open" string="Open"
+                            type="object" invisible="state != 'draft'"
+                            class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+<!--                        <button class="oe_stat_button"-->
+<!--                                attrs="{'invisible': [('is_tender_published', '!=', True)]}">-->
+<!--                            <span class="fa fa-lg fa-globe"-->
+<!--                                  style="color: green;">-->
+<!--                                Published-->
+<!--                            </span>-->
+<!--                        </button>-->
+                        <field name="is_published" widget="website_redirect_button"/>
+                    </div>
+
+
+                    <div class="oe_title">
+                        <h2>
+                            <field name="sequence_number"/>
+                        </h2>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="is_tender_published" invisible="1"/>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="category_id"/>
+                            <field name="type"/>
+                            <field name="company_id"/>
+                            <field name="is_published" invisible="1"/>
+                            <field name="website_url" invisible="1"/>
+                            <field name="website_published" string="Is Published" invisible="1"/>
+                            <field name="website_id" options="{'no_create': True}" domain="['|', ('company_id', '=', company_id), ('company_id', '=', False)]" groups="website.group_multi_website"/>
+                        </group>
+                        <group>
+                            <field name="procurement_id"/>
+                            <!--                        <field name="publication_date"/>-->
+                            <field name="start_time" readonly="1"/>
+                            <field name="closing_date"
+                                   readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Documents">
+                            <!--                            <field name="tender_document_ids"/>-->
+                            <field name="document_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="file"/>
+                                </list>
+                            </field>
+                        </page>
+                        <!-- New Briefing Session Tab -->
+                        <page string="Briefing Session">
+                            <group>
+                                <field name="briefing_session"/>
+                                <field name="briefing_compulsory" invisible="briefing_session != True"/>
+                                <field name="briefing_date_time" invisible="briefing_session != True"/>
+                                <field name="briefing_venue" invisible="briefing_session != True"/>
+                            </group>
+                        </page>
+                        <page string="Bids">
+                            <field name="bid_ids" readonly="1">
+                                <list>
+                                    <field name="vendor_id"/>
+                                    <field name="document_ids" widget="many2many_tags"/>
+                                    <button name="action_view_documents" string="Open Documents"
+                                            type="object" class="oe_highlight"/>
+
+                                    <!--                                    <field name="bid_amount"/>-->
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree Views -->
+    <record id="view_tender_tree" model="ir.ui.view">
+        <field name="name">tender.tender.tree</field>
+        <field name="model">tender.tender</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence_number"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_tender" model="ir.actions.act_window">
+        <field name="name">Tenders</field>
+        <field name="res_model">tender.tender</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_tenders" name="All Tenders" sequence="1"
+              parent="menu_tender_root"
+              action="action_tender"/>
+
+
+</odoo>

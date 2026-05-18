@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Tender Management Technical Guide (BPMN)</title>
+  <style>
+    body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.45; color: #111; max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+    h1, h2, h3 { color: #0b3558; }
+    h1 { font-size: 28px; margin-bottom: 4px; }
+    h2 { font-size: 22px; margin-top: 28px; }
+    h3 { font-size: 18px; margin-top: 20px; }
+    .meta { color: #444; margin-bottom: 18px; }
+    .card { background: #f7fbff; border: 1px solid #dce8f5; border-radius: 8px; padding: 12px; margin: 10px 0; }
+    .flow-img { width: 100%; max-width: 1050px; border: 1px solid #cfcfcf; border-radius: 4px; padding: 4px; background: #fff; }
+    code { font-family: Consolas, 'Courier New', monospace; font-size: 10pt; background: #f2f2f2; padding: 1px 4px; border-radius: 3px; }
+    ul { margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+<h1>Tender Management Technical Guide</h1>
+<p class="meta"><strong>Audience:</strong> Developers, technical support, QA<br/><strong>Date:</strong> 2026-03-09</p>
+<h2>1. Module Overview</h2>
+<div class="card"><strong>Module:</strong> <code>tender_management</code> for Odoo 16. Covers tender publication, bid submission, portal tracking, workflow control, downloads, and website integration.</div>
+<h2>2. Architecture</h2>
+<ul><li><strong>Controllers:</strong> <code>controller/bid_submission.py</code>, <code>controller/vendor_registration.py</code>, <code>controller/tender_bid_portal.py</code></li><li><strong>Models:</strong> <code>models/tender_tender.py</code>, <code>models/tender_bid.py</code>, <code>models/tender_document.py</code></li><li><strong>Views:</strong> backend forms and website templates under <code>views/</code></li><li><strong>Assets:</strong> <code>static/src/js/website_tender.js</code>, <code>static/src/css/tender_information.css</code></li></ul>
+<h2>3. Security and Validation Controls</h2>
+<ul><li>Bid submit route uses auth user + POST + CSRF</li><li>Vendor registration submit uses POST + CSRF + rate limit</li><li>Portal routes use owner/internal authorization checks</li><li>Download routes validate entitlement before streaming</li><li>Timer route validates HMAC token against <code>database.secret</code></li><li>Upload validation enforces extension and size limits</li></ul>
+<h2>4. Data Integrity and Locking</h2>
+<ul><li><code>tender.tender.write</code> blocks non-draft edits except controlled fields</li><li><code>tender.bid.write</code> blocks non-draft edits except controlled fields</li><li><code>tender.document</code> create/write/unlink blocked when linked tender is non-draft</li><li><code>fields_get</code> readonly metadata lock applied to non-draft records</li></ul>
+<h2>5. Configuration Keys</h2>
+<ul><li><code>tender_management.folder_id</code></li><li><code>tender_management.rate_limit.submit_bid.max_requests</code></li><li><code>tender_management.rate_limit.submit_bid.window_seconds</code></li><li><code>tender_management.rate_limit.vendor_registration.max_requests</code></li><li><code>tender_management.rate_limit.vendor_registration.window_seconds</code></li></ul>
+<h2>6. Troubleshooting</h2>
+<ul><li>Timer issues: verify <code>tender_timer_token</code> in page and JSON payload</li><li>Unauthorized download: validate publication state or bid ownership</li><li>Submission blocked: inspect tender status, <code>allow_bidding</code>, auth context, and upload rules</li><li>Rate-limit behavior: verify deployment topology and per-worker limits</li></ul>
+<h2>Graphical BPMN Process Flows</h2>
+<p>The following BPMN-style process diagrams are included for visual flow understanding.</p>
+<h3>Diagram A: Tender Authoring to Publication</h3>
+<p><img class="flow-img" src="diagrams/flow_a_tender_publication.png" alt="Diagram A: Tender Authoring to Publication" /></p>
+<p><em>Figure: Diagram A: Tender Authoring to Publication</em></p>
+<h3>Diagram B: Public Tender Discovery and Detail Access</h3>
+<p><img class="flow-img" src="diagrams/flow_b_discovery_detail.png" alt="Diagram B: Public Tender Discovery and Detail Access" /></p>
+<p><em>Figure: Diagram B: Public Tender Discovery and Detail Access</em></p>
+<h3>Diagram C: Countdown Timer</h3>
+<p><img class="flow-img" src="diagrams/flow_c_timer.png" alt="Diagram C: Countdown Timer" /></p>
+<p><em>Figure: Diagram C: Countdown Timer</em></p>
+<h3>Diagram D: Bid Submission End to End</h3>
+<p><img class="flow-img" src="diagrams/flow_d_bid_submission.png" alt="Diagram D: Bid Submission End to End" /></p>
+<p><em>Figure: Diagram D: Bid Submission End to End</em></p>
+<h3>Diagram E: Secure Document Download</h3>
+<p><img class="flow-img" src="diagrams/flow_e_downloads.png" alt="Diagram E: Secure Document Download" /></p>
+<p><em>Figure: Diagram E: Secure Document Download</em></p>
+<h3>Diagram F: Vendor Registration</h3>
+<p><img class="flow-img" src="diagrams/flow_f_vendor_registration.png" alt="Diagram F: Vendor Registration" /></p>
+<p><em>Figure: Diagram F: Vendor Registration</em></p>
+<h3>Diagram G: Portal Bid Tracking</h3>
+<p><img class="flow-img" src="diagrams/flow_g_portal_tracking.png" alt="Diagram G: Portal Bid Tracking" /></p>
+<p><em>Figure: Diagram G: Portal Bid Tracking</em></p>
+<h3>Diagram H: Close, Adjudication, and Award</h3>
+<p><img class="flow-img" src="diagrams/flow_h_close_award.png" alt="Diagram H: Close, Adjudication, and Award" /></p>
+<p><em>Figure: Diagram H: Close, Adjudication, and Award</em></p>
+<h2>7. File Reference Summary</h2>
+<p>Implementation resides in <code>controller/</code>, <code>models/</code>, <code>views/</code>, <code>security/</code>, and <code>static/src/</code>.</p>
+</body></html>

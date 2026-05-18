@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.view.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet" position="inside">
+                <style>
+                    .o_form_view:not(.o_field_highlight)
+                    .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                    .o_input:not(:hover):not(:focus) {
+                                --o-input-border-color: black !important;
+                                }
+                </style>
+            </xpath>
+
+            <xpath expr="//div/h1" position="after">
+                <div>
+                    <group string="IDENTIFICATION">
+                        <group>
+                            <field name="asset_type"/>
+                            <field name="classification_type"/>
+                            <field name="allowed_category_ids" invisible="1"/>
+                            <field name="afs_classification"/>
+                            <field name="serial_number"/>
+                            <field name="alternative_ref"/>
+                        </group>
+                        <group>
+                            <field name="job_location_id"/>
+                            <field name="invoice_number"/>
+                            <field name="room_number_id"/>
+                            <field name="floor"/>
+                            <field name="notes"/>
+                        </group>
+                    </group>
+                </div>
+            </xpath>
+            <xpath expr="//group[@name='asset_values']" position="inside">
+                <field name="supplier_id"/>
+                <field name="payment_number"/>
+                <field name="order_number"/>
+                <field name="description"/>
+            </xpath>
+            <xpath expr="//group[@name='current_values']" position="inside">
+                <field name="department_id"/>
+                <field name="custodian_id"/>
+                <!-- <field name="condition"/> -->
+                <field name="original_useful_life"/>
+            </xpath>
+            <xpath expr="//group[@name='current_values']" position="after">
+                <group string="IDENTIFICATION" invisible="1">
+                    <group>
+                        <field name="afs_classification"/>
+                        <field name="classification_type"/>
+<!--                        <field name="depreciation_move_ids"/>-->
+                        <field name="asset_type"/>
+                        <field name="serial_number"/>
+                        <field name="alternative_ref"/>
+                        <field name="job_location_id"/>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//page[@name='related_items']" position="after">
+                <page string="Disposal">
+                    <group>
+                        <group>
+                            <field name="disposal_date"/>
+                            <field name="disposal_price"/>
+                            <field name="disposal_method"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='related_items']" position="after">
+                <page string="Depreciation">
+                    <group>
+                        <group>
+                            <field name="depreciation_move_ids">
+                                    <list>
+                                        <field name="date"/>
+                                        <field name="ref"/>
+                                        <field name="journal_id"/>
+                                    </list>
+                            </field>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <!--Make here required True, False for only import sheet purpose-->
+            <xpath expr="/form/sheet/notebook/page[@name='main_page']/group/group[@name='current_values']/field[@name='custodian_id']" position="attributes">
+                <attribute name="required">False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_asset_list_inherit" model="ir.ui.view">
+        <field name="name">account.asset.view.list.inherit</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="/list//field[@name='method']" position="after">
+                <field name="remaining_days" optional="show"/>
+                <field name="remaining_months" optional="show"/>
+                <field name="last_depreciation_date" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_asset_form_search_id" model="ir.ui.view">
+        <field name="name">account.asset.search.view.inherit</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="classification_type"/>
+                <filter string="Movables" name="filter_movables" domain="[('classification_type','=', 'movables')]" />
+                <filter string="Immovable" name="filter_immovable" domain="[('classification_type','=', 'immovable')]" />
+                <filter string="Intangible" name="filter_intangible" domain="[('classification_type','=', 'intangible')]" />
+                <filter string="Minor Asset" name="filter_minor" domain="[('asset_type','=', 'minor')]" />
+                <filter string="Major Asset" name="filter_major" domain="[('asset_type','=', 'major')]" />
+            </xpath>
+
+            <xpath expr="/search//field[@name='name']" position="before">
+                <field name="alternative_ref"/>
+            </xpath>
+
+            <xpath expr="/search//field[@name='name']" position="after">
+                <field name="job_location_id"/>
+            </xpath>
+
+            <xpath expr="//search/group" position="inside">
+                <filter name="group_classification_type"
+                        string="Classification Type"
+                        context="{'group_by':'classification_type'}"/>
+                <filter name="group_asset_type"
+                        string="Asset Type"
+                        context="{'group_by':'asset_type'}"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

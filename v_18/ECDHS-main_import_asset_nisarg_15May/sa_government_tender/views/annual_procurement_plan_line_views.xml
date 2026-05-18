@@ -1,0 +1,127 @@
+<odoo>
+
+    <record id="view_annual_procurement_plan_line_list" model="ir.ui.view">
+        <field name="name">Annual Procurement Plan Line List</field>
+        <field name="model">annual.procurement.plan.line</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="class_of_procurement"/>
+                <field name="object_code"/>
+                <field name="product_id" string="Description of Requirements" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="user_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="procurement_method" column_invisible="1"/>
+                <field name="procurement_method_config_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="preference_point_system_config_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="sagov_app_created"/>
+                <field name="sagov_app_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="eoi_publication_date"/>
+                <field name="eoi_closing_date"/>
+                <field name="tender_notice_date"/>
+                <field name="tender_closing_date"/>
+                <field name="award_publication_date"/>
+                <field name="contract_signing_date"/>
+                <field name="cycle_work_days"/>
+                <field name="lead_time_days"/>
+                <field name="spoc_required"/>
+                <field name="source_of_funds"/>
+                <field name="uom_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="quantity"/>
+                <field name="unit_price"/>
+                <field name="total"/>
+                <field name="plan_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_annual_procurement_plan_line_form" model="ir.ui.view">
+        <field name="name">Annual Procurement Plan Line Form</field>
+        <field name="model">annual.procurement.plan.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                        <group>
+                            <group>
+                                 <field name="plan_id" invisible="0" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="sequence" readonly="1"/>
+                                <field name="name" readonly="1"/>
+                                <field name="user_id" readonly="plan_id.state not in ['draft']" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="product_id" readonly="plan_id.state not in ['draft']" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="requirements" readonly="plan_id.state not in ['draft']"/>
+                            </group>
+                        </group>
+                        <group string="Sagov Integration">
+                            <group>
+                                <field name="sagov_app_created" readonly="plan_id.state not in ['draft']"/>
+                            </group>
+                            <group>
+                                <field name="sagov_app_id" readonly="plan_id.state not in ['draft']" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Details">
+                                <field name="class_of_procurement" readonly="plan_id.state not in ['draft']"/>
+                                <field name="object_code" readonly="plan_id.state not in ['draft']"/>
+                            </group>
+                            <group string="">
+                                <field name="procurement_method" readonly="plan_id.state not in ['draft']" invisible="1"/>
+                                <field name="procurement_method_config_id" readonly="plan_id.state not in ['draft']" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="preference_point_system_config_id" readonly="plan_id.state not in ['draft']" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="source_of_funds" readonly="plan_id.state not in ['draft']"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Schedule">
+                                <field name="eoi_publication_date" readonly="plan_id.state not in ['draft']"/>
+                                <field name="eoi_closing_date" readonly="plan_id.state not in ['draft']"/>
+                                <field name="tender_notice_date" readonly="plan_id.state not in ['draft']"/>
+                                <field name="tender_closing_date" readonly="plan_id.state not in ['draft']"/>
+                                <field name="award_publication_date" readonly="plan_id.state not in ['draft']"/>
+                                <field name="contract_signing_date" readonly="plan_id.state not in ['draft']"/>
+                            </group>
+                            <group string="">
+                                <field name="cycle_work_days" readonly="plan_id.state not in ['draft']"/>
+                                <field name="lead_time_days" readonly="plan_id.state not in ['draft']"/>
+                                <field name="spoc_required" readonly="plan_id.state not in ['draft']"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Quantity / Cost">
+                                <field name="uom_id" readonly="plan_id.state not in ['draft']" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="quantity" readonly="plan_id.state not in ['draft']"/>
+                            </group>
+                            <group string="">
+                                <field name="unit_price" readonly="plan_id.state not in ['draft']"/>
+                                <field name="total" readonly="plan_id.state not in ['draft']"/>
+                            </group>
+                        </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_annual_procurement_plan_line" model="ir.actions.act_window">
+        <field name="name">Procurement Plan Lines</field>
+        <field name="res_model">annual.procurement.plan.line</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

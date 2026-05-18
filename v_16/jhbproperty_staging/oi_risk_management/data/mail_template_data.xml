@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <record id="mail_template_risk_notification" model="mail.template">
+            <field name="name">Reporting on newly identified risk</field>
+            <field name="model_id" ref="oi_risk_management.model_oi_risk_management_risk"/>
+            <field name="subject">Newly Identified Risk</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_to">{{object.owner_id.work_email}}</field>
+            <field name="body_html" type="html">
+                <div>
+                    Dear Team,
+                    <p>
+                        A new risk has been identified and recorded in the system. Please review the details below:
+                    </p>
+                    <ul>
+                        <li><strong>Risk Title:</strong><t t-out="object.name"/></li>
+                        <li><strong>Category:</strong> <span t-field="object.category_id"/></li>
+                        <li><strong>Risk Owner:</strong> <span t-field="object.owner_id"/></li>
+                        <li><strong>Cause:</strong> <t t-out="object.main_cause"/></li>
+                        <li><strong>Department:</strong> <span t-field="object.department_id"/></li>
+                    </ul>
+                    <p>Kindly take the necessary actions as per the risk management process.</p>
+                    <p>Best regards,</p>
+                    <p>Risk Management System</p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,28 @@
+{
+    'name': "Documents File Plan",
+    'description': """Documents File Plan""",
+    'summary': """Documents File Plan""",
+    'version': '19.0.1.0.0',
+    'category': 'Services',
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': "https://natedsystems.co.za",
+    'depends': ['base', 'documents', 'physical_document_records_manage','e_system'],
+    'data': [
+        'security/physical_record_security.xml',
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/action_sync_attachments.xml',
+        'views/documents_document_view.xml',
+        'views/physical_document_submission_view.xml',
+        'views/physical_record_keeper_view.xml',
+        'wizard/file_request_wizard_view.xml',
+
+    ],
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

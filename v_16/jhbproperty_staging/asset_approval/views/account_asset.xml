@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.view.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_asset_modify']"
+                   position="after">
+                <button type="object" name="action_submit_asset"
+                        string="Submit for Approval"
+                        class="btn-primary"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                <button type="object" name="action_reject_asset"
+                        string="Reject"
+                        groups="asset_approval.group_asset_manager"
+                        class="btn-primary"
+                        attrs="{'invisible': [('state', '!=', 'submit')]}"/>
+            </xpath>
+            <xpath expr="//button[@name='validate']" position="replace">
+                <button type="object" name="validate"
+                        string="Confirm"
+                        groups="asset_approval.group_asset_manager"
+                        class="btn-primary"
+                        attrs="{'invisible': [('state', '!=', 'submit')]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

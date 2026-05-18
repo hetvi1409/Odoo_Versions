@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <record id="import_maintenance_view_form" model="ir.ui.view">
+       <field name="name">import.maintenance.view.form</field>
+       <field name="model">import.maintenance</field>
+       <field name="arch" type="xml">
+           <form string="Report Options">
+               <group col="4">
+                   <field name="file"/>
+               </group>
+               <footer>
+                   <button name="action_import_xlsx" string="PRINT" type="object"
+                             default_focus="1" class="oe_highlight"/>
+                   <button string="Cancel" class="btn btn-default" special="cancel"/>
+               </footer>
+           </form>
+       </field>
+   </record>
+   <record id="import_maintenance_action" model="ir.actions.act_window">
+       <field name="name">Import Maintenance</field>
+       <field name="res_model">import.maintenance</field>
+       <field name="type">ir.actions.act_window</field>
+       <field name="view_mode">form</field>
+       <field name="target">new</field>
+   </record>
+   <menuitem id="import_maintenance_menu" name="Import Maintenance"
+             parent="maintenance.menu_m_request" action="import_maintenance_action" />
+</odoo>

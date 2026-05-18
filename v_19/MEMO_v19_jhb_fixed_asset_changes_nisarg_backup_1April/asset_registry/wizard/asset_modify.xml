@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Request Disposal Button adding for the department user-->
+    <record id="view_asset_modify_form_inherit" model="ir.ui.view">
+        <field name="name">asset.modify.form.inherit</field>
+        <field name="model">asset.modify</field>
+        <field name="inherit_id" ref="account_asset.asset_modify_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//footer" position="inside">
+                <button name="request_disposal"
+                        string="Request Disposal"
+                        type="object"
+                        class="btn-primary"
+                        data-hotkey="q" invisible="modify_action != 'dispose_request'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

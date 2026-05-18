@@ -1,0 +1,63 @@
+<odoo>
+    <template id="emp501_report_template">
+        <t t-call="web.basic_layout">
+            <!--      <t t-foreach="docs" t-as="doc">-->
+            <div class="page">
+                <h2>Employee Tax Reconciliation Report</h2>
+                <p>Period of Reconciliation: 202502
+                </p>
+                <p>Printed for
+                    <strong>
+                        <t t-esc="company_name"/>
+                    </strong>
+                    : Monthly
+                </p>
+            <table class="table table-sm table-borderless" style="width:100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <t t-foreach="months" t-as="month">
+                            <th><t t-esc="month"/></th>
+                        </t>
+                        <th>Total</th>
+                    </tr>
+                    <tr style="background-color: #f0f0f0;">
+                        <th colspan="99"><strong>Cycle: Monthly</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="data" t-as="emp">
+                        <tr style="background-color: #f0f0f0;">
+                            <td colspan="100%">
+                                <strong>Employee: <t t-if="emp['code']"> (<t t-esc="emp['code']"/>) </t><t t-esc="emp['name']"/></strong>
+                                <span style="float:right;">Period employed: <t t-esc="emp['period']"/></span>
+                            </td>
+                        </tr>
+                        <t t-foreach="emp['lines']" t-as="line">
+                            <tr>
+                                <td><t t-esc="line['description']"/></td>
+                                <t t-foreach="line['months']" t-as="value">
+                                    <td><t t-esc="value"/></td>
+                                </t>
+                                <td><t t-esc="line['total']"/></td>
+                            </tr>
+                        </t>
+                    </t>
+                </tbody>
+            </table>
+            <p style="font-size:10px;">
+                Please note that the value of 3703 will be reported as 3702 on the tax certificate if the employee has a 3701 or a 3702 value.
+            </p>
+            <p class="text-right" style="font-size: smaller; margin-top: 20px;">
+                    Printed on
+                    <t t-esc="printed_date"/>
+                    — Page
+                    <t t-esc="page_number"/>
+                    of
+                    <t t-esc="page_count"/>
+                </p>
+        </div>
+            <!--      </t>-->
+        </t>
+    </template>
+</odoo>

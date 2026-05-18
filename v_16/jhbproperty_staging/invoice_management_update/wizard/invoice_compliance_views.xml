@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="invoice_compliance_wizard_view_form" model="ir.ui.view">
+        <field name="name">invoice.compliance.wizard.view.form</field>
+        <field name="model">invoice.compliance.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="invoice_id" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="partner_id" readonly="1"/>
+                    </group>
+                </group>
+                <group string="Operations Documents">
+                    <group>
+                        <field name="competition_certificate"/>
+                    </group>
+                    <group>
+                        <field name="before_and_after_picture"/>
+                    </group>
+                </group>
+                <group string="SCM Documents">
+                    <group>
+                        <field name="scm_process_followed"/>
+                        <field name="followed_method"
+                               attrs="{'invisible': [('scm_process_followed', '!=', 'yes')], 'required': [('scm_process_followed', '=', 'yes')]}"/>
+                        <field name="compliance_report"/>
+                        <field name="letter_appointment"/>
+                    </group>
+                    <group>
+                        <field name="date_timeframe"/>
+                        <field name="scope_of_work"/>
+                        <field name="value_appointment"/>
+                    </group>
+                </group>
+                <group string="Finance Documents">
+                    <group>
+                        <field name="creditors_recon"/>
+                        <field name="bank_account_confirmation"/>
+                    </group>
+                    <group>
+                        <field name="proof_of_payment"/>
+                    </group>
+                </group>
+                <group string="Finance Review">
+                    <group>
+                        <field name="authorization_signature"/>
+                        <field name="invoice_date"/>
+                    </group>
+                    <group>
+                        <field name="date_stamp"/>
+                        <field name="cross_cast_bill"/>
+                    </group>
+                </group>
+                <group string="VAT Compliance">
+                    <group>
+                        <field name="tax"/>
+                        <field name="correct_name"/>
+                    </group>
+                    <group>
+                        <field name="address"/>
+                        <field name="vat"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_submit" string="Submit" type="object"
+                            default_focus="1" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

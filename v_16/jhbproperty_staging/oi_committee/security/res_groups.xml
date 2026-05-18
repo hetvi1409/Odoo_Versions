@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<record id="category_committee" model="ir.module.category">
+		<field name="name">Committee</field>
+	</record>
+	
+	<record id="group_committee" model="res.groups">
+		<field name="name">Committee Management</field>
+		<field name="category_id" ref="category_committee" />
+		<field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+		<field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+	</record>
+	
+	<record id="group_committee_member" model="res.groups">
+		<field name="name">Committee Member</field>
+		<field name="category_id" ref="category_committee" /> 
+		<field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+		<field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+	</record>
+	
+
+</odoo>

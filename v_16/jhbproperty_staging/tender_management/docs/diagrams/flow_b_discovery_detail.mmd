@@ -1,0 +1,16 @@
+flowchart LR
+  subgraph P[Public User]
+    A([Start]) --> B["/tenders"]
+    B --> C["/tenders-rfqs or /tenders-rfps"]
+    C --> D[Search or filter]
+    D --> E[Open tender detail]
+  end
+  subgraph C1[Website Controller]
+    C --> F[Apply domain and pagination]
+    E --> G[Validate exists and published]
+    G --> H[Prepare detail context and timer token]
+  end
+  subgraph Q[QWeb Frontend]
+    H --> I[Render detail cards and docs]
+    I --> J([End])
+  end

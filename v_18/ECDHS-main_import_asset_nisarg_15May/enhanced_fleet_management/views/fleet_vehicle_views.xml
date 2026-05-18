@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vehicle Form Inherited View -->
+
+    <record id="fleet_vehicle_view_form_inherit" model="ir.ui.view">
+        <field name="name">fleet.vehicle.form.inherit</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add buttons to view related records -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_transport_requests" type="object"
+                        class="oe_stat_button" icon="fa-paper-plane">
+                    <field name="pending_requests_count" widget="statinfo"
+                           string="Pending Requests"/>
+                </button>
+                <button name="action_view_trip_authorities" type="object"
+                        class="oe_stat_button" icon="fa-car">
+                    <field name="active_trips_count" widget="statinfo"
+                           string="Active Trips"/>
+                </button>
+                <button name="action_view_checklists" type="object"
+                        class="oe_stat_button" icon="fa-check-square-o">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Checklists</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <!-- Add Enhanced Fleet Management tab -->
+            <xpath expr="//notebook" position="inside">
+                <page name="fleet_register" string="Fleet Register">
+                    <group>
+                        <group string="Vehicle Category (FLEET_REGISTER_HUMAN_SETTLEMENTS.pdf)">
+                            <field name="vehicle_category"/>
+                            <field name="chassis_number"/>
+                            <field name="date_received"/>
+                            <field name="section_assignment"/>
+                            <field name="cost_center"/>
+                        </group>
+                        <group string="Maintenance Contract">
+                            <field name="maintenance_contract_type"/>
+                            <field name="contract_term" invisible="maintenance_contract_type == False"/>
+                            <field name="contract_km_coverage" invisible="maintenance_contract_type != 'mm'"/>
+                            <field name="monthly_cost" invisible="maintenance_contract_type == False"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Accessories">
+                            <field name="has_radio"/>
+                            <field name="has_aircon"/>
+                            <field name="has_canopy"/>
+                        </group>
+                        <group string="License &amp; Registration">
+                            <field name="license_renewal_date"/>
+                        </group>
+                    </group>
+                </page>
+                <page name="enhanced_fleet" string="Enhanced Fleet Info">
+                    <group>
+                        <group string="Insurance Information">
+                            <field name="insurance_company"/>
+                            <field name="insurance_policy_number"/>
+                            <field name="insurance_expiry_date"/>
+                        </group>
+                        <group string="Security Features">
+                            <field name="engine_number"/>
+                            <field name="alarm_fitted"/>
+                            <field name="tracking_device_fitted"/>
+                            <field name="tracking_company"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Vehicle Status">
+                            <field name="vehicle_condition_status" widget="badge"/>
+                            <field name="last_checklist_date"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

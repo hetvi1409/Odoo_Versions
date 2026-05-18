@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_memo_template_form" model="ir.ui.view">
+        <field name="name">memo.template.view.form.inherit</field>
+        <field name="model">memo.template</field>
+        <field name="inherit_id" ref="e_system.view_memo_template_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='background_body']" position="attributes">
+                <attribute name="string">Body</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_memo_template" model="ir.actions.act_window">
+        <field name="name">EDMS Templates</field>
+        <field name="res_model">memo.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('type','=', 'internal_audit')]</field>
+        <field name="context">{'default_type': 'internal_audit'}</field>
+    </record>
+
+    <menuitem id="menu_memo_template"
+              name="EDMS Templates" sequence="1"
+              parent="internal_audit_management.projects_config_menu"
+              action="action_memo_template"
+              groups="base.group_user,e_system.group_memo_quality_assurance,e_system.group_memo_requester"/>
+</odoo>

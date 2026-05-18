@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="portal_my_home_menu_land_regularization"
+              name="Portal layout : Land Regularization"
+              inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'land_regularization' or land_regularization"
+                t-attf-class="breadcrumb-item #{'active' if not land_regularization else ''}">
+                <a t-if="land_regularization"
+                   t-attf-href="/my/land_regularization">
+                    Land Regularization
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_land_regularization" name="Land Regularization"
+              customize_show="True" inherit_id="portal.portal_my_home"
+              priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <div id="portal_vendor_category">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Land Regularization</t>
+                    <t t-set="url" t-value="'/my/land_regularization'"/>
+                    <t t-set="placeholder_count"
+                       t-value="'land_regularization_count'"/>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="my_land_regularization" name="Land Regularization">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Land Regularization</t>
+            </t>
+            <t t-if="not land_regularization">
+                <p>There are currently no land regularization for your account.
+                </p>
+            </t>
+            <t t-if="land_regularization" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Land Type #</th>
+                        <th>Date</th>
+                        <th>Assessment Result</th>
+                        <th>Assessment</th>
+                        <th>Enquiry</th>
+<!--                        <th class="text-end">Status</th>-->
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <t t-foreach="land_regularization" t-as="res">
+                        <tr>
+                            <td>
+                                <a t-attf-href="/land_regularization_details_portal/#{res.id}">
+                                    <t t-out="res.type"/>
+                                </a>
+                            </td>
+                            <td >
+                                <span t-field="res.date_regularisation"/>
+                            </td>
+                            <td >
+                                <span t-field="res.assessment_result"/>
+                            </td>
+                            <td >
+                                <span t-field="res.assessment_id.name"/>
+                            </td>
+                            <td >
+                                <span t-field="res.enquiry_id.name"/>
+                            </td>
+<!--                            <td class="text-end">-->
+<!--                                <span t-field="res.state"/>-->
+<!--                            </td>-->
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+<!--    <template id="land_regularization_details" name="EAC">-->
+<!--        <t t-call="portal.portal_layout">-->
+<!--            <div class="card col-12 col-lg justify-content-end"-->
+<!--                 style="padding: 10px;">-->
+<!--                <div class="pb-2 pt-3">-->
+<!--                    <h2 class="my-0">-->
+<!--                        Land Regularization:-->
+<!--                        <em t-esc="land_regularization.type"/>-->
+<!--                    </h2>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                    <div class="mb-3 col-6">-->
+<!--&lt;!&ndash;                        <p>Your land regularization is currently in&ndash;&gt;-->
+<!--&lt;!&ndash;                            <span t-field="land_regularization.state"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            State&ndash;&gt;-->
+<!--&lt;!&ndash;                        </p>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div id="service_order_communication" class="mt-4">-->
+<!--                <h2>History</h2>-->
+<!--                <t t-call="portal.message_thread">-->
+<!--                    <t t-set="object" t-value="land_regularization"/>-->
+<!--                </t>-->
+<!--            </div>-->
+<!--        </t>-->
+<!--    </template>-->
+
+</odoo>

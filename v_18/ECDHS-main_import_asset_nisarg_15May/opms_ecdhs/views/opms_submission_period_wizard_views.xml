@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_opms_submission_period_wizard_form" model="ir.ui.view">
+            <field name="name">opms.submission.period.wizard.form</field>
+            <field name="model">opms.submission.period.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Manual Submission Period Override">
+                    <sheet>
+                        <div class="alert alert-warning mb-3" role="alert" style="border-left: 4px solid #d97706;">
+                            <h5 class="mb-1">
+                                <i class="fa fa-exclamation-triangle"/> Manual Override
+                            </h5>
+                            <p class="mb-0">
+                                You are about to <strong><field name="action_type" readonly="1" widget="badge"/></strong>
+                                submissions for <strong><field name="quarter_id" readonly="1"/></strong> manually.<br/>
+                                Automatic scheduling will be <strong>suspended</strong> until the Override Expires On date,
+                                at which point the system will resume automatic open/close control.
+                            </p>
+                        </div>
+                        <group>
+                            <field name="manual_override_until"
+                                   string="Override Expires On"
+                                   required="1"
+                                   help="Required. Automatic scheduling resumes on this date. Must be a future date."/>
+                        </group>
+                        <div class="alert alert-info mt-2" role="alert" style="font-size: 0.9rem;">
+                            <strong>Recommended values:</strong><br/>
+                            • <strong>Force-Open:</strong> set to the day after the submission close date so auto-close still fires on schedule.<br/>
+                            • <strong>Force-Close:</strong> set to the submission open date so auto-open still fires on schedule.
+                        </div>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm"
+                                type="object"
+                                string="Confirm Override"
+                                class="btn-primary"
+                                data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_submission_period_wizard" model="ir.actions.act_window">
+            <field name="name">Manual Submission Override</field>
+            <field name="res_model">opms.submission.period.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

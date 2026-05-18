@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--
+        <record model="ir.ui.view" id="building_filter">
+            <field name="name">building.search.view</field>
+            <field name="model">building</field>
+            <field name="inherit_id"
+                ref="itsys_real_estate.building_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="jmc_number"/>
+                </xpath>
+            </field>
+        </record> -->
+
+        <!-- Instruction Request Tree View -->
+        <record id="instruction_request_tree_view" model="ir.ui.view">
+            <field name="name">instruction.request.tree</field>
+            <field name="model">instruction.request</field>
+            <field name="arch" type="xml">
+                <tree string="Instruction/Request">
+                    <field name="name" string="Reference"/>
+                    <field name="property_id" options="{'no_open': False, 'no_create': True}" readonly="0" required="1" force_save="1"/>
+                    <field name="jmc_number" readonly="1" required="0" force_save="1"/>
+                    <field name="property_number" readonly="1" required="0" force_save="1"/>
+                    <field name="property_category" readonly="0" required="1" force_save="1"/>
+                    <field name="property_address" readonly="0" required="0" force_save="1"/>
+                    <field name="instruction_type" readonly="0" required="1" force_save="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Instruction Request Form View -->
+        <record id="instruction_request_form_view" model="ir.ui.view">
+            <field name="name">instruction.request.form</field>
+            <field name="model">instruction.request</field>
+            <field name="arch" type="xml">
+                <form string="Instruction/Request">
+                    <sheet>
+                        <style>
+                            .o_form_view:not(.o_field_highlight)
+                            .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                            .o_input:not(:hover):not(:focus) {
+                            --o-input-border-color: black !important;
+                            }
+                            .o_form_view:not(o_field_highlight)
+                            .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                            .note-editable:not(:focus) {
+                            border-color: black !important;
+                            }
+                            .form-check:not(:hover),
+                            .form-check:not(:hover) .form-check-input:not(:disabled),
+                            .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                            border-color: black !important;
+                            }
+                        </style>
+                        <group>
+                            <group>
+                                <field name="name" string="Reference"/>
+                                <field name="property_id" options="{'no_open': False, 'no_create': True}" readonly="0" required="1" force_save="1"/>
+                                <field name="jmc_number" readonly="1" required="0" force_save="1"/>
+                                <field name="property_number" readonly="1" required="0" force_save="1"/>
+                                <field name="property_category" readonly="0" required="1" force_save="1"/>
+                                <field name="property_address" readonly="0" required="0" force_save="1"/>
+                            </group>
+                            <group>
+                                <field name="instruction_type" readonly="0" required="1" force_save="1"/>
+                                <field name="instruction_description"/>
+                                <field name="create_date" readonly="1" required="0"/>
+                                <field name="write_date" readonly="1" required="0"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="instruction_documents" string="Documents">
+                                <field name="instruction_request_documents_ids" mode="tree,form"
+                                       context="{'default_jmc_property_id': property_id}">
+                                    <tree editable="bottom">
+                                        <field name="attachment_id" string="Upload Document" domain="[('id', '=', False)]" options="{'no_open': True, 'no_create': False}" readonly="0" required="1" force_save="1"/>
+                                        <field name="folder_id" string="File Plan" options="{'no_open': True, 'no_create': True}" readonly="0" required="1" force_save="1"/>
+                                        <field name="jmc_property_id" options="{'no_open': True, 'no_create': True}" readonly="1" required="1" force_save="1"/>
+                                        <button name="action_preview_document" type="object" string="Preview"
+                                                class="btn-primary"
+                                                attrs="{'invisible': [('attachment_id', '=', False)]}"/>
+                                        <!-- <field name="name" readonly="1" required="0"/> -->
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="instruction_notes" string="Notes">
+                                <field name="instruction_notes"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

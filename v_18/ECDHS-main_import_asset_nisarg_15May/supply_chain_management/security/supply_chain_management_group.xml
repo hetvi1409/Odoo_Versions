@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.module.category" id="purchase_requisition">
+        <field name="name">Purchase Requisition</field>
+        <field name="description">User access level for Purchase Requisition</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="purchase_requisition_user" model="res.groups">
+        <field name="name">Users</field>
+        <field name="category_id" ref="purchase_requisition"/>
+    </record>
+    <record id="purchase_requisition_user_manager" model="res.groups">
+        <field name="name">Users Manager</field>
+        <field name="category_id" ref="purchase_requisition"/>
+        <field name="implied_ids"
+               eval="[(4, ref('supply_chain_management.purchase_requisition_user'))]"/>
+    </record>
+    <record id="purchase_requisition_finance" model="res.groups">
+        <field name="name">Finance</field>
+        <field name="category_id" ref="purchase_requisition"/>
+        <field name="implied_ids"
+               eval="[(4, ref('supply_chain_management.purchase_requisition_user')), (4, ref('supply_chain_management.purchase_requisition_user_manager'))]"/>
+    </record>
+    <record id="purchase_requisition_scm" model="res.groups">
+        <field name="name">SCM</field>
+        <field name="category_id" ref="purchase_requisition"/>
+        <field name="implied_ids"
+               eval="[(4, ref('supply_chain_management.purchase_requisition_user')), (4, ref('supply_chain_management.purchase_requisition_user_manager')), (4, ref('supply_chain_management.purchase_requisition_finance'))]"/>
+    </record>
+    <record id="purchase_requisition_scm_manager" model="res.groups">
+        <field name="name">SCM Manager</field>
+        <field name="category_id" ref="purchase_requisition"/>
+        <field name="implied_ids"
+               eval="[(4, ref('supply_chain_management.purchase_requisition_user')), (4, ref('supply_chain_management.purchase_requisition_user_manager')), (4, ref('supply_chain_management.purchase_requisition_finance')), (4, ref('supply_chain_management.purchase_requisition_scm'))]"/>
+    </record>
+    <record id="purchase_requisition_scm_ceo" model="res.groups">
+        <field name="name">CEO</field>
+        <field name="category_id" ref="purchase_requisition"/>
+        <field name="implied_ids"
+               eval="[(4, ref('supply_chain_management.purchase_requisition_user')), (4, ref('supply_chain_management.purchase_requisition_user_manager')), (4, ref('supply_chain_management.purchase_requisition_finance')), (4, ref('supply_chain_management.purchase_requisition_scm')), (4, ref('supply_chain_management.purchase_requisition_scm_manager'))]"/>
+    </record>
+    <record id="purchase_requisition_scm_admin" model="res.groups">
+        <field name="name">SCM Admin</field>
+        <field name="category_id" ref="purchase_requisition"/>
+        <field name="implied_ids"
+               eval="[(4, ref('supply_chain_management.purchase_requisition_user')), (4, ref('supply_chain_management.purchase_requisition_user_manager')), (4, ref('supply_chain_management.purchase_requisition_finance')), (4, ref('supply_chain_management.purchase_requisition_scm')), (4, ref('supply_chain_management.purchase_requisition_scm_manager')), (4, ref('supply_chain_management.purchase_requisition_scm_ceo'))]"/>
+    </record>
+    <record id="purchase_requisition_scm_eac" model="res.groups">
+        <field name="name">EAC</field>
+        <field name="category_id" ref="purchase_requisition"/>
+        <field name="implied_ids"
+               eval="[(4, ref('supply_chain_management.purchase_requisition_user')), (4, ref('supply_chain_management.purchase_requisition_user_manager')), (4, ref('supply_chain_management.purchase_requisition_finance')), (4, ref('supply_chain_management.purchase_requisition_scm')), (4, ref('supply_chain_management.purchase_requisition_scm_manager')), (4, ref('supply_chain_management.purchase_requisition_scm_ceo')), (4, ref('supply_chain_management.purchase_requisition_scm_admin'))]"/>
+    </record>
+
+</odoo>

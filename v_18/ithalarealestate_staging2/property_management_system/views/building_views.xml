@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="building_unit_form" model="ir.ui.view">
+        <field name="name">product.template.view.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="itsys_real_estate.building_unit_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='active']" position="after">
+                <field name="province_id"/>
+<!--                <field name="district_id"/>-->
+                <field name="city_id"/>
+            </xpath>
+            <xpath expr="//field[@name='region_id']" position="after">
+                <field name="tenant_id"/>
+                <field name="property_type"/>
+                <field name="mooring_length" invisible="property_type != 'mooring'"/>
+                <field name="mooring_width" invisible="property_type != 'mooring'"/>
+                <field name="min_area" invisible="property_type == 'mooring'"/>
+                <field name="max_area" invisible="property_type == 'mooring'"/>
+            </xpath>
+            <xpath expr="//field[@name='surface']" position="after">
+                <field name="swimming_pool"/>
+                <field name="generator"/>
+                <field name="water_storage"/>
+                <field name="conceige"/>
+                <field name="security"/>
+                <field name="basement_parking"/>
+                <field name="park"/>
+                <field name="open_parking"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

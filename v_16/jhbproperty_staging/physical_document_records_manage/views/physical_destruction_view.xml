@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="custom_phydest_record_custom_form_view">
+            <field name="name">custom.physical.destruction.record.form.view</field>
+            <field name="model">custom.physical.destruction.record</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_approved_by" type="object" string="Approve" attrs="{'invisible': [('state', '!=', 'new')]}" class="oe_highlight"/>
+                        <button name="action_destroyed_by" type="object" string="Destroy" attrs="{'invisible': [('state', 'not in', ['new', 'approved'])]}"/>
+                        <field name="state" widget="statusbar" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="destroy_method" />
+                                <field name="approved_date" />
+                                <field name="destroy_date" />
+                            </group>
+                            <group>
+                                <field name="approved_by_id" />
+                                <field name="destroy_by_id" />
+                            </group>
+                        </group>
+                        <group string="Reason">
+                            <group>
+                                <field name="reason" />
+                            </group>
+                        </group>
+                        <group string="Description">
+                            <group>
+                                <field name="description" />
+                            </group>
+                        </group>              
+                    </sheet>
+                    <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="custom_phydest_record_tree_view">
+            <field name="name">custom.physical.destruction.record.tree</field>
+            <field name="model">custom.physical.destruction.record</field>
+            <field name="arch" type ="xml">
+                <tree>
+                    <field name="destroy_method" />
+                    <field name="approved_by_id" />
+                    <field name="approved_date" />
+                    <field name="destroy_by_id" />
+                    <field name="destroy_date" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_physical_record_destruction_search_view">
+            <field name="name">custom.physical.destruction.record.search</field>
+            <field name="model">custom.physical.destruction.record</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="destroy_method" />
+                    <field name="destroy_date" />
+                    <field name="destroy_by_id" />
+                    <field name="approved_by_id" />
+                    <field name="approved_date" />
+                    <field name="reason" />
+                    <field name="state" />
+                    <group expand="0" string="Group By">
+                        <filter name="Destruct Method" context="{'group_by':'destroy_method'}"/>
+                        <filter name="Destruct Date" context="{'group_by':'destroy_date'}"/>
+                        <filter name="Destruct by" context="{'group_by':'destroy_by_id'}"/>
+                        <filter name="Approve Date" context="{'group_by':'approved_date'}"/>
+                        <filter name="Approve by" context="{'group_by':'approved_by_id'}"/>
+                        <filter name="State" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_custom_physical_destruction" model="ir.actions.act_window">
+            <field name="name">Record Destruction Requests</field>
+            <field name="res_model">custom.physical.destruction.record</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Record Destruction Requests" 
+                  id="sub_menu_custom_record_destruction" 
+                  parent="menu_physical_record_main_custom" 
+                  sequence="21" action="action_custom_physical_destruction"/>
+
+    </data>
+</odoo>

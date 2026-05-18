@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Accident Report list View -->
+        <record id="view_fleet_accident_report_list" model="ir.ui.view">
+            <field name="name">fleet.accident.report.list</field>
+            <field name="model">fleet.accident.report</field>
+            <field name="arch" type="xml">
+                <list string="Accident Reports" decoration-danger="severity_level=='fatal'"
+                      decoration-warning="severity_level=='major'" decoration-info="state=='draft'">
+                    <field name="reference"/>
+                    <field name="accident_date"/>
+                    <field name="vehicle_registration"/>
+                                        <field name="driver_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="accident_location"/>
+                    <field name="accident_type"/>
+                    <field name="severity_level" widget="badge"
+                           decoration-danger="severity_level=='fatal'"
+                           decoration-warning="severity_level=='major'"
+                           decoration-info="severity_level=='minor'"/>
+                    <field name="total_injuries"/>
+                    <field name="police_notified" widget="boolean_toggle"/>
+                    <field name="insurance_notified" widget="boolean_toggle"/>
+                    <field name="state" widget="badge"
+                           decoration-success="state=='closed'"
+                           decoration-info="state=='reported'"
+                           decoration-warning="state in ('investigation','claim_filed')"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Accident Report Form View -->
+        <record id="view_fleet_accident_report_form" model="ir.ui.view">
+            <field name="name">fleet.accident.report.form</field>
+            <field name="model">fleet.accident.report</field>
+            <field name="arch" type="xml">
+                <form string="Accident Report (RT46)">
+                    <header>
+                        <button name="action_report_accident" string="Report Accident" type="object"
+                                class="oe_highlight" invisible="state != 'draft'"/>
+                        <button name="action_start_investigation" string="Start Investigation" type="object"
+                                class="oe_highlight" invisible="state != 'reported'"/>
+                        <button name="action_file_claim" string="File Insurance Claim" type="object"
+                                invisible="state not in ('reported','investigation')"/>
+                        <button name="action_approve_claim" string="Approve Claim" type="object"
+                                invisible="state != 'claim_filed'"/>
+                        <button name="action_reject_claim" string="Reject Claim" type="object"
+                                invisible="state != 'claim_filed'"/>
+                        <button name="action_close_report" string="Close Report" type="object"
+                                class="oe_highlight" invisible="state in ('draft','closed','cancelled')"/>
+                        <button name="action_cancel" string="Cancel" type="object"
+                                invisible="state in ('closed','cancelled')"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,reported,investigation,claim_filed,closed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_photos" type="object" class="oe_stat_button" icon="fa-camera">
+                                <field name="photo_count" widget="statinfo" string="Photos"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="reference" string="Accident Report"/>
+                            <h1>
+                                <field name="reference" readonly="1"/>
+                            </h1>
+                            <field name="name" invisible="1"/>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="severity_level" widget="badge"
+                                       decoration-danger="severity_level=='fatal'"
+                                       decoration-warning="severity_level in ('major','moderate')"
+                                       decoration-success="severity_level=='minor'"/>
+                                <field name="days_since_accident"/>
+                            </group>
+                            <group>
+                                <field name="reported_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="reported_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Accident Details" name="accident_details">
+                                <group>
+                                    <group string="When &amp; Where">
+                                        <field name="accident_date"/>
+                                        <field name="accident_location"/>
+                                        <field name="accident_address"/>
+                                        <field name="weather_conditions"/>
+                                        <field name="road_conditions"/>
+                                    </group>
+                                    <group string="Accident Classification">
+                                        <field name="accident_type"/>
+                                        <field name="speed_at_accident"/>
+                                        <field name="witness_present" widget="boolean_toggle"/>
+                                        <field name="witness_details" invisible="not witness_present"/>
+                                        <field name="consumption_of_substances"/>
+                                        <field name="substance_test_conducted" invisible="not consumption_of_substances"/>
+                                        <field name="substance_test_results" invisible="not substance_test_conducted"/>
+                                    </group>
+                                </group>
+                                <group string="Animal Involvement">
+                                    <field name="animal_involved" widget="boolean_toggle"/>
+                                    <field name="animal_type" invisible="not animal_involved"/>
+                                    <field name="animal_outcome" invisible="not animal_involved"/>
+                                    <field name="animal_owner_details" invisible="not animal_involved"/>
+                                </group>
+                                <group string="Accident Description">
+                                    <field name="accident_description" nolabel="1" placeholder="Describe how the accident occurred..."/>
+                                </group>
+                                <group string="Damage Description">
+                                    <field name="damage_description" nolabel="1" placeholder="Describe the damage to all vehicles and property..."/>
+                                </group>
+                            </page>
+                            <page string="Vehicle &amp; Driver" name="vehicle_driver">
+                                <group>
+                                    <group string="Vehicle Information">
+                                        <field name="vehicle_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="vehicle_registration"/>
+                                        <field name="vehicle_vin"/>
+                                        <field name="vehicle_make"/>
+                                        <field name="vehicle_model"/>
+                                        <field name="vehicle_driveable" widget="boolean_toggle"/>
+                                        <field name="vehicle_towed" invisible="vehicle_driveable" widget="boolean_toggle"/>
+                                        <field name="towing_company" invisible="not vehicle_towed"/>
+                                        <field name="tow_destination" invisible="not vehicle_towed"/>
+                                    </group>
+                                    <group string="Driver Information">
+                                        <field name="driver_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="driver_license"/>
+                                        <field name="driver_phone"/>
+                                        <field name="driver_injured" widget="boolean_toggle"/>
+                                        <field name="driver_injury_details" invisible="not driver_injured"/>
+                                        <field name="odometer_reading" readonly="1"/>
+                                        <field name="component_id" readonly="1"/>
+                                        <field name="driver_email"/>
+                                        <field name="driver_mobile"/>
+                                        <field name="driver_country_id" readonly="1"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group string="Passengers">
+                                        <field name="passenger_count"/>
+                                        <field name="passenger_details" invisible="passenger_count == 0"/>
+                                        <field name="passengers_injured" invisible="passenger_count == 0" widget="boolean_toggle"/>
+                                        <field name="passenger_injury_details" invisible="not passengers_injured"/>
+                                    </group>
+                                    <group string="Damage Assessment">
+                                        <field name="estimated_repair_cost" widget="monetary"/>
+                                        <field name="actual_repair_cost" widget="monetary"/>
+                                             <field name="currency_id" invisible="1"
+                                                 options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Third Party" name="third_party">
+                                <group>
+                                    <field name="third_party_involved" widget="boolean_toggle"/>
+                                </group>
+                                <group invisible="not third_party_involved">
+                                    <group string="Third Party Details">
+                                        <field name="third_party_name"/>
+                                        <field name="third_party_contact"/>
+                                        <field name="third_party_vehicle_reg"/>
+                                        <field name="third_party_insurance"/>
+                                    </group>
+                                    <group string="Third Party Injuries">
+                                        <field name="third_party_injured" widget="boolean_toggle"/>
+                                        <field name="third_party_injury_details" invisible="not third_party_injured"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Police &amp; Emergency" name="police_emergency">
+                                <group>
+                                    <group string="Police">
+                                        <field name="police_notified" widget="boolean_toggle"/>
+                                        <field name="police_station" invisible="not police_notified"/>
+                                        <field name="police_case_number" invisible="not police_notified"/>
+                                        <field name="police_officer_name" invisible="not police_notified"/>
+                                        <field name="police_report_date" invisible="not police_notified"/>
+                                    </group>
+                                    <group string="Emergency Services">
+                                        <field name="ambulance_called" widget="boolean_toggle"/>
+                                        <field name="hospital_name" invisible="not ambulance_called"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Insurance &amp; Claims" name="insurance">
+                                <group>
+                                    <group string="Insurance Details">
+                                        <field name="insurance_company_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="insurance_policy_number"/>
+                                        <field name="insurance_notified" widget="boolean_toggle"/>
+                                        <field name="insurance_notification_date" invisible="not insurance_notified"/>
+                                    </group>
+                                    <group string="Claim Information">
+                                        <field name="claim_number"/>
+                                        <field name="claim_status" widget="badge"/>
+                                        <field name="claim_amount" widget="monetary"/>
+                                        <field name="excess_amount" widget="monetary"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Investigation" name="investigation">
+                                <group>
+                                    <group string="Investigation Details">
+                                        <field name="investigation_officer_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="investigation_date"/>
+                                        <field name="fault_determination" widget="badge"/>
+                                        <field name="fault_percentage" invisible="fault_determination != 'shared'"/>
+                                    </group>
+                                    <group string="Related Records">
+                                        <field name="trip_authority_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="lost_theft_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </group>
+                                </group>
+                                <group string="Investigation Notes">
+                                    <field name="investigation_notes" nolabel="1" placeholder="Document investigation findings..."/>
+                                </group>
+                            </page>
+                            <page string="Photos &amp; Documents" name="attachments">
+                                <group>
+                                    <field name="photo_ids" widget="many2many_binary" nolabel="1"/>
+                                </group>
+                                <group>
+                                    <field name="document_ids" widget="many2many_binary" nolabel="1"/>
+                                </group>
+                            </page>
+                            <page string="Approval &amp; Closure" name="approval">
+                                <group>
+                                    <group string="Approval">
+                                        <field name="approved_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="approved_date"/>
+                                    </group>
+                                    <group string="Closure">
+                                        <field name="closed_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="closed_date"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- Accident Report Kanban View -->
+        <record id="view_fleet_accident_report_kanban" model="ir.ui.view">
+            <field name="name">fleet.accident.report.kanban</field>
+            <field name="model">fleet.accident.report</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state" class="o_kanban_small_column" quick_create="false">
+                    <field name="reference"/>
+                    <field name="accident_date"/>
+                    <field name="vehicle_registration"/>
+                    <field name="driver_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="accident_location"/>
+                    <field name="severity_level"/>
+                    <field name="state"/>
+                    <field name="total_injuries"/>
+                    <field name="police_notified"/>
+                    <field name="insurance_notified"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title"><field name="reference"/></strong>
+                                        <br/>
+                                        <span class="o_kanban_record_subtitle">
+                                            <i class="fa fa-car"/> <field name="vehicle_registration"/>
+                                        </span>
+                                    </div>
+                                    <div class="o_dropdown_kanban dropdown" groups="base.group_user">
+                                        <a role="button" class="dropdown-toggle o-no-caret btn" data-bs-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                            <span class="fa fa-ellipsis-v"/>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a type="edit" role="menuitem" class="dropdown-item">Edit</a></li>
+                                            <li><a type="delete" role="menuitem" class="dropdown-item">Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <field name="accident_date" widget="date"/>
+                                    <br/>
+                                    <field name="accident_location"/>
+                                    <div class="mt-1">
+                                        <span class="badge" t-attf-class="badge-#{record.severity_level.raw_value == 'fatal' ? 'danger' : record.severity_level.raw_value == 'major' ? 'warning' : 'info'}">
+                                            <field name="severity_level"/>
+                                        </span>
+                                        <t t-if="record.total_injuries.raw_value > 0">
+                                            <span class="badge badge-danger ms-1">
+                                                <i class="fa fa-ambulance"/> <field name="total_injuries"/> Injuries
+                                            </span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <t t-if="record.police_notified.raw_value">
+                                            <span class="badge badge-info" title="Police Notified">
+                                                <i class="fa fa-shield"/>
+                                            </span>
+                                        </t>
+                                        <t t-if="record.insurance_notified.raw_value">
+                                            <span class="badge badge-success ms-1" title="Insurance Notified">
+                                                <i class="fa fa-file-text-o"/>
+                                            </span>
+                                        </t>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <img t-att-src="kanban_image('res.partner', 'avatar_128', record.driver_id.raw_value)"
+                                             t-att-title="record.driver_id.value" t-att-alt="record.driver_id.value"
+                                             class="oe_kanban_avatar" style="width: 24px; height: 24px;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Accident Report Search View -->
+        <record id="view_fleet_accident_report_search" model="ir.ui.view">
+            <field name="name">fleet.accident.report.search</field>
+            <field name="model">fleet.accident.report</field>
+            <field name="arch" type="xml">
+                <search string="Search Accident Reports">
+                    <field name="reference"/>
+                    <field name="vehicle_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="driver_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                    <field name="accident_location"/>
+                    <filter string="My Reports" name="my_reports" domain="[('reported_by_id', '=', uid)]"/>
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Reported" name="reported" domain="[('state', '=', 'reported')]"/>
+                    <filter string="Under Investigation" name="investigation" domain="[('state', '=', 'investigation')]"/>
+                    <filter string="Claim Filed" name="claim_filed" domain="[('state', '=', 'claim_filed')]"/>
+                    <filter string="Closed" name="closed" domain="[('state', '=', 'closed')]"/>
+                    <separator/>
+                    <filter string="Minor" name="minor" domain="[('severity_level', '=', 'minor')]"/>
+                    <filter string="Moderate" name="moderate" domain="[('severity_level', '=', 'moderate')]"/>
+                    <filter string="Major" name="major" domain="[('severity_level', '=', 'major')]"/>
+                    <filter string="Fatal" name="fatal" domain="[('severity_level', '=', 'fatal')]"/>
+                    <separator/>
+                    <filter string="With Injuries" name="with_injuries" domain="[('total_injuries', '>', 0)]"/>
+                    <filter string="Police Involved" name="police_involved" domain="[('police_notified', '=', True)]"/>
+                    <filter string="Third Party Involved" name="third_party" domain="[('third_party_involved', '=', True)]"/>
+                    <separator/>
+                    <filter string="Accident Date" name="accident_date" date="accident_date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Severity" name="group_severity" context="{'group_by': 'severity_level'}"/>
+                        <filter string="Vehicle" name="group_vehicle" context="{'group_by': 'vehicle_id'}"/>
+                        <filter string="Accident Type" name="group_type" context="{'group_by': 'accident_type'}"/>
+                        <filter string="Accident Date" name="group_date" context="{'group_by': 'accident_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Accident Report Action -->
+        <record id="action_fleet_accident_report" model="ir.actions.act_window">
+            <field name="name">Accident Reports</field>
+            <field name="res_model">fleet.accident.report</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="context">{'search_default_my_reports': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No accident reports found
+                </p>
+                <p>
+                    Create an accident report (RT46) to document vehicle accidents.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

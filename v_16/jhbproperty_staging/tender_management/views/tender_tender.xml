@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View for Tender -->
+    <record id="view_tender_form" model="ir.ui.view">
+        <field name="name">tender.tender.form</field>
+        <field name="model">tender.tender</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_open" string="Publish"
+                            type="object" states = 'approve'
+                            class="oe_highlight"/>
+                    <button name="action_submit" string="Submit"
+                            type="object" states = 'draft'
+                            class="oe_highlight"/>
+                    <button name="action_verify" string="Verify"
+                            type="object" states = 'submit'
+                            class="oe_highlight"/>
+                        <button name="action_start_adjudication" string="Adjudication in Progress"
+                            type="object" states="closed"
+                            class="oe_highlight"/>
+                        <button name="action_award" string="Award"
+                            type="object" states="adjudication_in_progress"
+                            class="oe_highlight"/>
+                    <button name="action_approve" string="Approve"
+                            type="object" states = 'verify'
+                            class="oe_highlight"/>
+                    <button name="action_reject" string="Reject"
+                            type="object" states = 'verify'
+                            class="oe_highlight"/>
+                    <button name="action_reset_draft" string="Reset to Draft"
+                        type="object" states="submit,verify,approve,rejected,open"
+                        class="btn-secondary"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <div class="alert alert-warning"
+                        attrs="{'invisible': [('state', '=', 'draft')]}"
+                        style="display: inline-block; padding: 6px 10px; margin-bottom: 12px;">
+                        This record is locked because status is no longer Draft.
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+<!--                        <button class="oe_stat_button"-->
+<!--                                attrs="{'invisible': [('is_tender_published', '!=', True)]}">-->
+<!--                            <span class="fa fa-lg fa-globe"-->
+<!--                                  style="color: green;">-->
+<!--                                Published-->
+<!--                            </span>-->
+<!--                        </button>-->
+                        <field name="is_published" widget="website_redirect_button"/>
+                    </div>
+
+
+                    <div class="oe_title">
+                        <h2>
+                            <field name="sequence_number"/>
+                        </h2>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="is_tender_published" invisible="1"/>
+                            <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="description" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="category_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="type" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="company_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="is_published" invisible="1"/>
+                            <field name="website_url" invisible="1"/>
+                            <field name="website_published" string="Is Published" invisible="1"/>
+                            <field name="website_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" domain="['|', ('company_id', '=', company_id), ('company_id', '=', False)]" groups="website.group_multi_website" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="procurement_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="publish_date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="closing_date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="start_time" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="allow_bidding" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    </group>
+                    </group>
+                    <notebook attrs="{'readonly': [('state', '!=', 'draft')]}">
+                        <page string="RFQ Documents">
+                            <!--                            <field name="tender_document_ids"/>-->
+                            <field name="rfq_document_ids" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                <tree editable="bottom">
+                                    <field name="file" filename="name"/>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Documents">
+                            <!--                            <field name="tender_document_ids"/>-->
+                            <field name="document_ids" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                <tree editable="bottom">
+                                    <field name="file" filename="name"/>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <!-- New Briefing Session Tab -->
+                        <page string="Briefing Session">
+                            <group>
+                                <field name="briefing_session" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="briefing_compulsory" attrs="{'invisible': [('briefing_session', '!=', True)], 'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="briefing_date_time" attrs="{'invisible': [('briefing_session', '!=', True)], 'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="briefing_venue" attrs="{'invisible': [('briefing_session', '!=', True)], 'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </page>
+                        <page string="Bids">
+                            <field name="bid_ids" readonly="1" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="vendor_id"/>
+                                    <field name="document_ids" widget="many2many_tags"/>
+                                    <button name="action_view_documents" string="Open Documents"
+                                            type="object" class="oe_highlight"/>
+
+                                    <!--                                    <field name="bid_amount"/>-->
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree Views -->
+    <record id="view_tender_tree" model="ir.ui.view">
+        <field name="name">tender.tender.tree</field>
+        <field name="model">tender.tender</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence_number"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_tender" model="ir.actions.act_window">
+        <field name="name">Tenders</field>
+        <field name="res_model">tender.tender</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="menu_tenders" name="All Tenders" sequence="1"
+              parent="menu_tender_root"
+              action="action_tender"/>
+
+
+</odoo>

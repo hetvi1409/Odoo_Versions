@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+
+        <record id="oeh_medical_patient_grant_access_view" model="ir.ui.view">
+            <field name="name">Patient</field>
+            <field name="model">oeh.medical.patient</field>
+            <field name="inherit_id" ref="oehealth.oeh_medical_patient_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='change_archive']" position="before">
+                    <field name="is_portal_access" invisible="1"/>
+                    <button name="change_grant_access"
+                            type="object"
+                            class="oe_stat_button text-success"
+                            style="margin-right: 10px; border: 1px solid lightgray; border-radius: 20px;"
+                            icon="fa-archive text-success"
+                            string="Grant Portal Access">
+                            <!-- invisible="[('is_portal_access','=',False)]" -->
+                    </button>
+                    <button name="change_grant_access"
+                            type="object"
+                            class="oe_stat_button text-danger"
+                            style="margin-right: 10px; border: 1px solid lightgray; border-radius: 20px;"
+                            icon="fa-archive text-danger"
+                            string="Revoke Portal Access">
+                            <!-- invisible="[('is_portal_access','!=',False)]" -->
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='genetic_risks']" position="after">
+                    <field name="patient_token"/>
+                    <field name="patient_url"/>
+                </xpath>
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button name="send_patient_portal" type="object" class="oe_highlight" string="Send Patient Portal Access"
+                                />
+                    </header>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

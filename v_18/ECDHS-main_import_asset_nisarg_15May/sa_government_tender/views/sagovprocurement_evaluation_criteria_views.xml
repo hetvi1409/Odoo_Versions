@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ===================================== -->
+        <!-- Evaluation Criteria - Tree View -->
+        <!-- ===================================== -->
+        <record id="view_sagovprocurement_evaluation_criteria_list" model="ir.ui.view">
+            <field name="name">sagovprocurement.evaluation.criteria.list</field>
+            <field name="model">sagovprocurement.evaluation.criteria</field>
+            <field name="arch" type="xml">
+                <list string="Evaluation Criteria">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="criteria_type"/>
+                    <field name="weight" string="Weight %"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- Evaluation Criteria - Form View -->
+        <!-- ===================================== -->
+        <record id="view_sagovprocurement_evaluation_criteria_form" model="ir.ui.view">
+            <field name="name">sagovprocurement.evaluation.criteria.form</field>
+            <field name="model">sagovprocurement.evaluation.criteria</field>
+            <field name="arch" type="xml">
+                <form string="Evaluation Criteria">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="method_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="name"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="criteria_type"/>
+                                <field name="weight" string="Weight %"/>
+                            </group>
+                        </group>
+                        <group string="Description">
+                            <field name="description" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

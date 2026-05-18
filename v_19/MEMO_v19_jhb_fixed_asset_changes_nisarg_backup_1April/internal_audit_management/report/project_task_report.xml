@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_project_tasks">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 style="text-align: center;">Task Report</h2>
+                        <br/>
+                        <table class="table table-bordered" style="width:100%; border-collapse: collapse;">
+                            <tbody>
+                                <tr t-if="o.manager_id">
+                                    <td style="font-weight: bold; width: 30%;">Manager:</td>
+                                    <td t-esc="o.manager_id.name"/>
+                                </tr>
+                                <tr t-if="o.user_ids">
+                                    <td style="font-weight: bold;">Assignees:</td>
+                                    <td>
+                                        <t t-foreach="o.user_ids" t-as="user">
+                                            <t t-esc="user.name"/>
+                                            <br/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr t-if="o.tag_ids">
+                                    <td style="font-weight: bold;">Tags:</td>
+                                    <td>
+                                        <t t-foreach="o.tag_ids" t-as="tag">
+                                            <t t-esc="tag.name"/>
+                                            <br/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr t-if="o.date_deadline">
+                                    <td style="font-weight: bold; width: 30%;">Planned Date:</td>
+                                    <td t-esc="o.date_deadline"/>
+                                </tr>
+                                <tr t-if="o.repeat_interval">
+                                    <td style="font-weight: bold; width: 30%;">Repeat Interval:</td>
+                                    <td t-esc="o.repeat_interval"/>
+                                </tr>
+                                <tr t-if="o.description">
+                                    <td style="font-weight: bold; width: 30%;">Description:</td>
+                                    <td t-esc="o.description"/>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Extra Info Section -->
+                        <h3 style="text-align: center; margin-top: 20px;">Extra Info</h3>
+                        <table class="table table-bordered" style="width:100%; border-collapse: collapse;">
+                            <tbody>
+                                <tr t-if="o.parent_id">
+                                    <td style="font-weight: bold; width: 30%;">Parent Task:</td>
+                                    <td t-esc="o.parent_id.name"/>
+                                </tr>
+                                <tr t-if="o.email_cc">
+                                    <td style="font-weight: bold;">Email cc:</td>
+                                    <td t-esc="o.email_cc"/>
+                                </tr>
+                                <tr t-if="o.date_assign">
+                                    <td style="font-weight: bold;">Assigning Date:</td>
+                                    <td t-esc="o.date_assign"/>
+                                </tr>
+                                <tr t-if="o.date_last_stage_update">
+                                    <td style="font-weight: bold;">last Stage Update:</td>
+                                    <td t-esc="o.date_last_stage_update"/>
+                                </tr>
+                                <tr t-if="o.date_last_stage_update">
+                                    <td style="font-weight: bold;">Last Stage Update:</td>
+                                    <td t-esc="o.date_last_stage_update"/>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

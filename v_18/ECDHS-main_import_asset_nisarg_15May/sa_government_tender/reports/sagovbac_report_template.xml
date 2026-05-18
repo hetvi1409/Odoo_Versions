@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_sagovbac_review_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>BID ADJUDICATION COMMITTEE (BAC) REPORT</h2>
+                            <h3><span t-field="o.tender_id.name"/> - <span t-field="o.tender_id.title"/></h3>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <p><strong>BAC Reference:</strong> <span t-field="o.name"/></p>
+                                <p><strong>Tender Number:</strong> <span t-field="o.tender_id.name"/></p>
+                                <p><strong>Committee:</strong> <span t-field="o.committee_id.name"/></p>
+                            </div>
+                            <div class="col-6">
+                                <p><strong>Review Date:</strong> <span t-field="o.review_date"/></p>
+                                <p><strong>BAC Recommendation:</strong> <span t-field="o.bac_recommendation"/></p>
+                            </div>
+                        </div>
+
+                        <h4 class="mt-4">1. BEC Recommendation</h4>
+                        <p><strong>BEC Recommended Bidder:</strong> <span t-field="o.bec_recommendation_id.partner_id.name"/></p>
+                        <p><span t-field="o.bec_recommendation_notes"/></p>
+
+                        <h4 class="mt-3">2. BAC Review</h4>
+                        <div t-field="o.review_notes"/>
+
+                        <h4 class="mt-3">3. BAC Decision</h4>
+                        <div class="alert alert-info">
+                            <p><strong>Decision:</strong> <span t-field="o.bac_recommendation"/></p>
+                            <p><span t-field="o.recommendation_reason"/></p>
+                            <t t-if="o.approved_bid_id">
+                                <p><strong>Approved for Award:</strong> <span t-field="o.approved_bid_id.partner_id.name"/></p>
+                            </t>
+                        </div>
+
+                        <h4 class="mt-3">4. BAC Members &amp; Signatures</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr t-foreach="o.signatory_ids" t-as="signatory">
+                                    <td><span t-field="signatory.user_id.name"/></td>
+                                    <td t-if="signatory.is_chairperson">(Chairperson)</td>
+                                    <td>
+                                        <t t-if="signatory.signed">
+                                            Signed: <span t-field="signatory.signature_date"/>
+                                        </t>
+                                        <t t-else="">
+                                            Signature: _____________________
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

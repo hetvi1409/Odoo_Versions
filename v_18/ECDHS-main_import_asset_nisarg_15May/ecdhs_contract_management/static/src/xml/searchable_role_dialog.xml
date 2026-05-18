@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ecdhs_contract_management.SearchableRoleDialog">
+        <Dialog t-props="dialogProps">
+            <div class="m-2">
+                <label for="ecdhs_role_search_input" class="form-label">Search responsible</label>
+                <input
+                    id="ecdhs_role_search_input"
+                    type="text"
+                    class="form-control mb-2"
+                    placeholder="Type to filter roles..."
+                    t-model="state.query"
+                />
+
+                <label for="ecdhs_role_select_input" class="form-label">Responsible</label>
+                <select
+                    id="ecdhs_role_select_input"
+                    class="form-select"
+                    t-on-change="onSelectRole"
+                >
+                    <t t-foreach="filteredRoles" t-as="role" t-key="role.id">
+                        <option t-att-value="role.id" t-att-selected="role.id == state.selectedRole">
+                            <t t-esc="role.name"/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+            <t t-set-slot="footer">
+                <button class="btn btn-primary" t-on-click="onAddOnceClick">Add Once</button>
+                <button class="btn btn-secondary" t-on-click="onAddToAllPagesClick" t-att-hidden="props.pageCount &lt;= 1">Add to all pages</button>
+            </t>
+        </Dialog>
+    </t>
+</templates>

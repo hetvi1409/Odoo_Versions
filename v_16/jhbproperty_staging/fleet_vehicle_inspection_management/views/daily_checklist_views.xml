@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fleet_daily_checklist_action" model="ir.actions.act_window">
+        <field name="name">Daily Checklists</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fleet.vehicle.daily.checklist</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="fleet_daily_checklist_menu"
+              name="Daily Checklist"
+              parent="fleet_vehicle_inspection_management.fleet_operations_menu"
+              action="fleet_daily_checklist_action"/>
+
+    <record id="fleet_daily_checklist_view_form" model="ir.ui.view">
+        <field name="name">fleet.vehicle.daily.checklist.view.form</field>
+        <field name="model">fleet.vehicle.daily.checklist</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="depot_name"/>
+                            <field name="region"/>
+                            <field name="vehicle_id"/>
+                            <field name="driver_id"/>
+                            <field name="sap_no"/>
+                        </group>
+                        <group>
+                            <field name="odometer_reading"/>
+                            <field name="defects_reported"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <group string="Checklist">
+                        <field name="license_cof_valid" widget="radio" options="{'horizontal': true}"/>
+                        <field name="tyres_roadworthy" widget="radio" options="{'horizontal': true}"/>
+                        <field name="wheel_nuts_secure" widget="radio" options="{'horizontal': true}"/>
+                        <field name="logbook_up_to_date" widget="radio" options="{'horizontal': true}"/>
+                        <field name="damage_check" widget="radio" options="{'horizontal': true}"/>
+                        <field name="sufficient_fuel" widget="radio" options="{'horizontal': true}"/>
+                        <field name="lights_working" widget="radio" options="{'horizontal': true}"/>
+                        <field name="number_plates" widget="radio" options="{'horizontal': true}"/>
+                        <field name="vehicle_leaks" widget="radio" options="{'horizontal': true}"/>
+                        <field name="jack_and_spanner" widget="radio" options="{'horizontal': true}"/>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                    <notebook>
+                        <page name="signatures" string="Signatures">
+                            <group>
+                                <field name="driver_signature" widget="signature"/>
+                                <field name="transport_officer_signature" widget="signature"/>
+                                <field name="lto_signature" widget="signature"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="fleet_daily_checklist_view_tree" model="ir.ui.view">
+        <field name="name">fleet.vehicle.daily.checklist.view.tree</field>
+        <field name="model">fleet.vehicle.daily.checklist</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="defects_reported"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

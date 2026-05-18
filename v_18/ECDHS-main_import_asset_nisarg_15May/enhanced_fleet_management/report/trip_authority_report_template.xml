@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_trip_authority_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>TRIP AUTHORITY FORM</h2>
+                            <h3><t t-esc="o.reference"/></h3>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Employee Details:</strong>
+                                <table class="table table-sm table-bordered">
+                                    <tr>
+                                        <td width="40%"><strong>Name:</strong></td>
+                                        <td><t t-esc="o.employee_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Employee No:</strong></td>
+                                        <td><t t-esc="o.employee_number or '-'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Department:</strong></td>
+                                        <td><t t-esc="o.department_id.name or '-'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Position:</strong></td>
+                                        <td><t t-esc="o.job_id.name or '-'"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <strong>Vehicle &amp; Driver:</strong>
+                                <table class="table table-sm table-bordered">
+                                    <tr>
+                                        <td width="40%"><strong>Vehicle:</strong></td>
+                                        <td><t t-esc="o.vehicle_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Reg. Number:</strong></td>
+                                        <td><t t-esc="o.license_plate"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Driver:</strong></td>
+                                        <td><t t-esc="o.driver_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>License No:</strong></td>
+                                        <td><t t-esc="o.driver_license_number or '-'"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <strong>Trip Schedule:</strong>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td width="30%"><strong>Departure Date:</strong></td>
+                                        <td><t t-esc="o.departure_date"/></td>
+                                        <td width="30%"><strong>Return Date:</strong></td>
+                                        <td><t t-esc="o.return_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Duration:</strong></td>
+                                        <td colspan="3"><t t-esc="o.duration_days"/> day(s)</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <strong>Destination &amp; Purpose:</strong>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td width="25%"><strong>Destination:</strong></td>
+                                        <td><t t-esc="o.destination"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Purpose:</strong></td>
+                                        <td><t t-esc="o.purpose"/></td>
+                                    </tr>
+                                    <tr t-if="o.route_description">
+                                        <td><strong>Route:</strong></td>
+                                        <td><t t-esc="o.route_description"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Passengers:</strong></td>
+                                        <td><t t-esc="o.number_of_passengers"/> person(s)</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <strong>Odometer &amp; Fuel:</strong>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="table-active">
+                                            <th>Odometer Start</th>
+                                            <th>Odometer End</th>
+                                            <th>Distance (KM)</th>
+                                            <th>Fuel Start</th>
+                                            <th>Fuel End</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><t t-esc="o.odometer_start or ''"/></td>
+                                            <td><t t-esc="o.odometer_end or ''"/></td>
+                                            <td><t t-esc="o.distance_travelled or ''"/></td>
+                                            <td><t t-esc="dict(o._fields['fuel_level_start'].selection).get(o.fuel_level_start) if o.fuel_level_start else ''"/></td>
+                                            <td><t t-esc="dict(o._fields['fuel_level_end'].selection).get(o.fuel_level_end) if o.fuel_level_end else ''"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="col-4">
+                                <div class="border-top pt-2 text-center">
+                                    <strong>Driver Signature</strong><br/><br/>
+                                    <div style="height: 40px;"></div>
+                                    Date: _______________
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="border-top pt-2 text-center">
+                                    <strong>Employee Signature</strong><br/><br/>
+                                    <div style="height: 40px;"></div>
+                                    Date: _______________
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="border-top pt-2 text-center">
+                                    <strong>Authorized By</strong><br/>
+                                    <t t-if="o.authorized_by_id">
+                                        <t t-esc="o.authorized_by_id.name"/><br/>
+                                        Date: <t t-esc="o.authorization_date"/>
+                                    </t>
+                                    <t t-else="">
+                                        <div style="height: 40px;"></div>
+                                        Date: _______________
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4" t-if="o.special_instructions">
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    <strong>Special Instructions:</strong><br/>
+                                    <t t-esc="o.special_instructions"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

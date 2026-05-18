@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="mrp_bom_form_view" model="ir.ui.view">
+        <field name="name">mrp.bom.view.form</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']"
+                   position="after">
+                <field name="last_sequence" readonly="0"/>
+                <field name="year_sequence" readonly="1"/>
+                <field name="month_sequence" readonly="1"/>
+            </xpath>
+            <xpath expr="//div[hasclass('o_row')]" position="after">
+                <field name="not_quantity_unit"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

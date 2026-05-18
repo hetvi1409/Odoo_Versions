@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="project_template_view_form" model="ir.ui.view">
+        <field name="name">project.template.view.form</field>
+        <field name="model">project.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_create_project" string="Create Project"
+                            type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="project_type"/>
+                        </group>
+                    </group>
+                    <notebook>
+<!--                        <page string="Stages" name="stages">-->
+<!--                            <field name="type_ids">-->
+<!--                                <list>-->
+<!--                                    <field name="name"/>-->
+<!--                                </list>-->
+<!--                            </field>-->
+<!--                        </page>-->
+                        <page string="Default Tasks" name="tasks">
+                            <field name="task_template_ids">
+                                <list editable="bottom">
+                                    <field name="task_type_id"/>
+                                    <field name="name"/>
+                                    <field name="type_id"/>
+                                    <field name="task_type"/>
+                                </list>
+                            </field>
+<!--                            <field name="task_ids" context="{'form_view_ref': 'internal_audit_management.view_my_sub_task_form'}">-->
+<!--                                <list default_group_by="stage_id" editable="bottom">-->
+<!--                                    <field name="name"/>-->
+<!--                                    <field name="task_type"/>-->
+<!--                                    <field name="project_id" column_invisible="1"/>-->
+<!--                                    <field name="stage_id"/>-->
+<!--                                    <field name="company_id" column_invisible="1"/>-->
+<!--                                </list>-->
+<!--&lt;!&ndash;                                <form>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <form string="SUB TASK FORM">&ndash;&gt;-->
+<!--&lt;!&ndash;                <header>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <button name="action_review" type="object" invisible="stages != 'preparer' or uid not in user_reviewer_1_ids" string="1st Review" class="oe_highlight"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <button name="action_2nd_review" type="object" invisible="stages != 'first_reviewer' or uid not in user_reviewer_2_ids" string="2nd Review" class="oe_highlight"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <button name="action_revert" type="object" invisible="stages != 'first_reviewer' or uid not in user_reviewer_2_ids" string="Revert" class="oe_highlight"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <button name="action_approve" type="object" invisible="stages != 'second_reviewer' or uid not in user_approver_ids" string="Approve" class="oe_highlight"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <button name="action_revert" type="object" invisible="stages != 'second_reviewer' or uid not in user_approver_ids" string="Revert" class="oe_highlight"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <button name="action_reject" type="object" invisible="stages != 'second_reviewer' or uid not in user_approver_ids" string="Reject" class="oe_highlight"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <button name="action_revert" type="object" invisible="stages != 'rejected' or uid not in user_approver_ids" string="Move to Prepare" class="oe_highlight"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <field name="stages" widget="statusbar"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                </header>&ndash;&gt;-->
+<!--&lt;!&ndash;                <sheet>&ndash;&gt;-->
+<!--&lt;!&ndash;                   <div class="pe-0 w-100">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <h1 class="d-flex justify-content-between align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <div class="d-flex w-100">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Task Title..."/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <div class="d-flex justify-content-start o_state_container">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <field name="state" widget="project_task_state_selection" class="o_task_state_widget"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </h1>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;                    <group col="2">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <group>&ndash;&gt;-->
+<!--&lt;!&ndash;                               <field name="manager_id" widget="many2one_avatar_user"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="user_ids" widget="many2many_avatar_user"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="hr_team_id"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="user_reviewer_1_ids" widget="many2many_avatar_user"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="user_reviewer_2_ids" widget="many2many_avatar_user"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="user_approver_ids" widget="many2many_avatar_user"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </group>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;                        <group>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="project_id"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="parent_id"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="company_id" invisible="1"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="type"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="stage_id"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        </group>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </group>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    <notebook>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                        <page string="Audit Step">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                            <field name="audit_steps"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                        </page>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;                        <page string="Guidance">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                            <field name="guidance"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                        </page>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;                    </notebook>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <notebook>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                        <page string="Record of Work Done">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                            <field name="work_done"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                        </page>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                        <page string="Sample Selection">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                            <field name="sample_selection"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                        </page>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                        <page string="Conclusion">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                            <field name="conclusion"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                        </page>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                        <page string="Upload Documents">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="upload_document_name" invisible="1"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="attachment_id" filename="upload_document_name" widget="many2many_binary"/>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;                        </page>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <page string="References">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="references"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </page>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <page string="Findings Raised" name="finding">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="audit_finding_ids" editable="bottom">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <list>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="audit_requirement" optional="show"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="audit_finding" optional="show"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="impact" optional="show"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="internal_control_deficiency" optional="show"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="recommendation" optional="hide"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="management_response" optional="hide"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="finding_name" optional="hide"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="position_id" optional="hide"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="department_id" optional="hide"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="head_department_id" optional="hide"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="finding_date" optional="hide"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="auditor_conclusion" optional="hide"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <field name="attachment_ids" widget="many2many_binary" optional="hide"/>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                    <field name="is_finding_resolved"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                           optional="hide"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                </list>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                <form>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                    <group>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                        <group>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="audit_requirement"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="impact"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="recommendation"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="attachment_ids" widget="many2many_binary"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                        </group>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                        <group>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="audit_finding"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="internal_control_deficiency"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="management_response"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                        </group>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                    </group>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                    <group string="Auditors response">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                        <group>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="finding_name"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="department_id"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="finding_date"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash;                                            <field name="is_finding_resolved"/>&ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                        </group>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                        <group>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="position_id"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="head_department_id"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                            <field name="auditor_conclusion"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                        </group>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                    </group>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                </form>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                            </field>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </page>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <page string="Request Documents">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <button class="oe_stat_button" name="action_request_details" type="object" icon="fa-file-text-o">&ndash;&gt;-->
+<!--&lt;!&ndash;                                Open Requested Documents&ndash;&gt;-->
+<!--&lt;!&ndash;                            </button>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <button name="action_view_request_documents" type="object" string="Request Document" class="btn-secondary"/>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;                            &lt;!&ndash;                                                          <field name="request_documents"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="share_document"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </page>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <page string="Upload Notification Letter">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                             <field name="upload_notification_name" invisible="1"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <field name="attachment_notification_ids" filename="upload_notification_name" widget="many2many_binary"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        </page>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <page string="Project Assignement">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <group>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                             <field name="comments"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                             <field name="special_instruction"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="audit_objective"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="internal_audit_ids" widget="many2many_tags"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="auditor_id" widget="many2one"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </group>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        </page>&ndash;&gt;-->
+<!--&lt;!&ndash;                          <page string="SYSTEM DESCRIPTION">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <group>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                             <field name="objective"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                             <field name="rules"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                             <field name="skill"/>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                             <field name="skill"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                            <field name="audit_objective"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                            <field name="internal_audit_ids" widget="many2many_tags"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                            <field name="auditor_id" widget="many2one"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                            </group>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        </page>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </notebook>&ndash;&gt;-->
+<!--&lt;!&ndash;                </sheet>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                <div class="oe_chatter">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    <field name="message_follower_ids" groups="base.group_user"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    <field name="activity_ids"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    <field name="message_ids"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                </div>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            </form>&ndash;&gt;-->
+
+<!--                            </field>-->
+                        </page>
+                        <page string="Milestones Tasks" name="milestones">
+                            <field name="milestone_ids">
+                                <list>
+                                    <field name="name"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_project_template" model="ir.actions.act_window">
+        <field name="name">Project Templates</field>
+        <field name="res_model">project.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Project Template
+            </p>
+            <p>
+                Create and manage the Project Templates;
+            </p>
+        </field>
+    </record>
+
+    <menuitem name="Project Templates" id="project_template_conf_menu"
+              parent="project.menu_project_config"
+              sequence="0" action="action_project_template"/>
+
+</odoo>

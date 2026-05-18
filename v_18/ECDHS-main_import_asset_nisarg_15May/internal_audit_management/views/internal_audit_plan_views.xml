@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_internal_audit_plan" model="ir.actions.act_window">
+        <field name="name">Internal Audit Rolling Plan: 3 year</field>
+        <field name="res_model">internal.audit.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Plan
+            </p>
+            <p>
+                Create and manage the Internal Audit Rolling Plan;
+            </p>
+        </field>
+    </record>
+    <record id="internal_audit_plan_view_form" model="ir.ui.view">
+        <field name="name">internal.audit.plan.view.form</field>
+        <field name="model">internal.audit.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object" invisible="state != 'new'" string="1st Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object" invisible="state != 'first_reviewer'" string="2nd Review" class="oe_highlight"/>
+                    <button name="action_revert" type="object" invisible="state not in ['first_reviewer', 'second_reviewer']" string="Revert" class="oe_highlight"/>
+                    <button name="action_approve" type="object" invisible="state != 'second_reviewer'" string="Approve" class="oe_highlight"/>
+                    <button name="action_mark_discrepancy" type="object" invisible="state != 'second_reviewer'" string="Reject" class="oe_highlight"/>
+                    <button name="action_send_sign" type="object" string="Send For Sign" class="oe_highlight"/>
+<!--                    <button name="action_update" type="object"-->
+<!--                            invisible="state != 'reverted'"-->
+<!--                            string="Updated" class="oe_highlight"/>-->
+                    <field name="state" widget="statusbar" statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                        <button name="action_view_arp" type="object"
+                                class="oe_stat_button" icon="fa-pencil-square-o"
+                                string="ARP 1 Year" invisible="arp_count == 0">
+                            <field string="ARP 1 Year Plan" name="arp_count"
+                                   widget="statinfo"/>
+                        </button>
+                        <button name="view_signed_document" type="object"
+                                class="oe_stat_button" icon="fa-pencil-square-o"
+                                string="ARP 1 Year" invisible="not sign_request_id">
+                            Signed Document
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"
+                                   readonly="state in ['approved', 'rejected']"/>
+                            <field name="sequence_no" readonly="1"/>
+                            <label for="date_from" string="Planned Date"/>
+                            <div>
+                                <field name="date_from" class="oe_inline"/>
+                                -
+                                <field name="date_to" class="oe_inline"/>
+                            </div>
+                            <field name = "period"/>
+                            <field name = "folder_id" invisible="1"/>
+                            <field name="user_ids" widget="many2many_tags"
+                                   invisible="1"/>
+                            <field name="year_ids" widget="many2many_tags"
+                                   invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="user_preparer_ids"
+                                   widget="many2one_avatar_user"/>
+<!--                            <field name="user_reviewer_1_ids"-->
+<!--                                   widget="many2one_avatar_user"-->
+<!--                                   readonly="state == 'approved'"/>-->
+<!--                            <field name="user_reviewer_2_ids"-->
+<!--                                   widget="many2one_avatar_user"-->
+<!--                                   readonly="state == 'approved'"/>-->
+<!--                            <field name="user_approver_ids"-->
+<!--                                   widget="many2one_avatar_user"-->
+<!--                                   readonly="state == 'approved'"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+<!--                                    <field name="category_id"/>-->
+                                    <field name="team_ids" widget="many2many_tags"/>
+                                    <field name="risk_priority_rating"/>
+                                    <field name="year_1"/>
+                                    <field name="year_2"/>
+                                    <field name="year_3"/>
+<!--                                    <button name="action_create_arp_one_year" type="object" string="Update ARP 1 Year" class="oe_highlight"/>-->
+                                </list>
+                            </field>
+                        </page>
+<!--                        <page name="aop"-->
+<!--                              string="Internal Audit Operational Plan">-->
+<!--                            <field name="aop_task_ids"-->
+<!--                                   default="{'default_plan_id': id}">-->
+<!--                                <list editable="bottom">-->
+<!--                                    <field name="sequence_number"/>-->
+<!--                                    <field name="name" string="AOP Name"/>-->
+<!--                                    <field name="rolling_plan_id" string="ARP Name"/>-->
+<!--                                    <field name="plan_id" column_invisible="0"/>-->
+<!--                                    <field name="project_number"/>-->
+<!--                                    <field name="description"/>-->
+<!--                                    <field name="scope_of_work"/>-->
+<!--                                    <field name="assurance_consulting"/>-->
+<!--                                    <field name="department_ids"-->
+<!--                                           widget="many2many_tags"/>-->
+<!--                                    <field name="user_ids"-->
+<!--                                           widget="many2many_tags" column_invisible="1"/>-->
+<!--                                    <field name="start_date"-->
+<!--                                           string="Start Date"/>-->
+<!--                                    <field name="date_end"/>-->
+<!--                                    <field name="risk_priority_rating"/>-->
+<!--                                    <field name="risk_description"/>-->
+<!--                                </list>-->
+<!--                            </field>-->
+<!--                        </page>-->
+                        <page string="Tracking">
+                            <field name="internal_audit_plan_tracking_ids">
+                                <list editable="bottom" create="0">
+                                    <field name="user_id"/>
+                                    <field name="previous_stage_id"/>
+                                    <field name="new_stage_id"/>
+                                    <field name="comment"/>
+                                    <field name="date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Upload Documents">
+                            <group>
+                                <group>
+                                    <field name="attachment_ids"
+                                           widget="many2many_binary"
+                                           readonly="state in ['approved', 'rejected']"/>
+                                </group>
+                                <group>
+                                    <button name="action_view_documents"
+                                            invisible="not attachment_ids"
+                                            type="object" icon="fa-file-text-o"
+                                            string="Open Documents"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                        <page string="Projects">
+                            <field name="project_ids">
+                                <list create="0">
+                                    <field name="name"/>
+                                    <field name="department_id"/>
+                                    <field name="user_id"/>
+                                    <field name="date_start"/>
+                                    <field name="date"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="internal_audit_plan_view_tree" model="ir.ui.view">
+        <field name="name">internal.audit.plan.view.tree</field>
+        <field name="model">internal.audit.plan</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="name"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('new')"
+                       decoration-warning="state in ('reverted')"
+                       decoration-success="state in ('approved')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_task_aop" model="ir.actions.act_window">
+        <field name="name">Internal Audit Operational Plan</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,list,form,calendar,pivot,graph,activity</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No AOP found. Let's create one!
+            </p>
+            <p>
+                Organize your AOP by dispatching them across the pipeline.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_task_arp" model="ir.actions.act_window">
+        <field name="name">Internal Audit Rolling Plan</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">kanban,list,form,calendar,activity</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No ARP found. Let's create one!
+            </p>
+            <p>
+                Organize your ARP by dispatching them across the pipeline.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_task_arp_form_view_internal_audit" model="ir.actions.act_window.view">
+        <field name="sequence" eval="50"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="internal_audit_management.edit_project_internal_audit"/>
+        <field name="act_window_id" ref="internal_audit_management.action_task_arp"/>
+    </record>
+    <record id="action_arp_year" model="ir.actions.act_window">
+        <field name="name">Year</field>
+        <field name="res_model">arp.year</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Year found. Let's create one!
+            </p>
+            <p>
+                Organize your Year by dispatching them across the pipeline.
+            </p>
+        </field>
+    </record>
+    <record id="arp_year_view_tree" model="ir.ui.view">
+        <field name="name">arp.year.view.tree</field>
+        <field name="model">arp.year</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+    <menuitem id="audit_internal_audit_plan_menu"
+              name="Internal Audit Rolling Plan"
+              parent="internal_audit_management.internal_audit_universe"
+              action="action_internal_audit_plan"
+              sequence="6"/>
+    <menuitem id="action_arp_year_menu"
+              name="ARP Year"
+              parent="internal_audit_management.menu_internal_audit_config"
+              action="action_arp_year"
+              sequence="20"/>
+    <menuitem id="high_level_documents_menu"
+              name="High Level Documents"
+              parent="internal_audit_management.menu_main_internal_audit"
+              sequence="2"/>
+<!--    <menuitem id="high_internal_audit_plan_menu"-->
+<!--              name="Internal Audit Rolling Plan: 3 Year"-->
+<!--              parent="internal_audit_management.high_level_documents_menu"-->
+<!--              action="action_internal_audit_plan"-->
+<!--              sequence="8"/>-->
+</odoo>

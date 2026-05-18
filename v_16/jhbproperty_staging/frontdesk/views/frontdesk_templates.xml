@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="frontdesk_action_template" name="Frontdesk">
+        <input type="hidden" id="frontdesk_id" t-att-value="frontdesk.id" />
+        <input type="hidden" id="frontdesk_token" t-att-value="frontdesk.access_token" />
+        <input type="hidden" id="frontdesk_lang" t-att-value="current_lang" />
+        <t t-call="web.layout">
+            <t t-set="head">
+                <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+                <t t-call-assets="web.assets_frontend" t-js="false"/>
+                <link rel="stylesheet" type="text/scss" href="/web_enterprise/static/src/scss/modal_mobile.scss"/>
+                <script type="text/javascript">
+                    odoo.__session_info__ = <t t-out="json.dumps(request.env['ir.http'].get_frontend_session_info())"/>;
+                </script>
+<!--                    <script src="/web/static/lib/jquery/jquery.js" type="text/javascript"/>-->
+<!--                    <script src="/web/static/lib/jquery.hotkeys/jquery.hotkeys.js" type="text/javascript"/>-->
+                <t t-call-assets="web.assets_frontend"/>
+                <t t-call="web.conditional_assets_tests"/>
+                <div class="o-main-components-container"></div>
+
+                <script>
+                    odoo.define("frontdesk.kiosk_mode_frontdesk", async function (require) {
+<!--                            var { initFrontdesk } = require("@frontdesk/js/frontdesk_action");-->
+                        const { FrontdeskAction } = require('@frontdesk/js/frontdesk');
+                        const { App, Component,onMounted, onPatched, useComponent, useEnv } = require("@odoo/owl");
+                        const { makeEnv, startServices } = require('@web/env');
+                        const { templates } = require("@web/core/assets");
+                        const { registry } = require('@web/core/registry');
+                        const { hotkeyService } = require("@web/core/hotkeys/hotkey_service");
+
+
+                        const serviceRegistry = registry.category("services");
+
+                        const context = {
+                            station_id: '<t t-esc="frontdesk.id"/>',
+                            token: '<t t-esc="frontdesk.access_token"/>',
+                            lang: '<t t-esc="current_lang"/>',
+                            isMobile: '<t t-esc="isMobile"/>',
+                        };
+
+                        const root = document.querySelector('.o-main-components-container');
+                        if (!registry.category("services").contains("hotkey")) {
+                            registry.category("services").add("hotkey", hotkeyService);
+                        }
+<!--                            serviceRegistry.add("rpc", {-->
+<!--                                async: true,-->
+<!--                                start(env) {-->
+
+<!--                                },-->
+<!--                            }, { force: true });-->
+
+<!--                            const env = useEnv();-->
+
+                        console.log(Component.env);
+                        Component.env.services.hotkey = hotkeyService;
+                        const app = new App(FrontdeskAction, {
+<!--                                env: env,-->
+                            env: Component.env,
+                            dev: Component.env.isDebug(),
+                            templates,
+<!--                                dev: 0,-->
+                            translatableAttributes: ["data-tooltip"],
+                            translateFn: Component.env._t,
+                            props: {
+                                action: {
+                                    context: context
+                                }
+                            }
+                        });
+                        app.mount(root, {
+                            Component: FrontdeskAction,
+                            props: {
+                                action: {
+                                    context: context
+                                }
+                            }
+                        });
+                    });
+                </script>
+                <t t-set="title" t-value="frontdesk.name"/>
+            <t t-set="no_header" t-value="1"/>
+            <t t-set="no_footer" t-value="1"/>
+            <t t-set="no_livechat" t-value="1"/>
+            </t>
+        </t>
+    </template>
+</odoo>

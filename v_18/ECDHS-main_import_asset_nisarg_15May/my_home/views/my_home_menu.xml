@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_my_home_root_url" model="ir.actions.act_url">
+        <field name="name">My Home</field>
+        <field name="url">/my/home</field>
+        <field name="target">self</field>
+    </record>
+
+    <record id="action_my_home_projects" model="ir.actions.act_window">
+        <field name="name">My Projects</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">['|', ('user_id', '=', uid), ('create_uid', '=', uid)]</field>
+        <field name="context">{'search_default_my_projects': 1}</field>
+    </record>
+
+    <menuitem
+        id="menu_my_home_root"
+        name="My Home"
+        action="action_my_home_root_url"
+        sequence="5"
+        web_icon="my_home,static/description/home.png"
+        groups="base.group_user"
+    />
+
+    <menuitem
+        id="menu_my_home_projects"
+        name="My Projects"
+        parent="menu_my_home_root"
+        action="action_my_home_projects"
+        sequence="10"
+        groups="base.group_user"
+    />
+</odoo>

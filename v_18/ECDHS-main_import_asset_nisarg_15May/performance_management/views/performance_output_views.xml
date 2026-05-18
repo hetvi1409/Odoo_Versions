@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="performance_output_view_search" model="ir.ui.view">
+        <field name="name">performance.output.view.search</field>
+        <field name="model">performance.output</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="outcome_id" operator="child_of" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                <field name="sub_programme_id" operator="child_of" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                <field name="programme_id" operator="child_of" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                <field name="portfolio_id" operator="child_of" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                <field name="user_id" operator="child_of" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+
+                <separator/>
+<!--                <filter date="date" name="filter_date" string="Date"/>-->
+                <separator/>
+                <filter name="groupby_outcome" string="Outcome"
+                        context="{'group_by': 'outcome_id'}" domain="[]"/>
+                <filter name="groupby_sub_programme" string="Sub-Programme"
+                        context="{'group_by': 'sub_programme_id'}" domain="[]"/>
+                <filter name="groupby_programme" string="Programme"
+                        context="{'group_by': 'programme_id'}" domain="[]"/>
+                <filter name="groupby_performance" string="Performance"
+                        context="{'group_by': 'portfolio_id'}" domain="[]"/>
+                <filter name="groupby_user" string="Responsible"
+                        context="{'group_by': 'user_id'}" domain="[]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="performance_output_view_form" model="ir.ui.view">
+        <field name="name">performance.output.view.form</field>
+        <field name="model">performance.output</field>
+        <field name="arch" type="xml">
+            <form string="Performance_output">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="outcome_id"
+                                   domain="[('sub_programme_id', '=?', sub_programme_id)]" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="sub_programme_id"
+                                   domain="[('programme_id', '=?', programme_id)]" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="programme_id"
+                                   domain="[('portfolio_id', '=?', portfolio_id)]" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="portfolio_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <label for="start_date"/>
+                            <div class="oe_inline">
+                                <field name="start_date" class="oe_inline" placeholder="Start Date"/>
+                                <field name="end_date" class="oe_inline" placeholder="End Date"/>
+                            </div>
+                            <field name="user_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Output Indicators">
+                            <field name="indicator_ids" context="{'default_portfolio_id': portfolio_id,
+                                                                'default_portfolio_id': portfolio_id,
+                                                                'default_programme_id': programme_id,
+                                                                'default_outcome_id': outcome_id}">
+                                <list class="performance_management">
+                                    <field name="name"/>
+                                    <field name="output_id"
+                                        domain="[('outcome_id', '=?', outcome_id)]"
+                                        options="{'no_create': True, 'no_open': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    <field name="outcome_id"
+                                        domain="[('sub_programme_id', '=?', sub_programme_id)]"
+                                        options="{'no_create': True, 'no_open': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    <field name="sub_programme_id"
+                                        domain="[('programme_id', '=?', programme_id)]"
+                                        options="{'no_create': True, 'no_open': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    <field name="programme_id" readonly="1" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    <field name="portfolio_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    <field name="user_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    <field name="period"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="source_of_data"/>
+                                    <field name="method_of_calculation"/>
+                                    <field name="calculation_type"/>
+                                    <field name="desired_performance"/>
+                                    <field name="means_of_verification"/>
+                                    <field name="assumptions"/>
+                                    <field name="spatial_transformation"/>
+                                    <field name="department_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    <field name="section"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Output Description" name="output_description">
+                            <field name="description" />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="performance_output_view_list" model="ir.ui.view">
+        <field name="name">performance.output.view.list</field>
+        <field name="model">performance.output</field>
+        <field name="arch" type="xml">
+            <list class="performance_management">
+                <field name="name"/>
+                <field name="outcome_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                <field name="sub_programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                <field name="programme_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                <field name="portfolio_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="performance_output_action" model="ir.actions.act_window">
+        <field name="name">Outputs</field>
+        <field name="res_model">performance.output</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first performance output!
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="performance_output_menu"
+              name="Outputs"
+              action="performance_output_action"
+              parent="performance_management.performance_outcomes_menu"
+              sequence="10"/>
+</odoo>

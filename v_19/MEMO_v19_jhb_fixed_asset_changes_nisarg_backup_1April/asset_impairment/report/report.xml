@@ -1,0 +1,47 @@
+<odoo>
+
+    <record id="action_report_asset_impairment" model="ir.actions.report">
+        <field name="name">Asset Impairment Report</field>
+        <field name="model">account.asset</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">asset_impairment.report_asset_impairment</field>
+        <field name="report_file">asset_impairment.report_asset_impairment</field>
+        <field name="print_report_name">'Asset Impairment Report - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="account_asset.model_account_asset"/>
+        <field name="binding_type">report</field>
+    </record>
+
+<template id="report_asset_impairment">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <h2>Asset Impairment Report</h2>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Carrying Amount</th>
+                                <th>Fair Value Less Cost to Sell (FV-C2S)</th>
+                                <th>Value in Use (VIU)</th>
+                                <th>Recoverable Amount</th>
+                                <th>Impairment Loss</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="doc" t-as="line">
+                                <td t-esc="line.name"/>
+                                <td t-esc="line.carrying_amount"/>
+                                <td t-esc="line.fv_c2s"/>
+                                <td t-esc="line.value_in_use"/>
+                                <td t-esc="line.recoverable_amount"/>
+                                <td t-esc="line.impairment_loss"/>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

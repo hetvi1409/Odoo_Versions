@@ -1,0 +1,1020 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="email_template_audit_methodology_review" model="mail.template">
+        <field name="name">Internal Audit Methodology</field>
+        <field name="model_id" ref="internal_audit_management.model_audit_methodology"/>
+        <field name="subject">Internal Audit Methodology : Reviewed</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Internal Audit Methodology
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <record id="email_template_quality_control_peer_review"
+            model="mail.template">
+        <field name="name">Quality Control - Internal Peer Review</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_quality_control_peer"/>
+        <field name="subject">Quality Control - Internal Peer Review :
+            Reviewed
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Internal Peer Review
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_audit_procedure_to_review" model="mail.template">
+        <field name="name">Audit Procedure</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_project_task"/>
+        <field name="subject">Audit Procedure : Review</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                    Procedure was created
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>. Please review this.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_audit_procedure_to_approve" model="mail.template">
+        <field name="name">Audit Procedure</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_project_task"/>
+        <field name="subject">Audit Procedure : Approve</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                    Procedure was reviewed
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>. Please check this.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_audit_procedure_to_approved" model="mail.template">
+        <field name="name">Audit Procedure</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_project_task"/>
+        <field name="subject">Audit Procedure : Approved</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                    Procedure was Approved
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>. Please check this.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_audit_procedure_to_rejected" model="mail.template">
+        <field name="name">Audit Procedure</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_project_task"/>
+        <field name="subject">Audit Procedure : Rejected</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                    Procedure was Rejected
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>. Please check this.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_internal_audit_plan_review"
+            model="mail.template">
+        <field name="name">Internal Audit Plan</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_internal_audit_plan"/>
+        <field name="subject">Internal Audit Plan : Reviewed</field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Internal Audit Plan
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                    was in reviewed state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_internal_audit_plan_approve"
+            model="mail.template">
+        <field name="name">Internal Audit Plan</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_internal_audit_plan"/>
+        <field name="subject">Internal Audit Plan : Approved</field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Internal Audit Plan
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                    was in approved state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_internal_audit_plan_refuse"
+            model="mail.template">
+        <field name="name">Internal Audit Plan</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_internal_audit_plan"/>
+        <field name="subject">Internal Audit Plan : Refused</field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Internal Audit Plan
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                    was in refused state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_internal_audit_plan_reviewed"
+            model="mail.template">
+        <field name="name">Internal Audit Plan</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_internal_audit_plan"/>
+        <field name="subject">Internal Audit Plan : Reviewed</field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Internal Audit Plan
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                    was in reviewed state. The feedback was
+                    <b>
+                        <t t-out="object.feedback"/>
+                    </b>
+                    .
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_internal_audit_plan_new" model="mail.template">
+        <field name="name">Internal Audit Plan</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_internal_audit_plan"/>
+        <field name="subject">Internal Audit Plan : New</field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Internal Audit Plan
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                    was in reviewed state. The feedback was
+                    <b>
+                        <t t-out="object.feedback"/>
+                    </b>
+                    .
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_quality_control_peer_approve"
+            model="mail.template">
+        <field name="name">Quality Control - Internal Peer Review</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_quality_control_peer"/>
+        <field name="subject">Quality Control - Internal Peer Review :
+            Approved
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Internal Peer Review
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in approved state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_quality_control_peer_refuse"
+            model="mail.template">
+        <field name="name">Quality Control - Internal Peer Review</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_quality_control_peer"/>
+        <field name="subject">Quality Control - Internal Peer Review : Refused
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Internal Peer Review
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in refused state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_quality_control_peer_reviewed"
+            model="mail.template">
+        <field name="name">Quality Control - Internal Peer Review</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_quality_control_peer"/>
+        <field name="subject">Quality Control - Internal Peer Review :
+            Reviewed
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Internal Peer Review
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state. The feedback was
+                    <b>
+                        <t t-out="object.feedback"/>
+                    </b>
+                    .
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_quality_control_peer_new" model="mail.template">
+        <field name="name">Quality Control - Internal Peer Review</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_quality_control_peer"/>
+        <field name="subject">Quality Control - Internal Peer Review : New
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Internal Peer Review
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state. The feedback was
+                    <b>
+                        <t t-out="object.feedback"/>
+                    </b>
+                    .
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_quality_control_outsourced_peer_review"
+            model="mail.template">
+        <field name="name">Quality Control - Outsourced Peer Review</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_quality_control_outsourced_peer"/>
+        <field name="subject">Quality Control - Outsourced Peer Review :
+            Reviewed
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_preparer_ids.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Outsourced Peer Review
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_quality_control_outsourced_peer_approve"
+            model="mail.template">
+        <field name="name">Quality Control - Outsourced Peer Review</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_quality_control_outsourced_peer"/>
+        <field name="subject">Quality Control - Outsourced Peer Review :
+            Approved
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Outsourced Peer Review
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in approved state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_quality_control_outsourced_peer_refuse"
+            model="mail.template">
+        <field name="name">Quality Control - Outsourced Peer Review</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_quality_control_outsourced_peer"/>
+        <field name="subject">Quality Control - Outsourced Peer Review :
+            Refused
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Outsourced Peer Review
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in refused state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_quality_control_outsourced_peer_reviewed"
+            model="mail.template">
+        <field name="name">Quality Control - Outsourced Peer Review</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_quality_control_outsourced_peer"/>
+        <field name="subject">Quality Control - Outsourced Peer Review :
+            Reviewed
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Outsourced Peer Review
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state. The feedback was
+                    <b>
+                        <t t-out="object.feedback"/>
+                    </b>
+                    .
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_quality_control_outsourced_peer_new"
+            model="mail.template">
+        <field name="name">Quality Control - Outsourced Peer Review</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_quality_control_outsourced_peer"/>
+        <field name="subject">Quality Control - Outsourced Peer Review : New
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Outsourced Peer Review
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state. The feedback was
+                    <b>
+                        <t t-out="object.feedback"/>
+                    </b>
+                    .
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_financial_statement_review"
+            model="mail.template">
+        <field name="name">Financial Statements And Performance Report</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_financial_statement"/>
+        <field name="subject">Financial Statements And Performance Report :
+            Reviewed
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Financial Statements And Performance Report
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_financial_statement_approve"
+            model="mail.template">
+        <field name="name">Financial Statements And Performance Report</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_financial_statement"/>
+        <field name="subject">Financial Statements And Performance Report :
+            Approved
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Financial Statements And Performance Report
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in approved state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_financial_statement_refuse"
+            model="mail.template">
+        <field name="name">Financial Statements And Performance Report</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_financial_statement"/>
+        <field name="subject">Financial Statements And Performance Report :
+            Refused
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Financial Statements And Performance Report
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in refused state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_financial_statement_reviewed"
+            model="mail.template">
+        <field name="name">Financial Statements And Performance Report</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_financial_statement"/>
+        <field name="subject">Financial Statements And Performance Report :
+            Reviewed
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Financial Statements And Performance Report
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state. The feedback was
+                    <b>
+                        <t t-out="object.feedback"/>
+                    </b>
+                    .
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_financial_statement_new" model="mail.template">
+        <field name="name">Financial Statements And Performance Report</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_financial_statement"/>
+        <field name="subject">Financial Statements And Performance Report :
+            New
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Financial Statements And Performance Report
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state. The feedback was
+                    <b>
+                        <t t-out="object.feedback"/>
+                    </b>
+                    .
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_internal_quality_control_review"
+            model="mail.template">
+        <field name="name">Quality Control - Internal Review Framework</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_internal_quality_control"/>
+        <field name="subject">Quality Control - Internal Review Framework :
+            Reviewed
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Internal Review Framework
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_internal_quality_control_approve"
+            model="mail.template">
+        <field name="name">Quality Control - Internal Review Framework</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_internal_quality_control"/>
+        <field name="subject">Quality Control - Internal Review Framework :
+            Approved
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Internal Review Framework
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in approved state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_internal_quality_control_refuse"
+            model="mail.template">
+        <field name="name">Quality Control - Internal Review Framework</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_internal_quality_control"/>
+        <field name="subject">Quality Control - Internal Review Framework :
+            Refused
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Internal Review Framework
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in refused state.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_internal_quality_control_reviewed"
+            model="mail.template">
+        <field name="name">Quality Control - Internal Review Framework</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_internal_quality_control"/>
+        <field name="subject">Quality Control - Internal Review Framework :
+            Reviewed
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Internal Review Framework
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state. The feedback was
+                    <b>
+                        <t t-out="object.feedback"/>
+                    </b>
+                    .
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_internal_quality_control_new"
+            model="mail.template">
+        <field name="name">Quality Control - Internal Review Framework</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_internal_quality_control"/>
+        <field name="subject">Quality Control - Internal Review Framework :
+            New
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_id.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_id.name"/>
+                    <br/>
+                    Your Quality Control - Internal Review Framework
+                    <b>
+                        <t t-out="object.requirements"/>
+                    </b>
+                    was in reviewed state. The feedback was
+                    <b>
+                        <t t-out="object.feedback"/>
+                    </b>
+                    .
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_list_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.requirements"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+</odoo>

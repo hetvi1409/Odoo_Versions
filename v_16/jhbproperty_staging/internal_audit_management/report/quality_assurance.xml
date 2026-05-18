@@ -1,0 +1,144 @@
+<odoo>
+    <template id="report_quality_assurance">
+        <t t-call="web.basic_layout">
+            <t t-set="title">Quality Assurance</t>
+            <div class="page">
+                <h2 style="text-align:center;"><b>Quality Assurance Review</b></h2>
+                <h4><b>Planning and Administration: </b></h4>
+                <table style="width:100%">
+                    <tr>
+                        <td><strong>Name : <span t-esc="data.name and data.name.display_name"/></strong>
+                        </td>
+                        <td><strong>Period: <span t-esc="data.period_start"/> --> <span t-esc="data.period_end"/></strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Preparer : <span t-esc="data.user_preparer_ids and data.user_preparer_ids.name"/></strong>
+                        </td>
+                        <td><strong>First Reviewer : <span t-esc="data.user_reviewer_1_ids and data.user_reviewer_1_ids.name"/></strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Second Reviewer : <span t-esc="data.user_reviewer_2_ids and data.user_reviewer_2_ids.name"/></strong>
+                        </td>
+                        <td><strong>Approved By : <span t-esc="data.user_approver_ids  and data.user_approver_ids.name"/></strong>
+                        </td>
+                    </tr>
+                </table>
+                <table style="width:auto; border-collapse:collapse; margin-top:20px; height:300px;" border="1">
+                    <thead>
+                        <tr style="background-color:#db6a1f; vertical-align:middle">
+                            <th> </th>
+                            <th>Standards</th>
+                            <th>Yes</th>
+                            <th>No</th>
+                            <th>W/P Reference</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <t t-set="plan" t-value="data.planing_admin_ids"/>
+                    <t t-foreach="plan" t-as="docs">
+                        <tbody>
+                            <tr>
+                                <td><span t-esc="docs.requirement"/></td>
+                                <td><span t-esc="docs.standards"/></td>
+                                <td><span t-esc="docs.yes_bool"/></td>
+                                <td><span t-esc="docs.no_bool"/></td>
+                                <td><span t-esc="docs.wp_ref"/></td>
+                                <td><span t-esc="docs.remark"/></td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+                <h4><b>Fieldwork phase: </b></h4>
+                <table style="width:auto; border-collapse:collapse; margin-top:20px; height:300px;" border="1">
+                    <thead>
+                        <tr style="background-color:#db6a1f; vertical-align:middle">
+                            <th> </th>
+                            <th>Standards</th>
+                            <th>Yes</th>
+                            <th>No</th>
+                            <th>W/P Reference</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <t t-set="prem" t-value="data.field_work_phase"/>
+                    <t t-foreach="prem" t-as="docs">
+                        <tbody>
+                            <tr>
+                                <td><span t-esc="docs.requirement"/></td>
+                                <td><span t-esc="docs.standards"/></td>
+                                <td><span t-esc="docs.yes_bool"/></td>
+                                <td><span t-esc="docs.no_bool"/></td>
+                                <td><span t-esc="docs.wp_ref"/></td>
+                                <td><span t-esc="docs.remark"/></td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+                <h4><b>Reporting phase: </b></h4>
+                <table style="width:auto; border-collapse:collapse; margin-top:20px; height:300px;" border="1">
+                    <thead>
+                        <tr style="background-color:#db6a1f; vertical-align:middle">
+                            <th> </th>
+                            <th>Standards</th>
+                            <th>Yes</th>
+                            <th>No</th>
+                            <th>W/P Reference</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <t t-set="field" t-value="data.reporting_phase"/>
+                    <t t-foreach="field" t-as="docs">
+                        <tbody>
+                            <tr>
+                                <td><span t-esc="docs.requirement"/></td>
+                                <td><span t-esc="docs.standards"/></td>
+                                <td><span t-esc="docs.yes_bool"/></td>
+                                <td><span t-esc="docs.no_bool"/></td>
+                                <td><span t-esc="docs.wp_ref"/></td>
+                                <td><span t-esc="docs.remark"/></td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+                <h4><b>General: </b></h4>
+                <table style="width:auto; border-collapse:collapse; margin-top:20px; height:300px;" border="1">
+                    <thead>
+                        <tr style="background-color:#db6a1f; vertical-align:middle">
+                            <th> </th>
+                            <th>Standards</th>
+                            <th>Yes</th>
+                            <th>No</th>
+                            <th>W/P Reference</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <t t-set="final" t-value="data.general"/>
+                    <t t-foreach="final" t-as="docs">
+                        <tbody>
+                            <tr>
+                                <td><span t-esc="docs.requirement"/></td>
+                                <td><span t-esc="docs.standards"/></td>
+                                <td><span t-esc="docs.yes_bool"/></td>
+                                <td><span t-esc="docs.no_bool"/></td>
+                                <td><span t-esc="docs.wp_ref"/></td>
+                                <td><span t-esc="docs.remark"/></td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+                <table style="width:100%">
+                    <tr>
+                        <td><strong>General Notes:  <span t-esc="data.general_note"/></strong></td>
+                        <td><strong>Conclusion : <span t-esc="data.conclusion"/></strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Prepared By : <span t-esc="data.prepared_by.name"/></strong></td>
+                        <td><strong>Reviewed By : <span t-esc="data.reviewed_by.name"/></strong></td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

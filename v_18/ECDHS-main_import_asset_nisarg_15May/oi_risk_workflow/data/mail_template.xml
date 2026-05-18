@@ -1,0 +1,30 @@
+<odoo>
+    <data>
+        <record id="email_template_oi_risk_management_risk_to_revert" model="mail.template">
+            <field name="name">Risk Management</field>
+            <field name="model_id"
+                   ref="oi_risk_management.model_oi_risk_management_risk"/>
+            <field name="subject">Risk Management : Reverted</field>
+            <field name="description">send to the users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi
+                        <br/>
+                        Procedure was Reverted
+                        <b>
+                            <t t-out="object.name"/>
+                        </b>
+                        Please check this.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            Open
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

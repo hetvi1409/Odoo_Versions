@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Applications -->
+    <record id="hr_recruitment.menu_crm_case_categ0_act_job" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <!-- Reporting -->
+    <record id="hr_recruitment.report_hr_recruitment" model="ir.ui.menu">
+        <field name="name">Reporting &amp; Analysis</field>
+    </record>
+
+    <!-- Configuration -->
+    <!-- <record id="hr_recruitment.menu_hr_recruitment_configuration" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record> -->
+
+
+    <menuitem id="workforce_planning_menu_id"
+            name="Workforce Planning"
+            parent="hr_recruitment.menu_hr_recruitment_root"
+            sequence="25"/>
+
+    <!-- <menuitem id="menu_recruitment_enhancement_root"
+              name="Requisitions"
+              parent="hr_recruitment.menu_hr_recruitment_root"
+              sequence="25"
+              groups="recruitment_enhancement.group_recruitment_process_user,recruitment_enhancement.group_recruitment_process_manager"/> -->
+
+    <menuitem id="menu_recruitment_requisition"
+              name="Requisitions Requests"
+              parent="workforce_planning_menu_id"
+              action="recruitment_enhancement.action_recruitment_requisition"
+              sequence="10"/>
+
+    <menuitem id="menu_job_positions"
+              name="Job Positions"
+              parent="workforce_planning_menu_id"
+              action="hr_recruitment.action_hr_job_interviewer"
+              sequence="11"/>
+
+    <menuitem id="hr_recruitment_menu_applicant_profiles"
+            name="Applicant Profiles"
+            action="recruitment_enhancement.action_applicant_profile"
+            parent="workforce_planning_menu_id"
+            sequence="25"/>
+
+    <!--  -->
+    <menuitem id="sourcing_menu_id"
+            name="Sourcing"
+            parent="hr_recruitment.menu_hr_recruitment_root"
+            sequence="26"/>
+
+    <menuitem id="menu_hr_talent_pools_id"
+                name="By Talent Pools"
+                parent="sourcing_menu_id"
+                action="hr_recruitment.action_hr_talent_pool"
+                sequence="1"/>
+
+    <!--  -->
+    <menuitem id="candidates_menu_id"
+            name="Candidates"
+            parent="hr_recruitment.menu_hr_recruitment_root"
+            sequence="27"/>
+
+    <menuitem id="menu_all_applications_id"
+                name="Applications"
+                parent="candidates_menu_id"
+                action="hr_recruitment.crm_case_categ0_act_job"
+                sequence="1"/>
+
+    <!--  -->
+    <menuitem id="interview_assessment_menu_id"
+            name="Interview &amp; Assessment"
+            parent="hr_recruitment.menu_hr_recruitment_root"
+            sequence="28"/>
+
+    <menuitem id="menu_recruitment_interview"
+              name="Interview Sessions"
+              parent="interview_assessment_menu_id"
+              action="action_recruitment_interview"
+              sequence="1"/>
+
+    <menuitem id="menu_recruitment_interview_evaluation"
+              name="Evaluations"
+              parent="interview_assessment_menu_id"
+              action="action_interview_evaluation"
+              sequence="2"/>
+
+
+
+    <!--  -->
+    <menuitem id="verification_compliance_menu_id"
+            name="Verification &amp; Compliance"
+            parent="hr_recruitment.menu_hr_recruitment_root"
+            sequence="29"/>
+
+    <menuitem id="menu_recruitment_background_check"
+              name="Background Checks"
+              parent="verification_compliance_menu_id"
+              action="action_recruitment_background_check"
+              sequence="1"/>
+
+    <!--  -->
+    <menuitem id="offers_menu_id"
+            name="Offers &amp; Onboarding"
+            parent="hr_recruitment.menu_hr_recruitment_root"
+            sequence="30"/>
+
+    <menuitem id="menu_onboarding_plans"
+            name="Onboarding plans"
+            parent="offers_menu_id"
+            action="hr.mail_activity_plan_action"
+            sequence="10"/>
+
+
+
+    <!--  -->
+    <!-- <menuitem id="configuration_menu_id"
+            name="Configuration"
+            parent="hr_recruitment.menu_hr_recruitment_root"
+            sequence="32"/>
+
+    <menuitem
+                id="menu_hr_recruitment_global_settings"
+                name="Settings"
+                parent="configuration_menu_id"
+                sequence="0"
+                action="hr_recruitment.action_hr_recruitment_configuration"
+                groups="base.group_system"/>
+
+            <menuitem
+                id="menu_hr_recruitment_config_jobs"
+                name="Job Positions"
+                parent="configuration_menu_id"
+                sequence="10"/>
+
+    <menuitem
+                id="menu_hr_recruitment_utm"
+                parent="configuration_menu_id"
+                name="UTMs"
+                groups="base.group_no_one"
+                sequence="15"/>
+
+    <menuitem
+                id="menu_hr_recruitment_config_applications"
+                name="Applications"
+                parent="configuration_menu_id"
+                sequence="20"/>
+
+
+    <menuitem
+                id="menu_hr_recruitment_config_employees"
+                name="Employees"
+                parent="configuration_menu_id"
+                sequence="30"/>
+
+    <menuitem
+                id="menu_hr_recruitment_config_activities"
+                name="Activities"
+                parent="configuration_menu_id"
+                sequence="40"/>
+
+     <menuitem
+                name="Job Boards"
+                id="menu_hr_job_boards"
+                parent="configuration_menu_id"
+                sequence="50"/>
+
+
+    <menuitem id="menu_recruitment_shortlisting"
+              name="Shortlisting"
+              parent="configuration_menu_id"
+              action="action_recruitment_shortlisting"
+              sequence="20"/>
+
+
+
+
+
+    <menuitem id="menu_recruitment_offer"
+              name="Final Offers"
+              parent="configuration_menu_id"
+              action="action_recruitment_offer"
+              sequence="50"/> -->
+
+    <!-- <menuitem id="menu_recruitment_enhancement_config"
+              name="Configuration"
+              parent="hr_recruitment.menu_hr_recruitment_configuration"
+              sequence="100"
+              groups="recruitment_enhancement.group_recruitment_process_manager"/> -->
+
+    <record id="action_recruitment_media_channel" model="ir.actions.act_window">
+        <field name="name">Media Channels</field>
+        <field name="res_model">recruitment.media.channel</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_recruitment_media_channel"
+              name="Media Channels"
+              parent="hr_recruitment.menu_hr_recruitment_configuration"
+              action="action_recruitment_media_channel"
+              sequence="10"/>
+
+    <menuitem id="main_menu_approver_role"
+              name="Roles"
+              parent="hr_recruitment.menu_hr_recruitment_configuration"
+              sequence="15"/>
+
+    <!-- <menuitem id="menu_approval_role_submenu" name="Approver Roles" parent="main_menu_approver_role"
+              action="action_approver_role" sequence="1"/> -->
+</odoo>

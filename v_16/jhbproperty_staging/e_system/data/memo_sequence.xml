@@ -1,0 +1,83 @@
+<odoo>
+    <data noupdate="1">
+        <record id="seq_memo" model="ir.sequence">
+            <field name="name">Memo Sequence</field>
+            <field name="code">memo.memo</field>
+            <field name="prefix">MEMO/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+<!--        &lt;!&ndash; Authors can only see their own &ndash;&gt;-->
+<!--        <record id="memo_rule_author_own" model="ir.rule">-->
+<!--            <field name="name">Memo - Author's Own</field>-->
+<!--            <field name="model_id" ref="e_system.model_memo_memo"/>-->
+<!--            <field name="groups" eval="[(4, ref('group_memo_requester')),(4, ref('base.group_user'))]"/>-->
+<!--            <field name="domain_force">[('requester_id.id', '=', user.id)]</field>-->
+<!--        </record>-->
+<!--        <record id="memo_memo_rule_user_is_approver" model="ir.rule">-->
+<!--            <field name="name">Only Approvers Can See Their Memos</field>-->
+<!--            <field name="model_id" ref="e_system.model_memo_memo"/>-->
+<!--            <field name="domain_force">-->
+<!--                ['|',('approver_id.id', 'in', user.ids),('create_uid', '=', user.id)]-->
+<!--            </field>-->
+<!--            <field name="groups" eval="[(4, ref('base.group_user')),(4, ref('e_system.group_memo_approver'))]"/>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; Managers see all &ndash;&gt;-->
+<!--        <record id="memo_rule_quality_assurance" model="ir.rule">-->
+<!--            <field name="name">Memo - Quality Assurance</field>-->
+<!--            <field name="model_id" ref="e_system.model_memo_memo"/>-->
+<!--            <field name="groups" eval="[(4, ref('group_memo_quality_assurance')),(4, ref('base.group_user'))]"/>-->
+<!--            <field name="domain_force">['|',('quality_assurance_id.id', 'in', user.ids),('create_uid', '=', user.id)]-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; Recommenders: Only see request recommended MEmo &ndash;&gt;-->
+<!--        <record id="memo_rule_recommender_view" model="ir.rule">-->
+<!--            <field name="name">Memo - Recommender View</field>-->
+<!--            <field name="model_id" ref="e_system.model_memo_memo"/>-->
+<!--            <field name="groups" eval="[(4, ref('group_memo_recommenders')),(4, ref('base.group_user'))]"/>-->
+<!--            <field name="domain_force">['|',('recommender_ids.user_id', 'in', user.ids),('create_uid', '=', user.id)]-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="memo_record_rule_view" model="ir.rule">
+            <field name="name">Memo - Record View</field>
+            <field name="model_id" ref="e_system.model_memo_memo"/>
+            <field name="active" eval="False"/>
+            <field name="groups"
+                   eval="[(4, ref('group_memo_requester')),(4, ref('group_memo_quality_assurance')),(4, ref('group_memo_recommenders')),(4, ref('e_system.group_memo_approver')),(4, ref('base.group_user'))]"/>
+            <field name="domain_force">user.id in [1, 2] and [(1, '=', 1)] or ['|',('create_uid','=',
+                user.id),'|',('requester_id','=', user.id),'|',('approver_id','=',
+                user.id),'|',('quality_assurance_ids.user_id','=', user.id),('recommender_ids.user_id','=',
+                user.id)]
+            </field>
+        </record>
+
+        <record id="memo_rule_turn_based_access" model="ir.rule">
+            <field name="name">Memo: turn-based access</field>
+            <field name="model_id" ref="e_system.model_memo_memo"/>
+            <field name="groups"
+                   eval="[(4, ref('group_memo_requester')),(4, ref('group_memo_quality_assurance')),(4, ref('group_memo_recommenders')),(4, ref('e_system.group_memo_approver')),(4, ref('base.group_user'))]"/>
+            <!-- let superusers bypass (adapt IDs if your DB differs) -->
+            <field name="domain_force">user.id in [1, 2] and [(1,'=',1)] or ['|','|',('create_uid','=',
+                user.id),('requester_id','=', user.id),('allowed_user_ids','in', [user.id])]
+            </field>
+        </record>
+
+        <record id="memo_rule_follower_access" model="ir.rule">
+            <field name="name">Memo: Followers access</field>
+            <field name="model_id" ref="e_system.model_memo_memo"/>
+            <field name="groups"
+                   eval="[(4, ref('group_memo_requester')),(4, ref('group_memo_quality_assurance')),(4, ref('group_memo_recommenders')),(4, ref('e_system.group_memo_approver')),(4, ref('base.group_user'))]"/>
+            <field name="domain_force">[('message_partner_ids', 'in', [user.partner_id.id])]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,21 @@
+{
+    'name': "Survey Dashboard: Data",
+    'description': """This module Adding data to the survey dashboard""",
+    'summary': """Adding data to the survey dashboard""",
+    'version': '19.0.1.0.0',
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': 'https://natedsystems.co.za/',
+    'sequence': '10',
+    'category': 'Services',
+    'depends': ['survey', 'seta_dashboard'],
+    'data': [
+        # 'views/survey_templates_statistics.xml',
+    ],
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+}

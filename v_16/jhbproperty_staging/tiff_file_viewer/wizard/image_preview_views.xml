@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="image_preview_view_form">
+        <field name="name">image.preview.view.form</field>
+        <field name="model">image.preview</field>
+        <field name="priority">1</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Documents" create="1" edit="0">
+                <sheet>
+                    <group>
+                        <field name="file" filename="filename" invisible="1"/>
+                        <field name="filename" invisible="1"/>
+                        <field name="image" widget="image"
+                               attrs="{'invisible': [('type', '!=', 'image')]}"/>
+                        <field name="pdf" widget="pdf_viewer"
+                               attrs="{'invisible': [('type', '!=', 'pdf')]}"/>
+                    </group>
+                    <group>
+                        <field name="type" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="btn-secondary"
+                                special="cancel" data-hotkey="z"/>
+                    </footer>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

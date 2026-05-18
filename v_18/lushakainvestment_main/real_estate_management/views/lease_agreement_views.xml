@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="lease_agreement_view_form" model="ir.ui.view">
+        <field name="name">lease.agreement.view.tree</field>
+        <field name="model">lease.agreement</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="crm_lead_id"/>
+                        </group>
+                        <group>
+                            <field name="property_id"/>
+                            <field name="building_id"/>
+                            <field name="company_id"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Specifications" name="specifications">
+                        <group string="Property Details">
+                            <field name="transaction_type"/>
+                            <field name="section_number"/>
+                            <field name="floor"/>
+                            <field name="internal_area"/>
+                            <field name="additional_area"/>
+                            <field name="annual_escalation" widget="percentage"/>
+                        </group>
+                        <group string="Lease Period">
+                            <field name="date_offer"/>
+                            <field name="offer_open_days"/>
+                            <field name="offer_expiry_date"/>
+                        </group>
+                        <group string="Rates">
+                            <field name="net_rent"/>
+                            <field name="additional_area_rate"/>
+                            <field name="marketing_fee" widget="percentage"/>
+                            <field name="rates_tax"/>
+                            <field name="operating_cost"/>
+                        </group>
+                        <group string="Monthly">
+                            <field name="net_rent_monthly"/>
+                            <field name="additional_area_monthly"/>
+                            <field name="marketing_fee_monthly"/>
+                            <field name="rates_tax_monthly"/>
+                            <field name="operating_cost_monthly"/>
+                            <field name="gross_rent"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="parking"/>
+                            <field name="parking_bays"/>
+                        </group>
+                        <group>
+                            <field name="parking_bays_monthly"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group></group>
+                        <group>
+                            <field name="total_gross_rental"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="lease_agreement_view_tree" model="ir.ui.view">
+        <field name="name">lease.agreement.view.tree</field>
+        <field name="model">lease.agreement</field>
+        <field name="arch" type="xml">
+            <list>
+<!--                <field name="name"/>-->
+                <field name="crm_lead_id"/>
+<!--                <field name="province_id"/>-->
+<!--                <field name="country_id"/>-->
+            </list>
+        </field>
+    </record>
+
+    <record id="action_lease_agreement" model="ir.actions.act_window">
+        <field name="name">Lease Agreement</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">lease.agreement</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Lease Agreement
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_lease_agreement"
+              action="action_lease_agreement"
+              name="Lease Agreement"
+              parent="itsys_real_estate.menu_itsys_real_estate"
+              sequence="8"/>
+
+</odoo>

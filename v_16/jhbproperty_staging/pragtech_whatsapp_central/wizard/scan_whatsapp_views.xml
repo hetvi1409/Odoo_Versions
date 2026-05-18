@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="whatsapp_survey_scan_qr_view_form" model="ir.ui.view">
+        <field name="name">whatsapp.survey.scan.qr.form</field>
+        <field name="model">whatsapp.survey.scan.qr</field>
+        <field name="arch" type="xml">
+            <form string="Scan WhatsApp QR Code">
+                <h3 attrs="{'invisible':[('check_status', '=', True)]}" class='text-info'>Close the window after few seconds, Once you get logged in signal from your mobile device.</h3>
+                <h3 attrs="{'invisible':[('check_status', '=', False)]}" class='text-info'>QR-Code already scanned. Click on disconnect button if you want to re-scan or connect again</h3>
+                <field name="qr_code_img_data" readonly="1" widget="image" attrs="{'invisible':[('check_status', '=', True)]}"/>
+                <field name="check_status" invisible="1"/>
+                <footer>
+                    <group>
+                        <span>
+                            <button string="Close" attrs="{'invisible':[('check_status', '=', True)]}" class="oe_link" special="cancel" />
+                             <button string="Disconnect" type="object" attrs="{'invisible':[('check_status', '=', False)]}" class="oe_highlight" name="action_disconnect" />
+                        </span>
+                    </group>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="chat_api_whatsapp_qr_view_form" model="ir.ui.view">
+        <field name="name">chat.api.whatsapp.scan.qr.form</field>
+        <field name="model">chat.api.whatsapp.scan.qr</field>
+        <field name="arch" type="xml">
+            <form string="Scan WhatsApp QR Code">
+                <h3 class='text-info'>Close the window after few seconds, Once you get logged in signal from your mobile device.</h3>
+
+                <field name="qr_code_img_data" widget="image" readonly="True"/>
+
+                <footer>
+                    <group>
+                        <span>
+                            <button string="Close" class="oe_link" special="cancel" />
+                        </span>
+                    </group>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

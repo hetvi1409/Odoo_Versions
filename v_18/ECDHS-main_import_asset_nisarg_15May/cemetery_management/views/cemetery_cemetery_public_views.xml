@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+    <record id="website_menu_cemetery" model="website.menu">
+        <field name="name">Cemeteries</field>
+        <field name="url">/cemetery</field>
+        <field name="parent_id" ref="website.main_menu"/>
+<!--        <field name="parent_id" ref="cemetery_management.website_menu_cemetery_parent_menu"/>-->
+        <field name="sequence" type="int">14</field>
+    </record>
+    </data>
+    <template id="cemetery_cemetery_search_view" name="Cemetery">
+        <t t-call="portal.portal_layout" width="80%">
+            <t t-set="breadcrumbs_searchbar" t-value="False"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Cemeteries</t>
+            </t>
+            <t t-if="cemeteries" t-call="portal.portal_table">
+                <div role="group" t-foreach="cemeteries" t-as="cemetery">
+                    <div class="col"
+                         style="border: solid 1px #aaa7a7; border-left: 0px;
+                         border-right: 0px; display: flex; padding: 10px;
+                         justify-content: space-between; align-items: center;">
+                        <div style="">
+                            <a class="d-flex align-item-center">
+                                <a t-attf-href="/cemetery-details/#{cemetery.id}"
+                                   style="display: flex; align-items: flex-start;">
+                                    <div>
+                                        <img src="/cemetery_management/static/src/img/grave-thumbnail.jpg"
+                                             style="width: 80px; height: 80px; object-fit: cover"
+                                             alt="Grave"/>
+                                    </div>
+                                    <div style="margin:0px 10px;">
+                                        <h2 style="font-size: 25px;">
+                                            <t t-out="cemetery.name"/>:
+                                            <t t-out="cemetery.cemetery_id"/>
+                                        </h2>
+                                        <p class="">
+                                            <t t-if="cemetery.street">
+                                                <t t-esc="cemetery.street"/>,
+                                            </t>
+                                            <t t-if="cemetery.street2">
+                                                <t t-esc="cemetery.street2"/>,
+                                            </t>
+                                            <t t-if="cemetery.city">
+                                                <t t-esc="cemetery.city"/>,
+                                            </t>
+                                            <t t-if="cemetery.municipality_id">
+                                                <t t-esc="cemetery.municipality_id.id"/>
+                                                ,
+                                            </t>
+                                            <t t-if="cemetery.province_id">
+                                                <t t-esc="cemetery.province_id.id"/>
+                                                ,
+                                            </t>
+                                            <t t-if="cemetery.country_id">
+                                                <t t-esc="cemetery.country_id.id"/>
+                                            </t>
+                                        </p>
+                                    </div>
+
+                                </a>
+                            </a>
+                        </div>
+                        <div class=""
+                             style="text-align: right; flex-basis: calc(32% - 90px);flex-grow: 1; flex-shrink: 0; overflow:hidden;">
+                            Sections
+                            <t t-out="cemetery.sections_count"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <p t-else="">There are currently no Cemeteries.</p>
+        </t>
+    </template>
+    <template id="cemetery_cemetery_content_details" name="Cemetery">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty cemetery_application">
+                <form action="/cemetery-details"
+                      enctype="multipart/form-data"
+                      class="o_mark_required" data-mark="*"
+                      data-model_name="">
+                    <input id="cemetery_id"
+                           type="hidden"
+                           class="form-control s_website_form_input"
+                           t-att-value="cemetery_id"
+                           name="cemetery_id"/>
+                    <section class="s_text_block pt40 pb40 o_colored_level"
+                             style="background: #fcf2e0;"
+                             data-vcss="001" data-snippet="s_text_block">
+                        <div class=" container s_allow_columns">
+                            <div class="col-sm-7 col-lg px-sm-3 pt-3 d-flex flex-column">
+                                <div class="d-flex align-items-center">
+                                    <h1 class="bio-name m-0" itemprop="name">
+                                        <t t-esc="cemetery.name"/>
+                                    </h1>
+                                </div>
+                                <div class="col form-group d-flex justify-content-end s_website_form_submit"
+                                     data-name="cemeteries">
+                                    <div class="s_website_form_label"/>
+                                    <a href="/cemetery" class="btn">Cemeteries
+                                    </a>
+                                </div>
+                                <p class="">
+                                    <t t-if="cemetery.street">
+                                        <t t-esc="cemetery.street"/>,
+                                    </t>
+                                    <t t-if="cemetery.street2">
+                                        <t t-esc="cemetery.street2"/>,
+                                    </t>
+                                    <t t-if="cemetery.city">
+                                        <t t-esc="cemetery.city"/>,
+                                    </t>
+                                    <t t-if="cemetery.municipality_id">
+                                        <t t-esc="cemetery.municipality_id.id"/>
+                                        ,
+                                    </t>
+                                    <t t-if="cemetery.province_id">
+                                        <t t-esc="cemetery.province_id.id"/>
+                                        ,
+                                    </t>
+                                    <t t-if="cemetery.country_id">
+                                        <t t-esc="cemetery.country_id.id"/>
+                                    </t>
+                                </p>
+                                <div class="row">
+                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                               style="width: 200px"
+                                               for="studio1">
+                                            <span class="s_website_form_label_content">
+                                                First Name
+                                            </span>
+                                        </label>
+                                        <div class="col-sm">
+                                            <input id="surname"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   t-att-value="surname"
+                                                   name="surname"/>
+                                        </div>
+                                    </div>
+                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                               style="width: 200px"
+                                               for="studio1">
+                                            <span class="s_website_form_label_content">
+                                                Forenames
+                                            </span>
+                                        </label>
+                                        <div class="col-sm">
+                                            <input id="forenames"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   t-att-value="forenames"
+                                                   name="forenames"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                               style="width: 200px"
+                                               for="studio1">
+                                            <span class="s_website_form_label_content">
+                                                Date of Birth
+                                            </span>
+                                        </label>
+                                        <div class="col-sm">
+                                            <input id="date_of_birth"
+                                                   type="date"
+                                                   class="form-control s_website_form_input"
+                                                   t-att-value="date_of_birth"
+                                                   name="date_of_birth"/>
+                                        </div>
+                                    </div>
+                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                               style="width: 200px"
+                                               for="studio1">
+                                            <span class="s_website_form_label_content">
+                                                Date of Death
+                                            </span>
+                                        </label>
+                                        <div class="col-sm">
+                                            <input id="date_of_death"
+                                                   type="date"
+                                                   class="form-control s_website_form_input"
+                                                   t-att-value="date_of_death"
+                                                   name="date_of_death"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <br/>
+                                    <div class="col form-group d-flex justify-content-end s_website_form_submit"
+                                         data-name="Submit Button">
+                                        <div class="s_website_form_label"/>
+                                        <button type="submit"
+                                                class="btn btn-primary">
+                                            Search
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <div class=" container s_allow_columns">
+                        <div class="col-sm-7 col-lg px-sm-3 pt-3 d-flex flex-column">
+                            <t t-if="show_record == true">
+                                <!--                            <div class="">-->
+                                <!--                                    <div class="d-flex align-items-center">-->
+                                <t t-if="death">
+                                    <div class="" role="group"
+                                         t-foreach="death"
+                                         t-as="d">
+                                        <div class="col"
+                                             style="border: solid 1px #aaa7a7; border-left: 0px;
+                                                     border-right: 0px; display: flex; padding: 10px;
+                                                     justify-content: space-between; align-items: center;">
+                                            <div style="">
+                                                <a class="d-flex align-item-center">
+                                                    <a t-attf-href="/death-register/#{d.id}"
+                                                       style="display: flex; align-items: flex-start;">
+                                                        <div>
+                                                            <img src="/cemetery_management/static/src/img/grave-thumbnail.jpg"
+                                                                 style="width: 80px; height: 80px; object-fit: cover"
+                                                                 alt="Grave"/>
+                                                        </div>
+                                                        <div style="margin:0px 10px;">
+                                                            <h2 style="font-size: 25px;">
+                                                                <t t-out="d.surname"/>
+                                                                <t t-out="d.forenames"/>
+                                                            </h2>
+                                                            <p class="">
+                                                                Date of Birth:
+                                                                <t t-esc="d.date_of_birth"/>
+                                                                <br/>
+                                                                Date of Death:
+                                                                <t t-esc="d.date_of_death"/>
+                                                            </p>
+                                                        </div>
+
+                                                    </a>
+                                                </a>
+                                            </div>
+                                            <!--                                                    <div class=""-->
+                                            <!--                                                         style="text-align: right; flex-basis: calc(32% - 90px);flex-grow: 1; flex-shrink: 0; overflow:hidden;">-->
+                                            <!--                                                        Sections-->
+                                            <!--                                                        <t t-out="cemetery.sections_count"/>-->
+                                            <!--                                                    </div>-->
+                                        </div>
+                                    </div>
+
+                                </t>
+                                <p t-else="">There are currently no
+                                    death register.
+                                </p>
+                                <!--                                    </div>-->
+                                <!--                            </div>-->
+                            </t>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </t>
+    </template>
+    <template id="death_register_details" name="Death Register">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty cemetery_application">
+                <form action="/cemetery-details"
+                      enctype="multipart/form-data"
+                      class="o_mark_required" data-mark="*"
+                      data-model_name="">
+                    <section class="s_text_block pt40 pb40 o_colored_level"
+                             style="background: #E9ECE8;"
+                             data-vcss="001" data-snippet="s_text_block">
+                        <div class=" container s_allow_columns">
+                            <div class="col-sm-7 col-lg px-sm-3 pt-3 d-flex flex-column">
+                                <div class="d-flex align-items-center">
+                                    <h1 class="bio-name m-0" itemprop="name">
+                                        <t t-esc="death.surname"/>
+                                        <t t-esc="death.forenames"/>
+                                    </h1>
+                                </div>
+                                <t>
+                                    Date Of Birth:
+                                    <t t-esc="death.date_of_birth"/>
+                                </t>
+                                <br/>
+                                <t>
+                                    Date Of Death:
+                                    <t t-esc="death.date_of_death"/>
+                                </t>
+                                <br/>
+                                <!--                                <t>-->
+                                <!--                                    Date Of Burial: <t t-esc="death.date_of_burial"/>-->
+                                <!--                                </t>-->
+                                <!--                                <br/>-->
+                                <t>
+                                    Place of Death:
+                                    <t t-esc="death.place_of_death"/>
+                                </t>
+                                <br/>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </t>
+    </template>
+</odoo>

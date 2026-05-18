@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Request Disposal Button adding for the department user-->
+    <record id="view_asset_modify_disposal_form_inherit" model="ir.ui.view">
+        <field name="name">asset.modify.form.inherit</field>
+        <field name="model">asset.modify</field>
+        <field name="inherit_id" ref="account_asset.asset_modify_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='modify_action']" position="after">
+                <field name="disposal_method" widget="radio" attrs="{'invisible': [('modify_action', '!=', 'dispose')]}"
+                options="{'horizontal': true}"/>
+                <field name="consideration_input" attrs="{'invisible': [('disposal_method', '!=', 'other')]}"/>
+                <field name="selling_input" attrs="{'invisible': [('disposal_method', '!=', 'sale')]}"/>
+                <field name="asset_depreciated_value" attrs="{'invisible': [('modify_action', '!=', 'dispose')]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

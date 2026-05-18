@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_swot_analysis" model="ir.actions.act_window">
+        <field name="name">Swot Analysis</field>
+        <field name="res_model">swot.analysis</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Swot Analysis
+            </p>
+            <p>
+                Create and manage the Swot Analysis
+            </p>
+        </field>
+    </record>
+    <record id="swot_analysis_view_form" model="ir.ui.view">
+        <field name="name">swot.analysis.view.form</field>
+        <field name="model">swot.analysis</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="stages" widget="statusbar"/>
+                    <button name="action_review" type="object" invisible="stages != 'preparer' or uid != user_reviewer_1_ids" string="1st Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object" invisible="stages != 'first_reviewer' or uid != user_reviewer_2_ids" string="2nd Review" class="oe_highlight"/>
+                    <button name="action_revert" type="object" invisible="stages != 'first_reviewer' or uid != user_reviewer_2_ids" string="Revert" class="oe_highlight"/>
+                    <button name="action_approve" type="object" invisible="stages != 'second_reviewer' or uid != user_approver_ids" string="Approve" class="oe_highlight"/>
+                    <button name="action_reject" type="object" invisible="stages != 'second_reviewer' or uid != user_approver_ids" string="Reject" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence_no"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group>
+                            <field name="user_preparer_ids"
+                                   widget="many2one_avatar_user"/>
+<!--                            <field name="user_reviewer_1_ids"-->
+<!--                                   widget="many2one_avatar_user"-->
+<!--                                   readonly="stages == 'approved'"/>-->
+<!--                            <field name="user_reviewer_2_ids"-->
+<!--                                   widget="many2one_avatar_user"-->
+<!--                                   readonly="stages == 'approved'"/>-->
+<!--                            <field name="user_approver_ids"-->
+<!--                                   widget="many2one_avatar_user"-->
+<!--                                   readonly="stages == 'approved'"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Strengths">
+                            <field name="strengths_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="critical_issue"/>
+                                    <field name="internal_audit"/>
+                                    <field name="strategic_objectives"/>
+                                    <field name="target_date"/>
+                                    <field name="responsible_auditor"/>
+                                    <field name="upload_doc" widget="many2many_binary"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Weaknesses">
+                            <field name="weaknesses_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="critical_issue"/>
+                                    <field name="internal_audit"/>
+                                    <field name="strategic_objectives"/>
+                                    <field name="target_date"/>
+                                    <field name="responsible_auditor"/>
+                                    <field name="upload_doc" widget="many2many_binary"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Opportunities">
+                            <field name="opportunities_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="critical_issue"/>
+                                    <field name="internal_audit"/>
+                                    <field name="strategic_objectives"/>
+                                    <field name="target_date"/>
+                                    <field name="responsible_auditor"/>
+                                    <field name="upload_doc" widget="many2many_binary"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Threats">
+                            <field name="threats_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="critical_issue"/>
+                                    <field name="internal_audit"/>
+                                    <field name="strategic_objectives"/>
+                                    <field name="target_date"/>
+                                    <field name="responsible_auditor"/>
+                                    <field name="upload_doc" widget="many2many_binary"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Tracking">
+                            <field name="tracking_ids">
+                                <list create="0">
+                                    <field name="user_id"/>
+                                    <field name="previous"/>
+                                    <field name="new_state"/>
+                                    <field name="comment"/>
+                                    <field name="date_updated"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Matrix">
+                            <div class="card" style="padding: 20px;">
+                                <div class="card_body" style="display: flex; flex-direction: column; gap: 10px;">
+                                    <!-- Row 1 -->
+                                    <div style="display: flex; justify-content: space-around; gap: 10px;">
+                                        <!-- Strengths -->
+                                        <div style="background-color: #2ecc71; color: black; padding: 20px; width: 45%; height: auto; display: flex; flex-direction: column; justify-content: center;">
+                                            <strong style="font-size: 36px; text-align: center;">S</strong>
+                                            <span style="font-size: 18px;"><field name="strengths"/></span>
+                                        </div>
+                                        <!-- Weaknesses -->
+                                        <div style="background-color: #e74c3c; color: black; padding: 20px; width: 45%; height: auto; display: flex; flex-direction: column; justify-content: center;">
+                                            <strong style="font-size: 36px; text-align: center;">W</strong>
+                                            <span style="font-size: 18px;"><field name="weakness"/></span>
+                                        </div>
+                                    </div>
+                                    <!-- Row 2 -->
+                                    <div style="display: flex; justify-content: space-around; gap: 10px;">
+                                        <!-- Opportunities -->
+                                        <div style="background-color: #3498db; color: black; padding: 20px; width: 45%; height: auto; display: flex; flex-direction: column; justify-content: center;">
+                                            <strong style="font-size: 36px; text-align: center;">O</strong>
+                                            <span style="font-size: 18px;"><field name="opportunities"/></span>
+                                        </div>
+                                        <!-- Threats -->
+                                        <div style="background-color: #f1c40f; color: black; padding: 20px; width: 45%; height: auto; display: flex; flex-direction: column; justify-content: center;">
+                                            <strong style="font-size: 36px; text-align: center;">T</strong>
+                                            <span style="font-size: 18px;"><field name="threats"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="swot_analysis_view_tree" model="ir.ui.view">
+        <field name="name">swot.analysis.view.form</field>
+        <field name="model">swot.analysis</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="name"/>
+                <field name="sequence_no"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </list>
+        </field>
+    </record>
+<!--    <menuitem id="swot_analysis_menu"-->
+<!--              name="Swot Analysis"-->
+<!--              parent="internal_audit_management.environmental_menu"-->
+<!--              action="action_swot_analysis"-->
+<!--              sequence="2"/>-->
+</odoo>

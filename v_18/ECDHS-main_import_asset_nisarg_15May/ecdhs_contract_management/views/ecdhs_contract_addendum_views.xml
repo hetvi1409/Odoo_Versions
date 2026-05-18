@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Addendum  –  Form View
+    ================================================================= -->
+    <record id="ecdhs_contract_addendum_view_form" model="ir.ui.view">
+        <field name="name">ecdhs.contract.addendum.form</field>
+        <field name="model">ecdhs.contract.addendum</field>
+        <field name="arch" type="xml">
+            <form string="Contract Addendum">
+                <header>
+                    <button name="action_submit" type="object" string="Submit for Approval"
+                            invisible="state != 'draft'" class="btn-primary"/>
+                    <button name="action_approve" type="object" string="Approve"
+                            invisible="state != 'submitted'" class="btn-primary"/>
+                    <button name="action_sign" type="object" string="Send for Signature"
+                            invisible="state != 'approved'" class="btn-primary"/>
+                    <button name="action_view_signed_addendum" type="object"
+                            string="Download Signed Addendum"
+                            invisible="signed_document_attachment_id == False"
+                            class="btn-success" icon="fa-download"/>
+                    <button name="action_reject" type="object" string="Reject"
+                            invisible="state in ('draft','rejected','signed','signature_refused')" class="btn-danger"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,signing,signed"/>
+                </header>
+                <sheet readonly="state in ('approved','rejected','signed','signing','signature_refused')">
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                            --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                            border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                            border-color: black !important;
+                        }
+                        .addendum_template_label,
+                        .addendum_template_label.o_form_label,
+                        label.addendum_template_label {
+                            color: #ff0000 !important;
+                            font-weight: 700 !important;
+                        }
+                    </style>
+                    <widget name="web_ribbon" title="Rejected" bg_color="text-bg-danger"
+                            invisible="state != 'rejected'"/>
+                    <widget name="web_ribbon" title="Signature Refused" bg_color="text-bg-danger"
+                            invisible="state != 'signature_refused'"/>
+                    <widget name="web_ribbon" title="Signing in Progress" bg_color="text-bg-warning"
+                            invisible="state != 'signing'"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Addendum Details">
+                            <field name="addendum_type" readonly="state in ('approved','rejected','signed')"/>
+                            <field name="service_category"
+                                readonly="state in ('approved','rejected','signed')"
+                                   invisible="addendum_type != 'price_variation'"/>
+                            <label for="addendum_template_id" string="Addendum Template" class="addendum_template_label"/>
+                            <field name="addendum_template_id" nolabel="1"
+                                readonly="state in ('approved','rejected','signed')"
+                                options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="contract_id" readonly="state != 'draft'" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                               <field name="folder_id" widget="documents_folder_many2one"/>
+                            <field name="date" readonly="state in ('approved','rejected','signed')"/>
+                        </group>
+                        <group string="Date Extension"
+                               invisible="addendum_type != 'date_extension'">
+                            <field name="new_date_end" readonly="state in ('approved','rejected','signed','signing','signature_refused')"/>
+                            <field name="approved_by_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}" invisible="state not in ('approved','signed','signing','signature_refused')"/>
+                            <field name="approved_date" readonly="1" invisible="state not in ('approved','signed','signing','signature_refused')"/>
+                            <field name="signed_date" readonly="1" invisible="state not in ('signed',)"/>
+                            <field name="sign_request_id" readonly="1"
+                                   options="{'no_open': False, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"
+                                   invisible="sign_request_id == False"/>
+                            <field name="signed_document_attachment_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Price Variation – PFMA Controls"
+                           invisible="addendum_type != 'price_variation'">
+                        <group>
+                            <field name="original_value" widget="monetary" readonly="1"/>
+                            <field name="variation_amount" widget="monetary"
+                                   readonly="state in ('approved','rejected','signed')"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="variation_percentage" string="Variation %" digits="[5,2]"
+                                   decoration-danger="variation_exceeds_limit"/>
+                            <field name="variation_limit" string="Allowable Limit %" readonly="1"/>
+                            <field name="variation_exceeds_limit" widget="boolean" readonly="1"/>
+                            <field name="requires_treasury_approval" widget="boolean" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Description" name="addendum_description_page">
+                            <group string="Addendum Terms">
+                                <field name="change_description" nolabel="1" colspan="2"
+                                       readonly="state in ('approved','rejected','signed')"/>
+                            </group>
+                        </page>
+                        <page string="Notes" name="addendum_notes_page">
+                                <field name="notes" nolabel="1" colspan="2"
+                                       readonly="state in ('approved','rejected','signed')"/>
+                        </page>
+                    </notebook>
+
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Addendum  –  List View
+    ================================================================= -->
+    <record id="ecdhs_contract_addendum_view_list" model="ir.ui.view">
+        <field name="name">ecdhs.contract.addendum.list</field>
+        <field name="model">ecdhs.contract.addendum</field>
+        <field name="arch" type="xml">
+            <list string="Contract Addenda"
+                  decoration-danger="variation_exceeds_limit"
+                  decoration-muted="state == 'rejected'">
+                <field name="name"/>
+                <field name="contract_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="date"/>
+                <field name="addendum_type"/>
+                <field name="variation_amount" widget="monetary" optional="show"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="variation_percentage" string="Variation %" digits="[5,1]" optional="show"/>
+                <field name="variation_limit" string="Limit %" optional="show"/>
+                <field name="variation_exceeds_limit" widget="boolean" optional="show"/>
+                <field name="new_date_end" optional="hide"/>
+                <field name="approved_by_id" optional="hide" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'signed'"
+                       decoration-warning="state in ('submitted','approved')"
+                       decoration-danger="state == 'rejected'"/>
+                <button name="action_preview_addendum" type="object" string="Preview" class="btn-primary"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Window Action
+    ================================================================= -->
+    <record id="action_ecdhs_contract_addendum" model="ir.actions.act_window">
+        <field name="name">Addenda</field>
+        <field name="res_model">ecdhs.contract.addendum</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No addenda found</p>
+            <p>Addenda are created from the contract record.</p>
+        </field>
+    </record>
+
+</odoo>

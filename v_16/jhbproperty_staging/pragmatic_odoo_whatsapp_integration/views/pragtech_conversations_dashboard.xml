@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_dashboard" model="ir.actions.act_window">
+        <field name="name">Conversations Dashboard</field>
+        <field name="res_model">conversations.dashboard</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <record id="action_discuss" model="ir.actions.client">
+        <field name="name">Conversations Dashboard</field>
+        <field name="tag">mail.widgets.conversation</field>
+        <field name="res_model">conversations.dashboard</field>
+        <!-- <field name="params" eval="&quot ;{'default_active_id': 'mail.box_inbox' }&quot;"/> -->
+        <field name="target">current</field>
+    </record>
+
+    <record id="action_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_id" ref="pragtech_whatsapp_messenger.res_config_settings_view_form"/>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'pragmatic_odoo_whatsapp_integration', 'bin_size': False}</field>
+    </record>
+
+    <menuitem id="conversations_root_menu" name="Whatsapp-all-in-one Dashboard" sequence="8" web_icon="pragmatic_odoo_whatsapp_integration,static/description/icon.png"/>
+    <menuitem id="dashboard_main" name="Dashboard" action="action_discuss" sequence="1" parent="conversations_root_menu"/>
+    <menuitem id="config_menu" name="Configuration" sequence="2" parent="conversations_root_menu"/>
+    <menuitem id="menu_answer_action" action="pragtech_whatsapp_messenger.default_answer_action" name="Default Answers" sequence="30"
+              parent="config_menu" groups="base.group_system"/>
+    <menuitem id="settings_link" action="action_settings" sequence="1" name="Settings" parent="config_menu" groups="base.group_system"/>
+</odoo>

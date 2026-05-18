@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="transport_request_form">
+        <field name="name">transport.request.view.form</field>
+        <field name="model">transport.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submission" type="object"
+                            string="Submit"
+                            attrs="{'invisible': [('vehicle_type', 'not in', ['draft'])]}"
+                            groups="transport_request.group_requester"
+                            class="oe_highlight"/>
+                    <button name="action_approval" type="object"
+                            string="Approve"
+                            attrs="{'invisible': [('vehicle_type', 'not in', ['submitted'])]}"
+                            groups="transport_request.group_manager_approver"
+                            class="oe_highlight"/>
+                    <button name="action_assign" type="object"
+                            string="Assign"
+                            attrs="{'invisible': [('vehicle_type', 'not in', ['approved'])]}"
+                            groups="transport_request.group_transport_officer"
+                            class="oe_highlight"/>
+                    <button name="action_completion" type="object"
+                            string="Done"
+                            attrs="{'invisible': [('vehicle_type', 'not in', ['assigned'])]}"
+                            class="oe_highlight"/>
+                    <button name="action_reject" type="object"
+                            string="Reject"
+                            attrs="{'invisible': [('vehicle_type', 'not in', ['rejected'])]}"
+                            class="oe_highlight"/>
+                    <field name="vehicle_type" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Request Reference" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Requester Details">
+                            <field name="requester_id"/>
+                            <field name="department_id"/>
+                            <field name="request_date"/>
+                            <field name="purpose"/>
+                        </group>
+                        <group string="Location Details">
+                            <field name="street"
+                                   placeholder="Street..."
+                                   class="o_address_street"/>
+                            <field name="street2" placeholder="Street 2..."
+                                   class="o_address_street"/>
+                            <field name="city" class="o_address_city"/>
+                            <field name="state_id" class="o_address_state"
+                                   placeholder="State"
+                                   options="{'no_open': True, 'no_quick_create': True}"/>
+                            <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                            <div name="partner_address_country"
+                                 class="d-flex justify-content-between">
+                                <field name="country_id" placeholder="Country"
+                                       class="o_address_country"
+                                       options="{'no_open': True, 'no_create': True}"/>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="approver_id"/>
+                            <field name="approval_date"/>
+                            <field name="assigned_vehicle_id"/>
+                        </group>
+                        <group>
+                            <field name="assigned_driver_id"/>
+                            <field name="assignment_date"/>
+                            <field name="completion_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                        <page string="Rejection Reason" attrs="{'invisible': [('vehicle_type', 'not in', ['rejected'])]}">
+                            <field name="rejection_reason"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="transport_request_tree">
+        <field name="name">transport.request.view.tree</field>
+        <field name="model">transport.request</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="requester_id"/>
+                <field name="department_id"/>
+                <field name="request_date"/>
+                <field name="purpose"/>
+            </tree>
+        </field>
+    </record>
+    <!--kanban view-->
+    <record id="transport_request_view_kanban" model="ir.ui.view">
+        <field name="name">transport.request.view.kanban</field>
+        <field name="model">transport.request</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="oe_kanban_card">
+                                    <div>
+                                        <b>
+                                            <field name="name"
+                                                   style="color:red;"/>
+                                        </b>
+                                    </div>
+                                    <div>
+                                        <b>
+                                            Vehicle:
+                                            <field name="assigned_vehicle_id"/>
+                                        </b>
+                                    </div>
+                                    <div>
+                                        <b>
+                                            Requester:
+                                            <field name="requester_id"/>
+                                        </b>
+                                    </div>
+                                    <div>
+                                        <b>
+                                            Request Date:
+                                            <field name="request_date"/>
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <!-- Search View -->
+    <record id="view_transport_request_search" model="ir.ui.view">
+        <field name="name">transport.request.search</field>
+        <field name="model">transport.request</field>
+        <field name="arch" type="xml">
+            <search string="Search Transport Request">
+                <field name="request_date" string="Date and Time of Request"/>
+                <field name="vehicle_type"/>
+                <field name="department_id"/>
+                <field name="requester_id"/>
+                <field name="assigned_vehicle_id"/>
+
+                <filter name="filter_draft" string="Draft" domain="[('vehicle_type','=','draft')]"/>
+                <filter name="filter_submitted" string="Submitted" domain="[('vehicle_type','=','submitted')]"/>
+                <filter name="filter_approved" string="Approved" domain="[('vehicle_type','=','approved')]"/>
+                <filter name="filter_assigned" string="Assigned" domain="[('vehicle_type','=','assigned')]"/>
+                <filter name="filter_done" string="Done" domain="[('vehicle_type','=','done')]"/>
+
+                <group expand="1" string="Group By">
+                    <filter name="group_by_status" string="Status" context="{'group_by':'vehicle_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="transport_request_action" model="ir.actions.act_window">
+        <field name="name">Transport Request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">transport.request</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+    <menuitem id="menu_transport_request"
+              action="transport_request_action"
+              name="Transport Request"
+              parent="fleet.fleet_configuration"
+              sequence="10"/>
+</odoo>

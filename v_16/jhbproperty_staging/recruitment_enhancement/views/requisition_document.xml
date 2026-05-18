@@ -1,0 +1,84 @@
+<odoo>
+
+	<record id="view_recruitment_requisition_document_tree" model="ir.ui.view">
+		<field name="name">recruitment.requisition.document.tree</field>
+		<field name="model">requisition.document</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="requisition_id" invisible="1"/>
+				<field name="document_type_id"/>
+				<field name="document_file" filename="document_filename"/>
+				<field name="document_filename" invisible="1"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_recruitment_requisition_document_form" model="ir.ui.view">
+		<field name="name">requisition.document.form</field>
+		<field name="model">requisition.document</field>
+		<field name="arch" type="xml">
+			<form string="Requisition Document">
+				<sheet>
+					<group>
+						<field name="requisition_id"/>
+						<field name="document_type_id" options="{'no_open': True}"/>
+						<field name="document_file" filename="document_filename"/>
+						<field name="document_filename" invisible="1"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="action_recruitment_requisition_document" model="ir.actions.act_window">
+		<field name="name">Requisition Documents</field>
+		<field name="res_model">requisition.document</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+
+    <record id="view_recruitment_requisition_document_type_tree" model="ir.ui.view">
+		<field name="name">document.type.tree</field>
+		<field name="model">document.type</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_recruitment_requisition_document_form_1" model="ir.ui.view">
+		<field name="name">recruitment.requisition.document.type.form</field>
+		<field name="model">document.type</field>
+		<field name="arch" type="xml">
+			<form string="Requisition Document">
+				<sheet>
+					<group>
+						<field name="name"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="action_recruitment_requisition_document_type" model="ir.actions.act_window">
+		<field name="name">Document Types</field>
+		<field name="res_model">document.type</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+
+
+	<!-- <menuitem id="menu_recruitment_requisition_document"
+			  name="Requisition Documents"
+			  parent="hr_recruitment.menu_hr_recruitment_configuration"
+			  action="action_recruitment_requisition_document"
+			  sequence="51"/> -->
+
+	<menuitem id="menu_recruitment_requisition_document_type"
+			  name="Document Types"
+			  parent="hr_recruitment.menu_hr_recruitment_configuration"
+			  action="action_recruitment_requisition_document_type"
+			  sequence="52"/>
+
+</odoo>

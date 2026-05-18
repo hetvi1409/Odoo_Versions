@@ -1,0 +1,55 @@
+<!-- views/product_cost_split_views.xml -->
+<odoo>
+    <!-- Tree View -->
+    <record id="view_product_cost_split_tree" model="ir.ui.view">
+        <field name="name">product.cost.split.tree</field>
+        <field name="model">product.cost.split</field>
+        <field name="arch" type="xml">
+            <list string="Cost Splits">
+                <field name="main_product_id"/>
+                <field name="machine"/>
+            </list>
+        </field>
+    </record>
+    <!-- Form View -->
+    <record id="view_product_cost_split_form" model="ir.ui.view">
+        <field name="name">product.cost.split.form</field>
+        <field name="model">product.cost.split</field>
+        <field name="arch" type="xml">
+            <form string="Cost Split">
+                <sheet>
+                    <group>
+                        <field name="main_product_id"/>
+                        <field name="machine"/>
+                    </group>
+                    <notebook>
+                        <page string="Split Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="component_product_id"/>
+                                    <field name="amount"/>
+                                    <field name="account_id" options="{'no_create': True}" widget="many2many_tags"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Action -->
+    <record id="action_product_cost_split" model="ir.actions.act_window">
+        <field name="name">Product Cost Splits</field>
+        <field name="res_model">product.cost.split</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p>Use this to configure how each main product splits cost across COS accounts.</p>
+        </field>
+    </record>
+    <!-- Menu -->
+    <menuitem id="menu_product_cost_split_root"
+              name="Cost Splits"
+              parent="account.menu_finance_configuration"
+              action="action_product_cost_split"
+              sequence="99"/>
+</odoo>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="jhb_custom_login_with_modal" inherit_id="web.login" name="Login with Confirm Modal">
+        <xpath expr="//button[@type='submit']" position="replace">
+<!--            <t t-set="auto_checkin_enabled"-->
+<!--               t-value="request.env['ir.config_parameter'].sudo().get_param('auto_attendance_flow.auto_checkin_enabled')"/>-->
+<!--            <t t-if="auto_checkin_enabled">-->
+<!--                <button type="submit" id="web_log_in" class="btn btn-primary">Log in</button>-->
+<!--            </t>-->
+<!--            <t t-else="">-->
+<!--                <button type="submit" class="btn btn-primary">Log in</button>-->
+<!--            </t>-->
+            <button type="submit" id="web_log_in" class="btn btn-primary">Log in</button>
+        </xpath>
+        <!-- Add Bootstrap modal inside the form -->
+        <xpath expr="//form" position="inside">
+            <div class="modal" id="login_confirm_modal" tabindex="-1" role="dialog"
+                 aria-labelledby="loginConfirmModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <form action="/web" method="post">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="text-center">
+                                    <h1 class="mt-4">Welcome<t t-esc="request.session.get('login_name')"/>!
+                                    </h1>
+                                    <h2 class="mt4 mb24">
+                                        <t t-esc="request.session.get('login_greeting')"/>
+                                    </h2>
+                                    <div class="alert alert-info fs-4 my-3" role="status">
+                                        Checked in at
+                                        <b>
+                                            <!-- <t t-esc="datetime.datetime.now().strftime('%H:%M:%S')"/> -->
+                                            <t t-esc="(datetime.datetime.now() + datetime.timedelta(hours=2)).strftime('%H:%M:%S')"/>
+                                        </b>
+                                    </div>
+                                    <h4 class="text-success mb-4">
+                                        <t t-esc="request.session.get('login_message')"/>
+                                    </h4>
+                                    <button type="submit" class="btn btn-primary px-4 py-2">
+                                        OK
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </xpath>
+
+    </template>
+</odoo>

@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="helpdesk_ticket_view_kanban" model="ir.ui.view">
+        <field name="name">client.enquiry.view.kanban</field>
+        <field name="model">client.enquiry</field>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" action="action_view_enquiry" type="object"  class="o_kanban_small_column o_kanban_helpdesk_ticket" quick_create_view="client_enquiry.quick_create_client_enquiry_form" sample="1">
+                <field name="state"/>
+                <field name="user_id"/>
+                <field name="priority"/>
+<!--                <field name="property_id"/>-->
+                <field name="assessment_id"/>
+                <field name="team_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div>
+                            <span class="oe_kanban_color_help" role="img" />
+                            <div class="o_dropdown_kanban dropdown">
+                                <a class="dropdown-toggle o-no-caret btn" role="button" data-bs-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                    <span class="fa fa-ellipsis-v"/>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <t t-if="widget.editable"><a type="edit" class="dropdown-item" role="menuitem">Edit</a></t>
+                                    <t t-if="widget.deletable"><a type="delete" class="dropdown-item" role="menuitem">Delete</a></t>
+                                </div>
+                            </div>
+                            <div class="oe_kanban_content text-break">
+                                <div>
+                                    <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                </div>
+<!--                                <div>-->
+<!--                                    <field name="property_id"/>-->
+<!--                                </div>-->
+                                <div>
+                                    <field name="assessment_id"/>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="priority" widget="priority"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field t-if="record.user_id.raw_value" name="user_id" widget="many2one_avatar_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="client_enquiry_view_form" model="ir.ui.view">
+        <field name="name">Client Enquiry</field>
+        <field name="model">client.enquiry</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,assessment,completed"/>
+                    <button name="action_assigne_to_me"
+                            string="Assign to me" type="object" class="btn btn-secondary"
+                            groups="client_enquiry.group_cbo"
+                            invisible="state != 'submit' or user_id != False"/>
+<!--                    <button name="action_check_ownership" states="submit"-->
+<!--                            groups="client_enquiry.group_property_manager"-->
+<!--                            string="Check Property" type="object"/>-->
+                    <button name="action_submit"  invisible="state != 'draft'"
+                            string="Submit" type="object" groups="client_enquiry.group_cbo"/>
+                    <button name="action_create_assessment"  invisible="state != 'submit'"
+                            groups="client_enquiry.group_cbo"
+                            string="Request Assessment" type="object"/>
+                    <button name="action_send_cancelled_mail"  invisible="state != 'cancelled'"
+                            groups="client_enquiry.group_cbo"
+                            string="Send Mail to Enquirer" type="object"/>
+                    <button name="action_send_assessment_started_mail" invisible="state not in ['assessment','completed']"
+                            groups="client_enquiry.group_cbo"
+                            string="Send Mail to Enquirer" type="object"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_assessment" type="object"
+                                class="oe_stat_button"
+                                invisible="assessment_id == False">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Assessment</span>
+                            </div>
+                        </button>
+                        <button name="action_view_rental" type="object" class="oe_stat_button">
+<!--                                invisible="rental_id == False">-->
+                            <i class="fa fa-edit o_button_icon" />
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Lease</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <field name="company_type" widget="radio" options="{'horizontal': true}"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <field name="sla_policy_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_edit_color': True}" readonly="1"  invisible="1"/>
+                        <span invisible="sla_deadline == False"  class="mx-2 text-muted">
+                            <i class="fa fa-lg fa-clock-o me-2" aria-label="Sla Deadline" title="Sla Deadline"  invisible="1"/>
+                            <field name="sla_deadline" widget="remaining_days"  invisible="1"/>
+                        </span>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="sla_reached_late" invisible="1"/>
+                            <field name="sla_reached" invisible="1"/>
+                            <field name="sla_fail" invisible="1"/>
+                            <field name="sla_success" invisible="1"/>
+                            <field name="date"/>
+                            <field name="team_id" readonly="state != 'draft'"/>
+                            <field name="user_id" readonly="state not in ['draft', 'submit']" invisible="state == 'draft'"/>
+                        </group>
+                        <group >
+                            <field name="priority" optional="show" widget="priority"/>
+                            <field name="assessment_id" readonly="1"
+                            invisible="state in ['draft', 'submit']"/>
+                            <field name="assessment_state" widget="badge"
+                            invisible="state in ['draft', 'submit']"
+                                   decoration-info="assessment_state in ('draft', 'ownership')"
+                                   decoration-warning="assessment_state in ('compile', 'objection')"
+                                   decoration-primary="assessment_state in ('transition', 'valuation')"
+                                   decoration-success="assessment_state in ('approve', 'valuation_completed')"
+                                   decoration-danger="assessment_state in ('PTOB', 'negotiation', 'terminate', 'refused')"/>
+                            <field name="last_stage_updated"/>
+                        </group>
+                    </group>
+                    <group string="Enquiry">
+                        <group>
+                            <field name="type" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="proposed_use" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <group string="Particulars of property for which enquiry is made">
+                        <group>
+<!--                            <field name="property_id" readonly="state != 'draft'"-->
+<!--                                   context="{'tree_view_ref': 'itsys_real_estate.building_list'}"/>-->
+                            <field name="asset_number" readonly="state != 'draft'"/>
+                            <field name="stand_number" readonly="state != 'draft'"/>
+                            <field name="address" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+<!--                            <field name="region_id" readonly="state != 'draft'"/>-->
+                            <field name="entire_property" readonly="state != 'draft'"/>
+                            <field name="township" readonly="state != 'draft'"/>
+                            <field name="size" readonly="state != 'draft'"
+                            invisible="entire_property != 'no'"/>
+                        </group>
+                    </group>
+                    <group string="Particulars of person submitting enquiry(individual)"
+                           invisible="company_type != 'person'" >
+                        <group>
+                            <field name="partner_id" readonly="state != 'draft'"
+                                   options="{'no_quick_create': True}"
+                                   context="{'form_view_ref': 'client_enquiry.res_partner_view_form'}"/>
+                            <field name="surname" invisible="1" readonly="state != 'draft'"/>
+                            <field name="first_name" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="title" readonly="state != 'draft'"/>
+                            <field name="cell_phone" widget="phone" readonly="state != 'draft'"/>
+                            <field name="email" readonly="state != 'draft'"/>
+<!--                            <field name="rental_id" readonly="state != 'draft'"/>-->
+                        </group>
+                    </group>
+                    <group string="Particulars of applicant (Company/CC/Partnership/Trust/Other legal entity)"
+                           invisible="company_type != 'company'" >
+                        <group>
+                            <field name="contact_person_id"
+                                   options="{'no_quick_create': True}"
+                                   context="{'form_view_ref': 'client_enquiry.res_partner_view_form'}"/>
+                            <field name="contact_person_first_name"/>
+                            <field name="company_id" invisible="1" readonly="1"/>
+                            <field name="company_name"/>
+                            <span class="o_form_label o_td_label"
+                                  name="address_name">
+                                <b>Business Address</b>
+                            </span>
+                            <div class="o_address_format">
+                                <field name="street" readonly="state != 'draft'"
+                                       placeholder="Street..."
+                                       class="o_address_street"/>
+                                <field name="street2" readonly="state != 'draft'"
+                                       placeholder="Street 2..."
+                                       class="o_address_street"/>
+                                <field name="city" placeholder="City"
+                                       class="o_address_city"/>
+                                <field name="state_id" readonly="state != 'draft'"
+                                       class="o_address_state"
+                                       placeholder="State"
+                                       options="{'no_open': True, 'no_quick_create': True}"/>
+                                <field name="zip" placeholder="ZIP" readonly="state != 'draft'"
+                                       class="o_address_zip"/>
+                                <div name="partner_address_country"
+                                     class="d-flex justify-content-between">
+                                    <field name="country_id" readonly="state != 'draft'"
+                                           placeholder="Country"
+                                           class="o_address_country"
+                                           options="{'no_open': True, 'no_create': True}"/>
+                                </div>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="first_name_title"/>
+                            <field name="email" widget="email"/>
+                            <field name="registration_number" readonly="state != 'draft'"/>
+                            <field name="telephone_numbers" widget="phone" readonly="state != 'draft'"/>
+                            <field name="mobile" widget="phone" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="GEOLIS">
+                            <iframe id="custom_src" name="custom_src"
+                                    src="https://ags.joburg.org.za/cgis/index.aspx"
+                                    width="100%" height="500"/>
+                        </page>
+                        <page string="Windeed">
+                            <iframe id="windeed" name="windeed"
+                                    src="https://beta.windeed.co.za/login"
+                                    width="100%" height="500"/>
+                        </page>
+                        <page string="Supporting Documents">
+<!--                            invisible="asset_number == False">-->
+                            <group>
+                                <field name="attachment_ids" widget="many2many_binary"/>
+<!--                                <field name="enquiry_folder_id" invisible="1"/>-->
+                                <label for="attachment_ids">Documents</label>
+                                <button name="action_open_document"
+                                        string="Open Document"
+                                        type="object"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="client_enquiry_view_tree" model="ir.ui.view">
+        <field name="name">Client Enquiry</field>
+        <field name="model">client.enquiry</field>
+        <field name="arch" type="xml">
+            <list default_order="date desc">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="assessment_id"/>
+                <field name="team_id"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('draft')"
+                       decoration-warning="state in ('assessment', 'ongoing')"
+                       decoration-success="state in ('completed')"
+                       decoration-danger="state in ('cancelled')"/>
+                <field name="assessment_state" widget="badge"
+                       decoration-info="assessment_state in ('draft', 'ownership')"
+                       decoration-warning="assessment_state in ('compile', 'objection')"
+                       decoration-primary="assessment_state in ('transition', 'valuation', 'internal_meeting')"
+                       decoration-success="assessment_state in ('approve', 'valuation_completed', 'internal_meeting_approved', 'mayoral_approved', 'council_approved', 'council_79_approved')"
+                       decoration-danger="assessment_state in ('PTOB', 'negotiation', 'terminate', 'refused')"/>
+
+            </list>
+        </field>
+    </record>
+
+    <record id="client_enquiry_view_search" model="ir.ui.view">
+        <field name="name">client.enquiry.view.search</field>
+        <field name="model">client.enquiry</field>
+        <field name="arch" type="xml">
+            <search string="Client Enquiry">
+                <field name="name" string="Enquiry"/>
+                <field name="stand_number" string="Stand Number"/>
+                <filter string="My Enquiry" domain="[('user_id','=',uid)]" name="my_ticket"/>
+                <filter string="Unassigned Tickets" domain="[('user_id','=',False)]" name="unassigned"/>
+                <separator/>
+                <filter string="Draft" domain="[('state', '=', 'draft')]" name="state_draft"/>
+                <filter string="Submitted" domain="[('state', '=', 'submit')]" name="state_submit"/>
+                <filter string="Assessment Started" domain="[('state', '=', 'assessment')]" name="assessment_started"/>
+                <filter string="Assessment Ongoing" domain="[('state', '=', 'ongoing')]" name="assessment_ongoing"/>
+                <filter string="Assessment Completed" domain="[('state', '=', 'completed')]" name="assessment_completed"/>
+                <filter string="Cancelled" domain="[('state', '=', 'cancelled')]" name="assessment_cancelled"/>
+                <separator/>
+                <filter string="Urgent" domain="[('priority', '=', 3)]" name="urgent_priority"/>
+                <filter string="High Priority" domain="[('priority', '=', 2)]" name="high_priority"/>
+                <filter string="Medium Priority" domain="[('priority', '=', 1)]" name="low_priority"/>
+                <filter string="Low Priority" domain="[('priority', '=', 0)]" name="all_priority"/>
+                <separator/>
+                <group expand="0" string="Group By...">
+                    <filter string="Type" name="type" domain="[]"
+                            context="{'group_by':'type'}"/>
+                    <filter string="Stand Number" name="stand_number"
+                            domain="[]" context="{'group_by':'stand_number'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_client_enquiry" model="ir.actions.act_window">
+        <field name="name">Property Process</field>
+        <field name="res_model">client.enquiry</field>
+        <field name="view_mode">list,kanban,form</field>
+    </record>
+
+    <record id="action_client_enquiry_my" model="ir.actions.act_window">
+        <field name="name">Property Process</field>
+        <field name="res_model">client.enquiry</field>
+        <field name="context">{
+            'default_user_id': uid,
+            'search_default_my_ticket': true }
+        </field>
+        <field name="view_mode">list,kanban,form</field>
+    </record>
+
+    <record id="quick_create_client_enquiry_form" model="ir.ui.view">
+        <field name="name">client.enquiry.form.quick_create</field>
+        <field name="model">client.enquiry</field>
+        <field name="priority">1000</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name" placeholder="e.g. Product arrived damaged"/>
+                    <field name="team_id" required="1" options="{'no_open': True}" />
+                    <field name="user_id" options="{'no_open': True}"/>
+                    <field name="partner_id" options="{'no_open': True}" widget="res_partner_many2one"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="enquiry_helpdesk_team_action" model="ir.actions.act_window">
+        <field name="name">Teams</field>
+        <field name="res_model">helpdesk.team</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="domain">[('is_enquiry','=', True)]</field>
+        <field name="context">{'default_is_enquiry': True}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+                No teams found. Let's create one!
+            </p>
+            <p>
+                Create teams to organize your tickets by expertise or geographical region, and define a different workflow for each team.
+            </p>
+        </field>
+    </record>
+
+    <record id="helpdesk.helpdesk_team_action" model="ir.actions.act_window">
+        <field name="name">Teams</field>
+        <field name="res_model">helpdesk.team</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="domain">[('is_enquiry','=', False)]</field>
+        <field name="context">{'default_is_enquiry': False}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+                No teams found. Let's create one!
+            </p>
+            <p>
+                Create teams to organize your tickets by expertise or geographical region, and define a different workflow for each team.
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="client_enquiry_helpdesk_root_menu"
+        web_icon="client_enquiry,static/description/icon.png"
+              name="Enquiry" groups="client_enquiry.group_property_manager,client_enquiry.group_asset_evaluator,client_enquiry.group_cbo"
+              sequence="52"/>
+
+    <menuitem id="client_enquiry_helpdesk_enquiries_menu"
+              name="Enquires" groups="client_enquiry.group_property_manager,client_enquiry.group_asset_evaluator,client_enquiry.group_cbo"
+              parent="client_enquiry.client_enquiry_helpdesk_root_menu"
+              sequence="3"/>
+
+    <menuitem id="client_enquiry_menu"
+              name="All Enquiry"
+              groups="client_enquiry.group_property_manager,client_enquiry.group_cbo"
+              action="action_client_enquiry"
+              parent="client_enquiry.client_enquiry_helpdesk_enquiries_menu"
+              sequence="20"/>
+
+    <menuitem id="client_enquiry_my_menu"
+              name="My Enquiry"
+              groups="client_enquiry.group_property_manager,client_enquiry.group_cbo"
+              action="action_client_enquiry_my"
+              parent="client_enquiry.client_enquiry_helpdesk_enquiries_menu"
+              sequence="10"/>
+
+    <menuitem id="client_enquiry_helpdesk_configuration_menu"
+              name="Configuration"
+              parent="client_enquiry.client_enquiry_helpdesk_root_menu"
+              sequence="20"
+            groups="client_enquiry.group_property_manager"/>
+
+    <menuitem id="client_enquiry_helpdesk_team_menu" name="Teams" action="enquiry_helpdesk_team_action"
+        sequence="0" parent="client_enquiry.client_enquiry_helpdesk_configuration_menu" />
+
+    <record id="action_client_enquiry_report" model="ir.actions.act_window">
+        <field name="name">Property Process</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">client.enquiry</field>
+        <field name="view_mode">graph</field>
+    </record>
+
+    <record id="client_enquiry_view_graph_analysis" model="ir.ui.view">
+        <field name="name">client.enquiry.view.graph</field>
+        <field name="model">client.enquiry</field>
+        <field name="arch" type="xml">
+            <graph string="Tickets Analysis" sample="1" disable_linking="1">
+                <field name="team_id"/>
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+
+    <menuitem id="client_enquiry_reporting_main_menu"
+              name="Reporting"
+              groups="client_enquiry.group_property_manager,client_enquiry.group_cbo"
+              parent="client_enquiry.client_enquiry_helpdesk_root_menu"
+              sequence="15"/>
+    <menuitem id="client_enquiry_reporting_menu"
+              name="Reporting"
+              action="client_enquiry.action_client_enquiry_report"
+              groups="client_enquiry.group_property_manager,client_enquiry.group_cbo"
+              parent="client_enquiry.client_enquiry_reporting_main_menu"
+              sequence="20"/>
+</odoo>

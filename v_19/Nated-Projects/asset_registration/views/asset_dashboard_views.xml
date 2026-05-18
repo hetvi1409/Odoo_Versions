@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="asset_category_view_kanban" model="ir.ui.view">
+        <field name="name">asset.category.view.kanban</field>
+        <field name="model">asset.category</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_maintenance_team_kanban" create="0">
+                <field name="name"/>
+                <field name="draft_asset_count"/>
+                <field name="running_asset_count"/>
+                <field name="cancelled_asset_count"/>
+                <field name="asset_count"/>
+                <field name="impaired_asset_count"/>
+<!--                <field name="todo_request_count_unscheduled"/>-->
+                <templates>
+                    <t t-name="kanban-box">
+                        <div>
+                            <div t-attf-class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <a name="action_open_asset" type="object">
+                                            <field name="name"/>
+                                        </a></div>
+                                </div>
+                                <div class="o_kanban_manage_button_section">
+                                    <a class="o_kanban_manage_toggle_button" href="#"><i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/></a>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content">
+                                <div class="row">
+                                    <div class="col-6 o_kanban_primary_left">
+                                        <button class="btn btn-primary" name="action_open_asset" type="object">
+                                            <t t-esc="record.asset_count.value"/> All Asset
+                                        </button>
+                                    </div>
+
+                                    <div class="col-6 o_kanban_primary_right">
+                                        <div t-if="record.draft_asset_count.raw_value > 0">
+                                            <a name="action_draft_asset" type="object">
+                                                <t t-esc="record.draft_asset_count.value"/>
+                                                Draft Asset
+                                            </a>
+                                        </div>
+                                        <div t-if="record.running_asset_count.raw_value > 0">
+                                            <a name="action_running_asset" type="object">
+                                                <t t-esc="record.running_asset_count.value"/>
+                                                Running Asset
+                                            </a>
+                                        </div>
+                                        <div t-if="record.cancelled_asset_count.raw_value > 0">
+                                            <a name="action_cancelled_asset" type="object">
+                                                <t t-esc="record.cancelled_asset_count.value"/>
+                                                Cancelled Asset
+                                            </a>
+                                        </div>
+                                        <div t-if="record.impaired_asset_count.raw_value > 0">
+                                            <a name="action_impaired_asset" type="object">
+                                                <t t-esc="record.impaired_asset_count.value"/>
+                                                Impaired Asset
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_manage_pane dropdown-menu" role="menu">
+                                <div class="row">
+                                    <div class="col-6 o_kanban_card_manage_section o_kanban_manage_view">
+                                        <div role="menuitem" class="o_kanban_card_manage_title">
+                                            <span>Assets</span>
+                                        </div>
+                                        <div role="menuitem">
+                                            <a name="action_draft_asset" type="object">
+                                                Draft
+                                            </a>
+                                        </div>
+                                        <div role="menuitem">
+                                            <a name="action_running_asset" type="object">
+                                                Running
+                                            </a>
+                                        </div>
+                                        <div role="menuitem">
+                                            <a name="action_cancelled_asset" type="object">
+                                                Cancelled
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="asset_category_assert_action" model="ir.actions.act_window">
+        <field name="name">Asset Category</field>
+        <field name="res_model">asset.category</field>
+        <field name="view_mode">kanban</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new Asset Category.
+            </p>
+        </field>
+    </record>
+    <menuitem parent="account_accountant.menu_accounting" sequence="1"
+              id="menu_asset_category_action" name="Asset Category"
+              action="asset_category_assert_action"/>
+
+</odoo>

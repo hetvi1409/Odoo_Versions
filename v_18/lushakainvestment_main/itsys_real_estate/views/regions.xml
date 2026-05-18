@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- LIST VIEW -->
+        <record id="regions_list_view" model="ir.ui.view">
+            <field name="name">regions.list</field>
+            <field name="model">regions</field>
+            <field name="arch" type="xml">
+                <list string="Projects">
+                    <field name="complete_name"/>
+                    <field name="project_stage_id"/>
+                    <field name="project_type_id"/>
+                    <field name="municipality_id"/>
+                    <field name="purchase_price"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="regions_form_view" model="ir.ui.view">
+            <field name="name">regions.form</field>
+            <field name="model">regions</field>
+            <field name="arch" type="xml">
+                <form string="Project">
+
+            <!-- HEADER -->
+            <header>
+                <field name="project_stage_id"
+                       widget="statusbar"
+                       statusbar_visible="project_stage_id"
+                       options="{'no_create': True, 'clickable': '1'}"/>
+            </header>
+
+            <sheet>
+                <!-- SMART BUTTONS -->
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_open_property"
+                            type="object"
+                            class="oe_stat_button"
+                            title="Units">
+                        <i class="fa fa-building-o o_button_icon text-success" title="Units"/>
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Units</span>
+                        </div>
+                    </button>
+                </div>
+
+                <group>
+                    <group>
+                        <field name="name" required="1"/>
+                        <field name="region_id"/>
+                        <field name="project_type_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <group>
+                        <label for="street" string="Address"/>
+                        <div class="o_address_format">
+                            <field name="street" placeholder="Street..."/>
+                            <field name="street2" placeholder="Street 2..."/>
+                            <field name="city" placeholder="City"/>
+                            <field name="municipality_id" placeholder="Municipality"/>
+                            <field name="state_id"  placeholder="State/Province"/>
+                            <field name="zip" placeholder="ZIP"/>
+                            <field name="country_id" placeholder="Country" />
+                        </div>
+                    </group>
+                </group>
+
+                <notebook>
+
+                    <!-- GEOLOCATION TAB -->
+                    <page string="Geolocation">
+                        <group>
+                            <field name="latlng_ids">
+                                <list editable="bottom">
+                                    <field name="lat"/>
+                                    <field name="lng"/>
+                                    <field name="unit_id"/>
+                                    <field name="state"/>
+                                    <field name="url" invisible="1"/>
+                                </list>
+                            </field>
+                            <field name="map" widget="place_autocomplete_multi" class="oe_inline"/>
+                        </group>
+                    </page>
+
+                    <!-- PROPERTY DETAILS -->
+                    <page string="Property Details">
+                        <group>
+                            <group string="Legal">
+                                <field name="title_deed_no"/>
+                                <field name="erf_no"/>
+                                <field name="stand_details"/>
+                                <field name="sg_code"/>
+                                <field name="property_inclusions"/>
+                                <field name="property_rights"/>
+                                <field name="special_conditions"/>
+                            </group>
+
+                            <group string="Development">
+                                <field name="land_area"/>
+                                <field name="far"/>
+                                <field name="total_build_area" readonly="1"/>
+                                <field name="building_line"/>
+                                <field name="coverage_percent"/>
+                                <field name="height_floors"/>
+                                <field name="servitudes"/>
+                            </group>
+                        </group>
+                    </page>
+
+                    <!-- FINANCIALS -->
+                    <page string="Financials">
+                        <group>
+                            <group string="Seller &amp; Buyer">
+                                <field name="seller_name"/>
+                                <field name="purchaser_name"/>
+                                <field name="purchaser_number"/>
+                                <field name="purchase_date"/>
+                                <field name="transfer_date"/>
+                            </group>
+
+                            <group string="Purchase &amp; Commission">
+                                <field name="purchase_price"/>
+                                <field name="vat_percent"/>
+                                <field name="agent"/>
+                                <field name="agent_comm_percent"/>
+                                <field name="agent_comm_amount" readonly="1"/>
+                            </group>
+                        </group>
+                    </page>
+
+                    <!-- PROFESSIONALS -->
+                    <page string="Professionals">
+                        <field name="professional_ids">
+                            <list editable="bottom">
+                                <field name="name"/>
+                                <field name="mobile"/>
+                                <field name="email"/>
+                                <field name="specialization"/>
+                                <field name="note"/>
+                            </list>
+                        </field>
+                    </page>
+
+                    <!-- UTILITIES -->
+                    <page string="Utilities">
+                        <group>
+                            <group string="Power">
+                                <field name="power_supplier_id"/>
+                                <field name="electricity_1"/>
+                                <field name="electricity_2"/>
+                            </group>
+                            <group string="Water &amp; Gas">
+                                <field name="water_meter_1"/>
+                                <field name="water_meter_2"/>
+                                <field name="gas_meter_1"/>
+                                <field name="gas_meter_2"/>
+                            </group>
+                            <group string="Rates Accounts">
+                                <field name="rates_account_1"/>
+                                <field name="rates_account_2"/>
+                            </group>
+                        </group>
+                    </page>
+
+                    <!-- ATTACHMENTS -->
+                    <page string="Documents">
+                        <group>
+                            <field name="document_ids" widget="many2many_binary"/>
+                        </group>
+                    </page>
+
+                    <page string="Pictures">
+                        <group>
+                            <field name="image_ids" widget="many2many_binary"/>
+                            <field name="area_picture_ids" widget="many2many_binary"/>
+                        </group>
+                    </page>
+
+                    <page string="Design Plans">
+                        <group>
+                            <field name="design_plan_ids" widget="many2many_binary"/>
+                            <field name="layout_plan_ids" widget="many2many_binary"/>
+                        </group>
+                    </page>
+
+                    <page string="Videos">
+                        <group>
+                            <field name="video_ids" widget="many2many_binary"/>
+                        </group>
+                    </page>
+
+                    <!-- Final Notes -->
+                    <page string="Notes">
+                        <field name="note"/>
+                    </page>
+
+                </notebook>
+
+            </sheet>
+            <chatter/>
+        </form>
+            </field>
+        </record>
+
+        <!-- ACTION -->
+       <record id="regions_form_action" model="ir.actions.act_window">
+            <field name="name">Projects</field>
+            <field name="res_model">regions</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add your first project
+                </p>
+            </field>
+        </record>
+
+
+        <!-- MENU -->
+        <menuitem action="regions_form_action"
+                  id="menu_regions_form_action"
+                  parent="itsys_real_estate.menu_building_list"
+                  name="Projects"
+                  sequence="2"/>
+
+    </data>
+</odoo>

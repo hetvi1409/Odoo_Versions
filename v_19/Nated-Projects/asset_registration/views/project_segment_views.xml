@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="project_capital_segment_form_view" model="ir.ui.view">
+        <field name="name">project.capital.segment.tree.view</field>
+        <field name="model">project.capital.segment</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="capital_type"/>
+                        </group>
+                        <group>
+                            <field name="infrastructure_type"
+                                   attrs="{'invisible': [('capital_type','!=','Infrastructure')]}"/>
+                            <field name="non_infrastructure_type"
+                                   attrs="{'invisible': [('capital_type','!=','Non Infrastructure')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Lines">
+                            <field name="segment_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="project_capital_segment_tree_view" model="ir.ui.view">
+        <field name="name">project.capital.segment.tree.view</field>
+        <field name="model">project.capital.segment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="capital_type"/>
+                <field name="infrastructure_type"
+                       attrs="{'invisible': [('capital_type','!=','Infrastructure')]}"/>
+                <field name="non_infrastructure_type"
+                       attrs="{'invisible': [('capital_type','!=','Non Infrastructure')]}"/>
+            </tree>
+        </field>
+    </record>
+    <record id="project_capital_segment_action" model="ir.actions.act_window">
+        <field name="name">Project Capital Segment</field>
+        <field name="res_model">project.capital.segment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new Project Capital Segment.
+            </p>
+        </field>
+    </record>
+    <menuitem parent="account.menu_finance_entries_management"
+              id="project_capital_segment_menu" name="Project Capital Segment"
+              action="project_capital_segment_action" sequence="101"/>
+
+</odoo>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_recruitment_offer_list" model="ir.ui.view">
+        <field name="name">recruitment.offer.list</field>
+        <field name="model">recruitment.offer</field>
+        <field name="arch" type="xml">
+	            <tree>
+	                <field name="name"/>
+	                <field name="requisition_id"/>
+	                <field name="job_id" invisible="1"/>
+	                <field name="applicant_id"/>
+	                <field name="contract_type"/>
+	                <field name="salary_offered"/>
+	                <field name="background_check_ok"/>
+	                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_recruitment_offer_form" model="ir.ui.view">
+        <field name="name">recruitment.offer.form</field>
+        <field name="model">recruitment.offer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit_for_approval" string="Submit for Approval" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'to_approve')]}"/>
+                    <button name="action_send_offer" string="Send Offer" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'approved')]}"/>
+                    <button name="action_mark_accepted" string="Accepted" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'sent')]}"/>
+                    <button name="action_mark_rejected" string="Rejected" type="object" class="btn-secondary"
+                            attrs="{'invisible': [('state', 'not in', ['sent', 'approved'])]}"/>
+                    <button name="action_close" string="Close" type="object" class="btn-secondary"
+                            attrs="{'invisible': [('state', 'not in', ['accepted', 'rejected'])]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,to_approve,approved,sent,accepted,rejected,closed"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_input{
+                         border-color: black !important;
+                        border:1px solid black;
+                        padding:10px;
+                        border-radius:6px;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+	                    <group>
+	                        <group>
+	                            <field name="name" readonly="1"/>
+	                            <field name="requisition_id"/>
+	                            <field name="job_id" invisible="1"/>
+	                            <field name="interview_session_id"/>
+	                            <field name="applicant_id"/>
+	                        </group>
+	                        <group>
+	                            <field name="offer_date"/>
+                            <field name="proposed_start_date"/>
+                            <field name="contract_type"/>
+                            <field name="salary_offered"/>
+                            <field name="background_check_ok" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Approvals">
+                            <group>
+                                <field name="requires_ceo_cfo_approval"/>
+                                <field name="final_approver_id" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="Documents">
+                            <group>
+                                <field name="offer_letter_file" filename="offer_letter_filename"/>
+                                <field name="offer_letter_filename" invisible="1"/>
+                                <field name="contract_file" filename="contract_filename"/>
+                                <field name="contract_filename" invisible="1"/>
+                            </group>
+                        </page>
+                        <page string="Onboarding Checklist">
+                            <group>
+                                <field name="onboarding_it_account"/>
+                                <field name="onboarding_access_card"/>
+                                <field name="onboarding_workstation"/>
+                                <field name="onboarding_induction"/>
+                                <field name="policy_acknowledgement_signed"/>
+                                <field name="confidentiality_signed"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_recruitment_offer" model="ir.actions.act_window">
+        <field name="name">Final Offers</field>
+        <field name="res_model">recruitment.offer</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

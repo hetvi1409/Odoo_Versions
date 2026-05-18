@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Schedule the archiving task to run every day -->
+        <record id="ir_cron_document_archiver_retention" forcecreate="True" model="ir.cron">
+            <field name="name">Document Archiver Retention</field>
+            <field name="model_id" ref="document_update.model_retention_document_archiver"/>
+            <field name="state">code</field>
+            <field name="code">model.archive_retention_documents()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False" />
+        </record>
+
+        <record id="ir_cron_link_building_folder" forcecreate="True" model="ir.cron">
+            <field name="name">Link Building Folder</field>
+            <field name="model_id" ref="itsys_real_estate.model_building"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_link_building_folders()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False" />
+        </record>
+    </data>
+</odoo>

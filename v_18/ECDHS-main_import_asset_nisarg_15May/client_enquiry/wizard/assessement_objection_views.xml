@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="assessment_objection_view_form" model="ir.ui.view">
+        <field name="name">assessment.objection.form.view</field>
+        <field name="model">assessment.objection</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="assessment_id" readonly="1"/>
+                        <field name="outcome"/>
+                        <field name="is_object_valid" invisible="outcome != 'yes'"/>
+<!--                        <field name="is_negotiation" attrs="{'invisible': [('outcome', '!=', 'yes')], 'required': [('outcome', '=', 'yes')]}"/>-->
+<!--                        <field name="is_municipal_department" attrs="{'invisible': [('outcome', '!=', 'no')], 'required': [('outcome', '=', 'no')]}"/>-->
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_submit"
+                            string="Submit"
+                            type="object"
+                            class="btn-primary"
+                            data-hotkey="t"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+</odoo>

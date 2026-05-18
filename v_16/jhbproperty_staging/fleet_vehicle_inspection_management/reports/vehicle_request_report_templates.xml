@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vehicle Request Report Template -->
+    <template id="report_vehicle_request_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="text-center">
+                            <strong>REQUEST OF JPC VEHICLES</strong>
+                        </h2>
+                    </div>
+                </div>
+
+                <table class="table table-bordered mt-3">
+                    <tbody>
+                        <tr>
+                            <td><strong>Request No</strong></td>
+                            <td><span t-field="o.name"/></td>
+                            <td><strong>Date</strong></td>
+                            <td><span t-field="o.start_datetime"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Requester</strong></td>
+                            <td><span t-field="o.requester_id.name"/></td>
+                            <td><strong>Department</strong></td>
+                            <td><span t-field="o.department_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pickup Location</strong></td>
+                            <td><span t-field="o.pickup_location"/></td>
+                            <td><strong>Destination</strong></td>
+                            <td><span t-field="o.destination"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Start Time</strong></td>
+                            <td><span t-field="o.start_datetime"/></td>
+                            <td><strong>End Time</strong></td>
+                            <td><span t-field="o.end_datetime"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vehicle Allocated</strong></td>
+                            <td><span t-field="o.vehicle_id.name"/></td>
+                            <td><strong>Driver</strong></td>
+                            <td><span t-field="o.driver_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Transport Type</strong></td>
+                            <td><span t-field="o.transport_type"/></td>
+                            <td><strong>Passengers</strong></td>
+                            <td><span t-field="o.number_of_passengers"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Estimated Distance (KM)</strong></td>
+                            <td><span t-field="o.distance_km"/></td>
+                            <td><strong>After-Hours Authorization</strong></td>
+                            <td><span t-field="o.after_hours_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Status</strong></td>
+                            <td colspan="3"><span t-field="o.state"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Purpose of Trip</strong></h5>
+                        <p t-field="o.purpose"/>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Passenger Names</strong></h5>
+                        <p t-field="o.passenger_names"/>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-4 text-center">
+                        <p>_____________________</p>
+                        <p><strong>Requester</strong></p>
+                    </div>
+                    <div class="col-4 text-center">
+                        <p>_____________________</p>
+                        <p><strong>Department Manager</strong></p>
+                    </div>
+                    <div class="col-4 text-center">
+                        <p>_____________________</p>
+                        <p><strong>Fleet Office</strong></p>
+                    </div>
+                </div>
+
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_vehicle_request">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="fleet_vehicle_inspection_management.report_vehicle_request_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

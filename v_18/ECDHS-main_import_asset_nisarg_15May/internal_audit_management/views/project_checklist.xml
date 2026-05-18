@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_project_checklist" model="ir.actions.act_window">
+        <field name="name">Project Checklist</field>
+        <field name="res_model">project.checklist</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Project Checklist
+            </p>
+            <p>
+                Create and manage the Project Checklist
+            </p>
+        </field>
+    </record>
+    <record id="project_checklist__tree" model="ir.ui.view">
+        <field name="name">project.checklist.view.form</field>
+        <field name="model">project.checklist</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="project_title"/>
+                <field name="project"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_print_project_checklist" model="ir.actions.report">
+        <field name="name">Project Checklist</field>
+        <field name="model">ir.actions.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">internal_audit_management.report_project_checklist</field>
+        <field name="print_report_name">'Project Checklist'</field>
+    </record>
+    <record id="project_checklist_form" model="ir.ui.view">
+        <field name="name">view.project.checklist.form</field>
+        <field name="model">project.checklist</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                            invisible="state != 'preparer'"
+                            string="1st Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object"
+                            invisible="state != 'first_reviewer'"
+                            string="2nd Review" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="state not in ['first_reviewer', 'second_reviewer']"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_send_approver" type="object"
+                            invisible="state != 'second_reviewer'"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_approve" type="object"
+                            invisible="state != 'approver'"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_reject" type="object"
+                            invisible="state != 'second_reviewer'"
+                            string="Reject" class="oe_highlight"/>
+                    <button name="action_print_project_checklist" type="object" string="Print" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="preparer,first_reviewer,second_reviewer,approved,reverted,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <img src="/internal_audit_management/static/src/image/img.png" alt="Document" style="height:90px; width:150px;"/>
+                    <h5 style="text-align:left;">PROJECT CHECKLIST AND AUDIT CONSIDERATIONS</h5>
+                    <table style="width:100%">
+                        <tr>
+                            <td>
+                                <strong>Title:  <field name="project_title"/></strong>
+                            </td>
+                            <td>
+                                <group>
+                                    <field name="user_preparer_ids"/>
+                                </group>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Project:  <field name="project_id"/></strong>
+                            </td>
+                            <td>
+                                <group>
+                                    <field name="user_reviewer_1_ids"/>
+                                </group>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Project #: </strong><field name="project"/>
+                            </td>
+                            <td>
+                                <group>
+                                    <field name="user_reviewer_2_ids"/>
+                                </group>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td>
+                                <group>
+                                    <field name="user_approver_ids"/>
+                                </group>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="width:100%">
+                        <h4><b>Planning: </b></h4>
+                        <field name="planing_checklist_ids" style="border-collapse: collapse; width: 100%; border: 2px solid black;">
+                            <list options='{"no_open": True}'>
+                                <field name="description" string=" " style="border: 1px solid black; padding: 8px;"/>
+                                <field name="plan_date" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="initials" style="border: 1px solid black; padding: 8px;"/>
+                            </list>
+                        </field>
+                    </div>
+                    <div style="width:100%">
+                        <h4><b>Preliminary Survey: </b></h4>
+                        <field name="preliminary_survey_ids" style="border-collapse: collapse; width: 100%; border: 2px solid black;">
+                            <list options='{"no_open": True}'>
+                                <field name="description" string=" " style="border: 1px solid black; padding: 8px;"/>
+                                <field name="plan_date" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="initials" style="border: 1px solid black; padding: 8px;"/>
+                            </list>
+                        </field>
+                    </div>
+                    <div style="width:100%">
+                        <h4><b>FIELD WORK PHASE: </b></h4>
+                        <field name="field_work_ids" style="border-collapse: collapse; width: 100%; border: 2px solid black;">
+                            <list options='{"no_open": True}'>
+                                <field name="description" string=" " style="border: 1px solid black; padding: 8px;"/>
+                                <field name="plan_date" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="initials" style="border: 1px solid black; padding: 8px;"/>
+                            </list>
+                        </field>
+                    </div>
+                    <div style="width:100%">
+                        <h4><b>FINAL PHASE: </b></h4>
+                        <field name="final_phase_ids" style="border-collapse: collapse; width: 100%; border: 2px solid black;">
+                            <list options='{"no_open": True}'>
+                                <field name="description" string=" " style="border: 1px solid black; padding: 8px;"/>
+                                <field name="plan_date" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="initials" style="border: 1px solid black; padding: 8px;"/>
+                            </list>
+                        </field>
+                    </div>
+                    <table style="width:100%">
+                        <tr>
+                            <td><strong>Auditor-in-Charge:  <field name="auditor_in_charge"/></strong></td>
+                            <td><strong>Audit Manager :  <field name="auditor_manager"/></strong></td>
+                        </tr>
+                    </table>
+                    <notebook>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                        <page string="Documents">
+                            <field name="document_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+    <menuitem
+        name="Internal Audit Management"
+        id="menu_main_internal_audit" web_icon="internal_audit_management,static/src/image/image_1.png"
+        groups="project.group_project_manager,project.group_project_user"
+        sequence="70"
+    />
+    <menuitem
+            name="Configuration"
+            id="menu_internal_audit_config" parent="internal_audit_management.menu_main_internal_audit"
+            groups="project.group_project_manager"
+            sequence="100"
+        />
+    <menuitem id="project_checklist_menu"
+              name="Project Checklist Survey"
+              parent="internal_audit_management.menu_internal_audit_config"
+              action="action_project_checklist"
+              sequence="21"/>
+</odoo>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         Extends the native Sign send-request popup to allow users to pick a
+         mail.template and auto-populate the message / cc message fields.
+    ==================================================================== -->
+    <record id="sign_send_request_view_form_ecdhs" model="ir.ui.view">
+        <field name="name">sign.send.request.view.form.ecdhs</field>
+        <field name="model">sign.send.request</field>
+        <field name="inherit_id" ref="sign.sign_send_request_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Add template picker above the message editor (Signature Request page) -->
+            <xpath expr="//page[@name='signature_request']//field[@name='subject']" position="before">
+                <group>
+                    <field name="mail_template_message_id"
+                           options="{'no_create': True, 'no_open': True}"
+                           placeholder="Pick a template to fill the message…"/>
+                </group>
+            </xpath>
+
+            <!-- Add template picker above the cc message editor (Contacts in copy page) -->
+            <xpath expr="//page[@name='contacts_in_copy']/field[@name='message_cc']" position="before">
+                <group>
+                    <field name="mail_template_cc_id"
+                           options="{'no_create': True, 'no_open': True}"
+                           placeholder="Pick a template to fill the CC message…"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

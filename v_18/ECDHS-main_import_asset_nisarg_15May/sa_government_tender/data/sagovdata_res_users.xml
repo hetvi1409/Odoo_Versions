@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- https://www.odoo.com/documentation/14.0/howtos/backend.html -->
+<odoo>
+    <data noupdate="1">
+
+        <!-- https://shop.vitraining.com/blog/our-blog-1/post/how-can-i-update-a-record-stored-with-the-attribute-noupdate-1-31 -->
+        <!-- https://www.odoo.com/pl_PL/forum/pomoc-1/how-can-i-update-a-record-stored-with-the-attribute-noupdate-1-78133 -->
+        <!-- https://www.odoo.com/pl_PL/forum/pomoc-1/how-override-base-record-rule-in-custom-module-148347 -->
+        <!-- https://www.linkedin.com/pulse/odoo-how-override-noupdate1-mohamed-sharaf/ -->
+        <!-- https://www.cybrosys.com/blog/modify-existing-record-rules-in-odoo -->
+
+        <!-- Allow updating on noupdate=True records -->
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value
+                    eval="[('module', '=', 'base'), ('name', '=', 'user_admin')]" />
+            </function>
+            <value eval="{'noupdate': False}" />
+        </function>
+
+        <!-- DO NOT DELETE -->
+        <!-- Revoke noupdate change -->
+        <!-- <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value
+                    eval="[('module', '=', 'base'), ('name', '=', 'user_admin')]" />
+            </function>
+            <value eval="{'noupdate': True}" />
+        </function> -->
+
+        <record id="base.user_admin" model="res.users" forcecreate="False">
+            <field name="active" eval="True"/>
+            <field name="name">Administrator</field>
+            <field name="login">admin</field>
+            <field name="email">bmaimba@gmail.com</field>
+            <field name="password">Logmein$1234</field>
+            <!-- <field name="image_1920" type="base64" file="mahonisiclc_finance_enterprise_v17/static/src/img/MCLC_Mahonisi_Christian_Learning_Centre.jpg"/>
+            <field name="avatar_1920" type="base64" file="mahonisiclc_finance_enterprise_v17/static/src/img/MCLC_Mahonisi_Christian_Learning_Centre.jpg"/> -->
+            <!-- <field name="company_id" ref="base.main_company"/> -->
+            <!-- <field name="company_ids" eval="[(4, ref('base.main_company'))]"/> -->
+            <field name="groups_id" eval="[(4, ref('sa_government_tender.group_sagovtender_manager')),(4, ref('sa_government_tender.group_sagovtender_finance'))]"/>
+        </record>
+
+        <record id="res_users_approver" model="res.users" forcecreate="False">
+            <field name="active" eval="True"/>
+            <field name="name">Approver</field>
+            <field name="login">approver@gmail.com</field>
+            <field name="email">approver@gmail.com</field>
+            <field name="password">approver@gmail.com</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user')),(4, ref('sa_government_tender.group_sagovtender_manager')),(4, ref('sa_government_tender.group_sagovtender_finance'))]"/>
+        </record>
+
+        <record id="res_users_reviewer" model="res.users" forcecreate="False">
+            <field name="active" eval="True"/>
+            <field name="name">Reviewer</field>
+            <field name="login">reviewer@gmail.com</field>
+            <field name="email">reviewer@gmail.com</field>
+            <field name="password">reviewer@gmail.com</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user')),(4, ref('sa_government_tender.group_sagovtender_manager')),(4, ref('sa_government_tender.group_sagovtender_finance'))]"/>
+        </record>
+
+        <record id="res_users_benjamin_maimba" model="res.users" forcecreate="False">
+            <field name="active" eval="True"/>
+            <field name="name">Benjamin Maimba (User)</field>
+            <field name="login">bmaimba@gmail.com</field>
+            <field name="email">bmaimba@gmail.com</field>
+            <field name="password">bmaimba@gmail.com</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user')),(4, ref('sa_government_tender.group_sagovtender_manager')),(4, ref('sa_government_tender.group_sagovtender_finance'))]"/>
+        </record>
+
+        <record id="res_users_finance_officer" model="res.users" forcecreate="False">
+            <field name="active" eval="True"/>
+            <field name="name">Finance Officer</field>
+            <field name="login">financeofficer@example.com</field>
+            <field name="email">financeofficer@example.com</field>
+            <field name="password">financeofficer</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user')),(4, ref('sa_government_tender.group_sagovtender_manager')),(4, ref('sa_government_tender.group_sagovtender_finance'))]"/>
+        </record>
+
+        <record id="res_users_scm_officer" model="res.users" forcecreate="False">
+            <field name="active" eval="True"/>
+            <field name="name">SCM Officer</field>
+            <field name="login">scmofficer@example.com</field>
+            <field name="email">scmofficer@example.com</field>
+            <field name="password">scmofficer</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user')),(4, ref('sa_government_tender.group_sagovtender_manager')),(4, ref('sa_government_tender.group_sagovtender_finance'))]"/>
+        </record>
+
+        <record id="res_users_tender_officer" model="res.users" forcecreate="False">
+            <field name="active" eval="True"/>
+            <field name="name">Tender Officer</field>
+            <field name="login">tenderofficer@example.com</field>
+            <field name="email">tenderofficer@example.com</field>
+            <field name="password">tenderofficer</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user')),(4, ref('sa_government_tender.group_sagovtender_manager')),(4, ref('sa_government_tender.group_sagovtender_finance'))]"/>
+        </record>
+
+        <record id="res_users_bac1" model="res.users" forcecreate="False">
+            <field name="active" eval="True"/>
+            <field name="name">BAC Chair</field>
+            <field name="login">bac1</field>
+            <field name="email">bac1@example.com</field>
+            <field name="password">bac1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user')),(4, ref('sa_government_tender.group_sagovtender_manager')),(4, ref('sa_government_tender.group_sagovtender_finance'))]"/>
+        </record>
+
+        <record id="res_users_bac2" model="res.users" forcecreate="False">
+            <field name="active" eval="True"/>
+            <field name="name">BAC Secretary</field>
+            <field name="login">bac2</field>
+            <field name="email">bac2@example.com</field>
+            <field name="password">bac2</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user')),(4, ref('sa_government_tender.group_sagovtender_manager')),(4, ref('sa_government_tender.group_sagovtender_finance'))]"/>
+        </record>
+
+        <record id="res_users_bec1" model="res.users" forcecreate="False">
+            <field name="active" eval="True"/>
+            <field name="name">BEC Chair</field>
+            <field name="login">bec1</field>
+            <field name="email">bec1@example.com</field>
+            <field name="password">bec1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user')),(4, ref('sa_government_tender.group_sagovtender_manager')),(4, ref('sa_government_tender.group_sagovtender_finance'))]"/>
+        </record>
+
+        <record id="res_users_bec2" model="res.users" forcecreate="False">
+            <field name="active" eval="True"/>
+            <field name="name">BEC Secretary</field>
+            <field name="login">bec2</field>
+            <field name="email">bec2@example.com</field>
+            <field name="password">bec2</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user')),(4, ref('sa_government_tender.group_sagovtender_manager')),(4, ref('sa_government_tender.group_sagovtender_finance'))]"/>
+        </record>
+
+	</data>
+</odoo>

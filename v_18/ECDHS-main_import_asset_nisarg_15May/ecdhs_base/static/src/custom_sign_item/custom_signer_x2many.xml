@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+    <!-- Inherit the original sign template control panel -->
+    <t t-inherit="sign.SignerX2Many" t-inherit-mode="extension">
+        <!-- Replace the Sign Now button with our condition -->
+        <xpath expr="//div[contains(@class, 'o_field_wrap')]" position="replace">
+            <div class="o_field_wrap">
+                <Many2OneField id="labelId" name="partnerIdFieldInfo.name" record="record"
+                               t-props="partnerIdFieldInfo.additionalProps" canOpen="false" canCreate="false"
+                               canQuickCreate="false"
+                               canCreateEdit="false"/>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

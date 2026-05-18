@@ -1,0 +1,67 @@
+<odoo>
+    <data noupdate="0">
+
+        <!-- ================= DAILY REPORT TEMPLATE ================= -->
+        <record id="email_template_daily_helpdesk_report" model="mail.template">
+            <field name="name">Helpdesk Daily Open Tickets Report</field>
+            <field name="model_id" ref="helpdesk_ticket_report.model_helpdesk_ticket_report_wizard"/>
+            <field name="email_from">${(user.email_formatted or 'noreply@jhbproperty.co.za')}</field>
+            <field name="email_to">ithelpdesk@jhbproperty.co.za</field>
+            <field name="subject">Daily Helpdesk Report - Open Tickets ${ctx.get('today')}</field>
+            <field name="body_html" type="html">
+                <div>
+                    Dear Madam/Sir,<br/><br/>
+                    Please find attached today's Helpdesk Ticket Report showing all
+                    <b>open tickets</b> as of
+                    <b><t t-out="ctx.get('today') or ''"/></b>.<br/><br/>
+                    Kind regards,<br/>
+                    <b>Odoo Helpdesk System</b>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- ================= WEEKLY REPORT TEMPLATE ================= -->
+        <record id="email_template_weekly_helpdesk_report" model="mail.template">
+            <field name="name">Helpdesk Weekly All Tickets Report</field>
+            <field name="model_id" ref="helpdesk_ticket_report.model_helpdesk_ticket_report_wizard"/>
+            <field name="email_from">${(user.email_formatted or 'noreply@jhbproperty.co.za')}</field>
+            <field name="email_to">ithelpdesk@jhbproperty.co.za</field>
+            <field name="subject">Weekly Helpdesk Report - All Tickets {{ ctx.get('today') }}</field>
+            <field name="body_html" type="html">
+                <div>
+                    Dear Madam/Sir,<br/><br/>
+                    Attached is the weekly Helpdesk Ticket Report containing
+                    <b>all tickets</b> created in
+                    <b><t t-out="ctx.get('today') or ''"/></b>.<br/><br/>
+                    Kindly review the report for performance and response tracking.<br/><br/>
+                    Best regards,<br/>
+                    <b>Odoo Helpdesk System</b>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- ================= MONTHLY REPORT TEMPLATE ================= -->
+        <record id="email_template_monthly_helpdesk_report" model="mail.template">
+            <field name="name">Helpdesk Monthly Departmental Report</field>
+            <field name="model_id" ref="helpdesk_ticket_report.model_helpdesk_ticket_report_wizard"/>
+            <field name="email_from">${(user.email_formatted or 'noreply@jhbproperty.co.za')}</field>
+            <field name="email_to">ithelpdesk@jhbproperty.co.za</field>
+            <field name="subject">Monthly Helpdesk Report by Department {{ ctx.get('today') }}</field>
+            <field name="body_html" type="html">
+                <div>
+                    Dear Madam/Sir,<br/><br/>
+                    The attached file contains the
+                    <b>department-wise Helpdesk Ticket Report</b> for
+                    <b><t t-out="ctx.get('today') or ''"/></b>.<br/><br/>
+                    Please review departmental statistics and performance metrics.<br/><br/>
+                    Regards,<br/>
+                    <b>Odoo Helpdesk System</b>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

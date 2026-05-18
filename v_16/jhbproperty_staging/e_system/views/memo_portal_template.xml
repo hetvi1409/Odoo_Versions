@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="portal_my_home_menu_memo"
+              name="Portal layout : Memo"
+              inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'memo' or memo"
+                t-attf-class="breadcrumb-item #{'active' if not memo else ''}">
+                <a t-if="memo"
+                   t-attf-href="/my/memo">
+                    Memo
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_memo" name="Memo"
+              customize_show="True" inherit_id="portal.portal_my_home"
+              priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <div id="portal_vendor_category">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Memo</t>
+                    <t t-set="url" t-value="'/my/memo'"/>
+                    <t t-set="placeholder_count"
+                       t-value="'memo_count'"/>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="my_memo" name="Memo">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Memo</t>
+            </t>
+            <t t-if="not memo">
+                <p>There are currently no memo for your account.
+                </p>
+            </t>
+            <t t-if="memo" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Number #</th>
+                        <th>Name</th>
+                        <th>Submission Type</th>
+                        <th>Requester</th>
+                        <th>Date</th>
+                        <th class="text-end">Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <t t-foreach="memo" t-as="res">
+                        <tr>
+                            <td>
+                                <a t-attf-href="/memo_details_portal/#{res.id}">
+                                    <t t-out="res.memo_number"/>
+                                </a>
+                            </td>
+                            <td >
+                                <span t-field="res.name"/>
+                            </td>
+                            <td >
+                                <span t-field="res.submission_type"/>
+                            </td>
+                            <td >
+                                <span t-field="res.requester_id.name"/>
+                            </td>
+                            <td >
+                                <span t-field="res.date"/>
+                            </td>
+                            <td class="text-end">
+                                <span t-field="res.state"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+<!--    <record id="menu_my_home" model="website.menu">-->
+<!--            <field name="name">My Home</field>-->
+<!--            <field name="url">/my/home</field>-->
+<!--            <field name="parent_id" ref="website.main_menu"/>-->
+<!--            <field name="sequence" type="int">1</field>-->
+<!--        </record>-->
+</odoo>

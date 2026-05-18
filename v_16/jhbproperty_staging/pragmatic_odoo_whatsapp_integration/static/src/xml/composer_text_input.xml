@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="whatsapp.ComposerTextInput" owl="1">
+        <t t-if="composerView">
+            <script>
+                function allowDrop (ev) {
+                    ev.preventDefault();
+                }
+                function dragDropText (ev) {
+                    ev.preventDefault();
+                    console.log("transfer_data", ev);
+                    var data = ev.dataTransfer.getData("text");
+                    var z = document.createElement('text');
+                    z.innerHTML = data;
+                    const mirror = document.getElementById("composer_mirror");
+                    console.log("transfer", data);
+                    ev.target.value = data;
+                    ev.target.childNodes[0].nodeValue = data;
+                    mirror.value = data;
+                    mirror.childNodes[0].nodeValue = data;
+                }
+            </script>
+            <div class="o_ComposerTextInput position-relative bg-view" t-attf-class="{{ className }} {{ composerView.isCompact ? 'border border-end-0' : 'border-0' }}" t-on-paste="composerView.onPasteTextInput" t-ref="root">
+                <t t-if="composerView.composerSuggestionListView">
+                    <ComposerSuggestionListView record="composerView.composerSuggestionListView"/>
+                </t>
+                <textarea style="max-height: 50px;" class="o_ComposerTextInput_textarea o_ComposerTextInput_textareaStyle form-control px-3 border-0 shadow-none overflow-auto" 
+                ondrop="dragDropText(event)" ondragover="allowDrop(event)" 
+                t-att-class="{ 'o-composer-is-compact rounded-0 rounded-start-3': composerView.isCompact, 'rounded-3': !composerView.isCompact }" 
+                t-esc="composerView.composer.textInputContent" t-att-placeholder="composerView.composer.placeholder" 
+                t-on-click="composerView.onClickTextarea" t-on-focusin="composerView.onFocusinTextarea" t-on-focusout="composerView.onFocusoutTextarea" 
+                t-on-keydown="onKeydownTextarea" t-on-keyup="composerView.onKeyupTextarea" t-ref="textarea"/>
+                <!--
+                     This is an invisible textarea used to compute the composer
+                     height based on the text content. We need it to downsize
+                     the textarea properly without flicker.
+                -->
+                <textarea id="composer_mirror" class="o_ComposerTextInput_mirroredTextarea o_ComposerTextInput_textareaStyle position-absolute px-3 border-0 overflow-hidden opacity-0" ondrop="dragDropText(event)" ondragover="allowDrop(event)" 
+                t-att-class="{ 'o-composer-is-compact rounded-0 rounded-start-3': composerView.isCompact, 'rounded-3': !composerView.isCompact }" 
+                t-esc="composerView.composer.textInputContent" t-ref="mirroredTextarea" disabled="1"/>
+            </div>
+        </t>
+    </t>
+
+</templates>

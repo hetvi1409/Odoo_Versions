@@ -1,0 +1,111 @@
+<odoo>
+    <template id="report_procurement_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="procurement">
+                <t t-call="web.external_layout">
+                    <div class="page o_content_pdf">
+                        <h2 class="mb-3 border-bottom border-2 border-dark" style="text-align:center;">Procurement
+                        </h2>
+                        <table class="table table-sm o_main_table table-bordered mt-2 mb-2">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Procurement:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <span t-field="procurement.name"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Procurement Number:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <span t-field="procurement.procurement_number"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Date:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <span t-field="procurement.date"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Author:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <span t-field="procurement.author_id.name"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Approver:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <span t-field="procurement.approver_id.name"></span>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Status:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <t t-if="procurement.state == 'draft'">
+                                            <span>Draft</span>
+                                        </t>
+                                        <t t-if="procurement.state == 'awaiting_approval'">
+                                            <span>Awaiting Approval</span>
+                                        </t>
+                                        <t t-if="procurement.state == 'change_requested'">
+                                            <span>Change Requested</span>
+                                        </t>
+                                        <t t-if="procurement.state == 'approved'">
+                                            <span>Approved</span>
+                                        </t>
+                                        <t t-if="procurement.state == 'signed'">
+                                            <span>Signed</span>
+                                        </t>
+<!--                                        <t t-if="procurement.state == 'published'">-->
+<!--                                            <span>Published</span>-->
+<!--                                        </t>-->
+                                        <t t-if="procurement.state == 'rejected'">
+                                            <span>Rejected</span>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="oe_structure"></div>
+                        <t t-if="procurement.body">
+                            <h4 class="mb-3" style="text-align:center;">Procurement Content</h4>
+                            <div id="procurement_content mt-2 mb-2" class="clearfix">
+                                <div class="justify-text">
+                                    <p t-if="not is_html_empty(procurement.body)" name="content" class="mb-2">
+                                        <span t-field="procurement.body"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </t>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

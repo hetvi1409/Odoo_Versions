@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="custom_physical_record_form_view">
+            <field name="name">record.name.custom.form.view</field>
+            <field name="model">record.name.custom</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                            </group>
+                            <group>
+                                <field name="code" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_physical_record_tree_view">
+            <field name="name">record.name.custom.form.view</field>
+            <field name="model">record.name.custom</field>
+            <field name="arch" type ="xml">
+                <list>
+                    <field name="name" />
+                    <field name="code" />
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_physical_record_search_view">
+            <field name="name">record.name.custom.form.view</field>
+            <field name="model">record.name.custom</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="code" />
+                </search>
+            </field>
+        </record>
+  
+        <record id="action_custom_record_name" model="ir.actions.act_window">
+            <field name="name">Record Names</field>
+            <field name="res_model">record.name.custom</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem name="Record Names" id="sub_menu_custom_record_names" 
+                  parent="menu_physical_configurations_custom" 
+                  sequence="28" action="action_custom_record_name"/>
+
+    </data>
+</odoo>

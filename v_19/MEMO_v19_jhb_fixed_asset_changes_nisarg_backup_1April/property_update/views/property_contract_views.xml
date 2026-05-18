@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="rental_contract_form_view">
+        <field name="name">rental.contract.view.form</field>
+        <field name="model">rental.contract</field>
+        <field name="inherit_id" ref="itsys_real_estate.rental_contract_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook"
+                   position="inside">
+                <page string="Rental">
+                    <group>
+                        <group>
+                            <field name="rental_type"/>
+                            <field name="creditor_region_id"/>
+                            <field name="bldg_name"/>
+                            <field name="credit_controller_id"/>
+                            <field name="jmc_number"/>
+                            <field name="quick_ref"/>
+                            <field name="lease_type_id"/>
+                            <field name="unit_type_id"/>
+                            <field name="commence_date"/>
+                            <field name="rentroll_period"/>
+                        </group>
+                        <group>
+                            <field name="view_group"/>
+                            <field name="bldg_code"/>
+                            <field name="portfolio_manager_id"/>
+                            <field name="unit_code"/>
+                            <field name="prem_no"/>
+                            <field name="arr_status_id"/>
+                            <field name="portfolio_category_id"/>
+                            <field name="ten_name"/>
+                            <field name="lease_exp_date"/>
+                        </group>
+                    </group>
+                    <group string="Amount details">
+                        <group>
+                            <field name="opening_balance"/>
+                            <field name="other_income"/>
+                            <field name="interest"/>
+                        </group>
+                        <group>
+                            <field name="deposits"/>
+                            <field name="closing_balance"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="commercial_charges"/>
+                            <field name="expenditure"/>
+                            <field name="social"/>
+                            <field name="advertising_charges"/>
+                            <field name="land_sales"/>
+                            <field name="servitudes"/>
+                            <field name="total_charges"/>
+                        </group>
+                        <group>
+                            <field name="development"/>
+                            <field name="recoveries"/>
+                            <field name="vat"/>
+                            <field name="application_fees"/>
+                            <field name="residential"/>
+                            <field name="total_receipts"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='building_unit']" position="attributes">
+                <attribute name="required">0</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="lease_type" invisible="0"/>
+                <field name="outdoor_advertisement_id" invisible="lease_type != 'outdoor_lease'"/>
+            </xpath>
+<!--            <xpath expr="//field[@name='pricing']" position="attributes">-->
+<!--                <attribute name="required">0</attribute>-->
+<!--                <attribute name="attrs">{'required': [('contract_type', '=', 'is_ownership')]}</attribute>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+    <record id="rental_contract_filter" model="ir.ui.view">
+        <field name="name">rental.contract.model.view.list</field>
+        <field name="model">rental.contract</field>
+        <field name="inherit_id"
+               ref="itsys_real_estate.rental_contract_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="jmc_number"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="rental_contract_filter" model="ir.ui.view">
+        <field name="name">rental.contract.model.view.list</field>
+        <field name="model">rental.contract</field>
+        <field name="inherit_id"
+               ref="itsys_real_estate.rental_contract_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="jmc_number"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="rental_contract_tree_view" model="ir.ui.view">
+        <field name="name">rental.contract.model.view.list</field>
+        <field name="model">rental.contract</field>
+        <field name="inherit_id"
+               ref="itsys_real_estate.rental_contract_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="attach_line" string="Lease Document"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="rental_contract_portfolio_form_action" model="ir.actions.act_window">
+        <field name="name">Portfolio Leases</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">rental.contract</field>
+        <field name="domain">[('lease_type','=', 'portfolio_lease')]</field>
+        <field name="context">{'default_lease_type': 'portfolio_lease'}</field>
+        <field name="view_id" ref="itsys_real_estate.rental_contract_tree_view"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to add a new Portfolio Lease Contract
+            </p>
+        </field>
+    </record>
+    <record id="rental_contract_outdoor_lease_form_action" model="ir.actions.act_window">
+        <field name="name">Outdoor Advertisement Lease</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">rental.contract</field>
+        <field name="domain">[('lease_type','=', 'outdoor_lease')]</field>
+        <field name="context">{'default_lease_type': 'outdoor_lease'}</field>
+        <field name="view_id" ref="itsys_real_estate.rental_contract_tree_view"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to add a new Outdoor Advertisement Lease Contract
+            </p>
+        </field>
+    </record>
+    <record id="rental_contract_trade_lease_form_action" model="ir.actions.act_window">
+        <field name="name">Informal Trade Lease</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">rental.contract</field>
+        <field name="domain">[('lease_type','=', 'trade_lease')]</field>
+        <field name="context">{'default_lease_type': 'trade_lease'}</field>
+        <field name="view_id" ref="itsys_real_estate.rental_contract_tree_view"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to add a new Informal Trade Lease Contract
+            </p>
+        </field>
+    </record>
+<!--        <record id="view_account_asset_search_inherit" model="ir.ui.view">-->
+<!--        <field name="name">rental.contract.view.form</field>-->
+<!--        <field name="model">rental.contract</field>-->
+<!--        <field name="inherit_id" ref="account_asset.view_account_asset_search"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//field[@name='name']" position="replace">-->
+<!--                <field name="name" string="Asset Name"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//search" position="inside">-->
+<!--                <field name="identification_number" string="Asset ID"/>-->
+<!--                <field name="alternative_ref" string="Barcode Number"/>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <menuitem
+        id="menu_Lease_main"
+        name="Lease"
+        parent="itsys_real_estate.menu_itsys_real_estate"
+        sequence="12"/>
+    <menuitem
+        id="menu_rental_contract_portfolio"
+        name="Portfolio Leases"
+        action="rental_contract_portfolio_form_action"
+        parent="property_update.menu_Lease_main"
+        sequence="23"/>
+    <menuitem
+        id="menu_rental_contract_outdoor_lease"
+        name="Outdoor Advertisement Lease"
+        action="rental_contract_outdoor_lease_form_action"
+        parent="property_update.menu_Lease_main"
+        sequence="23"/>
+    <menuitem
+        id="menu_rental_contract_trade_lease"
+        name="Informal Trade Lease"
+        action="rental_contract_trade_lease_form_action"
+        parent="property_update.menu_Lease_main"
+        sequence="23"/>
+
+</odoo>

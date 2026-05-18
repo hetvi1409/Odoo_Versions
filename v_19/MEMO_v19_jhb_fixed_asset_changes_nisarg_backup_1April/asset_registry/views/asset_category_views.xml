@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="asset_category_tree_view" model="ir.ui.view">
+        <field name="name">asset.category.list.view</field>
+        <field name="model">asset.category</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="is_movable"/>
+                <field name="is_immovable"/>
+                <field name="is_intangible"/>
+            </list>
+        </field>
+    </record>
+    <record id="asset_category_action" model="ir.actions.act_window">
+        <field name="name">Asset Category</field>
+        <field name="res_model">asset.category</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new Asset Category.
+            </p>
+        </field>
+    </record>
+    <record id="asset_category_view_tree" model="ir.ui.view">
+        <field name="name">asset.type.list.view</field>
+        <field name="model">asset.type</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="asset_category_view_form" model="ir.ui.view">
+        <field name="name">asset.type.view.form</field>
+        <field name="model">asset.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="category_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+<!--    <record id="asset_type_action" model="ir.actions.act_window">-->
+<!--        <field name="name">Asset Type</field>-->
+<!--        <field name="res_model">asset.type</field>-->
+<!--        <field name="view_mode">list,form</field>-->
+<!--        <field name="help" type="html">-->
+<!--            <p class="o_view_nocontent_smiling_face">-->
+<!--                Click to create a new Asset Type.-->
+<!--            </p>-->
+<!--        </field>-->
+<!--    </record>-->
+    <menuitem parent="account.account_transactions_menu"
+              id="menu_asset_category_action_" name="Asset Category"
+              action="asset_category_action" sequence="101"/>
+
+
+    <record id="account.menu_board_journal_1" model="ir.ui.menu">
+            <field name="parent_id" ref="account.account_transactions_menu"/>
+    </record>
+
+<!--    <menuitem parent="account.account_transactions_menu"-->
+<!--              id="menu_asset_type" name="Asset Type"-->
+<!--              action="asset_type_action" sequence="101"/>-->
+
+</odoo>

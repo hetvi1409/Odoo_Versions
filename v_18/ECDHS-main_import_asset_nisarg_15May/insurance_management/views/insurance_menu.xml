@@ -1,0 +1,43 @@
+<!-- views/insurance_menu.xml -->
+<odoo>
+    <record id="menu_insurance_root" model="ir.ui.menu">
+        <field name="name">Insurance&#10;Management</field>
+        <field name="web_icon">insurance_management,static/description/icon.png</field>
+    </record>
+
+    <record id="menu_insurance_policies" model="ir.ui.menu">
+        <field name="name">Policies</field>
+        <field name="parent_id" ref="menu_insurance_root"/>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="menu_insurance_claims" model="ir.ui.menu">
+        <field name="name">Claims</field>
+        <field name="parent_id" ref="menu_insurance_root"/>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="action_insurance_policy" model="ir.actions.act_window">
+        <field name="name">Policies</field>
+        <field name="res_model">insurance.policy</field>
+        <field name="view_mode">list,form,kanban</field>
+    </record>
+
+    <record id="menu_action_insurance_policy" model="ir.ui.menu">
+        <field name="name">Policies</field>
+        <field name="parent_id" ref="menu_insurance_policies"/>
+        <field name="action" ref="action_insurance_policy"/>
+    </record>
+
+    <record id="action_insurance_claim" model="ir.actions.act_window">
+        <field name="name">Claims</field>
+        <field name="res_model">insurance.claim</field>
+        <field name="view_mode">list,form,kanban</field>
+    </record>
+
+    <record id="menu_action_insurance_claim" model="ir.ui.menu">
+        <field name="name">Claims</field>
+        <field name="parent_id" ref="menu_insurance_claims"/>
+        <field name="action" ref="action_insurance_claim"/>
+    </record>
+</odoo>

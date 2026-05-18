@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_job_advert">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="company" t-value="o.company_id"/>
+                <t t-call="web.external_layout_standard">
+                    <div class="page o_content_pdf">
+                        <div class="mb-3 p-3" style="text-align:center; background-color: black; color: white;">
+                        <strong><t t-esc="o.name"/></strong>
+                        <br/>
+                        <t t-if="o.requisition_id.position_type == 'new'">
+                            <strong> New Position </strong>
+                        </t>
+                        <t t-else="">
+                            <strong> Permanent Position </strong>
+                        </t>
+                        </div>
+                        <table class="table table-sm o_main_table table-bordered mt-2 mb-2">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Department:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.department_id.name"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Designation:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.name"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Reporting to:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.user_role_id.name"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Reference Number:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.requisition_id.name"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Remuneration:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            R <span t-field="o.requisition_id.budget_availability"></span> (Basic salary excluding benefits per Month)
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Local:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <t t-if="o.address_id.street"><span t-field="o.address_id.street"/>, </t>
+                                            <t t-if="o.address_id.street2"><span t-field="o.address_id.street2"/>, </t>
+                                            <t t-if="o.address_id.city"><span t-field="o.address_id.city"/>, </t>
+                                            <t t-if="o.address_id.state_id"><span t-field="o.address_id.state_id.name"/>, </t>
+                                            <t t-if="o.address_id.zip"><span t-field="o.address_id.zip"/>, </t>
+                                            <t t-if="o.address_id.country_id"><span t-field="o.address_id.country_id.name"/></t>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <!-- <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Company Name:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.company_id.name"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Job Title:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.name"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Company Overview:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.company_overview"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Job Purpose:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-field="o.job_purpose"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Required Qualifications &amp; Experience:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <t t-if="o.required_experience">
+                                            <strong>
+                                                <span t-field="o.required_experience"></span>
+                                            </strong>
+                                        </t>
+                                        <t t-if="o.minimum_qualifications">
+                                            <strong>-
+                                                <span t-field="o.minimum_qualifications"></span>
+                                            </strong>
+                                        </t>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Desired Skills &amp; Competencies:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <t t-if="o.skill_ids">
+                                            <strong>
+                                                <span t-esc="o.skill_ids.mapped('name')"></span>
+                                            </strong>
+                                        </t>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Key Performance Indicators (KPIs):</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                            <span t-esc="o.kpi_names"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Application Closing Date:</span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <strong>
+                                           <span t-field="o.closing_date"></span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;width:40%;">
+                                        <strong>
+                                            <span>Additional Notes (Equal opportunity statements, background checks,
+                                                etc.):
+                                            </span>
+                                        </strong>
+                                    </td>
+                                    <td style="text-align:left;width:60%;">
+                                        <t t-esc="o.notes"/>
+                                    </td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                        <div class="oe_structure"></div>
+                        <!-- <h4 class="mb-3" style="text-align:center;">Job Description</h4> -->
+                        <div id="job_description mt-2 mb-2" class="clearfix">
+                            <div class="justify-text mt-4">
+                                <span t-field="o.description"/>
+                            </div>
+                        </div>
+                        <div>
+                            <strong>
+                                APPLY ONLINE:
+                                <a href="https://www.jhbproperty.co.za"
+                                style="color: blue; text-decoration: underline;">
+                                    www.jhbproperty.co.za
+                                </a>.
+                                Please take note that only online applications will be considered.
+                                Please apply by using the following link:
+                                <span style="color: red;">( Insert the Link)</span>
+                            </strong>
+                        </div>
+
+                        <div class="mt-2">
+                            <span><strong style="text-decoration: underline;">ENQUIRIES ONLY:</strong></span><br/>
+                            <span>Contact Person: Lindeni Shoba</span><br/>
+                            <span>Tel No: (060) 739 2942</span>
+                        </div>
+
+                        <!-- Yellow Box Section -->
+                        <div class="mt-4" style="border: 2px solid black; background-color: #f4b400; padding: 15px;">
+                            <div class="row">
+                                <!-- Left Side -->
+                                <div class="col-6">
+                                    <div class="mb-2">
+                                        <strong>Publication Date:</strong><br/>
+                                        <span t-field="o.create_date" t-options='{"widget": "date"}'/>
+                                    </div>
+                                    <div>
+                                        <strong>Closing Date:</strong><br/>
+                                        <span t-field="o.closing_date"/>
+                                    </div>
+                                </div>
+
+                                <!-- Right Side -->
+                                <div class="col-6 d-flex align-items-center justify-content-center text-center">
+                                    <strong>
+                                        This Vacancy is open to Employees of the City of Johannesburg and External Candidates
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_hr_job_advert" model="ir.actions.report">
+        <field name="name">Job Advert Report</field>
+        <field name="model">hr.job</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">recruitment_enhancement.report_job_advert</field>
+        <field name="report_file">recruitment_enhancement.report_job_advert</field>
+        <field name="print_report_name">'Job - %s' % (object.name)</field>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+</odoo>

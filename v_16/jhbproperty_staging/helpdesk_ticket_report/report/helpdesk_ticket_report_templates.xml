@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="helpdesk_ticket_report_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <center>
+                            <div style="margin-top: 60px;font-size:25px; font-weight:bold;">
+                                Helpdesk Ticket Summary Report
+                            </div>
+                            <div style="font-size:20px;">
+                                <t t-if="data.get('report_type') == 'by_department'">
+                                    Department-wise Report
+                                </t>
+                                <t t-elif="data.get('report_type') == 'open_tickets'">
+                                    Open Tickets Report
+                                </t>
+                                <t t-else="">
+                                    All Tickets Report
+                                </t>
+                            </div>
+                        </center>
+
+                        <div style="margin-top: 30px;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <b>From Date:</b>
+                                    <t t-esc="data.get('start_date') or 'N/A'"/>
+                                </div>
+                                <div class="col-6">
+                                    <b>To Date:</b>
+                                    <t t-esc="data.get('end_date') or 'N/A'"/>
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <!-- Tickets Section -->
+                            <!--                            <t t-foreach="docs" t-as="dept">-->
+                            <!--                                <t t-if="data.get('report_type') == 'by_department'">-->
+                            <!--                                    <div style="margin-top: 15px;">-->
+                            <!--                                        <b>Department:</b>-->
+                            <!--                                        <t t-esc="dept.get('department')"/>-->
+                            <!--                                    </div>-->
+                            <!--                                </t>-->
+                            <!-- Department Summary Table -->
+                            <t t-if="data.get('report_type') == 'by_department'">
+                                <table class="table table-bordered"
+                                       style="width:100%; border-collapse:collapse; font-size:14px; margin-top:20px;">
+                                    <thead style="background-color:#c6efce; text-align:left;">
+                                        <tr>
+                                            <th>Department</th>
+                                            <th>Total Tickets</th>
+                                            <th>Percentage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="docs" t-as="dept_summary">
+                                            <tr>
+                                                <td>
+                                                    <t t-esc="dept_summary.get('department')"/>
+                                                </td>
+                                                <td>
+                                                    <t t-esc="dept_summary.get('count')"/>
+                                                </td>
+                                                <td>
+                                                    <t t-esc="('%.2f' % dept_summary.get('percentage')) + ' %'"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr style="font-weight:bold; background-color:#e2efda;">
+                                            <td>Total</td>
+                                            <td>
+                                                <t t-esc="total_tickets"/>
+                                            </td>
+                                            <td>100 %</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+
+                            <!-- Detailed Ticket Table -->
+                            <t t-elif="data.get('report_type') in ['open_tickets', 'all_tickets']">
+                                <t t-foreach="docs" t-as="dept">
+                                    <table class="table table-bordered"
+                                           style="width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;">
+                                        <thead style="background-color:#c6efce; text-align:left;">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Created By</th>
+                                                <th>Create Date</th>
+                                                <th>Assigned To</th>
+                                                <th>Summary</th>
+                                                <th>Description</th>
+                                                <th>Status</th>
+                                                <th>Latest Comment</th>
+                                                <t t-if="data.get('report_type') == 'all_tickets'">
+                                                    <th>Close Date</th>
+                                                    <th>Category</th>
+                                                </t>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-set="i" t-value="0"/>
+                                            <t t-foreach="dept.get('tickets')" t-as="ticket">
+                                                <tr t-attf-style="background-color:#{'#f2fff2' if (i or 0) % 2 == 0 else 'white'};">
+                                                    <td>
+                                                        <t t-esc="ticket.id"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="ticket.create_uid.partner_id.display_name or ''"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="ticket.create_date and ticket.create_date.strftime('%Y-%m-%d @ %I:%M %p') or ''"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="ticket.user_id.name or ''"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="ticket.name or ''"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="description_map.get(ticket.id, ticket.description or '')"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="ticket.stage_id.name or 'Open'"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="latest_comment_map.get(ticket.id, '')"/>
+                                                    </td>
+                                                    <t t-if="data.get('report_type') == 'all_tickets'">
+                                                        <td>
+                                                            <t t-esc="ticket.close_date and ticket.close_date.strftime('%Y-%m-%d @ %I:%M %p') or ''"/>
+                                                        </td>
+                                                        <td>
+                                                            <t t-esc="ticket.user_id.department_id.name or ''"/>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                                <t t-set="i" t-value="i+1"/>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </t>
+                            </t>
+
+
+                        </div>
+                        <!-- Footer -->
+                        <div class="mt-4 text-end">
+                            <p>
+                                <b>Generated By:</b>
+                                <t t-esc="user.name"/>
+                            </p>
+                            <p>
+                                <b>Date:</b>
+                                <t t-esc="time.strftime('%d %B %Y')"/>
+                            </p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

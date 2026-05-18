@@ -1,0 +1,61 @@
+<odoo>
+    <template id="tax_certificate_report">
+        <t t-call="web.basic_layout">
+<!--            <t t-foreach="docs" t-as="doc">-->
+                <div class="page">
+                    <h2>Income Tax Certificate Error Report</h2>
+                    <br/>
+                    <p>
+                        <strong>Preliminary validation report for tax year 2025</strong>
+                    </p>
+                    <br/>
+                    <p>
+                        <strong style="color:red;">Please note that this is a preliminary report to assist in the
+                            reconciliation process.
+                        </strong>
+                    </p>
+                    <p>
+                        <strong style="color:red;">Final reports will be generated along with the tax certificate
+                            submission.
+                        </strong>
+                    </p>
+                    <br/>
+                    <p>Printed for
+                        <strong>Emihle Live (Pty) Ltd</strong>
+                    </p>
+                    <br/>
+
+                    <table class="table table-sm table-borderless" style="width:100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #f0f0f0;">
+                                <th>IRP5 Code</th>
+                                <th>Field</th>
+                                <th>Error Message</th>
+                                <th>Employee Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="tax_certificate_error_lines" t-as="line">
+                                <tr>
+                                    <td>
+                                        <t t-esc="line['code']"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line['field']"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line['error_message']"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line['employee_name']"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                </div>
+<!--            </t>-->
+        </t>
+    </template>
+</odoo>

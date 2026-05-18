@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record id="emails_template_to_confirm_asset" model="mail.template">
+            <field name="name">Approval Request Submitted</field>
+            <field name="model_id" ref="model_asset_removal_approvals"/>
+            <field name="subject">Approval Request: {{object.assets_id.name}}</field>
+            <field name="body_html" type="html">
+                <p>Dear,</p>
+                <p>
+                    Asset
+                    <strong>
+                        <t t-esc="object.assets_id.name"/>
+                    </strong>
+                   has requested for approval.
+                </p>
+                <p>Please process this request accordingly!</p>
+                <p>Best regards,</p>
+                <div style="margin: 16px 0px 16px 0px;">
+<!--                    <a t-att-href="object.redirect_url"-->
+<!--                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">-->
+<!--                        View Request-->
+<!--                    </a>-->
+                </div>
+            </field>
+        </record>
+         <record id="emails_template_to_confirmation" model="mail.template">
+            <field name="name">Approval Approved</field>
+            <field name="model_id" ref="model_asset_removal_approvals"/>
+            <field name="subject">Approved Approval: {{object.assets_id.name}}</field>
+            <field name="body_html" type="html">
+                <p>Dear,</p>
+                <p>
+                    Asset
+                    <strong>
+                        <t t-esc="object.assets_id.name"/>
+                    </strong>
+                   has requested for approval.
+                </p>
+                <p>Best regards,</p>
+                <div style="margin: 16px 0px 16px 0px;">
+<!--                    <a t-att-href="object.redirect_url"-->
+<!--                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">-->
+<!--                        View Request-->
+<!--                    </a>-->
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

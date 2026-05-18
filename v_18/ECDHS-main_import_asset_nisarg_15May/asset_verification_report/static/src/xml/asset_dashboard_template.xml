@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+   <t t-name="AssetMovementReport" owl="1">
+       <!-- Section contains a structure for the purchase report, including a filter
+       view and a table view. It has div elements for the filter view and table view,
+       with respective classes for styling. -->
+       <div class="">
+           <div>
+               <center>
+                   <h1 style="margin: 20px;">Asset Movement Report</h1>
+               </center>
+           </div>
+       </div>
+       <div class="print-btns">
+           <div class="sub_container_left print-actions">
+               <button type="button" class="btn btn-primary action-btn"
+                       t-on-click="printPdf">
+                   Print (PDF)
+               </button>
+
+               <button type="button" class="btn btn-primary action-btn"
+                       t-on-click="print_xlsx">
+                   Export (XLSX)
+               </button>
+           </div>
+           <br/>
+           <div class="sub_container_right filter-container">
+
+               <!-- Custodian Filter -->
+               <div class="filter-item">
+                   <label>
+                       <strong>Asset</strong>
+                   </label>
+                   <select class="form-control" t-ref="selected_asset">
+                       <option value="">-- Select Asset --</option>
+                       <t t-foreach="state.asset_list" t-as="a"
+                          t-key="a['id']">
+                           <option t-att-value="a.id">
+                               <t t-esc="a.name"/>
+                           </option>
+                       </t>
+                   </select>
+               </div>
+
+               <!-- Filter Button -->
+               <div class="filter-button">
+                   <button type="button" class="btn btn-primary"
+                           t-on-click="load_data">
+                       Filter
+                   </button>
+               </div>
+
+           </div>
+       </div>
+
+       <div class="overflow-auto" style="height: 70vh; padding:10px">
+           <div>
+               <div class="table_main_view">
+                   <table cellspacing="0" width="100%">
+                       <thead>
+                           <tr class="table_pr_head">
+                               <th class="mon_fld">Asset</th>
+                               <th class="mon_fld">Old Location</th>
+                               <th class="mon_fld">New Location</th>
+                               <th class="mon_fld">Changed By</th>
+                               <th class="mon_fld">Changed On</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           <t t-foreach="state.assets"
+                              t-as="asset"
+                              t-key="asset['id']">
+                               <tr style="border: 1.5px solid black;"
+                                   class="pr-line"
+                                   t-att-data-account-id="asset['id']"
+                                   t-attf-data-target=".a{{asset['id']}}">
+                                   <td>
+                                       <t t-if="asset['id']">
+                                           <div>
+                                               <a>
+                                                   <span>
+                                                       <t t-if="asset['asset_id']">
+                                                           <t t-esc="asset['asset_id'][1]"/>
+                                                       </t>
+                                                   </span>
+                                               </a>
+<!--                                               <ul class="dropdown-menu"-->
+<!--                                                   role="menu"-->
+<!--                                                   aria-labelledby="table_toggle_btn">-->
+<!--                                                   <li>-->
+<!--                                                       <a class="view_purchase_order"-->
+<!--                                                          tabindex="-1"-->
+<!--                                                          href="#"-->
+<!--                                                          t-att-id="asset['id']"-->
+<!--                                                          t-on-click="viewPurchaseOrder">-->
+<!--                                                           View Purchase Order-->
+<!--                                                       </a>-->
+<!--                                                   </li>-->
+<!--                                               </ul>-->
+                                           </div>
+                                       </t>
+                                   </td>
+                                   <td style="text-align:center;">
+                                       <span>
+                                           <t t-if="asset['old_location_id']">
+                                               <t t-esc="asset['old_location_id'][1]"/>
+                                           </t>
+                                       </span>
+                                   </td>
+                                   <td style="text-align:center;">
+                                       <span>
+                                           <t t-if="asset['new_location_id']">
+                                               <t t-esc="asset['new_location_id'][1]"/>
+                                           </t>
+                                       </span>
+                                   </td>
+                                   <td style="text-align:center;">
+                                       <span>
+                                           <t t-if="asset['changed_by']">
+                                               <t t-esc="asset['changed_by'][1]"/>
+                                           </t>
+                                       </span>
+                                   </td>
+                                   <td style="text-align:center;">
+                                       <span>
+                                           <t t-esc="asset['date']"/>
+                                       </span>
+                                   </td>
+                               </tr>
+                           </t>
+                       </tbody>
+                   </table>
+               </div>
+           </div>
+       </div>
+   </t>
+</templates>

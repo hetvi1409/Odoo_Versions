@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_recruitment_shortlisting_list" model="ir.ui.view">
+        <field name="name">recruitment.shortlisting.list</field>
+        <field name="model">recruitment.shortlisting</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="requisition_id"/>
+                <field name="job_id"/>
+                <field name="meeting_datetime"/>
+                <field name="venue"/>
+                <field name="shortlisted_count"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_recruitment_shortlisting_form" model="ir.ui.view">
+        <field name="name">recruitment.shortlisting.form</field>
+        <field name="model">recruitment.shortlisting</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" string="Start" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_done" string="Close Shortlisting" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+                    <button name="action_open_interview_sessions" string="Interviews" type="object" class="btn-secondary"
+                            attrs="{'invisible': [('state', '!=', 'done')]}"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-secondary"
+                            attrs="{'invisible': [('state', 'in', ['done', 'cancelled'])]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,done,cancelled"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_input{
+                         border-color: black !important;
+                        border:1px solid black;
+                        padding:10px;
+                        border-radius:6px;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="requisition_id"/>
+                            <field name="job_id" readonly="1"/>
+                            <field name="department_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="meeting_datetime"/>
+                            <field name="venue"/>
+                            <field name="purpose"/>
+                            <field name="shortlisted_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Panel Attendance">
+                            <field name="panel_line_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="surname"/>
+                                    <field name="department"/>
+                                    <field name="contact_number"/>
+                                    <field name="signature_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Candidate Evaluation">
+                            <field name="candidate_line_ids">
+                                <tree editable="bottom">
+                                    <field name="applicant_id" domain="[('job_id', '=', parent.job_id)]"/>
+                                    <field name="score"/>
+                                    <field name="shortlisted"/>
+                                    <field name="notes"/>
+                                </tree>
+                            </field>
+                            <field name="ee_compliance_notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_recruitment_shortlisting" model="ir.actions.act_window">
+        <field name="name">Shortlisting</field>
+        <field name="res_model">recruitment.shortlisting</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

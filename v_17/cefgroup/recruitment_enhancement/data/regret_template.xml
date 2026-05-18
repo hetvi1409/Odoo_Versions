@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_regret_letter" model="mail.template">
+            <field name="name">Interview Regret Letter</field>
+            <field name="email_from">{{ user.partner_id.email or '' }}</field>
+            <field name="email_to">{{ object.email_from or '' }}</field>
+            <field name="subject">Interview Regret Letter: {{object.job_id.name}}</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-size: 13px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear
+                        <t t-out="object.partner_id.name or 'applicant'">
+                            [applicant name]
+                        </t>
+                        <br/>
+                        <br/>
+                        <p>
+                            Thank you for attending the interview at <t
+                                t-out="object.survey_id.job_id.job_location_id.name">
+                            [Company name]
+                        </t> for the position <t
+                                t-out="object.survey_id.job_id.name">[job
+                            name]</t>.
+                            This mail serves to inform you that following the
+                            said interviews, your application was not
+                            successful.
+                            Best wishes for the future.
+                        </p>
+                        <br/>
+                        Regards
+                        <br/>
+                        <t t-out="user.name"/>
+                        <br/>
+                        <t t-out="user.email or 'No email provided'">[user
+                            email]
+                        </t>
+                    </p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

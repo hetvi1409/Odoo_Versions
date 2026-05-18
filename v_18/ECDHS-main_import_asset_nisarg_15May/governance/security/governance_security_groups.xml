@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<odoo>
+    <!-- Make a new category   -->
+    <record model="ir.module.category" id="module_governance_category">
+        <field name="name">Governance</field>
+        <field name="description">Access to governance module</field>
+        <field name="sequence">16</field>
+    </record>
+
+    <!-- Create a user group   -->
+    <record id="group_governance_user" model="res.groups">
+        <field name="name">Governance User</field>
+        <field name="category_id" ref="governance.module_governance_category"/>
+        <field name="users" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Create an admin group   -->
+    <record id="group_governance_administrator" model="res.groups">
+        <field name="name">Governance Administrator</field>
+        <field name="implied_ids" eval="[(4, ref('group_governance_user'))]"/>
+        <field name="category_id" ref="governance.module_governance_category"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+</odoo>

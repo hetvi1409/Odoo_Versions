@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fleet_after_hours_action" model="ir.actions.act_window">
+        <field name="name">After-Hours Authorizations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fleet.after.hours.authorization</field>
+        <field name="view_mode">tree,form,calendar</field>
+    </record>
+
+    <menuitem id="fleet_after_hours_menu"
+              name="After-Hours Authorization"
+              parent="fleet_vehicle_inspection_management.fleet_operations_menu"
+              action="fleet_after_hours_action"/>
+
+    <record id="fleet_after_hours_view_form" model="ir.ui.view">
+        <field name="name">fleet.after.hours.authorization.view.form</field>
+        <field name="model">fleet.after.hours.authorization</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,manager_approved,fleet_approved,expired"/>
+                    <button name="action_submit" type="object" string="Submit"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="action_manager_approve" type="object"
+                            string="Manager Approve" class="oe_highlight"
+                            groups="fleet_vehicle_inspection_management.group_fleet_request_manager"
+                            attrs="{'invisible': [('state', '!=', 'submitted')]}"/>
+                    <button name="action_fleet_approve" type="object"
+                            string="Fleet Approve" class="oe_highlight"
+                            groups="fleet_vehicle_inspection_management.group_fleet_office"
+                            attrs="{'invisible': [('state', '!=', 'manager_approved')]}"/>
+                    <button name="action_expire" type="object"
+                            string="Expire" class="btn-secondary"
+                            attrs="{'invisible': [('state', '!=', 'fleet_approved')]}"/>
+                    <button name="action_reject" type="object"
+                            string="Reject" class="btn-secondary"
+                            attrs="{'invisible': [('state', 'in', ['rejected','expired'])]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="requester_id"/>
+                            <field name="vehicle_id"/>
+                            <field name="request_id"/>
+                        </group>
+                        <group>
+                            <field name="start_datetime"/>
+                            <field name="end_datetime"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason"/>
+                    </group>
+                    <notebook>
+                        <page string="Attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="fleet_after_hours_view_tree" model="ir.ui.view">
+        <field name="name">fleet.after.hours.authorization.view.tree</field>
+        <field name="model">fleet.after.hours.authorization</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="requester_id"/>
+                <field name="vehicle_id"/>
+                <field name="start_datetime"/>
+                <field name="end_datetime"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="fleet_after_hours_view_calendar" model="ir.ui.view">
+        <field name="name">fleet.after.hours.authorization.view.calendar</field>
+        <field name="model">fleet.after.hours.authorization</field>
+        <field name="arch" type="xml">
+            <calendar date_start="start_datetime" date_stop="end_datetime"
+                      string="After-Hours Authorization" mode="month">
+                <field name="name"/>
+                <field name="requester_id"/>
+                <field name="vehicle_id"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+</odoo>

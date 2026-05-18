@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Email Template: Supplier Registration Confirmation -->
+        <record id="email_template_supplier_registration" model="mail.template">
+            <field name="name">Supplier: Registration Confirmation</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="subject">Welcome! Your Supplier Registration is Complete</field>
+            <field name="email_to">${object.email}</field>
+            <field name="email_from">${(object.company_id.email or user.company_id.email or '')|safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                    <div style="background-color: #f8f9fa; padding: 20px;">
+                        <div style="background-color: white; max-width: 600px; margin: 0 auto; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h2 style="color: #28a745; margin: 0;">✓ Registration Successful!</h2>
+                            </div>
+
+                            <p>Dear <strong>${object.name}</strong>,</p>
+
+                            <p>Welcome to the SA Government Tender Portal! Your supplier registration has been successfully completed.</p>
+
+                            <div style="background-color: #e7f3ff; padding: 15px; border-left: 4px solid #2196F3; margin: 20px 0;">
+                                <h3 style="margin-top: 0; color: #1976D2;">Your Account Details</h3>
+                                <ul style="margin-bottom: 0;">
+                                    <li><strong>Company Name:</strong> ${object.name}</li>
+                                    <li><strong>Email/Login:</strong> ${object.email}</li>
+                                    <li t-if="object.company_registration_number"><strong>Registration Number:</strong> ${object.company_registration_number}</li>
+                                    <li t-if="object.csd_number"><strong>CSD Number:</strong> ${object.csd_number}</li>
+                                </ul>
+                            </div>
+
+                            <div style="background-color: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;">
+                                <h3 style="margin-top: 0; color: #856404;">⚠️ Important: Set Your Password</h3>
+                                <p style="margin-bottom: 10px;">For security purposes, you need to set your password before you can access the portal.</p>
+                                <p style="margin-bottom: 10px;"><strong>Your temporary default password is:</strong> <code style="background-color: #f8f9fa; padding: 5px 10px; border-radius: 4px; font-size: 14px;">${object.email}</code></p>
+                                <p style="margin-bottom: 0;"><strong>We strongly recommend changing this password immediately after your first login.</strong></p>
+                            </div>
+
+                            <div style="background-color: #d4edda; padding: 15px; border-left: 4px solid #28a745; margin: 20px 0;">
+                                <h3 style="margin-top: 0; color: #155724;">🔐 Set Your Secure Password</h3>
+                                <p style="margin-bottom: 10px;">Click the button below to set a secure password for your account. This link will take you directly to your password reset page.</p>
+                                <div style="text-align: center; margin: 15px 0;" t-if="ctx.get('password_reset_url')">
+                                    <a t-att-href="ctx.get('password_reset_url')"
+                                       style="display: inline-block; background-color: #28a745; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;">
+                                        🔑 Set My Password Now
+                                    </a>
+                                </div>
+                                <p style="margin-bottom: 0; font-size: 13px;"><em>Alternatively, you can login with your temporary password (your email address) and change it from your account settings.</em></p>
+                            </div>
+
+                            <div style="text-align: center; margin: 30px 0;">
+                                <a href="${object.get_base_url()}/web/login"
+                                   style="display: inline-block; background-color: #007bff; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                                    Login to Portal
+                                </a>
+                            </div>
+
+                            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 4px; margin: 20px 0;">
+                                <h3 style="margin-top: 0; color: #333;">Portal Access Includes:</h3>
+                                <ul style="margin-bottom: 0;">
+                                    <li>Browse and view government tender opportunities</li>
+                                    <li>Submit bids for eligible tenders</li>
+                                    <li>Track your bid submissions and status</li>
+                                    <li>Manage your company profile and documents</li>
+                                    <li>Receive notifications about new tenders</li>
+                                </ul>
+                            </div>
+
+                            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                                <p style="margin-bottom: 5px;"><strong>Need Help?</strong></p>
+                                <p style="margin: 0; color: #6c757d; font-size: 14px;">
+                                    If you have any questions or need assistance, please contact our support team.
+                                </p>
+                            </div>
+
+                            <div style="margin-top: 20px; text-align: center; color: #6c757d; font-size: 12px;">
+                                <p style="margin: 0;">This is an automated message. Please do not reply to this email.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+        <!-- Email Template: Tender Published -->
+        <record id="email_template_tender_published" model="mail.template">
+            <field name="name">Tender: Published Notification</field>
+            <field name="model_id" ref="model_sagovtender_tender"/>
+            <field name="subject">New Tender Published: ${object.name} - ${object.title}</field>
+            <field name="email_from">${(object.company_id.email or '')|safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear Supplier,</p>
+                    <p>A new tender has been published:</p>
+                    <h3>${object.name}: ${object.title}</h3>
+                    <ul>
+                        <li><strong>Department:</strong> ${object.department_id.name}</li>
+                        <li><strong>Estimated Value:</strong> ${object.estimated_value} ${object.currency_id.name}</li>
+                        <li><strong>Closing Date:</strong> ${object.closing_date}</li>
+                        <li><strong>Tender Type:</strong> ${object.tender_type_id.name}</li>
+                    </ul>
+                    <p>Please visit the tender portal to view full details and submit your bid.</p>
+                    <p>Best regards,<br/>${object.company_id.name}</p>
+                </div>
+            </field>
+        </record>
+
+        <!-- Email Template: Bid Received -->
+        <record id="email_template_bid_received" model="mail.template">
+            <field name="name">Bid: Submission Confirmation</field>
+            <field name="model_id" ref="model_sagovtender_bid"/>
+            <field name="subject">Bid Submission Confirmed: ${object.name}</field>
+            <field name="email_to">${object.partner_id.email}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear ${object.partner_id.name},</p>
+                    <p>We confirm receipt of your bid submission:</p>
+                    <ul>
+                        <li><strong>Bid Reference:</strong> ${object.name}</li>
+                        <li><strong>Tender:</strong> ${object.tender_id.name} - ${object.tender_id.title}</li>
+                        <li><strong>Submission Date:</strong> ${object.submission_date}</li>
+                    </ul>
+                    <p>Your bid will be evaluated according to the tender requirements.</p>
+                    <p>Best regards,<br/>${object.company_id.name}</p>
+                </div>
+            </field>
+        </record>
+
+        <!-- Email Template: Award Notification -->
+        <record id="email_template_sagovtender_award" model="mail.template">
+            <field name="name">Tender: Award Notification</field>
+            <field name="model_id" ref="model_sagovtender_award"/>
+            <field name="subject">Tender Award: ${object.tender_id.name}</field>
+            <field name="email_to">${object.awarded_partner_id.email}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear ${object.awarded_partner_id.name},</p>
+                    <p><strong>Congratulations!</strong></p>
+                    <p>We are pleased to inform you that your bid has been successful:</p>
+                    <ul>
+                        <li><strong>Tender:</strong> ${object.tender_id.name} - ${object.tender_id.title}</li>
+                        <li><strong>Award Value:</strong> ${object.award_value} ${object.currency_id.name}</li>
+                        <li><strong>Award Date:</strong> ${object.award_date}</li>
+                    </ul>
+                    <p>Please contact us to proceed with contract finalization.</p>
+                    <p>Best regards,<br/>${object.company_id.name}</p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="custom_physical_record_keeper_tree_view_inherit" model="ir.ui.view">
+        <field name="name">physical.record.keeper.custom.list</field>
+        <field name="model">physical.record.keeper.custom</field>
+        <field name="inherit_id" ref="physical_document_records_manage.custom_physical_record_keeper_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='document_type']" position="after">
+                <field name="reference_month"/>
+                <field name="reference_year"/>
+                <field name="folder_id"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="custom_physical_record_custom_form_view_inherit" model="ir.ui.view">
+        <field name="name">physical.record.keeper.custom.form</field>
+        <field name="model">physical.record.keeper.custom</field>
+        <field name="inherit_id" ref="physical_document_records_manage.custom_physical_record_custom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='record_id']" position="after">
+                <field name="attachment_id"/>
+                <field name="folder_id" widget="documents_folder_many2one"/>
+                <field name="reference_month"/>
+                <field name="reference_year"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="custom_physical_record_keeper_filter_inherit" model="ir.ui.view">
+        <field name="name">physical.record.keeper.custom.search.view.inherit</field>
+        <field name="model">physical.record.keeper.custom</field>
+        <field name="inherit_id" ref="physical_document_records_manage.custom_physical_record_keeper_filter"/>
+        <field name="arch" type="xml">
+            <field name="title" position="after">
+                <field name="attachment_id" string="File"/>
+                <field name="folder_id" string="Folder"/>
+                <field name="reference_month" string="Month"/>
+                <field name="reference_year" string="Year"/>
+            </field>
+            <xpath expr="//filter[@name='group_by_record_id']" position="after">
+                <filter string="Folder" name="filter_folder_id" domain="[]"
+                        context="{'group_by': 'folder_id'}"/>
+                <filter string="Month" name="filter_reference_month" domain="[]"
+                        context="{'group_by': 'reference_month'}"/>
+                <filter string="Year" name="filter_reference_year" domain="[]"
+                        context="{'group_by': 'reference_year'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="physical_document_records_manage.action_custom_physical_record_keeper" model="ir.actions.act_window">
+        <field name="context">{'search_default_group_by_folder_id': 1}</field>
+    </record>
+
+    <menuitem id="menu_file_submission_root" parent="physical_document_records_manage.menu_physical_record_keeper_custom"
+              name="File Submission" sequence="0"/>
+    <menuitem id="menu_file_submission" parent="documents_file_plan.menu_file_submission_root"
+              name="File Submission"
+              action="documents_file_plan.physical_document_submission_action" sequence="0"/>
+    <menuitem id="menu_file_request" parent="physical_document_records_manage.menu_physical_record_keeper_custom"
+              name="File Request" action="documents_file_plan.action_request_wizard"
+              sequence="2"/>
+    <menuitem id="physical_document_records_manage.menu_physical_record_main_custom" name="Records"
+              parent="physical_document_records_manage.menu_physical_configurations_custom"/>
+
+    <menuitem name="Configurations" id="physical_document_records_manage.menu_physical_configurations_custom"
+              groups="physical_document_records_manage.group_physical_record_custom,base.group_system"
+              parent="physical_document_records_manage.menu_physical_record_keeper_custom"
+              sequence="10"/>
+
+    <menuitem id="menu_filed_documents" parent="documents_file_plan.menu_file_submission_root" name="Filed Documents"
+              action="documents_file_plan.document_submission_action" sequence="1"/>
+    <menuitem name="File Plan" id="menu_documents" parent="physical_document_records_manage.menu_physical_record_keeper_custom"
+        action="documents.document_action" groups="base.group_user" sequence="3"/>
+</odoo>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inherit_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.form.inherit</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <!-- Example: Adding a new field below the 'category_id' field -->
+            <xpath expr="//button[@name='action_asset_modify']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_save_model']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='compute_depreciation_board']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- <xpath expr="//notebook/page[1]/group[1]/group[4]" position="replace">
+            </xpath>
+            <xpath expr="//notebook/page[1]/group[1]/group[5]" position="replace">
+            </xpath> -->
+                <xpath expr="//field[@name='account_depreciation_expense_id']" position="attributes">
+                <attribute name="required">0</attribute>
+            </xpath>
+                    <xpath expr="//field[@name='account_depreciation_id']" position="attributes">
+                        <attribute name="required">0</attribute>
+            </xpath>
+            <xpath expr="//button[@name='validate']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='set_to_cancelled']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='set_to_draft']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+<!--             <xpath expr="//page[@name='related_items']"" position="attributes">-->
+<!--                <attribute name="invisible">1</attribute>-->
+<!--            </xpath>-->
+
+<xpath expr="//button[@name='validate']" position="after">
+    <!-- <button name="action_custom_validate"
+            type="object"
+            string="Confirm"
+            class="btn-primary"
+             invisible="state in ('open','damaged','cancelled','draft','asset_disposed')"/> -->
+
+    <button name="action_custom_validate"
+        type="object"
+        string="Confirm"
+        class="btn-primary"
+        invisible="state != 'request_for_approval'"
+        groups="fixed_assets.group_fixed_asset_authorizer,fixed_assets.group_fixed_asset_approver"/>
+
+</xpath>
+
+
+            <xpath expr="//button[@name='set_to_cancelled']" position="after">
+    <!-- <button name="action_custom_cancel"
+            type="object"
+            string="Cancel Asset" groups="fixed_assets.group_fixed_asset_verifier"
+              invisible="state in ('cancelled', 'draft','damaged')"/> -->
+
+            <!-- Cancel Asset Button - Only Verifier in open/disposed -->
+        <button name="action_custom_cancel"
+            type="object"
+            string="Cancel Asset"
+            groups="fixed_assets.group_fixed_asset_verifier,fixed_assets.group_fixed_asset_approver"
+            invisible="state in ('cancelled', 'draft', 'request_for_approval','asset_disposed')"/>
+
+            </xpath>
+
+            <xpath expr="//button[@name='set_to_draft']" position="after">
+    <!-- <button name="action_custom_draft"
+            type="object"
+            string="Set to Draft" groups="fixed_assets.group_fixed_asset_approver"
+                        invisible="state == 'draft'"/> -->
+
+<!--            invisible="state in ('', '')"/>-->
+
+<!-- Set to Draft Button - Only Manager -->
+            <button name="action_custom_draft"
+                    type="object"
+                    string="Set to Draft"
+                    groups="fixed_assets.group_fixed_asset_approver"
+                    invisible="state == 'draft'"/>
+
+</xpath>
+                            <xpath expr="//field[@name='account_depreciation_expense_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+                        <xpath expr="//field[@name='account_depreciation_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+
+        </field>
+    </record>
+</odoo>

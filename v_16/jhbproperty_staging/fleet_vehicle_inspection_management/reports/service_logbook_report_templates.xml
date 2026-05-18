@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Service Logbook Report Template -->
+    <template id="report_service_logbook_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="text-center">
+                            <strong>JPC SERVICE LOGBOOK</strong>
+                        </h2>
+                    </div>
+                </div>
+
+                <table class="table table-bordered mt-3">
+                    <tbody>
+                        <tr>
+                            <td><strong>Date</strong></td>
+                            <td><span t-field="o.date"/></td>
+                            <td><strong>Vehicle</strong></td>
+                            <td><span t-field="o.vehicle_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Driver</strong></td>
+                            <td><span t-field="o.driver_id.name"/></td>
+                            <td><strong>Depot Name</strong></td>
+                            <td><span t-field="o.depot_name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Opening Odo</strong></td>
+                            <td><span t-field="o.opening_odometer"/></td>
+                            <td><strong>Closing Odo</strong></td>
+                            <td><span t-field="o.closing_odometer"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total KMS</strong></td>
+                            <td><span t-field="o.total_kms"/></td>
+                            <td><strong>Service Dept</strong></td>
+                            <td><span t-field="o.service_department"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Service / Maintenance</strong></h5>
+                        <p t-field="o.service_maintenance"/>
+                    </div>
+                </div>
+
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_service_logbook">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="fleet_vehicle_inspection_management.report_service_logbook_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="legal_view_custom_helpdesk_ticket_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <form string="Helpdesk Ticket">
+                <header>
+                    <button name="assign_ticket_to_self" string="Assign To Me" type="object" class="oe_highlight"
+                            groups="helpdesk.group_helpdesk_user" attrs="{'invisible': [('user_id', '!=', False)]}"
+                            data-hotkey="q"/>
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"/>
+                </header>
+                <sheet>
+                    <field name="legend_blocked" invisible="1"/>
+                    <field name="legend_normal" invisible="1"/>
+                    <field name="legend_done" invisible="1"/>
+                    <field name="rating_count" invisible="1"/>
+                    <field name="use_rating" invisible="1"/>
+                    <field name="rating_avg" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_ratings" type="object" class="oe_stat_button" icon=""
+                                attrs="{'invisible': ['|', ('use_rating', '=', False), ('rating_count', '=', 0)]}"
+                                groups="helpdesk.group_use_rating">
+                            <i class="fa fa-fw o_button_icon fa-smile-o text-success"
+                               attrs="{'invisible': [('rating_avg', '&lt;', 3.66)]}" title="Satisfied"/>
+                            <i class="fa fa-fw o_button_icon fa-meh-o text-warning"
+                               attrs="{'invisible': ['|', ('rating_avg', '&lt;', 2.33), ('rating_avg', '&gt;=', 3.66)]}"
+                               title="Okay"/>
+                            <i class="fa fa-fw o_button_icon fa-frown-o text-danger"
+                               attrs="{'invisible': [('rating_avg', '&gt;=', 2.33)]}" title="Dissatisfied"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="rating_avg_text" nolabel="1"/>
+                                </span>
+                                <span class="o_stat_text">Rating</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_open_helpdesk_ticket"
+                                icon="fa-life-ring"
+                                attrs="{'invisible': ['|', ('partner_id', '=', False), ('partner_ticket_count', '=', 0)]}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="partner_ticket_count" nolabel="1"/>
+                                    <span class="text-secondary fw-normal">Tickets</span>
+                                </span>
+                                <span class="o_stat_value">
+                                    <field name="partner_open_ticket_count" nolabel="1"/>
+                                    <span class="text-secondary fw-normal">Open</span>
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                            attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="kanban_state" widget="state_selection"/>
+                    <field name="use_sla" invisible="1"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" class="field_name" placeholder="e.g. Product arrived damaged"/>
+                        </h1>
+                        <field name="sla_status_ids" widget="helpdesk_sla_many2many_tags"
+                               attrs="{'invisible': ['|', ('use_sla', '=', False), ('sla_status_ids', '=', [])]}"
+                               options="{'color_field': 'color', 'no_edit_color': True}" readonly="1"
+                               groups="helpdesk.group_use_sla"/>
+                        <span attrs="{'invisible': ['|', ('sla_deadline', '=', False), ('use_sla', '=', False)]}"
+                              groups="helpdesk.group_use_sla" class="mx-2 text-muted">
+                            <i class="fa fa-lg fa-clock-o me-2" aria-label="Sla Deadline" title="Sla Deadline"/>
+                            <field name="sla_deadline" widget="remaining_days"/>
+                        </span>
+                    </div>
+                    <group class="mb-0 mt-4">
+                        <group>
+                            <field name="active" invisible="1"/>
+                            <field name="team_id" required="1" string="Groups" domain="[('is_legal_team', '=', True)]"
+                                   context="{'kanban_view_ref': 'helpdesk.helpdesk_team_view_kanban_mobile', 'default_use_sla': True,'default_is_legal_team':True}"/>
+                            <field name="legal_type"/>
+                            <field name="legal_sub_type"/>
+                            <field name="legal_status"/>
+                            <field name="legal_source"/>
+                        </group>
+                        <group>
+                            <field name="our_client_id"/>
+                            <field name="our_client_contact_id"/>
+                            <field name="date_created"/>
+                            <field name="estimated_completion_date"/>
+                            <field name="total_expenses"/>
+                        </group>
+                        <group>
+                            <field name="user_id" class="field_user_id"
+                                   domain="['&amp;', ('id', 'in', domain_user_ids), ('share', '=', False)]"
+                                   widget="many2one_avatar_user"/>
+                            <field name="domain_user_ids" invisible="1"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="company_id" groups="base.group_multi_company" context="{'create': False}"/>
+                        </group>
+                        <group>
+                            <field name="partner_id" class="field_partner_id"
+                                   domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]"
+                                   widget="res_partner_many2one"
+                                   context="{'default_name': partner_name, 'default_email': partner_email, 'default_phone': partner_phone}"/>
+                            <field name="partner_name" attrs="{'invisible': [('partner_id', '!=', False)]}"/>
+                            <field name="is_partner_email_update" invisible="1"/>
+                            <field name="is_partner_phone_update" invisible="1"/>
+                            <label for="partner_email" string="Email"/>
+                            <div class="o_row o_row_readonly">
+                                <field name="partner_email" widget="email" string="email"/>
+                                <span class="fa fa-exclamation-triangle text-warning oe_edit_only"
+                                      title="By saving this change, the customer email will also be updated."
+                                      attrs="{'invisible': [('is_partner_email_update', '=', False)]}"/>
+                            </div>
+                            <label for="partner_phone" string="Phone"/>
+                            <div class="o_row o_row_readonly">
+                                <field name="partner_phone" widget="phone" string="Phone"/>
+                                <span class="fa fa-exclamation-triangle text-warning oe_edit_only"
+                                      title="By saving this change, the customer phone number will also be updated."
+                                      attrs="{'invisible': [('is_partner_phone_update', '=', False)]}"/>
+                            </div>
+                            <field name="email_cc" groups="base.group_no_one"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="description" string="Description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="helpdesk_ticket_base_list_legal">
+        <field name="name">helpdesk.ticket.list.view</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_tickets_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='team_id']" position="attributes">
+                <attribute name="string">Groups</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="case_matter_action_main_my" model="ir.actions.act_window">
+        <field name="name">Case Matters</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">tree,kanban,form,activity,pivot,graph,cohort</field>
+        <field name="search_view_id" ref="helpdesk.helpdesk_tickets_view_search"/>
+        <field name="context">{
+            'search_default_my_ticket': True,
+            'search_default_is_open': True,
+            'default_user_id': uid,
+            }
+        </field>
+        <field name="domain">[('team_id.is_legal_team', '=', True)]</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'tree', 'view_id': ref('helpdesk.helpdesk_tickets_view_tree')}),
+                      (0, 0, {'view_mode': 'kanban', 'view_id': ref('helpdesk.helpdesk_ticket_view_kanban')}),
+                      (0, 0, {'view_mode': 'form', 'view_id': ref('law_firm_bits.legal_view_custom_helpdesk_ticket_form')}),
+                      (0, 0, {'view_mode': 'activity', 'view_id': ref('helpdesk.helpdesk_ticket_view_activity')}),
+                      (0, 0, {'view_mode': 'pivot', 'view_id': ref('helpdesk.helpdesk_ticket_view_pivot_main')}),
+                      (0, 0, {'view_mode': 'graph', 'view_id': ref('helpdesk.helpdesk_ticket_view_graph_main')}),
+                      (0, 0, {'view_mode': 'cohort', 'view_id': ref('helpdesk.helpdesk_ticket_view_cohort')}),]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No tickets found. Let's create one!
+            </p>
+            <p>To get things done, plan activities and use the ticket status.
+                <br/>
+                Collaborate efficiently by chatting in real-time or via email.
+            </p>
+        </field>
+    </record>
+
+    <record id="case_matter_action_main_tree" model="ir.actions.act_window">
+        <field name="name">Case Matters</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">tree,kanban,form,activity,pivot,graph,cohort</field>
+        <field name="search_view_id" ref="helpdesk.helpdesk_tickets_view_search"/>
+        <field name="context">{'search_default_is_open': True}</field>
+        <field name="domain">[('team_id.is_legal_team', '=', True)]</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'tree', 'view_id': ref('helpdesk.helpdesk_tickets_view_tree')}),
+                      (0, 0, {'view_mode': 'kanban', 'view_id': ref('helpdesk.helpdesk_ticket_view_kanban')}),
+                      (0, 0, {'view_mode': 'form', 'view_id': ref('law_firm_bits.legal_view_custom_helpdesk_ticket_form')}),
+                      (0, 0, {'view_mode': 'activity', 'view_id': ref('helpdesk.helpdesk_ticket_view_activity')}),
+                      (0, 0, {'view_mode': 'pivot', 'view_id': ref('helpdesk.helpdesk_ticket_view_pivot_main')}),
+                      (0, 0, {'view_mode': 'graph', 'view_id': ref('helpdesk.helpdesk_ticket_view_graph_main')}),
+                      (0, 0, {'view_mode': 'cohort', 'view_id': ref('helpdesk.helpdesk_ticket_view_cohort')}),]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No tickets found. Let's create one!
+            </p>
+            <p>To get things done, plan activities and use the ticket status.
+                <br/>
+                Collaborate efficiently by chatting in real-time or via email.
+            </p>
+        </field>
+    </record>
+
+    <record id="helpdesk.helpdesk_ticket_action_main_my" model="ir.actions.act_window">
+        <field name="domain">[('team_id.is_legal_team', '=', False)]</field>
+    </record>
+
+    <record id="helpdesk.helpdesk_ticket_action_main_tree" model="ir.actions.act_window">
+        <field name="domain">[('team_id.is_legal_team', '=', False)]</field>
+    </record>
+
+    <record model="ir.ui.view" id="helpdesk_team_view_form_legal">
+        <field name="name">helpdesk.team.view.form</field>
+        <field name="model">helpdesk.team</field>
+        <field name="inherit_id"
+               ref="helpdesk.helpdesk_team_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='website_form_channel']" position="inside">
+                <div class="col-lg-6 o_setting_box">
+                    <div class="o_setting_left_pane">
+                        <field name="is_legal_team"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="is_legal_team"/>
+                        <div class="text-muted">
+                            Create Matter with Legal Team Type
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

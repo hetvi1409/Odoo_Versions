@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_property_acquisition" model="ir.actions.act_window">
+        <field name="name">Property Acquisition</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">property.acquisition</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="property_acquisition_view_tree" model="ir.ui.view">
+        <field name="name">property.acquisition.view.list</field>
+        <field name="model">property.acquisition</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="property_id"/>
+                <field name="jmc_number"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="property_acquisition_view_form" model="ir.ui.view">
+        <field name="name">property.acquisition.view.form</field>
+        <field name="model">property.acquisition</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="submit,valuation,transaction,negotiation"/>
+                    <button name="check_ownership" invisible="state != 'draft'"
+                            string="Submit" type="object"
+                            class="btn btn-secondary"/>
+                    <button name="action_create_valuation" invisible="state != 'submit'"
+                            string="Create Valuation" type="object"
+                            class="btn btn-secondary"/>
+                    <button name="action_create_transaction" invisible="state != 'valuation'"
+                            string="Create Transaction" type="object"
+                            class="btn btn-secondary"/>
+                    <button name="action_start_negotiation" invisible="state != 'transaction_created'"
+                            string="Negotiation" type="object"
+                            class="btn btn-primary"/>
+                    <button name="action_agreement" invisible="state != 'negotiation'"
+                            string="Approve" type="object"
+                            class="btn btn-primary"/>
+                    <button name="action_reject" invisible="state != 'negotiation'"
+                            string="Refuse" type="object"
+                            class="btn btn-secondary"/>
+                    <button name="action_draft_agreement" type="object"
+                            string="Draft Agreement"
+                            invisible="state != 'agreed'" class="btn btn-primary"/>
+                    <button name="action_sign_agreement" type="object"
+                            string="Sign Agreement"
+                            invisible="state != 'agreement_draft'" class="btn btn-primary"/>
+                    <button name="action_start_conveyancing" type="object"
+                            string="Start Conveyancing"
+                            invisible="state != 'agreement_signed'" class="btn-primary"/>
+                    <button name="action_conveyance" type="object"
+                            string="Conveyancing"
+                            invisible="state != 'conveyancing'" class="btn-primary"/>
+                    <button name="action_handover" type="object"
+                            string="Conveyancing"
+                            invisible="state != 'conveyance'" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_transaction" type="object"
+                                class="oe_stat_button" invisible="transaction_id == False">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Transaction</span>
+                            </div>
+                        </button>
+                        <button name="action_view_valuation" type="object"
+                                class="oe_stat_button" invisible="valuation_id == False">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Valuation</span>
+                            </div>
+                        </button>
+                        <button name="action_view_property" type="object"
+                                class="oe_stat_button" invisible="property_id == False">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Property</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="property_id"/>
+                            <field name="jmc_number"/>
+                            <field name="owner_id"/>
+                            <field name="price"/>
+                            <field name="valuation_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"
+                                   readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="address"/>
+                            <field name="stand_number"/>
+                            <field name="buyer_id"/>
+                            <field name="transaction_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"
+                                   readonly="1"/>
+                            <field name="valuation_state" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Documents">
+                            <group>
+                                <field name="comments"/>
+                                <field name="attachment_ids"
+                                       widget="many2many_binary"/>
+                            </group>
+                            <group>
+                                <field name="negotiation_comment"/>
+                                <field name="negotiation_attachment_ids"
+                                       widget="many2many_binary"/>
+                            </group>
+                            <group>
+                                <field name="agreement_comment"/>
+                                <field name="agreement_attachment_ids"
+                                       widget="many2many_binary"/>
+                            </group>
+                            <group>
+                                <field name="sign_agreement_comment"/>
+                                <field name="sign_agreement_attachment_ids"
+                                       widget="many2many_binary"/>
+                            </group>
+                            <group>
+                                <field name="conveyancing_comment"/>
+                                <field name="conveyancing_attachment_ids"
+                                       widget="many2many_binary"/>
+                            </group>
+                        </page>
+                        <page string="GEOLIS">
+                            <iframe id="custom_src" name="custom_src"
+                                    src="https://ags.joburg.org.za/cgis/index.aspx"
+                                    width="100%" height="500"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <menuitem id="property_acquisition_menu"
+              name="Property Acquisition"
+              action="action_property_acquisition"
+              parent="client_enquiry.client_enquiry_helpdesk_enquiries_menu"
+              sequence="24"/>
+</odoo>

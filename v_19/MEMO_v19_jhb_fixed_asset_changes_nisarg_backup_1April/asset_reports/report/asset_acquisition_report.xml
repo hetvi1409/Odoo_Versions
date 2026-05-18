@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_report_asset_acquisition" model="ir.actions.report">
+        <field name="name">Asset acquisition</field>
+        <field name="model">asset.acquisition.reports</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">asset_reports.report_asset_acquisition</field>
+        <field name="report_file">asset_reports.report_asset_acquisition</field>
+        <field name="print_report_name">'Asset Acquisition - %s' %
+            (object.name)
+        </field>
+        <field name="binding_model_id" ref="model_asset_acquisition_reports"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_asset_acquisition">
+        <t t-call="web.html_container">
+            <!--            <t t-foreach="docs" t-as="doc">-->
+            <t t-call="web.external_layout">
+                <div calss="page">
+<!--                    <img class="img"-->
+<!--                         src="/asset_reports/static/src/img/report_icon.png"/>-->
+                    <br/>
+                    <h4>Acquisition</h4>
+                    <table class="table">
+                        <tbody class="order_body">
+                            <tr>
+                                <td>
+                                    From date:
+                                </td>
+                                <td>
+                                    <t t-esc="from_date"/>
+                                </td>
+                                <td>
+                                    Cost Centre:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Facility:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    To Date:
+                                </td>
+                                <td>
+                                    <t t-esc="to_date"/>
+                                </td>
+                                <td>
+                                    Department:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Function:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Is Approved:
+                                </td>
+                                <td>
+                                    _
+                                </td>
+                                <td>
+                                    Class:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Fund:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Date Type:
+                                </td>
+                                <td>
+                                    _
+                                </td>
+                                <td>
+                                    Item:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Region:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Class:
+                                </td>
+                                <td>
+                                    _
+                                </td>
+                                <td>
+                                    Project:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Dim 12:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    CompType:
+                                </td>
+                                <td>
+                                    _
+                                </td>
+                                <td>
+                                    Supplier:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Dim 13:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Cost Center:
+                                </td>
+                                <td>
+                                    _
+                                </td>
+                                <td>
+                                    Cost:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Dim 14:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr class="text-center">
+                                <th class="text-right">Barcode</th>
+                                <th class="text-right">Asset Description
+                                </th>
+                                <th class="text-right">Cost</th>
+                                <th class="text-right">Residual Value</th>
+                                <th class="text-right">Acquisition Date</th>
+                                <th class="text-right">Ready Date</th>
+                                <th class="text-right">Captured By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="data" t-as="rec">
+                                <td>
+                                    <t t-esc="rec[0]"/>
+                                </td>
+                                <td>
+                                    <span t-esc="rec[1]"/>:
+                                    <span t-esc="rec[2]"/>
+                                </td>
+                                <td>
+                                    <span t-esc="rec[3]"/>
+                                </td>
+                                <td>
+                                    <t t-set="filtered_docs"
+                                       t-value="docs.filtered(lambda x: x.barcode == rec[0])"/>
+                                    <t t-if="filtered_docs">
+                                        <t t-esc="filtered_docs[0].value_residual"/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <span t-esc="rec[4]"/>
+                                </td>
+                                <td>
+                                    <span t-esc="rec[5]"/>
+                                </td>
+                                <td>
+                                    <t t-if="len(rec) > 6">
+                                        <span t-esc="rec[6]"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+            <!--            </t>-->
+        </t>
+    </template>
+</odoo>

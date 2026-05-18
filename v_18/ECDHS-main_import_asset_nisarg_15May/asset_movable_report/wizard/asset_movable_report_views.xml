@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+        <record id="asset_movable_report_view_form" model="ir.ui.view">
+        <field name="name">asset.movable.report.view.form</field>
+        <field name="model">asset.movable.report</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="type" widget="radio" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_generate_report" string="Print PDF"
+                            type="object" class="oe_highlight"/>
+                    <button name="action_export_excel" string="Print XLS"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn_default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+     <!-- Wizard Action -->
+    <record id="action_asset_movable_report" model="ir.actions.act_window">
+        <field name="name">Assets Report</field>
+        <field name="res_model">asset.movable.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_asset_movable_report"
+              name="Minor/Major Assets Report"
+              parent="account.account_reports_management_menu"
+              action="action_asset_movable_report"/>
+</odoo>

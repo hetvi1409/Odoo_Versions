@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="housing_subsidy_form">
+        <field name="name">housing.subsidy.view.tree</field>
+        <field name="model">housing.subsidy</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_submit" type="object"
+                            string="Submit"
+                            invisible="state not in 'draft'"
+                            class="oe_highlight"/>
+                    <button name="action_submit_for_verify" type="object"
+                            string="Submit For Verify"
+                            invisible="state not in 'submitted'"
+                            groups="website_housing_subsidy.group_subsidy_conveyancer"
+                            class="oe_highlight"/>
+                    <button name="action_verify_conveyancer" type="object"
+                            string="Verify"
+                            invisible="state not in 'pending_verify'"
+                            groups="website_housing_subsidy.group_subsidy_conveyancer"
+                            class="oe_highlight"/>
+                    <button name="action_submit_for_approve" type="object"
+                            string="Submit For Approve"
+                            invisible="state not in 'verified'"
+                            groups="website_housing_subsidy.group_subsidy_conveyancer"
+                            class="oe_highlight"/>
+                    <button name="action_rejected" type="object"
+                            string="Reject"
+                            invisible="state not in ['pending_approval','approve']"
+                            class="oe_highlight"/>
+                    <button name="action_verify_approve" type="object"
+                            string="Approve"
+                            invisible="state not in 'pending_approval'"
+                            groups="website_housing_subsidy.group_subsidy_lender"
+                            class="oe_highlight"/>
+
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="individual_reg_number"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="emergency_contact_name"/>
+                            <field name="credit_linked"/>
+                            <field name="non_credit_linked"/>
+                            <field name="street"/>
+                            <field name="street2"/>
+                            <field name="zip"/>
+                        </group>
+                        <group>
+                            <field name="ind_phdb_res_num"/>
+                            <field name="city"/>
+                            <field name="state_id"/>
+                            <field name="country_id"/>
+                            <field name="telephone_number"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Documents">
+                            <group>
+                                <group>
+                                    <field name="mrg_certificate" widget="binary"/>
+                                    <field name="identity_doc_self" widget="binary"/>
+                                    <field name="identity_doc_spouse" widget="binary"/>
+                                    <field name="divorce_certificate" widget="binary"/>
+                                    <field name="spouse_death_certificate" widget="binary"/>
+                                    <field name="proof_of_disability" widget="binary"/>
+                                    <field name="proof_of_loan" widget="binary"/>
+                                </group>
+                                <group>
+                                    <field name="agreement_of_sale" widget="binary"/>
+                                    <field name="compact_agreement" widget="binary"/>
+                                    <field name="agreement_with_conveyancer" widget="binary"/>
+                                    <field name="building_contract_certificate" widget="binary"/>
+                                    <field name="proof_of_income_certificate" widget="binary"/>
+                                    <field name="residence_certificate" widget="binary"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Personal details">
+                            <group>
+                                <group string="Applicant Details">
+                                    <field name="applicant_surname"/>
+                                    <field name="applicant_full_name"/>
+                                    <field name="applicant_maiden_surname"/>
+                                    <field name="applicant_gender"/>
+                                    <field name="identity_number"/>
+                                    <field name="race_applicant"/>
+                                </group>
+                                <group string="Spouse Details">
+                                    <field name="spouse_surname"/>
+                                    <field name="spouse_full_name"/>
+                                    <field name="spouse_maiden_surname"/>
+                                    <field name="identity_number_spouse"/>
+                                    <field name="spouse_gender"/>
+                                    <field name="race_spouse"/>
+                                </group>
+                                <group string=" ">
+                                    <field name="married"/>
+                                    <field name="divorced_with_dept"/>
+                                    <field name="hab_long_partner"/>
+                                    <field name="single_depend"/>
+                                    <field name="widow_depend"/>
+                                    <field name="residential_address"/>
+                                    <field name="disabled"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Dependant Details">
+                            <field name="dependant_details_id">
+                                <list editable="bottom">
+                                    <field name="dependant_surname"/>
+                                    <field name="dependant_initials"/>
+                                    <field name="dependant_relation"/>
+                                    <field name="dependant_age"/>
+                                    <field name="dependant_gender"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Monthly Income Details">
+                            <group>
+                                <group string="Applicant">
+                                    <field name="applicant_emp_details"/>
+                                    <field name="applicant_basic_income"/>
+                                    <field name="applicant_regular_period"/>
+                                    <field name="applicant_housing_allowance"/>
+                                    <field name="applicant_regular_financial"/>
+                                    <field name="applicant_commission_received"/>
+                                    <field name="applicant_pension_disability"/>
+                                    <field name="applicant_total"/>
+                                    <field name="joint_total"/>
+                                </group>
+                                <group string="Spouse">
+                                    <field name="spouse_emp_details"/>
+                                    <field name="spouse_basic_income"/>
+                                    <field name="spouse_regular_period"/>
+                                    <field name="spouse_housing_allowance"/>
+                                    <field name="spouse_regular_financial"/>
+                                    <field name="spouse_commission_received"/>
+                                    <field name="spouse_pension_disability"/>
+                                    <field name="spouse_total"/>
+                                    <field name="subsidy_amt"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Details of Citizenship">
+                            <group>
+                                <group>
+                                    <field name="citizen"/>
+                                    <field name="citizen_country_id"/>
+                                    <field name="south_african_permit"/>
+                                    <field name="date_permit"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Details of Property">
+                            <group>
+                                <group>
+                                    <field name="name_of_seller"/>
+                                    <field name="district_id"/>
+                                    <field name="municipality_id"/>
+                                    <field name="township"/>
+                                    <field name="township_extension"/>
+                                    <field name="lot_number"/>
+                                </group>
+                                <group>
+                                    <field name="unit_number"/>
+                                    <field name="flat_name"/>
+                                    <field name="house"/>
+                                    <field name="type_tenure"/>
+                                    <field name="other_tenure"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Funding Details">
+                            <group>
+                                <group>
+                                    <field name="total_product_price"/>
+                                    <field name="subsidy"/>
+                                    <field name="amt_home_loan"/>
+                                    <field name="emp_contribution"/>
+                                    <field name="own_contribution"/>
+                                    <field name="own_building"/>
+                                    <field name="funding_total"/>
+                                </group>
+                                <group>
+                                    <field name="sub_amount"/>
+                                    <field name="disability_subsidy"/>
+                                    <field name="geotech_assist"/>
+                                    <field name="sub_total_provincial"/>
+                                    <field name="grants_received"/>
+                                    <field name="total_subsidy_qualified"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Conveyance">
+                            <group>
+                                <group>
+                                    <field name="convey_name"/>
+                                    <field name="convey_street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="convey_street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="convey_city" placeholder="City" class="o_address_city"/>
+                                    <field name="convey_state_id" class="o_address_state" placeholder="State"/>
+                                </group>
+                                <group>
+                                    <field name="convey_zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <field name="convey_country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                    <field name="conveyance_fee"/>
+                                    <field name="convey_approval_code"/>
+                                    <field name="convey_telephone"/>
+                                    <field name="convey_facsmile"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Lender">
+                            <group>
+                                <group>
+                                    <field name="lender_name"/>
+                                    <field name="lender_street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="lender_street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="lender_zip" placeholder="ZIP"/>
+                                    <field name="lender_city" placeholder="City"/>
+                                </group>
+                                <group>
+                                    <field name="lender_state_id" placeholder="State"/>
+                                    <field name="lender_country_id" placeholder="Country"/>
+                                    <field name="lender_approval_code"/>
+                                    <field name="lender_telephone"/>
+                                    <field name="lender_facsmile"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Builder Details">
+                            <group>
+                                <group>
+                                    <field name="builder_name"/>
+                                    <field name="builder_street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="builder_street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="builder_zip" placeholder="ZIP"/>
+                                    <field name="builder_city" placeholder="City"/>
+                                </group>
+                                <group>
+                                    <field name="builder_state_id" placeholder="State"/>
+                                    <field name="builder_country_id" placeholder="Country"/>
+                                    <field name="council_reg_number"/>
+                                    <field name="builder_telephone"/>
+                                    <field name="builder_facsmile"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="housing_subsidy_list">
+        <field name="name">housing.subsidy.view.list</field>
+        <field name="model">housing.subsidy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="individual_reg_number"/>
+                <field name="emergency_contact_name"/>
+                <field name="street"/>
+                <field name="street2"/>
+                <field name="zip"/>
+                <field name="city"/>
+                <field name="telephone_number"/>
+            </list>
+        </field>
+    </record>
+    <record id="housing_subsidy_action" model="ir.actions.act_window">
+        <field name="name">Housing Subsidy</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">housing.subsidy</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem name="Housing Subsidy"
+              id="menu_housing_subsidy"
+              sequence="40"
+              web_icon="website_housing_subsidy,static/description/icon.png"
+    />
+    <menuitem id="menu_housing_subsidy_app"
+              action="housing_subsidy_action"
+              name="Housing Subsidy"
+              parent="menu_housing_subsidy"
+              sequence="10"
+    />
+</odoo>

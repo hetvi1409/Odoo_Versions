@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="helpdesk_category_tree_view" model="ir.ui.view">
+        <field name="name">helpdesk.category.tree.view</field>
+        <field name="model">helpdesk.category</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="department_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="helpdesk_category_action" model="ir.actions.act_window">
+        <field name="name">Category</field>
+        <field name="res_model">helpdesk.category</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new Category.
+            </p>
+        </field>
+    </record>
+        <menuitem parent="helpdesk.helpdesk_menu_config"
+              id="menu_helpdesk_category" name="Category"
+              action="helpdesk_category_action" sequence="101"/>
+
+</odoo>

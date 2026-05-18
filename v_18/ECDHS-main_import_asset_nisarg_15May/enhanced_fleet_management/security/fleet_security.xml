@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Fleet Management Categories -->
+        <record id="module_category_fleet_management" model="ir.module.category">
+            <field name="name">Enhanced Fleet Management</field>
+            <field name="description">Manage fleet operations, transport requests, and vehicle tracking</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- Fleet User Group -->
+        <record id="group_fleet_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_fleet_management"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Fleet Manager Group -->
+        <record id="group_fleet_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_fleet_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_fleet_user'))]"/>
+        </record>
+
+        <!-- Fleet Administrator Group -->
+        <record id="group_fleet_admin" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="category_id" ref="module_category_fleet_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_fleet_manager'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <!-- Record Rules for Transport Requests -->
+        <record id="fleet_transport_request_user_rule" model="ir.rule">
+            <field name="name">Transport Request: User can see own requests</field>
+            <field name="model_id" ref="model_fleet_transport_request"/>
+            <field name="domain_force">[('requester_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="fleet_transport_request_manager_rule" model="ir.rule">
+            <field name="name">Transport Request: Manager can see all</field>
+            <field name="model_id" ref="model_fleet_transport_request"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Record Rules for Trip Authority -->
+        <record id="fleet_trip_authority_user_rule" model="ir.rule">
+            <field name="name">Trip Authority: User can see own trips</field>
+            <field name="model_id" ref="model_fleet_trip_authority"/>
+            <field name="domain_force">['|', ('employee_id.user_id', '=', user.id), ('driver_id.user_ids', 'in', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="fleet_trip_authority_manager_rule" model="ir.rule">
+            <field name="name">Trip Authority: Manager can see all</field>
+            <field name="model_id" ref="model_fleet_trip_authority"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Record Rules for Vehicle Checklist -->
+        <record id="fleet_vehicle_checklist_user_rule" model="ir.rule">
+            <field name="name">Vehicle Checklist: User can see related checklists</field>
+            <field name="model_id" ref="model_fleet_vehicle_checklist"/>
+            <field name="domain_force">['|', ('inspector_id.user_id', '=', user.id), ('driver_id.user_ids', 'in', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="fleet_vehicle_checklist_manager_rule" model="ir.rule">
+            <field name="name">Vehicle Checklist: Manager can see all</field>
+            <field name="model_id" ref="model_fleet_vehicle_checklist"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Record Rules for Lost/Theft -->
+        <record id="fleet_lost_theft_user_rule" model="ir.rule">
+            <field name="name">Lost/Theft: User can see own reports</field>
+            <field name="model_id" ref="model_fleet_lost_theft"/>
+            <field name="domain_force">[('reported_by_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="fleet_lost_theft_manager_rule" model="ir.rule">
+            <field name="name">Lost/Theft: Manager can see all</field>
+            <field name="model_id" ref="model_fleet_lost_theft"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Record Rules for Accident Reports -->
+        <record id="fleet_accident_report_user_rule" model="ir.rule">
+            <field name="name">Accident Report: User can see own reports</field>
+            <field name="model_id" ref="model_fleet_accident_report"/>
+            <field name="domain_force">[('reported_by_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="fleet_accident_report_manager_rule" model="ir.rule">
+            <field name="name">Accident Report: Manager can see all</field>
+            <field name="model_id" ref="model_fleet_accident_report"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Record Rules for Vehicle Relief -->
+        <record id="fleet_vehicle_relief_user_rule" model="ir.rule">
+            <field name="name">Vehicle Relief: User can see own requests</field>
+            <field name="model_id" ref="model_fleet_vehicle_relief"/>
+            <field name="domain_force">[('requester_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="fleet_vehicle_relief_manager_rule" model="ir.rule">
+            <field name="name">Vehicle Relief: Manager can see all</field>
+            <field name="model_id" ref="model_fleet_vehicle_relief"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Record Rules for Odometer Readings -->
+        <record id="fleet_odometer_reading_user_rule" model="ir.rule">
+            <field name="name">Odometer Reading: User can see own readings</field>
+            <field name="model_id" ref="model_fleet_odometer_reading"/>
+            <field name="domain_force">[('recorded_by_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="fleet_odometer_reading_manager_rule" model="ir.rule">
+            <field name="name">Odometer Reading: Manager can see all</field>
+            <field name="model_id" ref="model_fleet_odometer_reading"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_fleet_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

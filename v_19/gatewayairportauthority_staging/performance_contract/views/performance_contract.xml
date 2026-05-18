@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="view_performance_contract_form" model="ir.ui.view">
+        <field name="model">performance.contract</field>
+        <field name="arch" type="xml">
+
+            <form>
+                <header>
+                    <button name="action_submit_for_approval" string="Submit for Approval" type="object"
+                        class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_mark_signed" string="Mark as Signed" type="object"
+                        class="btn-success" invisible="state in ['signed', 'done','draft','in_process','expired','approval_in_process','approved','rejected']"/>
+                    <!-- <button name="action_reject" string="Reject" type="object"
+                        class="btn-danger" invisible="state in ['signed', 'done','draft','in_process','signed_by_employee','signed_by_manager','expired','approval_in_process','approved']"/> -->
+                    <button name="action_set_to_draft" string="Set to Draft" type="object"
+                        class="btn-secondary" invisible="state in ['draft','in_process','signed_by_employee','signed_by_manager','expired']"/>
+
+                    <button name="employee_sign_contract" string="Employee Sign" type="object"
+                        class="btn-primary" invisible="state in ['draft','signed','done','signed_by_employee','expired'] or signed_by_employee"/>
+                    <button name="manager_sign_contract" string="Manager Sign" type="object"
+                        class="btn-primary" invisible="state in ['draft','signed','done','signed_by_manager','expired'] or signed_by_manager"/>
+                    <button name="mark_as_complated" string="Mark As completed" type="object"
+                        class="btn-primary" invisible="state not in ['approved']"/>
+
+
+                    <button name="action_start_approval_process" string="Start Approval"
+                        type="object" class="btn-primary" invisible="state != 'signed'"/>
+
+                    <button name="acction_approve_contract" string="Approve"
+                        type="object" class="btn-success" invisible="not is_current_approver"/>
+
+                    <button name="action_reject_contract" string="Reject"
+                        type="object" class="btn-danger" invisible="not is_current_approver"/>
+
+                    <button name="action_mark_done" string="Complete Contract"
+                        type="object" class="btn-info"
+                        invisible="[('approval_status', '!=', 'fully_approved')]"/>
+
+
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_process,signed,done,expired,rejected"/>
+
+                </header>
+                <sheet>
+                    <!-- Smart button for attachments -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_attachments" type="object" class="oe_stat_button" icon="fa-paperclip">
+                            <field name="attachment_count" widget="statinfo" string="Attachments"/>
+                        </button>
+                    </div>
+
+                            <div class="oe_title">
+                                <h1><field name="name"/></h1>
+                            </div>
+                    <group>
+
+                        <group>
+                             <field name="priority" widget="priority"/>
+                            <field name="employee_id" />
+                            <field name="manager_id"/>
+                            <field name="department_id"/>
+                            <field name="job_id"/>
+                            <field name="approval_team_id" groups="performance_contract.group_performance_evaluator"/>
+                            <field name="approval_status" invisible="1"/>
+                            <field name="current_approver_id" invisible="1"/>
+                            <field name="is_current_approver" invisible="1"/>
+                            <field name="total_evaluation_score"/>
+                        </group>
+
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="total_weightage" widget="progressbar"/>
+                            <field name="final_result" widget="percentage" groups="performance_contract.group_performance_evaluator"/>
+                            <field name="signed_by_employee" invisible="1"/>
+                            <field name="signed_by_manager" invisible="1"/>
+                        </group>
+
+                    </group>
+                    <notebook>
+                        <page string="Goals">
+                            <group>
+                                <field name="goal_ids" context="{'default_employee_id': employee_id}">
+                                    <list editable="bottom">
+                                        <field name="name"/>
+                                        <field name="progression"/>
+                                        <field name="deadline"/>
+                                        <field name="weightage" options="{'editable': true}" widget="progressbar"/>
+                                        <field name="result" groups="performance_contract.group_performance_evaluator"/>
+                                        <field name="status" widget="badge" decoration-success="status == 'good'" decoration-info="status =='average'" decoration-warning="status =='below_average'" decoration-danger="status =='poor'"
+                                            groups="performance_contract.group_performance_evaluator"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Sign">
+                            <group>
+                                <group>
+                                    <field name="employee_sign" widget="signature" readonly="1"/>
+                                    <field name="employee_sign_date" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="manager_sign" widget="signature" readonly="1"/>
+                                    <field name="manager_sign_date" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Approval Lines" groups="performance_contract.group_performance_evaluator">
+                            <field name="approval_line_ids" readonly="1">
+                                <list>
+                                    <field name="user_id"/>
+                                    <field name="approved"/>
+                                    <field name="reject_reason"/>
+                                    <field name="approval_date"/>
+                                    <field name="status" widget="badge" decoration-success="status == 'approved'"
+                                    decoration-info="status =='pending'" decoration-danger="status =='rejected'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Competency Evaluation" groups="performance_contract.group_performance_evaluator">
+                            <group>
+                                <field name="current_employee_skill_new_ids" context="{'default_employee_id': employee_id}" readonly="0">
+                                    <list editable="bottom">
+                                        <field name="employee_id" column_invisible="1"/>
+                                        <field name="skill_id"/>
+                                        <field name="skill_level_id"/>
+                                        <field name="skill_level_progress" widget="progressbar"/>
+                                        <field name="skill_type_id" column_invisible="1"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+
+
+        </field>
+    </record>
+
+
+    <record id="view_performance_contract_form_id" model="ir.ui.view">
+        <field name="model">performance.contract</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="employee_sign" widget="signature" required="1"/>
+                    <field name="employee_sign_date" readonly="1"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_performance_contract_form_id_1" model="ir.ui.view">
+        <field name="model">performance.contract</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="manager_sign" widget="signature" required="1"/>
+                    <field name="manager_sign_date" readonly="1"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+
+
+    <record id="view_performance_contract_list" model="ir.ui.view">
+        <field name="model">performance.contract</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="priority" widget="priority"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_performance_contract" model="ir.actions.act_window">
+        <field name="name">Performance Contracts</field>
+        <field name="res_model">performance.contract</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

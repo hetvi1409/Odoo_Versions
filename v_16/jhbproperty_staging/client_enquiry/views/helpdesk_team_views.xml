@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="helpdesk_team_view_form">
+        <field name="name">helpdesk.team..view.form</field>
+        <field name="model">helpdesk.team</field>
+        <field name="inherit_id"
+               ref="helpdesk.helpdesk_team_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='productivity']" position="after">
+                <h2>Enquiry For property Assessment</h2>
+                <div class="row mt16 o_settings_container" id="channels">
+                    <div class="col-lg-6 o_setting_box" id="alias_channels">
+                        <div class="o_setting_left_pane">
+                            <field name="is_enquiry"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="is_enquiry"/>
+                            <div class="text-muted">
+                                Create tickets by sending an email to an alias
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="helpdesk_team_enquiry_view_kanban" model="ir.ui.view" >
+        <field name="name">helpdesk.team.dashboard</field>
+        <field name="model">helpdesk.team</field>
+        <field name="priority">200</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_helpdesk_kanban o_helpdesk_view"
+                    group_create="0" create="0" sample="1"
+                    action="action_view_enquiry" type="object" context="{'default_team_id': active_id}"
+            >
+                <field name="name"/>
+                <field name="sequence" widget="handle"/>
+                <field name="color"/>
+                <field name="use_alias"/>
+                <field name="alias_name"/>
+                <field name="alias_domain"/>
+                <field name="alias_id"/>
+                <field name="use_rating"/>
+                <field name="use_sla"/>
+                <field name="unassigned_tickets"/>
+                <field name="ticket_closed"/>
+                <field name="success_rate"/>
+                <field name="urgent_ticket"/>
+                <field name="open_ticket_count"/>
+                <field name="sla_failed"/>
+                <field name="rating_count"/>
+                <field name="rating_avg" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click">
+                            <span class="oe_kanban_color_help" t-attf-title="In #{kanban_getcolorname(record.color.raw_value)}" role="img" t-attf-aria-label="In #{kanban_getcolorname(record.color.raw_value)}"/>
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary"><field name="display_name"/></div>
+                                    <small t-if="record.use_alias.value and record.alias_name.value and record.alias_domain.value"/>
+                                </div>
+                                <div class="o_kanban_manage_button_section" t-if="!selection_mode">
+                                    <a class="o_kanban_manage_toggle_button o_dropdown_kanban" href="#"><i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/></a>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content" t-if="!selection_mode">
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left">
+                                        <button class="btn btn-primary o_helpdesk_ticket_btn" name="action_view_enquiry" type="object" context="{'default_team_id': active_id}"><field name="enquiry_count"/> Enquiries</button>
+                                    </div>
+
+                                    <div class="col o_kanban_primary_right">
+                                        <div class="mb4">
+                                            <a name="action_view_assessment_started" type="object" title="Number of tickets closed in the past 7 days." class="justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Assessment Started</span>
+                                                <span class="ms-3">
+                                                    <field name="assessment_started"/>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="mb4">
+                                            <a name="action_view_assessment_completed" type="object" title="Number of tickets closed in the past 7 days." class="justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Assessment Completed</span>
+                                                <span class="ms-3">
+                                                    <field name="assessment_completed"/>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col o_kanban_primary_left">
+                                        <button class="btn btn-primary o_helpdesk_ticket_btn" name="action_view_enquiry_assessment" type="object" context="{'default_team_id': active_id}"><field name="assessment_count"/> Assessment</button>
+                                    </div>
+                                    <div class="col o_kanban_primary_right">
+                                                                                <div class="mb4">
+                                            <a name="action_view_assessment_cancelled" type="object" title="Number of tickets closed in the past 7 days." class="justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Assessment Cancelled</span>
+                                                <span class="ms-3">
+                                                    <field name="assessment_cancelled"/>
+                                                </span>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row pt-5">
+                                    <div class="col">
+                                        <a name="action_view_open_enquiry" type="object" class="d-flex flex-column align-items-center">
+                                            <span class="fw-bold"><field name="open_enquiry_count"/></span>
+                                            <span class="text-muted">Open</span>
+                                        </a>
+                                    </div>
+                                    <div class="col border-start">
+                                        <a name="action_view_unassigned_enquiry" type="object"  class="d-flex flex-column align-items-center">
+                                            <span class="fw-bold"><field name="unassigned_enquiry"/></span>
+                                            <span class="text-muted">Unassigned</span>
+                                        </a>
+                                    </div>
+                                    <div class="col border-start">
+                                        <a name="action_view_urgent_enquiry" type="object" class="d-flex flex-column align-items-center">
+                                            <span class="fw-bold"><field name="urgent_enquiry"/></span>
+                                            <span class="text-muted">Urgent</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container o_kanban_card_manage_pane dropdown-menu" role="menu">
+                                <div t-if="widget.editable" class="row">
+                                    <div class="col-6 o_kanban_card_manage_section o_kanban_manage_view">
+                                        <div role="menuitem" class="o_kanban_card_manage_title">
+                                            <span>View</span>
+                                        </div>
+                                        <div role="menuitem">
+                                            <a name="action_view_enquiry" type="object">Enquiry</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div t-if="widget.editable" class="o_kanban_card_manage_settings row">
+                                    <div role="menuitem" aria-haspopup="true" class="col-8">
+                                        <ul class="oe_kanban_colorpicker" data-field="color" role="menu"/>
+                                    </div>
+                                    <div role="menuitem" class="col-4">
+                                        <a name="action_view_enquiry_team" type="object">Settings</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="helpdesk_team_enquiry_dashboard_action_main"
+            model="ir.actions.act_window">
+        <field name="name">Enquiry Overview</field>
+        <field name="res_model">helpdesk.team</field>
+        <field name="view_mode">kanban</field>
+        <field name="context">{}</field>
+        <field name="domain">[('is_enquiry','=', True)]</field>
+        <field name="view_id" ref="helpdesk_team_enquiry_view_kanban"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No teams found
+            </p>
+            <p>
+                Create teams to organize your tickets by expertise or
+                geographical region, and define a different workflow for each
+                team.
+            </p>
+        </field>
+    </record>
+
+    <record id="helpdesk.helpdesk_team_dashboard_action_main" model="ir.actions.act_window">
+        <field name="name">Helpdesk Overview</field>
+        <field name="res_model">helpdesk.team</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="context">{}</field>
+        <field name="domain">[('is_enquiry','=', False)]</field>
+        <field name="view_id" ref="helpdesk.helpdesk_team_view_kanban"/>
+        <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+                No teams found
+            </p>
+            <p>
+                Create teams to organize your tickets by expertise or geographical region, and define a different workflow for each team.
+            </p>
+        </field>
+    </record>
+
+    <record id="helpdesk.helpdesk_ticket_analysis_action" model="ir.actions.act_window">
+       <field name="name">Ticket Analysis</field>
+       <field name="res_model">helpdesk.ticket.report.analysis</field>
+       <field name="view_mode">pivot,graph</field>
+        <field name="search_view_id" ref="helpdesk.helpdesk_ticket_report_analysis_view_search"/>
+        <field name="domain">['|', ('company_id', '=', False), ('company_id', 'in', allowed_company_ids), ('team_id.is_enquiry', '=', False)]</field>
+        <field name="context">{
+            'search_default_group_by_create_date': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No data yet !
+            </p><p>
+                Get statistics on your tickets and how long it takes to assign and resolve them.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="helpdesk_menu_team_enquiry_dashboard"
+              action="helpdesk_team_enquiry_dashboard_action_main"
+              sequence="2" parent="client_enquiry.client_enquiry_helpdesk_root_menu"
+              name="Enquiry Overview"
+              groups="client_enquiry.group_property_manager,client_enquiry.group_asset_evaluator,client_enquiry.group_cbo"/>
+
+</odoo>

@@ -1,0 +1,265 @@
+<odoo>
+
+    <record id="view_annual_procurement_plan_list" model="ir.ui.view">
+        <field name="name">Annual Procurement Plan List</field>
+        <field name="model">annual.procurement.plan</field>
+        <field name="arch" type="xml">
+            <list default_order="id desc">
+                <header>
+                    <button name="%(action_app_import)d" string="Import APP" type="action" class="btn-primary ms-1"
+                            display="always"/>
+                </header>
+                <field name="name"/>
+                <field name="entity_name"/>
+                <field name="indicative"/>
+                <field name="fiscal_year"/>
+                <field name="department_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="state"/>
+                <field name="total_app_budget"/>
+                <field name="procurement_method_config_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="preference_point_system_config_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_annual_procurement_plan_form" model="ir.ui.view">
+        <field name="name">Annual Procurement Plan Form</field>
+        <field name="model">annual.procurement.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!-- <button name="%(action_app_line_import)d"
+                            string="Import Lines Only"
+                            type="action" context="{'default_plan_id': id}"
+                            class="btn-primary"
+                            invisible="state not in ['draft']"/> -->
+
+                    <button name="action_submit"
+                            string="Submit"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state not in ['draft'] or show_submit_button == False"/>
+                    <button name="action_reset_to_draft"
+                            string="Reset to Draft"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state in ['draft', 'approved'] or not (create_uid == uid or initiator_id == uid)"/>
+                    <button name="action_review"
+                            string="Reviewed"
+                            type="object"
+                            class="btn-primary"
+                            invisible="show_reviewed == False"/>
+                    <button name="action_send_for_approval"
+                            string="Send for Approval"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state not in ['reviewed']"/>
+                    <button name="action_approve"
+                            string="Approve"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state not in ['awaiting_approval'] or approver_id != uid"/>
+                    <button name="action_reject"
+                            string="Reject"
+                            type="object"
+                            class="btn-danger"
+                            invisible="state not in ['awaiting_approval'] or approver_id != uid"/>
+
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="fiscal_year" required="1"/>
+                            <field name="procurement_method" required="1" invisible="1"/>
+                            <field name="procurement_method_config_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="preference_point_system_config_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="department_id" required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="indicative" string="Indicative APP" widget="radio"
+                                   options="{'horizontal': true}"/>
+                        </group>
+                        <group string="">
+                            <field name="user_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="company_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="entity_name"/>
+                            <field name="show_submit_button" invisible="1"/>
+                            <field name="show_reviewed" invisible="1"/>
+                            <field name="can_delete_lines" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Budget">
+                            <field name="estimated_budget_total_from"/>
+                            <field name="estimated_budget_total_to"/>
+                            <field name="total_app_budget"/>
+                            <field name="total_unused_budget"/>
+                            <field name="currency_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                        <group string="Period">
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="approve_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Procurement Lines">
+                            <button name="%(action_app_line_import)d"
+                                string="Import Lines"
+                                type="action" context="{'default_plan_id': id}"
+                                class="btn-primary"
+                                invisible="state not in ['draft']"/>
+                            <button name="action_app_line_delete"
+                                    string="Delete Lines"
+                                    type="object"
+                                    class="btn-primary ms-2"
+                                    invisible="state not in ['draft']"/>
+                            <field name="line_ids" readonly="state not in ['draft']">
+                                <list default_order="id asc" editable="bottom" open_form_view="0">
+                                    <field name="sequence"/>
+                                    <field name="sagov_app_created" string="APP Created" readonly="1"/>
+                                    <button name="action_open_record" type="object" string="Open line" class="oe_link"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="object_code"/>
+                                    <field name="procurement_method" column_invisible="1"/>
+                                    <field name="procurement_method_config_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="preference_point_system_config_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="class_of_procurement"/>
+                                    <field name="spoc_required"/>
+                                    <field name="source_of_funds"/>
+                                    <field name="uom_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="total"/>
+                                    <field name="comment"/>
+                                    <field name="eoi_publication_date"/>
+                                    <field name="eoi_closing_date"/>
+                                    <field name="tender_notice_date"/>
+                                    <field name="tender_closing_date"/>
+                                    <field name="award_publication_date"/>
+                                    <field name="contract_signing_date"/>
+                                    <field name="cycle_work_days" string="Cycle (Work Days)"/>
+                                    <field name="lead_time_days"/>
+                                    <field name="product_id" string="Description of Requirements" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="user_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="sagov_app_id" widget="many2one" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="documents" string="Documents">
+                            <group>
+                                <field name="org_structure"/>
+                                <field name="pmu_structure"/>
+                                <field name="accounting_officer_identity"/>
+                                <field name="evaluation_committee_members"/>
+                                <field name="disposal_committee_members"/>
+                                <field name="procuring_entities_facilities"/>
+                                <field name="signed_copy_app"/>
+                                <field name="asset_disposal_plan"/>
+                                <field name="asset_disposal_plan_filename"/>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                        <page string="Initiator">
+                            <group>
+                                <group>
+                                    <field name="initiator_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                </group>
+                                <group>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Reviewers">
+                            <field name="reviewer_ids" mode="list,kanban"
+                                   options="{'delete': [('can_delete_lines', '=', True)]}"
+                                   readonly="state not in ['draft','submitted']">
+                                <list editable="bottom"
+                                      decoration-success="status in ('Completed')"
+                                      decoration-danger="status in ('Not-Completed')"
+                                      no_open="1">
+                                    <field name="existing_request_user_ids" column_invisible="True"/>
+                                    <field name="is_editable" column_invisible="True"/>
+                                    <field name="display_name" column_invisible="True"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="user_id" string="Recommender" force_save="1"
+                                           readonly="sign_initials != False or is_editable == False" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="date" readonly="1" force_save="1"/>
+                                    <field name="status" force_save="1"
+                                           readonly="is_editable == False"/>
+                                    <field name="comment" force_save="1" readonly="is_editable == False"/>
+                                    <field name="sign_initials" widget="image" options="{'size': [0, 50]}"
+                                           readonly="True"/>
+                                    <button string="Sign" type="object" name="action_sign_line"
+                                            invisible="sign_initials != False"/>
+                                </list>
+                                <kanban class="o_kanban_mobile">
+                                    <templates>
+                                        <t t-name="card" class="flex-row">
+                                            <field name="user_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                            <t t-if="record.status.raw_value">
+                                                <t t-set="classname"
+                                                   t-value="{'Completed': 'text-bg-success','Not-Completed': 'text-bg-danger'}[record.status.raw_value] || 'text-bg-light'"/>
+                                                <span t-attf-class="ms-auto rounded-pill {{ classname }}">
+                                                    <field name="status"/>
+                                                </span>
+                                            </t>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                                <form>
+                                    <group>
+                                        <field name="existing_request_user_ids" invisible="0"/>
+                                        <field name="user_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Approver">
+                            <group>
+                                <field name="approver_id" required="state != 'draft'"
+                                       readonly="approver_sign != False" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <label for="approver_sign" class="oe_inline"/>
+                                <div class="o_row o_row_readonly">
+                                    <field name="approver_sign" widget="image" options="{'size': [0, 50]}"
+                                           readonly="True"/>
+                                    <button name="action_sign_approver" type="object" string="Sign Approver"
+                                            class="oe_highlight" invisible="approver_sign != False"/>
+                                </div>
+                                <field name="approve_date" readonly="True"/>
+                                <field name="approve_comment"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_annual_procurement_plan" model="ir.actions.act_window">
+        <field name="name">Annual Procurement Plans</field>
+        <field name="res_model">annual.procurement.plan</field>
+        <field name="path">app</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

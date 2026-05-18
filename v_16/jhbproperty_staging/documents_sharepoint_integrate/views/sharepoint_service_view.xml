@@ -1,0 +1,51 @@
+<odoo>
+
+    <record id="view_sharepoint_browser_wizard" model="ir.ui.view">
+        <field name="name">sharepoint.browser.wizard.form</field>
+        <field name="model">sharepoint.browser.wizard</field>
+        <field name="arch" type="xml">
+            <form string="SharePoint Browser">
+                <header>
+                    <button string="Back" type="object" name="action_go_back" class="btn-secondary"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <field name="current_path" readonly="1"/>
+                    </group>
+
+                    <field name="line_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="item_type"/>
+                            <field name="file_name" invisible="1"/>
+                            <field name="is_uploaded" invisible="1"/>
+                            <field name="is_from_sharepoint" invisible="1"/>
+                            <field name="file_content"
+                                   filename="file_name" widget="binary"
+                                   attrs="{'invisible':[('item_type','!=','file')]}"/>
+                            <!--                            <button name="action_upload_to_sharepoint"-->
+                            <!--                                    type="object"-->
+                            <!--                                    string="Upload"-->
+                            <!--                                    attrs="{'invisible': ['|',('is_uploaded','=',True),('is_from_sharepoint','=',True)]}"/>-->
+                            <button name="action_delete_item"
+                                    type="object"
+                                    string="Delete From Sharepoint"
+                                    attrs="{'invisible':['|',('is_from_sharepoint','=',False),('item_type','not in',['file','folder'])]}"/>
+                            <button name="action_open_folder"
+                                    type="object"
+                                    string="Open"
+                                    attrs="{'invisible':[('item_type','!=','folder')]}"/>
+
+                            <button name="action_open_file"
+                                    type="object"
+                                    string="View"
+                                    attrs="{'invisible':[('item_type','!=','file')]}"/>
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

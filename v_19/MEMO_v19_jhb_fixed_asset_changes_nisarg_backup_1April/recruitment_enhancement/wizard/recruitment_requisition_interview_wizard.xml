@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_recruitment_requisition_interview_wizard_form" model="ir.ui.view">
+        <field name="name">recruitment.requisition.interview.wizard.form</field>
+        <field name="model">recruitment.requisition.interview.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Schedule Interview">
+
+                <group>
+                    <!-- Application & Job -->
+                    <group string="Application Info">
+                        <field name="application_id" options="{'no_create': True}"/>
+                        <field name="job_id" options="{'no_create': True}"/>
+<!--                        <field name="ee_representative" options="{'no_create': True}"/>-->
+<!--                        <field name="panelist_representative" options="{'no_create': True}"/>-->
+                    </group>
+
+                    <group string="People">
+                        <field name="interviewer_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="recruiter_id" options="{'no_create': True}"/>
+                        <field name="recruiter_phone"/>
+                    </group>
+                </group>
+
+                <group>
+                    <group string="Schedule">
+                        <field name="interview_type" widget="radio"/>
+                        <field name="interview_time"/>
+                        <field name="duration" string="Duration (Hours)" widget="float_time"/>
+                    </group>
+                </group>
+
+                <separator string="HR Note"/>
+                <field name="hr_note" widget="html" nolabel="1" style="min-height: 120px;"/>
+
+                <!-- Attachments section styled like Image 1 -->
+                <separator string="Attachments"/>
+                <field name="attachment_ids"
+                       widget="many2many_binary"
+                       string="Attach a file"
+                       nolabel="1"/>
+
+                <!-- Skills & Questions Tabs -->
+                <notebook>
+                    <page string="Skills" name="skills">
+                        <div class="o_hr_skills_editable o_hr_skills_group o_group_skills">
+                            <field name="id" invisible="1"/>
+                            <group>
+                                <group>
+                                    <field mode="list" nolabel="1" name="current_applicant_skill_ids"
+                                           widget="skills_one2many"
+                                           context="{'default_applicant_id': application_id, 'no_timeline': True}">
+                                        <list class="o_applicant_skills"
+                                              decoration-muted="valid_to and valid_to &lt; context_today().strftime('%Y-%m-%d')"
+                                              decoration-danger="valid_to and valid_to &lt;= (context_today() + relativedelta(days=7)).strftime('%Y-%m-%d') and valid_to &gt; context_today().strftime('%Y-%m-%d')"
+                                              decoration-warning="valid_to and valid_to &lt;= (context_today() + relativedelta(months=1)).strftime('%Y-%m-%d') and valid_to &gt; (context_today() + relativedelta(days=7)).strftime('%Y-%m-%d')">
+                                            <field name="skill_type_id" optional="hidden"/>
+                                            <field name="skill_id"/>
+                                            <field name="skill_level_id"/>
+                                            <field name="level_progress" widget="progressbar"/>
+                                            <field name="valid_to" column_invisible="1"/>
+                                        </list>
+                                    </field>
+                                </group>
+                                <group>
+                                    <field name="matching_score" invisible="is_pool_applicant" nolabel="1"
+                                           widget="skill_match_gauge_field" options="{'max_value': 100}"/>
+                                </group>
+                            </group>
+                        </div>
+                    </page>
+
+                    <page string="Questions" name="questions">
+                        <field name="question_and_page_ids" nolabel="1">
+                            <list create="0" delete="0">
+                                <field name="title" string="Question"/>
+                                <field name="question_type" string="Question Type"/>
+                                <field name="elimination_question" string="Elimination"/>
+                                <field name="constr_mandatory" string="Mandatory"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+
+                <footer>
+                    <button name="action_create_interview"
+                            string="Create Interview"
+                            type="object"
+                            class="btn-primary"
+                            data-hotkey="q"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="action_recruitment_requisition_interview_wizard" model="ir.actions.act_window">
+        <field name="name">Schedule Interview</field>
+        <field name="res_model">recruitment.requisition.interview.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_recruitment_requisition_interview_wizard_form"/>
+    </record>
+
+</odoo>

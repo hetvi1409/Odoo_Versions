@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_asset_verification_list" model="ir.ui.view">
+        <field name="name">asset.verification.list</field>
+        <field name="model">asset.verification</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="asset_id"/>
+                <field name="barcode_number"/>
+                <field name="description"/>
+                <field name="verify"/>
+                <field name="allocation"/>
+                <field name="location_id"/>
+                <field name="condition"/>
+                <field name="verification_job_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_asset_verification_form" model="ir.ui.view">
+        <field name="name">asset.verification.form</field>
+        <field name="model">asset.verification</field>
+        <field name="arch" type="xml">
+            <form string="Asset Verification">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_verify"
+                            string="Verify"
+                            type="object" invisible="state != 'draft'"
+                            class="btn-primary"/>
+                    <button name="action_not_verify"
+                            string="Not Verify" invisible="state != 'draft'"
+                            type="object"
+                            class="btn-secondary"/>
+                    <button name="action_approve"
+                            string="Approve" invisible="state != 'verified'"
+                            type="object"
+                            class="btn-primary"/>
+                    <button name="action_reject"
+                            string="Reject" invisible="state != 'verified'"
+                            type="object"
+                            class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="asset_id"/>
+                            <field name="description"/>
+                            <field name="allocation"/>
+                            <field name="condition"/>
+                        </group>
+                        <group>
+                            <field name="barcode_number"/>
+                            <field name="verify"/>
+                            <field name="location_id"/>
+                            <field name="verification_job_id"/>
+                        <field name="custodian_id"/>
+                        <field name="custodian_department_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_asset_verification_list" model="ir.actions.act_window">
+        <field name="name">Asset Verification</field>
+        <field name="res_model">asset.verification</field>
+        <field name="view_mode">list,form</field>
+        <field name="help">View and manage asset verification records.</field>
+    </record>
+
+    <!-- Submenu: Verification Lines -->
+    <menuitem id="menu_asset_verification_lines"
+              name="Verification Records"
+              parent="fixed_assets.menu_action_fixed_assets"
+              action="action_asset_verification_list"
+              sequence="10"/>
+
+</odoo>

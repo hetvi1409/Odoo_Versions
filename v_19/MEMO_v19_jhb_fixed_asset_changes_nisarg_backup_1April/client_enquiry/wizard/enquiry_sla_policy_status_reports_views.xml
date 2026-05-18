@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="enquiry_sla_policy_status_view_form" model="ir.ui.view">
+        <field name="name">enquiry.sla.policy.status.form.view</field>
+        <field name="model">enquiry.sla.policy.status</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="type"/>
+                            <field name="sla_type"/>
+                        </group>
+                        <group>
+                            <field name="quarterly_type" invisible="type != 'quarterly'"/>
+                            <field name="monthly_type" invisible="type != 'monthly'"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_print" string="Print PDF" type="object"
+                            class="btn-primary" data-hotkey="t"/>
+                    <button name="action_print_xlsx" string="Print Excel"
+                            type="object" class="btn-primary" data-hotkey="t"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_enquiry_sla_policy_status" model="ir.actions.act_window">
+        <field name="name">SLA Status Reports</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">enquiry.sla.policy.status</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="enquiry_sla_policy_status_reporting_menu"
+              name="SLA Status PDF Report"
+              action="client_enquiry.action_enquiry_sla_policy_status"
+              parent="client_enquiry.client_enquiry_reporting_main_menu"
+              sequence="30"/>
+</odoo>

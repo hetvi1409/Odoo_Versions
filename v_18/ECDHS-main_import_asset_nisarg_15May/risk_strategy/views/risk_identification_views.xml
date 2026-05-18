@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="risk_identification_form_view" model="ir.ui.view">
+        <field name="name">oi_risk_management.risk.view.tree</field>
+        <field name="model">oi_risk_management.risk</field>
+        <field name="inherit_id" ref="risk_universe_update.risk_identification_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='risk_type_id']" position="after">
+                <field name="strategy_id" invisible="oi_risk_type != 'strategic'"/>
+            </xpath>
+            <xpath expr="//field[@name='version']" position="before">
+                <field name="internal_audit_id" />
+            </xpath>
+            <xpath expr="//field[@name='activity_id']" position="after">
+                <field name="end_date" invisible="1"/>
+                <field name="start_date"
+                       string="Period"
+                       widget="daterange"
+                       options="{'end_date_field': 'end_date'}"
+                       on_change="1"/>
+                <!-- Invisible End Date to store the value -->
+                <field name="end_date"
+                       invisible="1"
+                       required="start_date"
+                       on_change="1"/>
+                <field name="year_id" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="arp_year_view_form" model="ir.ui.view">
+        <field name="name">arp.year.form</field>
+        <field name="model">arp.year</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

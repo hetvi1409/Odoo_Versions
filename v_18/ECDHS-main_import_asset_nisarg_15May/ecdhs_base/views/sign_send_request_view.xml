@@ -1,0 +1,31 @@
+<odoo>
+    <record id="view_sign_send_request_form_inherit_admin_only" model="ir.ui.view">
+        <field name="name">sign.send.request.form.inherit.admin.only</field>
+        <field name="model">sign.send.request</field>
+        <field name="inherit_id" ref="sign.sign_send_request_view_form"/>
+        <field name="arch" type="xml">
+            <field name="reference_doc" position="after">
+                <field name="current_user_id"/>
+            </field>
+            <!-- Hide first 'Sign Now' button -->
+            <xpath expr="//footer/button[@name='sign_directly']" position="attributes">
+                <attribute name="invisible">current_user_id not in [1,2]</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='contacts_in_copy']/group/field[@name='cc_partner_ids']" position="replace">
+                <field name="cc_partner_ids" string="Contacts" widget="many2many_tags"
+                       placeholder="Write email or search contact..." context="{'show_email': True}"
+                       options="{'no_create': True, 'no_quick_create': True, 'no_open': True}"/>
+            </xpath>
+            <xpath expr="//field[@name='signer_ids']" position="replace">
+                <field name="signer_ids" colspan="2" nolabel="1" widget="signer_x2many" invisible="signers_count == 0"
+                       options="{'no_create': True, 'no_quick_create': True, 'no_open': True}"></field>
+            </xpath>
+
+            <!--            &lt;!&ndash; Hide second 'Sign Now' button (with context no_sign_mail) &ndash;&gt;-->
+            <!--            <xpath expr="//footer/button[@name='sign_directly' and contains(@context, 'no_sign_mail')]" position="attributes">-->
+            <!--                <attribute name="invisible">current_user_id not in [1,2]</attribute>-->
+            <!--            </xpath>-->
+        </field>
+    </record>
+</odoo>

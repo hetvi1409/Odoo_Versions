@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo noupdate="0">
+
+    <!--    Record rules-->
+    <record id="inspection_supervisor_rule" model="ir.rule">
+        <field name="name">Inspection Supervisor Rule</field>
+        <field name="model_id" ref="model_inspection_request"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('fleet_vehicle_inspection_management.group_vehicle_inspection_supervisor'))]"/>
+    </record>
+
+    <record id="inspection_manager_rule" model="ir.rule">
+        <field name="name">Inspection Manager Rule</field>
+        <field ref="model_inspection_request" name="model_id"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('fleet_vehicle_inspection_management.group_vehicle_inspection_manager'))]"/>
+    </record>
+
+    <!--    multi company rule-->
+    <record id="inspection_request_company_rule" model="ir.rule">
+        <field name="name">Inspection Request Company Rule</field>
+        <field ref="model_inspection_request" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="vehicle_inspection_company_rule" model="ir.rule">
+        <field name="name">Vehicle Inspection Company Rule</field>
+        <field ref="model_vehicle_inspection" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="fleet_vehicle_request_company_rule" model="ir.rule">
+        <field name="name">Fleet Vehicle Request Company Rule</field>
+        <field ref="model_fleet_vehicle_request" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="after_hours_authorization_company_rule" model="ir.rule">
+        <field name="name">After Hours Authorization Company Rule</field>
+        <field ref="model_fleet_after_hours_authorization" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="key_register_company_rule" model="ir.rule">
+        <field name="name">Key Register Company Rule</field>
+        <field ref="model_fleet_vehicle_key_register" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="accident_report_company_rule" model="ir.rule">
+        <field name="name">Accident Report Company Rule</field>
+        <field ref="model_fleet_vehicle_accident_report" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="policy_document_company_rule" model="ir.rule">
+        <field name="name">Policy Document Company Rule</field>
+        <field ref="model_fleet_policy_document" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="job_card_company_rule" model="ir.rule">
+        <field name="name">Job Card Company Rule</field>
+        <field ref="model_fleet_job_card" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="fuel_register_company_rule" model="ir.rule">
+        <field name="name">Fuel Register Company Rule</field>
+        <field ref="model_fleet_fuel_register" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="trip_log_company_rule" model="ir.rule">
+        <field name="name">Trip Log Company Rule</field>
+        <field ref="model_fleet_vehicle_trip_log" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="daily_checklist_company_rule" model="ir.rule">
+        <field name="name">Daily Checklist Company Rule</field>
+        <field ref="model_fleet_vehicle_daily_checklist" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+    <record id="service_logbook_company_rule" model="ir.rule">
+        <field name="name">Service Logbook Company Rule</field>
+        <field ref="model_fleet_vehicle_service_logbook" name="model_id"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+    </record>
+</odoo>

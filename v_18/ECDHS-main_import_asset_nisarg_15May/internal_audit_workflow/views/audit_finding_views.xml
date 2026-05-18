@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="audit_finding_view_form" model="ir.ui.view">
+        <field name="name">audit_finding_view_form</field>
+        <field name="model">audit.finding</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="internal_audit_management.audit_finding_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="replace">
+                <form>
+                    <header>
+                        <field name="stages" widget="statusbar" options="{'clickable': '1'}"
+                               statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>
+                        <button name="action_review" type="object"
+                                invisible="stages != 'draft'"
+                                string="Preparer" class="oe_highlight"/>
+                        <button name="action_2nd_review" type="object"
+                                invisible="stages != 'preparer'"
+                                string="Reviewer" class="oe_highlight"/>
+                        <button name="action_revert" type="object"
+                                invisible="stages != 'preparer'"
+                                string="Revert" class="oe_highlight"/>
+                        <button name="action_approve" type="object"
+                                invisible="stages != 'second_reviewer'"
+                                string="Approve" class="oe_highlight"/>
+                        <button name="action_revert" type="object"
+                                invisible="stages != 'second_reviewer'"
+                                string="Revert" class="oe_highlight"/>
+                        <button name="action_reject" type="object"
+                                invisible="stages != 'second_reviewer'"
+                                string="Reject" class="oe_highlight"/>
+                        <button name="action_revert" type="object"
+                                invisible="stages != 'rejected'"
+                                string="Move to Prepare" class="oe_highlight"/>
+                        <button name="action_sent_manager" type="object"
+                                invisible="stages != 'approved'"
+                                string="Send To Manager" class="oe_highlight"/>
+                        <button name="action_sent_auditor" type="object"
+                                invisible="stages != 'find_response'"
+                                string="Send To Auditor" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_records" type="object"
+                                    string="Revert Records"
+                                    class="oe_stat_button" icon="fa-book">
+                            </button>
+                        </div>
+                        <div class="pe-0 w-100">
+                            <h1 class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex w-100">
+                                    <field name="finding_name"/>
+                                </div>
+                                <div class="d-flex justify-content-start o_state_container">
+                                    <field name="state" widget="project_task_state_selection"
+                                           class="o_task_state_widget"/>
+                                </div>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <!--                            <field name="finding_number"/>-->
+                                <field name="project_id" readonly="not can_edit"/>
+                                <field name="task_id" readonly="not can_edit"/>
+                                <field name="audit_finding" options="{'height': 100}" readonly="stages == 'approved' or not can_edit"/>
+                                <field name="audit_requirement" options="{'height': 100}" readonly="not can_edit"/>
+                                <field name="impact" readonly="stages == 'approved' or not can_edit"/>
+                                <field name="internal_control_deficiency" readonly="stages == 'approved' or not can_edit"/>
+                                <field name="classification" readonly="stages == 'approved' or not can_edit"/>
+                                <field name="recommendation" readonly="stages == 'approved' or not can_edit"/>
+                                <field name="user_id" invisible="1"/>
+                                <field name="name_user" widget="many2one_avatar_user" readonly="not can_edit"/>
+                                <field name="position_id" readonly="stages == 'approved' or not can_edit"/>
+                                <field name="department_id" readonly="not can_edit"/>
+                                <field name="head_department_id" widget="many2one_avatar_user" readonly="not can_edit"/>
+                                <field name="finding_date" readonly="stages == 'approved' or not can_edit"/>
+                                <field name="user_ids" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="can_edit" invisible="1"/>
+                                <field name="preparer_id" widget="many2one_avatar_user"/>
+                                <field name="reviewer_id" widget="many2one_avatar_user"/>
+                                <field name="approver_id" widget="many2one_avatar_user"/>
+                            </group>
+                            <notebook>
+                                <page string="Documents">
+                                    <field name="document_ids" widget="many2many_binary" readonly="not can_edit"/>
+                                </page>
+                                <page string="Management Response"
+                                      invisible=" stages not in ['find_response','find_conclude']">
+                                    <group>
+                                        <group>
+                                            <field name="management_response" readonly="not can_edit"/>
+                                            <field name="manager_approval" readonly="not can_edit"/>
+                                            <field name="upload_document_name" invisible="1" readonly="not can_edit"/>
+                                            <field name="attachment_ids" filename="upload_document_name"
+                                                   widget="many2many_binary" readonly="not can_edit"/>
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Final Audit" invisible="stages != 'find_conclude'">
+                                    <group>
+                                        <group>
+                                            <field name="auditor_conclusion" readonly="not can_edit"/>
+                                            <field name="is_finding_resolved" readonly="not can_edit"/>
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Tracking">
+                                    <field name="audit_finding_tracking_ids" readonly="not can_edit">
+                                        <list string="Tracking">
+                                            <field name="user_id"/>
+                                            <field name="previous_stage_id"/>
+                                            <field name="new_stage_id"/>
+                                            <field name="comment"/>
+                                            <field name="date"/>
+                                        </list>
+                                    </field>
+                                </page>
+                                <page string="Audit Reverts/ Review Notes">
+                                    <group>
+                                        <field name="feedback" readonly="not can_edit"/>
+                                    </group>
+                                </page>
+                            </notebook>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </xpath>
+<!--            <xpath expr="//header" position="replace">-->
+<!--                <header>-->
+<!--                    <field name="stages" widget="statusbar" options="{'clickable': '1'}"-->
+<!--                           statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>-->
+<!--                    <button name="action_review" type="object"-->
+<!--                            invisible="stages != 'draft'"-->
+<!--                            string="Preparer" class="oe_highlight"/>-->
+<!--                    <button name="action_2nd_review" type="object"-->
+<!--                            invisible="stages != 'preparer'"-->
+<!--                            string="Reviewer" class="oe_highlight"/>-->
+<!--                    <button name="action_revert" type="object"-->
+<!--                            invisible="stages != 'preparer'"-->
+<!--                            string="Revert" class="oe_highlight"/>-->
+<!--                    <button name="action_approve" type="object"-->
+<!--                            invisible="stages != 'second_reviewer'"-->
+<!--                            string="Approve" class="oe_highlight"/>-->
+<!--                    <button name="action_revert" type="object"-->
+<!--                            invisible="stages != 'second_reviewer'"-->
+<!--                            string="Revert" class="oe_highlight"/>-->
+<!--                    <button name="action_reject" type="object"-->
+<!--                            invisible="stages != 'second_reviewer'"-->
+<!--                            string="Reject" class="oe_highlight"/>-->
+<!--                    <button name="action_revert" type="object"-->
+<!--                            invisible="stages != 'rejected'"-->
+<!--                            string="Move to Prepare" class="oe_highlight"/>-->
+<!--                    <button name="action_sent_manager" type="object"-->
+<!--                            invisible="stages != 'approved'"-->
+<!--                            string="Send To Manager" class="oe_highlight"/>-->
+<!--                    <button name="action_sent_auditor" type="object"-->
+<!--                            invisible="stages != 'find_response'"-->
+<!--                            string="Send To Auditor" class="oe_highlight"/>-->
+<!--                </header>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='user_preparer_ids']" position="replace">-->
+<!--                <field name="can_edit" invisible="0"/>-->
+<!--                <field name="preparer_id" widget="many2one_avatar_user"/>-->
+<!--                <field name="reviewer_id" widget="many2one_avatar_user"/>-->
+<!--                <field name="approver_id" widget="many2one_avatar_user"/>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+</odoo>

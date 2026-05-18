@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="portal_my_home_menu_buildings"
+              name="Portal layout : Properties"
+              inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-attf-class="breadcrumb-item #{'active' if page_name == 'buildings' else ''}">
+                <a t-if="page_name != 'buildings'" href="/my/buildings">Properties</a>
+                <t t-else="">Properties</t>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_buildings" name="Properties"
+              customize_show="True" inherit_id="portal.portal_my_home"
+              priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <div id="portal_buildings">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Properties</t>
+                    <t t-set="url" t-value="'/my/buildings'"/>
+                    <t t-set="placeholder_count" t-value="'buildings_count'"/>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="my_buildings" name="Properties">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Properties</t>
+            </t>
+
+            <div class="row mb-3">
+                <div class="col-12">
+                    <h3>Properties</h3>
+                </div>
+            </div>
+
+            <form action="/my/buildings" method="get" class="mb-4">
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <label class="form-label">Region</label>
+                        <select name="region_id" class="form-select">
+                            <option value="">Select Region</option>
+                            <t t-foreach="regions" t-as="region">
+                                <option t-att-value="region.id"
+                                        t-att-selected="'selected' if selected_region_id == region.id else None">
+                                    <t t-out="region.complete_name or region.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <details t-att-open="'open' if advanced_active else None">
+                            <summary class="mb-3 ps-2 py-2 text-primary" style="cursor: pointer; border-left: 4px solid currentColor; background-color: #f8f9fa; border-radius: 4px;">
+                                <h5 class="mb-0 d-inline text-primary" style="font-weight: 600;">
+                                    <i class="fa fa-filter me-2"></i>Advanced Filters
+                                </h5>
+                            </summary>
+                            <div class="row g-2 mt-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">JMC Number</label>
+                                    <input type="text" name="jmc_number" class="form-control"
+                                           t-att-value="jmc_number or ''"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">ERF Number</label>
+                                    <input type="text" name="erf_number" class="form-control"
+                                           t-att-value="erf_number or ''"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Ward</label>
+                                    <input type="text" name="ward" class="form-control"
+                                           t-att-value="ward or ''"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Stand Number</label>
+                                    <input type="text" name="stand_number" class="form-control"
+                                           t-att-value="stand_number or ''"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Address</label>
+                                    <input type="text" name="address" class="form-control"
+                                           t-att-value="address or ''"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Sort By</label>
+                                    <select name="sortby" class="form-select">
+                                        <option value="erf_asc" t-att-selected="'selected' if sortby == 'erf_asc' else None">ERF Number (A-Z)</option>
+                                        <option value="erf_desc" t-att-selected="'selected' if sortby == 'erf_desc' else None">ERF Number (Z-A)</option>
+                                        <option value="jmc_asc" t-att-selected="'selected' if sortby == 'jmc_asc' else None">JMC Number (A-Z)</option>
+                                        <option value="jmc_desc" t-att-selected="'selected' if sortby == 'jmc_desc' else None">JMC Number (Z-A)</option>
+                                        <option value="ward_asc" t-att-selected="'selected' if sortby == 'ward_asc' else None">Ward (A-Z)</option>
+                                        <option value="ward_desc" t-att-selected="'selected' if sortby == 'ward_desc' else None">Ward (Z-A)</option>
+                                        <option value="address_asc" t-att-selected="'selected' if sortby == 'address_asc' else None">Address (A-Z)</option>
+                                        <option value="address_desc" t-att-selected="'selected' if sortby == 'address_desc' else None">Address (Z-A)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Page Size</label>
+                                    <select name="page_size" class="form-select">
+                                        <option value="20" t-att-selected="'selected' if page_size == 20 else None">20</option>
+                                        <option value="50" t-att-selected="'selected' if page_size == 50 else None">50</option>
+                                        <option value="100" t-att-selected="'selected' if page_size == 100 else None">100</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <a href="/my/buildings" class="btn btn-secondary">Clear</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <t t-if="not region_selected">
+                <p>Select a region, then click Search to view buildings.</p>
+            </t>
+
+            <t t-if="region_selected and not buildings">
+                <p>There are currently no buildings for your selected filters.</p>
+            </t>
+
+            <t t-if="region_selected and buildings">
+                <div class="d-flex justify-content-end mb-2">
+                    <p class="text-muted mb-0">Records: <t t-out="total_records"/> (Showing <t t-out="page_records"/> on this page)</p>
+                </div>
+
+                <div class="d-block d-md-none">
+                    <t t-foreach="buildings" t-as="building">
+                        <div class="card mb-2">
+                            <div class="card-body p-3">
+                                <div><strong>JMC Number:</strong> <span t-out="building.jmc_number or '-'"/></div>
+                                <div><strong>ERF Number:</strong> <span t-out="building.name or '-'"/></div>
+                                <div><strong>Region:</strong> <span t-out="building.region_id.complete_name or building.region_id.name or '-'"/></div>
+                                <div><strong>Ward:</strong> <span t-out="building.ward or '-'"/></div>
+                                <div><strong>Stand Number:</strong> <span t-out="building.stand_number or '-'"/></div>
+                                <div><strong>Address:</strong> <span t-out="building.address or '-'"/></div>
+                                <div class="mt-2">
+                                    <a t-attf-href="/my/buildings/#{building.id}#{'?' + building_keep_query if building_keep_query else ''}" class="btn btn-sm btn-primary">View</a>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+                <div class="d-none d-md-block table-responsive">
+                    <t t-call="portal.portal_table">
+                        <thead>
+                            <tr class="active">
+                                <th>JMC Number</th>
+                                <th>ERF Number</th>
+                                <th>Region</th>
+                                <th>Ward</th>
+                                <th>Address</th>
+                                <th>Stand Number</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="buildings" t-as="building">
+                                <tr>
+                                    <td><span t-out="building.jmc_number or '-'"/></td>
+                                    <td><span t-out="building.name or '-'"/></td>
+                                    <td><span t-out="building.region_id.complete_name or building.region_id.name or '-'"/></td>
+                                    <td><span t-out="building.ward or '-'"/></td>
+                                    <td><span t-out="building.address or '-'"/></td>
+                                    <td><span t-out="building.stand_number or '-'"/></td>
+                                    <td>
+                                        <a t-attf-href="/my/buildings/#{building.id}#{'?' + building_keep_query if building_keep_query else ''}" class="btn btn-sm btn-primary">View</a>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </t>
+                </div>
+            </t>
+
+        </t>
+    </template>
+
+    <template id="my_building_detail" name="Property Detail">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Properties</t>
+            </t>
+
+            <div class="row mb-3">
+                <div class="col-12 d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Property Details</h3>
+                    <div>
+                        <a t-att-href="back_url" class="btn btn-secondary btn-sm">Back to List</a>
+                        <a t-att-href="backend_form_url" class="btn btn-primary btn-sm ms-1">Open Form View</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6"><strong>JMC Number:</strong> <span t-out="building.jmc_number or '-'"/></div>
+                        <div class="col-md-6"><strong>ERF Number:</strong> <span t-out="building.name or '-'"/></div>
+                        <div class="col-md-6"><strong>Region:</strong> <span t-out="building.region_id.complete_name or building.region_id.name or '-'"/></div>
+                        <div class="col-md-6"><strong>Ward:</strong> <span t-out="building.ward or '-'"/></div>
+                        <div class="col-md-6"><strong>Address:</strong> <span t-out="building.address or '-'"/></div>
+                        <div class="col-md-6"><strong>Stand Number:</strong> <span t-out="building.stand_number or '-'"/></div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

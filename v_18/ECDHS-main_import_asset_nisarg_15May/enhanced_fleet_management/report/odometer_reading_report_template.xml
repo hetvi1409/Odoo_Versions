@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_odometer_reading_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Odometer Reading</h2>
+                        <p><strong>Reference:</strong> <span t-esc="doc.reference"/></p>
+                        <p><strong>Vehicle:</strong> <span t-esc="doc.vehicle_id.name"/> (<span t-esc="doc.vehicle_registration"/>)</p>
+                        <p><strong>Driver:</strong> <span t-esc="doc.driver_id.name"/></p>
+                        <p><strong>Reading Date:</strong> <span t-esc="doc.reading_date"/></p>
+                        <p><strong>Reading Type:</strong> <span t-esc="dict(doc._fields['reading_type'].selection).get(doc.reading_type)"/></p>
+                        <p><strong>Odometer:</strong> <span t-esc="doc.odometer_reading"/> km</p>
+                        <p><strong>Previous Reading:</strong> <span t-esc="doc.previous_reading"/> km</p>
+                        <p><strong>Distance Traveled:</strong> <span t-esc="doc.distance_traveled"/> km</p>
+                        <h3>Fuel &amp; Condition</h3>
+                        <p><strong>Fuel Level:</strong> <span t-esc="dict(doc._fields['fuel_level'].selection).get(doc.fuel_level)"/></p>
+                        <p><strong>Fuel %:</strong> <span t-esc="doc.fuel_percentage"/>%</p>
+                        <p><strong>Vehicle Condition:</strong> <span t-esc="dict(doc._fields['vehicle_condition'].selection).get(doc.vehicle_condition)"/></p>
+                        <p><strong>Issues Noted:</strong> <span t-esc="doc.issues_noted and 'Yes' or 'No'"/></p>
+                        <p t-if="doc.issues_noted" t-esc="doc.issue_description"/>
+                        <h3>Verification</h3>
+                        <p><strong>Recorded By:</strong> <span t-esc="doc.recorded_by_id.name"/></p>
+                        <p><strong>Verified:</strong> <span t-esc="doc.verified and 'Yes' or 'No'"/></p>
+                        <p><strong>Verified By:</strong> <span t-esc="doc.verified_by_id.name"/></p>
+                        <p><strong>Verification Date:</strong> <span t-esc="doc.verification_date"/></p>
+                        <h3>Notes</h3>
+                        <p t-esc="doc.notes"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

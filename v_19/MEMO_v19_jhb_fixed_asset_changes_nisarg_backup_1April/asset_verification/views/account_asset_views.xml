@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.view.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <style>
+                    .o_form_view:not(.o_field_highlight)
+                    .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                    .o_input:not(:hover):not(:focus) {
+                                --o-input-border-color: black !important;
+                                }
+                </style>
+            </xpath>
+            <xpath expr="//div/h1" position="after">
+                <div>
+                    <group string="IDENTIFICATION">
+                        <group>
+                            <field name="asset_type"/>
+                            <field name="classification_type"/>
+                            <field name="allowed_category_ids" invisible="1"/>
+                            <field name="afs_classification"/>
+                            <field name="serial_number"/>
+                            <field name="alternative_ref"/>
+                            <field name="job_location_id"/>
+                            <field name="invoice_number"/>
+                            <field name="room_number_id"/>
+                            <field name="condition"/>
+                            <field name="custodian_id"/>
+                        </group>
+                    </group>
+                </div>
+            </xpath>
+            <xpath expr="//group[@name='current_values']" position="after">
+                <group string="IDENTIFICATION" invisible="1">
+                    <group>
+                        <field name="afs_classification"/>
+                        <field name="classification_type"/>
+                        <field name="asset_type"/>
+                        <field name="serial_number"/>
+                        <field name="alternative_ref"/>
+                        <field name="job_location_id"/>
+                    </group>
+                </group>
+            </xpath>
+
+            <xpath expr="/form//page[@name='impairment_board']" position="after">
+                <page name="Verification History">
+                    <group>
+                        <field name="history_ids">
+                            <list>
+                                <field name="is_verified"/>
+                                <field name="parent_barcode"/>
+                                <field name="past_year"/>
+                                <field name="this_year"/>
+                                <field name="condition" widget="many2many_tags"/>
+                                <field name="location_id"/>
+                                <field name="create_date" string="TimeStamps"/>
+
+                                <!-- button to open the kanban view -->
+                                <button name="open_kanban_view" type="object" class="oe_stat_button" icon="fa-arrow-right">
+                                    <span>View Details</span>
+                                </button>
+                            </list>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+
+            <xpath expr="//button[@name='open_entries']" position="after">
+                <button name="open_employee_record" type="object" class="oe_stat_button" icon="fa-address-card-o" invisible="[('custodian_id','=','False')]">
+                <span>Employee</span>
+                </button>
+            </xpath>
+
+            <xpath expr="/form//button[@name='open_entries']" position="after">
+                <button class="oe_stat_button" icon="fa-camera" type="object" name="open_asset_images">
+                    <span>Asset Images</span>
+                </button>
+            </xpath>
+
+        </field>
+    </record>
+    <record id="view_account_asset_tree" model="ir.ui.view">
+        <field name="name">account.asset.view.tree</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='acquisition_date']" position="after">
+                <field name="is_verified"/>
+                <field name="date_verification"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

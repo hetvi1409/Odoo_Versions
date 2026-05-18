@@ -1,0 +1,90 @@
+<odoo>
+    <data>
+        <record id="mail_template_requisition_submit" model="mail.template">
+            <field name="name">Requisition Approval Request</field>
+            <field name="model_id" ref="recruitment_enhancement.model_hr_job"/>
+            <field name="subject">{{ object.name }} - {{ ctx.get('stage', 'Approval') }} Request</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_cc">{{ ','.join(filter(None, object.approval_line_ids.mapped('user_id.email'))) or '' }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello Approvers,
+                        <br/>
+                        <br/>
+                        <p>
+                            You have received a Recruitment Requisition
+                            <strong><t t-out="object.name or ''">REQ-0001</t></strong>
+                            <t t-out="ctx.get('request', 'approval')"/> request at stage
+                            <strong><t t-out="ctx.get('stage', '')"/></strong>.
+                        </p>
+                        <p>You can open the requisition using the link below:</p>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="object.create_uid.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+<!--            <field name="auto_delete" eval="False"/>-->
+        </record>
+
+        <record id="mail_template_requisition_returned" model="mail.template">
+            <field name="name">Requisition Returned/Rejection Notice</field>
+            <field name="model_id" ref="recruitment_enhancement.model_hr_job"/>
+            <field name="subject">Requisition Returned: {{ object.name }}</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_cc">{{ ','.join(filter(None, object.approval_line_ids.mapped('user_id.email'))) or '' }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello Approvers,
+                        <br/>
+                        <br/>
+                        <p>
+                            Requisition <strong><t t-out="object.name or ''">REQ-0001</t></strong>
+                            was returned/rejected at stage <strong><t t-out="ctx.get('stage', '')"/></strong>.
+                        </p>
+                        <p>Feedback: <t t-out="ctx.get('reason', 'No feedback')"/></p>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="user.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+<!--            <field name="auto_delete" eval="False"/>-->
+        </record>
+        <record id="mail_template_requisition_line_update" model="mail.template">
+            <field name="name">Requisition Line Update Notification</field>
+            <field name="model_id" ref="recruitment_enhancement.model_hr_job"/>
+            <field name="subject">Requisition {{ object.name }} has been {{ ctx.get('status', 'updated') }}</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_cc">{{ ','.join(filter(None, object.approval_line_ids.mapped('user_id.email'))) or '' }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello Approvers,
+                        <br/>
+                        <br/>
+                        <p>
+                            Requisition <strong><t t-out="object.name or ''">REQ-0001</t></strong>
+                            was <strong><t t-out="ctx.get('status', '')"/></strong> by <t t-out="ctx.get('action_user', 'a user')"/>.
+                        </p>
+                        <t t-if="ctx.get('reason')">
+                            <p>Reason/Feedback: <t t-out="ctx.get('reason')"/></p>
+                        </t>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="user.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+<!--            <field name="auto_delete" eval="False"/>-->
+        </record>
+    </data>
+</odoo>

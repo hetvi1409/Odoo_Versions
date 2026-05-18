@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Daily Checklist Report Template -->
+    <template id="report_daily_checklist_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="text-center">
+                            <strong>JPC VEHICLE CHECK LIST</strong>
+                        </h2>
+                    </div>
+                </div>
+
+                <table class="table table-bordered mt-3">
+                    <tbody>
+                        <tr>
+                            <td><strong>Date</strong></td>
+                            <td><span t-field="o.date"/></td>
+                            <td><strong>Depot Name</strong></td>
+                            <td><span t-field="o.depot_name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Region</strong></td>
+                            <td><span t-field="o.region"/></td>
+                            <td><strong>Driver</strong></td>
+                            <td><span t-field="o.driver_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vehicle</strong></td>
+                            <td><span t-field="o.vehicle_id.name"/></td>
+                            <td><strong>SAP No</strong></td>
+                            <td><span t-field="o.sap_no"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Odometer</strong></td>
+                            <td colspan="3"><span t-field="o.odometer_reading"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Checklist Item</th>
+                            <th style="text-align:center;">Yes</th>
+                            <th style="text-align:center;">No</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>License, COF, Operator Card Valid</td>
+                            <td style="text-align:center;"><t t-if="o.license_cof_valid == 'yes'">X</t></td>
+                            <td style="text-align:center;"><t t-if="o.license_cof_valid == 'no'">X</t></td>
+                        </tr>
+                        <tr>
+                            <td>All tyres roadworthy, spare included</td>
+                            <td style="text-align:center;"><t t-if="o.tyres_roadworthy == 'yes'">X</t></td>
+                            <td style="text-align:center;"><t t-if="o.tyres_roadworthy == 'no'">X</t></td>
+                        </tr>
+                        <tr>
+                            <td>All wheel nuts present and secure</td>
+                            <td style="text-align:center;"><t t-if="o.wheel_nuts_secure == 'yes'">X</t></td>
+                            <td style="text-align:center;"><t t-if="o.wheel_nuts_secure == 'no'">X</t></td>
+                        </tr>
+                        <tr>
+                            <td>Logbook up to date</td>
+                            <td style="text-align:center;"><t t-if="o.logbook_up_to_date == 'yes'">X</t></td>
+                            <td style="text-align:center;"><t t-if="o.logbook_up_to_date == 'no'">X</t></td>
+                        </tr>
+                        <tr>
+                            <td>Check for damage on the vehicle</td>
+                            <td style="text-align:center;"><t t-if="o.damage_check == 'yes'">X</t></td>
+                            <td style="text-align:center;"><t t-if="o.damage_check == 'no'">X</t></td>
+                        </tr>
+                        <tr>
+                            <td>Sufficient fuel in vehicle</td>
+                            <td style="text-align:center;"><t t-if="o.sufficient_fuel == 'yes'">X</t></td>
+                            <td style="text-align:center;"><t t-if="o.sufficient_fuel == 'no'">X</t></td>
+                        </tr>
+                        <tr>
+                            <td>All lights working</td>
+                            <td style="text-align:center;"><t t-if="o.lights_working == 'yes'">X</t></td>
+                            <td style="text-align:center;"><t t-if="o.lights_working == 'no'">X</t></td>
+                        </tr>
+                        <tr>
+                            <td>Number plates</td>
+                            <td style="text-align:center;"><t t-if="o.number_plates == 'yes'">X</t></td>
+                            <td style="text-align:center;"><t t-if="o.number_plates == 'no'">X</t></td>
+                        </tr>
+                        <tr>
+                            <td>Any leaks on the vehicle</td>
+                            <td style="text-align:center;"><t t-if="o.vehicle_leaks == 'yes'">X</t></td>
+                            <td style="text-align:center;"><t t-if="o.vehicle_leaks == 'no'">X</t></td>
+                        </tr>
+                        <tr>
+                            <td>Jack and wheel spanner</td>
+                            <td style="text-align:center;"><t t-if="o.jack_and_spanner == 'yes'">X</t></td>
+                            <td style="text-align:center;"><t t-if="o.jack_and_spanner == 'no'">X</t></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <strong>Defects Reported:</strong> <span t-field="o.defects_reported"/>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <strong>Notes:</strong>
+                        <p t-field="o.notes"/>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-6 text-center">
+                        <p>_____________________</p>
+                        <p><strong>Driver Signature</strong></p>
+                    </div>
+                    <div class="col-6 text-center">
+                        <p>_____________________</p>
+                        <p><strong>Transport Officer Signature</strong></p>
+                    </div>
+                </div>
+
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_daily_checklist">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="fleet_vehicle_inspection_management.report_daily_checklist_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

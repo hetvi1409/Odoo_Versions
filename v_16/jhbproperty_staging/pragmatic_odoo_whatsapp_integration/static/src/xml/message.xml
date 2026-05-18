@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="whatsapp.Message" owl="1">
+        <t t-if="messageView">
+            <div class="o_Message_wp position-relative py-1"
+                t-att-class="{
+                    'o_Message_active': messageView.isActive,
+                    'o-clicked': messageView.messagingAsClickedMessageView,
+                    'o-discussion': messageView.message.isDiscussionOrNotification,
+                    'o-has-message-selection': messageView.messageListViewItemOwner and messageView.messageListViewItemOwner.messageListViewOwner.threadViewOwner.replyingToMessageView,
+                    'o-highlighted': messageView.message.isHighlighted or messageView.isHighlighted,
+                    'o-isReplyHighlighted bg-view shadow-lg': messageView.isHighlighted,
+                    'o-isDeviceSmall': messaging.device.isSmall,
+                    'o-not-discussion': !messageView.message.isDiscussionOrNotification,
+                    'o-notification': messageView.message.message_type === 'notification',
+                    'o-selected': messageView.isSelected,
+                    'o-squashed pt-1': messageView.isSquashed,
+                    'o-starred': messageView.message.isStarred,
+                    'o-currentAuthor': messageView.message.isCurrentUserOrGuestAuthor,
+                    'mt-1': !messageView.isSquashed and messageView.messageListViewItemOwner,
+                    'px-3': !messageView.isInChatWindow,
+                    'px-1': messageView.isInChatWindow,
+                    'opacity-50': (messageView.messageListViewItemOwner and messageView.messageListViewItemOwner.messageListViewOwner.threadViewOwner.replyingToMessageView) and !messageView.isSelected,
+                }" t-attf-class="{{ messageView.extraClass }} {{ className }}" role="group" t-att-aria-label="messageView.message.messageTypeText" t-on-click="messageView.onClick" t-on-mouseenter="messageView.onMouseenter" t-on-mouseleave="messageView.onMouseleave" t-att-data-id="messageView.message.id" t-att-data-message-id="messageView.message.id"
+                t-ref="root"
+            >
+                <div class="o_Message_inReplyToWrap" t-att-class="{ 'me-5': messageView.isInDiscuss or messageView.isInChatWindowAndIsAlignedLeft, 'd-flex justify-content-end ms-5': messageView.isInChatWindowAndIsAlignedRight }">
+                    <MessageInReplyToView t-if="messageView.messageInReplyToView" record="messageView.messageInReplyToView" className="'mb-1'" classNameObj="{ 'me-5': messageView.isInChatWindowAndIsAlignedLeft, 'ms-5': messageView.isInChatWindowAndIsAlignedRight }"/>
+                </div>
+                <t t-if="messageView.message.author === messaging.currentPartner">
+                    <div class="position-relative d-flex flex-shrink-0" style="margin-left: auto;" t-att-class="{ 'flex-row-reverse': messageView.isInChatWindowAndIsAlignedRight }">
+                        <div class="o_Message_core flex-grow-1">
+                            <t t-if="!messageView.isSquashed">
+                                <div class="o_Message_header d-flex flex-wrap align-items-baseline" t-att-class="{ 'justify-content-end': messageView.isInChatWindowAndIsAlignedRight }">
+                                    <t t-if="messageView.message.date">
+                                        <small class="o_Message_date o_Message_headerDate text-muted opacity-50" t-att-class="{ 'o-message-selected': messageView.isSelected, 'me-2': !(messageView.isInChatWindowAndIsAlignedRight) }" t-att-title="messageView.message.datetime">
+                                            <span t-if="messageView.isShowingAuthorName">-</span> <t t-esc="messageView.dateFromNow"/>
+                                        </small>
+                                    </t>
+                                    <t t-if="messageView.messageSeenIndicatorView">
+                                        <MessageSeenDashboard className="'o_Message_seenIndicator ms-1'" record="messageView.messageSeenIndicatorView"/>
+                                    </t>
+                                    <t t-if="messageView.messageListViewItemOwner and messageView.message.originThread and messageView.message.originThread !== messageView.messageListViewItemOwner.messageListViewOwner.threadViewOwner.thread">
+                                        <small class="o_Message_originThread me-2" t-att-class="{ 'o-message-selected text-600': messageView.isSelected, 'text-500': !messageView.isSelected }">
+                                            <t t-if="messageView.message.originThread.model === 'mail.channel'">
+                                                (from <a class="o_Message_originThreadLink fs-6" t-att-href="messageView.message.originThread.url" t-on-click="messageView.onClickOriginThread"><t t-if="messageView.message.originThread.displayName">#<t t-esc="messageView.message.originThread.displayName"/></t><t t-else="">channel</t></a>)
+                                            </t>
+                                            <t t-else="">
+                                                on <a class="o_Message_originThreadLink fs-6" t-att-href="messageView.message.originThread.url" t-on-click="messageView.onClickOriginThread"><t t-if="messageView.message.originThread.displayName"><t t-esc="messageView.message.originThread.displayName"/></t><t t-else="">document</t></a>
+                                            </t>
+                                        </small>
+                                    </t>
+                                    <t t-if="messageView.messageListViewItemOwner and messageView.message.originThread and messageView.message.originThread === messageView.messageListViewItemOwner.messageListViewOwner.threadViewOwner.thread and messageView.message.notifications.length > 0">
+                                        <div t-att-class="{ 'ms-2': messageView.isInChatWindowAndIsAlignedRight }">
+                                            <t t-if="messageView.message.failureNotifications.length > 0">
+                                                <span class="o_Message_notificationIconClickable o-error cursor-pointer text-danger" role="button" tabindex="0" t-on-click="messageView.onClickFailure">
+                                                    <i class="o_Message_notificationIcon" t-att-class="messageView.failureNotificationIconClassName" role="img" aria-label="Delivery failure"/> <span t-if="messageView.failureNotificationIconLabel" t-out="messageView.failureNotificationIconLabel"/>
+                                                </span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="o_Message_notificationIconClickable text-600 cursor-pointer" t-on-click="messageView.onClickNotificationIcon" t-ref="notificationIcon">
+                                                    <i class="o_Message_notificationIcon" t-att-class="messageView.notificationIconClassName"/> <span t-if="messageView.notificationIconLabel" t-out="messageView.notificationIconLabel"/>
+                                                </span>
+                                            </t>
+                                        </div>
+                                    </t>
+                                </div>
+                            </t> 
+                            <WhatsappAttachmentList t-if="messageView.attachmentList" record="messageView.attachmentList" className="'position-relative'"/>
+                            <LinkPreviewListView t-if="messageView.linkPreviewListView" record="messageView.linkPreviewListView"/>
+                            <div t-if="messageView.message.messageReactionGroups.length > 0" class="position-relative d-flex flex-wrap"
+                            t-att-class="{ 'flex-row-reverse me-3': messageView.isInChatWindowAndIsAlignedRight, 'ms-3': !messageView.isInChatWindowAndIsAlignedRight and (messageView.message.isDiscussionOrNotification or messageView.message.message_type === 'sms')}" t-attf-class="{{ messageView.message.isDiscussionOrNotification or messageView.message.message_type === 'sms' ? 'mt-n2' : 'mt-1' }}">
+                                <t t-foreach="messageView.message.messageReactionGroups" t-as="messageReactionGroup" t-key="messageReactionGroup.localId">
+                                    <MessageReactionGroup className="'mb-1'" classNameObj="{ 'ms-1': messageView.isInChatWindowAndIsAlignedRight, 'me-1': !(messageView.isInChatWindowAndIsAlignedRight) }" record="messageReactionGroup"/>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="position-relative d-flex flex-shrink-0" style="margin-right: auto;" t-att-class="{ 'flex-row-reverse': messageView.isInChatWindowAndIsAlignedRight }">
+                        <div class="o_Message_core flex-grow-1">
+                            <t t-if="!messageView.isSquashed">
+                                <div class="o_Message_header d-flex flex-wrap align-items-baseline" t-att-class="{ 'justify-content-end': messageView.isInChatWindowAndIsAlignedRight }">
+                                    <t t-if="messageView.message.date">
+                                        <small class="o_Message_date o_Message_headerDate text-muted opacity-50" t-att-class="{ 'o-message-selected': messageView.isSelected, 'me-2': !(messageView.isInChatWindowAndIsAlignedRight) }" t-att-title="messageView.message.datetime">
+                                            <span t-if="messageView.isShowingAuthorName">-</span> <t t-esc="messageView.dateFromNow"/>
+                                        </small>
+                                    </t>
+                                    <t t-if="messageView.messageSeenIndicatorView">
+                                        <MessageSeenDashboard className="'o_Message_seenIndicator ms-1'" record="messageView.message.localId"/>
+                                    </t>
+                                    <t t-if="messageView.messageListViewItemOwner and messageView.message.originThread and messageView.message.originThread !== messageView.messageListViewItemOwner.messageListViewOwner.threadViewOwner.thread">
+                                        <small class="o_Message_originThread me-2" t-att-class="{ 'o-message-selected text-600': messageView.isSelected, 'text-500': !messageView.isSelected }">
+                                            <t t-if="messageView.message.originThread.model === 'mail.channel'">
+                                                (from <a class="o_Message_originThreadLink fs-6" t-att-href="messageView.message.originThread.url" t-on-click="messageView.onClickOriginThread"><t t-if="messageView.message.originThread.displayName">#<t t-esc="messageView.message.originThread.displayName"/></t><t t-else="">channel</t></a>)
+                                            </t>
+                                            <t t-else="">
+                                                on <a class="o_Message_originThreadLink fs-6" t-att-href="messageView.message.originThread.url" t-on-click="messageView.onClickOriginThread"><t t-if="messageView.message.originThread.displayName"><t t-esc="messageView.message.originThread.displayName"/></t><t t-else="">document</t></a>
+                                            </t>
+                                        </small>
+                                    </t>
+                                    <t t-if="messageView.messageListViewItemOwner and messageView.message.originThread and messageView.message.originThread === messageView.messageListViewItemOwner.messageListViewOwner.threadViewOwner.thread and messageView.message.notifications.length > 0">
+                                        <div t-att-class="{ 'ms-2': messageView.isInChatWindowAndIsAlignedRight }">
+                                            <t t-if="messageView.message.failureNotifications.length > 0">
+                                                <span class="o_Message_notificationIconClickable o-error cursor-pointer text-danger" role="button" tabindex="0" t-on-click="messageView.onClickFailure">
+                                                    <i class="o_Message_notificationIcon" t-att-class="messageView.failureNotificationIconClassName" role="img" aria-label="Delivery failure"/> <span t-if="messageView.failureNotificationIconLabel" t-out="messageView.failureNotificationIconLabel"/>
+                                                </span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="o_Message_notificationIconClickable text-600 cursor-pointer" t-on-click="messageView.onClickNotificationIcon" t-ref="notificationIcon">
+                                                    <i class="o_Message_notificationIcon" t-att-class="messageView.notificationIconClassName"/> <span t-if="messageView.notificationIconLabel" t-out="messageView.notificationIconLabel"/>
+                                                </span>
+                                            </t>
+                                        </div>
+                                    </t>
+                                </div>
+                            </t>
+                            <WhatsappAttachmentList t-if="messageView.attachmentList" record="messageView.attachmentList" className="'position-relative'"/>
+                            <LinkPreviewListView t-if="messageView.linkPreviewListView" record="messageView.linkPreviewListView"/>
+                            <div t-if="messageView.message.messageReactionGroups.length > 0" class="position-relative d-flex flex-wrap"
+                            t-att-class="{ 'flex-row-reverse me-3': messageView.isInChatWindowAndIsAlignedRight, 'ms-3': !messageView.isInChatWindowAndIsAlignedRight and (messageView.message.isDiscussionOrNotification or messageView.message.message_type === 'sms')}" t-attf-class="{{ messageView.message.isDiscussionOrNotification or messageView.message.message_type === 'sms' ? 'mt-n2' : 'mt-1' }}">
+                                <t t-foreach="messageView.message.messageReactionGroups" t-as="messageReactionGroup" t-key="messageReactionGroup.localId">
+                                    <MessageReactionGroup className="'mb-1'" classNameObj="{ 'ms-1': messageView.isInChatWindowAndIsAlignedRight, 'me-1': !(messageView.isInChatWindowAndIsAlignedRight) }" record="messageReactionGroup"/>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </t>
+
+</templates>

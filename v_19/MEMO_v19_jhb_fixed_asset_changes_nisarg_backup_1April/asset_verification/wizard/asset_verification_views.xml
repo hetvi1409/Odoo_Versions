@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="asset_verification_view_form" model="ir.ui.view">
+        <field name="name">asset.verification.view.form</field>
+        <field name="model">asset.verification</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button string="Modify" name="action_modify" type="object" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                                    --o-input-border-color: black !important;
+                                    }
+                    </style>
+                    <group>
+                        <div class="alert alert-info o_label_top d-flex align-items-center" style="background-color: #e8f4f8; border: 2px solid #5bc0de; border-radius: 8px; padding: 15px; margin-bottom: 10px;justify-content: center;">
+                            <div class="" style="font-weight: bold; font-size: 16px; color: #31708f;">Asset Current Status:</div>
+                            <div class="" style="margin-left: 10px; font-size: 16px; color: #31708f;">
+                                <field name="asset_last_status" readonly="1"/>
+                            </div>
+                        </div>
+                    </group>
+                    <group>
+                        <field name="asset_id"/>
+                        <field name="barcode_number"/>
+                        <field name="description"/>
+<!--                        <field name="verify" widget='radio'/>-->
+                        <field name="location_id"/>
+                        <field name="condition" widget='many2many_tags'/>
+                        <field name="user_id" readonly="1"/>
+                        <field name="custodian_id"/>
+                        <field name="image_ids">
+                            <list>
+                                <field name="image" widget="image"/>
+                            </list>
+                        </field>
+
+                    </group>
+                </sheet>
+
+                 <footer>
+                    <!-- Existing Cancel Button -->
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    <button string="Verify" name="action_verify" type="object" class="oe_highlight"
+                             invisible="state != 'draft'"/>
+<!--                    <button string="Not Verify" name="action_not_verify" type="object" class="oe_highlight"-->
+<!--                           invisible="state != 'draft'"/>-->
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

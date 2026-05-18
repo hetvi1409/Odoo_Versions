@@ -1,0 +1,1013 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="website_menu_for_sale" model="website.menu">
+        <field name="name">Buy</field>
+        <field name="url">/for-sale</field>
+        <field name="sequence" eval="10"/>
+    </record>
+    <template id="website_property_search_page" name="Property Search Page">
+        <t t-call="website.layout">
+            <div class="property-search-page">
+
+                <!-- Hero Section -->
+                <section class="hero-section text-white position-relative"
+                         style="background-image:url('/property_management_system/static/src/img/bg.jpg');
+                background-size:contain; background-position:0 -100px; height:550px;">
+
+                    <!-- Overlay to darken the image slightly -->
+                    <div class="position-absolute top-0 start-0 w-100 h-100"
+                         style="background: rgba(0, 0, 0, 0.35);"></div>
+
+                    <div class="container h-100 position-relative d-flex flex-column justify-content-end align-items-center text-center pb-4">
+                        <div class="hero-content" style="width: 100%;">
+
+                            <!-- Title -->
+                            <h1 class="fw-bold mb-3">Find Property for Sale</h1>
+
+                            <!-- Tabs -->
+                            <div class="nav nav-tabs justify-content-center mb-4 border-0">
+                                <a class="nav-link active text-white border-0 border-bottom border-3 border-danger bg-transparent px-3"
+                                   href="/for-sale">Buy
+                                </a>
+                                <a class="nav-link text-white bg-transparent px-3"
+                                   href="/for-rent">Rent
+                                </a>
+                            </div>
+
+                            <!-- Search Bar -->
+                            <div style="background-color: #0274be; border-radius: 10px;">
+                                <form action="/for-sale" method="get">
+                                    <div class="search-bar rounded-3 p-3 d-flex flex-wrap justify-content-center align-items-center gap-2"
+                                         style="max-width: 950px; margin: 0 auto;">
+
+                                        <div class="input-group"
+                                             style="flex: 1 1 250px;">
+                                            <select name="province_id"
+                                                    class="form-select"
+                                                    required="true">
+                                                <option value="">Select
+                                                    Province
+                                                </option>
+                                                <t t-foreach="provinces"
+                                                   t-as="p">
+                                                    <option t-att-selected="province_id == p.id"
+                                                            t-att-value="p.id">
+                                                        <t t-esc="p.name"/>
+                                                    </option>
+                                                </t>
+                                            </select>
+                                        </div>
+
+                                        <button type="submit"
+                                                class="btn btn-danger px-4 fw-bold">
+                                            Search
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <!-- Filters row below search bar -->
+
+                                <!-- Bottom text -->
+                                <div class="text-white small mt-2 p-3">
+                                    Click search to browse
+                                    <strong>
+                                        <t t-esc="property_count"/>
+                                    </strong>
+                                    properties
+                                    •
+                                    <a href="#"
+                                       class="text-white text-decoration-underline">
+                                        Clear Filters
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <t t-if="province_name">
+                    <input type="hidden" name="province_id"
+                           t-att-value="province_id"/>
+                    <input type="hidden" name="city_id" t-att-value="city_id"/>
+                    <input type="hidden" name="province_name"
+                           t-att-value="province_name"/>
+                    <input type="hidden" name="city_name"
+                           t-att-value="city_name"/>
+                    <section class="property-region-section py-5 bg-light">
+                        <div class="container">
+                            <!-- Header -->
+                            <div class="mb-4">
+                                <h2 class="fw-bold text-center mb-5"
+                                    style="color: #0d63c9;font-family: ui-monospace;">
+                                    Property for Sale in
+                                    <t t-if="city_name">
+                                        <t t-esc="city_name"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="province_name"/>
+                                    </t>
+
+                                </h2>
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb small">
+                                        <li class="breadcrumb-item">
+                                            <a href="/for-sale"
+                                               class="text-decoration-none text-primary">
+                                                Property for Sale
+                                            </a>
+                                        </li>
+                                        <li class="breadcrumb-item active text-muted"
+                                            aria-current="page">
+
+                                            <t t-if="city_id">
+                                                <a t-att-href="'/for-sale?province_id=%s' % (province_id)"
+                                                   class="text-decoration-none text-primary">
+                                                    <t t-esc="province_name"/>
+                                                </a>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-esc="province_name"/>
+                                            </t>
+                                        </li>
+                                        <t t-if="city_id">
+                                            <li class="breadcrumb-item active text-muted"
+                                                aria-current="page">
+                                                <t t-esc="city_name"/>
+                                            </li>
+                                        </t>
+                                    </ol>
+                                </nav>
+                            </div>
+
+                            <!-- Cities and Areas -->
+                            <div class="row">
+                                <t t-foreach="cities" t-as="city">
+                                    <div class="col-md-3 col-sm-6 mb-3">
+                                        <a t-att-href="'/for-sale?province_id=%s&amp;city_id=%s' % (city.province_id.id, city.id)"
+                                           class="d-block fw-semibold text-primary text-decoration-none hover-underline">
+                                            <i class="bi bi-geo-alt-fill me-1 text-danger"></i>
+                                            <t t-esc="city.name"/>
+                                        </a>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </section>
+                </t>
+                <section class="hero-section text-white position-relative py-5">
+                    <!-- Content -->
+                    <t t-if="properties">
+
+                        Overlay
+                        <div class="position-absolute top-0 start-0 w-100 h-100"
+                             style="background: rgb(215 215 215 / 45%);"></div>
+                        <div class="container position-relative z-1">
+                            <div class="row justify-content-center g-4">
+                                <t t-foreach="properties"
+                                   t-as="unit"> <!-- Limit to 4 -->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card property-card glass-card text-dark border-0 shadow-sm rounded-4 overflow-hidden h-100 hover-scale position-relative">
+
+                                            <!-- Image -->
+                                            <t t-set="img_url">
+                                                <t t-if="unit.image_1920">
+                                                    <t t-esc="'/web/image/product.template/' + str(unit.id) + '/image_1920'"/>
+                                                </t>
+                                                <t t-else="'/web/static/src/img/placeholder.png'"/>
+                                            </t>
+                                            <img t-att-src="img_url"
+                                                 class="card-img-top"
+                                                 alt="Property Image"
+                                                 style="height: 200px; object-fit: cover;"/>
+
+                                            <!-- Card Body -->
+                                            <div class="card-body">
+                                                <h5 class="fw-semibold text-truncate mb-2">
+                                                    <t t-esc="unit.name"/>
+                                                </h5>
+                                                <p class="text-muted small mb-1">
+                                                    Code:
+                                                    <t t-esc="unit.code or '-'"/>
+                                                </p>
+                                                <p class="fw-bold text-primary mb-2">
+                                                    Price:
+                                                    <t t-esc="unit.pricing"/>
+                                                    USD
+                                                </p>
+
+                                                <div class="d-flex flex-wrap small text-muted mb-2">
+                                                    <span class="me-3">
+                                                        <i class="bi bi-building"></i>
+                                                        Floor:
+                                                        <t t-esc="unit.floor or '-'"/>
+                                                    </span>
+                                                    <span>
+                                                        <i class="bi bi-door-closed"></i>
+                                                        Rooms:
+                                                        <t t-esc="unit.rooms or 0"/>
+                                                    </span>
+                                                </div>
+
+                                                <div class="small text-muted mb-3">
+                                                    <i class="bi bi-droplet-half"></i>
+                                                    Bathrooms:
+                                                    <t t-esc="unit.bathrooms or 0"/>
+                                                </div>
+
+                                                <p class="small mb-3 text-secondary">
+                                                    <i class="bi bi-geo-alt"></i>
+                                                    <t t-esc="unit.building_id.name if unit.building_id else 'No Building Info'"/>
+                                                </p>
+
+                                                <div class="text-center">
+                                                    <a t-att-href="'/properties/%s' % unit.id"
+                                                       class="btn btn-outline-primary btn-sm rounded-pill px-4">
+                                                        View Details
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+
+                        </div>
+                    </t>
+                    <t t-if="province_id or city_id">
+                        <t t-if="not properties">
+                            <div class="container py-5 position-relative text-center">
+
+                                <h2 class="fw-bold mb-3 text-primary"
+                                    style="font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;">
+                                    🏡 Property for Sale
+                                </h2>
+
+                                <p class="text-secondary fs-5 mb-4">
+                                    No properties found matching your search
+                                    criteria.
+                                </p>
+
+                                <a href="/for-sale"
+                                   class="btn btn-outline-primary px-4 rounded-pill shadow-sm">
+                                    <i class="bi bi-arrow-left me-1"></i>
+                                    Back to Listings
+                                </a>
+
+                            </div>
+                        </t>
+                    </t>
+                </section>
+                <!-- Discover Section -->
+                <section
+                        class="discover-section py-5 bg-light property_discover">
+                    <div class="container text-center">
+                        <h3 class="fw-semibold mb-4" style="color: #0274be !important;">Discover all
+                            things property
+                        </h3>
+
+                        <!-- Toggle Buttons -->
+                        <div class="btn-group mb-5" role="group"
+                             aria-label="Property Type">
+                            <button type="button"
+                                    class="buy btn btn-toggle active"
+                                    t-on-click="_onClickBuying"
+                                    data-target="buying">Buying
+                            </button>
+                            <button type="button" class="btn btn-toggle rent"
+                                    t-on-click="_onClickRenting"
+                                    data-target="renting">Renting
+                            </button>
+                            <button type="button" class="btn btn-toggle sell"
+                                    t-on-click="_onClickSelling"
+                                    data-target="selling">Selling
+                            </button>
+                        </div>
+
+                        <!-- Buying Section -->
+                        <div id="buying" class="property-section active">
+                            <div class="row justify-content-center">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+
+                                        <img src="/property_management_system/static/src/img/property_alert.png"
+                                             alt="Mortgage" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Property Alerts
+                                        </h5>
+                                        <p class="text-muted mb-4">
+                                            Sign up for an account and receive
+                                            property alerts when new properties
+                                            match your search criteria.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            Sign Up Now
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/property_price.png"
+                                             alt="Properties" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Sold Prices
+                                        </h5>
+                                        <p class="text-muted mb-4">
+                                            Find the value of any property in
+                                            South Africa.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            View Sold Prices
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/looking_to_buy.png"
+                                             alt="Guides" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Looking To Buy?
+                                        </h5>
+                                        <p class="text-muted mb-4">
+                                            Get all the information you need
+                                            when buying a property with our
+                                            comprehensive property guides.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            View Property Guides
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Renting Section -->
+                        <div id="renting" class="property-section">
+                            <div class="row justify-content-center">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/agent.png"
+                                             alt="Agents" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Find Letting Agents
+                                        </h5>
+                                        <p class="text-muted mb-4">Find trusted
+                                            letting agents near you.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            Search Letting Agents
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+
+                                        <img src="/property_management_system/static/src/img/property_alert.png"
+                                             alt="Mortgage" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Property Alerts
+                                        </h5>
+                                        <p class="text-muted mb-4">
+                                            Sign up for an account and receive
+                                            property alerts when new properties
+                                            match your search criteria.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            Sign Up Now
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/advice.png"
+                                             alt="Advice" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Rental Advice
+                                        </h5>
+                                        <p class="text-muted mb-4">Explore our
+                                            collection of helpful articles and
+                                            valuable tips to navigate the rental
+                                            market like a pro.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            Explore Articles
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selling Section -->
+                        <div id="selling" class="property-section">
+                            <div class="row justify-content-center">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828950.png"
+                                             alt="Valuation" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Automated Property Valuations
+                                        </h5>
+                                        <p class="text-muted mb-4">Curious about
+                                            the value of your property? Get a
+                                            free automated property valuation
+                                            today!
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            Get Started
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/property_price.png"
+                                             alt="Properties" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Sold Prices
+                                        </h5>
+                                        <p class="text-muted mb-4">
+                                            Find the value of any property in
+                                            South Africa.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            View Sold Prices
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/looking_to_buy.png"
+                                             alt="Promotion" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Looking to sell?
+                                        </h5>
+                                        <p class="text-muted mb-4">Get all the
+                                            information you need when selling a
+                                            property with our comprehensive
+                                            property guides.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            View Property Guide
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Styles -->
+                <style>
+                    .btn-toggle {
+                    background-color: transparent;
+                    border: none;
+                    color: #6c757d;
+                    font-weight: 500;
+                    padding: 0.5rem 1.5rem;
+                    border-bottom: 2px solid transparent;
+                    transition: all 0.3s ease;
+                    }
+                    .btn-toggle:hover {
+                    color: #0d6efd;
+                    }
+                    .btn-toggle.active {
+                    color: #0d6efd;
+                    border-bottom: 2px solid #0d6efd;
+                    }
+                    .property-section {
+                    display: none;
+                    }
+                    .property-section.active {
+                    display: block;
+                    }
+                    .card {
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    }
+                    .card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+                    }
+                </style>
+
+            </div>
+        </t>
+    </template>
+    <record id="website_menu_for_rent" model="website.menu">
+        <field name="name">Rent</field>
+        <field name="url">/for-rent</field>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <template id="website_property_search_rent_page" name="Property Search Page">
+        <t t-call="website.layout">
+            <div class="property-search-page">
+
+                <!-- Hero Section -->
+                <section class="hero-section text-white position-relative"
+                         style="background-image:url('/property_management_system/static/src/img/bg.jpg');
+                background-size:contain; background-position:0 -100px; height:550px;">
+
+                    <!-- Overlay to darken the image slightly -->
+                    <div class="position-absolute top-0 start-0 w-100 h-100"
+                         style="background: rgba(0, 0, 0, 0.35);"></div>
+
+                    <div class="container h-100 position-relative d-flex flex-column justify-content-end align-items-center text-center pb-4">
+                        <div class="hero-content" style="width: 100%;">
+
+                            <!-- Title -->
+                            <h1 class="fw-bold mb-3">Find Property for Sale</h1>
+
+                            <!-- Tabs -->
+                            <div class="nav nav-tabs justify-content-center mb-4 border-0">
+                                <a class="nav-link text-white bg-transparent px-3"
+                                   href="/for-sale">Buy
+                                </a>
+                                <a class="nav-link active text-white border-0 border-bottom border-3 border-danger bg-transparent px-3"
+                                   href="/for-rent">Rent
+                                </a>
+                            </div>
+
+                            <!-- Search Bar -->
+                            <div style="background-color: #0274be; border-radius: 10px;">
+                                <form action="/for-rent" method="get">
+                                    <div class="search-bar rounded-3 p-3 d-flex flex-wrap justify-content-center align-items-center gap-2"
+                                         style="max-width: 950px; margin: 0 auto;">
+
+                                        <div class="input-group"
+                                             style="flex: 1 1 250px;">
+                                            <select name="province_id"
+                                                    class="form-select"
+                                                    required="true">
+                                                <option value="">Select
+                                                    Province
+                                                </option>
+                                                <t t-foreach="provinces"
+                                                   t-as="p">
+                                                    <option t-att-selected="province_id == p.id"
+                                                            t-att-value="p.id">
+                                                        <t t-esc="p.name"/>
+                                                    </option>
+                                                </t>
+                                            </select>
+                                        </div>
+
+                                        <button type="submit"
+                                                class="btn btn-danger px-4 fw-bold">
+                                            Search
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <!-- Bottom text -->
+                                <div class="text-white small mt-2 p-3">
+                                    Click search to browse
+                                    <strong>
+                                        <t t-esc="property_count"/>
+                                    </strong>
+                                    properties
+                                    •
+                                    <a href="#"
+                                       class="text-white text-decoration-underline">
+                                        Clear Filters
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <t t-if="province_name">
+                    <input type="hidden" name="province_id"
+                           t-att-value="province_id"/>
+                    <input type="hidden" name="city_id" t-att-value="city_id"/>
+                    <input type="hidden" name="province_name"
+                           t-att-value="province_name"/>
+                    <input type="hidden" name="city_name"
+                           t-att-value="city_name"/>
+                    <section class="property-region-section py-5 bg-light">
+                        <div class="container">
+                            <!-- Header -->
+                            <div class="mb-4">
+                                <h2 class="fw-bold text-center mb-5"
+                                    style="color: #0d63c9;font-family: ui-monospace;">
+                                    Property for Sale in
+                                    <t t-if="city_name">
+                                        <t t-esc="city_name"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="province_name"/>
+                                    </t>
+
+                                </h2>
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb small">
+                                        <li class="breadcrumb-item">
+                                            <a href="/for-rent"
+                                               class="text-decoration-none text-primary">
+                                                Property for Sale
+                                            </a>
+                                        </li>
+                                        <li class="breadcrumb-item active text-muted"
+                                            aria-current="page">
+
+                                            <t t-if="city_id">
+                                                <a t-att-href="'/for-rent?province_id=%s' % (province_id)"
+                                                   class="text-decoration-none text-primary">
+                                                    <t t-esc="province_name"/>
+                                                </a>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-esc="province_name"/>
+                                            </t>
+                                        </li>
+                                        <t t-if="city_id">
+                                            <li class="breadcrumb-item active text-muted"
+                                                aria-current="page">
+                                                <t t-esc="city_name"/>
+                                            </li>
+                                        </t>
+                                    </ol>
+                                </nav>
+                            </div>
+
+                            <!-- Cities and Areas -->
+                            <div class="row">
+                                <t t-foreach="cities" t-as="city">
+                                    <div class="col-md-3 col-sm-6 mb-3">
+                                        <a t-att-href="'/for-rent?province_id=%s&amp;city_id=%s' % (city.province_id.id, city.id)"
+                                           class="d-block fw-semibold text-primary text-decoration-none hover-underline">
+                                            <i class="bi bi-geo-alt-fill me-1 text-danger"></i>
+                                            <t t-esc="city.name"/>
+                                        </a>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </section>
+                </t>
+                <section class="hero-section text-white position-relative py-5">
+                    <!-- Content -->
+                    <t t-if="properties">
+
+                        Overlay
+                        <div class="position-absolute top-0 start-0 w-100 h-100"
+                             style="background: rgb(215 215 215 / 45%);"></div>
+                        <div class="container position-relative z-1">
+                            <div class="row justify-content-center g-4">
+                                <t t-foreach="properties"
+                                   t-as="unit"> <!-- Limit to 4 -->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card property-card glass-card text-dark border-0 shadow-sm rounded-4 overflow-hidden h-100 hover-scale position-relative">
+
+                                            <!-- Image -->
+                                            <t t-set="img_url">
+                                                <t t-if="unit.image_1920">
+                                                    <t t-esc="'/web/image/product.template/' + str(unit.id) + '/image_1920'"/>
+                                                </t>
+                                                <t t-else="'/web/static/src/img/placeholder.png'"/>
+                                            </t>
+                                            <img t-att-src="img_url"
+                                                 class="card-img-top"
+                                                 alt="Property Image"
+                                                 style="height: 200px; object-fit: cover;"/>
+
+                                            <!-- Card Body -->
+                                            <div class="card-body">
+                                                <h5 class="fw-semibold text-truncate mb-2">
+                                                    <t t-esc="unit.name"/>
+                                                </h5>
+                                                <p class="text-muted small mb-1">
+                                                    Code:
+                                                    <t t-esc="unit.code or '-'"/>
+                                                </p>
+                                                <p class="fw-bold text-primary mb-2">
+                                                    Price:
+                                                    <t t-esc="unit.pricing"/>
+                                                    USD
+                                                </p>
+
+                                                <div class="d-flex flex-wrap small text-muted mb-2">
+                                                    <span class="me-3">
+                                                        <i class="bi bi-building"></i>
+                                                        Floor:
+                                                        <t t-esc="unit.floor or '-'"/>
+                                                    </span>
+                                                    <span>
+                                                        <i class="bi bi-door-closed"></i>
+                                                        Rooms:
+                                                        <t t-esc="unit.rooms or 0"/>
+                                                    </span>
+                                                </div>
+
+                                                <div class="small text-muted mb-3">
+                                                    <i class="bi bi-droplet-half"></i>
+                                                    Bathrooms:
+                                                    <t t-esc="unit.bathrooms or 0"/>
+                                                </div>
+
+                                                <p class="small mb-3 text-secondary">
+                                                    <i class="bi bi-geo-alt"></i>
+                                                    <t t-esc="unit.building_id.name if unit.building_id else 'No Building Info'"/>
+                                                </p>
+
+                                                <div class="text-center">
+                                                    <a t-att-href="'/properties/%s' % unit.id"
+                                                       class="btn btn-outline-primary btn-sm rounded-pill px-4">
+                                                        View Details
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+
+                        </div>
+                    </t>
+                    <t t-if="province_id or city_id">
+                        <t t-if="not properties">
+                            <div class="container py-5 position-relative text-center">
+
+                                <h2 class="fw-bold mb-3 text-primary"
+                                    style="font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;">
+                                    🏡 Property for Sale
+                                </h2>
+
+                                <p class="text-secondary fs-5 mb-4">
+                                    No properties found matching your search
+                                    criteria.
+                                </p>
+
+                                <a href="/for-sale"
+                                   class="btn btn-outline-primary px-4 rounded-pill shadow-sm">
+                                    <i class="bi bi-arrow-left me-1"></i>
+                                    Back to Listings
+                                </a>
+
+                            </div>
+                        </t>
+                    </t>
+                </section>
+                <!-- Discover Section -->
+                <section
+                        class="discover-section py-5 bg-light property_discover">
+                    <div class="container text-center">
+                        <h3 class="fw-semibold mb-4" style="color: #0274be !important;">Discover all
+                            things property
+                        </h3>
+
+                        <!-- Toggle Buttons -->
+                        <div class="btn-group mb-5" role="group"
+                             aria-label="Property Type">
+                            <button type="button"
+                                    class="buy btn btn-toggle active"
+                                    t-on-click="_onClickBuying"
+                                    data-target="buying">Buying
+                            </button>
+                            <button type="button" class="btn btn-toggle rent"
+                                    t-on-click="_onClickRenting"
+                                    data-target="renting">Renting
+                            </button>
+                            <button type="button" class="btn btn-toggle sell"
+                                    t-on-click="_onClickSelling"
+                                    data-target="selling">Selling
+                            </button>
+                        </div>
+
+                        <!-- Buying Section -->
+                        <div id="buying" class="property-section active">
+                            <div class="row justify-content-center">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+
+                                        <img src="/property_management_system/static/src/img/property_alert.png"
+                                             alt="Mortgage" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Property Alerts
+                                        </h5>
+                                        <p class="text-muted mb-4">
+                                            Sign up for an account and receive
+                                            property alerts when new properties
+                                            match your search criteria.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            Sign Up Now
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/property_price.png"
+                                             alt="Properties" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Sold Prices
+                                        </h5>
+                                        <p class="text-muted mb-4">
+                                            Find the value of any property in
+                                            South Africa.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            View Sold Prices
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/looking_to_buy.png"
+                                             alt="Guides" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Looking To Buy?
+                                        </h5>
+                                        <p class="text-muted mb-4">
+                                            Get all the information you need
+                                            when buying a property with our
+                                            comprehensive property guides.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            View Property Guides
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Renting Section -->
+                        <div id="renting" class="property-section">
+                            <div class="row justify-content-center">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/agent.png"
+                                             alt="Agents" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Find Letting Agents
+                                        </h5>
+                                        <p class="text-muted mb-4">Find trusted
+                                            letting agents near you.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            Search Letting Agents
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+
+                                        <img src="/property_management_system/static/src/img/property_alert.png"
+                                             alt="Mortgage" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Property Alerts
+                                        </h5>
+                                        <p class="text-muted mb-4">
+                                            Sign up for an account and receive
+                                            property alerts when new properties
+                                            match your search criteria.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            Sign Up Now
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/advice.png"
+                                             alt="Advice" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Rental Advice
+                                        </h5>
+                                        <p class="text-muted mb-4">Explore our
+                                            collection of helpful articles and
+                                            valuable tips to navigate the rental
+                                            market like a pro.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            Explore Articles
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selling Section -->
+                        <div id="selling" class="property-section">
+                            <div class="row justify-content-center">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828950.png"
+                                             alt="Valuation" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Automated Property Valuations
+                                        </h5>
+                                        <p class="text-muted mb-4">Curious about
+                                            the value of your property? Get a
+                                            free automated property valuation
+                                            today!
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            Get Started
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/property_price.png"
+                                             alt="Properties" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Sold Prices
+                                        </h5>
+                                        <p class="text-muted mb-4">
+                                            Find the value of any property in
+                                            South Africa.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            View Sold Prices
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                                        <img src="/property_management_system/static/src/img/looking_to_buy.png"
+                                             alt="Promotion" width="120"
+                                             class="mb-3 mx-auto"/>
+                                        <h5 class="fw-semibold text-dark mb-2">
+                                            Looking to sell?
+                                        </h5>
+                                        <p class="text-muted mb-4">Get all the
+                                            information you need when selling a
+                                            property with our comprehensive
+                                            property guides.
+                                        </p>
+                                        <button class="btn btn-outline-primary px-4 rounded-pill">
+                                            View Property Guide
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Styles -->
+                <style>
+                    .btn-toggle {
+                    background-color: transparent;
+                    border: none;
+                    color: #6c757d;
+                    font-weight: 500;
+                    padding: 0.5rem 1.5rem;
+                    border-bottom: 2px solid transparent;
+                    transition: all 0.3s ease;
+                    }
+                    .btn-toggle:hover {
+                    color: #0d6efd;
+                    }
+                    .btn-toggle.active {
+                    color: #0d6efd;
+                    border-bottom: 2px solid #0d6efd;
+                    }
+                    .property-section {
+                    display: none;
+                    }
+                    .property-section.active {
+                    display: block;
+                    }
+                    .card {
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    }
+                    .card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+                    }
+                </style>
+
+            </div>
+        </t>
+    </template>
+
+</odoo>

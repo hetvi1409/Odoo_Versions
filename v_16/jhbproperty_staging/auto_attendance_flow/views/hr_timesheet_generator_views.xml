@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_hr_timesheet_generator_form" model="ir.ui.view">
+        <field name="name">hr.timesheet.generator.form</field>
+        <field name="model">hr.timesheet.generator</field>
+        <field name="arch" type="xml">
+            <form string="Timesheet Generator">
+                <header>
+                    <button name="action_generate_timesheets"
+                            string="Generate Timesheets"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_reset_to_draft"
+                            string="Reset to Draft"
+                            type="object"
+                            attrs="{'invisible': [('state', '!=', 'generated')]}"/>
+                    <button name="action_approve_timesheet" type="object" class="btn-primary" string="Sign &amp; Approve"
+                            attrs="{'invisible': &quot;[('state', '!=', 'generated')]&quot;}"/>
+                    <button name="action_open_reject_wizard" type="object" class="btn-primary" string="Reject"
+                            attrs="{'invisible': &quot;[('state', '!=', 'generated')]&quot;}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated"/>
+                </header>
+                <sheet>
+                    <group invisible="1">
+                        <field name="employee_id"/>
+                        <field name="show_manager_tree"/>
+                        <field name="show_user_tree"/>
+                    </group>
+
+                    <div class="timesheet-register-theme timesheet-register-header">
+                        <div class="timesheet-register-title-wrap">
+                            <div class="timesheet-register-logo-block">
+                                  <img src="/auto_attendance_flow/static/src/img/joburg_property_logo.png"
+                                     alt="Joburg Property Company"
+                                     class="timesheet-register-logo"/>
+                            </div>
+                            <div class="timesheet-register-title">DAILY ATTENDANCE REGISTER</div>
+                        </div>
+                        <table class="table table-bordered timesheet-register-info-table">
+                            <tbody>
+                                <tr>
+                                    <th>Month:</th>
+                                    <td><field name="month" nolabel="1"/></td>
+                                    <th>Year:</th>
+                                    <td><field name="year" nolabel="1"/></td>
+                                </tr>
+                                <tr>
+                                    <th>Department:</th>
+                                    <td><field name="department_id" nolabel="1"/></td>
+                                    <th>Branch/Directorate:</th>
+                                    <td><field name="branch_directorate_id" nolabel="1"/></td>
+                                </tr>
+                                <tr>
+                                    <th>Surname:</th>
+                                    <td><field name="surname" nolabel="1"/></td>
+                                    <th>Name/s:</th>
+                                    <td><field name="name" nolabel="1"/></td>
+                                </tr>
+                                <tr>
+                                    <th>SAP/Employee Number:</th>
+                                    <td><field name="sap_employee_number" nolabel="1"/></td>
+                                    <th>Contact Telephone or Cell Number:</th>
+                                    <td><field name="contact_phone" widget="phone" nolabel="1"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <field name="rejection_reason" attrs="{'invisible': [('state', '!=', 'rejected')]}"/>
+
+                    <!-- Attendance Lines -->
+                    <div class="timesheet-register-theme">
+                    <notebook>
+                        <page string="Generated Timesheets">
+                            <div class="table-responsive timesheet-generated-table">
+                                <field name="attendance_ids" groups="hr.group_hr_user,hr.group_hr_manager,base.group_system"
+                                    context="{'default_employee_id': employee_id}"
+                                    attrs="{'readonly': [('state', '!=', 'generated')],'invisible': [('show_manager_tree', '=', False)]}"
+                                    options="{'no_create': False, 'no_create_edit': False, 'no_open': True}">
+                                 <tree editable="bottom" decoration-danger="is_weekend_or_holiday" class="table table-bordered">
+                                     <field name="employee_id" invisible="0" readonly="1"/>
+                                     <field name="attendance_date" readonly="1"/>
+                                     <field name="attendance_presence_status" string="Status" widget="radio" options="{'horizontal': true}"/>
+                                     <field name="is_weekend_or_holiday" invisible="1"/>
+                                 </tree>
+                                </field>
+                            </div>
+                            <div class="table-responsive timesheet-generated-table">
+                                <field name="attendance_ids"
+                                    groups="base.group_user,hr_attendance.group_hr_attendance_kiosk"
+                                    context="{'default_employee_id': employee_id}"
+                                    attrs="{'readonly': [('state', '!=', 'generated')],'invisible': [('show_user_tree', '=', False)]}"
+                                    options="{'no_create': True, 'no_delete': True, 'no_open': True}">
+                                 <tree editable="bottom" decoration-danger="is_weekend_or_holiday" class="table table-bordered">
+                                     <field name="employee_id" invisible="0" readonly="1"/>
+                                     <field name="attendance_date" readonly="1"/>
+                                     <field name="attendance_presence_status" string="Status" widget="radio" options="{'horizontal': true}"/>
+                                     <field name="is_weekend_or_holiday" invisible="1"/>
+                                 </tree>
+                                </field>
+                            </div>
+                        </page>
+                        <page string="Extra Information">
+                            <div class="table-responsive timesheet-generated-table">
+                                <field name="attendance_extra_ids" groups="hr.group_hr_user,hr.group_hr_manager,base.group_system"
+                                    context="{'default_employee_id': employee_id}"
+                                    attrs="{'readonly': [('state', '!=', 'generated')],'invisible': [('show_manager_tree', '=', False)]}"
+                                    options="{'no_create': False, 'no_create_edit': False, 'no_open': True}">
+                                 <tree editable="bottom" decoration-danger="is_weekend_or_holiday" class="table table-bordered">
+                                     <field name="worked_hours" widget="float_time" readonly="1"/>
+                                     <field name="validated_overtime_hours" widget="float_time" readonly="1"/>
+                                     <field name="check_in"
+                                         attrs="{'readonly': [('is_weekend_or_holiday', '=', True), ('is_overtime', '=', False)]}"/>
+                                     <field name="check_out"
+                                         attrs="{'readonly': ['|',('check_in','=',False),('is_weekend_or_holiday', '=', True), ('is_overtime', '=', False)]}"/>
+                                     <field name="is_overtime"/>
+                                     <field name="approved_document_id" domain="[('id', '=', False)]"
+                                         attrs="{'column_invisible': [('is_overtime', '=', False)],'required': [('is_overtime', '=', True)]}"/>
+                                     <field name="overtime_approved" groups="hr.group_hr_user,hr.group_hr_manager,base.group_system"/>
+                                     <field name="time_off_type_id"/>
+                                     <field name="timesheet_status"/>
+                                     <field name="overtime_status"/>
+                                     <field name="is_weekend_or_holiday" invisible="1"/>
+                                 </tree>
+                                </field>
+                            </div>
+                            <div class="table-responsive timesheet-generated-table">
+                                <field name="attendance_extra_ids"
+                                    groups="base.group_user,hr_attendance.group_hr_attendance_kiosk"
+                                    context="{'default_employee_id': employee_id}"
+                                    attrs="{'readonly': [('state', '!=', 'generated')],'invisible': [('show_user_tree', '=', False)]}"
+                                    options="{'no_create': True, 'no_delete': True, 'no_open': True}">
+                                 <tree editable="bottom" decoration-danger="is_weekend_or_holiday" class="table table-bordered">
+                                     <field name="worked_hours" widget="float_time" readonly="1"/>
+                                     <field name="validated_overtime_hours" widget="float_time" readonly="1"/>
+                                     <field name="check_in"
+                                         attrs="{'readonly': [('is_weekend_or_holiday', '=', True), ('is_overtime', '=', False)]}"/>
+                                     <field name="check_out"
+                                         attrs="{'readonly': ['|',('check_in','=',False),('is_weekend_or_holiday', '=', True), ('is_overtime', '=', False)]}"/>
+                                     <field name="is_overtime"/>
+                                     <field name="approved_document_id" domain="[('id', '=', False)]"
+                                         attrs="{'column_invisible': [('is_overtime', '=', False)],'required': [('is_overtime', '=', True)]}"/>
+                                     <field name="overtime_approved" groups="base.group_user"/>
+                                     <field name="time_off_type_id"/>
+                                     <field name="timesheet_status" readonly="1"/>
+                                     <field name="overtime_status" readonly="1"/>
+                                     <field name="is_weekend_or_holiday" invisible="1"/>
+                                 </tree>
+                                </field>
+                            </div>
+                        </page>
+                    </notebook>
+                    </div>
+
+                    <div class="timesheet-register-theme timesheet-signoff-section">
+                        <div class="timesheet-signoff-note">
+                            I hereby confirm as the Line Manager, that the attendance of the employee above was checked and signed off below.
+                        </div>
+                        <table class="table table-bordered timesheet-register-info-table">
+                            <tbody>
+                                <tr>
+                                    <th>Surname:</th>
+                                    <td><field name="manager_surname" nolabel="1"/></td>
+                                    <th>Initials:</th>
+                                    <td><field name="manager_initials" nolabel="1"/></td>
+                                </tr>
+                                <tr>
+                                    <th>SAP/Employee Number:</th>
+                                    <td><field name="manager_sap_employee_number" nolabel="1"/></td>
+                                    <th>Cell Phone Number:</th>
+                                    <td><field name="manager_contact_phone" widget="phone" nolabel="1"/></td>
+                                </tr>
+                                <tr>
+                                    <th>Signature:</th>
+                                    <td><field name="signature" widget="signature" nolabel="1"/></td>
+                                    <th>Date:</th>
+                                    <td><field name="signature_date" nolabel="1"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <field name="manager_id" invisible="1"/>
+                    </div>
+                </sheet>
+
+                <!-- No Employee Record Message -->
+                <div class="alert alert-warning" role="alert"
+                     attrs="{'invisible': [('employee_id', '!=', False)]}">
+                    <strong>No Employee Record Found!</strong>
+                    <br/>
+                    You do not have an employee record linked to your user account.
+                    Please contact your administrator to create your employee record.
+                </div>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_hr_timesheet_generator_tree" model="ir.ui.view">
+        <field name="name">hr.timesheet.generator.tree</field>
+        <field name="model">hr.timesheet.generator</field>
+        <field name="arch" type="xml">
+            <tree string="Timesheet Generators">
+                <field name="employee_id"/>
+                <field name="name"/>
+                <field name="surname"/>
+                <field name="month"/>
+                <field name="year"/>
+                <field name="state"/>
+                <field name="signature_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_hr_timesheet_generator_search" model="ir.ui.view">
+        <field name="name">hr.timesheet.generator.search</field>
+        <field name="model">hr.timesheet.generator</field>
+        <field name="arch" type="xml">
+            <search string="Search Timesheet Generators">
+                <field name="employee_id"/>
+                <field name="name"/>
+                <field name="surname"/>
+                <field name="month"/>
+                <field name="year"/>
+                <field name="department_id"/>
+
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Generated" name="generated" domain="[('state', '=', 'generated')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Department" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Month" name="group_month" context="{'group_by': 'month'}"/>
+                    <filter string="Year" name="group_year" context="{'group_by': 'year'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hr_timesheet_generator" model="ir.actions.act_window">
+        <field name="name">Timesheet Generator</field>
+        <field name="res_model">hr.timesheet.generator</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="auto_attendance_flow.view_hr_timesheet_generator_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new timesheet generator
+            </p>
+            <p>
+                Generate monthly timesheets automatically based on working days,
+                excluding weekends and holidays.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_hr_timesheet_generator"
+              name="Timesheet Generator"
+              parent="hr_attendance.menu_hr_attendance_root"
+              action="action_hr_timesheet_generator"
+              sequence="0"/>
+
+</odoo>

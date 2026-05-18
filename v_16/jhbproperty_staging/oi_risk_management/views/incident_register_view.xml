@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="incident_register_view_list">
+        <field name="name">incident.register.view.list</field>
+        <field name="model">incident.register</field>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Name" />
+                <field name="incident_id"/>
+                <field name="type"/>
+                <field name="category_id"/>
+                <field name="incident_date"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="incident_register_view_form">
+        <field name="name">incident.register.view.form</field>
+        <field name="model">incident.register</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="status" widget="statusbar" readonly="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="incident_id"/>
+                            <field name="type"/>
+                            <field name="category_id"/>
+                            <field name="description"/>
+                        </group>
+                        <group>
+                            <field name="incident_date"/>
+                            <field name="impact"/>
+                            <field name="root_cause"/>
+                            <field name="actions_taken"/>
+                            <field name="responsible_person"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_incident_register_view">
+        <field name="name">Incident Register</field>
+        <field name="res_model">incident.register</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('oi_risk_management.incident_register_view_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('oi_risk_management.incident_register_view_form')})]"/>
+    </record>
+    <menuitem name="Incident Register" id="incident_register_menu"
+              parent="oi_risk_management.menu_root"
+              action="oi_risk_management.action_incident_register_view" sequence="7"/>
+</odoo>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="audit_standards_report_action"
+            model="ir.actions.report">
+        <field name="name">PDF Report</field>
+        <field name="model">audit.standards</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">internal_audit_management.audit_standards_report</field>
+        <field name="report_file">internal_audit_management.audit_standards_report</field>
+        <field name="binding_model_id" ref="model_audit_standards"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'%s' % object.name</field>
+    </record>
+
+    <template id="audit_standards_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="col-xs-4" style="padding:0;">
+                            <center>
+                                <h2 t-esc="doc.name"/>
+                            </center>
+                        </div>
+                        <table class="table table-striped align_center">
+                            <tr>
+                                <td>
+                                    <strong>W/P Reference:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.sequence_no"/>
+                                </td>
+                                <td>
+                                    <strong>Requirements:</strong>
+                                </td>
+                                <td>
+                                    <span t-field="doc.requirements"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-striped align_center">
+                            <tr>
+                                <td>
+                                    <strong>Work Done:</strong>
+                                </td>
+                                <td>
+                                    <span t-field="doc.record_work_done"/>
+                                </td>
+                                <td>
+                                    <strong>Conclusion:</strong>
+                                </td>
+                                <td>
+                                    <span t-field="doc.conclusion"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-striped align_center">
+                            <tr>
+                                <td>
+                                    <strong>Preparer:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.user_preparer_ids.name"/>
+                                </td>
+                                <td>
+                                    <strong>First Reviewer:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.user_reviewer_1_ids.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Second Reviewer:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.user_reviewer_2_ids.name"/>
+                                </td>
+                                <td>
+                                    <strong>Approver:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.user_approver_ids.name"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <center>
+                            <h4>Revert Details</h4>
+                        </center>
+                        <t t-if="doc.feedback">
+                            <table class="table table-striped align_center">
+                                <tr>
+                                    <td>
+                                        <strong>Feedback:</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.feedback"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </t>
+                        <t t-set="reverts"
+                           t-value="doc.env['audit.revert'].search([('res_id', '=', doc.id), ('res_model', '=', doc._name)])"/>
+                        <t t-if="reverts">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Revert Name</th>
+                                        <th>Created Date</th>
+                                        <th>Review Comments</th>
+                                        <th>Audit Proposal</th>
+                                        <th>State</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="reverts"
+                                        t-as="revert">
+                                        <td>
+                                            <t t-esc="revert.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="revert.date"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="revert.comments"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="revert.audit_findings"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="revert.state"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

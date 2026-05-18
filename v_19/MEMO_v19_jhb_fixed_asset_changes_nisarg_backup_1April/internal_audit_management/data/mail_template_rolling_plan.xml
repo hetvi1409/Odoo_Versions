@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="email_template_rolling_plan_to_review" model="mail.template">
+        <field name="name">Internal Audit Rolling Plan</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_rolling_plan"/>
+        <field name="subject">Internal Audit Rolling Plan : Review</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                    Rolling Plan was created
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>. Please review this.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+     <record id="email_template_rolling_plan_to_approve" model="mail.template">
+        <field name="name">Internal Audit Rolling Plan</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_rolling_plan"/>
+        <field name="subject">Internal Audit Rolling Plan : Approve</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                    Rolling Plan was reviewed
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>. Please check this.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_rolling_plan_to_rejected" model="mail.template">
+        <field name="name">Internal Audit Rolling Plan</field>
+        <field name="model_id"
+               ref="internal_audit_management.model_rolling_plan"/>
+        <field name="subject">Internal Audit Rolling Plan : Rejected</field>
+        <field name="description">send to the users.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                    Rolling Plan was Rejected
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>. Please check this.
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+</odoo>

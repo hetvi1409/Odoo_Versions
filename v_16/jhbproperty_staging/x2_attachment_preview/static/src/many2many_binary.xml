@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="x2_attachment_preview.preview"
+       t-inherit="web.Many2ManyBinaryField.attachment_preview"
+       t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_image_box')]" position="replace">
+            <div class="o_image_box float-start" t-att-data-tooltip="'Preview ' + file.name">
+                <a aria-label="Preview" download="" t-on-click.stop="() => this.previewFile(file)">
+                    <span class="o_image o_hover" t-att-data-mimetype="file.mimetype" t-att-data-ext="ext" role="img"/>
+                </a>
+            </div>
+        </xpath>
+    </t>
+</templates>

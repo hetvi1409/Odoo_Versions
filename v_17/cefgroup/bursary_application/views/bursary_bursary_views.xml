@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bursary_bursary_view_tree" model="ir.ui.view">
+        <field name="name">bursary.bursary.view.tree</field>
+        <field name="model">bursary.bursary</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="application_start_date"/>
+                <field name="application_end_date"/>
+<!--                <field name="funding_amount"/>-->
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="bursary_bursary_view_form" model="ir.ui.view">
+        <field name="name">bursary.bursary.view.form</field>
+        <field name="model">bursary.bursary</field>
+        <field name="arch" type="xml">
+            <form string="Bursary">
+                <header>
+                    <button name="action_submit" string="Submit for Approval"
+                            class="oe_highlight"
+                            type="object" invisible="(state != 'draft')"/>
+                    <button name="action_approve" string="Approve" class="oe_highlight"
+                            type="object" invisible="(state != 'submitted')"/>
+                    <button name="action_reject" string="Reject"
+                            type="object" invisible="(state not in ('submitted','approved'))"/>
+                    <button name="action_publish"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="(state != 'approved') or (website_published == True)"
+                            string="Publish"/>
+                    <button name="action_unpublish"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="(state != 'published') or (website_published != True)"
+                            string="Un-Publish"/>
+                    <button name="action_close"
+                            type="object"
+                            invisible="(state != 'published')"
+                            string="Close"/>
+                    <button name="action_draft"
+                            type="object"
+                            invisible="(state != 'closed')"
+                            string="Move To Draft"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted, approved,published"/>
+                </header>
+                <sheet>
+
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                                class="oe_stat_button"
+                                name="action_view_application"
+                                icon="fa-file-text"
+                                invisible="bursary_count == False">
+                            <field name="bursary_count" widget="statinfo" string="Application"/>
+
+                        </button>
+                        <field name="is_published" widget="website_redirect_button"/>
+                    </div>
+                    <div class="oe_title">
+                        <field name="name"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="application_start_date" widget="daterange"
+                                   options="{'end_date_field': 'application_end_date'}"/>
+                            <field name="application_end_date" invisible="1"/>
+                            <field name="programme_ids" widget="many2many_tags"/>
+<!--                            <field name="survey_id"/>-->
+                        </group>
+                        <group>
+<!--                            <field name="funding_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                            <field name="currency_id" invisible="1"/>
+                            <field name="academic_year_id"/>
+                            <field name="website_published" invisible="0"/>
+                            <field name="is_published" invisible="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Eligibility">
+                            <field name="eligibility"/>
+                        </page>
+                        <page string="Required Documents">
+                            <field name="required_documents"/>
+                        </page>
+                        <page string="Pre-Screening">
+                            <group>
+                                <group>
+                                    <button name="action_create_elimination_survey"
+                                            type="object"
+                                            string="Elimination Questions"
+                                            class="btn-primary"
+                                            invisible="survey_id"
+                                            icon="fa-edit"/>
+                                    <button name="action_view_elimination_survey"
+                                            type="object"
+                                            string="Elimination Questions"
+                                            class="btn-primary"
+                                            invisible="not survey_id"
+                                            icon="fa-edit"/>
+                                </group>
+                                <group>
+                                    <field name="survey_id" readonly="1"/>
+                                </group>
+                                <field name="question_and_page_ids">
+                                    <tree create="0">
+                                        <field name="title" required="1"/>
+                                        <field name="survey_id" required="1"/>
+                                        <field name="question_type"
+                                               required="1"/>
+                                        <field name="constr_mandatory"
+                                               required="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bursary_bursary" model="ir.actions.act_window">
+        <field name="name">Bursary</field>
+        <field name="res_model">bursary.bursary</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_bursary_bursary_application" model="ir.actions.act_window">
+        <field name="name">Bursary</field>
+        <field name="res_model">bursary.bursary</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+</odoo>

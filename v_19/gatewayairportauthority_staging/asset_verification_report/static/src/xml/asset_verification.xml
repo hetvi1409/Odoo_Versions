@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+   <t t-name="AssetVerificationReport" owl="1">
+       <!-- Section contains a structure for the purchase report, including a filter
+       view and a table view. It has div elements for the filter view and table view,
+       with respective classes for styling. -->
+       <div class="">
+           <div>
+               <center>
+                   <h1 style="margin: 20px;">Asset Verification Report</h1>
+               </center>
+           </div>
+       </div>
+       <div class="print-btns">
+           <div class="sub_container_left print-actions">
+               <button type="button" class="btn btn-primary print-btn"
+                       t-on-click="printPdf">
+                   Print (PDF)
+               </button>
+
+               <button type="button" class="btn btn-primary print-btn"
+                       t-on-click="print_xlsx">
+                   Export (XLSX)
+               </button>
+           </div>
+
+           <br/>
+
+           <div class="sub_container_right filter-container">
+
+           <!-- Asset -->
+               <div class="filter-item">
+                   <label>
+                       <strong>Asset</strong>
+                   </label>
+                   <select class="form-control" t-ref="asset">
+                       <option value="">-- Select Asset --</option>
+                       <t t-foreach="state.asset_list" t-as="e"
+                          t-key="e['id']">
+                           <option t-att-value="e.id">
+                               <t t-esc="e.name"/>
+                           </option>
+                       </t>
+                   </select>
+               </div>
+                <!-- remove unused filters -->
+               <!-- Custodian -->
+               <!-- <div class="filter-item">
+                   <label>
+                       <strong>Custodian</strong>
+                   </label>
+                   <select class="form-control" t-ref="custodian">
+                       <option value="">Select Custodian</option>
+                       <t t-foreach="state.custodian_list" t-as="c"
+                          t-key="c['id']">
+                           <option t-att-value="c.id">
+                               <t t-esc="c.name"/>
+                           </option>
+                       </t>
+                   </select>
+               </div> -->
+
+               <!-- Department -->
+               <!-- <div class="filter-item">
+                   <label>
+                       <strong>Department</strong>
+                   </label>
+                   <select class="form-control" t-ref="department">
+                       <option value="">Select Department</option>
+                       <t t-foreach="state.department_list" t-as="d"
+                          t-key="d['id']">
+                           <option t-att-value="d.id">
+                               <t t-esc="d.name"/>
+                           </option>
+                       </t>
+                   </select>
+               </div> -->
+
+
+
+               <!-- Job Location -->
+                <div class="filter-item">
+                   <label>
+                       <strong>Job Location</strong>
+                   </label>
+                   <select class="form-control" t-ref="location">
+                       <option value="">Select Job Location</option>
+                       <t t-foreach="state.job_location_list" t-as="l"
+                          t-key="l['id']">
+                           <option t-att-value="l.id">
+                               <t t-esc="l.name"/>
+                           </option>
+                       </t>
+                   </select>
+               </div>
+
+               <!-- Start Date -->
+               <div class="filter-item">
+                   <label>
+                       <strong>Period Start Date</strong>
+                   </label>
+                   <input type="date" class="form-control" t-ref="period_start_date"/>
+               </div>
+
+               <!-- End Date -->
+               <div class="filter-item">
+                   <label>
+                       <strong>Period End Date</strong>
+                   </label>
+                   <input type="date" class="form-control" t-ref="period_end_date"/>
+               </div>
+
+               <!-- Verification Status -->
+               <div class="filter-item">
+                   <label>
+                       <strong>Verification Status</strong>
+                   </label>
+                   <select class="form-control" t-ref="verification_status" t-model="state.verification_status" t-on-change="onVerificationStatusChange">
+                       <option value="">Select Verification Status</option>
+                       <option value="verified">Verified</option>
+                       <option value="not_verified">Not Verified</option>
+                       <option value="all">All</option>
+                   </select>
+               </div>
+
+               <!-- Button -->
+               <div class="filter-button">
+                   <button type="button" class="btn btn-primary"
+                           t-on-click="load_data">
+                       Filter
+                   </button>
+               </div>
+
+           </div>
+       </div>
+
+       <div class="overflow-auto" style="height: 70vh; padding:10px">
+           <div>
+               <div class="table_main_view">
+                   <table cellspacing="0" width="100%">
+                       <thead>
+                           <tr class="table_pr_head">
+                                <!-- <th class="mon_fld">History ID</th> -->
+                               <th class="mon_fld">Asset</th>
+                               <th class="mon_fld">Barcode</th>
+                               <!-- <th class="mon_fld">Description</th> -->
+                               <th class="mon_fld">Verified By</th>
+                               <th class="mon_fld">Verification Status</th>
+                               <th class="mon_fld">Verified At</th>
+                               <th class="mon_fld">Condition</th>
+                               <th class="mon_fld">Past Year</th>
+                               <th class="mon_fld">This Year</th>
+                               <!-- <th class="mon_fld">Location</th>
+                               <th class="mon_fld">Date Of Verification</th>
+                               <th class="mon_fld">Verifier</th> -->
+                           </tr>
+                       </thead>
+                       <tbody>
+
+                    <t t-if="state.verification_status=='not_verified'">
+                        <t t-foreach="state.assets" t-as="asset" t-key="asset['id']">
+                            <tr style="border: 1.5px solid black;" class="pr-line">
+                                <td>
+                                    <span>
+                                        <t t-esc="asset['history_id']?.[1] or ''"/>
+                                    </span>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span>
+                                        <t t-esc="asset['alternative_ref'] or ''"/>
+                                    </span>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span>-</span>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span>Not Verified</span>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span>-</span>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span>-</span>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span>-</span>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span>-</span>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                       <!-- here add condition for  -->
+                        <t t-else="">
+                           <t t-foreach="state.assets"
+                              t-as="asset"
+                              t-key="asset['id']">
+                               <tr style="border: 1.5px solid black;"
+                                   class="pr-line"
+                                   t-att-data-account-id="asset['id']"
+                                   t-attf-data-target=".a{{asset['id']}}">
+                                   <!-- <td style="text-align:center;">
+                                       <span>
+                                             <t t-esc="asset['id']"/>
+                                       </span>
+                                   </td> -->
+                                   <td>
+                                        <span>
+                                            <t t-esc="asset['history_id']?.[1] or ''"/>
+                                        </span>
+                                   </td>
+                                   <td style="text-align:center;">
+                                       <span>
+                                           <t t-esc="asset['parent_barcode']"/>
+                                       </span>
+                                   </td>
+                                   <td style="text-align:center;">
+                                       <span>
+                                            <t t-esc="asset['asset_verification_user_id']?.[1] or ''"/>
+                                       </span>
+                                   </td>
+                                   <td style="text-align:center;">
+                                       <span>
+                                           <t t-esc="asset['is_verified'] or ''"/>
+                                       </span>
+                                   </td>
+                                   <td style="text-align:center;">
+                                       <span>
+                                           <t t-esc="asset['create_date']?.split(' ')[0]"/>
+                                       </span>
+                                   </td>
+                                   <td style="text-align:center;">
+                                       <span>
+                                           <t t-esc="asset['condition']"/>
+                                       </span>
+                                   </td>
+                                   <td style="text-align:center;">
+                                       <span>
+                                           <t t-esc="asset['past_year'] or ''"/>
+                                       </span>
+                                   </td>
+                                   <td style="text-align:center;">
+                                       <span>
+                                           <t t-esc="asset['this_year'] or ''"/>
+                                       </span>
+                                   </td>
+                               </tr>
+                           </t>
+                        </t>
+
+                       </tbody>
+                   </table>
+               </div>
+           </div>
+       </div>
+   </t>
+</templates>

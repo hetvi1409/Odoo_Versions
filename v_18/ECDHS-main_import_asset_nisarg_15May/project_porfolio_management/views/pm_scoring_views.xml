@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- list View -->
+    <record id="view_pm_scoring_list" model="ir.ui.view">
+        <field name="name">pm.scoring.list</field>
+        <field name="model">pm.scoring</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="method"/>
+                <field name="weight_total"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_pm_scoring_form" model="ir.ui.view">
+        <field name="name">pm.scoring.form</field>
+        <field name="model">pm.scoring</field>
+        <field name="arch" type="xml">
+            <form string="Scoring Profile">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="method"/>
+                        <field name="weight_total" readonly="1"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Criteria">
+                            <field name="criterion_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="weight"/>
+                                    <field name="input_type"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="weight"/>
+                                        <field name="input_type"/>
+                                        <field name="options_json" widget="text"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_pm_scoring" model="ir.actions.act_window">
+        <field name="name">Scoring Profiles</field>
+        <field name="res_model">pm.scoring</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu -->
+    
+    <menuitem id="menu_pm_scoring_profile_criteria" name="Scoring Profile/Criteria" parent="menu_portfolio_root" action="action_pm_scoring"/>
+    <menuitem id="menu_pm_scoring" name="Scoring Profile" parent="menu_pm_scoring_profile_criteria" action="action_pm_scoring"/>
+    <!-- list -->
+    <record id="view_pm_scoring_criterion_list" model="ir.ui.view">
+        <field name="name">pm.scoring.criterion.list</field>
+        <field name="model">pm.scoring.criterion</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="scoring_id"/>
+                <field name="weight"/>
+                <field name="input_type"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form -->
+    <record id="view_pm_scoring_criterion_form" model="ir.ui.view">
+        <field name="name">pm.scoring.criterion.form</field>
+        <field name="model">pm.scoring.criterion</field>
+        <field name="arch" type="xml">
+            <form string="Scoring Criterion">
+                <sheet>
+                    <group>
+                        <grroup>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="scoring_id"/>
+                        </grroup>
+                        <group>
+                            <field name="weight"/>
+                            <field name="input_type"/>
+                            <field name="options_json" widget="text"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="value_ids">
+                            <list>
+                                <field name="criterion_id"/>
+                                <field name="value_numeric"/>
+                                <field name="value_option"/>
+                                <field name="contribution" readonly="1"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_pm_scoring_criterion" model="ir.actions.act_window">
+        <field name="name">Scoring Criteria</field>
+        <field name="res_model">pm.scoring.criterion</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_pm_scoring_criterion" name="Scoring Criteria" parent="menu_pm_scoring_profile_criteria" action="action_pm_scoring_criterion"/>
+    <!-- list -->
+    <record id="view_pm_scoring_value_list" model="ir.ui.view">
+        <field name="name">pm.scoring.value.list</field>
+        <field name="model">pm.scoring.value</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="criterion_id"/>
+                <field name="value_numeric"/>
+                <field name="value_option"/>
+                <field name="contribution" readonly="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form -->
+    <record id="view_pm_scoring_value_form" model="ir.ui.view">
+        <field name="name">pm.scoring.value.form</field>
+        <field name="model">pm.scoring.value</field>
+        <field name="arch" type="xml">
+            <form string="Scoring Value">
+                <sheet>
+                    <group>
+                        <group>
+
+                        <field name="project_id"/>
+                        <field name="criterion_id"/>
+                        <field name="value_numeric"/>
+                        </group>
+                        <group>
+
+                        <field name="value_option"/>
+                        <field name="contribution" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Scoring Values -->
+    <record id="action_pm_scoring_value" model="ir.actions.act_window">
+        <field name="name">Scoring Values</field>
+        <field name="res_model">pm.scoring.value</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create and manage project scoring values here.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu for Scoring Values -->
+    <menuitem id="menu_pm_scoring_value"
+              name="Scoring Values"
+              parent="menu_pm_scoring_profile_criteria"
+              action="action_pm_scoring_value"
+              sequence="30"/>
+</odoo>

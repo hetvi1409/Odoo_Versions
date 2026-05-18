@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="mail_notification_layout_rebranding" inherit_id="mail.mail_notification_layout">
+        <xpath expr="//div[@t-if='show_footer' and contains(@style, 'color: #555555')]" position="replace">
+            <t t-set="powered_by_text" t-value="company.env['ir.config_parameter'].sudo().get_param('powered_by_odoo_remove.powered_by_text', '')"/>
+            <div t-if="show_footer" style="color: #555555; font-size:11px;">
+                <t t-if="powered_by_text">
+                    <t t-esc="powered_by_text"/>
+                </t>
+                <span t-if="show_unfollow and powered_by_text" id="mail_unfollow">
+                    | <a href="/mail/unfollow" style="text-decoration:none; color:#555555;">Unfollow</a>
+                </span>
+                <span t-if="show_unfollow and not powered_by_text" id="mail_unfollow">
+                    <a href="/mail/unfollow" style="text-decoration:none; color:#555555;">Unfollow</a>
+                </span>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="mail_notification_light_rebranding" inherit_id="mail.mail_notification_light">
+        <xpath expr="//tr[td[contains(., 'Powered by')]]" position="replace">
+            <t t-set="powered_by_text" t-value="company.env['ir.config_parameter'].sudo().get_param('powered_by_odoo_remove.powered_by_text', '')"/>
+            <tr>
+                <td align="center" style="min-width: 590px;">
+                    <t t-if="powered_by_text">
+                        <t t-esc="powered_by_text"/>
+                    </t>
+                    <span t-if="show_unfollow and powered_by_text" id="mail_unfollow">
+                        | <a href="/mail/unfollow" style="text-decoration:none; color:#555555;">Unfollow</a>
+                    </span>
+                    <span t-if="show_unfollow and not powered_by_text" id="mail_unfollow">
+                        <a href="/mail/unfollow" style="text-decoration:none; color:#555555;">Unfollow</a>
+                    </span>
+                </td>
+            </tr>
+        </xpath>
+    </template>
+</odoo>

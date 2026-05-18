@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_custom_payslip" inherit_id='hr_payroll.report_payslip'>
+        <!--        <t t-call="web.html_container">-->
+        <!--            <t t-foreach="docs" t-as="payslip">-->
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <div class="row mb-3">
+                        <div class="col-3 mb4">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                                 style="max-height: 135px !important;" alt="Logo"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <!-- Employee & Company Information -->
+                    <!--                    <table class="my-0 table table-sm table-borderless"-->
+                    <!--                           style="width:100%; font-size:13px; margin-bottom:10px;">-->
+                    <!--                        <tr>-->
+                    <!--                            <td>-->
+                    <!--                                <strong>Emp. Code</strong>-->
+                    <!--                            </td>-->
+                    <!--                            <td>-->
+                    <!--                                &lt;!&ndash;                                <t t-esc="o.employee_id.identification_id or ''"/>&ndash;&gt;-->
+                    <!--                                <span>000348</span>-->
+                    <!--                            </td>-->
+                    <!--                            <td>-->
+                    <!--                                <strong>Date Engaged</strong>-->
+                    <!--                            </td>-->
+                    <!--                            <td>-->
+                    <!--                                &lt;!&ndash;                                <t t-esc="o.employee_id.first_contract_date"/>&ndash;&gt;-->
+                    <!--                                <span t-field="o.employee_id.first_contract_date" t-options='{"format": "yyyy/MM/dd"}'>-->
+                    <!--                                    2023-08-20-->
+                    <!--                                </span>-->
+                    <!--                            </td>-->
+                    <!--                            <td>-->
+                    <!--                                <strong>Pay Period</strong>-->
+                    <!--                            </td>-->
+                    <!--                            <td>-->
+                    <!--                                &lt;!&ndash;                                <t t-esc="o.date_from"/>&ndash;&gt;-->
+                    <!--                                <span t-field="o.date_from" t-options='{"format": "yyyy/MM/dd"}'>2023-08-20</span>-->
+                    <!--                                - -->
+                    <!--                                &lt;!&ndash;                                <t t-esc="o.date_to"/>&ndash;&gt;-->
+                    <!--                                <span t-field="o.date_to" t-options='{"format": "yyyy/MM/dd"}'>2023-08-20</span>-->
+                    <!--                            </td>-->
+                    <!--                        </tr>-->
+                    <!--                        <tr>-->
+                    <!--                            <td>-->
+                    <!--                                <strong>Emp. Name</strong>-->
+                    <!--                            </td>-->
+                    <!--                            <td>-->
+                    <!--                                <t t-esc="o.employee_id.name"/>-->
+                    <!--                            </td>-->
+                    <!--                            <td>-->
+                    <!--                                <strong>Cost Centre</strong>-->
+                    <!--                            </td>-->
+                    <!--                            <td>-->
+                    <!--                                &lt;!&ndash;                                <t t-esc="o.employee_id.department_id.name"/>&ndash;&gt;-->
+                    <!--                                <span>KH019900</span>-->
+                    <!--                            </td>-->
+                    <!--                            <td></td>-->
+                    <!--                            <td></td>-->
+                    <!--                        </tr>-->
+                    <!--                        <tr>-->
+                    <!--                            <td>-->
+                    <!--                                <strong>Known As</strong>-->
+                    <!--                            </td>-->
+                    <!--                            <td>-->
+                    <!--                                <t t-esc="o.employee_id.display_name or ''"/>-->
+                    <!--                            </td>-->
+                    <!--                            <td>-->
+                    <!--                                <strong>Company Rule</strong>-->
+                    <!--                            </td>-->
+                    <!--                            <td>-->
+                    <!--                                &lt;!&ndash;                                <t t-esc="o.contract_id.name"/>&ndash;&gt;-->
+                    <!--                                <span>007 - Hulamin Containers Wages</span>-->
+                    <!--                            </td>-->
+                    <!--                            <td></td>-->
+                    <!--                            <td></td>-->
+                    <!--                        </tr>-->
+                    <!--                    </table>-->
+                    <!--                    <br/>-->
+                    <br/>
+                    <br/>
+                    <!--                    <hr/>-->
+
+                    <table class="my-0 table table-sm table-borderless"
+                           style="width:100%; font-size:13px; margin-bottom:10px;">
+                        <tr>
+                            <td>
+                                <strong>Emp. Code</strong>
+                            </td>
+                            <td>
+                                                                <t t-esc="o.employee_id.employee_code or ''"/>
+<!--                                <span>000348</span>-->
+                            </td>
+                            <td>
+                                <strong>Date Engaged</strong>
+                            </td>
+                            <td>
+                                <!--                                <t t-esc="o.employee_id.first_contract_date"/>-->
+                                <span t-field="o.employee_id.first_contract_date" t-options='{"format": "yyyy/MM/dd"}'>
+                                    2023-08-20
+                                </span>
+                            </td>
+                            <td>
+                                <strong>Pay Period</strong>
+                            </td>
+                            <td>
+                                <!--                                <t t-esc="o.date_from"/>-->
+                                <span t-field="o.date_from" t-options='{"format": "yyyy/MM/dd"}'>2023-08-20</span>
+                                -
+                                <!--                                <t t-esc="o.date_to"/>-->
+                                <span t-field="o.date_to" t-options='{"format": "yyyy/MM/dd"}'>2023-08-20</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Emp. Name</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.employee_id.legal_name or ''"/>
+                            </td>
+                            <td>
+                                <strong>Job Title</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.employee_id.job_title or ''"/>
+                            </td>
+                            <td>
+                                <strong>Co. Name</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.employee_id.address_id.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Known As</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.employee_id.name or ''"/>
+                            </td>
+                            <td>
+                                <strong>Job Grade</strong>
+                            </td>
+                            <td>
+                                <!--                                <t t-esc="o.employee_id.job_id.name"/>-->
+                                <span></span>
+                            </td>
+                            <td>
+                                <strong>Co. Address</strong>
+                            </td>
+                            <td>
+                                <t t-if="o.employee_id.address_id.street">
+                                    <t t-esc="o.employee_id.address_id.street"/>
+                                    <br/>
+                                </t>
+                                <t t-if="o.employee_id.address_id.street2">
+                                    <t t-esc="o.employee_id.address_id.street2"/>
+                                    <br/>
+                                </t>
+                                <t t-if="o.employee_id.address_id.city or o.employee_id.address_id.state_id or o.employee_id.address_id.country_id">
+                                    <t t-esc="o.employee_id.address_id.city"/>
+                                    <t t-esc="o.employee_id.address_id.state_id.name"/>
+                                    <t t-esc="o.employee_id.address_id.country_id.name"/>
+                                    <br/>
+                                </t>
+                                <t t-esc="o.employee_id.address_id.zip"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>ID Number</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.employee_id.identification_id"/>
+                            </td>
+                            <td>
+                                <strong>Rate Per Hour</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.contract_id.hourly_wage"/>
+                            </td>
+                            <td>
+                                <strong>PAYE Ref. No.</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.employee_id.paye_number"/>
+                                <!--                                <span>7920819200</span>-->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Emp. Address</strong>
+                            </td>
+                            <td>
+                                <t t-if="o.employee_id.private_street">
+                                    <t t-esc="o.employee_id.private_street"/>
+                                    <br/>
+                                </t>
+                                <t t-if="o.employee_id.private_street2">
+                                    <t t-esc="o.employee_id.private_street2"/>
+                                    <br/>
+                                </t>
+                                <t t-if="o.employee_id.private_city or o.employee_id.private_state_id or o.employee_id.private_country_id">
+                                    <t t-esc="o.employee_id.private_city"/>
+                                    <t t-esc="o.employee_id.private_state_id.name"/>
+                                    <t t-esc="o.employee_id.private_country_id.name"/>
+                                    <br/>
+                                </t>
+                                <t t-esc="o.employee_id.private_zip"/>
+                            </td>
+                            <td>
+                                <strong>Hours Per Period</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.contract_id.resource_calendar_id.hours_per_week"/>
+                            </td>
+                            <td>
+                                <strong>UIF Reg. No.</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.employee_id.uif_number"/>
+                                <!--                                <span>0662141/2</span>-->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Income Tax No.</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.employee_id.income_tax_number or ''"/>
+                            </td>
+                            <td>
+                                <strong>Account No.</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.employee_id.bank_account_id.acc_number">063244764</t>
+                            </td>
+                            <td>
+                                <strong>Cost Centre</strong>
+                            </td>
+                            <td>
+                                <t t-esc="o.employee_id.cost_centre or ''"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <strong>Branch No.</strong>
+                            </td>
+                            <td>
+                                <!--                                <t t-esc="o.employee_id.department_id.name"/>-->
+                                <t t-esc="o.employee_id.bank_account_id.bank_id.bic">040727</t>
+                            </td>
+                            <td>
+                                <strong>Company Rule</strong>
+                            </td>
+                            <td>
+                                <!--                                <t t-esc="o.contract_id.name"/>-->
+                                <t t-esc="o.employee_id.company_rule or ''"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <strong>Payment Type</strong>
+                            </td>
+                            <td>
+                                <!--                                <t t-esc="o.struct_id.name"/>-->
+                                <span>ACB</span>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+
+                    <br/>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-6" style="padding-right:5px;">
+                            <table class="my-0 table table-sm table-borderless"
+                                   style="width:100%; font-size:13px; margin-bottom:10px;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="background-color:#e7e9ed;" colspan="4">
+                                            <strong>Earnings</strong>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <strong>Description</strong>
+                                        </th>
+                                        <th class="text-end">
+                                            <strong>Units</strong>
+                                        </th>
+                                        <th class="text-end">
+                                            <strong>Amount</strong>
+                                        </th>
+                                        <th class="text-end">
+                                            <strong>Opening Balance</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <t t-set="lines" t-value="o.line_ids"/>
+                                    <t t-foreach="lines.filtered(lambda l: l.category_id.code in ['BASIC','ALW','NON_TAX_DEDUCTION'])"
+                                       t-as="line">
+                                        <tr>
+                                            <td>
+                                                <t t-esc="line.name"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <t t-esc="line.quantity or ''"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <t t-esc="'%.2f' % line.total"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span>0.0</span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+
+                                <tfoot>
+                                    <tr style="border-top:1px solid;">
+                                        <td>
+                                            <strong>Taxable Income</strong>
+                                        </td>
+                                        <td></td>
+                                        <td class="text-end">
+                                            <strong>
+                                                <t t-esc="'%.2f' % sum(line.total for line in lines.filtered(lambda l: l.category_id.code in ['GROSS']))"/>
+                                            </strong>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-6" style="padding-left:5px;">
+                            <table class="my-0 table table-sm table-borderless"
+                                   style="width:100%; font-size:13px; margin-bottom:10px;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="background-color:#e7e9ed;" colspan="4">
+                                            <strong>Deductions</strong>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <strong>Description</strong>
+                                        </th>
+                                        <th class="text-end">
+                                            <strong>Units</strong>
+                                        </th>
+                                        <th class="text-end">
+                                            <strong>Amount</strong>
+                                        </th>
+                                        <th class="text-end">
+                                            <strong>Opening Balance</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <t t-set="lines" t-value="o.line_ids"/>
+                                    <t t-foreach="lines.filtered(lambda l: l.category_id.code in ['DED','TAX','NON_TAX_INCOME'])"
+                                       t-as="line">
+                                        <tr>
+                                            <td>
+                                                <t t-esc="line.name"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <t t-esc="line.quantity or ''"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <t t-esc="'%.2f' % line.total"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span>0.0</span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+
+                                <tfoot>
+                                    <tr style="border-top:1px solid;">
+                                        <td>
+                                            <strong>Total Deductions</strong>
+                                        </td>
+                                        <td></td>
+                                        <td class="text-end">
+                                            <strong>
+                                                <t t-esc="'%.2f' % sum(line.total for line in lines.filtered(lambda l: l.category_id.code in ['DED','TAX']))"/>
+                                            </strong>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <table class="my-0 table table-sm table-borderless"
+                                   style="width:100%; font-size:13px; margin-bottom:10px;">
+                                <thead>
+                                    <tr style="border-top:1px solid; border-bottom:1px solid; background-color:#e7e9ed; height:28px;">
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <t t-set="taxable_income"
+                           t-value="0.0"/>
+                        <t t-set="total_tax"
+                           t-value="0.0"/>
+                        <t t-set="total_deduction"
+                           t-value="0.0"/>
+                        <t t-set="total_non_tax_deduction"
+                           t-value="0.0"/>
+                        <t t-set="total_non_tax_income"
+                           t-value="0.0"/>
+                        <div class="col-6">
+                            <table class="my-0 table table-sm table-borderless"
+                                   style="width:100%; font-size:13px; margin-bottom:10px;">
+                                <thead>
+                                    <tr style="border-top:1px solid; border-bottom:1px solid; background-color:#e7e9ed; margin-left:5px;">
+                                        <th>
+                                            <strong>Net Pay</strong>
+                                        </th>
+                                        <th></th>
+                                        <th></th>
+                                        <th>
+                                            <!--                                            <t t-set="taxable_income"-->
+                                            <!--                                               t-value="sum(line.total for line in lines.filtered(lambda l: l.category_id.code in ['BASIC', 'ALW']))"/>-->
+                                            <!--                                            <t t-set="total_tax"-->
+                                            <!--                                               t-value="sum(line.total for line in lines.filtered(lambda l: l.category_id.code in ['TAX']))"/>-->
+                                            <!--                                            <t t-set="total_deduction"-->
+                                            <!--                                               t-value="sum(line.total for line in lines.filtered(lambda l: l.category_id.code in ['DED']))"/>-->
+                                            <!--                                            <t t-set="total_non_tax_deduction"-->
+                                            <!--                                               t-value="sum(line.total for line in lines.filtered(lambda l: l.category_id.code in ['NON_TAX_DEDUCTION']))"/>-->
+                                            <!--                                            <t t-set="total_non_tax_income"-->
+                                            <!--                                               t-value="sum(line.total for line in lines.filtered(lambda l: l.category_id.code in ['NON_TAX_INCOME']))"/>-->
+                                            <!--                                            <strong style="margin-left:-10px; padding-left:10px;">-->
+                                            <!--                                                <t t-esc="'%.2f' % (taxable_income + total_tax + total_deduction + total_non_tax_deduction + total_non_tax_income)"/>-->
+                                            <!--                                            </strong>-->
+                                            <strong style="margin-left:-10px; padding-left:10px;">
+                                                <t t-esc="'%.2f' % sum(line.total for line in lines.filtered(lambda l: l.category_id.code in ['NET']))"/>
+                                            </strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                    <br/>
+                    <div class="row" style="page-break-inside: avoid;">
+                        <div class="col-6" style="padding-right:5px;">
+                            <table class="my-0 table table-sm table-borderless"
+                                   style="width:100%; font-size:13px; margin-bottom:10px;">
+                                <thead>
+                                    <tr style="border-top:1px solid;">
+                                        <th class="text-center" style="background-color:#e7e9ed;" colspan="3">
+                                            <strong>Company Contributions</strong>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <strong>Description</strong>
+                                        </th>
+                                        <th class="text-end">
+                                            <strong>Amount</strong>
+                                        </th>
+                                        <th class="text-end">
+                                            <strong>Opening Balance</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <t t-set="lines" t-value="o.line_ids"/>
+                                    <t t-foreach="lines.filtered(lambda l: l.category_id.code == 'COMP')" t-as="line">
+                                        <tr>
+                                            <td>
+                                                <t t-esc="line.name"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <t t-esc="'%.2f' % line.total"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span>0.0</span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+
+                                <tfoot>
+                                    <tr style="border-top:1px solid;">
+                                        <td>
+                                            <strong>Total Company Contributions</strong>
+                                        </td>
+                                        <td class="text-end">
+                                            <strong>
+                                                <t t-esc="'%.2f' % sum(line.total for line in lines.filtered(lambda l: l.category_id.code == 'COMP'))"/>
+                                            </strong>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-6" style="padding-left:5px;">
+                            <table class="my-0 table table-sm table-borderless"
+                                   style="width:100%; font-size:13px; margin-bottom:10px;">
+                                <thead>
+                                    <tr style="border-top:1px solid;">
+                                        <th class="text-center" style="background-color:#e7e9ed;" colspan="2">
+                                            <strong>Year To Date Totals</strong>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <strong>Description</strong>
+                                        </th>
+                                        <th class="text-end">
+                                            <strong>Amount</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span>Taxable Income</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-esc="'%.2f' % o.ytd_taxable_income"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Total Earnings</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-esc="'%.2f' % o.ytd_earnings"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Total Deductions</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-esc="'%.2f' % o.ytd_deductions"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Total Company Contributions</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-esc="'%.2f' % o.ytd_contributions"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Total SARS PAYE</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-esc="'%.2f' % o.ytd_paye"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <table class="my-0 table table-sm table-borderless"
+                           style="width:100%; font-size:13px; margin-bottom:10px;">
+                        <thead>
+                            <tr style="border-top:1px solid;">
+                                <th style="background-color:#e7e9ed;" colspan="2">
+                                    <strong>Leave Balances</strong>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <strong>Description</strong>
+                                </th>
+                                <th class="text-end">
+                                    <t t-set="month_name" t-value="o.date_to and o.date_to.strftime('%B')"/>
+                                    <strong>Balance Due at End of
+                                        <t t-esc="month_name"/>
+                                    </strong>
+                                    <!--                                    <strong>Balance Due at End</strong>-->
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <t t-foreach="o.leave_balance_line_ids" t-as="line">
+                                <tr>
+                                    <td>
+                                        <t t-esc="line.leave_type_id.name"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-esc="line.balance_days"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <!--                            <tr>-->
+                            <!--                                <td>-->
+                            <!--                                    Sick Leave-->
+                            <!--                                </td>-->
+                            <!--                                <td class="text-end">-->
+                            <!--                                    &lt;!&ndash;                                    <t t-esc="'%.2f' % line.total"/>&ndash;&gt;-->
+                            <!--                                    <span>0.0000</span>-->
+                            <!--                                </td>-->
+                            <!--                            </tr>-->
+                        </tbody>
+                    </table>
+
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <record id="paperformat_payroll_payslip" model="report.paperformat">
+        <field name="name">A4 - payslip</field>
+        <field name="default" eval="True"/>
+        <field name="format">Letter</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">32</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="hr_payroll.action_report_payslip" model="ir.actions.report">
+        <field name="paperformat_id" ref="l10n_hr_za_reports.paperformat_payroll_payslip"/>
+    </record>
+</odoo>

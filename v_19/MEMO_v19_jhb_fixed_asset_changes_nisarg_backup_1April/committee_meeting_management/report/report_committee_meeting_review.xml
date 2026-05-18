@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="committee_review_report">
+       <t t-call="web.html_container">
+           <t t-foreach="docs" t-as="doc">
+               <t t-call="web.external_layout">
+                   <div class="page">
+                       <div class="oe_structure"/>
+                       <t t-foreach="doc" t-as="o">
+                           <h2><b>Meeting: <t t-esc="o.name"/></b></h2>
+                           <p>Time: <t t-esc="o.date_start"> To <t t-esc="o.date_end"/> </t></p>
+                           <t t-if="o.attendance_ids">
+                               <p>Participant: </p>
+                               <t t-foreach="o.attendance_ids" t-as="attendance">
+                                   <br/>
+                                   <t t-esc="attendance.employee_id.name"/>
+                               </t>
+                           </t>
+                           <br/>
+                           <br/>
+                           <t t-foreach="o.note_review_ids" t-as="note">
+                               <br/>
+                               <t t-esc="note.memo"/>
+                           </t>
+                       </t>
+                   </div>
+               </t>
+           </t>
+       </t>
+   </template>
+    <record id="action_committee_review_report" model="ir.actions.report">
+        <field name="name">Review Report</field>
+        <field name="model">committee.meeting</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">committee_meeting_management.committee_review_report</field>
+        <field name="report_file">committee_meeting_management.committee_review_report</field>
+        <field name="print_report_name">'Notes - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="committee_meeting_management.model_committee_meeting"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

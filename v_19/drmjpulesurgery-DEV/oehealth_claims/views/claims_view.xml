@@ -1,0 +1,183 @@
+<odoo>
+    <record id="view_health_claim_tree" model="ir.ui.view">
+        <field name="name">health.claim.tree</field>
+        <field name="model">health.claim</field>
+        <field name="arch" type="xml">
+            <list string="Claims">
+                 <field name="claim_date"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="charged"/>
+                <field name="total_claim_amount"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_health_claim_form" model="ir.ui.view">
+        <field name="name">health.claim.form</field>
+        <field name="model">health.claim</field>
+        <field name="arch" type="xml">
+            <form string="Health Claim">
+                 <header>
+                         <button name="action_create_claim_invoice" type="object"
+                        string="Create Claim Invoice"/>
+
+<!--                     <button name="action_view_invoices" type="object"-->
+<!--                        string="Invoices"-->
+<!--                        class="oe_stat_button" icon="fa-file-invoice"/>-->
+
+                    </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                         <button type="object" class="oe_stat_button" name="action_claim_invoice"
+                                icon="fa-pencil-square-o" string="Claim Invoice">
+                             <field string="Claim Invoice" name="claim_count" widget="statinfo"/>
+
+                     </button>
+                    </div>
+                    <group>
+                        <field name="patient_id"/>
+                        <field name="id_number"/>
+                        <field name="dob"/>
+                        <field name="gender"/>
+                        <field name="medical_aid"/>
+                        <field name="medical_aid_option"/>
+                        <field name="medical_aid_number"/>
+                    </group>
+
+                    <!-- Notebook for Visit -->
+                    <notebook>
+                        <page string="Visit Information">
+                            <field name="visit_line_ids">
+                                <list editable="bottom">
+                                    <field name="visit_date"/>
+                                    <field name="type"/>
+                                    <field name="qty"/>
+                                    <field name="icd10_id"/>
+                                    <field name="code"/>
+                                    <field name="tariff"/>
+                                    <field name="charged"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+
+<!--                        <page string="Financials">-->
+<!--                            <group>-->
+<!--                                <field name="total_claim_amount" readonly="1"/>-->
+<!--                            </group>-->
+<!--                        </page>-->
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+
+     <record id="view_health_claim_kanban" model="ir.ui.view">
+        <field name="name">health.claim.kanban</field>
+        <field name="model">health.claim</field>
+        <field name="arch" type="xml">
+            <kanban class="o_health_claim_kanban">
+                <field name="claim_date"/>
+<!--                <field name="patient_name"/>-->
+<!--                <field name="id_number"/>-->
+<!--                <field name="ins/urer"/>-->
+<!--                <field name="medical_aid"/>-->
+<!--                <field name="account_no"/>-->
+<!--                <field name="charge_amount"/>-->
+                <templates>
+      <!-- <t t-name="kanban-box"> -->
+      <t t-name="card">
+                    <div class="row">
+                        <div class="col">
+                <div>Claim Date: <field name="claim_date"/></div>
+            </div>
+            <div class="col">
+<!--                <div>Patient: <field name="patient_name"/></div>-->
+            </div>
+            <div class="col">
+<!--                <div>ID Number: <field name="id_number"/></div>-->
+            </div>
+            <div class="col">
+<!--                <div>Insurer: <field name="insurer"/></div>-->
+            </div>
+            <div class="col">
+<!--                <div>Status: <field name="state"/></div>-->
+            </div>
+            <div class="col">
+<!--                  <button type="object" name="action_claim_sketchpad"-->
+<!--                                    class="btn btn-primary btn-sm">-->
+<!--                                SketchPad-->
+<!--                            </button>-->
+<!--                                 <button type="object" name="action_claim_notepad"-->
+<!--                                    class="btn btn-primary btn-sm">-->
+<!--                                ClinicalNote-->
+<!--                            </button>-->
+                 <button type="object" name="action_payment"
+                                    class="btn btn-primary btn-sm">
+                                Payment
+                            </button>
+                 <button type="object" name="action_edit_claim"
+                                    class="btn btn-primary btn-sm">
+                                Edit Claim
+                            </button>
+                 <button type="object" name="action_new_claim"
+                                    class="btn btn-primary btn-sm">
+                                New Claim
+                            </button>
+                <widget name="web_voice_recorder"/>
+
+<!--                <button type="object" name="action_patient"-->
+<!--                                    class="btn btn-primary btn-sm" widget="web_voice_recorder">-->
+<!--                                Recording-->
+<!--                            </button>-->
+
+<!--                    <t t-name="web.VoiceRecorderWidget">-->
+<!--        <div class="o_voice_recorder d-flex align-items-center gap-2">-->
+<!--            <button type="button" class="btn btn-primary" name="voice_recorder_btn" t-on-click="toggleRecording">-->
+<!--                <t t-esc="state.recording ? 'Stop' : 'Record'"/>-->
+<!--            </button>-->
+<!--            <span class="text-muted">-->
+<!--                <t t-esc="state.elapsed"/>-->
+<!--            </span>-->
+<!--        </div>-->
+<!--    </t>-->
+<!--                <button type="object" name="action_submit" invisible="state != 'draft'"-->
+<!--                        class="btn btn-primary btn-sm">-->
+<!--                    Submit-->
+<!--                </button>-->
+<!--                <button type="object" name="action_approve" invisible="state != 'submitted'"-->
+<!--                        class="btn btn-success btn-sm">-->
+<!--                    Approve-->
+<!--                </button>-->
+<!--                <button type="object" name="action_reject" invisible="state != 'submitted'"-->
+<!--                        class="btn btn-danger btn-sm">-->
+<!--                    Reject-->
+<!--                </button>-->
+<!--                <button type="object" name="action_view_patient"-->
+<!--                        class="btn btn-primary btn-sm">-->
+<!--                    Patient-->
+<!--                </button>-->
+<!--                <button type="object" name="action_payment"-->
+<!--                        class="btn btn-primary btn-sm">-->
+<!--                    Payment-->
+<!--                </button>-->
+            </div>
+        </div>
+    </t>
+</templates>
+            </kanban>
+        </field>
+    </record>
+        <record id="action_health_claim" model="ir.actions.act_window">
+        <field name="name">Claims</field>
+        <field name="res_model">health.claim</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <menuitem id="menu_health_claim" name="Claims"
+              parent="oehealth.oeh_medical_menu"
+              action="action_health_claim"/>
+
+</odoo>

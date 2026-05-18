@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="agenda_report_action" model="ir.actions.report">
+        <field name="name">Agenda</field>
+        <field name="model">calendar.event</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">board_management_system.agenda_report</field>
+        <field name="report_file">board_management_system.agenda_report</field>
+        <field name="binding_model_id" ref="model_calendar_event"/>
+        <field name="print_report_name">'Agenda'</field>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="agenda_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <style>
+                            thead { display: table-header-group; }
+                            .align_center { text-align: center; }
+                        </style>
+                        <h3>
+                            <center>
+                                <strong>Agenda</strong>
+                            </center>
+                        </h3>
+                        <br/>
+                        Meeting:
+                        <strong>
+                            <t t-out="o.name"/>
+                        </strong>
+                        <br/>
+                        Attendees:
+                        <t t-foreach="o.partner_ids" t-as="partner">
+                            <t t-out="partner.name"/>,
+                        </t>
+                        <br/>
+                        <br/>
+                        <ul>
+                            <li><t t-out="o.agenda" /></li>
+                            <li t-foreach="o.agenda_ids"
+                                    t-as="agenda">
+                                        <span style="margin-left:5px"
+                                              t-out="agenda.name or ''">
+                                        </span>
+                                </li>
+
+                        </ul>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

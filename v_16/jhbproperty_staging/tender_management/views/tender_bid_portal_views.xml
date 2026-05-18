@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="portal_my_home_menu_bid_applications"
+              name="Portal layout : Bid Applications menu entries"
+              inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'bid_applications' or bidb_applications"
+                t-attf-class="breadcrumb-item #{'active' if not bid_applications else ''}">
+                <a t-attf-href="/my/bid_applications?{{ keep_query() }}">
+                    Bid Applications
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_bid_applications" name="Bid Applications"
+              customize_show="True" inherit_id="portal.portal_my_home"
+              priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_vendor_category_enable" t-value="True"/>
+        </xpath>
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <div id="portal_vendor_category">
+                <t t-call="portal.portal_docs_entry">
+    <!--                <t t-set="icon" t-value="'/sale/static/src/img/bag.svg'"/>-->
+                    <t t-set="title">Bid Applications</t>
+                    <t t-set="text">Follow your Bid Applications</t>
+                    <t t-set="url" t-value="'/my/bid_applications'"/>
+                    <t t-set="placeholder_count"
+                       t-value="'bid_count'"/>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="my_bid_applications" name="Bids">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Submitted Bid</t>
+            </t>
+            <t t-if="bid_applications" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Bid Name #</th>
+                        <th class="text-end">Tender</th>
+                        <th class="text-end">Type</th>
+                        <th class="text-end">Status</th>
+                    </tr>
+                </thead>
+                <t t-foreach="bid_applications" t-as="res">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/bid_application_details_portal/#{res.id}">
+                                <t t-out="res.name"/>
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="res.tender_id.name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="res.bid_type"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="res.state"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no bids submitted.</p>
+        </t>
+    </template>
+
+    <template id="bid_application_details" name="Bids">
+        <t t-call="website.layout">
+            <t t-set="main_object" t-value="tender"/>
+            <div id="wrap" class="oe_structure tender_timer_id">
+                <div class="container m-4">
+                    <div class="unique-navbar">
+                        <div class="unique-navbar-left">
+                            <strong>TENDER BID INFORMATION</strong>
+                        </div>
+                        <div class="unique-navbar-right">
+                            <div class="tender_timer text-center">
+                                <p class="countdown-text">Auction will end in
+                                </p>
+                                <h3 id="tender_timer_count">---</h3>
+                                <p class="countdown-date">Till
+                                    <t t-esc="tender.closing_date"/>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                          <input name="tender_id" t-att-value="timer_tender_id"
+                              type="hidden"/>
+                          <input name="tender_timer_token" t-att-value="timer_token"
+                           type="hidden"/>
+                    <div class="row"
+                         style="background-color: #f0f8ff; padding: 20px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);">
+                        <h2 id="sequence_number" style="margin-bottom: 20px;">
+                            <t t-esc="tender.name"/>
+                        </h2>
+                        <div class="section-heading">Details</div>
+                        <p>
+                            <strong>Tender Name:</strong>
+                            <span class="ml-2">
+                                <t t-esc="tender.bid_name"/>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Type:</strong>
+                            <span class="ml-2" t-att-style="'color: green;'">
+                                <t t-set="type_mapping"
+                                   t-value="{'rfi': 'RFI', 'rfp': 'RFP', 'rfq': 'RFQ'}"/>
+                                <t t-esc="type_mapping.get(tender.bid_type, 'Unknown')"/>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Current Status:</strong>
+                            <span class="ml-2">
+                                <span t-field="tender.state"/>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Submission Deadline:</strong>
+                            <span class="ml-2">
+                                <t t-esc="tender.submission_deadline"/>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Closing Date:</strong>
+                            <span class="ml-2">
+                                <t t-esc="tender.closing_date"/>
+                            </span>
+                        </p>
+
+                        <div class="section-heading">Other Documents</div>
+                        <ul>
+                            <t t-foreach="tender.document_ids" t-as="document">
+                                <li>
+                                    <a t-att-href="'/download/document/%d' % document.id">
+                                        <t t-esc="document.name"/>
+                                    </a>
+                                </li>
+                            </t>
+                        </ul>
+                        <div>
+                            <div>
+                                <a class="btn btn-primary custom-button-bid"
+                                   t-att-href="'/download/all_bid_documents/%d' % tender.id">
+                                    Print All Documents
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mt-3">
+                            <a href="/bid-status" class="btn btn-primary">Back To BID Status</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+
+    </template>
+</odoo>

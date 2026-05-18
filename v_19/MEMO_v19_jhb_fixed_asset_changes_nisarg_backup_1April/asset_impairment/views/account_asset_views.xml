@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.view.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="asset_registry.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='asset_impairment']" position="after">
+                <page string="Impairment Board" name="impairment_board" invisible="impairment_move_ids == False">
+                    <field name="impairment_move_ids" mode="list" options="{'reload_whole_on_button': true}">
+                        <list string="Impairment Lines" decoration-info="state == 'draft'" create="0"
+                              default_order="impairment_date asc, id asc" editable="top">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="impairment_date" string="Impairment Date"/>
+                            <field name="reference"/>
+                            <field name="impairment_value" widget="monetary" string="Impairment Loss"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="state" invisible="1"/>
+                            <field name="cumulative_impairment_value" widget="monetary" string="Impairment Loss"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="current_value" widget="monetary" string="Impairment Loss"
+                                   options="{'currency_field': 'currency_id'}"/>
+                        </list>
+                    </field>
+                </page>
+
+            </xpath>
+            <xpath expr="//page[@name='asset_impairment']" position="inside">
+                <group>
+                    <field name="fv_c2s"/>
+                    <field name="value_in_use"/>
+                    <field name="recoverable_amount" readonly="1"/>
+                    <field name="carrying_amount"/>
+                    <field name="impairment_loss" readonly="1"/>
+                </group>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_export_xlsx" type="object" string="Export Impairment Report (Excel)"
+                        class="oe_highlight"
+                        groups="asset_impairment.group_asset_impairment_manager"/>
+                <button name="compute_impairment_board" string="Compute Impairment" type="object" class="oe_highlight"
+                        groups="asset_impairment.group_asset_impairment_manager"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_account_asset_tree" model="ir.ui.view">
+        <field name="name">account.asset.view.list</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='acquisition_date']" position="after">
+                <field name="recoverable_amount"/>
+                <field name="impairment_loss"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View for Tender Document -->
+    <record id="view_tender_document_form" model="ir.ui.view">
+        <field name="name">tender.document.form</field>
+        <field name="model">tender.document</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <field name="name"/>
+                        <field name="file" filename="name"/>
+                        <field name="tender_id" readonly="1" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+<!--    Form view for bid document-->
+    <record id="view_bid_document_form" model="ir.ui.view">
+        <field name="name">bid.document.form</field>
+        <field name="model">tender.document</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <field name="name"/>
+                        <field name="file"/>
+                        <field name="bid_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Tree Views -->
+    <record id="view_tender_document_tree" model="ir.ui.view">
+        <field name="name">tender.document.tree</field>
+        <field name="model">tender.document</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="tender_id"/>
+                <field name="bid_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_tender_document" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">tender.document</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="menu_tender_documents" name="Documents" sequence="3"
+              parent="menu_tender_root" action="action_tender_document"/>
+
+</odoo>

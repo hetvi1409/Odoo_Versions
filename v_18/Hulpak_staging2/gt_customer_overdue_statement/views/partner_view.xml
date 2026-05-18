@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	 <record id="inherit_view_customer_form_purchase" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="purchase.view_partner_property_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='property_purchase_currency_id']" position="before">
+                <field name="supplier"/>
+            </xpath>
+        </field>
+    </record>
+
+	<record id="inherit_view_customer_form" model="ir.ui.view">
+		<field name="name">res.partner.form</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="base.view_partner_form"/>
+		<field name="arch" type="xml">
+            <xpath expr="//field[@name='property_payment_term_id']" position="before">
+                <field name="customer"/>
+                <field name="supplier" invisible="1"/>
+            </xpath>
+
+		    <xpath expr="//notebook" position="inside">
+
+		    <!-->>>>>>>>>>>>>>>>>>>>>Customer Statement<<<<<<<<<<<<<<<<<<<<<<<<<  -->
+
+		    	<page string="Customer Overdue Statement" invisible="customer_rank == '0'">
+					<field name="customer_rank" invisible="1"/>
+		    		<group>
+		            <div class="o_row" >
+			    		<button name="action_cus_overdue_statement_print" type="object" class="oe_highlight" string="Print Overdue Statement"/>
+		            	<button name="action_cus_overdue_statement_send" type="object" class="oe_highlight" string="Send Overdue Statement" />
+		            </div>
+		            </group>
+		            <group string="Filter By Date">
+		            	<label for="filter_by"/>
+						<div class="o_row" >
+							<field name="filter_by" class="oe_inline" />
+							From <field name="period_from" class="oe_inline" />
+							To <field name="period_to" class="oe_inline" />
+							Days Length <field name="ageing_length" class="oe_inline" />
+						</div>
+					</group>
+
+					<!-->>>>>>>>>>>>>>>>>>>>>Customer Overdue Statement<<<<<<<<<<<<<<<<<<<<<<<<<  -->
+
+					<separator string="Customer Overdue Statement" />
+					<field name="cus_overdue_ids" style="text-align: right;"  >
+						<list default_order='name'>
+							<field name="new_date_invoice" string="Invoice Date" />
+							<field name="name" />
+							<field name="new_company_id" string="Company" />
+							<field name="new_date_due" string="Due Date" />
+							<field name="amount_residual" string="Invoices/Debits" sum="Total" />
+							<field name="paid_amount" sum="Total" />
+							<field name="amount_total" sum="Total" />
+							<field name="state" invisible="1" />
+						</list>
+					</field>
+					<separator string="Payments" />
+					<field name="cus_overdue_payment_ids" style="text-align: right;" >
+						<list default_order='date'>
+							<field name="date" string="Payment Date" />
+							<field name="name" string="Number"/>
+							<field name="company_id" string="Company" />
+							<field name="name" string="Memo"/>
+							<field name="move_id" />
+							<field name="state" invisible="1" />
+							<field name="amount" string="Payment Amount" sum="Total" />
+						</list>
+					</field>
+		    	</page>
+
+		    	<!-->>>>>>>>>>>>>>>>>>>>>Supplier Details<<<<<<<<<<<<<<<<<<<<<<<<<  -->
+
+		    	<page string="Supplier Overdue Statement" invisible="supplier_rank == '0'">
+		    		<field name="supplier_rank" invisible="1"/>
+		    		<group>
+		            <div class="o_row" >
+			    		<button name="action_sup_overdue_statement_print" type="object" class="oe_highlight" string="Print Overdue Statement"/>
+			    		<button name="action_sup_overdue_statement_send" type="object" class="oe_highlight" string="Send Overdue Statement" />
+		            </div>
+		            </group>
+		            <group string="Filter By Date">
+		            	<label for="sup_filter_by" string="Filter By"/>
+						<div class="o_row" >
+							<field name="sup_filter_by" class="oe_inline" />
+							From <field name="sup_period_from" class="oe_inline" />
+							To <field name="sup_period_to" class="oe_inline" />
+							Days Length <field name="sup_ageing_length" class="oe_inline" />
+						</div>
+					</group>
+
+					<!-->>>>>>>>>>>>>>>>>>>>>Supplier Overdue Statement<<<<<<<<<<<<<<<<<<<<<<<<<  -->
+
+					<separator string="Supplier Overdue Statement" />
+					<field name="sup_overdue_ids" style="text-align: right;" >
+						<list default_order='name' >
+							<field name="new_date_invoice" string="Bill Date" />
+							<field name="name" string="Bill Number" />
+							<field name="new_company_id" string="Company" />
+							<field name="new_date_due" string="Due Date" />
+							<field name="amount_residual" string="Invoices/Debits" sum="Total" />
+							<field name="paid_amount" sum="Total" />
+							<field name="amount_total" sum="Total" />
+							<field name="state" invisible="1" />
+						</list>
+					</field>
+					<separator string="Payments" />
+					<field name="sup_overdue_payment_ids" style="text-align: right;" >
+						<list default_order='date'>
+							<field name="date" string="Payment Date" />
+							<field name="name" string="Bill Number"/>
+							<field name="company_id" string="Company" />
+							<field name="name" string="Memo"/>
+							<field name="move_id" />
+							<field name="amount" string="Payment Amount" sum="Total" />
+							<field name="state" invisible="1" />
+
+						</list>
+					</field>
+
+		    	</page>
+		    </xpath>
+		</field>
+	</record>
+
+</odoo>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

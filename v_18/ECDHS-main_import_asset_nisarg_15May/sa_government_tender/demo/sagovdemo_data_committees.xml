@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- Committees Committees Committees Committees Committees Committees Committees Committees Committees Committees-->
+        <!-- Bid Adjudication Committee (BAC) - MAIN Demo: Committees -->
+        <record id="demo_bac_committee" model="sagovtender.committee">
+            <field name="name">Bid Adjudication Committee (BAC) - MAIN</field>
+            <field name="code">BAC-MAIN</field>
+            <field name="committee_type">bac</field>
+            <field name="state">active</field>
+            <field name="description">Main Bid Adjudication Committee</field>
+        </record>
+
+        <!-- Bid Adjudication Committee (BAC) - SECONDARY Demo: Committees -->
+        <record id="demo_bac_committee2" model="sagovtender.committee">
+            <field name="name">Bid Adjudication Committee (BAC) - SECONDARY</field>
+            <field name="code">BAC-SECONDARY</field>
+            <field name="committee_type">bac</field>
+            <field name="state">active</field>
+            <field name="description">Secondary Bid Adjudication Committee</field>
+        </record>
+
+        <!-- Bid Evaluation Committee (BEC) - MAIN Demo: Committees -->
+        <record id="demo_bec_committee" model="sagovtender.committee">
+            <field name="name">Bid Evaluation Committee (BEC) - MAIN</field>
+            <field name="code">BEC-MAIN</field>
+            <field name="committee_type">bec</field>
+            <field name="state">active</field>
+            <field name="description">Bid Evaluation Committee MAIN</field>
+        </record>
+
+        <!-- Bid Evaluation Committee (BEC) - ICT Demo: Committees -->
+        <record id="demo_bec_committee2" model="sagovtender.committee">
+            <field name="name">Bid Evaluation Committee (BEC) - ICT</field>
+            <field name="code">BEC-ICT</field>
+            <field name="committee_type">bec</field>
+            <field name="state">active</field>
+            <field name="description">Bid Evaluation Committee for ICT procurement</field>
+        </record>
+
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- BAC Committee Members BAC Committee Members BAC Committee Members BAC Committee Members BAC Committee Members BAC Committee Members-->
+        <!-- Demo: Committee Member 1 BAC Chair for BAC-MAIN -->
+        <record id="demo_bac_member_1_main" model="sagovtender.committee.member">
+            <field name="committee_id" ref="demo_bac_committee"/>
+            <field name="user_id" ref="sa_government_tender.res_users_bac1"/>
+            <field name="role">Committee Member</field>
+            <field name="is_chairperson" eval="True"/>
+            <field name="is_secretary" eval="False"/>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Demo: Committee Member 2 BAC Secretary for BAC-MAIN -->
+        <record id="demo_bac_member_2_main" model="sagovtender.committee.member">
+            <field name="committee_id" ref="demo_bac_committee"/>
+            <field name="user_id" ref="sa_government_tender.res_users_bac2"/>
+            <field name="role">Committee Member</field>
+            <field name="is_chairperson" eval="False"/>
+            <field name="is_secretary" eval="True"/>
+            <field name="active" eval="True"/>
+        </record>
+
+
+        <!-- Demo: Committee Member 1 BAC Chair for BAC-SECONDARY -->
+        <record id="demo_bac_member_1_secondary" model="sagovtender.committee.member">
+            <field name="committee_id" ref="demo_bac_committee2"/>
+            <field name="user_id" ref="sa_government_tender.res_users_bac1"/>
+            <field name="role">Committee Member</field>
+            <field name="is_chairperson" eval="True"/>
+            <field name="is_secretary" eval="False"/>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Demo: Committee Member 2 BAC Secretary for BAC-SECONDARY -->
+        <record id="demo_bac_member_2_secondary" model="sagovtender.committee.member">
+            <field name="committee_id" ref="demo_bac_committee2"/>
+            <field name="user_id" ref="sa_government_tender.res_users_bac2"/>
+            <field name="role">Committee Member</field>
+            <field name="is_chairperson" eval="False"/>
+            <field name="is_secretary" eval="True"/>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <!-- BEC Committee Members BEC Committee Members BEC Committee Members BEC Committee Members BEC Committee Members BEC Committee Members-->
+        <!-- Demo: Committee Member 1 BEC Chair for BEC-MAIN -->
+        <record id="demo_bec_member_1_main" model="sagovtender.committee.member">
+            <field name="committee_id" ref="demo_bec_committee"/>
+            <field name="user_id" ref="sa_government_tender.res_users_bec1"/>
+            <field name="role">Committee Member</field>
+            <field name="is_chairperson" eval="True"/>
+            <field name="is_secretary" eval="False"/>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Demo: Committee Member 2 BEC Secretary for BEC-MAIN -->
+        <record id="demo_bec_member_2_main" model="sagovtender.committee.member">
+            <field name="committee_id" ref="demo_bec_committee"/>
+            <field name="user_id" ref="sa_government_tender.res_users_bec2"/>
+            <field name="role">Committee Member</field>
+            <field name="is_chairperson" eval="False"/>
+            <field name="is_secretary" eval="True"/>
+            <field name="active" eval="True"/>
+        </record>
+
+
+        <!-- Demo: Committee Member 1 BEC Chair for BEC-SECONDARY -->
+        <record id="demo_bec_member_1_secondary" model="sagovtender.committee.member">
+            <field name="committee_id" ref="demo_bec_committee2"/>
+            <field name="user_id" ref="sa_government_tender.res_users_bec1"/>
+            <field name="role">Committee Member</field>
+            <field name="is_chairperson" eval="True"/>
+            <field name="is_secretary" eval="False"/>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Demo: Committee Member 2 BEC Secretary for BEC-SECONDARY -->
+        <record id="demo_bec_member_2_secondary" model="sagovtender.committee.member">
+            <field name="committee_id" ref="demo_bec_committee2"/>
+            <field name="user_id" ref="sa_government_tender.res_users_bec2"/>
+            <field name="role">Committee Member</field>
+            <field name="is_chairperson" eval="False"/>
+            <field name="is_secretary" eval="True"/>
+            <field name="active" eval="True"/>
+        </record>
+
+
+    </data>
+</odoo>

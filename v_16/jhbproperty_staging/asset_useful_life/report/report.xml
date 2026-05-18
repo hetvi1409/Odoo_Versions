@@ -1,0 +1,66 @@
+<odoo>
+    <!-- Define the report action -->
+    <report
+        id="asset_useful_life_report"
+        model="account.asset"
+        string="Asset Useful Life Report"
+        report_type="qweb-pdf"
+        name="asset_useful_life.asset_useful_life_report_template"
+        file="asset_useful_life.asset_useful_life_report_template"
+        print_report_name="'Asset Useful Life Report - ' + object.name"
+    />
+
+    <template id="asset_useful_life_report_template">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <div class="page">
+                <h2>Asset Useful Life Report</h2>
+                <h3>Asset: <t t-esc="doc.name"/></h3>
+                <p>Asset Cost: <t t-esc="doc.original_value"/></p>
+                <p>Date of Purchase: <t t-esc="doc.acquisition_date"/></p>
+                <p>Original Useful Life: <t t-esc="doc.original_useful_life"/> months</p>
+                <p>Remaining Useful Life: <t t-esc="doc.remaining_useful_life"/> months</p>
+                <p>Revised Useful Life: <t t-esc="doc.revised_useful_life"/> months</p>
+                <p>Accumulated Depreciation: <t t-esc="doc.accumulated_depreciation"/> </p>
+
+                <t t-set="carrying_amount" t-value="doc.original_value or 0"/>
+                <t t-set="monthly_depreciation" t-value="doc.depreciation_rate or 0"/>
+
+                <h3>Useful Life Schedule</h3>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Depreciation</th>
+                            <th>Remaining Useful Life</th>
+                            <th>Carrying Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="remaining_life" t-value="doc.remaining_useful_life"/>
+                        <t t-set="revised_life" t-value="doc.revised_useful_life"/>
+
+                        <t t-foreach="range(1, int(doc.original_useful_life) + 1)" t-as="month">
+    <tr>
+        <td>Month <t t-esc="month"/></td>
+        <td>
+            <t t-esc="doc.original_value / doc.original_useful_life"/>
+        </td>
+        <td>
+            <t t-esc="doc.remaining_useful_life - month"/>
+        </td>
+        <td>
+            <t t-set="carrying_amount" t-value="carrying_amount - (doc.original_value / doc.original_useful_life)"/>
+            <t t-esc="carrying_amount >= 0 and carrying_amount or 0"/>
+        </td>
+    </tr>
+</t>
+
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </t>
+</template>
+
+</odoo>

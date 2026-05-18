@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_committee_meeting_form">
+        <field name="name">committee.meeting.view.form</field>
+        <field name="model">committee.meeting</field>
+        <field name="inherit_id"
+               ref="oi_committee.view_committee_meeting_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='attendance']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Meeting Details">
+                        <group>
+                            <field name="meeting_link"/>
+                            <field name="is_completed"/>
+                        </group>
+                        <group string="Attendance" name="attendance">
+                            <field name="attendance_ids" nolabel="1"
+                                   mode="kanban" colspan="2">
+                                <kanban class="o_hr_employee_kanban">
+                                    <field name="id"/>
+                                    <field name="sequence"/>
+                                    <field name="employee_id"/>
+                                    <field name="member_type"/>
+                                    <field name="department_id"/>
+                                    <field name="job_id"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
+                                                <!-- Medium employee's picture -->
+                                                <div class="o_kanban_image_fill_left d-none d-md-block"
+                                                     t-attf-style="background-image: url(#{kanban_image('hr.employee', 'image_medium', record.employee_id.raw_value)})"
+                                                     role="img"/>
+                                                <!-- Employee's picture optimized for mobile -->
+                                                <div class="o_kanban_image d-md-none rounded-circle"
+                                                     t-attf-style="background-image: url(#{kanban_image('hr.employee', 'image_small', record.employee_id.raw_value)})"
+                                                     role="img"/>
+
+                                                <div class="oe_kanban_details">
+                                                    <div class="o_kanban_record_top">
+                                                        <div class="o_kanban_record_headings">
+                                                            <strong class="o_kanban_record_title">
+                                                                <field name="employee_id"/>
+                                                            </strong>
+                                                            <span t-if="record.job_id.raw_value"
+                                                                  class="o_kanban_record_subtitle">
+                                                                <field name="job_id"/>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="o_kanban_record_bottom">
+                                                        <div class="oe_kanban_bottom_left text-muted">
+                                                            <span/>
+                                                        </div>
+                                                        <div class="oe_kanban_bottom_right">
+                                                            <span class="float-right text-right">
+                                                                <field name="member_type"
+                                                                       widget="label_selection"
+                                                                       options="{'classes': {'president': 'success', 'secretary': 'info', 'member' : 'primary', 'reserve' : 'warning'}}"/>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                                <tree>
+                                    <field name="employee_id"/>
+                                    <field name="member_type"/>
+                                    <field name="job_id"/>
+                                    <field name="department_id"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                    <page string="Agenda">
+                        <group>
+                            <field name="agenda" type="html" class="oe_memo"
+                                   default_focus="1"
+                                   options="{'resizable': false, 'collaborative': true}"/>
+                            <field name="note_ids" widget="many2many_tags"
+                                   invisible="1"/>
+                            <field name="is_agenda" invisible="1"/>
+                        </group>
+                        <button name="action_add_section"
+                                string="Add New Section" type="object"
+                                class="btn btn-primary"/>
+                        <button name="%(committee_meeting_management.action_committee_agenda_report)d"
+                                string="Download PDF" type="action" attrs="{'invisible': [('is_agenda', '=', False)]}"
+                                class="btn btn-primary oe_right"/>
+                        <field name="note_ids" nolabel="1" mode="kanban"
+                               readonly="True" default_order="id desc"
+                               colspan="2">
+                            <kanban class="o_hr_employee_kanban">
+                                <field name="id"/>
+                                <field name="memo"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
+                                            <div class="oe_kanban_details">
+                                                <div class="o_kanban_record_top">
+                                                    <div class="o_kanban_record_headings">
+                                                        <strong class="o_kanban_record_title">
+                                                            <field name="memo"/>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="o_kanban_record_bottom">
+                                                    <div class="oe_kanban_bottom_left text-muted">
+                                                        <span/>
+                                                    </div>
+                                                    <div class="oe_kanban_bottom_right">
+                                                        <span class="float-right text-right">
+                                                            <button name="action_edit"
+                                                                    string="Edit"
+                                                                    type="object"
+                                                                    class="btn btn-primary"/>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                    </page>
+                    <page string="Meeting Minutes">
+                        <button name="action_create_note"
+                                attrs="{'invisible': [('note_id', '!=', False)]}"
+                                string="Create Minutes" type="object"
+                                class="btn btn-primary"/>
+                        <button name="action_edit_note"
+                                attrs="{'invisible': [('note_id', '=', False)]}"
+                                string="Edit Minutes" type="object"
+                                class="btn btn-primary"/>
+                        <button name="%(committee_meeting_management.action_committee_note_report)d"
+                                string="Download PDF" type="action" attrs="{'invisible': [('note_id', '=', False)]}"
+                                class="btn btn-secondary oe_right"/>
+
+                        <group>
+                            <field name="note_id" readonly="True"
+                                   invisible="1"/>
+                            <field name="note" type="html" class="oe_memo"
+                                   default_focus="1"
+                                   options="{'resizable': false, 'collaborative': true}"/>
+                        </group>
+                    </page>
+                    <page string="Review">
+                        <button name="action_add_section_review"
+                                string="Add New Section" type="object"
+                                class="btn btn-primary"/>
+                        <button name="%(committee_meeting_management.action_committee_review_report)d"
+                                string="Download PDF" type="action"
+                                attrs="{'invisible': [('review', '=', False)]}"
+                                class="btn btn-secondary oe_right"/>
+                                                <button name="action_convert_as_final"
+                                string="Final" type="object" attrs="{'invisible': [('note_id', '=', False)]}"
+                                class="btn btn-primary oe_right"/>
+                                                    <field name="note" type="html" class="oe_memo"
+                                   default_focus="1"
+                                   options="{'resizable': false, 'collaborative': true}"/>
+
+                        <field name="review" invisible="1"/>
+                        <field name="note_review_ids" nolabel="1" mode="kanban"
+                               readonly="True" default_order="id desc"
+                               colspan="2">
+                            <kanban class="o_hr_employee_kanban">
+                                <field name="id"/>
+                                <field name="memo"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
+                                            <div class="oe_kanban_details">
+                                                <div class="o_kanban_record_top">
+                                                    <div class="o_kanban_record_headings">
+                                                        <strong class="o_kanban_record_title">
+                                                            <field name="memo"/>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="o_kanban_record_bottom">
+                                                    <div class="oe_kanban_bottom_left text-muted">
+                                                        <span/>
+                                                    </div>
+                                                    <div class="oe_kanban_bottom_right">
+                                                        <span class="float-right text-right">
+                                                            <button name="action_edit"
+                                                                    string="Edit"
+                                                                    type="object"
+                                                                    class="btn btn-primary"/>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                    </page>
+                    <page string="Final" name="final">
+                        <group>
+                            <field name="final" type="html" class="oe_memo"
+                                   readonly="1"
+                                   default_focus="1"
+                                   options="{'resizable': false, 'collaborative': true}"/>
+                        </group>
+                    </page>
+
+                    <page string="Vote">
+                        <button name="action_create_servery"
+                                string="Create New Vote" type="object"
+                                class="btn btn-primary"
+                                attrs="{'invisible': [('survey_id', '!=', False)]}"/>
+                        <button name="action_edit_servery"
+                                string="Edit Vote" type="object"
+                                class="btn btn-primary"
+                                attrs="{'invisible': [('survey_id', '=', False)]}"/>
+                        <group>
+                            <group>
+                                <field name="survey_id" readonly="1"/>
+                                <field name="answer_done_count" invisible="1"/>
+                                <field name="session_state" invisible="1"/>
+                                <field name="active_votes" invisible="1"/>
+                                <field name="certification" invisible="1"/>
+                                <field name="question_ids" invisible="1"/>
+                            </group>
+                            <group attrs="{'invisible': [('survey_id', '=', False)]}">
+                                <button name="action_send_survey" string="Share"
+                                        type="object"
+                                        attrs="{'invisible': [('active_votes', '=', False)]}"
+                                        class="btn btn-secondary oe_right"/>
+                                <button name="action_result_survey"
+                                        attrs="{'invisible': [('answer_done_count', '&lt;=', 0)]}"
+                                        string="See results" type="object"
+                                        class="btn btn-secondary oe_right"/>
+                                <button name="action_start_session"
+                                        attrs="{'invisible': ['|', ('session_state', '!=', False), '|', ('active_votes', '=', False), ('certification', '=', True)]}"
+                                        string="Create Live Session"
+                                        type="object"
+                                        class="d-none d-sm-block"/>
+                                <button name="action_open_session_manager"
+                                        string="Open Session Manager"
+                                        type="object"
+                                        class="d-none d-sm-block"
+                                        attrs="{'invisible': [('session_state', '=', False)]}"/>
+                                <button name="action_end_session" string="Close Live Session" type="object" class="d-none d-sm-block" attrs="{'invisible': [('session_state', 'not in', ['ready', 'in_progress'])]}"/>
+                                <button name="action_test_survey" string="Test" type="object" attrs="{'invisible': ['|', ('active_votes', '=', False), ('question_ids', '=', [])]}"/>
+                                <button name="action_unarchive_votes" string="Reopen" class="btn-primary" type="object" attrs="{'invisible': [('active_votes', '=', True)]}"/>
+                                <button name="action_print_survey" string="Print" type="object" attrs="{'invisible': [('active_votes', '=', False)]}"/>
+                                <button name="action_archive_votes" string="Close" type="object" attrs="{'invisible': [('active_votes', '=', False)]}"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+            <xpath expr="//button[@name='action_approve']" position="after">
+                <button name="action_completed" string="Mark as Completed"
+                        type="object" class="btn btn-primary"
+                        attrs="{'invisible': ['|', ('state', '!=', 'approved'), ('is_completed', '!=', False)]}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_committee_meeting_search">
+        <field name="name">committee.meeting.view.search</field>
+        <field name="model">committee.meeting</field>
+        <field name="inherit_id"
+               ref="oi_committee.view_committee_meeting_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='active']" position="replace">
+                <filter string="Active" name="active"
+                        domain="['|', ('state', 'not in', ['rejected']), ('is_completed', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

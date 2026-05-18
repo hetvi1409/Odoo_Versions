@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="mail_template_enquiry_ack" model="mail.template">
+        <field name="name">Property Enquiry Acknowledgement</field>
+        <field name="model_id" ref="model_property_enquiry"/>
+        <field name="subject">Thank You for Your Enquiry - Ref: {{object.name}}</field>
+        <field name="email_to">{{ object.name or 'n/a' }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.title_id.name"/>
+                    <t t-out="object.contact_surname"/>,
+                    <br/>
+                </p>
+                <p>Thank you for contacting us. We have received your enquiry
+                    and assigned it the reference number
+                    <strong>
+                        <t t-out="object.name"/>
+                    </strong>
+                    .
+                </p>
+                <p>Our team will review your request and get back to you
+                    shortly.
+                </p>
+
+                <p>
+                    <strong>Summary:</strong>
+                    <br/>
+                    - Enquiry Date:
+                    <t t-out="object.date"/>
+                    <br/>
+                    - Property Type:
+                    <span t-field="object.property_type"/>
+                    <br/>
+                    - District:
+                    <t t-out="object.district_id.name"/>
+                    <br/>
+                    - Town/Suburb:
+                    <t t-out="object.city_id.name"/>
+                    <br/>
+                    - Property:
+                    <t t-out="object.property_id.name"/>
+                    <br/>
+                    - Building Unit:
+                    <t t-out="object.building_id.name"/>
+                </p>
+            </div>
+        </field>
+    </record>
+    <record id="mail_template_enquiry_created" model="mail.template">
+        <field name="name">Property Enquiry Acknowledgement</field>
+        <field name="model_id" ref="model_property_enquiry"/>
+        <field name="subject">Enquiry Created - Ref: {{object.name}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <br/>
+                </p>
+                <p>We have received a enquiry
+                    and assigned it the reference number
+                    <strong>
+                        <t t-out="object.name"/>
+                    </strong>
+                    .
+                </p>
+                <p>Please check review this.
+                </p>
+
+                <p>
+                    <strong>Summary:</strong>
+                    <br/>
+                    - Enquiry Date:
+                    <t t-out="object.date"/>
+                    <br/>
+                    - Property Type:
+                    <span t-field="object.property_type"/>
+                    <br/>
+                    - District:
+                    <t t-out="object.district_id.name"/>
+                    <br/>
+                    - Town/Suburb:
+                    <t t-out="object.city_id.name"/>
+                    <br/>
+                    - Property:
+                    <t t-out="object.property_id.name"/>
+                    <br/>
+                    - Building Unit:
+                    <t t-out="object.building_id.name"/>
+                </p>
+            </div>
+        </field>
+    </record>
+    <record id="mail_template_enquiry_declined" model="mail.template">
+        <field name="name">Property Enquiry Declined</field>
+        <field name="model_id" ref="model_property_enquiry"/>
+        <field name="email_to">{{ object.name or 'n/a' }}</field>
+        <field name="subject">Enquiry Declined - Ref: {{object.name}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.title_id.name"/>
+                    <t t-out="object.contact_surname"/>,
+                    <br/>
+                </p>
+                <p>The enquiry with the reference number
+                    <strong><t t-out="object.name"/></strong> was declined.
+                    Declined Reason:<strong><t t-out="object.comments"/></strong>
+                </p>
+                <p>Please check review this.
+                </p>
+
+                <p>
+                    <strong>Summary:</strong>
+                    <br/>
+                    - Enquiry Date:
+                    <t t-out="object.date"/>
+                    <br/>
+                    - Property Type:
+                    <span t-field="object.property_type"/>
+                    <br/>
+                    - District:
+                    <t t-out="object.district_id.name"/>
+                    <br/>
+                    - Town/Suburb:
+                    <t t-out="object.city_id.name"/>
+                    <br/>
+                    - Property:
+                    <t t-out="object.property_id.name"/>
+                    <br/>
+                    - Building Unit:
+                    <t t-out="object.building_id.name"/>
+                </p>
+            </div>
+        </field>
+    </record>
+    <record id="mail_template_enquiry_approved" model="mail.template">
+        <field name="name">Property Enquiry Approved</field>
+        <field name="model_id" ref="model_property_enquiry"/>
+        <field name="subject">Enquiry Approved - Ref: {{object.name}}</field>
+        <field name="email_to">{{ object.name or 'n/a' }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.title_id.name"/>
+                    <t t-out="object.contact_surname"/>,
+                    <br/>
+                </p>
+                <p>The enquiry with the reference number
+                    <strong><t t-out="object.name"/></strong> was approved for site visit.
+                </p>
+
+                <p>
+                    <strong>Summary:</strong>
+                    <br/>
+                    - Enquiry Date:
+                    <t t-out="object.date"/>
+                    <br/>
+                    - Property Type:
+                    <span t-field="object.property_type"/>
+                    <br/>
+                    - District:
+                    <t t-out="object.district_id.name"/>
+                    <br/>
+                    - Town/Suburb:
+                    <t t-out="object.city_id.name"/>
+                    <br/>
+                    - Property:
+                    <t t-out="object.property_id.name"/>
+                    <br/>
+                    - Building Unit:
+                    <t t-out="object.building_id.name"/>
+                </p>
+            </div>
+        </field>
+    </record>
+    <record id="mail_template_enquiry_to_approve" model="mail.template">
+        <field name="name">Property Enquiry To Approved</field>
+        <field name="model_id" ref="model_property_enquiry"/>
+        <field name="subject">Enquiry To Approve - Ref: {{object.name}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                </p>
+                <p>The enquiry with the reference number
+                    <strong><t t-out="object.name"/></strong> was to approve state. Please check and review.
+                </p>
+
+                <p>
+                    <strong>Summary:</strong>
+                    <br/>
+                    - Enquiry Date:
+                    <t t-out="object.date"/>
+                    <br/>
+                    - Property Type:
+                    <span t-field="object.property_type"/>
+                    <br/>
+                    - District:
+                    <t t-out="object.district_id.name"/>
+                    <br/>
+                    - Town/Suburb:
+                    <t t-out="object.city_id.name"/>
+                    <br/>
+                    - Property:
+                    <t t-out="object.property_id.name"/>
+                    <br/>
+                    - Building Unit:
+                    <t t-out="object.building_id.name"/>
+                </p>
+            </div>
+        </field>
+    </record>
+        <record id="mail_template_enquiry_approve_site_visit" model="mail.template">
+        <field name="name">Property Enquiry Site Visit</field>
+        <field name="model_id" ref="model_property_enquiry"/>
+        <field name="subject">Site Visit For Enquiry - Ref: {{object.name}}</field>
+        <field name="email_to">{{ object.name or 'n/a' }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.title_id.name"/>
+                    <t t-out="object.contact_surname"/>,
+                    <br/>
+                </p>
+                <p>The enquiry with the reference number
+                    <strong><t t-out="object.name"/></strong> was approved and Ready for site visit.
+                </p>
+
+                <p>
+                    <strong>Summary:</strong>
+                    <br/>
+                    - Enquiry Date:
+                    <t t-out="object.date"/>
+                    <br/>
+                    - Property Type:
+                    <span t-field="object.property_type"/>
+                    <br/>
+                    - District:
+                    <t t-out="object.district_id.name"/>
+                    <br/>
+                    - Town/Suburb:
+                    <t t-out="object.city_id.name"/>
+                    <br/>
+                    - Property:
+                    <t t-out="object.property_id.name"/>
+                    <br/>
+                    - Building Unit:
+                    <t t-out="object.building_id.name"/>
+                </p>
+            </div>
+        </field>
+    </record>
+
+
+</odoo>

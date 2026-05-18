@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="assets_register_reports_location_form" model="ir.ui.view">
+        <field name="name">assets.register.location.view.form</field>
+        <field name="model">assets.register.location</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="job_location_id"/>
+                        </group>
+                        <group>
+                            <field name="type" widget="radio"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_generate_report" string="Print PDF"
+                            type="object" class="oe_highlight"/>
+                    <button name="action_export_excel" string="Print XLS"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn_default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+     <!-- Wizard Action -->
+    <record id="action_assets_register_location_report" model="ir.actions.act_window">
+        <field name="name">Assets Register Location Report</field>
+        <field name="res_model">assets.register.location</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_assets_register_location_report"
+              name="Asset Register By Location Report"
+              parent="asset_verification_report.menu_assets_reports"
+              action="action_assets_register_location_report"/>
+</odoo>

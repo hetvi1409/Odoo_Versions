@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <record id="sign.sign_request_my_requests_action" model="ir.actions.act_window">
+            <field name="domain">['|', ('create_uid', '=', uid), ('request_item_ids.partner_id.user_ids', 'in', [uid])]</field>
+        </record>
+
+        <record id="sign.menu_document" model="ir.ui.menu">
+            <field name="name">Digital Signatures</field>
+            <field name="action" ref="sign.sign_request_my_requests_action"/>
+        </record>
+    </data>
+</odoo>

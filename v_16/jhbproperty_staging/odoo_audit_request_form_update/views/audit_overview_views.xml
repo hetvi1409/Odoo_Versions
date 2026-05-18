@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_audit_overview" model="ir.actions.act_window">
+        <field name="name">Audit Overview</field>
+        <field name="res_model">audit.overview</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Guidance
+            </p>
+            <p>
+                Create and manage the Guidance and other information;
+            </p>
+        </field>
+    </record>
+    <record id="audit_overview_view_kanban" model="ir.ui.view">
+        <field name="name">audit.overview.dashboard</field>
+        <field name="model">audit.overview</field>
+        <field name="priority">200</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_audit_overview"
+                    group_create="0" create="1" sample="1" write="1"
+            >
+                <field name="name"/>
+                <field name="color"/>
+                <templates >
+                    <t t-name="kanban-box" limit="4" >
+                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''}"
+                             name="stock_picking">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary"
+                                         style="font-size: 25px;color: black; font-family: ui-monospace;font-weight: bolder;">
+                                        <field name="name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content"
+                                 t-if="record.name.value == 'Audit Governance'">
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left"
+                                         style="justify-content: center; display: flex; width: 60%;">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_audit"
+                                           style="margin-left: 40px;"
+                                           type="object">Overall
+                                            Internal Audit Methodology
+                                        </a>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_right"
+                                         style="justify-content: center; display: flex; width: 60%;">
+                                        <div class="mb4"
+                                               style="margin: 0px 15px 0px 15px;">
+                                            <a name="action_view_request_reviewed"
+                                               type="object"
+                                               class="btn btn-secondary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Review of Methodology
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="mb4"
+                                               style="margin: 0px 15px 0px 15px;">
+                                            <a name="action_view_request_approved"
+                                               type="object"
+                                               class="btn btn-secondary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Approval of methodology
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr t-if="record.name.value == 'Audit Governance'"
+                                    class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row "
+                                     t-if="record.name.value == 'Audit Governance'">
+                                    <div class="col o_kanban_primary_left d-fex justify-content-center">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           style="margin-left: 40px;"
+                                           name="%(odoo_audit_request_form_update.action_guidance_information)d"
+                                           type="action">Guidance and other
+                                            information
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_right d-fex justify-content-center">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="%(odoo_audit_request_form_update.action_custom_audit_request_report)d"
+                                           type="action">Financial statements
+                                            and performance report
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <hr t-if="record.name.value == 'Audit Governance'"
+                                    class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left"
+                                         style="justify-content: center; display: flex; width: 60%;">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           style="margin-left: 40px;"
+                                           name="action_view_quality_control"
+                                           type="object">Quality Control
+                                        </a>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_right"
+                                         style="justify-content: center; display: flex; width: 60%;">
+                                        <div class="mb4"
+                                               style="margin: 0px 15px 0px 15px;">
+                                            <a name="action_view_internal_review"
+                                               type="object"
+                                               class="btn btn-secondary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Internal review
+                                                    framework
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="mb4 "
+                                               style="margin: 0px 15px 0px 15px;">
+                                            <a name="action_view_internal_peer_review"
+                                         style="justify-content: center; display: flex; width: 60%;"
+                                               type="object"
+                                               class="btn btn-secondary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Internal Peer review
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="mb4"
+                                               style="margin: 0px 15px 0px 15px;">
+                                            <a name="action_view_outsourced_peer_review"
+                                               type="object"
+                                               class="btn btn-secondary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Outsourced peer reviews
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr
+                                    class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row"
+                                     t-if="record.name.value == 'Audit Governance'">
+                                    <div class="col d-flex justify-content-center o_kanban_primary_left">
+                                        <a class="btn btn-primary" >
+                                            Internal audit Charter
+                                        </a>
+                                    </div>
+                                    <div class="col d-flex justify-content-center o_kanban_primary_left">
+                                        <a class="btn btn-primary">
+                                            AuditCommittee Charter
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <hr t-if="record.name.value == 'Audit Governance'"
+                                    class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row"
+                                     t-if="record.name.value == 'Audit Governance'">
+                                    <div class="col o_kanban_primary_left d-flex justify-content-center">
+                                        <a class="btn btn-primary">
+                                            Internal Audit Plan
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr t-if="record.name.value == 'Audit Governance'"
+                                    class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                            </div>
+                            <div class="container o_kanban_card_content"
+                                 t-if="record.name.value == 'Overall Audit Approach'">
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left d-flex justify-content-center">
+                                        <a class="btn btn-primary"
+                                                    name="action_view_business">
+                                            Understanding of business
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left d-flex justify-content-center" name="action_view_compliance">
+                                        <a class="btn btn-primary">
+                                            Compliance scoping and materiality
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left d-flex justify-content-center">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           style="margin-left: 40px;"
+                                           name="action_view_communication_correspondence"
+                                           type="object">Communication and correspondence
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_right d-flex justify-content-center">
+                                        <div class="mb4">
+                                            <a name="action_view_communicate_auditee"
+                                               type="object"
+                                               class="btn btn-secondary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Communicate with auditee management
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="mb4 ">
+                                            <a name="action_view_communicate_audit_team"
+                                               type="object"
+                                               class="btn btn-secondary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Communicate within audit team
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="mb4" >
+                                            <a name="action_view_information_ui"
+                                               type="object"
+                                               class="btn btn-secondary justify-content-center">
+                                                <span>Request for Information U I
+                                                </span>
+                                            </a>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex;">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_oversight"
+                                           type="object"> Oversight
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex;">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_management_representation"
+                                           type="object"> Obtain management representation
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                            </div>
+                            <div class="container o_kanban_card_content"
+                                 t-if="record.name.value == 'Plan The Audit'">
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_entity_environment"
+                                           type="object"> Understand the entity and its environment
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_management_representation"
+                                           type="object"> Obtain management representation
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_audit_strategy"
+                                           type="object"> Develop audit strategy
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="%(project.open_view_project_all)d"
+                                           type="action">Project Management
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_revise_materiality"
+                                           type="object"> Determine and revise materiality
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_multiple_location"
+                                           type="object">Audit of multiple locations
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                            </div>
+                            <div class="container o_kanban_card_content"
+                                 t-if="record.name.value == 'Understand The System Of Internal Control'">
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_entity_internal_control"
+                                           type="object"> Understand the entity's internal controls
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_entity_business_processes"
+                                           type="object"> Understand the business processes and relevant controls
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+
+                            </div>
+                            <div class="container o_kanban_card_content"
+                                 t-if="record.name.value == 'Perform Risk Assessment'">
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_entity_environment"
+                                           type="object"> Perform analytical procedures
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_plan_response_risk"
+                                           type="object"> Assess and plan response to risks of material misstatement
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="%(oi_risk_management.risks_view)d"
+                                           type="action"> Risk assessment and response
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_use_work"
+                                           type="object"> Assess use of work of others
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="%(oi_risk_management.risks_view)d"
+                                           type="action"> Fraud risk assessment
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_allegation"
+                                           type="object"> Allegations and NOCLAR
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                            </div>
+                            <div class="container o_kanban_card_content"
+                                 t-if="record.name.value == 'Audit Execution'">
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_audit_transactions"
+                                           type="object"> Audit class of transactions
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_audit_disclosures"
+                                           type="object"> Audit disclosures
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_predetermined_objectives"
+                                           type="object">Predetermined objectives To get start
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_compliance"
+                                           type="object">Compliance Heading st document
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_material_irregularities"
+                                           type="object">Material Irregularities
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left d-flex justify-content-center">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           style="margin-left: 40px;"
+                                           name="action_view_evaluate_audit_evidence"
+                                           type="object">Evaluate The Audit Evidence
+                                        </a>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_right d-flex justify-content-center">
+                                        <div class="mb4" style="margin:0 5px 0 5px;">
+                                            <a name="action_view_prior_impact"
+                                               type="object"
+                                               style="border: 1px solid #35979c;"
+                                               class="btn btn-secondary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Evaluate impact of prior year uncorrected misstatements
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="mb4"
+                                             style="margin:0 5px 0 5px;">
+                                            <a name="action_view_final_analytic_procedure"
+                                               type="object"
+                                               style="border: 1px solid #35979c;"
+                                               class="btn btn-secondary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Perform final analytical procedures La
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col o_kanban_primary_right d-flex justify-content-center">
+                                        <div class="mb4" style="margin:0 5px 0 5px;">
+                                            <a name="action_view_evaluate_going_concern"
+                                               type="object"
+                                               style="border: 1px solid #35979c;"
+                                               class="btn btn-secondary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Evaluate going concern R
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="mb4" style="margin:0 5px 0 5px;">
+                                            <a name="action_view_evaluate_subsequent_events"
+                                               type="object"
+                                               style="border: 1px solid #35979c;"
+                                               class="btn btn-secondary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Evaluate subsequent events and other information
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_uncorrected_misstatements"
+                                           style="margin-left: 40px;"
+                                           type="object">Evaluate uncorrected misstatements and conclude
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_deficiencies_internal_control"
+                                           type="object">Deficiencies in internal control
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+
+                            </div>
+                            <div class="container o_kanban_card_content"
+                                 t-if="record.name.value == 'Reporting'">
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_key_audit_matters"
+                                           type="object">Key audit matters
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_prepare_management_reports"
+                                           type="object">Prepare management reports
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_prepare_auditor_report"
+                                           type="object">Prepare auditor's report
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_prepare_dashboard_reports"
+                                           type="object">Prepare a dashboard report
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_prepare_sector_report"
+                                           type="object">Prepare sector report i
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_prepare_general_report"
+                                           type="object">Prepare general report
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_overall_conclusion"
+                                           type="object">Form overall conclusion 2
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+
+                            </div>
+                            <div class="container o_kanban_card_content"
+                                 t-if="record.name.value == 'Follow Up Audits'">
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_internal_audit_action_plan"
+                                           type="object">Internal Audit Action plan
+                                        </a>
+                                    </div>
+                                    <div class="col o_kanban_primary_left" style="justify-content: center; display: flex; ">
+                                        <a class="btn btn-primary o_helpdesk_ticket_btn"
+                                           name="action_view_external_audit_action_plan"
+                                           type="object">External Audit Action plan
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left d-flex justify-content-center" >
+                                        <a style="font-size: 21px;color: black; font-family: ui-monospace; font-weight: bold;margin-left: 40px;"> Reporting </a>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col o_kanban_primary_right d-flex justify-content-center">
+                                        <div class="mb4" style="margin: 0 5px 0 5px;">
+                                            <a name="action_view_internal_audit_action_plan_report"
+                                               type="object"
+                                               class="btn btn-primary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Internal Audit Action plan
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="mb4" style="margin: 0 5px 0 5px;">
+                                            <a name="action_view_external_audit_action_plan_report"
+                                               type="object"
+                                               class="btn btn-primary justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>External Audit Action plan
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mx-auto text-center"
+                                    style="width: 80%;"/>
+                            </div>
+
+<!--                            <div class="o_kanban_record_bottom mx-auto text-center"-->
+<!--                                 style="width: 70%;">-->
+<!--                                <div class="oe_kanban_bottom_left">-->
+<!--                                    <field name="activity_ids"-->
+<!--                                           widget="kanban_activity"/>-->
+<!--                                </div>-->
+<!--                                <div class="oe_kanban_bottom_right">-->
+<!--                                    <field t-if="record.user_id.raw_value"-->
+<!--                                           name="user_id"-->
+<!--                                           widget="many2one_avatar_user"/>-->
+<!--                                    <field t-if="record.committee_user_id.raw_value"-->
+<!--                                           name="committee_user_id"-->
+<!--                                           widget="many2one_avatar_user"/>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <menuitem id="custom_audit_request_menu_overview"
+              name="Overview"
+              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+              action="action_audit_overview"
+              sequence="1"/>
+    <record id="action_audit_overview_tree" model="ir.actions.act_window">
+        <field name="name">Audit Overview</field>
+        <field name="res_model">audit.overview</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Guidance
+            </p>
+            <p>
+                Create and manage the Guidance and other information;
+            </p>
+        </field>
+    </record>
+    <menuitem id="custom_audit_request_menu_audit_governance"
+              name="Audit Governance"
+              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+              action="action_audit_overview_tree"
+              sequence="2"/>
+    <menuitem id="custom_audit_request_menu_overall_audit_approach"
+              name="Overall Audit Approach"
+              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+              action="action_audit_overview_tree"
+              sequence="2"/>
+    <menuitem id="custom_audit_request_menu_plan_the_audit"
+              name="Plan The Audit"
+              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+              action="action_audit_overview_tree"
+              sequence="2"/>
+    <menuitem id="custom_audit_request_menu_understand_system_internal_control"
+              name="Understand The System Of Internal Control "
+              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+              action="action_audit_overview_tree"
+              sequence="2"/>
+    <menuitem id="custom_audit_request_menu_perform_risk_assessment"
+              name="Perform Risk Assessment"
+              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+              action="action_audit_overview_tree"
+              sequence="2"/>
+    <menuitem id="custom_audit_request_menu_audit_execution"
+              name="Audit Execution"
+              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+              action="action_audit_overview_tree"
+              sequence="2"/>
+    <menuitem id="custom_audit_request_menu_file_finalisation"
+              name="File Finalisation"
+              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+              action="action_audit_overview_tree"
+              sequence="12"/>
+    <menuitem id="custom_audit_request_menu_financial_year"
+              name="Financial Year"
+              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+              action="action_audit_overview_tree"
+              sequence="12"/>
+
+</odoo>

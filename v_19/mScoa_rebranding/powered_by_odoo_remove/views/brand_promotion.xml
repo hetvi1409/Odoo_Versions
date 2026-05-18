@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="remove_odoo_after_powered_by" inherit_id="web.brand_promotion_message">
+        <xpath expr="//t[@t-set='odoo_logo']" position="before">
+            <t t-set="powered_by_text" t-value="request.env['ir.config_parameter'].sudo().get_param('powered_by_odoo_remove.powered_by_text', '')"/>
+        </xpath>
+        <xpath expr="//t[@t-set='final_message']" position="replace">
+            <t t-set="final_message">%s</t>
+        </xpath>
+        <xpath expr="//t[@t-out]" position="replace">
+            <t t-out="final_message % powered_by_text"/>
+        </xpath>
+    </template>
+</odoo>

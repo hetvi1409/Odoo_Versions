@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_tender_root"
+              name="SCM-SAGovTenders"
+              web_icon="sa_government_tender,static/description/icon.png"
+              sequence="10"/>
+<!--
+    <menuitem id="menu_app_import_root"
+              name="Annual Procurement Plan"
+              parent="menu_tender_root"
+              sequence="0"/> -->
+
+    <menuitem id="menu_suppliers"
+              name="Suppliers"
+              parent="menu_tender_root"
+              action="action_sagov_suppliers"
+              sequence="0"/>
+
+    <menuitem id="menu_users"
+              name="Users"
+              parent="menu_tender_root"
+              action="base.action_res_users"
+              sequence="0"/>
+
+    <menuitem id="menu_suppliers"
+              name="Suppliers"
+              parent="menu_tender_root"
+              action="action_sagov_suppliers"
+              sequence="1"/>
+
+    <menuitem id="menu_app_import_demand_mgt"
+              name="Demand Management"
+              parent="menu_tender_root"
+              sequence="2"/>
+
+    <menuitem id="menu_tender"
+              name="Tenders"
+              parent="menu_tender_root"
+              sequence="20"/>
+
+
+    <menuitem id="menu_app_root"
+              name="Annual Procurement Plan"
+              parent="menu_app_import_demand_mgt"
+              sequence="10"/>
+
+    <menuitem id="menu_tender_procurement"
+              name="Procurement Process"
+              parent="menu_app_import_demand_mgt"
+              sequence="20"/>
+
+    <menuitem id="menu_sagovtender_bidding"
+              name="Bidding &amp; Evaluation"
+              parent="menu_tender_root"
+              sequence="30"/>
+
+    <menuitem id="menu_purchase_orders"
+              name="Purchase Orders"
+              parent="menu_tender_root"
+              action="purchase.purchase_form_action"
+              sequence="40"/>
+
+    <menuitem id="menu_tender_config"
+              name="Configuration"
+              parent="menu_tender_root"
+              groups="sa_government_tender.group_sagovtender_scm_officer,sa_government_tender.group_sagovtender_manager"
+              sequence="90"/>
+
+    <menuitem id="menu_sagovprocurement_method"
+              name="Procurement Methods"
+              parent="menu_tender_config"
+              action="action_sagovprocurement_method"
+              sequence="10"/>
+
+    <menuitem id="menu_sagovpreference_point_system"
+              name="Preference Point Systems"
+              parent="menu_tender_config"
+              action="action_sagovpreference_point_system"
+              sequence="20"/>
+
+    <menuitem id="menu_tender_master_data"
+              name="Master Data"
+              parent="menu_tender_config"
+              groups="sa_government_tender.group_sagovtender_scm_officer,sa_government_tender.group_sagovtender_manager"
+              sequence="30"/>
+
+    <!-- APP Menus -->
+    <menuitem id="menu_app_import_plan"
+              name="Upload APP's for the Year"
+              parent="menu_app_root"
+              action="action_annual_procurement_plan"
+              sequence="1"/>
+
+    <menuitem id="menu_sagovannual_procurement_plan"
+              name="Approved Annual Procurement Plans"
+              parent="menu_app_root"
+              action="action_sagovannual_procurement_plan"
+              sequence="2"/>
+
+    <!-- Procurement Process Menus -->
+    <menuitem id="menu_purchase_requisition"
+              name="Purchase Requisitions"
+              parent="menu_tender_procurement"
+              action="action_purchase_requisition"
+              sequence="10"/>
+
+    <menuitem id="menu_sagovbudget_confirmation"
+              name="Budget Confirmations"
+              parent="menu_tender_procurement"
+              action="action_sagovbudget_confirmation"
+              sequence="20"/>
+
+    <menuitem id="menu_sagovtender_specification"
+              name="Specifications"
+              parent="menu_tender_procurement"
+              action="action_sagovtender_specification"
+              sequence="30"/>
+
+    <menuitem id="menu_sagovbudgets"
+              name="Budgets &amp; Expenditures"
+              parent="menu_tender_procurement"
+              action="action_sagov_account_report_budget"
+              sequence="40"/>
+
+    <!-- Tender Menus -->
+    <menuitem id="sub_menu_tender"
+              name="Tenders"
+              parent="menu_tender"
+              action="action_tender"
+              sequence="10"/>
+
+    <!-- Bidding & Evaluation Menus -->
+    <menuitem id="menu_sagovtender_bid"
+              name="Bids"
+              parent="menu_sagovtender_bidding"
+              action="action_sagovtender_bid"
+              sequence="10"/>
+
+    <menuitem id="menu_sagovbid_opening_register"
+              name="Bid Opening Registers"
+              parent="menu_sagovtender_bidding"
+              action="action_sagovbid_opening_register"
+              sequence="20"/>
+
+    <menuitem id="menu_sagovcompliance_check"
+              name="Supplier Verifications (Compliance Checks)"
+              parent="menu_sagovtender_bidding"
+              action="action_sagovcompliance_check"
+              sequence="30"/>
+
+    <menuitem id="menu_sagovdeclaration_interest"
+              name="Declarations of Interest"
+              parent="menu_sagovtender_bidding"
+              action="action_sagovdeclaration_interest"
+              sequence="40"/>
+
+    <menuitem id="menu_sagovbid_evaluation"
+              name="Bid Evaluations"
+              parent="menu_sagovtender_bidding"
+              action="action_sagovbid_evaluation"
+              sequence="50"/>
+
+    <menuitem id="menu_sagovbac_review"
+              name="BAC Reviews"
+              parent="menu_sagovtender_bidding"
+              action="action_sagovbac_review"
+              sequence="60"/>
+
+    <menuitem id="menu_sagovtender_award"
+              name="Awards"
+              parent="menu_sagovtender_bidding"
+              action="action_sagovtender_award"
+              sequence="70"/>
+
+    <!-- Configuration Menus -->
+    <menuitem id="menu_sagovtender_committee"
+              name="Committees"
+              parent="menu_tender_master_data"
+              action="action_sagovtender_committee"
+              sequence="10"/>
+
+    <menuitem id="menu_sagovtender_type"
+              name="Tender Types"
+              parent="menu_tender_master_data"
+              action="action_sagovtender_type"
+              sequence="20"/>
+
+    <menuitem id="menu_advertisement_platform"
+              name="Advertisement Platforms"
+              parent="menu_tender_master_data"
+              action="action_advertisement_platform"
+              sequence="30"/>
+
+    <menuitem id="menu_app_import_plan_lines"
+              name="Procurement Lines"
+              parent="menu_tender_master_data"
+              action="sa_government_tender.action_annual_procurement_plan_line"
+              sequence="40"/>
+
+    <menuitem id="menu_sagovprocurement_document_requirement"
+              name="Document Requirements"
+              parent="menu_tender_master_data"
+              action="action_sagovprocurement_document_requirement"
+              sequence="35"/>
+
+    <!-- <menuitem id="menu_sagovtender_ui_section_tabs"
+              name="Visible Tabs"
+              parent="menu_tender_master_data"
+              action="%(action_sagovtender_ui_section_tabs)d"
+              sequence="50"/>
+
+    <menuitem id="menu_sagovtender_ui_section_buttons"
+              name="Visible Header Buttons"
+              parent="menu_tender_master_data"
+              action="%(action_sagovtender_ui_section_buttons)d"
+              sequence="60"/> -->
+</odoo>

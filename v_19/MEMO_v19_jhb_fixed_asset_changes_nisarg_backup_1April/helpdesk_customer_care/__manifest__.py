@@ -1,0 +1,32 @@
+{
+    'name': "Helpdesk Customer Care",
+    'description': """Helpdesk Customer Care""",
+    'summary': """Helpdesk Customer Care""",
+    'version': '19.0.1.0.0',
+    'sequence': '20',
+    'category': 'Services',
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': 'https://natedsystems.co.za/',
+    'depends': ['helpdesk', 'website_helpdesk', 'website'],
+    'data': [
+        'data/helpdesk_category_data.xml',
+        'security/ir.model.access.csv',
+        'views/helpdesk_category_views.xml',
+        'views/helpdesk_ticket_views.xml',
+        # 'views/helpdesk_template.xml',
+    ],
+    'assets': {
+        'web.assets_frontend': [
+            # 'helpdesk_customer_care/static/src/js/helpdesk_ticket.js',
+            # 'helpdesk_customer_care/static/src/scss/helpdesk_ticket.scss',
+            'helpdesk_customer_care/static/src/js/helpdesk_ticket_validation.js',
+        ],
+    },
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

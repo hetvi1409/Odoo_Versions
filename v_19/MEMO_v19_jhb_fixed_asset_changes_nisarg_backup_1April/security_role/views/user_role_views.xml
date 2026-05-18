@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_user_role_tree" model="ir.ui.view">
+        <field name="name">user.role.list</field>
+        <field name="model">user.role</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="user_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_form_roles" model="ir.ui.view">
+        <field name="name">user.role.form</field>
+        <field name="model">user.role</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="user_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook colspan="4">
+                        <page name="access_rights" string="Access Rights">
+                            <field name="group_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <!--                <div class="oe_chatter">-->
+                <!--                    <field name="message_follower_ids"/>-->
+                <!--                    <field name="activity_ids"/>-->
+                <!--                    <field name="message_ids"/>-->
+                <!--                </div>-->
+            </form>
+        </field>
+    </record>
+
+    <record id="role_group_view" model="ir.ui.view">
+        <field name="name">res.users.groups</field>
+        <field name="model">user.role</field>
+        <field name="inherit_id" ref="view_form_roles"/>
+        <field name="arch" type="xml">
+            <!-- dummy, will be modified by groups -->
+            <field name="group_ids" position="after"/>
+        </field>
+    </record>
+
+
+    <record id="action_user_role" model="ir.actions.act_window">
+        <field name="name">User Role</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">user.role</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_user_role"
+              name="User Role"
+              parent="base.menu_users"
+              action="action_user_role"
+              sequence="17"/>
+</odoo>

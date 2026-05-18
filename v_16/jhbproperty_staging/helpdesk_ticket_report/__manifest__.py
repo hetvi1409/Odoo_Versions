@@ -1,0 +1,22 @@
+{
+    'name': "Helpdesk Ticket Report",
+    'description': """Helpdesk Ticket Report""",
+    'summary': """Helpdesk Ticket Report""",
+    'version': '16.0.1.0.0',
+    'sequence': '20',
+    'category': 'Services',
+    'depends': ['helpdesk', 'website_helpdesk', 'website'],
+    'data': [
+        'security/ir.model.access.csv',
+        'wizard/helpdesk_ticket_report_wizard_view.xml',
+        'report/helpdesk_ticket_report_action.xml',
+        'report/helpdesk_ticket_report_templates.xml',
+        'data/email_template.xml',
+        'data/scheduled_action.xml',
+    ],
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

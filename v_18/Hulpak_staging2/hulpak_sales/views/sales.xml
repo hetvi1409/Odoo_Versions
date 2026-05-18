@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--  Inherit sale.order form view  -->
+    <record id="view_order_form_inherit_region_department" model="ir.ui.view">
+        <field name="name">sale.order.region_department</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="currency_id"/>
+                <field name="department" required="1" domain="[('plan_id.name', 'ilike', 'Department')]" options="{'no_open': True, 'no_create': True}"/>
+                <field name="region" required="1" domain="[('plan_id.name', 'ilike', 'Region')]" options="{'no_open': True, 'no_create': True}"/>
+                <field name="warehouse_id" invisible="1" readonly="state == 'sale'" style="background-color:#f0f0f0; color:black;"/>
+                <!-- needed for js logic -->
+                <field name="warehouse_id" options="{'no_create': True}" force_save="1" readonly="state == 'sale'" style="background-color:#f0f0f0; color:black;"/>
+                <field name="reference"/>
+            </xpath>
+            <xpath expr="//form[1]/header[1]" position="inside">
+                <widget name="web_ribbon" title="Credit Hold" bg_color="text-bg-danger" invisible="credit_hold == False"/>
+            </xpath>
+            <xpath expr="//field[@name='validity_date']" position="after">
+                <field name="commitment_date" required="1" style="background-color:#f0f0f0; color:black;"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <!-- <field name="region" required="1" domain="[('plan_id.name', 'ilike', 'Region')]"  options="{'no_open': True, 'no_create': True}"/> -->
+                <xpath expr="//field[@name='client_order_ref']" position="move"/>
+                <!--<field name="currency_id"/>-->
+                <xpath expr="//field[@name='payment_term_id']" position="move"/>
+                <xpath expr="//field[@name='department']" position="move"/>
+            </xpath>
+            <xpath expr="//field[@name='client_order_ref']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/group[@name='sale_header']/group[@name='partner_details']/field[@name='partner_invoice_id']" position="attributes">
+                <attribute name="domain">[("parent_id", "=", partner_id)]</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/group[@name='sale_header']/group[@name='partner_details']/field[@name='partner_shipping_id']" position="attributes">
+                <attribute name="domain">[("parent_id", "=", partner_id)]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="options">{"no_create":true}</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/group[@name='sale_header']/group[@name='partner_details']/field[@name='partner_invoice_id']" position="attributes">
+                <attribute name="options">{"no_quick_create":true,"no_create_edit":true,"no_create":true,"no_open":true}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
+                <attribute name="options">{"no_quick_create":true,"no_create":true,"no_open":true}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='client_order_ref']" position="attributes">
+                <attribute name="force_save">1</attribute>
+                <attribute name="readonly">True</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/group[@name='sale_header']/group[@name='order_details']/field[@name='currency_id'][2]" position="attributes">
+                <attribute name="options">{"no_create":true}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='product_template_id']" position="attributes">
+                <attribute name="options">{"no_open":true,"no_create":true}</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/list[1]/field[@name='tax_id']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_law_calendar_form" model="ir.ui.view">
+            <field name="name">calendar.form.view</field>
+            <field name="model">calendar.event</field>
+            <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button name="action_create_invoice" string="Create Invoice" type="object" invisible="is_consultation == False"/>
+                    </header>
+                </xpath>
+
+                <xpath expr="//sheet/div" position="before">
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="open_invoice_view" class="oe_stat_button"
+                                icon="fa-pencil-square-o" invisible="count_invoice == 0">
+                            <field name="count_invoice" widget="statinfo" string="Invoice"/>
+                        </button>
+                    </div>
+                </xpath>
+
+                <field name="allday" position="after">
+                    <field name="consultation_amount"/>
+                </field>
+
+                <xpath expr="//div[hasclass('align-items-baseline')]" position="before">
+                    <div class="oe_title mb-3 row">
+                        <div>
+                            <label for="customer_id"/>
+                        </div>
+                        <h3>
+                            <field name="customer_id"/>
+                            <field name="is_consultation" invisible="1"/>
+                        </h3>
+                    </div>
+                    <br/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_law_calendar_tree" model="ir.ui.view">
+            <field name="name">calendar.list.view</field>
+            <field name="model">calendar.event</field>
+            <field name="inherit_id" ref="calendar.view_calendar_event_tree"/>
+            <field name="arch" type="xml">
+                <field name="partner_ids" position="before">
+                    <field name="customer_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="action_consultation_calendar_event" model="ir.actions.act_window">
+            <field name="name">Consultation</field>
+            <field name="res_model">calendar.event</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="calendar.view_calendar_event_calendar"/>
+            <field name="search_view_id" ref="calendar.view_calendar_event_search"/>
+            <field name="domain">[('is_consultation', '=', True)]</field>
+            <field name="context">{'default_is_consultation': True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No consultation found. Let's schedule one!
+                </p>
+                <p>
+                    The calendar is shared between employees and fully integrated with
+                    other applications such as the employee leaves or the business
+                    opportunities.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_calendar_event_domain" model="ir.actions.act_window">
+            <field name="name">Consultation</field>
+            <field name="res_model">calendar.event</field>
+            <field name="view_mode">calendar,list,form</field>
+            <field name="view_id" ref="calendar.view_calendar_event_calendar"/>
+            <field name="search_view_id" ref="calendar.view_calendar_event_search"/>
+            <field name="domain">[('is_consultation', '=', True)]</field>
+            <field name="context">{'default_is_consultation': True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No meetings found. Let's schedule one!
+                </p>
+                <p>
+                    The consultation is shared between employees and fully integrated with
+                    other applications such as the employee leaves or the business
+                    opportunities.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="email_template_enquiry" model="mail.template">
+            <field name="name">Enquiry</field>
+            <field name="model_id" ref="client_enquiry.model_client_enquiry"/>
+            <field name="subject"> The Property in the enquiry {{ object.name or 'n/a' }} is not available.</field>
+            <field name="description">send to the customers.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.partner_id.name" />,<br/>
+                        The Enquiry <t t-out="object.name"/> is not available in JPC Company.
+                    </p>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_submitted" model="mail.template">
+            <field name="name">Enquiry</field>
+            <field name="model_id" ref="client_enquiry.model_client_enquiry"/>
+            <field name="subject"> The enquiry {{ object.name or 'n/a' }} is submitted.</field>
+            <field name="description">send to the customers.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.partner_id.name" />,<br/>
+                        The Enquiry <t t-out="object.name"/> is Submitted to the CBO team.
+                    </p>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_assigned" model="mail.template">
+            <field name="name">Enquiry Assigned</field>
+            <field name="model_id" ref="client_enquiry.model_client_enquiry"/>
+            <field name="subject"> The Enquiry {{ object.name or 'n/a' }} is Assigned.</field>
+            <field name="email_to">{{object.user_id.partner_id.email}}</field>
+            <field name="description">send to the users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.user_id.name" /><br/>
+                        The Enquiry <t t-out="object.name"/> is assigned for you.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_assessment_assigned" model="mail.template">
+            <field name="name">Assessment Assigned</field>
+            <field name="model_id" ref="client_enquiry.model_enquiry_assessment"/>
+            <field name="subject"> The Assessment {{ object.name or 'n/a' }} is Assigned.</field>
+            <field name="email_to">{{object.user_id.partner_id.email}}</field>
+            <field name="description">send to the users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.user_id.name" /><br/>
+                        The Assessment <t t-out="object.name"/> is assigned for you.
+                    </p>
+
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_submit" model="mail.template">
+            <field name="name">Enquiry Submit</field>
+            <field name="model_id" ref="client_enquiry.model_client_enquiry"/>
+            <field name="subject"> The Enquiry {{ object.name or 'n/a' }} is Submitted.</field>
+            <field name="description">send to the users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi Team,<br/>
+                        The Enquiry <t t-out="object.name"/> is submitted. Please check and review this.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_assessment_created" model="mail.template">
+            <field name="name">Assessment Created</field>
+            <field name="model_id" ref="client_enquiry.model_client_enquiry"/>
+            <field name="subject"> The Assessment {{ object.assessment_id.name or 'n/a' }} is Created.</field>
+            <field name="description">Send to the assessment managers users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi Team,<br/>
+                        The Assessment <t t-out="object.assessment_id.name"/> for the Enquiry <t t-out="object.name"/> was created. Please check and review assessment.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_assessment_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.assessment_id.name"/>
+                            </t>
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_assessment_send_for_circulation" model="mail.template">
+            <field name="name">Assessment: Send for circulation</field>
+            <field name="model_id" ref="client_enquiry.model_enquiry_assessment"/>
+            <field name="subject"> The Assessment {{ object.name or 'n/a' }} is Uploaded the Assessment Result.</field>
+            <field name="description">Send to the project managers users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi Team,<br/>
+                        The Assessment <t t-out="object.name"/> is uploaded the assessment documents. Please check and review assessment.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_assessment_request_valuation" model="mail.template">
+            <field name="name">Assessment: Request Valuation</field>
+            <field name="model_id" ref="client_enquiry.model_enquiry_assessment"/>
+            <field name="subject"> The Assessment {{ object.name or 'n/a' }} : Request Valuation.</field>
+            <field name="description">Send to the project managers users.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi Team,<br/>
+                        The Assessment <t t-out="object.name"/> Was completed the objection. Please request for the valuation.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_assessment_upload_valuation" model="mail.template">
+            <field name="name">Assessment: Upload Valuation Report</field>
+            <field name="model_id" ref="client_enquiry.model_enquiry_assessment"/>
+            <field name="subject"> The Assessment {{ object.name or 'n/a' }} : Upload Valuation.</field>
+            <field name="description">Send to the project managers users for upload the valuation.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi Team,<br/>
+                        The Assessment <t t-out="object.name"/> was completed the request valuation. Please upload the valuation report.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_assessment_upload_transaction" model="mail.template">
+            <field name="name">Assessment: Upload Transaction Report</field>
+            <field name="model_id" ref="client_enquiry.model_enquiry_assessment"/>
+            <field name="subject"> The Assessment {{ object.name or 'n/a' }} : Upload Transaction.</field>
+            <field name="description">Send to the project managers users for upload the transaction.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi Team,<br/>
+                        The Assessment <t t-out="object.name"/> was completed the valuation report. Please upload the transaction report.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_meeting_request" model="mail.template">
+            <field name="name">Assessment: Create meeting</field>
+            <field name="model_id" ref="client_enquiry.model_assessment_meeting"/>
+            <field name="subject"> The Assessment {{ object.assessment_id.name or 'n/a' }} : Create Meeting.</field>
+            <field name="description">Send to the committee managers users for Create meetings.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi Team,<br/>
+                        The Assessment <t t-out="object.assessment_id.name"/> was completed the meeting request. Please create the meeting request.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Create Meeting
+                            </t>
+                        </a>
+                    </div>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.assessment_id.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open Assessment<t t-out="object.assessment_id.name"/>
+                            </t>
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_assessment_upload_meeting_report" model="mail.template">
+            <field name="name">Assessment: Upload Internal Meeting Report</field>
+            <field name="model_id" ref="client_enquiry.model_enquiry_assessment"/>
+            <field name="subject"> The Assessment {{ object.name or 'n/a' }} : Upload Internal meeting reports.</field>
+            <field name="description">Send to the project managers users for upload the internal meeting.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi Team,<br/>
+                        The Assessment <t t-out="object.name"/> was completed the request meeting state. Please upload the internal meeting report.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_assessment_not_supported" model="mail.template">
+            <field name="name">Assessment: Not Supported</field>
+            <field name="model_id" ref="client_enquiry.model_enquiry_assessment"/>
+            <field name="subject"> The Assessment {{ object.name or 'n/a' }} : Not Supported.</field>
+            <field name="description">Send to the CBO users for Informing the status.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi Team,<br/>
+                        The Assessment <t t-out="object.name"/> Not supported.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_enquiry_cancelled" model="mail.template">
+            <field name="name">Enquiry</field>
+            <field name="model_id" ref="client_enquiry.model_client_enquiry"/>
+            <field name="subject"> The Enquiry {{ object.name or 'n/a' }} IS CANCELLED.</field>
+            <field name="description">send to the customers.</field>
+            <field name="email_to">{{object.email}}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.partner_id.name" />,<br/>
+                        The Enquiry <t t-out="object.name"/> is cancelled.
+                        The Assessment <t t-out="object.assessment_id.name"/> is not supported in JPC.
+                    </p>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_client_enquiry_supported" model="mail.template">
+            <field name="name">Enquiry</field>
+            <field name="model_id" ref="client_enquiry.model_client_enquiry"/>
+            <field name="subject"> The Enquiry {{ object.name or 'n/a' }} IS Supported.</field>
+            <field name="description">send to the customers.</field>
+            <field name="email_to">{{object.email}}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.partner_id.name" />,<br/>
+                        The assessment started for the enquiry <t t-out="object.name"/>.
+                        The Assessment <t t-out="object.assessment_id.name"/> is supported in JPC.
+                    </p>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_client_enquiry_assessment_completed" model="mail.template">
+            <field name="name">Enquiry</field>
+            <field name="model_id" ref="client_enquiry.model_client_enquiry"/>
+            <field name="subject"> The Enquiry {{ object.name or 'n/a' }} IS CANCELLED.</field>
+            <field name="description">send to the customers.</field>
+            <field name="email_to">{{object.email}}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.partner_id.name" />,<br/>
+                        The assessment completed for the enquiry <t t-out="object.name"/>.
+                        The Assessment <t t-out="object.assessment_id.name"/> is supported in JPC.
+                    </p>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_request_document" model="mail.template">
+            <field name="name">Documents</field>
+            <field name="model_id" ref="client_enquiry.model_land_regularization"/>
+            <field name="subject"> Please add these documents.</field>
+            <field name="description">send to the enquirer.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.requester_infos.name" />,<br/>
+                        Please add the documents.
+                        <div style="margin: 16px 0px 16px 0px;">
+                            <a t-att-href="(object.get_list_url())"
+                               style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                <t>
+                                    Open
+                                </t>
+                            </a>
+                        </div>
+                    </p>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_review_document" model="mail.template">
+            <field name="name">Documents</field>
+            <field name="model_id" ref="client_enquiry.model_land_regularization"/>
+            <field name="subject"> Please review these documents.</field>
+            <field name="description">send to the assignee.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi,<br/>
+                        Please review the documents.
+                        <div style="margin: 16px 0px 16px 0px;">
+                            <a t-att-href="(object.get_list_url())"
+                               style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                <t>
+                                    Open
+                                </t>
+                            </a>
+                        </div>
+                    </p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

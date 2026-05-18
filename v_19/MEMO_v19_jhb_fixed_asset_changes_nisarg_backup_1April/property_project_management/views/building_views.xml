@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="building_base_pages_form">
+        <field name="name">building.form.view</field>
+        <field name="model">building</field>
+        <field name="inherit_id"
+               ref="itsys_real_estate.building_base_pages_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="get_task_details"
+                        icon="fa-credit-card" invisible="task_count == 0">
+                    <field string="Tasks"
+                           name="task_count" widget="statinfo"/>
+                </button>
+            </xpath>
+           <xpath expr="//header" position="inside">"
+                <button name="create_project_task" type="object" string="Create Task" class="oe_highlight"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

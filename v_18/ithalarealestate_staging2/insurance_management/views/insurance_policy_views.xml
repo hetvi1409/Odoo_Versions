@@ -1,0 +1,199 @@
+<!-- views/insurance_policy_views.xml -->
+<odoo>
+    <record id="view_insurance_policy_list" model="ir.ui.view">
+        <field name="name">insurance.policy.list</field>
+        <field name="model">insurance.policy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="insurance_type"/>
+                <field name="insurer_id"/>
+                <field name="policy_start_date"/>
+                <field name="policy_end_date"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_insurance_policy_form" model="ir.ui.view">
+        <field name="name">insurance.policy.form</field>
+        <field name="model">insurance.policy</field>
+        <field name="arch" type="xml">
+            <form string="Insurance Policy">
+                <header>
+                    <field name="status" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_attachments" string="Documents" type="object" class="oe_stat_button">
+                        <field name="attachment_count" widget="statinfo"/>
+                    </button>
+                    <button name="action_open_payments" string="Payments" type="object" class="oe_stat_button">
+                        <field name="payment_count" widget="statinfo"/>
+                    </button>
+                    <button name="action_open_claims" string="Claims" type="object" class="oe_stat_button">
+                        <field name="claim_count" widget="statinfo"/>
+                    </button>
+                    <button name="action_open_linked" string="Linked" type="object" class="oe_stat_button">
+                        <field name="linked_count" widget="statinfo"/>
+                    </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="insurance_type"/>
+                            <field name="insurer_id"/>
+                            <field name="broker_id"/>
+                        </group>
+                        <group>
+                            <field name="policy_start_date"/>
+                            <field name="policy_end_date"/>
+                            <field name="status"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <field name="sum_insured"/>
+                        <field name="premium_amount"/>
+                        <field name="currency_id"/>
+                        <field name="payment_frequency"/>
+                        <field name="payment_method"/>
+                        <field name="excess_amount"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Details">
+                            <group>
+                                <field name="policy_document" filename="policy_document_name"/>
+                                <field name="policy_document_name"/>
+                                <field name="notes"/>
+                            </group>
+                        </page>
+
+                        <page string="Property" invisible="insurance_type != 'property'">
+                            <group>
+                                <field name="property_id"/>
+                                <field name="property_ref"/>
+                                <field name="property_address"/>
+                                <field name="property_type"/>
+                                <field name="building_size"/>
+                                <field name="construction_type"/>
+                                <field name="replacement_value"/>
+                            </group>
+                        </page>
+
+                        <page string="Asset" invisible="insurance_type != 'asset'">
+                            <group>
+                                <field name="asset_ref"/>
+                                <field name="asset_category_id"/>
+                                <field name="asset_serial"/>
+                                <field name="asset_value"/>
+                                <field name="asset_location"/>
+                                <field name="asset_condition"/>
+                            </group>
+                        </page>
+
+                        <page string="Vehicle" invisible="insurance_type != 'vehicle'">
+                            <group>
+                                <field name="vehicle_registration"/>
+                                <field name="vehicle_make_model"/>
+                                <field name="vin_number"/>
+                                <field name="engine_number"/>
+                                <field name="vehicle_year"/>
+                                <field name="driver_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Tenant" invisible="insurance_type != 'tenant'">
+                            <group>
+                                <field name="tenant_id"/>
+                                <field name="lease_ref"/>
+                                <field name="tenant_cover_type"/>
+                                <field name="required_by_landlord"/>
+                            </group>
+                        </page>
+
+                        <page string="Coverage &amp; Risk">
+                            <group>
+                                <field name="risks_covered" widget="many2many_tags"/>
+                                <field name="exclusions"/>
+                                <field name="geographical_coverage"/>
+                                <field name="special_conditions"/>
+                                <field name="reinstatement_clause"/>
+                            </group>
+                        </page>
+
+                        <page string="Claims">
+                            <group>
+                                <field name="claims_contact_person"/>
+                                <field name="claims_contact_number"/>
+                                <field name="claims_contact_email"/>
+                            </group>
+                            <separator/>
+                            <field name="claim_ids" nolabel="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="status"/>
+                                    <field name="claim_amount"/>
+                                    <field name="payout_amount"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Compliance &amp; Monitoring">
+                            <group>
+                                <field name="pfma_compliant"/>
+                                <field name="insurance_verified"/>
+                                <field name="verified_by"/>
+                                <field name="verification_date"/>
+                                <field name="renewal_reminder_enabled"/>
+                                <field name="days_before_expiry_reminder"/>
+                                <field name="risk_rating"/>
+                                <field name="audit_comments"/>
+                            </group>
+                        </page>
+
+                        <page string="Automation">
+                            <group>
+                                <field name="auto_renewal"/>
+                                <field name="renewal_in_progress"/>
+                                <field name="last_renewal_date"/>
+                                <field name="next_review_date"/>
+                                <field name="responsible_officer"/>
+                                <field name="department_id"/>
+                                <field name="linked_vendor"/>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- kanban -->
+    <record id="view_insurance_policy_kanban" model="ir.ui.view">
+        <field name="name">insurance.policy.kanban</field>
+        <field name="model">insurance.policy</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="insurance_type"/>
+                <field name="insurer_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="o_kanban_record">
+                            <div class="o_kanban_record_body">
+                                <strong><field name="name"/></strong>
+                                <div><field name="insurance_type"/></div>
+                                <div><field name="insurer_id"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

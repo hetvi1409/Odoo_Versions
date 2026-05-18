@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_law_client_form" model="ir.ui.view">
+            <field name="name">res.client.form.view</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']/button" position="before">
+                    <button class="oe_stat_button" type="object" name="open_trust_account_view" icon="fa-star">
+                        <field string="Trust Account" name="count_trust_account" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" type="object" name="open_case_view" icon="fa-legal">
+                        <field string="Cases" name="count_case" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" type="object" name="open_matter_view" icon="fa-paperclip">
+                        <field string="Matter" name="count_matter" widget="statinfo"/>
+                    </button>
+                </xpath>
+                <xpath expr="//page[@name='internal_notes']//field[@name='comment']" position="after">
+                    <group>
+                        <group col="2">
+                            <separator string="Law Firm Info" colspan="2"/>
+                            <field name="is_law_client" string="Law Firm Client"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_legal_res_partner_clients" model="ir.actions.act_window">
+            <field name="name">Clients</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('is_law_client', '=', True)]</field>
+            <field name="context">{'default_is_law_client': True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Clients found. Let's create one!
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

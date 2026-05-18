@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_timesheet_approval_wizard" model="ir.ui.view">
+        <field name="name">timesheet.approval.wizard.form</field>
+        <field name="model">timesheet.approval.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Timesheet Review Wizard">
+                <sheet>
+                    <group>
+                        <field name="attendance_ids" readonly="0">
+                            <tree>
+                                <field name="employee_id"/>
+                                <field name="check_in"/>
+                                <field name="check_out"/>
+                                <field name="worked_hours"/>
+                                <field name="validated_overtime_hours"/>
+                                <field name="timesheet_status"/>
+                                <field name="overtime_status"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_approve_all" string="Approve All" type="object" class="btn-primary"
+                            confirm="Are you sure you want to approve all selected timesheets?"/>
+                    <button name="action_decline_all" string="Decline All" type="object" class="btn-secondary"
+                            confirm="Are you sure you want to decline all selected timesheets?"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- <record id="action_timesheet_approval_wizard" model="ir.actions.act_window">
+        <field name="name">1X Review Timesheets</field>
+        <field name="res_model">timesheet.approval.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_hr_attendance"/>
+        <field name="context">{'default_attendance_ids': active_ids}</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_open_send_mail_wizard()</field>
+    </record> -->
+
+    <!-- Action -->
+    <record id="action_timesheet_approval_wizard" model="ir.actions.act_window">
+        <field name="name">Timesheets to Review</field>
+        <field name="res_model">timesheet.approval.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+<!--        <field name="binding_model_id" ref="hr_attendance.model_hr_attendance"/>-->
+        <field name="context">{'default_attendance_ids': []}</field>
+    </record>
+
+</odoo>

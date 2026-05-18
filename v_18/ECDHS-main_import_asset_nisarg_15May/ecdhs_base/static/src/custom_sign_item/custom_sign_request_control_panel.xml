@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="sign.SignRequestControlPanel" t-inherit-mode="extension">
+        <!-- Replace the Download Certificate button -->
+        <xpath expr="//a[contains(@class, 'o_sign_download_log_button')]" position="replace">
+            <a t-if="signInfo.get('signRequestState') == 'signed' and showCertificateButton"
+               t-attf-href="/sign/download/{{signInfo.get('documentId')}}/{{signInfo.get('signRequestToken')}}/log"
+               class="btn btn-secondary o_sign_download_log_button">
+                Download Certificate
+            </a>
+        </xpath>
+        <!-- Replace the Sign Now button -->
+        <xpath expr="//button[contains(@class, 'o_sign_sign_directly')]" position="replace">
+            <button t-if="signInfo.get('needToSign') and showSignNowButton" type="button"
+                    class="btn btn-primary me-2 o_sign_sign_directly"
+                    t-on-click="signDocument">Sign Now</button>
+        </xpath>
+        <!-- Replace the Cancel button -->
+        <xpath expr="//button[contains(@class, 'o_sign_cancel')]" position="replace">
+            <button t-if="allowCancel and showSignNowButton" type="button" class="btn btn-secondary me-2 o_sign_cancel"
+                    t-on-click="cancelDocument">Cancel</button>
+        </xpath>
+    </t>
+
+</templates>

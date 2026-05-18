@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="bsc_memo_action" model="ir.actions.act_window">
+        <field name="name">RFQ Memo</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bsc.memo</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new record!
+            </p>
+        </field>
+    </record>
+    <record id="bsc_memo_view_form" model="ir.ui.view">
+        <field name="name">bsc.memo.view.tree</field>
+        <field name="model">bsc.memo</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget='statusbar'
+                           statusbar_visible='draft,approve'/>
+                    <button name="action_approve"
+                            class="oe_highlight" states="draft"
+                            string="Approve" type="object"
+                            groups="supply_chain_management.purchase_requisition_scm_ceo"/>
+                    <button name="action_refuse"
+                            class="btn btn-secondary" states="draft"
+                            string="Refuse" type="object"
+                            groups="supply_chain_management.purchase_requisition_scm_ceo"/>
+                    <button name="reset_drafts"
+                            class="btn btn-secondary" states="cancelled"
+                            string="Reset to Draft" type="object"
+                            groups="supply_chain_management.purchase_requisition_scm_ceo"/>
+                    <button name="action_create_purchase_requisition"
+                            class="btn btn-secondary" states="approve"
+                            string="Create Purchase Requisition" type="object"
+                            groups="supply_chain_management.purchase_requisition_scm_ceo"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="get_purchase_requisition_details"
+                                icon="fa-credit-card">
+                            Purchase Requisition
+                        </button>
+                        <button name="action_view_transaction" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('transaction_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Transaction</span>
+                            </div>
+                        </button>
+                        <button name="action_view_valuation" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('valuation_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Valuation</span>
+                            </div>
+                        </button>
+                        <button name="action_view_circulation" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('circulation_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Circulation</span>
+                            </div>
+                        </button>
+                        <button name="action_view_assessment" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('assessment_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Assessment</span>
+                            </div>
+                        </button>
+                        <button name="action_view_enquiry" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('enquiry_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Enquiry</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="New"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="total_amount"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="valuation_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="circulation_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="enquiry_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="assessment_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="transaction_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group>
+                        <field name="attachment_ids" widget="many2many_binary"/>
+                        </group>
+                        <group>
+                        <field name="description" widget="html"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="bsc_memo_view_tree" model="ir.ui.view">
+        <field name="name">bsc.memo.view.tree</field>
+        <field name="model">bsc.memo</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="total_amount"/>
+                <field name="state" decoration-info="state == 'draft'"
+                       decoration-success="state == 'approve'"
+                       decoration-danger="state == 'cancelled'" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    <menuitem id="bsc_memo_menu"
+              name="RFQ Memo"
+              parent="purchase.menu_procurement_management"
+              action="bsc_memo_action"
+              groups="supply_chain_management.purchase_requisition_user"/>
+</odoo>

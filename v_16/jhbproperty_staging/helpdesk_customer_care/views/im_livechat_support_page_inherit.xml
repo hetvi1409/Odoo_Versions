@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="im_livechat_support_page_logo_inherit"
+                  inherit_id="im_livechat.support_page"
+                  name="Livechat Support Page - Channel Logo">
+            <xpath expr="//div[hasclass('main')]/h1[hasclass('channel_name')]" position="before">
+                <div class="o_livechat_channel_logo">
+                    <img t-if="channel and channel.image_128"
+                         t-att-src="'/web/image/im_livechat.channel/%s/image_128' % channel.id"
+                         t-att-alt="channel.name or 'Livechat channel logo'"
+                         class="img-fluid o_livechat_channel_logo_image"/>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

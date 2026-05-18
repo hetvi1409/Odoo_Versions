@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_client_transaction" model="ir.actions.act_window">
+        <field name="name">Transactions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">client.transaction</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_client_transaction_upload_report" model="ir.actions.act_window">
+        <field name="name">Transactions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">client.transaction</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'draft')]</field>
+    </record>
+    <record id="action_client_transaction_approve" model="ir.actions.act_window">
+        <field name="name">Transactions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">client.transaction</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'approve')]</field>
+    </record>
+    <record id="action_client_transaction_signature" model="ir.actions.act_window">
+        <field name="name">Transactions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">client.transaction</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'send_to')]</field>
+    </record>
+    <record id="action_client_transaction_section" model="ir.actions.act_window">
+        <field name="name">Transactions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">client.transaction</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'to_do_section_79')]</field>
+    </record>
+    <record id="action_client_transaction_bid" model="ir.actions.act_window">
+        <field name="name">Transactions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">client.transaction</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'bid')]</field>
+    </record>
+
+    <record id="client_transaction_view_form" model="ir.ui.view">
+        <field name="name">client.transaction.view.form</field>
+        <field name="model">client.transaction</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+
+                    <button name="action_submit" states="draft"
+                            string="Submit" type="object"
+                            class="btn btn-secondary"/>
+                    <button name="action_send_for_signing" states="approve"
+                            string="Send for Signature" type="object"
+                            groups="client_enquiry.group_property_manager"
+                            class="btn btn-primary"/>
+                    <button name="sign_the_report" states="send_to"
+                            string="Sign The Report" type="object"
+                            groups="client_enquiry.group_general_manager"
+                            class="btn btn-primary"/>
+                    <button name="action_approve" states="submit"
+                            string="Approve" type="object"
+                            groups="client_enquiry.group_general_manager"
+                            class="btn btn-primary"/>
+                    <button name="action_refuse" states="submit"
+                            string="Refuse" type="object"
+                            groups="client_enquiry.group_general_manager"
+                            class="btn btn-secondary"/>
+                    <button name="action_accept" states="approve"
+                            string="Accept" type="object"
+                            groups="client_enquiry.group_general_manager"
+                            class="btn btn-secondary"/>
+                    <button name="send_section_79_advert" states="to_do_section_79"
+                            string="Send Section 79" type="object"
+                            groups="client_enquiry.group_property_manager"
+                            class="btn btn-secondary"/>
+                    <button name="action_approve_section_79" states="to_do_section_79"
+                            string="Approve Section 79" type="object"
+                            groups="client_enquiry.group_property_manager"
+                            class="btn btn-primary"/>
+                    <button name="action_create_scm" states="bid"
+                            string="SCM" type="object"
+                            groups="client_enquiry.group_property_manager"
+                            class="btn btn-primary"/>
+                    <button name="action_create_eac"
+                            attrs="{'invisible': ['|', ('state', '!=', 'eac'), ('eac_id', '!=' , False)]}"
+                            string="Create EAC Process" type="object"
+                            groups="client_enquiry.group_property_manager"
+                            class="btn btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_eac" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('eac_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">EAC Process</span>
+                            </div>
+                        </button>
+                        <button name="action_view_valuation" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('valuation_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Valuation</span>
+                            </div>
+                        </button>
+                        <button name="action_view_circulation" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('circulation_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Circulation</span>
+                            </div>
+                        </button>
+                        <button name="action_view_assessment" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('assessment_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Assessment</span>
+                            </div>
+                        </button>
+                        <button name="action_view_enquiry" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('enquiry_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Enquiry</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="valuation_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="circulation_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="enquiry_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="assessment_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="user_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="eac_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="property_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                            <field name="jmc_number"/>
+<!--                            <field name="jmc_numbers" widget="Many2one"/>-->
+                            <field name="stand_number"/>
+                        </group>
+                        <group>
+                            <field name="address"/>
+                            <field name="amount"/>
+                        </group>
+                    </group>
+                    <group string="Transaction Details">
+                        <group>
+                            <field name="transaction_type"/>
+                            <field name="continue_process"/>
+                            <field name="endorse_comments"/>
+                            <field name="bid_comments"/>
+                            <field name="amount"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Documents">
+                            <group>
+                                <group>
+                                    <field name="transaction_attachment_ids"
+                                           widget="many2many_binary"/>
+                                    <field name="valuation_attachment_ids"
+                                           widget="many2many_binary"/>
+                                </group>
+                                <group>
+                                    <field name="receiver_user_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Meetings">
+                            <group>
+                                <group>
+                                    <label for="board_committee_id"/>
+                                    <div col="2" class="o_row">
+                                        <field name="board_committee_id" class="oe_inline"
+                                        options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                                        <button name="create_board_meeting" type="object" class="btn btn-link" attrs="{'invisible': [('board_committee_id', '!=', False)]}" >
+                                            <span class="fa fa-tag"/><span> Create meeting</span>
+                                        </button>
+                                        <button name="action_view_board_meeting" type="object" class="btn btn-link" attrs="{'invisible': [('board_committee_id', '==', False)]}" >
+                                            <span class="fa fa-tag"/><span> View meeting</span>
+                                        </button>
+                                    </div>
+                                    <label for="emt_committee_id"/>
+                                    <div col="2" class="o_row">
+                                        <field name="emt_committee_id" class="oe_inline"
+                                        options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                                        <button name="create_emt_meeting" type="object" class="btn btn-link" attrs="{'invisible': [('emt_committee_id', '!=', False)]}" >
+                                            <span class="fa fa-tag"/><span> Create meeting</span>
+                                        </button>
+                                        <button name="action_view_emt_meeting" type="object" class="btn btn-link" attrs="{'invisible': [('emt_committee_id', '==', False)]}" >
+                                            <span class="fa fa-tag"/><span> View meeting</span>
+                                        </button>
+                                    </div>
+                                    <label for="section_79_committee_id"/>
+                                    <div col="2" class="o_row">
+                                        <field name="section_79_committee_id" class="oe_inline"
+                                        options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                                        <button name="create_section_79_meeting" type="object" class="btn btn-link" attrs="{'invisible': [('section_79_committee_id', '!=', False)]}" >
+                                            <span class="fa fa-tag"/><span> Create meeting</span>
+                                        </button>
+                                        <button name="action_view_section_79_meeting" type="object" class="btn btn-link" attrs="{'invisible': [('section_79_committee_id', '==', False)]}" >
+                                            <span class="fa fa-tag"/><span> View meeting</span>
+                                        </button>
+                                    </div>
+                                    <label for="mayoral_committee_id"/>
+                                    <div col="2" class="o_row">
+                                        <field name="mayoral_committee_id" class="oe_inline"
+                                        options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                                        <button name="create_mayoral_meeting" type="object" class="btn btn-link" attrs="{'invisible': [('mayoral_committee_id', '!=', False)]}" >
+                                            <span class="fa fa-tag"/><span> Create meeting</span>
+                                        </button>
+                                        <button name="action_view_mayoral_meeting" type="object" class="btn btn-link" attrs="{'invisible': [('mayoral_committee_id', '==', False)]}" >
+                                            <span class="fa fa-tag"/><span> View meeting</span>
+                                        </button>
+                                    </div>
+                                    <label for="council_committee_id"/>
+                                    <div col="2" class="o_row">
+                                        <field name="council_committee_id" class="oe_inline"
+                                        options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"/>
+                                        <button name="create_council_meeting" type="object" class="btn btn-link" attrs="{'invisible': [('council_committee_id', '!=', False)]}" >
+                                            <span class="fa fa-tag"/><span> Create meeting</span>
+                                        </button>
+                                        <button name="action_view_council_meeting" type="object" class="btn btn-link" attrs="{'invisible': [('council_committee_id', '==', False)]}" >
+                                            <span class="fa fa-tag"/><span> View meeting</span>
+                                        </button>
+                                    </div>
+
+                                </group>
+                                <group>
+                                    <field name="board_committee_attachment_ids" widget="many2many_binary"/>
+                                    <field name="emt_committee_attachment_ids" widget="many2many_binary"/>
+                                    <field name="section_79_committee_attachment_ids" widget="many2many_binary"/>
+                                    <field name="mayoral_committee_attachment_ids" widget="many2many_binary"/>
+                                    <field name="council_committee_attachment_ids" widget="many2many_binary"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="GEOLIS">
+                            <iframe id="custom_src" name="custom_src"
+                                    src="https://ags.joburg.org.za/cgis/index.aspx"
+                                    width="100%" height="500"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+
+            </form>
+        </field>
+    </record>
+    <record id="client_transaction_view_tree" model="ir.ui.view">
+        <field name="name">client.transaction.view.tree</field>
+        <field name="model">client.transaction</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="property_id"/>
+                <field name="enquiry_id"/>
+                <field name="jmc_number"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <menuitem id="client_transaction_menu"
+              name="Transaction"
+              action="action_client_transaction"
+              parent="client_enquiry.client_enquiry_helpdesk_enquiries_menu"
+              sequence="24"/>
+
+</odoo>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View for Tender Category -->
+    <record id="view_tender_category_form" model="ir.ui.view">
+        <field name="name">tender.category.form</field>
+        <field name="model">tender.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_tender_category" model="ir.actions.act_window">
+        <field name="name">Tender Categories</field>
+        <field name="res_model">tender.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+<!--    <record id="action_vendor_database" model="ir.actions.act_window">-->
+<!--        <field name="name">Vendors</field>-->
+<!--        <field name="res_model">res.partner</field>-->
+<!--        <field name="domain">[('supplier_rank', '>', 0)]</field>-->
+<!--        <field name="view_mode">list,form</field>-->
+<!--    </record>-->
+
+    <!-- Menu Items -->
+    <!--    Main menu-->
+    <menuitem id="menu_tender_management_root" name="Tender Management" groups="base.group_erp_manager"
+              sequence="20" web_icon="tender_management,static/description/icon.png"/>
+
+    <!--    Dashboard and submenus-->
+    <menuitem id="menu_dashboard_root" name="Dashboards" sequence="1"
+              parent="tender_management.menu_tender_management_root"/>
+
+    <menuitem id="menu_request_received" name="Request Received" sequence="1"
+              parent="tender_management.menu_dashboard_root" action="action_tender_category"/>
+    <menuitem id="menu_order_raised" name="Orders raised" sequence="2"
+              parent="tender_management.menu_dashboard_root" action="action_tender_category"/>
+    <menuitem id="menu_bids_specification" name="Bids specifications" sequence="3"
+              parent="tender_management.menu_dashboard_root" action="action_tender_category"/>
+    <menuitem id="menu_incidents" name="Incidents" sequence="4"
+              parent="tender_management.menu_dashboard_root" action="action_tender_category"/>
+
+    <!--    Tenders-->
+    <menuitem id="menu_tender_root" name="Tenders" sequence="2"
+              parent="menu_tender_management_root"/>
+    <menuitem id="menu_tender_categories" name="Tender Categories" sequence="2"
+              parent="menu_tender_root" action="action_tender_category"/>
+<!--    <menuitem id="menu_vendor_database" name="Vendors" sequence="10"-->
+<!--              parent="menu_tender_root" action="action_vendor_database"/>-->
+</odoo>
+
+

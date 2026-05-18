@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ir_cron_send_followup_mail" model="ir.cron">
+        <field name="name">Job Requisition: Follow Up</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="model_id" ref="model_hr_job"/>
+        <field name="code">model.send_follow_up_mail()</field>
+        <field name="state">code</field>
+    </record>
+
+    <record id="ir_actions_server_send_loan_detail_email" model="ir.actions.server">
+        <field name="name">Application: Candidates</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_hr_applicant"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.action_open_candidates()
+        </field>
+        <field name="binding_model_id" ref="recruitment_enhancement.model_hr_applicant"/>
+    </record>
+    <record id="ir_actions_server_application_candidates" model="ir.actions.server">
+        <field name="name">Matching Candidates</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_hr_job"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.action_search_matching_candidates()
+        </field>
+        <field name="binding_model_id" ref="recruitment_enhancement.model_hr_job"/>
+    </record>
+        <record id="ir_actions_server_readvertise_jobs" model="ir.actions.server">
+        <field name="name">Re-Advertise Job</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_hr_job"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.action_readvertise_jobs()
+        </field>
+        <field name="binding_model_id" ref="recruitment_enhancement.model_hr_job"/>
+    </record>
+</odoo>

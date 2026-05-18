@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="ecdhs_contract_dashboard_view_form" model="ir.ui.view">
+        <field name="name">ecdhs.contract.dashboard.form</field>
+        <field name="model">ecdhs.contract.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Contracts Management Dashboard" create="false" edit="false" delete="false">
+                <sheet class="ecdhs-contract-dashboard" style="padding: 0; margin: 0; max-width: none;">
+                    <field name="name" invisible="1"/>
+                    <div class="ecdhs-dashboard-header">
+                        <h1>Contracts Overview</h1>
+                        <p class="text-muted">Interactive command center for live contracts, compliance, payments, and performance.</p>
+                    </div>
+
+                    <div class="ecdhs-panel-grid">
+                        <div class="ecdhs-panel panel-my-contracts">
+                            <h3>My Contracts <span class="ecdhs-panel-chip">Owner View</span></h3>
+                            <div class="oe_button_box ecdhs-panel-stats" name="my_contracts_box">
+                                <button name="action_open_my_open_contracts" type="object" class="oe_stat_button ecdhs-mini-stat mini-indigo" icon="fa-briefcase">
+                                    <field name="my_open_contracts" widget="statinfo" string="Open"/>
+                                </button>
+                                <button name="action_open_my_expiring_contracts" type="object" class="oe_stat_button ecdhs-mini-stat mini-amber" icon="fa-hourglass-half">
+                                    <field name="my_expiring_contracts" widget="statinfo" string="Expiring"/>
+                                </button>
+                                <button name="action_open_my_blocked_contracts" type="object" class="oe_stat_button ecdhs-mini-stat mini-rose" icon="fa-exclamation-circle">
+                                    <field name="my_blocked_contracts" widget="statinfo" string="Blocked"/>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="ecdhs-panel panel-performance">
+                            <h3>Monitoring Performance <span class="ecdhs-panel-chip">SLA Tracker</span></h3>
+                            <div class="oe_button_box ecdhs-panel-stats" name="monitoring_box">
+                                <button name="action_open_monitoring_reports" type="object" class="oe_stat_button ecdhs-mini-stat mini-slate" icon="fa-list-alt">
+                                    <field name="monitoring_total" widget="statinfo" string="Reports"/>
+                                </button>
+                                <button name="action_open_compliant_monitoring_reports" type="object" class="oe_stat_button ecdhs-mini-stat mini-teal" icon="fa-thumbs-up">
+                                    <field name="monitoring_compliant" widget="statinfo" string="Compliant"/>
+                                </button>
+                                <button name="action_open_compliance_alerts" type="object" class="oe_stat_button ecdhs-mini-stat mini-cyan" icon="fa-line-chart">
+                                    <field name="monitoring_compliance_rate" widget="statinfo" string="Compliance %"/>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="ecdhs-panel panel-payments">
+                            <h3>Payment Verification <span class="ecdhs-panel-chip">Finance Desk</span></h3>
+                            <div class="oe_button_box ecdhs-panel-stats" name="payment_box">
+                                <button name="action_open_verified_payments" type="object" class="oe_stat_button ecdhs-mini-stat mini-blue" icon="fa-check-square-o">
+                                    <field name="payments_verified" widget="statinfo" string="Verified"/>
+                                </button>
+                                <button name="action_open_paid_payments" type="object" class="oe_stat_button ecdhs-mini-stat mini-green" icon="fa-money">
+                                    <field name="payments_paid" widget="statinfo" string="Paid"/>
+                                </button>
+                                <button name="action_open_rejected_payments" type="object" class="oe_stat_button ecdhs-mini-stat mini-red" icon="fa-ban">
+                                    <field name="payments_rejected" widget="statinfo" string="Rejected"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ecdhs-secondary-grid">
+                        <div class="ecdhs-panel ecdhs-budget-card">
+                            <h3>Budget vs Spend <span class="ecdhs-panel-chip">Cost Control</span></h3>
+                            <group>
+                                <group>
+                                    <field name="company_currency_id" invisible="1"/>
+                                    <field name="budget_amount" widget="monetary" string="Budget Amount"/>
+                                    <field name="spend_amount" widget="monetary" string="Spend Amount"/>
+                                    <field name="budget_vs_spend_delta" widget="monetary" string="Remaining Budget"/>
+                                </group>
+                                <group>
+                                    <button name="action_open_budget_vs_spend" type="object" string="Open Budget vs Spend" class="btn btn-primary"/>
+                                </group>
+                            </group>
+                        </div>
+
+                        <div class="ecdhs-panel panel-types">
+                            <h3>Contract Portfolio by Type <span class="ecdhs-panel-chip">Portfolio Mix</span></h3>
+                            <div class="oe_button_box ecdhs-type-grid" name="type_box">
+                                <button name="action_open_sla_contracts" type="object" class="oe_stat_button ecdhs-mini-stat mini-purple" icon="fa-file-text-o">
+                                    <field name="type_sla_count" widget="statinfo" string="SLA"/>
+                                </button>
+                                <button name="action_open_funding_contracts" type="object" class="oe_stat_button ecdhs-mini-stat mini-orange" icon="fa-handshake-o">
+                                    <field name="type_funding_count" widget="statinfo" string="Funding"/>
+                                </button>
+                                <button name="action_open_lease_contracts" type="object" class="oe_stat_button ecdhs-mini-stat mini-ink" icon="fa-building-o">
+                                    <field name="type_lease_count" widget="statinfo" string="Lease"/>
+                                </button>
+                                <button name="action_open_cession_contracts" type="object" class="oe_stat_button ecdhs-mini-stat mini-gold" icon="fa-random">
+                                    <field name="type_cession_count" widget="statinfo" string="Cession"/>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="ecdhs-panel panel-health">
+                            <h3>Contract Health <span class="ecdhs-panel-chip">Risk Radar</span></h3>
+                            <div class="oe_button_box ecdhs-panel-stats" name="health_box">
+                                <button name="action_open_on_track_contracts" type="object" class="oe_stat_button ecdhs-mini-stat mini-mint" icon="fa-heartbeat">
+                                    <field name="on_track_contracts" widget="statinfo" string="On Track"/>
+                                </button>
+                                <button name="action_open_delayed_milestones" type="object" class="oe_stat_button ecdhs-mini-stat mini-rose" icon="fa-warning">
+                                    <field name="delayed_milestones" widget="statinfo" string="Delayed"/>
+                                </button>
+                                <button name="action_open_compliance_alerts" type="object" class="oe_stat_button ecdhs-mini-stat mini-coral" icon="fa-shield">
+                                    <field name="compliance_alerts" widget="statinfo" string="Compliance Alerts"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts section placeholder -->
+                    <field name="chart_type_distribution" invisible="1"/>
+                    <field name="chart_state_distribution" invisible="1"/>
+                    <field name="chart_health_distribution" invisible="1"/>
+                    <field name="chart_payment_summary" invisible="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ecdhs_contract_dashboard" model="ir.actions.server">
+        <field name="name">Dashboard</field>
+        <field name="model_id" ref="model_ecdhs_contract_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">
+dashboard = env['ecdhs.contract.dashboard'].search([], limit=1)
+if not dashboard:
+    dashboard = env['ecdhs.contract.dashboard'].create({'name': 'Contract Management Dashboard'})
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Dashboard',
+    'res_model': 'ecdhs.contract.dashboard',
+    'res_id': dashboard.id,
+    'view_mode': 'form',
+    'views': [[False, 'form']],
+    'view_id': env.ref('ecdhs_contract_management.ecdhs_contract_dashboard_view_form').id,
+}
+        </field>
+    </record>
+
+</odoo>

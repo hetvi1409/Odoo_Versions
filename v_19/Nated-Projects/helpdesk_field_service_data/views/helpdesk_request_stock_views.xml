@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="helpdesk_request_stock_tree_view" model="ir.ui.view">
+        <field name="name">helpdesk.request.stock.tree.view</field>
+        <field name="model">helpdesk.request.stock</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="ticket_id"/>
+                <field name="partner_id"/>
+                <field name="picking_type_id"/>
+                <field name="location_id"/>
+                <field name="destination_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="helpdesk_request_stock_view_form" model="ir.ui.view">
+        <field name="name">helpdesk.request.stock.view.form</field>
+        <field name="model">helpdesk.request.stock</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit" type="object"
+                            class="btn-primary"
+                            groups="helpdesk_field_service_data.group_buyer_scm"
+                            states="draft"/>
+                    <button name="action_confirm" string="Confirm" class="btn-primary" type="object"
+                            groups="helpdesk_field_service_data.group_buyer_scm"
+                            states="submit"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            groups="helpdesk_field_service_data.group_buyer_scm"
+                            states="submit"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="submit,confirm"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                attrs="{'invisible': [('ticket_id', '=', False)]}"
+                                name="action_ticket" icon="fa-life-ring">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <span>1</span>
+                                    <span class="text-secondary fw-normal">
+                                        Tickets
+                                    </span>
+                                </span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                attrs="{'invisible': [('picking_id', '=', False)]}"
+                                name="action_picking" icon="fa-list-alt">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <span>1</span>
+                                    <span class="text-secondary fw-normal">
+                                        Pickings
+                                    </span>
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="ticket_id"/>
+                            <field name="picking_type_id"/>
+                            <field name="location_id"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="company_id"/>
+                            <field name="destination_id"/>
+                            <field name="picking_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+            </form>
+        </field>
+    </record>
+    <record id="helpdesk_request_stock_action" model="ir.actions.act_window">
+        <field name="name">Helpdesk Request Stock</field>
+        <field name="res_model">helpdesk.request.stock</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new Helpdesk request stock.
+            </p>
+        </field>
+    </record>
+    <menuitem parent="helpdesk.helpdesk_menu_config"
+              id="menu_helpdesk_request_stock" name="Stock Request"
+              action="helpdesk_request_stock_action" sequence="101"/>
+</odoo>

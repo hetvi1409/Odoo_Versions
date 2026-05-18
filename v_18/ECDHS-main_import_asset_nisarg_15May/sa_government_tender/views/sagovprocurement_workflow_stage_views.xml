@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ===================================== -->
+        <!-- Workflow Stage - Tree View -->
+        <!-- ===================================== -->
+        <record id="view_sagovprocurement_workflow_stage_list" model="ir.ui.view">
+            <field name="name">sagovprocurement.workflow.stage.list</field>
+            <field name="model">sagovprocurement.workflow.stage</field>
+            <field name="arch" type="xml">
+                <list string="Workflow Stages" editable="bottom" decoration-info="sequence">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="responsible_group"/>
+                    <field name="stage_type"/>
+                    <field name="required" widget="boolean_toggle"/>
+                    <field name="visible_header_buttons" widget="many2many_tags"/>
+                    <field name="visible_tabs" widget="many2many_tags"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- Workflow Stage - Form View -->
+        <!-- ===================================== -->
+        <record id="view_sagovprocurement_workflow_stage_form" model="ir.ui.view">
+            <field name="name">sagovprocurement.workflow.stage.form</field>
+            <field name="model">sagovprocurement.workflow.stage</field>
+            <field name="arch" type="xml">
+                <form string="Workflow Stage">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="method_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="name"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="responsible_group"/>
+                                <field name="stage_type"/>
+                                <field name="required" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+                        <group string="Description">
+                            <field name="description" nolabel="1"/>
+                        </group>
+                        <group string="Visibility">
+                            <field name="visible_tabs" widget="many2many_tags" options="{'no_create': True,'no_create_edit': True}"/>
+                            <field name="visible_header_buttons" widget="many2many_tags" options="{'no_create': True,'no_create_edit': True}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

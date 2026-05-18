@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_patient_medical_cert_document">
+    <t t-call="web.external_layout">
+        <div class="page" style="font-family: Arial, sans-serif; font-size:13px; line-height:1.6; color:#000;">
+              <div class="row" style="border-bottom:2px solid #333; padding-bottom:10px; margin-bottom:20px; display:flex; align-items:center;">
+                <!-- Medical Symbol -->
+                <div style="width:20%; text-align:left;">
+                    <img src="/oehealth/static/src/img/medical_symbol.png" height="60" width="60"/>
+                </div>
+              </div>
+
+            <!-- Header -->
+            <div class="text-center" style="border-bottom:2px solid #333; padding-bottom:8px; margin-bottom:15px;">
+                <h2 style="margin:0; font-weight:bold; letter-spacing:0.5px;">Medical Certificate</h2>
+                <p style="margin:2px 0; font-size:12px;">
+                    <strong>Patient Name</strong>
+                    <span style="margin-left:20px;">Start Date</span><span t-field="o.start_date"/> –
+                    <span>End Date</span><span t-field="o.end_date"/>
+                </p>
+            </div>
+
+            <!-- Patient Info -->
+                       <table style="width:100%; margin-bottom:20px; border-collapse:collapse; border:1px solid #999;">
+                <tr style="background:#f5f5f5;">
+                    <td style="padding:6px 10px; border:1px solid #999; width:50%;">
+                        <strong>Patient:</strong> <span t-field="o.patient.name"/>
+                    </td>
+                    <td style="padding:6px 10px; border:1px solid #999; width:50%;">
+                        <strong>Date of Birth:</strong> <span t-field="o.patient.dob"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:6px 10px; border:1px solid #999;">
+                        <strong>Contact No.:</strong> <span t-field="o.patient.phone"/>
+                    </td>
+                    <td style="padding:6px 10px; border:1px solid #999;">
+                        <strong>Medical Aid:</strong>
+                    </td>
+                </tr>
+            </table>
+
+
+            <!-- Certificate Body -->
+               <div style="border:1px solid #333; padding:15px; margin-bottom:25px; min-height:140px; border-radius:4px;">
+                <p style="margin:0; text-align:justify;">
+                    This is to certify that <strong><span t-field="o.patient.name"/></strong>
+                    is medically unfit for work from
+                    <strong><span t-field="o.start_date"/></strong>
+                    to <strong><span t-field="o.end_date"/></strong>
+                    due to <strong><span t-field="o.reason"/></strong>.
+                </p>
+            </div>
+            <!-- Footer -->
+              <div style="margin-top:40px;">
+                <p style="margin-bottom:40px;">________________________</p>
+                <p><strong><span t-field="o.doctor.name"/></strong></p>
+                <p><em>Signature and Stamp</em></p>
+            </div>
+
+        </div>
+    </t>
+</template>
+
+
+    <template id="report_patient_medical_cert">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="oehealth.report_patient_medical_cert_document"
+                   t-lang="o.patient.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

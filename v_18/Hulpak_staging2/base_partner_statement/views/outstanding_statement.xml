@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2018 ForgeFlow, S.L. (https://www.forgeflow.com)
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <template id="outstanding_balance">
+        <p>
+            <span
+                t-out="get_title(o, account_type=account_type, line_type=line_type, ending_date=ending_date, currency=display_currency.name)"
+            />
+        </p>
+        <table class="table table-sm table-statement">
+            <thead>
+                <tr>
+                    <th>Reference number</th>
+                    <th>Date</th>
+                    <th>Due Date</th>
+                    <th>Description</th>
+                    <th class="amount">Original</th>
+                    <th class="amount">Open Amount</th>
+                    <th class="amount">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr t-foreach="currency[line_type]" t-as="line" t-att-class="''">
+                    <td>
+                        <span t-out="line['move_id']" />
+                    </td>
+                    <td>
+                        <span t-out="line['date']" />
+                    </td>
+                    <td>
+                        <span t-out="line['date_maturity']" />
+                    </td>
+                    <td>
+                        <t t-if="line['name'] != '/'">
+                            <t t-if="not line['ref']">
+                                <span t-out="line['name']" />
+                            </t>
+                            <t t-if="line['ref'] and not line['name']">
+                                <span t-out="line['ref']" />
+                            </t>
+                            <t t-if="line['ref'] and line['name']">
+                                <t
+                                    t-if="line['name'] not in line['ref'] or line['name'] == line['ref']"
+                                >
+                                    <span t-out="line['name']" />
+                                </t>
+                                <t t-if="line['ref'] not in line['name']">
+                                    <span t-out="line['ref']" />
+                                </t>
+                            </t>
+                        </t>
+                        <t t-if="line['name'] == '/'">
+                            <span t-out="line['ref']" />
+                        </t>
+                    </td>
+                    <td class="amount">
+                        <span
+                            t-out="line['amount']"
+                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                        />
+                    </td>
+                    <td class="amount">
+                        <span
+                            t-out="line['open_amount']"
+                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                        />
+                    </td>
+                    <td class="amount">
+                        <span
+                            t-out="line['balance']"
+                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td />
+                    <td>
+                        <span t-out="ending_date" />
+                    </td>
+                    <td colspan="4">Ending Balance</td>
+                    <td class="amount">
+                        <span
+                            t-out="ending_amount"
+                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                        />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+    <template id="base_partner_statement.outstanding_statement_document">
+        <t t-call="web.external_layout">
+            <style>
+                /* Make borders merge into a single line */
+                .my_lines_table {
+                    border-collapse: collapse;
+                }
+
+                /* Vertical lines + faint bottom borders for all body cells */
+                .my_lines_table tbody td {
+                    /* use only left OR right to avoid double-thick verticals; here I keep left */
+                    border-left: 0.5px solid #000000;
+                    border-right: 0.5px solid #000000;
+                    border-bottom: 0.2px solid #cccccc; /* faint bottom line */
+                }
+
+                /* Strong bottom border on the very last row */
+                .my_lines_table tbody tr:last-child td {
+                    border-bottom: 0.5px solid #000000;
+                }
+
+                /* Optional: top border for first row to “close” the box */
+                .my_lines_table tbody tr:first-child td {
+                    border-top: 0.5px solid #000000;
+                }
+            </style>
+
+            <t t-set="o" t-value="o.with_context({'lang': lang})" />
+            <t t-set="address"></t>
+            <div class="page" style="padding-top: 5px;">
+                <hr size="1" color="#e0e0e0" />
+                <div align="left" style="display: inline-block; width: 49%; padding-top: 4px;">
+                    <h2 style="text-align:left;font-size:20px; color:#808080">Customer Outstanding Statement</h2>
+
+                    <div id="informationz" class="row mt32 mb32" >
+                        <div class="col-4 bm-2">
+                            <span t-attf-style="color: white ;"><strong>Date:</strong></span>
+                            <p t-out="d['today']" class="m-0" />
+                        </div>
+                        <div t-if="o.ref" class="col-8 bm-2">
+                            <span t-attf-style="color: white ;"><strong>Partner Code:</strong></span>
+                            <p t-field="o.ref" class="m-0" />
+                        </div>
+                    </div>
+                </div>
+                <div align="right" style="display: inline-block; width: 49%; vertical-align: top; padding-top: 4px;">
+                    <t t-set="child" t-value="o.child_ids.filtered(lambda l: l.type == 'invoice')"/>
+                    <t t-if="child">
+                        <div style="display: flex; justify-content: flex-end;">
+                            <div>
+                                <span  t-esc="o.name"/>
+                            </div>
+                            <t t-if="o.vat">
+                                <div>
+                                    VAT No : <span t-esc="o.vat"/> 
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div style="display: flex; justify-content: flex-end;">
+                            <div>
+                                <span t-esc="o.name"/>
+                            </div>
+                            <t t-if="o.vat">
+                                <div>
+                                    VAT No : <span t-esc="o.vat"/>                                    
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+                <t t-if="d['currencies']">
+                    <br />
+                    <t t-foreach="d['currencies'].items()" t-as="currency">
+                        <t t-set="display_currency" t-value="Currencies[currency[0]]" />
+                        <t t-set="currency" t-value="currency[1]" />
+                        <t t-set="line_type" t-value="'lines'" />
+                        <t t-set="ending_amount" t-value="currency['amount_due']" />
+                        <t t-set="ending_date" t-value="d['end']" />
+                        <!-- <t
+                            t-call="base_partner_statement.outstanding_balance"
+                            name="outstanding"
+                        /> -->
+                        <p>
+                            Statement up to <span t-esc="d['end']" /> in <span t-esc="display_currency.name"/>
+                        </p>
+                        <table class="table my_lines_table">
+                            <thead>
+                                <tr>
+                                    <th t-attf-style="width: 17%; font-weight: bold; color: white ;">Reference number</th>
+                                    <th t-attf-style="width: 12%; font-weight: bold; color: white ;">Date</th>
+                                    <th t-attf-style="width: 12%; font-weight: bold; color: white ;">Due Date</th>
+                                    <th t-attf-style="width: 17%; font-weight: bold; color: white ;">Description</th>
+                                    <th class="amount" t-attf-style="width: 14%; font-weight: bold; color: white ;">Original</th>
+                                    <th class="amount" t-attf-style="width: 14%; font-weight: bold; color: white ;">Open Amount</th>
+                                    <th class="amount" t-attf-style="width: 14%; font-weight: bold; color: white ;">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="currency['lines']" t-as="line">
+                                    <!-- t-att-class="'statement-no_followup' if line['no_followup'] else ''" -->                                
+                                    <td>
+                                        <span t-esc="line['move_id']" />
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.get('statement_date_str', '')" />
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.get('statement_due_date_str', '')" />
+                                    </td>
+                                    <td>                                        
+                                        <t t-if="line['ra_number'] and line['ref'] and line['move_id'] != '/'">
+                                            <span t-esc="line['ra_number']" /> - <span t-esc="line['ref']" /> - <span t-esc="line['move_id']" /> 
+                                        </t>
+                                        <t t-else="">
+                                            <t t-if="line['name'] != '/'">
+                                                <t t-if="not line['ref']">
+                                                    <span t-esc="line['name']" />
+                                                </t>
+                                                <t t-if="line['ref'] and not line['name']">
+                                                    <span t-esc="line['ref']" />
+                                                </t>
+                                                <t t-if="line['ref'] and line['name']">
+                                                    <t t-if="line['name'] not in line['ref'] or line['name'] == line['ref']">
+                                                        <span t-esc="line['name']" />
+                                                    </t>
+                                                    <t t-if="line['ref'] not in line['name']">
+                                                        <span t-esc="line['ref']" />
+                                                    </t>
+                                                </t>
+                                            </t>
+                                            <t t-if="line['name'] == '/'">
+                                                <span t-esc="line['ref']" />
+                                            </t>
+                                        </t>
+                                    </td>
+                                    <td class="amount">
+                                        <span
+                                            t-esc="line['amount']"
+                                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                                        />
+                                    </td>
+                                    <td class="amount">
+                                        <span
+                                            t-esc="line['open_amount']"
+                                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                                        />
+                                    </td>
+                                    <td class="amount" style="background-color: #e9ecef;">
+                                        <span
+                                            t-esc="line['balance']"
+                                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;"/>
+                                    <td style="font-weight: bold;">
+                                        <span t-esc="d.get('end_str', d.get('end'))" />
+                                    </td>
+                                    <td colspan="2" style="font-weight: bold;">
+                                        Ending Balance
+                                    </td>
+                                    <td style="font-weight: bold;"/>
+                                    <td style="font-weight: bold;"/>
+                                    <td class="amount" style="background-color: #e9ecef; font-weight: bold;">
+                                        <span
+                                            t-esc="currency['amount_due']"
+                                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <t
+                            t-call="base_partner_statement.aging_buckets"
+                            t-if="currency['buckets']"
+                        />                         
+                    </t>
+                </t>
+                <p t-if="d.get('no_entries')">
+                    <strong>The partner doesn't have due entries.</strong>
+                </p>
+            </div>
+        </t>
+    </template>
+    <template id="outstanding_statement">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="d" t-value="data.get(o.id)" />
+                <t
+                    t-call="base_partner_statement.outstanding_statement_document"
+                    t-lang="o.lang"
+                />
+            </t>
+        </t>
+    </template>
+    <record id="action_print_outstanding_statement" model="ir.actions.report">
+        <field name="name">Outstanding Statement - PDF</field>
+        <field name="model">res.partner</field>
+        <field name="report_name">base_partner_statement.outstanding_statement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_file">base_partner_statement.outstanding_statement</field>
+        <field name="print_report_name">'Outstanding Statement - %s' % (user.company_id.name)</field>
+    </record>
+    <record id="action_print_outstanding_statement_html" model="ir.actions.report">
+        <field name="name">Outstanding Statement - HTML</field>
+        <field name="model">res.partner</field>
+        <field name="report_name">base_partner_statement.outstanding_statement</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_file">base_partner_statement.outstanding_statement</field>
+    </record>
+    <record id="action_print_outstanding_statement_xlsx" model="ir.actions.report">
+        <field name="name">Outstanding Statement XLSX</field>
+        <field name="model">res.partner</field>
+        <field name="type">ir.actions.report</field>
+        <field name="report_name">p_s.report_outstanding_statement_xlsx</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_file">report_outstanding_statement</field>
+    </record>
+</odoo>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="pestel_analysis_view_form" model="ir.ui.view">
+        <field name="name">pestel_analysis_view_form</field>
+        <field name="model">pestel.analysis</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="internal_audit_management.pestel_analysis_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="replace">
+                <header>
+                    <field name="stages" widget="statusbar" options="{'clickable': '1'}" statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>
+                    <button name="action_2nd_review" type="object" string="Prepare"
+                            class="oe_highlight"
+                            invisible="stages != 'preparer' or uid != preparer_id"/>
+                    <button name="action_approve" type="object" string="Reviewed"
+                            class="oe_highlight"
+                            invisible="stages != 'second_reviewer' or uid != reviewer_id"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'second_reviewer'"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_reject" type="object"
+                            invisible="stages != 'second_reviewer'"
+                            string="Reject" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'rejected'"
+                            string="Move to Prepare" class="oe_highlight"/>
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='user_preparer_ids']" position="replace">
+                <field name="can_edit" invisible="1"/>
+                <field name="preparer_id" widget="many2one_avatar_user"/>
+                <field name="reviewer_id" widget="many2one_avatar_user"/>
+                <field name="approver_id" widget="many2one_avatar_user"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sequence_no']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='start_date']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='end_date']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='political_factor']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='economic_factor']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='social_factor']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='technological_factor']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='environmental_factor']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='legislative_factor']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='tracking_ids']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='political']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='economic']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='social']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='techno']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='environment']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='legislative']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='feedback']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

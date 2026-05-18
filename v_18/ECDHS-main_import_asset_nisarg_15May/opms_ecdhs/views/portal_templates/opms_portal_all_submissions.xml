@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_opms_all_submissions_page" name="OPMS Portal All Submissions Page">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="False"/>
+            <div class="container py-4 opms-portal-shell">
+                <div class="mb-2">
+                    <h2 class="mb-1">OPMS All Submissions</h2>
+                    <p class="text-muted mb-0">Review, filter, edit, and delete submissions for the financial year.</p>
+                </div>
+                <t t-call="opms_ecdhs.opms_portal_subnav"/>
+
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <div id="opms-all-submissions-seed" class="d-none" t-att-data-selected-submission-id="highlighted_submission_id or ''"></div>
+
+                <div class="card mb-4" id="opms-submissions-section">
+                    <div class="card-header d-flex justify-content-between align-items-center opms-submissions-section-header">
+                        <strong><i class="fa fa-list-alt me-2"/>All Submissions</strong>
+                        <span class="badge bg-secondary" id="opms-all-submissions-badge">Loading...</span>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div class="row g-2 mb-3 align-items-end" id="opms-all-submissions-filters">
+                            <div class="col-sm-6 col-md-3">
+                                <label class="form-label form-label-sm mb-1">Financial Year</label>
+                                <select class="form-select form-select-sm" id="opms-filter-financial-year">
+                                    <option value="">Current Financial Year</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <label class="form-label form-label-sm mb-1">Quarter</label>
+                                <select class="form-select form-select-sm" id="opms-filter-quarter">
+                                    <option value="">All Quarters</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <label class="form-label form-label-sm mb-1">Status</label>
+                                <select class="form-select form-select-sm" id="opms-filter-status">
+                                    <option value="">All Statuses</option>
+                                    <option value="Draft">Draft</option>
+                                    <option value="Submitted">Submitted</option>
+                                    <option value="Director Review">Director Review</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <label class="form-label form-label-sm mb-1">Search</label>
+                                <input type="search" class="form-control form-control-sm" id="opms-filter-search" placeholder="Indicator, name, submitted by..."/>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="opms-filter-clear-btn">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover mb-0" id="opms-all-submissions-table">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-id">#</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-programme">Programme</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-sub-programme">Sub-Programme</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-directorate">Directorate</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-output">Output</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-indicator">Output Indicator</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-quarter">Quarter</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-status">Status</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-progress">Progress</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-planned-value">Planned Value</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-actual-value">Actual Value</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-submitted-by">Submitted By</a></th>
+                                        <th><a href="#" class="text-decoration-none" id="opms-all-sort-date">Date</a></th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="opms-all-submissions-body">
+                                    <tr><td colspan="14" class="text-center text-muted py-3"><i class="fa fa-spinner fa-spin me-1"/>Loading submissions...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center" id="opms-all-pagination">
+                        <small class="text-muted" id="opms-all-pagination-info">Loading...</small>
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Pagination controls">
+                            <button type="button" class="btn btn-outline-secondary" id="opms-all-page-prev">Prev</button>
+                            <button type="button" class="btn btn-outline-secondary" id="opms-all-page-next">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 d-none" id="opms-inline-edit-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <strong><i class="fa fa-pencil me-2"/>Inline Edit Submission</strong>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="opms-inline-edit-cancel-top">Cancel</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info mb-3" id="opms-inline-edit-meta" style="font-size:0.9em;"></div>
+                        <div id="opms-inline-edit-error" class="alert alert-danger d-none"></div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Actual Value</label>
+                            <input type="text" class="form-control" id="opms-inline-edit-actual-value" placeholder="Enter actual output value"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Progress <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="opms-inline-edit-comments" rows="3" placeholder="Describe progress..."/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Reason for Deviation</label>
+                            <textarea class="form-control" id="opms-inline-edit-reason" rows="2" placeholder="If applicable..."/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Remedial Actions</label>
+                            <textarea class="form-control" id="opms-inline-edit-remedial" rows="2" placeholder="If applicable..."/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Evidence Re-Upload (Optional)</label>
+                            <input type="file" class="form-control" id="opms-inline-edit-evidence-files" accept="application/pdf,.pdf" multiple="multiple"/>
+                            <div class="form-text" id="opms-inline-edit-evidence-help">Leave empty to keep existing evidence unchanged. PDF files only.</div>
+                        </div>
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary" id="opms-inline-edit-cancel-bottom">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="opms-inline-edit-save-btn">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
+            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+            <script><![CDATA[
+                document.addEventListener('DOMContentLoaded', function () {
+                    let allSubmissionsData = [];
+                    let currentEditSubId = null;
+                    const allSubmissionsStateKey = 'opmsAllSubmissionsStateV2';
+                    let allSubmissionsSort = { by: 'hierarchy', dir: 'asc' };
+                    let allSubmissionsPage = 1;
+                    const allSubmissionsPageSize = 20;
+                    const seed = document.getElementById('opms-all-submissions-seed');
+                    let highlightedSubmissionId = (seed && seed.dataset.selectedSubmissionId) || '';
+                    const urlParams = new URLSearchParams(window.location.search || '');
+                    const selectedOnlyMode = urlParams.get('selected_only') === '1';
+                    if (!highlightedSubmissionId) {
+                        highlightedSubmissionId = String(urlParams.get('submission_id') || '');
+                    }
+                    const statusColors = {
+                        'Approved': 'success', 'Submitted': 'primary', 'Director Review': 'info',
+                        'Draft': 'secondary', 'Rejected': 'danger'
+                    };
+                    let currentInlineEditMeasurementType = 'text';
+                    const inlineActualInput = document.getElementById('opms-inline-edit-actual-value');
+
+                    function formatDisplayToIsoDate(displayValue) {
+                        const text = String(displayValue || '').trim();
+                        const parts = text.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+                        if (!parts) {
+                            return '';
+                        }
+                        const day = parseInt(parts[1], 10);
+                        const month = parseInt(parts[2], 10);
+                        const year = parseInt(parts[3], 10);
+                        const candidate = new Date(year, month - 1, day);
+                        if (candidate.getFullYear() !== year || candidate.getMonth() !== month - 1 || candidate.getDate() !== day) {
+                            return '';
+                        }
+                        return year + '-' + String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                    }
+
+                    let fpInlineInstance = null;
+                    function configureInlineActualInput(measurementType, value) {
+                        currentInlineEditMeasurementType = measurementType || 'text';
+                        if (!inlineActualInput) {
+                            return;
+                        }
+                        if (currentInlineEditMeasurementType === 'date') {
+                            inlineActualInput.type = 'text';
+                            inlineActualInput.readOnly = true;
+                            inlineActualInput.removeAttribute('placeholder');
+                            if (!fpInlineInstance) {
+                                fpInlineInstance = flatpickr(inlineActualInput, { dateFormat: 'd/m/Y', disableMobile: true });
+                            }
+                            if (value) { fpInlineInstance.setDate(value, false, 'd/m/Y'); } else { fpInlineInstance.clear(); }
+                        } else {
+                            if (fpInlineInstance) { fpInlineInstance.destroy(); fpInlineInstance = null; }
+                            inlineActualInput.type = 'text';
+                            inlineActualInput.readOnly = false;
+                            inlineActualInput.placeholder = 'Enter actual output value';
+                            inlineActualInput.value = value || '';
+                        }
+                    }
+
+                    function escHtml(str) {
+                        return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                    }
+
+                    function getCsrfToken() {
+                        const hiddenInput = document.querySelector('input[name="csrf_token"]');
+                        if (hiddenInput && hiddenInput.value) { return hiddenInput.value; }
+                        const match = document.cookie.match(/(?:^|;\s*)csrf_token=([^;]+)/);
+                        return match ? decodeURIComponent(match[1]) : '';
+                    }
+
+                    function showAllSubmissionsNotice(message, level) {
+                        const host = document.getElementById('opms-submissions-section');
+                        if (!host) { return; }
+                        let box = document.getElementById('opms-all-submissions-feedback');
+                        if (!box) {
+                            box = document.createElement('div');
+                            box.id = 'opms-all-submissions-feedback';
+                            const body = host.querySelector('.card-body.pb-0');
+                            if (body) {
+                                body.prepend(box);
+                            } else {
+                                host.prepend(box);
+                            }
+                        }
+                        box.className = 'alert opms-inline-feedback alert-' + (level || 'warning') + ' mb-3';
+                        box.textContent = message;
+                    }
+
+                    const pendingAllSubmissionDeleteIds = new Set();
+
+                    function isPdfFile(file) {
+                        const fileName = String((file && file.name) || '').toLowerCase();
+                        const mimeType = String((file && file.type) || '').toLowerCase();
+                        return fileName.endsWith('.pdf') && (mimeType === '' || mimeType === 'application/pdf');
+                    }
+
+                    function validateInlineEvidenceSelection() {
+                        const evidenceInput = document.getElementById('opms-inline-edit-evidence-files');
+                        if (!evidenceInput || !evidenceInput.files || !evidenceInput.files.length) {
+                            return true;
+                        }
+                        const invalid = Array.from(evidenceInput.files).find(function (file) { return !isPdfFile(file); });
+                        if (invalid) {
+                            evidenceInput.value = '';
+                            showAllSubmissionsNotice('Only PDF files are allowed for Evidence uploads.', 'warning');
+                            return false;
+                        }
+                        return true;
+                    }
+
+                    function readAllSubmissionsState() {
+                        const fallback = {
+                            sort: { by: 'hierarchy', dir: 'asc' },
+                            page: 1,
+                            filters: { financial_year_id: '', quarter: '', status: '', search: '' }
+                        };
+                        try {
+                            const raw = window.sessionStorage.getItem(allSubmissionsStateKey);
+                            if (!raw) { return fallback; }
+                            const parsed = JSON.parse(raw) || {};
+                            const sortBy = ['hierarchy', 'id', 'programme', 'sub_programme', 'directorate', 'output', 'indicator', 'quarter', 'status', 'progress', 'actual_value', 'planned_value', 'submitted_by', 'date'].includes((parsed.sort || {}).by)
+                                ? parsed.sort.by
+                                : fallback.sort.by;
+                            const sortDir = ['asc', 'desc'].includes((parsed.sort || {}).dir)
+                                ? parsed.sort.dir
+                                : fallback.sort.dir;
+                            const page = Number.isInteger(parsed.page) && parsed.page > 0 ? parsed.page : 1;
+                            return {
+                                sort: { by: sortBy, dir: sortDir },
+                                page: page,
+                                filters: {
+                                    financial_year_id: String(((parsed.filters || {}).financial_year_id || '')),
+                                    quarter: String(((parsed.filters || {}).quarter || '')),
+                                    status: String(((parsed.filters || {}).status || '')),
+                                    search: String(((parsed.filters || {}).search || '')),
+                                }
+                            };
+                        } catch (error) {
+                            return fallback;
+                        }
+                    }
+
+                    function persistAllSubmissionsState() {
+                        try {
+                            window.sessionStorage.setItem(allSubmissionsStateKey, JSON.stringify({
+                                sort: allSubmissionsSort,
+                                page: allSubmissionsPage,
+                                filters: {
+                                    financial_year_id: (document.getElementById('opms-filter-financial-year') || {}).value || '',
+                                    quarter: (document.getElementById('opms-filter-quarter') || {}).value || '',
+                                    status: (document.getElementById('opms-filter-status') || {}).value || '',
+                                    search: (document.getElementById('opms-filter-search') || {}).value || '',
+                                }
+                            }));
+                        } catch (error) {
+                            // Ignore storage failures and keep current page state only.
+                        }
+                    }
+
+                    function applySavedAllSubmissionsState() {
+                        const savedState = readAllSubmissionsState();
+                        allSubmissionsSort = savedState.sort;
+                        allSubmissionsPage = savedState.page || 1;
+                        const financialYearFilter = document.getElementById('opms-filter-financial-year');
+                        const statusFilter = document.getElementById('opms-filter-status');
+                        const searchFilter = document.getElementById('opms-filter-search');
+                        if (financialYearFilter) { financialYearFilter.value = savedState.filters.financial_year_id; }
+                        if (statusFilter) { statusFilter.value = savedState.filters.status; }
+                        if (searchFilter) { searchFilter.value = savedState.filters.search; }
+                        return {
+                            quarter: savedState.filters.quarter,
+                            financialYearId: savedState.filters.financial_year_id,
+                        };
+                    }
+
+                    function highlightSubmission(subId) {
+                        if (!subId) { return; }
+                        document.querySelectorAll('.opms-all-sub-highlight').forEach(function (el) {
+                            el.classList.remove('opms-all-sub-highlight');
+                        });
+                        const target = document.getElementById('opms-all-sub-row-' + subId);
+                        if (!target) { return; }
+                        target.classList.add('opms-all-sub-highlight');
+                        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        window.setTimeout(function () {
+                            target.classList.remove('opms-all-sub-highlight');
+                        }, 3000);
+                    }
+
+                    function renderAllSubmissions() {
+                        const tbody = document.getElementById('opms-all-submissions-body');
+                        const badge = document.getElementById('opms-all-submissions-badge');
+                        const pageInfo = document.getElementById('opms-all-pagination-info');
+                        const prevBtn = document.getElementById('opms-all-page-prev');
+                        const nextBtn = document.getElementById('opms-all-page-next');
+                        if (!tbody) { return; }
+                        const qVal = (document.getElementById('opms-filter-quarter') || {}).value || '';
+                        const stVal = (document.getElementById('opms-filter-status') || {}).value || '';
+                        const srVal = ((document.getElementById('opms-filter-search') || {}).value || '').toLowerCase().trim();
+                        let filtered = allSubmissionsData.filter(function (sub) {
+                            if (qVal && sub.quarter_code !== qVal) { return false; }
+                            if (stVal && sub.workflow_status !== stVal) { return false; }
+                            if (srVal && !((sub.programme || '').toLowerCase().includes(srVal)
+                                || (sub.sub_programme || '').toLowerCase().includes(srVal)
+                                || (sub.directorate || '').toLowerCase().includes(srVal)
+                                || (sub.output || '').toLowerCase().includes(srVal)
+                                || (sub.indicator_name || '').toLowerCase().includes(srVal)
+                                || (sub.name || '').toLowerCase().includes(srVal)
+                                || (sub.submitted_by || '').toLowerCase().includes(srVal)
+                                || (sub.workflow_status || '').toLowerCase().includes(srVal)
+                                || (sub.actual_value || '').toLowerCase().includes(srVal)
+                                || (sub.comments || '').toLowerCase().includes(srVal))) {
+                                return false;
+                            }
+                            return true;
+                        });
+
+                        if (selectedOnlyMode && highlightedSubmissionId) {
+                            filtered = filtered.filter(function (sub) {
+                                return String(sub.id || '') === String(highlightedSubmissionId);
+                            });
+                        }
+
+                        const quarterRank = { Q1: 1, Q2: 2, Q3: 3, Q4: 4 };
+                        const getQuarterRank = function (code) {
+                            const normalized = String(code || '').toUpperCase().trim();
+                            if (quarterRank[normalized]) { return quarterRank[normalized]; }
+                            const match = normalized.match(/Q\s*(\d+)/);
+                            return match ? parseInt(match[1], 10) : 99;
+                        };
+                        const getDateValue = function (value) {
+                            const text = String(value || '').trim();
+                            if (!text) {
+                                return 0;
+                            }
+                            const directMatch = text.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+                            if (directMatch) {
+                                const day = parseInt(directMatch[1], 10);
+                                const month = parseInt(directMatch[2], 10);
+                                const year = parseInt(directMatch[3], 10);
+                                const dateObj = new Date(year, month - 1, day);
+                                if (dateObj.getFullYear() === year && dateObj.getMonth() === month - 1 && dateObj.getDate() === day) {
+                                    return dateObj.getTime();
+                                }
+                            }
+                            const parsed = Date.parse(text);
+                            if (!Number.isNaN(parsed)) {
+                                return parsed;
+                            }
+                            return 0;
+                        };
+                        const compareText = function (a, b) {
+                            return String(a || '').localeCompare(String(b || ''), undefined, { sensitivity: 'base' });
+                        };
+                        const compareActual = function (a, b) {
+                            const parseNumeric = function (val) {
+                                const num = parseFloat(String(val || '').replace(/[^0-9.+\-]/g, ''));
+                                return Number.isNaN(num) ? null : num;
+                            };
+                            const aNum = parseNumeric(a);
+                            const bNum = parseNumeric(b);
+                            if (aNum !== null && bNum !== null) {
+                                return aNum - bNum;
+                            }
+                            return compareText(a, b);
+                        };
+
+                        const compareHierarchy = function (a, b) {
+                            const checks = [
+                                compareText(a.programme, b.programme),
+                                compareText(a.sub_programme, b.sub_programme),
+                                compareText(a.directorate, b.directorate),
+                                compareText(a.output, b.output),
+                                compareText(a.indicator_name, b.indicator_name),
+                                getQuarterRank(a.quarter_code) - getQuarterRank(b.quarter_code),
+                                getDateValue(a.submission_date) - getDateValue(b.submission_date),
+                                (a.id || 0) - (b.id || 0),
+                            ];
+                            return checks.find(function (cmp) { return cmp !== 0; }) || 0;
+                        };
+
+                        filtered = filtered.slice().sort(function (a, b) {
+                            const by = allSubmissionsSort.by;
+                            if (by === 'hierarchy') {
+                                return compareHierarchy(a, b);
+                            }
+                            if (by === 'id') {
+                                return (a.id || 0) - (b.id || 0);
+                            }
+                            if (by === 'programme') {
+                                return compareText(a.programme, b.programme);
+                            }
+                            if (by === 'sub_programme') {
+                                return compareText(a.sub_programme, b.sub_programme);
+                            }
+                            if (by === 'directorate') {
+                                return compareText(a.directorate, b.directorate);
+                            }
+                            if (by === 'output') {
+                                return compareText(a.output, b.output);
+                            }
+                            if (by === 'quarter') {
+                                return getQuarterRank(a.quarter_code) - getQuarterRank(b.quarter_code);
+                            }
+                            if (by === 'status') {
+                                return compareText(a.workflow_status, b.workflow_status);
+                            }
+                            if (by === 'progress') {
+                                return compareText(a.comments, b.comments);
+                            }
+                            if (by === 'actual_value') {
+                                return compareActual(a.actual_value, b.actual_value);
+                            }
+                            if (by === 'planned_value') {
+                                return compareActual(a.planned_value, b.planned_value);
+                            }
+                            if (by === 'submitted_by') {
+                                return compareText(a.submitted_by, b.submitted_by);
+                            }
+                            if (by === 'date') {
+                                return getDateValue(a.submission_date) - getDateValue(b.submission_date);
+                            }
+                            return compareText(a.indicator_name, b.indicator_name);
+                        });
+                        if (allSubmissionsSort.dir === 'desc') {
+                            filtered.reverse();
+                        }
+
+                        const totalRows = filtered.length;
+                        const totalPages = Math.max(1, Math.ceil(totalRows / allSubmissionsPageSize));
+                        if (allSubmissionsPage > totalPages) {
+                            allSubmissionsPage = totalPages;
+                        }
+                        const startIndex = (allSubmissionsPage - 1) * allSubmissionsPageSize;
+                        const pageItems = filtered.slice(startIndex, startIndex + allSubmissionsPageSize);
+
+                        function markSortHeader(id, label, key) {
+                            const el = document.getElementById(id);
+                            if (!el) { return; }
+                            const marker = (allSubmissionsSort.by === key)
+                                ? (allSubmissionsSort.dir === 'asc' ? ' ▲' : ' ▼')
+                                : '';
+                            el.innerHTML = label + marker;
+                        }
+                        markSortHeader('opms-all-sort-id', '#', 'id');
+                        markSortHeader('opms-all-sort-programme', 'Programme', 'programme');
+                        markSortHeader('opms-all-sort-sub-programme', 'Sub-Programme', 'sub_programme');
+                        markSortHeader('opms-all-sort-directorate', 'Directorate', 'directorate');
+                        markSortHeader('opms-all-sort-output', 'Output', 'output');
+                        markSortHeader('opms-all-sort-indicator', 'Output Indicator', 'indicator');
+                        markSortHeader('opms-all-sort-quarter', 'Quarter', 'quarter');
+                        markSortHeader('opms-all-sort-status', 'Status', 'status');
+                        markSortHeader('opms-all-sort-progress', 'Progress', 'progress');
+                        markSortHeader('opms-all-sort-actual-value', 'Actual Value', 'actual_value');
+                        markSortHeader('opms-all-sort-planned-value', 'Planned Value', 'planned_value');
+                        markSortHeader('opms-all-sort-submitted-by', 'Submitted By', 'submitted_by');
+                        markSortHeader('opms-all-sort-date', 'Date', 'date');
+
+                        if (badge) {
+                            badge.textContent = filtered.length + ' / ' + allSubmissionsData.length + ' submission' + (allSubmissionsData.length !== 1 ? 's' : '');
+                            badge.className = 'badge bg-secondary';
+                        }
+
+                        if (pageInfo) {
+                            const from = totalRows ? (startIndex + 1) : 0;
+                            const to = totalRows ? Math.min(startIndex + allSubmissionsPageSize, totalRows) : 0;
+                            pageInfo.textContent = 'Showing ' + from + '-' + to + ' of ' + totalRows + ' (Page ' + allSubmissionsPage + ' of ' + totalPages + ')';
+                        }
+                        if (prevBtn) { prevBtn.disabled = allSubmissionsPage <= 1; }
+                        if (nextBtn) { nextBtn.disabled = allSubmissionsPage >= totalPages; }
+
+                        tbody.innerHTML = '';
+                        if (!totalRows) {
+                            tbody.innerHTML = '<tr><td colspan="14" class="text-center text-muted py-3">No submissions found.</td></tr>';
+                            return;
+                        }
+
+                        pageItems.forEach(function (sub, idx) {
+                            const tr = document.createElement('tr');
+                            tr.id = 'opms-all-sub-row-' + sub.id;
+                            tr.setAttribute('data-sub-id', String(sub.id));
+                            const isOpen = sub.is_quarter_open === true;
+                            const statusColor = statusColors[sub.workflow_status] || 'secondary';
+                            const shortComment = (sub.comments || '-').length > 60 ? (sub.comments || '-').substring(0, 60) + '...' : (sub.comments || '-');
+                            const cells = [
+                                '<td class="text-muted">' + String(startIndex + idx + 1) + '</td>',
+                                '<td><small>' + escHtml(sub.programme || '-') + '</small></td>',
+                                '<td><small>' + escHtml(sub.sub_programme || '-') + '</small></td>',
+                                '<td><small>' + escHtml(sub.directorate || '-') + '</small></td>',
+                                '<td><small>' + escHtml(sub.output || '-') + '</small></td>',
+                                '<td><small>' + escHtml(sub.indicator_name || '-') + '</small></td>',
+                                '<td><span class="badge bg-light text-dark border">' + escHtml(sub.quarter_code || '-') + '</span></td>',
+                                '<td><span class="badge text-bg-' + statusColor + '">' + escHtml(sub.workflow_status || '-') + '</span></td>',
+                                '<td><small class="text-muted">' + escHtml(shortComment) + '</small></td>',
+                                '<td>' + escHtml(sub.actual_value || '-') + '</td>',
+                                '<td>' + escHtml(sub.planned_value || '-') + '</td>',
+                                '<td>' + escHtml(sub.submitted_by || '-') + '</td>',
+                                '<td><small>' + escHtml(sub.submission_date || '-') + '</small></td>',
+                            ];
+                            tr.innerHTML = cells.join('');
+
+                            const actionsCell = document.createElement('td');
+                            actionsCell.className = 'text-nowrap';
+
+                            const editBtn = document.createElement('button');
+                            editBtn.type = 'button';
+                            editBtn.className = 'btn btn-sm me-1 ' + (isOpen ? 'btn-outline-primary opms-sub-action-edit' : 'btn-outline-secondary opms-sub-action-locked');
+                            editBtn.innerHTML = isOpen ? '<i class="fa fa-pencil"></i> Edit' : '<i class="fa fa-lock"></i> Locked';
+                            editBtn.title = isOpen ? 'Edit submission' : 'Quarter is closed - locked';
+                            editBtn.disabled = !isOpen;
+                            if (isOpen) {
+                                editBtn.addEventListener('click', function () { openInlineEditor(sub.id); });
+                            }
+
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.type = 'button';
+                            deleteBtn.className = 'btn btn-sm ' + (isOpen ? 'btn-outline-danger opms-sub-action-delete' : 'btn-outline-secondary opms-sub-action-locked');
+                            deleteBtn.innerHTML = isOpen ? '<i class="fa fa-trash"></i>' : '<i class="fa fa-lock"></i>';
+                            deleteBtn.title = isOpen ? 'Delete submission' : 'Quarter is closed - locked';
+                            deleteBtn.disabled = !isOpen;
+                            if (isOpen) {
+                                deleteBtn.addEventListener('click', function () { deleteSubmission(sub.id); });
+                            }
+
+                            actionsCell.appendChild(editBtn);
+                            actionsCell.appendChild(deleteBtn);
+                            tr.appendChild(actionsCell);
+                            tbody.appendChild(tr);
+                        });
+
+                        if (highlightedSubmissionId) {
+                            window.setTimeout(function () {
+                                highlightSubmission(highlightedSubmissionId);
+                            }, 150);
+                        }
+
+                        persistAllSubmissionsState();
+                    }
+
+                    async function loadAllSubmissions() {
+                        const tbody = document.getElementById('opms-all-submissions-body');
+                        const badge = document.getElementById('opms-all-submissions-badge');
+                        const saved = applySavedAllSubmissionsState();
+                        const selectedFinancialYear = (document.getElementById('opms-filter-financial-year') || {}).value || saved.financialYearId || '';
+                        try {
+                            const url = selectedFinancialYear
+                                ? ('/my/opms/submissions/all?financial_year_id=' + encodeURIComponent(selectedFinancialYear))
+                                : '/my/opms/submissions/all';
+                            const response = await fetch(url, { credentials: 'same-origin' });
+                            const payload = await response.json();
+                            allSubmissionsData = (payload && Array.isArray(payload.submissions)) ? payload.submissions : [];
+                            const financialYearFilter = document.getElementById('opms-filter-financial-year');
+                            if (financialYearFilter) {
+                                const financialYears = (payload && Array.isArray(payload.financial_year_options)) ? payload.financial_year_options : [];
+                                financialYearFilter.replaceChildren();
+                                const defaultOption = document.createElement('option');
+                                defaultOption.value = '';
+                                defaultOption.textContent = 'Current Financial Year';
+                                financialYearFilter.appendChild(defaultOption);
+                                financialYears.forEach(function (fy) {
+                                    const option = document.createElement('option');
+                                    option.value = String(fy.id || '');
+                                    option.textContent = fy.name || '-';
+                                    financialYearFilter.appendChild(option);
+                                });
+                                if (selectedFinancialYear && financialYears.some(function (fy) { return String(fy.id) === String(selectedFinancialYear); })) {
+                                    financialYearFilter.value = String(selectedFinancialYear);
+                                } else {
+                                    financialYearFilter.value = '';
+                                }
+                            }
+                            const quarterFilter = document.getElementById('opms-filter-quarter');
+                            if (quarterFilter) {
+                                const quarters = Array.from(new Set(allSubmissionsData.map(function (sub) { return sub.quarter_code; }).filter(Boolean))).sort();
+                                quarterFilter.replaceChildren();
+                                const defaultOption = document.createElement('option');
+                                defaultOption.value = '';
+                                defaultOption.textContent = 'All Quarters';
+                                quarterFilter.appendChild(defaultOption);
+                                quarters.forEach(function (quarterCode) {
+                                    const option = document.createElement('option');
+                                    option.value = quarterCode;
+                                    option.textContent = quarterCode;
+                                    quarterFilter.appendChild(option);
+                                });
+                                quarterFilter.value = quarters.includes(saved.quarter) ? saved.quarter : '';
+                            }
+                            renderAllSubmissions();
+                        } catch (error) {
+                            if (tbody) {
+                                tbody.innerHTML = '<tr><td colspan="14" class="text-center text-danger py-3">Failed to load submissions.</td></tr>';
+                            }
+                            if (badge) {
+                                badge.textContent = 'Error';
+                                badge.className = 'badge bg-danger';
+                            }
+                        }
+                    }
+
+                    function closeInlineEditor() {
+                        const card = document.getElementById('opms-inline-edit-card');
+                        if (card) { card.classList.add('d-none'); }
+                        const errorEl = document.getElementById('opms-inline-edit-error');
+                        if (errorEl) {
+                            errorEl.classList.add('d-none');
+                            errorEl.textContent = '';
+                        }
+                        const evidenceInput = document.getElementById('opms-inline-edit-evidence-files');
+                        if (evidenceInput) {
+                            evidenceInput.value = '';
+                        }
+                        currentInlineEditMeasurementType = 'text';
+                        currentEditSubId = null;
+                    }
+
+                    async function openInlineEditor(subId) {
+                        currentEditSubId = null;
+                        const errorEl = document.getElementById('opms-inline-edit-error');
+                        const metaEl = document.getElementById('opms-inline-edit-meta');
+                        const card = document.getElementById('opms-inline-edit-card');
+                        if (errorEl) {
+                            errorEl.classList.add('d-none');
+                            errorEl.textContent = '';
+                        }
+                        try {
+                            const response = await fetch('/my/opms/submission/' + subId + '/load', { credentials: 'same-origin' });
+                            const payload = await response.json();
+                            if (!payload.ok) {
+                                showAllSubmissionsNotice(payload.error || 'Cannot edit this submission.', 'danger');
+                                return;
+                            }
+                            currentEditSubId = subId;
+                            currentInlineEditMeasurementType = payload.measurement_type || 'text';
+                            if (metaEl) {
+                                metaEl.textContent = (payload.indicator_name || '') + ' - ' + (payload.quarter_label || '');
+                            }
+                            const evidenceHelp = document.getElementById('opms-inline-edit-evidence-help');
+                            if (evidenceHelp) {
+                                const count = Number(payload.evidence_count || 0);
+                                evidenceHelp.textContent = count > 0
+                                    ? ('Current evidence files: ' + count + '. Re-upload only if you want to replace them.')
+                                    : 'No evidence currently attached. Upload files only if needed.';
+                            }
+                            const fieldMap = {
+                                'opms-inline-edit-comments': payload.comments,
+                                'opms-inline-edit-reason': payload.reason_for_deviation,
+                                'opms-inline-edit-remedial': payload.remedial_actions,
+                            };
+                            Object.entries(fieldMap).forEach(function (entry) {
+                                const el = document.getElementById(entry[0]);
+                                if (el) { el.value = entry[1] || ''; }
+                            });
+                            configureInlineActualInput(payload.measurement_type || 'text', payload.actual_value_input || payload.actual_value || '');
+                            if (card) {
+                                card.classList.remove('d-none');
+                                card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        } catch (error) {
+                            showAllSubmissionsNotice('Failed to load submission data.', 'danger');
+                        }
+                    }
+
+                    const saveBtn = document.getElementById('opms-inline-edit-save-btn');
+                    if (saveBtn) {
+                        saveBtn.addEventListener('click', async function () {
+                            if (!currentEditSubId) { return; }
+                            if (!validateInlineEvidenceSelection()) { return; }
+                            const errorEl = document.getElementById('opms-inline-edit-error');
+                            const body = new FormData();
+                            body.append('csrf_token', getCsrfToken());
+                            body.append('comments', (document.getElementById('opms-inline-edit-comments') || {}).value || '');
+                            body.append('actual_value', (document.getElementById('opms-inline-edit-actual-value') || {}).value || '');
+                            body.append('reason_for_deviation', (document.getElementById('opms-inline-edit-reason') || {}).value || '');
+                            body.append('remedial_actions', (document.getElementById('opms-inline-edit-remedial') || {}).value || '');
+                            const evidenceInput = document.getElementById('opms-inline-edit-evidence-files');
+                            if (evidenceInput && evidenceInput.files && evidenceInput.files.length) {
+                                Array.from(evidenceInput.files).forEach(function (file) {
+                                    body.append('evidence_files', file);
+                                });
+                            }
+                            try {
+                                const response = await fetch('/my/opms/submission/' + currentEditSubId + '/update', {
+                                    method: 'POST',
+                                    credentials: 'same-origin',
+                                    body: body,
+                                });
+                                const payload = await response.json();
+                                if (!payload.ok) {
+                                    if (errorEl) {
+                                        errorEl.textContent = payload.error || 'Update failed.';
+                                        errorEl.classList.remove('d-none');
+                                    }
+                                    return;
+                                }
+                                const savedSubId = String(currentEditSubId);
+                                closeInlineEditor();
+                                highlightedSubmissionId = savedSubId;
+                                await loadAllSubmissions();
+                            } catch (error) {
+                                if (errorEl) {
+                                    errorEl.textContent = 'An error occurred while saving.';
+                                    errorEl.classList.remove('d-none');
+                                }
+                            }
+                        });
+                    }
+
+                    const inlineEvidenceInput = document.getElementById('opms-inline-edit-evidence-files');
+                    if (inlineEvidenceInput) {
+                        inlineEvidenceInput.addEventListener('change', function () {
+                            validateInlineEvidenceSelection();
+                        });
+                    }
+
+                    async function deleteSubmission(subId) {
+                        const key = String(subId || '');
+                        if (!pendingAllSubmissionDeleteIds.has(key)) {
+                            pendingAllSubmissionDeleteIds.clear();
+                            pendingAllSubmissionDeleteIds.add(key);
+                            showAllSubmissionsNotice('Click delete again to confirm. This action cannot be undone.', 'danger');
+                            return;
+                        }
+                        pendingAllSubmissionDeleteIds.delete(key);
+                        try {
+                            const body = new URLSearchParams();
+                            body.set('csrf_token', getCsrfToken());
+                            const response = await fetch('/my/opms/submission/' + subId + '/delete', {
+                                method: 'POST',
+                                credentials: 'same-origin',
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                body: body.toString(),
+                            });
+                            const payload = await response.json();
+                            if (!payload.ok) {
+                                showAllSubmissionsNotice(payload.error || 'Could not delete submission.', 'danger');
+                                return;
+                            }
+                            highlightedSubmissionId = '';
+                            await loadAllSubmissions();
+                        } catch (error) {
+                            showAllSubmissionsNotice('Failed to delete submission.', 'danger');
+                        }
+                    }
+
+                    const financialYearFilter = document.getElementById('opms-filter-financial-year');
+                    if (financialYearFilter) {
+                        financialYearFilter.addEventListener('change', function () {
+                            allSubmissionsPage = 1;
+                            const quarterFilter = document.getElementById('opms-filter-quarter');
+                            if (quarterFilter) { quarterFilter.value = ''; }
+                            persistAllSubmissionsState();
+                            loadAllSubmissions();
+                        });
+                    }
+
+                    ['opms-filter-quarter', 'opms-filter-status', 'opms-filter-search'].forEach(function (id) {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.addEventListener('input', function () {
+                                allSubmissionsPage = 1;
+                                persistAllSubmissionsState();
+                                renderAllSubmissions();
+                            });
+                            el.addEventListener('change', function () {
+                                allSubmissionsPage = 1;
+                                persistAllSubmissionsState();
+                                renderAllSubmissions();
+                            });
+                        }
+                    });
+
+                    function bindSortHeader(id, key) {
+                        const el = document.getElementById(id);
+                        if (!el || el.dataset.bound) { return; }
+                        el.dataset.bound = '1';
+                        el.addEventListener('click', function (ev) {
+                            ev.preventDefault();
+                            if (allSubmissionsSort.by === key) {
+                                allSubmissionsSort.dir = allSubmissionsSort.dir === 'asc' ? 'desc' : 'asc';
+                            } else {
+                                allSubmissionsSort.by = key;
+                                allSubmissionsSort.dir = 'asc';
+                            }
+                            allSubmissionsPage = 1;
+                            persistAllSubmissionsState();
+                            renderAllSubmissions();
+                        });
+                    }
+                    bindSortHeader('opms-all-sort-id', 'id');
+                    bindSortHeader('opms-all-sort-programme', 'programme');
+                    bindSortHeader('opms-all-sort-sub-programme', 'sub_programme');
+                    bindSortHeader('opms-all-sort-directorate', 'directorate');
+                    bindSortHeader('opms-all-sort-output', 'output');
+                    bindSortHeader('opms-all-sort-indicator', 'indicator');
+                    bindSortHeader('opms-all-sort-quarter', 'quarter');
+                    bindSortHeader('opms-all-sort-status', 'status');
+                    bindSortHeader('opms-all-sort-progress', 'progress');
+                    bindSortHeader('opms-all-sort-actual-value', 'actual_value');
+                    bindSortHeader('opms-all-sort-planned-value', 'planned_value');
+                    bindSortHeader('opms-all-sort-submitted-by', 'submitted_by');
+                    bindSortHeader('opms-all-sort-date', 'date');
+
+                    const prevBtn = document.getElementById('opms-all-page-prev');
+                    const nextBtn = document.getElementById('opms-all-page-next');
+                    if (prevBtn) {
+                        prevBtn.addEventListener('click', function () {
+                            if (allSubmissionsPage > 1) {
+                                allSubmissionsPage -= 1;
+                                persistAllSubmissionsState();
+                                renderAllSubmissions();
+                            }
+                        });
+                    }
+                    if (nextBtn) {
+                        nextBtn.addEventListener('click', function () {
+                            allSubmissionsPage += 1;
+                            persistAllSubmissionsState();
+                            renderAllSubmissions();
+                        });
+                    }
+
+                    const clearBtn = document.getElementById('opms-filter-clear-btn');
+                    if (clearBtn) {
+                        clearBtn.addEventListener('click', function () {
+                            ['opms-filter-financial-year', 'opms-filter-quarter', 'opms-filter-status', 'opms-filter-search'].forEach(function (id) {
+                                const el = document.getElementById(id);
+                                if (el) { el.value = ''; }
+                            });
+                            allSubmissionsSort = { by: 'hierarchy', dir: 'asc' };
+                            allSubmissionsPage = 1;
+                            persistAllSubmissionsState();
+                            renderAllSubmissions();
+                        });
+                    }
+
+                    ['opms-inline-edit-cancel-top', 'opms-inline-edit-cancel-bottom'].forEach(function (id) {
+                        const btn = document.getElementById(id);
+                        if (btn) { btn.addEventListener('click', closeInlineEditor); }
+                    });
+
+                    loadAllSubmissions();
+                });
+            ]]></script>
+        </t>
+    </template>
+</odoo>

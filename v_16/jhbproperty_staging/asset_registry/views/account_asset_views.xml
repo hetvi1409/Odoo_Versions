@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.view.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_asset_modify']"
+                   position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'not in',
+                    ('open', 'disposal_request_sent'))]}
+                </attribute>
+
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <!--                <button type="object" name="action_asset_addition"-->
+                <!--                        string="Asset Addition"-->
+                <!--                        attrs="{'invisible': [('state', 'in', ['close', 'model', 'cancelled', 'impaired'])]}"/>-->
+                <!--                <button type="object" name="action_asset_lose"-->
+                <!--                        string="Asset Disposal"-->
+                <!--                        attrs="{'invisible': [('state', 'in', ['close', 'model', 'cancelled'])]}"/>-->
+                <!--                <button type="object" name="action_asset_transfer"-->
+                <!--                        string="Asset Movement"-->
+                <!--                        attrs="{'invisible': [('state', 'in', ['model'])]}"/>-->
+                <button type="object" name="action_asset_impairment"
+                        string="Asset Impairment"
+                        attrs="{'invisible': [('state', 'in', ['close', 'model', 'cancelled', 'impaired'])]}"/>
+            </xpath>
+
+
+            <!--            <xpath expr="//button[@name='action_asset_modify']" position="after">-->
+            <!--                <button name="action_request_disposal" string="Disposal Request"-->
+            <!--                        type="object" class="oe_highlight"-->
+            <!--                        attrs="{'invisible': [('state', '!=', 'running')]}"/>-->
+
+            <!--            </xpath>-->
+            <xpath expr="//button[@name='action_asset_modify']"
+                   position="after">
+                <button name="action_dispose_approval" string="Approve Dispose"
+                        type="object" class="oe_highlight"
+                        attrs="{'invisible': [('state', '!=', 'running')]}"/>
+
+
+            </xpath>
+
+            <xpath expr="//button[@name='action_asset_modify']"
+                   position="after">
+                <button name="action_dispose_reject" string="Reject Dispose"
+                        type="object" class="oe_highlight"
+                        attrs="{'invisible': [('state', '!=', 'running')]}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='analytic_distribution']"
+                   position="after">
+                <field name="comp_id"
+                       string="Company ID"/>
+            </xpath>
+            <xpath expr="//page[@name='main_page']" position="inside">
+                <group string="Disposal">
+                    <field name="disposal_reason"
+                           string="Disposal Reason"/>
+                </group>
+            </xpath>
+            <xpath expr="//sheet/div[2]" position="before">
+                <field name="image_1920" widget="image" class="oe_avatar"/>
+            </xpath>
+            <xpath expr="//sheet/div[2]" position="after">
+                <group>
+                    <group>
+                        <field name="asset_type_id"/>
+                        <field name="alternative_ref"/>
+                    </group>
+                    <group>
+                        <field name="asset_category_id"/>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//notebook/page[@name='main_page']/group/group[3]"
+                   position="after">
+                <group string="Depreciation Values">
+                    <field name="depreciation_on_days"/>
+                    <field name="total_depreciation_2022"/>
+                    <field name="total_depreciation_2023"/>
+                    <field name="accumulated_depreciation_2022"/>
+                    <field name="accumulated_depreciation_2023"/>
+                    <field name="closing_book_value_2022"/>
+                    <field name="closing_book_value_2023"/>
+                </group>
+                <group string="Details">
+                    <field name="w_and_t_per"/>
+                    <field name="current_w_and_t_2022"/>
+                    <field name="current_w_and_t_2023"/>
+                    <field name="closing_accum_w_and_t_2022"/>
+                    <field name="closing_accum_w_and_t_2023"/>
+                    <field name="closing_tax_value_2022"/>
+                    <field name="closing_tax_value_2023"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Description" name="description">
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </page>
+                <page string="Asset Useful life" name="useful_life">
+                    <group>
+                        <group string="Useful Life">
+                            <field name="original_useful_life"/>
+                            <field name="time_lapsed" readonly="1"/>
+                            <field name="remaining_useful_life" readonly="1"/>
+                            <field name="depreciation_rate" readonly="1"/>
+                            <field name="accumulated_depreciation"
+                                   readonly="1"/>
+                            <field name="useful_life_month"/>
+                            <field name="remaining_useful_life_month"/>
+                            <field name="useful_life_day"/>
+                            <field name="remaining_useful_life_day"/>
+                        </group>
+                        <group string="Adjust Useful Life">
+                            <button name="%(asset_useful_life.action_adjust_life_wizard)d"
+                                    string="Adjust Life" type="action"
+                                    class="btn-primary"/>
+                        </group>
+                    </group>
+                    <field name="useful_life_ids">
+                        <tree editable="bottom">
+                            <field name="date"/>
+                            <!--<field name="amount"/>-->
+                            <field name="original_useful_life"/>
+                            <field name="reserved_useful_life"/>
+                            <field name="remaining_useful_life"/>
+                        </tree>
+                    </field>
+                </page>
+
+                <page string="Asset Impairment" name="asset_impairment"
+                      attrs="{'invisible': [('state', 'not in', ['impaired', 'cancelled'])]}">
+                    <group>
+                        <field name="reason_impairment"/>
+                        <field name="is_impaired" invisible="1"/>
+                        <field name="impairment_date"/>
+                    </group>
+                    <group string="External sources of information">
+                        <group>
+                            <field name="cessation"/>
+                        </group>
+                        <group>
+                            <field name="long_term_change"/>
+                        </group>
+                    </group>
+                    <group string="Internal sources of information">
+                        <group>
+                            <field name="evidence"/>
+                        </group>
+                        <group>
+                            <field name="evidence_document_ids"
+                                   widget="many2many_binary"
+                                   attrs="{'invisible': [('evidence','!=', 'yes')]}"/>
+                        </group>
+                        <group>
+                            <field name="significant_long_term_change"/>
+                            <field name="evidence_internal_report"/>
+                        </group>
+                        <group>
+                            <field name="decision"/>
+                            <field name="evidence_internal_report_document_ids"
+                                   widget="many2many_binary"
+                                   attrs="{'invisible': [('evidence_internal_report','!=', 'yes')]}"/>
+                        </group>
+                    </group>
+
+                </page>
+
+            </xpath>
+            <xpath expr="//field[@name='original_value']" position="after">
+                <!--                <field name="opening_cost"/>-->
+                <!--                <field name="money_received_sale_asset"/>-->
+                <!--                <field name="current_value_asset"/>-->
+                <field name="carrying_amount"/>
+                <field name="value_in_use"/>
+                <field name="fair_value_less_cost_to_sell"/>
+                <!--                <field name="carrying_amount"/>-->
+                <!--                <field name="asset_parent_id"/>-->
+            </xpath>
+            <xpath expr="//field[@name='analytic_distribution']"
+                   position="after">
+                <!--                <field name="opening_cost"/>-->
+                <!--                <field name="addition"/>-->
+                <!--                <field name="disposal"/>-->
+                <!--                <field name="transfer"/>-->
+                <!--                <field name="closing_cost"/>-->
+                <!--                <field name="depreciation_charge"/>-->
+                <!--                <field name="accumulated_depreciation"/>-->
+                <!--                <field name="accumulated_depreciation_transfer"/>-->
+                <field name="impairment"/>
+                <!--                <field name="accumulated_impairment_disposal"/>-->
+                <!--                <field name="accumulated_impairment_transfer"/>-->
+                <!--                <field name="life_in_months"/>-->
+                <!--                <field name="acc_dep_opening"/>-->
+                <!--                <field name="closing_accumulated_depreciation"/>-->
+                <!--                <field name="opening_book_value_july_22"/>-->
+                <!--                <field name="closing_book_value_july_22"/>-->
+                <!--                <field name="original_useful_life"/>-->
+                <!--                <field name="expense_cost"/>-->
+                <!--                <field name="capitalise_costs"/>-->
+                <!--                <field name="replacement_value"/>-->
+                <!--                <field name="market_value"/>-->
+                <!--                <field name="ready_for_use"/>-->
+                <!--                <field name="sub_category_description"/>-->
+            </xpath>
+        </field>
+    </record>
+    <record id="view_account_asset_search_inherit" model="ir.ui.view">
+        <field name="name">account.asset.search.by.asset_id</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="replace">
+                <field name="name" string="Asset Name"/>
+            </xpath>
+            <xpath expr="//search" position="inside">
+                <field name="identification_number" string="Asset ID"/>
+                <field name="alternative_ref" string="Barcode Number"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,72 @@
+
+<odoo>
+  <record id="view_profile_tree" model="ir.ui.view">
+    <field name="name">scs.employee.profile.tree</field>
+    <field name="model">scs.employee.profile</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="employee_id"/>
+        <field name="role_id"/>
+        <field name="total_competencies"/>
+        <field name="met_count"/>
+        <field name="gap_count"/>
+        <field name="gap_percent"/>
+      </tree>
+    </field>
+  </record>
+  <record id="view_profile_form" model="ir.ui.view">
+    <field name="name">scs.employee.profile.form</field>
+    <field name="model">scs.employee.profile</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <header>
+            <button name="action_create_assessment" type="object" string="New Assessment" class="oe_highlight"/>
+            <button name="action_generate_training_suggestions" type="object" string="Suggest Training"/>
+            <button name="%(action_report_profile)d" type="action" string="Print Gap Report"/>
+          </header>
+          <group>
+            <field name="employee_id"/>
+            <field name="role_id"/>
+          </group>
+          <group>
+            <field name="total_competencies" readonly="1"/>
+            <field name="met_count" readonly="1"/>
+            <field name="gap_count" readonly="1"/>
+            <field name="gap_percent" readonly="1"/>
+          </group>
+          <notebook>
+            <page string="Assessments">
+              <field name="assessment_ids">
+                <tree>
+                  <field name="name"/>
+                  <field name="state"/>
+                  <field name="create_date"/>
+                </tree>
+              </field>
+            </page>
+            <page string="Competencies">
+              <field name="assessment_ids">
+                <tree>
+                  <field name="name"/>
+                  <field name="state"/>
+                  <field name="create_date"/>
+                </tree>
+              </field>
+            </page>
+            <page string="Training Actions">
+              <field name="assessment_ids">
+                <tree>
+                  <field name="name"/>
+                  <field name="state"/>
+                  <field name="create_date"/>
+                </tree>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+</odoo>

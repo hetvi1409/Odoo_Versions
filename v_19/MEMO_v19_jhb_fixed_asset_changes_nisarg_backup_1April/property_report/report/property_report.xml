@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="building_report_action" model="ir.actions.report">
+        <field name="name">Property</field>
+        <field name="model">building</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">property_report.building_property_report</field>
+        <field name="report_file">property_report.building_property_report</field>
+        <field name="binding_model_id" ref="model_building"/>
+    </record>
+    <template id="building_property_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="d-flex justify-content-center">
+                        <!-- Report Title -->
+                        <table class="table table-bordered">
+                            <!--                               style="border-radius: 10px; overflow: hidden;">-->
+                            <thead class="table-dark">
+                                <tr>
+                                    <th colspan="4" class="h4 text-center">
+                                        Property Details
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th class="bg-light">
+                                        <strong>JMC Number</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.jmc_number"/>
+                                        </center>
+                                    </td>
+                                    <th class="bg-light">
+                                        <strong>Purchase Date</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.purchase_date"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">
+                                        <strong>Region</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.region_id.name"/>
+                                        </center>
+                                    </td>
+                                    <th class="bg-light">
+                                        <strong>Launch Date</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.launch_date"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <th>
+                                        <strong>Market Value</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.market_value"/>
+                                        </center>
+                                    </td>
+                                    <th>
+                                        <strong>Type Of Taken</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.type_of_take"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">
+                                        <strong>ERF Number</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.name"/>
+                                        </center>
+                                    </td>
+                                    <th class="bg-light">
+                                        <strong>Code</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.code"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <th>
+                                        <strong>Stand Number</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.stand_number"/>
+                                        </center>
+                                    </td>
+                                    <th>
+                                        <strong>Owner</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.partner_id.name"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">
+                                        <strong>Historical Book Value</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.history_amount"/>
+                                        </center>
+                                    </td>
+                                    <th class="bg-light">
+                                        <strong>Ward</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.ward"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <th>
+                                        <strong>Zoning</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.zoning_id.name"/>
+                                        </center>
+                                    </td>
+                                    <th>
+                                        <strong>Township</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.township"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">
+                                        <strong>SG ID</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.sg_id"/>
+                                        </center>
+                                    </td>
+                                    <th class="bg-light">
+                                        <strong>User Department</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.department_id.name"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <th>
+                                        <strong>Title Deed Number</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.title_deed_number"/>
+                                        </center>
+                                    </td>
+                                    <th>
+                                        <strong>Leased Or Not</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.leased_state"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">
+                                        <strong>Property Condition</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.property_condition"/>
+                                        </center>
+                                    </td>
+                                    <th class="bg-light">
+                                        <strong>Category</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.category_id.name"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <th>
+                                        <strong>Current Use</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.current_use"/>
+                                        </center>
+                                    </td>
+                                    <th>
+                                        <strong>Status</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.state"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <th>
+                                        <strong>Latitude</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.latitude"/>
+                                        </center>
+                                    </td>
+                                    <th>
+                                        <strong>Longitude</strong>
+                                    </th>
+                                    <td>
+                                        <center>
+                                            <t t-esc="o.longitude"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <t t-if="o.building_image_ids">
+
+                            <table class="table table-bordered">
+                                <!--                               style="border-radius: 10px; overflow: hidden;">-->
+                                <thead class="table-dark">
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <strong>Property Images</strong>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tboday>
+                                    <tr t-foreach="o.building_image_ids"
+                                               t-as="image">
+                                        <td colspan="4" class="text-center"
+                                            style="display: flex; flex-wrap: wrap; justify-content: center;">
+                                            <t >
+                                                <t t-if="image.image_1920">
+                                                    <img t-att-src="'data:image/png;base64,%s' % image.image_1920.decode('utf-8')"
+                                                         style="max-width: 500px; height: auto; margin: 10px; border: 1px solid #ddd; padding: 5px; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tboday>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

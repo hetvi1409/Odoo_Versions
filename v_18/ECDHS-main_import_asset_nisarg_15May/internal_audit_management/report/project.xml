@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="project_project_report_action" model="ir.actions.report">
+        <field name="name">PDF Report</field>
+        <field name="model">project.project</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">internal_audit_management.project_project_report</field>
+        <field name="report_file">internal_audit_management.project_project_report</field>
+        <field name="binding_model_id" ref="model_project_project"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'%s' % object.name</field>
+    </record>
+
+    <template id="project_project_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="col-xs-4" style="padding:0;">
+                            <center>
+                                <h2 t-esc="doc.name"/>
+                            </center>
+                        </div>
+                        <table style="width:100%; border-collapse: collapse;">
+                            <tr>
+                                <td>
+                                    <strong>Name of the Tasks:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.label_tasks"/>
+                                </td>
+                                <td>
+                                    <strong>Preparer:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.user_preparer_ids.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Audit Type:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.audit_type"/>
+                                </td>
+                                <td>
+                                    <strong>First Reviewer:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.user_reviewer_1_ids.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Project Number:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.project_number"/>
+                                </td>
+                                <td>
+                                    <strong>Second Reviewer:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.user_reviewer_2_ids.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Team Members:</strong>
+                                </td>
+                                <td>
+                                    <t t-foreach="doc.team_member_ids" t-as="member">
+                                        <t t-esc="member.name"/>
+                                        <br/>
+                                    </t>
+                                </td>
+
+                                <td>
+                                    <strong>Approver:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.user_approver.name"/>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Project Template:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.template_id.name"/>
+                                </td>
+                                <td>
+                                    <strong>Project Manager:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.user_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Planned Date:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.date_start"/>
+                                    <t t-esc="doc.date"/>
+                                </td>
+                                <td>
+                                    <strong>Internal Audit 3 year Plan:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.internal_audit_3_years.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Internal Audit 1 year Plan:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.internal_audit_1_year_id.name"/>
+                                </td>
+                                <td>
+                                    <strong>Internal Audit Operational Plan:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.aop_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Time Budget:</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.time_budget_hours"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

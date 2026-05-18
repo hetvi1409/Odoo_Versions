@@ -1,0 +1,87 @@
+<odoo>
+    <record id="view_machinery_component_list" model="ir.ui.view">
+        <field name="name">machinery.component.list</field>
+        <field name="model">machinery.component</field>
+        <field name="arch" type="xml">
+            <list string="Machinery Components">
+                <field name="name"/>
+                <field name="default_code"/>
+                <field name="component_type"/>
+                <field name="manufacturer_id"/>
+                <field name="status"/>
+                <field name="location"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_machinery_component_form" model="ir.ui.view">
+        <field name="name">machinery.component.form</field>
+        <field name="model">machinery.component</field>
+        <field name="arch" type="xml">
+            <form string="Machinery Component">
+             <header>
+                <button type="object" name="create_product_cost_splits" string="Create Cost Splits" class="oe_stat_button" icon="fa-plus"/>
+            </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_product_cost_splits" icon="fa-list" >
+                            <field string="Cost Splits" name="split_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="default_code"/>
+                            <field name="serial_number"/>
+                            <field name="component_type"/>
+                            <field name="status"/>
+                            <field name="location"/>
+                        </group>
+                        <group>
+                            <field name="manufacturer_id"/>
+                            <field name="purchase_date"/>
+                            <field name="warranty_expiry"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products Produced">
+                            <field name="product_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="COS Accounts">
+                            <field name="cos_account_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Income Accounts">
+                            <field name="income_account_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Product Cost Splits">
+                            <field name="product_cost_split_ids"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_machinery_component" model="ir.actions.act_window">
+        <field name="name">Machinery Components</field>
+        <field name="res_model">machinery.component</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Machinery Component
+            </p>
+        </field>
+    </record>
+    <record id="access_machinery_component_user" model="ir.model.access">
+        <field name="name">machinery.component user</field>
+        <field name="model_id" ref="hulpak_sales.model_machinery_component"/>
+        <field name="group_id" ref="base.group_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+    <menuitem id="menu_machinery_component_items" name="All Components" action="action_machinery_component"
+              parent="account.menu_finance_configuration" sequence="98"/>
+</odoo>

@@ -1,0 +1,241 @@
+<templates>
+    <t t-name="AuditMeterDashboard" owl="1">
+        <!-- Section contains a structure for the purchase report, including a filter
+        view and a table view. It has div elements for the filter view and table view,
+         with respective classes for styling.-->
+        <div class="">
+            <div>
+                <center>
+                    <h1 style="margin: 20px;">Audit Report</h1>
+                </center>
+            </div>
+        </div>
+        <div class="print-btns">
+            <div class="sub_container_left"
+                 style="width: 285px; margin-left: 36px;">
+                <div class="report_print">
+                    <button type="button" class="btn btn-primary"
+                            style="float: left; margin-right: 9px;"
+                            t-on-click="printPdf">
+                        Print (PDF)
+                    </button>
+<!--                    <button type="button" class="btn btn-primary"-->
+<!--                            t-on-click="print_xlsx">-->
+<!--                        Export (XLSX)-->
+<!--                    </button>-->
+                </div>
+            </div>
+            <br/>
+            <div class="sub_container_right">
+<!--                <div class="search-Result-Selection" >-->
+<!--                    <div class="dropdown">-->
+<!--                        <a class="btn btn-secondary dropdown-togglereport-type"-->
+<!--                           href="#" role="button" id="dropdownMenuLink"-->
+<!--                           data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                            <span class="fa fa-book"/>-->
+<!--                            <span class="low_case dropdown-toggle"> Exception-->
+<!--                                :-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                        <select id="selection" class="dropdown-menu report_type"-->
+<!--                                aria-labelledby="dropdownMenuLink"-->
+<!--                                t-ref="exception"-->
+<!--                                t-on-change="_onChangeType"-->
+<!--                                name="states[]">-->
+<!--                            <div role="separator" class="dropdown-divider"/>-->
+<!--                            <option value=""></option>-->
+<!--                            <option value="Duplicate Invoices">Duplicate Invoices-->
+<!--                            </option>-->
+<!--                            <option value="Duplicate Payments">Duplicate Payments-->
+<!--                            </option>-->
+<!--                        </select>-->
+<!--                        <span id="report_res_" t-out="state.exception" style="margin-left: 10px;"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="search-Result-Selection" id="type-filter">
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-togglereport-type"
+                           href="#" role="button" id="dropdownMenuLink"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="fa fa-book"/>
+                            <span class="low_case dropdown-toggle">Type
+                                :
+                            </span>
+                        </a>
+                        <select id="selection" class="dropdown-menu report_type"
+                                aria-labelledby="dropdownMenuLink"
+                                t-ref="order_by"
+                                t-on-change="_onChangeType"
+                                name="states[]">
+                            <div role="separator" class="dropdown-divider"/>
+                            <option value="All" selected="">All
+                            </option>
+                            <option value="Today">Today
+                            </option>
+                            <option value="This Week">This Week
+                            </option>
+                            <option value="This Month">This Month
+                            </option>
+                            <option value="Custom">Custom
+                            </option>
+                        </select>
+                        <span id="report_res" t-out="state.order_by" style="margin-left: 10px;"/>
+                    </div>
+                </div>
+                <div class="dropdown d-none" id="date-range-custom">
+                    <button class="btn btn-secondary dropdown-toggle time_range_pr"
+                            type="button" id="date_chose"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="fa fa-calendar" title="Dates" role="img"
+                              aria-label="Dates"/>
+                        Date Range
+                    </button>
+                    <div class="dropdown-menu my_custom_dropdown" role="menu"
+                         aria-labelledby="date_chose">
+                        <div class="form-group">
+                            <label class="" for="date_from">Start Date :</label>
+                            <div class="input-group date" id="date_from"
+                                 data-target-input="nearest">
+                                <input type="date" name="date_from"
+                                       t-ref="date_from" id="date_from_value"
+                                       class="form-control datetimepicker-input"
+                                       data-target="#date_from"
+                                       t-att-name="prefix"/>
+                                <div class="input-group-append"
+                                     data-target="#date_from"
+                                     data-toggle="datetimepicker"
+                                     style="pointer-events: none;">
+                                </div>
+                            </div>
+                            <label class="" for="date_to">End Date :</label>
+                            <div class="input-group date" id="date_to"
+                                 data-target-input="nearest">
+                                <input type="date" name="date_to"
+                                       t-ref="date_to"
+                                       class="form-control datetimepicker-input"
+                                       data-target="#date_to"
+                                       t-att-name="prefix"/>
+                                <div class="input-group-append"
+                                     data-target="#date_to"
+                                     data-toggle="datetimepicker"
+                                     style="pointer-events: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="apply_filter">
+                    <button type="button" id="apply_filter"
+                            class="btn btn-primary" t-on-click="applyFilter">
+                        Apply
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="" style="display: flex; justify-content: center; ">
+                <div style="width: 85%; border: 1px solid lightgray; ">
+                    <div class="table_main_view overflow-auto"
+                         style="height: 70vh; padding:10px;">
+                        <table class="table table-condensed" cellspacing="0">
+                            <thead>
+                                <tr class="table_pr_head">
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Auditor
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Total
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Can Audit
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">No Access
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Good Meter
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Damaged Meter
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">Access Denied
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">No Meter
+                                    </th>
+                                    <th class="mon_fld"
+                                        style="text-align:center;">City
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+<!--                                <t t-foreach="state.order_line"-->
+<!--                                   t-as="audit_meter"-->
+<!--                                   t-key="audit_meter_index">-->
+<!--                                    <tr style="text-align:center;"-->
+<!--                                        class="pr-line"-->
+<!--                                        t-att-data-account-id="audit_meter['id']"-->
+<!--                                        t-attf-data-target=".a{{audit_meter['id']}}">-->
+<!--                                        <td style="text-align:center;">-->
+<!--                                            <span>-->
+<!--                                                <a class="view_order"-->
+<!--                                                   tabindex="-1"-->
+<!--                                                   href="#"-->
+<!--                                                   t-att-id="audit_meter['auditor_id']"-->
+<!--                                                   t-on-click="ViewAuditorDetails">-->
+<!--                                                    <t t-esc="audit_meter['name']"/>-->
+<!--                                                </a>-->
+<!--                                            </span>-->
+<!--                                        </td>-->
+<!--                                        <td style="text-align:center;">-->
+<!--                                            <span>-->
+<!--                                                <t t-esc="audit_meter['total']"/>-->
+<!--                                            </span>-->
+<!--                                        </td>-->
+<!--                                        <td style="text-align:center;">-->
+<!--                                            <span>-->
+<!--                                                <t t-esc="audit_meter['can_audit']"/>-->
+<!--                                            </span>-->
+<!--                                        </td>-->
+<!--                                        <td style="text-align:center;">-->
+<!--                                            <span>-->
+<!--                                                <t t-esc="audit_meter['no_access']"/>-->
+<!--                                            </span>-->
+<!--                                        </td>-->
+<!--                                        <td style="text-align:center;">-->
+<!--                                            <span>-->
+<!--                                                <t t-esc="audit_meter['good_meter']"/>-->
+<!--                                            </span>-->
+<!--                                        </td>-->
+<!--                                        <td style="text-align:center;">-->
+<!--                                            <span>-->
+<!--                                                <t t-esc="audit_meter['damaged_meter']"/>-->
+<!--                                            </span>-->
+<!--                                        </td>-->
+<!--                                        <td style="text-align:center;">-->
+<!--                                            <span>-->
+<!--                                                <t t-esc="audit_meter['access_denied']"/>-->
+<!--                                            </span>-->
+<!--                                        </td>-->
+<!--                                        <td style="text-align:center;">-->
+<!--                                            <span>-->
+<!--                                                <t t-esc="audit_meter['no_electricity']"/>-->
+<!--                                            </span>-->
+<!--                                        </td>-->
+<!--                                        <td style="text-align:center;">-->
+<!--                                            <span>-->
+<!--                                                <t t-esc="audit_meter['city']"/>-->
+<!--                                            </span>-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+<!--                                </t>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

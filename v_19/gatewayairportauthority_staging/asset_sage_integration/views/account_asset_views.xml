@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.view.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='main_page']/group" position="inside">
+                <group string="Sage">
+                    <field name="sage_id"/>
+                </group>
+            </xpath>
+            <xpath expr="//button[@name='validate']" position="after">
+                <button name="action_post_transaction" invisible="state != 'model'" string="Post Transaction API" type="object"
+                        class="oe_highlight"/>
+                <button name="action_post_transaction_asset"  invisible="state != 'open'" string="Post Transaction API" type="object"
+                        class="oe_highlight" groups="fixed_assets.group_fixed_asset_final_reviewer"/>
+            </xpath>
+
+            <xpath expr="//sheet/div[@name='button_box']" position="before">
+                <div class="oe_button_box" name="button_box" invisible="state != 'model'">
+                    <button class="oe_stat_button" name="action_view_asset" type="object" icon="fa-bars">
+                        <field string="Assets" name="all_asset_count" widget="statinfo"/>
+                    </button>
+                </div>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <notebook colspan="4" invisible="state != 'model'">
+                    <page string="Sage Accounts">
+                        <group>
+                            <group>
+                                <field name="sage_account_account_id"
+                                       domain="[('company_ids', 'in', company_id.id),
+                ('internal_group', '=', 'asset')]"/>
+
+                                <!--                                !!!!older version!!!!-->
+                                <!--                                <field name="sage_account_account_id" domain="[-->
+                                <!--                                    ('company_id', '=', company_id),-->
+                                <!--                                    ('account_type', 'in', (-->
+                                <!--                                        'asset_fixed',-->
+                                <!--                                        'asset_non_current',-->
+                                <!--                                        'asset_current'))]"/>-->
+                                <field name="sage_accumulated_depreciation_account_id"/>
+                                <field name="sage_cost_account_id"/>
+                            </group>
+                            <group>
+                                <field name="sage_depreciation_account_id"/>
+                                <field name="sage_expense_account_id"
+                                       domain="[('account_type', 'in', ('expense', 'expense_direct_cost'))]"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

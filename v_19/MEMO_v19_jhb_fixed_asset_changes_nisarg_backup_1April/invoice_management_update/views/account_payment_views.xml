@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_account_payment_form">
+        <field name="name">account.payment.view.form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_post']" position="after">
+                <button name="action_approve"
+                        string="Approve" class="oe_highlight"
+                        type="object"
+                        invisible="state != 'draft' or payment_type != 'inbound'"/>
+                <button name="action_refuse"
+                        string="Review" class="oe_highlight"
+                        type="object"
+                        invisible="state != 'draft' or payment_type != 'inbound'"/>
+                <button name="action_approve_second"
+                        string="Approve" class="oe_highlight"
+                        type="object"
+                        invisible="state != 'paid' or payment_type != 'inbound'"/>
+                <button name="action_refuse_second"
+                        string="Refuse" class="oe_highlight"
+                        type="object"
+                        invisible="state != 'paid' or payment_type != 'inbound'"/>
+                <button name="action_approve_third"
+                        string="Approve" class="oe_highlight"
+                        type="object" invisible="state != 'paid' or payment_type != 'inbound'"/>
+                <button name="action_refuse_third"
+                        string="Refuse" class="oe_highlight"
+                        type="object"
+                        invisible="state != 'paid' or payment_type != 'inbound'"/>
+            </xpath>
+            <xpath expr="//button[@name='action_post']" position="replace">
+                <button name="action_post" string="Confirm" type="object" class="oe_highlight" invisible="state not in ['draft','paid']" data-hotkey="v"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_title')]" position="after">
+                <group>
+                    <field name="load_batch"/>
+                    <field name="release"/>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='payment_type']" position="after">
+                <field name="invoice_id" readonly="state != 'draft'" invisible="payment_type != 'inbound'"/>
+                <field name="to_reconcile_ids" widget="many2many_tags" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

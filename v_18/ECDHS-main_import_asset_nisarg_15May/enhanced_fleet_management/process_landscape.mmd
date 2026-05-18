@@ -1,0 +1,21 @@
+flowchart TD
+    A[Transport Request Draft] --> B[Submitted]
+    B --> C[Manager Approved]
+    C --> D[Vehicle Assigned]
+    D --> E[Trip Authority Issued]
+    E --> F[Trip Active]
+    F --> G[Pre-trip Checklist + Odometer Start]
+    G --> H[Trip Execution]
+    H --> I[Post-trip Checklist + Odometer End]
+    I --> J[Trip Completed]
+    F --> K{Incident?}
+    K -->|Yes| L[Accident Report]
+    K -->|No| J
+    L --> M[Investigation/Claim]
+    M --> N[Accident Closed]
+    H --> O{Vehicle Unavailable?}
+    O -->|Yes| P[Vehicle Relief Requested]
+    P --> Q[Relief Approved/Assigned]
+    Q --> R[Handover/Return + Costs]
+    R --> S[Relief Closed]
+    J --> T[Reports & Archive]

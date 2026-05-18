@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    
+    <record id="project_approval_view_list" model="ir.ui.view">
+        <field name="name">project.approval.view.list</field>
+        <field name="model">project.approval</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="entity_id"/>
+                <field name="title"/>
+                <field name="state"/>
+                <field name="organiser_id"/>
+                <field name="approver_id"/>
+                <field name="logged_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="project_approval_view_form" model="ir.ui.view">
+        <field name="name">project.approval.view.form</field>
+        <field name="model">project.approval</field>
+        <field name="arch" type="xml">
+            <form string="Project Approval">
+                <header>
+                    <field name="state" widget="statusbar"/>
+
+                    <button name="action_ready" class="oe_highlight"
+                            invisible="state != 'pending'"
+                            string="Ready" type="object"/>
+                    <button name="action_approved" class="oe_highlight"
+                            invisible="state != 'ready'"
+                            string="Approved" type="object"/>
+                    <button name="action_declined" class="oe_highlight"
+                            invisible="state != 'ready'"
+                            string="Declined" type="object"/>
+                </header>
+                <sheet>
+                                                            <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover),
+                        .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover)
+                        .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover)
+                        .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group string="Approval Information">
+                        <group>
+                            <field name="name"/>
+                            <field name="title"/>
+
+                            <field name="project_id" context="{'form_view_ref': 'project_porfolio_management.edit_project_ppe'}"
+                             options="{'no_create': True}"/>
+
+                            <field name="note"/>
+                            <field name="entity_id"/>
+                        </group>
+                        <group>
+                            <field name="approver_id"/>
+                            <field name="organiser_id"/>
+                            <field name="related_entity_type"/>
+                            <field name="related_entity_key"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="days_waiting_approval"/>
+                        <field name="logged_date"/>
+                        <field name="loaded_by_id"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_project_approval" model="ir.actions.act_window">
+        <field name="name">Project Approval</field>
+        <field name="res_model">project.approval</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Project Approval found. Let's create one!
+            </p>
+            <p>
+                Create Project Approval to organize your tasks. Define a different workflow for each project.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="action_project_approval_menu" name="Project Approval"
+              parent="menu_ppo_governance"
+              action="action_project_approval"
+              sequence="10"/>
+</odoo>

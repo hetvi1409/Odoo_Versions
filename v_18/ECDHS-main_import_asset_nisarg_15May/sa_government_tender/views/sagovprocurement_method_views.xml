@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ===================================== -->
+        <!-- Procurement Method - Tree View -->
+        <!-- ===================================== -->
+        <record id="view_sagovprocurement_method_list" model="ir.ui.view">
+            <field name="name">sagovprocurement.method.list</field>
+            <field name="model">sagovprocurement.method</field>
+            <field name="arch" type="xml">
+                <list string="Procurement Methods">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="min_value" string="Min Value (R)"/>
+                    <field name="max_value" string="Max Value (R)"/>
+                    <field name="quotations_required"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- Procurement Method - Form View -->
+        <!-- ===================================== -->
+        <record id="view_sagovprocurement_method_form" model="ir.ui.view">
+            <field name="name">sagovprocurement.method.form</field>
+            <field name="model">sagovprocurement.method</field>
+            <field name="arch" type="xml">
+                <form string="Procurement Method">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="validate_compliance" type="object" class="oe_stat_button" icon="fa-check">
+                                <field string="Validate Compliance" name="pppfa_compliant" widget="boolean_button" options="{'terminology': 'active'}"/>
+                            </button>
+                        </div>
+
+                        <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+
+                        <div class="oe_title">
+                            <label for="name" string="Method Name"/>
+                            <h1>
+                                <field name="name" placeholder="e.g., Competitive Bid &lt; R50 Million" required="1"/>
+                            </h1>
+                            <group>
+                                <group>
+                                    <field name="code" placeholder="e.g., competitive_bid_r50m" required="1"/>
+                                    <field name="sequence"/>
+                                </group>
+                                <group>
+                                    <field name="active" widget="boolean_toggle"/>
+                                    <field name="currency_id" groups="base.group_multi_currency" options="{'no_create': True}"/>
+                                </group>
+                            </group>
+                        </div>
+
+                        <!-- General Information Section -->
+                        <group>
+                            <group string="Description">
+                                <field name="description" widget="html" nolabel="1" placeholder="Detailed description of this procurement method..."/>
+                            </group>
+                        </group>
+
+                        <group string="Value Thresholds">
+                            <group>
+                                <field name="min_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="max_value" widget="monetary" options="{'currency_field': 'currency_id'}" help="0 = No limit"/>
+                            </group>
+                            <group>
+                                <field name="preference_point_system_ids" widget="many2many_tags" options="{'color_field': 'system_type', 'no_create': True}"/>
+                            </group>
+                        </group>
+
+                        <!-- Requirements Section -->
+                        <separator string="Requirements Configuration"/>
+                        <group string="Quotation Requirements">
+                            <group>
+                                <field name="quotations_required"/>
+                                <field name="quotation_period_days" string="Quotation Period (Days)"/>
+                            </group>
+                            <group>
+                                <field name="written_quotation_only" widget="boolean_toggle"/>
+                                <field name="late_bids_rejected" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+
+                        <group string="Approval &amp; Committee Requirements">
+                            <group>
+                                <field name="requires_bsc_approval" widget="boolean_toggle"/>
+                                <field name="requires_bec_evaluation" widget="boolean_toggle"/>
+                                <field name="requires_bac_review" widget="boolean_toggle"/>
+                            </group>
+                            <group>
+                                <field name="requires_compliance_check" widget="boolean_toggle"/>
+                                <field name="requires_declaration_interest" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+
+                        <group string="Briefing Session">
+                            <group>
+                                <field name="requires_briefing_session" widget="boolean_toggle"/>
+                                <field name="briefing_mandatory" widget="boolean_toggle" invisible="not requires_briefing_session"/>
+                            </group>
+                            <group>
+                                <field name="advertising_days_minimum" string="Min. Advertising Days"/>
+                            </group>
+                        </group>
+
+                        <group string="Additional Options">
+                            <group>
+                                <field name="allows_negotiation" widget="boolean_toggle"/>
+                                <field name="allows_framework_agreement" widget="boolean_toggle"/>
+                            </group>
+                            <group>
+                                <field name="allows_panel_procurement" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+
+                        <!-- Workflow & Stages Section -->
+                        <separator string="Workflow &amp; Stages"/>
+                        <field name="workflow_stage_ids" nolabel="1"
+                            context="{'default_method_id': id,
+                                     'tree_view_ref': 'sa_government_tender.view_sagovprocurement_workflow_stage_list',
+                                     'form_view_ref': 'sa_government_tender.view_sagovprocurement_workflow_stage_form'}"/>
+
+                        <!-- Documents Section -->
+                        <separator string="Document Requirements"/>
+                        <field name="document_requirement_ids" nolabel="1"
+                            context="{'default_method_id': id,
+                                     'tree_view_ref': 'sa_government_tender.view_sagovprocurement_document_requirement_list',
+                                     'form_view_ref': 'sa_government_tender.view_sagovprocurement_document_requirement_form'}"/>
+
+                        <!-- Evaluation Criteria Section -->
+                        <separator string="Evaluation Criteria"/>
+                        <field name="evaluation_criteria_ids" nolabel="1"
+                            context="{'default_method_id': id,
+                                     'tree_view_ref': 'sa_government_tender.view_sagovprocurement_evaluation_criteria_list',
+                                     'form_view_ref': 'sa_government_tender.view_sagovprocurement_evaluation_criteria_form'}"/>
+
+                        <!-- Compliance Section -->
+                        <separator string="Regulatory Compliance"/>
+                        <group string="Compliance Status">
+                            <group>
+                                <field name="pppfa_compliant" widget="boolean_toggle"/>
+                                <field name="pfma_compliant" widget="boolean_toggle"/>
+                            </group>
+                            <group>
+                                <field name="mfma_compliant" widget="boolean_toggle"/>
+                                <field name="treasury_regulation_compliant" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <group string="Legal Framework">
+                                <field name="legal_framework" widget="html" nolabel="1" placeholder="Reference to PFMA, MFMA, PPPFA, and National Treasury regulations..."/>
+                            </group>
+                        </group>
+
+                        <!-- Notes & Policies Section -->
+                        <separator string="Notes &amp; Policies"/>
+                        <group>
+                            <group string="Policy Notes">
+                                <field name="policy_notes" widget="html" nolabel="1" placeholder="Policy notes and guidelines for this procurement method..."/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Internal Notes">
+                                <field name="internal_notes" nolabel="1" placeholder="Internal notes for SCM team (not visible to suppliers)..."/>
+                            </group>
+                        </group>
+
+                        <!-- Audit Trail Section -->
+                        <separator string="Audit Trail"/>
+                        <group>
+                            <group string="Created By">
+                                <field name="created_by_user_id" readonly="1" options="{'no_create': True}"/>
+                                <field name="create_date" readonly="1"/>
+                            </group>
+                            <group string="Last Modified By">
+                                <field name="last_modified_by_user_id" readonly="1" options="{'no_create': True}"/>
+                                <field name="write_date" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- Procurement Method - Kanban View -->
+        <!-- ===================================== -->
+        <record id="view_sagovprocurement_method_kanban" model="ir.ui.view">
+            <field name="name">sagovprocurement.method.kanban</field>
+            <field name="model">sagovprocurement.method</field>
+            <field name="arch" type="xml">
+                <kanban string="Procurement Methods" default_group_by="active">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click o_kanban_record_has_image_fill">
+                                <div class="o_kanban_image">
+                                    <img t-att-src="kanban_image('sagovprocurement.method', 'id', record.id.value)" class="o_image_64_contain" alt="Method"/>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <strong><field name="name"/></strong>
+                                    <div>
+                                        <span class="badge badge-info" t-if="record.code.value"><t t-esc="record.code.value"/></span>
+                                        <span class="badge badge-warning" t-if="record.active.value">Active</span>
+                                        <span class="badge badge-secondary" t-if="!record.active.value">Inactive</span>
+                                    </div>
+                                    <div class="text-muted" t-if="record.min_value.value">
+                                        R<t t-esc="record.min_value.value"/> - R<t t-esc="record.max_value.value or 'Unlimited'"/>
+                                    </div>
+                                    <div>Quotations: <t t-esc="record.quotations_required.value"/></div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- Procurement Method - Search View -->
+        <!-- ===================================== -->
+        <record id="view_sagovprocurement_method_search" model="ir.ui.view">
+            <field name="name">sagovprocurement.method.search</field>
+            <field name="model">sagovprocurement.method</field>
+            <field name="arch" type="xml">
+                <search string="Procurement Methods">
+                    <field name="name" string="Method Name"/>
+                    <field name="code" string="Code"/>
+                    <separator/>
+                    <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active', '=', False)]"/>
+                    <separator/>
+                    <filter name="pppfa_compliant" string="PPPFA Compliant" domain="[('pppfa_compliant', '=', True)]"/>
+                    <filter name="requires_bec" string="Requires BEC Evaluation" domain="[('requires_bec_evaluation', '=', True)]"/>
+                    <filter name="requires_bac" string="Requires BAC Review" domain="[('requires_bac_review', '=', True)]"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter name="group_by_active" string="Status" domain="[]" context="{'group_by': 'active'}"/>
+                        <filter name="group_by_min_value" string="Value Range" domain="[]" context="{'group_by': 'min_value'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- Procurement Method Action -->
+        <!-- ===================================== -->
+        <record id="action_sagovprocurement_method" model="ir.actions.act_window">
+            <field name="name">Procurement Methods</field>
+            <field name="res_model">sagovprocurement.method</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="search_view_id" ref="view_sagovprocurement_method_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Procurement Method configuration.
+                </p>
+                <p>Define procurement methods per PFMA, MFMA, PPPFA, and National Treasury regulations.</p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

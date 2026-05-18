@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="frontdeskEnhancement.WelcomePage" t-inherit="frontdesk.WelcomePage" t-inherit-mode="extension">
+        <!-- Replace the bottom QR + date container -->
+        <xpath expr="//div[contains(@class, 'gap-5') and contains(@class, 'mt-auto')]" position="replace">
+
+            <!-- QR code aligned to the end -->
+            <div class="d-flex flex-column align-self-end flex-lg-row justify-content-center justify-content-lg-between align-items-center align-items-lg-end gap-5">
+                <img
+                        t-if="props.stationInfo.self_check_in"
+                        class="rounded p-2 bg-white o_qrcode"
+                        t-att-src="state.qrCode"
+                        alt="QR Code"
+                />
+            </div>
+
+            <!-- Date at the bottom -->
+            <div class="d-flex flex-column flex-lg-row justify-content-center justify-content-lg-between align-items-center align-items-lg-end gap-5 mt-auto">
+                <div class="display-5" t-out="state.today"/>
+            </div>
+
+        </xpath>
+
+    </t>
+</templates>

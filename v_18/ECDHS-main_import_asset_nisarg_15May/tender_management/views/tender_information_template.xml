@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="tender_information" name="Website Tenders">
+        <!-- Template extending website.layout -->
+        <t t-call="website.layout">
+            <div id="wrap" class="o_portal_wrap">
+                <div class="container mv64">
+                    <div class="col-xs-12">
+                        <div class="box box-primary">
+                            <div class="box-header search-header">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="box text-center"
+                                             style="border: 1px solid #ddd; padding: 10px; border-radius: 6px; background-color: #729bcf; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height: 60px;">
+                                            <h3 class="box-title"
+                                                style="line-height: 40px;">
+                                                Tenders List
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <br/>
+                                </div>
+                                <div class="col-xs-12">
+
+                                    <div class="nav-tabs-custom">
+                                        <ul class="nav nav-tabs custom-tab">
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane active"
+                                                 id="tab_1">
+
+                                                <form class="form-inline"
+                                                      name="frmsearch"
+                                                      action="/published_tenders"
+                                                      method="POST"
+                                                      autocomplete="off">
+                                                    <input type="hidden"
+                                                           name="csrf_token"
+                                                           t-att-value="request.csrf_token()"
+                                                           autocomplete="off">
+                                                    </input>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <input type="text"
+                                                                       placeholder="Tender Id"
+                                                                       id="searchRefNo"
+                                                                       name="searchRefNo"
+                                                                       class="form-control"
+                                                                       maxlength="50">
+                                                                </input>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <input type="text"
+                                                                       placeholder="Title"
+                                                                       id="searchNoticeTitle"
+                                                                       name="searchNoticeTitle"
+                                                                       class="form-control"
+                                                                       autocomplete="off">
+                                                                </input>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <t t-set="categories"
+                                                                   t-value="request.env['tender.category'].sudo().search([])"/>
+                                                                <select name="categories"
+                                                                        id="searchCategoryName"
+                                                                        class="form-control searchCategory">
+                                                                    <option value="">
+                                                                        Category...
+                                                                    </option>
+                                                                    <t t-foreach="categories or []"
+                                                                       t-as="category">
+                                                                        <option t-att-value="category.id">
+                                                                            <t t-esc="category.name"/>
+                                                                        </option>
+                                                                    </t>
+                                                                </select>
+
+                                                                <!--                                                                <input type="text"-->
+                                                                <!--                                                                       placeholder="Category"-->
+                                                                <!--                                                                       id="searchCategoryName"-->
+                                                                <!--                                                                       name="searchCategoryName"-->
+                                                                <!--                                                                       class="form-control">-->
+                                                                <!--                                                                </input>-->
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <select class="form-control"
+                                                                        id="searchStatus"
+                                                                        name="searchStatus">
+                                                                    <option value="">
+                                                                        --Status--
+                                                                    </option>
+                                                                    <option value="CONCLUDED">
+                                                                        Closed
+                                                                    </option>
+                                                                    <option value="CANCEL_APPROVED">
+                                                                        Opened
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br/>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="searchPublishDateFrom">
+                                                                    --Open
+                                                                    Date From--
+                                                                </label>
+                                                                <input type="date"
+                                                                       id="searchPublishDateFrom"
+                                                                       name="searchPublishDateFrom"
+                                                                       class="form-control">
+                                                                </input>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="searchPublishDateTo">
+                                                                    --Open
+                                                                    Date To--
+                                                                </label>
+                                                                <input type="date"
+                                                                       id="searchPublishDateTo"
+                                                                       name="searchPublishDateTo"
+                                                                       class="form-control">
+                                                                </input>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="searchClosingDateFrom">
+                                                                    --Closing
+                                                                    Date From--
+                                                                </label>
+                                                                <input type="date"
+                                                                       id="searchClosingDateFrom"
+                                                                       name="searchClosingDateFrom"
+                                                                       class="form-control">
+                                                                </input>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="searchClosingDateTo">
+                                                                    --Closing
+                                                                    Date To--
+                                                                </label>
+                                                                <input type="date"
+                                                                       id="searchClosingDateTo"
+                                                                       name="searchClosingDateTo"
+                                                                       class="form-control">
+                                                                </input>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <select class="form-control"
+                                                                        id="searchBidTypes"
+                                                                        name="searchBidTypes">
+                                                                    <option value="">
+                                                                        --Bid
+                                                                        Types--
+                                                                    </option>
+                                                                    <option value="rfi">
+                                                                        RFI
+                                                                    </option>
+                                                                    <option value="rfe">
+                                                                        RFE
+                                                                    </option>
+                                                                    <option value="rfq">
+                                                                        RFQ
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <button type="submit"
+                                                                        class="btn bg-purple"
+                                                                        title="Search">
+                                                                    <i class="fa fa-fw fa-search"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- Bootstrap table to show tenders information -->
+                                                <div class="col-xs-12 responsive-card-table">
+                                                    <!-- Table headers -->
+                                                    <table id="tender_information"
+                                                           class="table table-bordered table-hover">
+                                                        <thead style="background-color: #729bcf;">
+                                                            <tr class="active">
+                                                                <th class="text-center">
+                                                                    Tender ID
+                                                                </th>
+                                                                <th class="text-center">
+                                                                    Tender Name
+                                                                </th>
+                                                                <th class="text-center">
+                                                                    Category
+                                                                </th>
+                                                                <th class="text-center">
+                                                                    Bid Type
+                                                                </th>
+                                                                <th class="text-center">
+                                                                    Opening Date
+                                                                </th>
+                                                                <th class="text-center">
+                                                                    Closing Date
+                                                                </th>
+                                                                <th class="text-center">
+                                                                    Status
+                                                                </th>
+                                                                <th class="text-center">
+                                                                    Action
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <!-- Looping over the tenders_information to show the tender details -->
+                                                            <t t-foreach="tenders_information"
+                                                               t-as="tender">
+                                                                <tr>
+                                                                    <td class="text-center"
+                                                                        t-esc="tender.sequence_number"/>
+                                                                    <td class="text-center"
+                                                                        t-esc="tender.name"/>
+                                                                    <td class="text-center">
+                                                                        <t t-if="tender.category_id">
+                                                                            <t t-esc="tender.category_id.name"/>
+                                                                        </t>
+                                                                    </td>
+                                                                    <td class="text-center"
+                                                                        t-esc="tender.type"/>
+                                                                    <!--                                                                        <t t-if="tender.category_id">-->
+                                                                    <!--                                                                            <t t-esc="tender.category_id.name"/>-->
+                                                                    <!--                                                                        </t>-->
+                                                                    <!--                                                                    </td>-->
+                                                                    <td class="text-center"
+                                                                        t-esc="tender.start_time"/>
+                                                                    <td class="text-center"
+                                                                        t-esc="tender.closing_date"/>
+                                                                    <td class="text-center"
+                                                                        t-esc="tender.state"/>
+                                                                    <td class="text-center">
+                                                                        <a t-att-href="'/tender/%d' % tender.id"
+                                                                           class="btn btn-primary">
+                                                                            Open
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            </t>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="tender_detail_template" name="Tender Detail">
+        <t t-call="website.layout">
+                <t t-set="main_object" t-value="tender"/>
+            <div id="wrap" class="oe_structure tender_timer_id">
+                <div class="container m-4">
+                    <div class="unique-navbar">
+                        <div class="unique-navbar-left">
+                            <strong>TENDER INFORMATION</strong>
+                        </div>
+                        <div class="unique-navbar-right">
+                            <div class="tender_timer text-center">
+                                <p class="countdown-text">Auction will end in
+                                </p>
+                                <h3 id="tender_timer_count">---</h3>
+                                <p class="countdown-date">Till
+                                    <t t-esc="tender.closing_date"/>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <input name="tender_id" t-att-value="tender.id"
+                           type="hidden"/>
+                    <div class="row"
+                         style="background-color: #f0f8ff; padding: 20px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);">
+                        <h2 id="sequence_number" style="margin-bottom: 20px;">
+                            <t t-esc="tender.sequence_number"/>
+                        </h2>
+                        <div class="section-heading">Details</div>
+                        <p>
+                            <strong>Tender Name:</strong>
+                            <span class="ml-2">
+                                <t t-esc="tender.name"/>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Category:</strong>
+                            <span class="ml-2">
+                                <t t-esc="tender.category_id.name"/>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Type:</strong>
+                            <span class="ml-2" t-att-style="'color: green;'">
+                                <t t-set="type_mapping"
+                                   t-value="{'rfi': 'RFI', 'rfp': 'RFP', 'rfq': 'RFQ'}"/>
+                                <t t-esc="type_mapping.get(tender.type, 'Unknown')"/>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Current Status:</strong>
+                            <span class="ml-2">
+                                <t t-esc="tender.state"/>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Opening Date:</strong>
+                            <span class="ml-2">
+                                <t t-esc="tender.start_time"/>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Closing Date:</strong>
+                            <span class="ml-2">
+                                <t t-esc="tender.closing_date"/>
+                            </span>
+                        </p>
+                        <div class="section-heading">BRIEFING SESSION:</div>
+                        <p>
+                            <strong>Is there a briefing session?:</strong>
+                            <span class="ml-2">
+                                <t t-if="tender.briefing_session">Yes</t>
+                                <t t-else="">No</t>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Is it compulsory?:</strong>
+                            <span class="ml-2">
+                                <t t-if="tender.briefing_compulsory">Yes</t>
+                                <t t-else="">No</t>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Briefing Date and Time:</strong>
+                            <span class="ml-2">
+                                <t t-if="tender.briefing_date_time">
+                                    <t t-esc="tender.briefing_date_time"/>
+                                </t>
+                                <t t-else="">N/A</t>
+                            </span>
+                        </p>
+                        <p>
+                            <strong>Briefing Venue:</strong>
+                            <span class="ml-2">
+                                <t t-if="tender.briefing_venue">
+                                    <t t-esc="tender.briefing_venue"/>
+                                </t>
+                                <t t-else="">N/A</t>
+                            </span>
+                        </p>
+
+                        <div class="section-heading">Documents</div>
+                        <ul>
+                            <t t-foreach="tender.document_ids" t-as="document">
+                                <li>
+                                    <a t-att-href="'/download/document/%d' % document.id">
+                                        <t t-esc="document.name"/>
+                                    </a>
+                                </li>
+                            </t>
+                        </ul>
+                        <div>
+                            <div>
+                                <a class="btn btn-primary custom-button-bid"
+                                   t-att-href="'/download/all_documents/%d' % tender.id">
+                                    Print All Documents
+                                </a>
+                            </div>
+                            <div>
+                                <a class="btn btn-primary custom-button-bid mt-3"
+                                   title="Download Documents" target="_blank"
+                                   t-attf-href="/print_bid1/{{ tender.id }}">
+                                    Preview
+                                    <i class="ms-1 fa fa-download"/>
+                                </a>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mt-3">
+                                <p style="margin-bottom: 0; font-size: 18px;">
+                                    Bid Submission:
+                                </p>
+                                <t t-if="warning_message">
+                                    <p id="loginMessage"
+                                       style="color: red; font-weight: bold;">
+                                        <t t-esc="warning_message"/>
+                                    </p>
+                                </t>
+                                <t t-else="">
+                                    <a t-att-href="'/bid_submit/%d' % tender.id"
+                                       class="btn btn-primary">Next >>>
+                                    </a>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="bid_submission_template" name="Bid Submission">
+        <t t-call="website.layout">
+            <div class="image_website_form"
+                 style="background-image: linear-gradient(to bottom, rgb(255 255 255 / 43%), rgb(0 0 0 / 50%)); background-size: cover; background-position: center;">
+                <div id="wrap" class="oe_structure oe_empty"
+                     style="display: flex; justify-content: center; align-items: center;">
+                    <div class="container"
+                         style="max-width: 100%; padding: 60px 80px; border-radius: 6px; background-color: #fffafa75; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);">
+                        <br/>
+                        <form action="/submit_bid"
+                              method="post"
+                              enctype="multipart/form-data"
+                              class="o_mark_required"
+                              data-mark="*">
+                            <input type="hidden"
+                                   name="csrf_token"
+                                   t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="tender_id"
+                                   t-att-value="tender.id"/>
+                            <div class="row" id="whole_sub"
+                                 t-ref="location">
+                                <div class="col-md-12">
+                                    <div class="form-group p-3"
+                                         style="border: 1px solid #ddd; border-radius: 6px; background-color: #f9f9f9; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);">
+                                        <h4>Selected Tender:
+                                            <t t-esc="tender.sequence_number"/>
+                                        </h4>
+                                        <t t-set="customer"
+                                           t-value="request.env.user.partner_id"/>
+                                        <p>Vendor Name:
+                                            <t t-esc="customer.name"/>
+                                        </p>
+                                        <div>
+                                            <label for="bid_documents">Upload
+                                                Documents:
+                                            </label>
+                                            <input type="file"
+                                                   name="bid_documents_ids"
+                                                   multiple="true"
+                                                   accept=".pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+                                        </div>
+                                        <div class="row s_col_no_resize s_col_no_bgcolor mb-3">
+                                            <!-- Other fields as needed -->
+                                        </div>
+                                        <div class="form-group d-flex justify-content-between mt-4">
+                                            <button type="submit"
+                                                    id="next"
+                                                    class="btn btn-primary"
+                                                    style="padding: 10px 20px; font-size: 16px;">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="error_template" name="Error Page">
+        <div class="container">
+            <h1>Error</h1>
+            <p t-esc="error_message"/>
+        </div>
+    </template>
+    <template id="thank_you_page" name="Bid Thank You">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1 class="text-center">Thank You!</h1>
+                <div class="pb16 pt16 s_hr" data-snippet="s_hr"
+                     data-name="Separator">
+                    <hr class="mx-auto border-top w-50 border-dark text-center"/>
+                </div>
+                <h5 class="text-center">
+                    <span class="fa fa-check-circle"/>
+                    <span>Your bid has been submitted successfully.</span>
+                </h5>
+                <h5 class="text-center" style="margin-top: 20px;">
+                    <span style="font-size: 18px; font-weight: bold;">
+                        You can track with this Reference Number:
+                    </span>
+                    <br/>
+                    <span style="font-size: 24px; color: #336699;">
+                        <t t-esc="reference_number"/>
+                    </span>
+                </h5>
+            </div>
+        </t>
+    </template>
+</odoo>

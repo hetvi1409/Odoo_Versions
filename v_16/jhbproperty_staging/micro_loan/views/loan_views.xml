@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- View definition for the tree view of the Loan model -->
+    <record id="loan_tree_view" model="ir.ui.view">
+        <field name="name">loan.loan.tree</field>
+        <field name="model">loan.loan</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="account_number_id"/>
+                <field name="name"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <!-- View definition for the form view of the Loan model -->
+    <record id="loan_form_view" model="ir.ui.view">
+        <field name="name">loan.loan.form</field>
+        <field name="model">loan.loan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button string="Approve" class="oe_highlight" type="object" name="approve_loan" attrs="{'invisible': [('state', 'in', ['approved', 'rejected'])]}"/>
+                    <button string="Reject" class="oe_highlight" type="object" name="reject_loan" attrs="{'invisible': [('state', 'in', ['approved', 'rejected'])]}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="account_number_id" options="{'no_create': True}" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                            <field name="name" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                            <field name="amount" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                            <field name="loan_type_id" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                        </group>
+                        <group>
+                            <label for="interest_rate"/>
+                                <div>
+                                    <field name="interest_rate" class="oe_inline" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <span class="o_form_label oe_inline">%</span>
+                                </div > 
+                            <field name="installment" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                            <field name="date" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                        </group>    
+                    </group>
+                    <!-- Notebook for organizing information into pages -->
+                    <notebook>
+                    <!-- Page for Loan File Information -->
+                        <page string="Loan File Information">
+                            <field name="file_info_line_ids" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}">
+                                <tree string="Loan File Information" editable="bottom">
+                                    <field name="file_info_id"/>
+                                    <field name="file_info"/>
+                                    <field name="file_upload"/>
+                                    <field name="loan_info_id" invisible="0"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <!-- Page for Loan Guarantor -->
+                        <page string="Guarantor" name="guarantor">
+                            <group>
+                                <group>
+                                    <field name="guarantor_name" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="gender" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="guarantor_relation" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="guarantor_nationality" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="guarantor_country" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="guarantor_city" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="guarantor_sign" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="guarantor_photo" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                </group>
+                                <group>
+                                    <field name="guarantor_birth" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="guarantor_nid" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="guarantor_state" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="guarantor_address" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="guarantor_contact" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                    <field name="guarantor_email" attrs="{'readonly': [('state', 'in', ['approved', 'rejected'])]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <!-- Page for Collateral Security -->
+                        <page string="Collateral Security">
+                            <field name="col_security_line_id">
+                                <tree string="Collateral Security" editable="bottom">
+                                    <field name="name"/>
+                                    <field name="account"/>
+                                    <field name="amount"/>
+                                    <field name="col_security_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Action definition for the Loan model -->
+    <record id="loan_action" model="ir.actions.act_window">
+        <field name="name">Loan Application</field>
+        <field name="res_model">loan.loan</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

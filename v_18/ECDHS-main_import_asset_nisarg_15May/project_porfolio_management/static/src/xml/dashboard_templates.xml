@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Template for the Project Task dashboard -->
+<templates id="template" xml:space="preserve">
+    <t t-name="projecttaskdashboard">
+        <div style="max-height: -webkit-fill-available; overflow-y: scroll; background-color:#f7fcff">
+            <div class="mx-5">
+                <div id="AlertBox" class="mt-3 alert alert-warning" role="alert">
+                    <h3>Please Select Stages in Project Settings</h3>
+                </div>
+                <div class="row gx-0 mt-3">
+                    <div class="col-12 d-flex justify-content-end">
+                        <button id="downloadBtn" t-on-click="(e) => this.downloadReport(e)" class="btn btn-primary p-2">
+                            <i class="fa fa-file-pdf-o p-1" aria-hidden="true"></i>
+                            Print
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="mx-5" id="dashboard">
+                <t t-call="ProjectLinksBlock"/>
+                <t t-call="Projectfilters"/>
+                <t t-call="Projectcounters"/>
+                <t t-call="ProjectManagercharts"/>
+                <t t-call="ProjectCostcharts"/>
+                <t t-call="Projectcharts"/>
+                <t t-call="ProjectTables"/>
+            </div>
+        </div>
+    </t>
+    <t t-name="ProjectLinksBlock">
+        <div class="card mt-4">
+            <div class="card-header d-flex justify-content-between">
+                    <span>My Links</span>
+                    <button type="button" class="btn btn-light btn-sm"
+                            t-on-click="openLinksWizard">
+                        <i class="fa fa-cog"/>
+                    </button>
+                </div>
+                <div class="card-body d-flex flex-wrap gap-3">
+                    <t t-foreach="dashboard_links" t-as="link" t-key="link['id']">
+                        <div class="d-flex flex-column align-items-center">
+                            <a t-att-href="link.url" target="_blank">
+                                <t t-if="link.icon">
+                                    <img t-att-src="'data:image/png;base64,' + link.icon"
+                                         class="rounded" style="width:48px;height:48px;"/>
+                                </t>
+                                <t t-else="">
+                                    <i class="fa fa-link fa-2x"/>
+                                </t>
+                            </a>
+                            <span><t t-esc="link.name"/></span>
+                        </div>
+                    </t>
+                </div>
+        </div>
+    </t>
+
+    <!-- Filters -->
+    <t t-name="Projectfilters">
+        <div class="card mt-4 filters">
+            <div class="row p-2 m-2 gx-0 gy-2">
+                <div class="col-lg-1 my-auto">
+                    <img t-att-src="'data:image/png;base64,' + user_img" class="css-shadow"/>
+                </div>
+                <div class="col-lg-4 pl-1 my-auto">
+                    <h1><t t-esc="greetings"/>,<t t-esc="user_name"/>.</h1>
+                    <h4>Welcome to your Project Task Dashboard.</h4>
+                </div>
+                <div class="col-lg-7">
+                    <div class="row gy-2">
+                        <div class="col-lg-3 m-0">
+                            <label for="project_selection" class="form-label fw-bolder">Project</label>
+                            <select class="form-select" id="project_selection"
+                                    t-on-change="(ev) => this._onchangeProjectFilter(ev)">
+                                <option value="all">All Projects</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 m-0">
+                            <label for="user_selections" class="form-label fw-bolder">User</label>
+                            <select class="form-select" id="user_selections"
+                                    t-on-change="(ev) => this._onchangeProjectFilter(ev)">
+                                <option value="all">All Users</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 m-0">
+                            <label for="partner_selection" class="form-label fw-bolder">Customer</label>
+                            <select class="form-select" id="partner_selection"
+                                    t-on-change="(ev) => this._onchangeProjectFilter(ev)">
+                                <option value="all">All Customers</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 m-0">
+                            <label for="stages_selection" class="form-label fw-bolder">Stages</label>
+                            <select class="form-select" id="stages_selection"
+                                    t-on-change="(ev) => this._onchangeProjectFilter(ev)">
+                                <option value="all">All Stages</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 m-0">
+                            <label for="duration_selection" class="form-label fw-bolder">Date</label>
+                            <select class="form-select" id="duration_selection"
+                                    t-on-change="(ev) => this._onchangeProjectFilter(ev)">
+                                <option value="0">Today</option>
+                                <option value="7">Last 7 Days</option>
+                                <option value="28">Last 28 Days</option>
+                                <option value="90">Last 90 Days</option>
+                                <option value="365">Last 365 Days</option>
+                                <option value="all">Lifetime</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Counters -->
+    <t t-name="Projectcounters">
+        <div class="mt-5 mb-5">
+            <div class="row text-center gy-2">
+                <div class="col-lg-3">
+                    <div class="card box" id="all_task_data1" t-on-click="(e) => this.action_all_task(e)">
+                        <div class="card-body">
+                            <h1 id="all_task_data"><t t-esc="all_task_data.length"/></h1>
+                            <h5>All Tasks</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card box" id="open_task_data1" t-on-click="(e) => this.action_all_task(e)">
+                        <div class="card-body">
+                            <h1 id="open_task_data"><t t-esc="open_task_data.length"/></h1>
+                            <h5>Open</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card box" id="done_task_data1" t-on-click="(e) => this.action_all_task(e)">
+                        <div class="card-body">
+                            <h1 id="done_task_data"><t t-esc="done_task_data.length"/></h1>
+                            <h5>Done</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card box" id="closed_task_data1" t-on-click="(e) => this.action_all_task(e)">
+                        <div class="card-body">
+                            <h1 id="closed_task_data"><t t-esc="closed_task_data.length"/></h1>
+                            <h5>Closed</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Project Manager Chart -->
+    <t t-name="ProjectManagercharts">
+        <div class="mt-5">
+            <div class="row gy-2">
+                <!-- Group By Stages -->
+                <div class="col-lg-4 col-md-4 col-12">
+                    <div class="card table-card">
+                        <div class="card-header">
+                            <label for="project_health_chart_selection" class="form-label fw-bolder">Chart Type</label>
+                            <select id="project_health_chart_selection" class="form-select"
+                                    t-on-change="(ev) => this._onchangeProjectHealthChart(ev)">
+                                <option value="bar">Bar</option>
+                                <option value="line">Line</option>
+                                <option value="pie">Pie</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
+                        <div class="card-title text-center p-3" style="font-weight:600; font-size:0.9625rem;">
+                            Project Health by Project Manager
+                            <i class="fa fa-download float-end" style="cursor: pointer;"
+                               t-on-click="(e) => this._downloadChart(e)"></i>
+                        </div>
+                        <div class="card-body text-center">
+                            <canvas id="project_health_chart_data"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group By Missing Resource Allocation -->
+                <div class="col-lg-4 col-md-4 col-12">
+                    <div class="card table-card">
+                        <div class="card-header">
+                            <label for="missing_resource_allocation_chart_selection" class="form-label fw-bolder">Chart Type</label>
+                            <select id="missing_resource_allocation_chart_selection" class="form-select"
+                                    t-on-change="(ev) => this._onchangeMissingResourceAllocationChart(ev)">
+                                <option value="bar">Bar</option>
+                                <option value="line">Line</option>
+                                <option value="pie">Pie</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
+                        <div class="card-title text-center p-3" style="font-weight:600; font-size:0.9625rem;">
+                            Missing Resource Allocation by Project Manager
+                            <i class="fa fa-download float-end" style="cursor: pointer;"
+                               t-on-click="(e) => this._downloadChart(e)"></i>
+                        </div>
+                        <div class="card-body text-center">
+                            <canvas id="missing_resource_allocation_chart_data"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-12">
+                    <div class="card table-card">
+                        <div class="card-header">
+                            <label for="governance_chart_selection" class="form-label fw-bolder">Chart Type</label>
+                            <select id="governance_chart_selection" class="form-select"
+                                    t-on-change="(ev) => this._onchangeGovernanceChart(ev)">
+                                <option value="bar">Bar</option>
+                                <option value="line">Line</option>
+                                <option value="pie">Pie</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
+                        <div class="card-title text-center p-3" style="font-weight:600; font-size:0.9625rem;">
+                            Governance by Project Manager
+                            <i class="fa fa-download float-end" style="cursor: pointer;"
+                               t-on-click="(e) => this._downloadChart(e)"></i>
+                        </div>
+                        <div class="card-body text-center">
+                            <canvas id="governance_chart_data"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Project Cost Chart -->
+    <t t-name="ProjectCostcharts">
+        <div class="mt-5">
+            <div class="row gy-2">
+                <!-- Group By Cost -->
+                <div class="col-lg-12 col-md-12 col-12">
+                    <div class="card table-card">
+                        <div class="card-header">
+                            <label for="project_cost_chart_selection" class="form-label fw-bolder">Chart Type</label>
+                            <select id="project_cost_chart_selection" class="form-select"
+                                    t-on-change="(ev) => this._onchangeProjectCostChart(ev)">
+                                <option value="bar">Bar</option>
+                                <option value="line">Line</option>
+                                <option value="pie">Pie</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
+                        <div class="card-title text-center p-3" style="font-weight:600; font-size:0.9625rem;">
+                            Sum of Budget and Spent and Total at Completion by Year / Month (Cumulative)
+                            <i class="fa fa-download float-end" style="cursor: pointer;"
+                               t-on-click="(e) => this._downloadChart(e)"></i>
+                        </div>
+                        <div class="card-body text-center">
+                            <canvas id="project_cost_chart_data"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Charts -->
+    <t t-name="Projectcharts">
+        <div class="mt-5">
+            <div class="row gy-2">
+                <!-- Group By Stages -->
+                <div class="col-lg-4 col-md-4 col-12">
+                    <div class="card table-card">
+                        <div class="card-header">
+                            <label for="stages_chart_selection" class="form-label fw-bolder">Chart Type</label>
+                            <select id="stages_chart_selection" class="form-select"
+                                    t-on-change="(ev) => this._onchangeStagesChart(ev)">
+                                <option value="bar">Bar</option>
+                                <option value="line">Line</option>
+                                <option value="pie">Pie</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
+                        <div class="card-title text-center p-3" style="font-weight:600; font-size:0.9625rem;">
+                            Group By Stages
+                            <i class="fa fa-download float-end" style="cursor: pointer;"
+                               t-on-click="(e) => this._downloadChart(e)"></i>
+                        </div>
+                        <div class="card-body text-center">
+                            <canvas id="stages_chart_data"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group By Project -->
+                <div class="col-lg-4 col-md-4 col-12">
+                    <div class="card table-card">
+                        <div class="card-header">
+                            <label for="project_chart_selection" class="form-label fw-bolder">Chart Type</label>
+                            <select id="project_chart_selection" class="form-select"
+                                    t-on-change="(ev) => this._onchangeProjectChart(ev)">
+                                <option value="bar">Bar</option>
+                                <option value="line">Line</option>
+                                <option value="pie">Pie</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
+                        <div class="card-title text-center p-3" style="font-weight:600; font-size:0.9625rem;">
+                            Group By Project
+                            <i class="fa fa-download float-end" style="cursor: pointer;"
+                               t-on-click="(e) => this._downloadChart(e)"></i>
+                        </div>
+                        <div class="card-body text-center">
+                            <canvas id="project_chart_data"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-12">
+                    <div class="card table-card">
+                        <div class="card-header">
+                            <label for="priority_chart_selection" class="form-label fw-bolder">Chart Type</label>
+                            <select id="priority_chart_selection" class="form-select"
+                                    t-on-change="(ev) => this._onchangePriorityChart(ev)">
+                                <option value="bar">Bar</option>
+                                <option value="line">Line</option>
+                                <option value="pie">Pie</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
+                        <div class="card-title text-center p-3" style="font-weight:600; font-size:0.9625rem;">
+                                Group By Priority
+                            <i class="fa fa-download float-end" style="cursor: pointer;"
+                               t-on-click="(e) => this._downloadChart(e)"></i>
+                        </div>
+                        <div class="card-body text-center">
+                            <canvas id="project_priority_chart_data"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Priority & Source row -->
+<!--            <div class="row mt-3 gy-2">-->
+<!--                &lt;!&ndash; Group By Priority &ndash;&gt;-->
+<!--                <div class="col-lg-6 col-md-6 col-12">-->
+<!--                    <div class="card table-card">-->
+<!--                        <div class="card-header">-->
+<!--                            <label for="priority_chart_selection" class="form-label fw-bolder">Chart Type</label>-->
+<!--                            <select id="priority_chart_selection" class="form-select"-->
+<!--                                    t-on-change="(ev) => this._onchangePriorityChart(ev)">-->
+<!--                                <option value="bar">Bar</option>-->
+<!--                                <option value="line">Line</option>-->
+<!--                                <option value="pie">Pie</option>-->
+<!--                                <option value="doughnut">Doughnut</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                        <div class="card-title text-center p-3" style="font-weight:600; font-size:23px;">-->
+<!--                            Group By Priority-->
+<!--                            <i class="fa fa-download float-end" style="cursor: pointer;"-->
+<!--                               t-on-click="(e) => this._downloadChart(e)"></i>-->
+<!--                        </div>-->
+<!--                        <div class="card-body text-center" style="width:810px; height:330px">-->
+<!--                            <canvas id="project_priority_chart_data"/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Group By Source &ndash;&gt;-->
+<!--                <div class="col-lg-6 col-md-6 col-12">-->
+<!--                    <div class="card table-card">-->
+<!--                        <div class="card-header">-->
+<!--                            <label for="source_chart_selection" class="form-label fw-bolder">Chart Type</label>-->
+<!--                            <select id="source_chart_selection" class="form-select"-->
+<!--                                    t-on-change="(ev) => this._onchangeSourceChart(ev)">-->
+<!--                                <option value="doughnut">Doughnut</option>-->
+<!--                                <option value="pie">Pie</option>-->
+<!--                                <option value="bar">Bar</option>-->
+<!--                                <option value="line">Line</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                        <div class="card-title text-center p-3" style="font-weight:600; font-size:23px;">-->
+<!--                            Group By Source-->
+<!--                            <i class="fa fa-download float-end" style="cursor: pointer;"-->
+<!--                               t-on-click="(e) => this._downloadChart(e)"></i>-->
+<!--                        </div>-->
+<!--                        <div class="card-body text-center" style="width:810px; height:330px">-->
+<!--                            <canvas id="project_source_chart_data"/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+    </t>
+
+
+    <!-- Tables -->
+    <t t-name="ProjectTables">
+        <div class="row mt-4 gy-2 md-5">
+            <div class="col-lg-6 col-md-6 col-12">
+                <div class="card table-card table-responsive">
+                    <div class="card-header table-header">
+                        <span>All Tasks</span>
+                    </div>
+                    <table id="my_table_all_task_list" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Project</th>
+                                <th>Customer</th>
+                                <th>Assigned To</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody> </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-12">
+                <div class="card table-card table-responsive">
+                    <div class="card-header table-header">
+                        <span>Upcoming Deadlines</span>
+                    </div>
+                    <table id="my_table_closing_task_list" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Task</th>
+                                <th>Customer</th>
+                                <th>Assigned To</th>
+                            </tr>
+                        </thead>
+                        <tbody> </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

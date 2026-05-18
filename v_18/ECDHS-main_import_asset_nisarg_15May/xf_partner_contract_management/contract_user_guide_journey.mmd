@@ -1,0 +1,20 @@
+flowchart TD
+  A[User: New Contract from Template] --> B[Backend: Draft Contract Created]
+  B --> C[User: Verify]
+  C --> D[Backend: Send Provider Sign Request]
+  D --> E[Provider: Sign on Frontend]
+  E --> F[Backend: Provider Signed Synced]
+  F --> G{Amendments Needed?}
+  G -- Yes --> H[User: Review/Amend]
+  H --> I[User: Verify Amendment]
+  I --> J[User: Send for Vetting]
+  G -- No --> J
+  J --> K[Deputy Recommendation]
+  K --> L[Legal Recommendation]
+  L --> M[Approver: Approve]
+  M --> N[User: Send for Internal Signing]
+  N --> O[User: Create On-site Meeting]
+  O --> P[Backend: State Running]
+  P --> Q[Backend: Monitoring Cron + Expiry Cron]
+  Q --> R[User: Procurement if needed]
+  R --> S[End: Renewed/Closed/Expired/Cancelled]

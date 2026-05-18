@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_task_form2" model="ir.ui.view">
+        <field name="name">view.project.task.inherit.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='stage_id']"
+                   position="attributes">
+                <attribute name="options">{'clickable': '0'}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_assign']" position="before">
+                <field name="sub_task_count"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="before">
+                <field name="type"/>
+            </xpath>
+            <xpath expr="//field[@name='user_ids']" position="before">
+                <field name="reference_number"/>
+                <field name="hr_team_id"/>
+            </xpath>
+            <xpath expr="//header/field[@name='personal_stage_type_id']"
+                   position="attributes">
+                <attribute name="options">{'clickable': '0'}</attribute>
+            </xpath>
+            <xpath expr="//page[@name='description_page']"
+                   position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='sub_tasks_page']"
+                   position="attributes">
+                <attribute name="string">Audit Procedures</attribute>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']/list/field[@name='name']"
+                   position="before">
+                <field name="state" widget="badge" nolabel="1"
+                       decoration-warning="state in ('02_changes_requested')"
+                       decoration-info="state in ('01_in_progress')"
+                       decoration-success="state in ('03_approved', '1_done')"
+                       decoration-danger="state == '1_canceled'"/>
+            </xpath>
+
+            <!--            <xpath expr="//field[@name='project_id']" position="after">-->
+            <!--                <style>-->
+            <!--                    .o_list_renderer .o_list_table .o_list_record_open_form_view-->
+            <!--                    button {-->
+            <!--                    padding: 0px;-->
+            <!--                    background: none;-->
+            <!--                    border-style: none;-->
+            <!--                    display: none;-->
+            <!--                    cursor: pointer;-->
+            <!--                    }-->
+            <!--                </style>-->
+            <!--            </xpath>-->
+
+            <xpath expr="//field[@name='child_ids']/list" position="inside">
+                <button class="oe_link" type="object"
+                        name="action_view_sub_task" string="View">
+                </button>
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_my_sub_task_form" model="ir.ui.view">
+        <field name="name">view.my.sub.task.form</field>
+        <field name="model">project.task</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="SUB TASK FORM">
+                <header>
+                    <button name="action_review" type="object"
+                            invisible="stages != 'first_reviewer'"
+                            string="1st Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object"
+                            invisible="stages != 'first_reviewer'"
+                            string="2nd Review" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'first_reviewer'"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_approve" type="object"
+                            invisible="stages != 'second_reviewer'"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'second_reviewer'"
+                            string="Revert" class="oe_highlight"/>
+
+                    <button name="action_reject" type="object"
+                            invisible="stages != 'second_reviewer'"
+                            string="Reject" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'rejected'"
+                            string="Move to Prepare" class="oe_highlight"/>
+
+                    <field name="stages" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="pe-0 w-100">
+                        <h1 class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex w-100">
+                                <field name="name"
+                                       options="{'line_breaks': False}"
+                                       widget="text"
+                                       class="o_task_name text-truncate w-md-75 w-100 pe-2"
+                                       placeholder="Task Title..."/>
+                            </div>
+
+                            <div class="d-flex justify-content-start o_state_container">
+                                <field name="state"
+                                       widget="project_task_state_selection"
+                                       class="o_task_state_widget"/>
+                            </div>
+                        </h1>
+                    </div>
+                    <group col="2">
+                        <group>
+                            <field name="manager_id"
+                                   widget="many2one_avatar_user"/>
+                            <field name="user_ids"
+                                   widget="many2many_avatar_user"/>
+                            <field name="hr_team_id"/>
+                            <field name="user_reviewer_1_ids"
+                                   widget="many2one_avatar_user"/>
+                            <field name="user_reviewer_2_ids"
+                                   widget="many2one_avatar_user"/>
+                            <field name="user_approver"
+                                   widget="many2one_avatar_user"/>
+                        </group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="parent_id"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="type"/>
+                            <field name="stage_id"/>
+                            <field name="task_type" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Audit Step"
+                              invisible="task_type != 'exec_3'"
+                        >
+                            <field name="audit_steps"/>
+                        </page>
+                        <page string="Guidance"
+                              invisible="task_type != 'exec_3'"
+                        >
+                            <field name="guidance"/>
+                        </page>
+                    </notebook>
+
+                    <notebook>
+                        <page string="Upload Notification Letter"
+                              name="upload_notification" invisible="task_type != 'plan_1'">
+                            <field name="upload_notification_name"
+                                   invisible="1"/>
+                            <field name="attachment_notification_ids"
+                                   filename="upload_notification_name"
+                                   widget="many2many_binary"/>
+                            <field name="upload_report_document_name"
+                                   invisible="1"/>
+                        </page>
+
+                        <page string="Project Assignment" invisible="task_type != 'plan_2'">
+                            <group>
+
+                                <field name="comments"/>
+                                <field name="special_instruction"/>
+                                <field name="audit_objective"/>
+                                <field name="internal_audit_ids"
+                                       widget="many2many_tags"/>
+                                <field name="auditor_id" widget="many2one"/>
+                            </group>
+
+                        </page>
+                        <page string="PRELIMINARY SURVEY" invisible="task_type != 'plan_23'">
+                            <field name="survey_details" colspan="4"
+                                   nolabel="1">
+                                <list string="Survey Details">
+                                    <field name="survey_num"/>
+                                    <field name="item_description"/>
+                                    <field name="assignment_category"/>
+                                    <field name="comments"/>
+                                    <field name="analysis"/>
+                                    <field name="reference"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Time Budget" invisible="task_type != 'plan_34'">
+                            <field name="time_budget_task_ids">
+                                <list editable="bottom">
+                                    <field name="rank_id"/>
+                                    <field name="auditor_id"/>
+                                    <field name="hours" sum="total"/>
+                                    <field name="planned_hours" sum="total"/>
+                                    <field name="field_hours" sum="total"/>
+                                    <field name="reporting_hours" sum="total"/>
+                                    <field name="comments"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="CONTROL ADEQUECY ASSESSMENT" invisible="task_type != 'plan_7'">
+                            <field name="control_assessment_ids">
+                                <list editable="bottom">
+                                    <field name="control_objective"/>
+                                    <field name="scope"/>
+                                    <field name="key_assessed"/>
+                                    <field name="existing_control"/>
+                                    <field name="agree_opinion"/>
+                                    <!--                                  <field name="risk_identified"/>-->
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Risks" name="risk" invisible="task_type != 'plan_8'">
+                            <field name="risk_ids" editable="bottom">
+                                <list>
+                                    <field name="name" readonly="1"/>
+                                    <field name="category"
+                                           widget="many2many_tags"/>
+                                    <field name="inherent_risk_score"/>
+                                    <field name="control_effectiveness"/>
+                                    <field name="residual_risk_score"/>
+                                    <field name="owner"/>
+                                    <field name="severity" optional="show"/>
+                                    <field name="status" optional="show"/>
+                                    <field name="next_date" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Professional Development" invisible="task_type != 'plan_10'">
+                            <field name="professional_development_ids">
+                                <list editable="bottom">
+                                    <field name="project_id"/>
+                                    <field name="subject"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="date_prof"/>
+                                    <field name="wp_reference"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="AUDIT PROGRAM" invisible="task_type != 'exec_1'">
+                            <field name="audit_pgm_id">
+                                <list string="Audit Program">
+                                    <field name="process"/>
+                                    <field name="risk_identified"/>
+                                    <field name="controls_identified"/>
+                                    <field name="audit_procedures"/>
+                                    <field name="timeline"/>
+                                    <field name="responsibility_assigned_to"/>
+                                    <field name="wp_reference"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="QUALITY ASSESSMENT" invisible="task_type != 'rep_4'">
+                            <field name="upload_quality_assessment_document_name"
+                                   invisible="1"/>
+                            <field name="attachment_quality_assessment_audit_ids"
+                                   filename="upload_quality_assessment_document_name"
+                                   widget="many2many_binary"/>
+                        </page>
+
+                        <page string="Record of Work Done"
+                              invisible="task_type != 'exec_3'">
+                            >
+                            <field name="work_done"/>
+                        </page>
+                        <page string="Sample Selection"
+                              invisible="task_type != 'exec_3'">
+                            >
+                            <field name="sample_selection"/>
+                        </page>
+                        <page string="Conclusion" invisible="task_type not in ['exec_3', 'rep_4']">
+                            <field name="conclusion"/>
+                        </page>
+
+                        <page string="Upload Engagement Memorandum" invisible="task_type != 'plan_5'">
+                            <field name="memo_attachment_id"
+                                   widget="many2many_binary"/>
+                        </page>
+                        <page string="SYSTEM DESCRIPTION" invisible="task_type != 'plan_6'">
+                            <group>
+                                <field name="objective"/>
+                                <field name="rules"/>
+                                <field name="skill"/>
+                                <field name="system_objective"/>
+                                <field name="component_nature"/>
+                            </group>
+                            <field name="activity_description_ids"
+                                   widget="one2many">
+                                <list editable="bottom">
+                                    <field name="activity_no"/>
+                                    <field name="system_activity"/>
+                                    <field name="description_activity"/>
+                                    <field name="verification"/>
+                                    <field name="risk_identified"/>
+                                </list>
+                            </field>
+
+
+                            <!--                                <div>-->
+                            <!--                                    -->
+                            <!--<field name = "activity_no"/>-->
+                            <!--                                </div>-->
+
+                            <!--                             <field name="skill"/>-->
+                            <!--                            <field name="audit_objective"/>-->
+                            <!--                            <field name="internal_audit_ids" widget="many2many_tags"/>-->
+                            <!--                            <field name="auditor_id" widget="many2one"/>-->
+
+
+                        </page>
+                        <page string="Upload Documents"
+                              invisible="task_type in ['plan_2', 'plan_3', 'plan_6', 'plan_7', 'plan_8', 'exec_1', 'exec_3']">
+                            <field name="upload_document_name" invisible="1"/>
+                            <field name="attachment_id"
+                                   filename="upload_document_name"
+                                   widget="many2many_binary"/>
+                        </page>
+                        <page string="Request Documents"
+                              invisible="task_type in ['plan_6', 'plan_7', 'plan_8', 'exec_1', 'exec_3']">
+                            <button class="oe_stat_button"
+                                    name="action_request_details"
+                                    type="object"
+                                    icon="fa-file-text-o">
+                                Open Requested Documents
+                            </button>
+
+                            <button name="action_view_request_documents"
+                                    type="object" string="Request Document"
+                                    class="btn-secondary"/>
+
+                            <!--                                                          <field name="request_documents"/>-->
+                            <field name="share_document"/>
+                        </page>
+                        <page string="Findings Raised" name="finding"
+                              invisible="task_type in ['plan_6', 'plan_7', 'plan_8', 'exec_1', 'exec_3']">
+                            <field name="audit_finding_ids" editable="bottom">
+                                <list>
+                                    <field name="audit_requirement"
+                                           optional="show"/>
+                                    <field name="audit_finding"
+                                           optional="show"/>
+                                    <field name="impact" optional="show"/>
+                                    <field name="internal_control_deficiency"
+                                           optional="show"/>
+                                    <field name="recommendation"
+                                           optional="hide"/>
+                                    <field name="management_response"
+                                           optional="hide"/>
+                                    <field name="finding_name" optional="hide"/>
+                                    <field name="position_id" optional="hide"/>
+                                    <field name="department_id"
+                                           optional="hide"/>
+                                    <field name="head_department_id"
+                                           optional="hide"/>
+                                    <field name="finding_date" optional="hide"/>
+                                    <field name="auditor_conclusion"
+                                           optional="hide"/>
+                                    <field name="attachment_ids"
+                                           widget="many2many_binary"
+                                           optional="hide"/>
+                                    <!--                                    <field name="is_finding_resolved"-->
+                                    <!--                                           optional="hide"/>-->
+                                </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="audit_requirement"/>
+                                            <field name="impact"/>
+                                            <field name="recommendation"/>
+                                            <field name="attachment_ids"
+                                                   widget="many2many_binary"/>
+                                        </group>
+                                        <group>
+                                            <field name="audit_finding"/>
+                                            <field name="internal_control_deficiency"/>
+                                            <field name="management_response"/>
+                                        </group>
+                                    </group>
+                                    <group string="Auditors response">
+                                        <group>
+                                            <field name="finding_name"/>
+                                            <field name="department_id"/>
+                                            <field name="finding_date"/>
+                                            <!--                                            <field name="is_finding_resolved"/>-->
+                                        </group>
+                                        <group>
+                                            <field name="position_id"/>
+                                            <field name="head_department_id"/>
+                                            <field name="auditor_conclusion"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Upload Minutes of Meeting" invisible="task_type != 'plan_9'">
+                            <field name="mom_attachment_id"
+                                   widget="many2many_binary"/>
+                        </page>
+
+                        <page string="Management Report" invisible="task_type != 'plan_9'">
+                            <field name="upload_report_document_name"
+                                   invisible="1"/>
+                            <field name="attachment_report_ids"
+                                   filename="upload_report_document_name"
+                                   widget="many2many_binary"/>
+                        </page>
+                        <page string="DRAFT AUDIT REPORT" invisible="task_type != 'rep_1'">
+                            <field name="upload_draft_audit_document_name"
+                                   invisible="1"/>
+                            <field name="attachment_draft_audit_ids"
+                                   filename="upload_draft_audit_document_name"
+                                   widget="many2many_binary"/>
+                        </page>
+                        <page string="FINAL AUDIT" invisible="task_type != 'rep_3'">
+                            <field name="upload_final_audit_document_name"
+                                   invisible="1"/>
+                            <field name="attachment_final_audit_ids"
+                                   filename="upload_final_audit_document_name"
+                                   widget="many2many_binary"/>
+                        </page>
+
+                        <page string="References" name="reference"
+                              invisible="task_type not in ['plan_1', 'plan_2', 'plan_3', 'plan_5', 'plan_6', 'plan_7', 'plan_8', 'plan_9', 'plan_10', 'exec_1', 'exec_3', 'rep_1', 'rep_2', 'rep_3', 'rep_4']">
+                            <field name="references"/>
+                        </page>
+                        <page string="Sampling" invisible="task_type != 'exec_2'">
+                            <group>
+                                <group>
+                                    <field name="name_population"/>
+                                    <field name="recorded_amount"/>
+                                </group>
+                                <group>
+                                    <field name="population_type"/>
+                                </group>
+                            </group>
+                            <group string="Indicate which assertions are audited in this working paper">
+                                <group>
+                                    <field name="completeness" invisible="population_type not in ['class_transaction', 'account_balance', 'disclosure_class_transaction', 'disclosure_account_balances']"/>
+                                    <field name="accuracy" invisible="population_type not in ['class_transaction', 'disclosure_class_transaction']"/>
+                                    <field name="obligations" invisible="population_type not in ['account_balance', 'disclosure_account_balances']"/>
+                                    <field name="classification"/>
+                                </group>
+                                <group>
+                                    <field name="occurrence" invisible="population_type not in ['class_transaction', 'disclosure_class_transaction']"/>
+                                    <field name="cut_off" invisible="population_type not in ['class_transaction', 'disclosure_class_transaction']"/>
+                                    <field name="existence" invisible="population_type not in ['account_balance', 'disclosure_account_balances']"/>
+                                    <field name="valuation" invisible="population_type not in ['account_balance', 'disclosure_account_balances']"/>
+                                    <field name="presentation"/>
+                                </group>
+                            </group>
+                            <group string="Materiality" name="Materiality">
+                                <field name="revised"/>
+                            </group>
+                            <group>
+                                <group string="Overall/ specific materiality">
+                                    <field name="preliminary_materiality_overall"/>
+                                    <field name="revised_materiality_overall" invisible="revised != 'yes'"/>
+                                    <field name="final_materiality_overall"/>
+                                </group>
+                                <group string="Performance materiality">
+                                    <field name="preliminary_performance_materiality"/>
+                                    <field name="revised_performance_materiality"
+                                           invisible="revised != 'yes'"/>
+                                    <field name="final_performance_materiality"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="level_assurance"/>
+                                    <field name="indicate_sample_selection"/>
+                                </group>
+                                <group>
+                                    <field name="define_population"/>
+                                </group>
+                            </group>
+                            <group string="Step A2: Calculate initial sample size based on preliminary performance materiality">
+                                <group>
+                                    <field name="level_assurance" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="initial_sample_size" readonly="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Level 3">
+                                    <field name="sample_size_3"/>
+                                    <field name="mini_sample_size_3" required="task_type == 'exec_2'"/>
+                                    <field name="final_sample_size_3"/>
+                                </group>
+                                <group string="Level 2">
+                                    <field name="sample_size_2"/>
+                                    <field name="mini_sample_size_2" required="task_type == 'exec_2'"/>
+                                    <field name="final_sample_size_2"/>
+                                </group>
+                                <group string="Level 1">
+                                    <field name="sample_size_1"/>
+                                    <field name="mini_sample_size_1"
+                                           required="task_type == 'exec_2'"/>
+                                    <field name="final_sample_size_1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <!--                        <page string="Client Satisfaction Survey">-->
+                        <!--                            <field name="client_survey_ids">-->
+                        <!--                                <list>-->
+                        <!--                                    <field name="auditee"/>-->
+                        <!--                                    <field name="subject"/>-->
+                        <!--                                </list>-->
+                        <!--                            </field>-->
+                        <!--                        </page>-->
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="project.act_project_project_2_project_task_all"
+            model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,list,form,calendar,pivot,graph,activity</field>
+        <field name="domain">[('project_id', '=', active_id)]</field>
+        <field name="view_ids" eval="[
+        (5, 0, 0),
+        (0, 0, {'view_mode': 'kanban'}),
+        (0, 0, {'view_mode': 'list'}),
+        (0, 0, {'view_mode': 'form', 'view_id': ref('project.view_task_form2')}),
+        (0, 0, {'view_mode': 'gantt', 'view_id': ref('project_enterprise.project_task_dependency_view_gantt')}),
+        (0, 0, {'view_mode': 'calendar'}),
+        (0, 0, {'view_mode': 'map', 'view_id': ref('project_enterprise.project_task_map_view_no_title')}),
+        (0, 0, {'view_mode': 'pivot', 'view_id': ref('project.view_project_task_pivot_inherit')}),
+        (0, 0, {'view_mode': 'graph'}),
+        (0, 0, {'view_mode': 'activity'})]"/>
+        <field name="context">{ 'active_model': 'project.project', 'default_project_id': active_id,
+            'show_project_update': True, 'search_default_open_tasks': 1, }
+        </field>
+        <field name="search_view_id" ref="project.view_task_search_form"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No tasks found. Let's create one!
+            </p>
+            <p>
+                Keep track of the progress of your tasks from creation to
+                completion.
+                <br/>
+                Collaborate efficiently by chatting in real-time or via email.
+            </p>
+        </field>
+    </record>
+    <!--    Modify this-->
+    <!--    <record id="view_project_task_inherit_kanban" model="ir.ui.view">-->
+    <!--        <field name="name">view.project.task.inherit.kanban</field>-->
+    <!--        <field name="model">project.task</field>-->
+    <!--        <field name="inherit_id" ref="project.view_task_kanban"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            kanban_state-->
+    <!--            <xpath expr="//field[@name='kanban_state']" position="before">-->
+    <!--                <button class="oe_link" type="object"-->
+    <!--                        name="action_view_sub_task" string="View"-->
+    <!--                        invisible="parent_id == False"/>-->
+
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
+    <record id="view_project_task_inherit_tree" model="ir.ui.view">
+        <field name="name">view.project.task.inherit.list</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stage_id']" position="after">
+                <field name="parent_id" invisible="1"/>
+                <button class="oe_link" type="object"
+                        name="action_view_sub_task" string="View" invisible="parent_id == False"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

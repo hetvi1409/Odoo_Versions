@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Top menu item -->
+    <menuitem name="Risk Management" id="oi_risk_management.menu_root"
+              web_icon="oi_risk_management,static/description/icon.png"/>
+
+    <!-- category menus -->
+    <menuitem name="Events" id="oi_risk_management.activity_tree_menu"
+              parent="oi_risk_management.menu_root"
+              action="oi_risk_management.activities_view" sequence="5"/>
+    <menuitem name="Risks" id="oi_risk_management.risk_tree_menu"
+              parent="oi_risk_management.menu_root"
+              action="oi_risk_management.risks_view" sequence="6"/>
+    <menuitem name="Reports" id="oi_risk_management.reports_menu" parent="oi_risk_management.menu_root"
+              sequence="7"/>
+    <menuitem name="Configuration" id="oi_risk_management.configuration_menu"
+              parent="oi_risk_management.menu_root" sequence="15"/>
+
+
+    <!-- action menus -->
+    <menuitem name="Events/Activities" id="oi_risk_management.configuration_activity_menu"
+              parent="oi_risk_management.configuration_menu"/>
+    <menuitem name="Categories" id="oi_risk_management.configuration_activity_categories_menu"
+              parent="oi_risk_management.configuration_activity_menu"
+              action="oi_risk_management.configuration_activity_categories_view"/>
+    <menuitem name="Tags" id="oi_risk_management.configuration_activity_tags_menu"
+              parent="oi_risk_management.configuration_activity_menu"
+              action="oi_risk_management.configuration_activity_tags_view"/>
+
+
+    <menuitem name="Criteria" id="oi_risk_management.configuration_criteria_menu"
+              parent="oi_risk_management.configuration_menu"/>
+    <menuitem name="Severity" id="oi_risk_management.configuration_risk_severity_menu"
+              parent="oi_risk_management.configuration_criteria_menu"
+              action="oi_risk_management.configuration_risk_severity_action"/>
+    <menuitem name="Likelihood" id="oi_risk_management.configuration_risk_likelihood_menu"
+              parent="oi_risk_management.configuration_criteria_menu"
+              action="oi_risk_management.configuration_risk_likelihood_action"/>
+    <menuitem name="Control Effectiveness"
+              id="oi_risk_management.configuration_risk_control_effectiveness_menu"
+              parent="oi_risk_management.configuration_criteria_menu"
+              action="oi_risk_management.configuration_risk_control_effectiveness_action"/>
+
+    <menuitem name="Departments" id="oi_risk_management.configuration_departments_menu"
+              parent="oi_risk_management.configuration_menu"
+              action="hr.hr_department_kanban_action"/>
+
+    <menuitem name="List of Risks" id="oi_risk_management.list_of_risks_activity_menu"
+              parent="oi_risk_management.reports_menu" sequence="9"/>
+    <menuitem name="Board Approval" id="oi_risk_management.list_of_risks_board_approval_menu"
+              parent="oi_risk_management.list_of_risks_activity_menu"
+              action="oi_risk_management.list_of_risks_board_approval_action" sequence="10"/>
+    <menuitem name="All" id="oi_risk_management.list_of_risks_all_menu"
+              parent="oi_risk_management.list_of_risks_activity_menu"
+              action="oi_risk_management.risks_view" sequence="11"/>
+    <menuitem name="Board" id="oi_risk_management.list_of_risks_board_menu"
+              parent="oi_risk_management.list_of_risks_activity_menu"
+              action="oi_risk_management.list_of_risks_board_action" sequence="12"/>
+    <!--groups="oi_risk_management.group_risk_ceo"-->
+    <menuitem name="Exco" id="oi_risk_management.list_of_risks_exco_menu"
+              parent="oi_risk_management.list_of_risks_activity_menu"
+              action="oi_risk_management.list_of_risks_exco_action" sequence="13"/>
+    <!--groups="oi_risk_management.group_risk_gm"-->
+    <menuitem name="Department" id="oi_risk_management.list_of_risks_department_menu"
+              parent="oi_risk_management.list_of_risks_activity_menu"
+              action="oi_risk_management.list_of_risks_department_wizard_action" sequence="14"/>
+    <!--groups="oi_risk_management.group_risk_manager"-->
+
+
+    <menuitem name="Risks Dashboard" id="oi_risk_management.risk_dashboard_menu"
+              parent="oi_risk_management.reports_menu" sequence="10"/>
+    <menuitem name="All" id="oi_risk_management.risk_dashboard_all_menu"
+              action="oi_risk_management.risk_dashboard_action"
+              parent="oi_risk_management.risk_dashboard_menu"
+              sequence="11"/>
+    <menuitem name="Board" id="oi_risk_management.risk_dashboard_board_menu"
+              action="oi_risk_management.risk_dashboard_board_action"
+              parent="oi_risk_management.risk_dashboard_menu" sequence="12"/>
+    <menuitem name="Exco" id="oi_risk_management.risk_dashboard_exco_menu"
+              action="oi_risk_management.risk_dashboard_exco_action"
+              parent="oi_risk_management.risk_dashboard_menu" sequence="13"/>
+    <menuitem name="Department" id="oi_risk_management.risk_dashboard_department_menu"
+              action="oi_risk_management.risk_dashboard_wizard_action"
+              parent="oi_risk_management.risk_dashboard_menu" sequence="14"/>
+    
+    <menuitem name="Risk Profile" id="oi_risk_management.risk_profile_menu" parent="oi_risk_management.reports_menu"
+              action="oi_risk_management.risk_profile_wizard_action" sequence="20"/>
+
+
+    <menuitem id="oi_risk_management.configuration_settings_menu"
+              name="Settings"
+              parent="oi_risk_management.configuration_menu"
+              sequence="0"
+              action="oi_risk_management.configuration_settings_view_action"
+              groups="base.group_system"/>
+
+</odoo>

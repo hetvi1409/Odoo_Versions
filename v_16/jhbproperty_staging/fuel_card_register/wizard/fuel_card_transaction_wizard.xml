@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_fuel_card_txn_report_wizard_form" model="ir.ui.view">
+        <field name="name">fuel.card.txn.report.wizard.form</field>
+        <field name="model">fuel.card.transaction.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Fuel Card Transaction Report">
+                <group>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </group>
+                <footer>
+                    <button string="Generate Report" type="object"
+                            name="fuel_card_report_excel" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_fuel_card_txn_report_wizard"
+            model="ir.actions.act_window">
+        <field name="name">Fuel Card Transaction Report</field>
+        <field name="res_model">fuel.card.transaction.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_fuel_card_report_wizard"
+              name="Export Fuel Card Transactions"
+              parent="fleet.menu_fleet_reporting"
+              action="action_fuel_card_txn_report_wizard" sequence="10"/>
+</odoo>

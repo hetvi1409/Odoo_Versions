@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_custom_helpdesk_ticket_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='assign_ticket_to_self']"
+                   position="after">
+                <button name="action_assigned_for_inspection"
+                        type="object"
+                        string="Assigned for Inspection"
+                        class="btn-primary"
+                        attrs="{'invisible':[('assign_for_inspection_check', '!=', True)]}"
+                />
+            </xpath>
+            <xpath expr="//button[@name='assign_ticket_to_self']"
+                   position="after">
+                <button name="action_submit"
+                        type="object"
+                        attrs="{'invisible':[('submit_check', '=', True)]}"
+                        string="Submit"
+                        class="btn-primary"
+                />
+            </xpath>
+            <xpath expr="//button[@name='assign_ticket_to_self']"
+                   position="attributes">
+                <attribute name="attrs">{'invisible': ['|', ('user_check', '!=',
+                    True), ('user_id', '!=', False)]}
+                </attribute>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <button name="action_job_card_creation"
+                        type="object"
+                        attrs="{'invisible':['|', '|', ('submit_check', '!=', True), ('check_inspection_finish', '!=', True), ('is_job_card_create', '=', True)]}"
+                        string="Create Job Card"
+                        class="btn-primary"/>
+                <!--                <button name="action_inventory_approval_request"-->
+                <!--                        type="object"-->
+                <!--                        attrs="{'invisible': ['|', ('is_inventory_required', '!=', 'yes'), ('check_inventory_approve', '=', True)]}"-->
+                <!--                        string="Inventory Approval Request"-->
+                <!--                        class="btn-primary"/>-->
+                <button name="action_approve_inventory"
+                        type="object"
+                        string="Approve"
+                        groups="property_maintenance_management.facility_manager_access"
+                        class="btn-primary"
+                        attrs="{'invisible': ['|', ('check_inventory_approve', '!=', True), ('check_approved', '=', True)]}"/>
+                <button name="action_assign_job"
+                        type="object"
+                        string="Assign Job"
+                        class="btn-primary"
+                        attrs="{'invisible':['|', ('is_card_approved','!=', True),('is_job_assigned', '=', True)]}"/>
+                <button name="action_solved_task"
+                        type="object"
+                        string="Solved Task"
+                        class="btn-primary"
+                        attrs="{'invisible':['|', ('is_task_solved','!=', True), ('task_solved','=', True)]}"/>
+
+
+            </xpath>
+            <xpath expr="//button[@name='assign_ticket_to_self']"
+                   position="after">
+                <button name="action_add_job_cards"
+                        type="object"
+                        attrs="{'invisible': ['|', ('check_approved', '!=', True), ('is_job_card_created', '=', True)]}"
+                        string="Job Card"
+                        class="btn-primary"
+                />
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <div class="alert alert-success" role="alert"
+                     style="height: 40px;left: 10px;right: 10px; margin-bottom:0px;text-align: left;"
+                     attrs="{'invisible':['|', ('is_card_approved','!=', True),('is_job_assigned', '=', True)]}">
+                    The job card is approved by the manager
+                </div>
+            </xpath>
+
+
+            <xpath expr="//header" position="inside">
+                <div class="alert alert-success" role="alert"
+                     style="height: 40px;left: 10px;right: 10px; margin-bottom:0px;text-align: left;"
+                     attrs="{'invisible':['|', ('is_task_solved','!=', True), ('task_solved','=', True)]}">
+                    The work is completed you can move this ticket into the
+                    solved stage
+                </div>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <div class="alert alert-warning" role="alert"
+                     style="height: 40px;left: 10px;right: 10px; margin-bottom:0px;text-align: left;"
+                     attrs="{'invisible':[('is_card_decline','!=', True)]}">
+                    The job card is declined by the manager
+                </div>
+            </xpath>
+
+            <xpath expr="//div[hasclass('oe_button_box')]"
+                   position="inside">
+                <button name="action_inspection" type="object"
+                        class="oe_stat_button" icon="fa-legal"
+                        attrs="{'invisible':[('inspection_count', '==' , 0)]}">
+                    <span class="o_stat_text">Inspection</span>
+                </button>
+                <button class="oe_stat_button" type="object"
+                        name="get_job_card_details"
+                        icon="fa-id-card-o"
+                        attrs="{'invisible':[('is_job_card_create', '!=', True)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Job Card</span>
+                    </div>
+
+
+                    <!--                        <field string="Job Card"-->
+                    <!--                               name="job_card_count" widget="statinfo"/>-->
+                </button>
+            </xpath>
+
+            <xpath expr="//field[@name='stage_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='properties']"
+                   position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='description']"
+                   position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="before">
+                <field name="is_inventory_required" widget="radio"
+                       invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='description']" position="after">
+                <notebook>
+<!--                        attrs="{'invisible': [('is_maintenance_request', '!=', True)]}">-->
+                    <!-- Create a new notebook page -->
+                    <page string="Description">
+                            <field name="description" widget="html"/>
+                    </page>
+                    <page string="Property Details">
+                        <group>
+                            <group>
+                                <!-- <field name="description"/> -->
+                                <field name="property_name"
+                                       context="{'tree_view_ref': 'itsys_real_estate.building_list'}"/>
+                                <field name="jmc_number"/>
+                                <field name="type"/>
+                                <field name="location"/>
+                                <field name="region_id"/>
+                                <field name="supervisor_id"/>
+                            </group>
+                            <group>
+                                <field name="assign_for_inspection_check" invisible="1"/>
+                                <field name="assignee_for_inspection"
+                                    attrs="{'invisible':[('is_in_progress_stage', '!=', True),('assign_for_inspection_check', '!=', True)], 'required': [('assign_for_inspection_check', '==', True)]}"/>
+                                <!--                <field name="assignee_for_inspection_2"-->
+                                <!--                       attrs="{'invisible':[('assign_for_inspection_check', '=', True)]}"/>-->
+                                <span class="o_form_label o_td_label"
+                                    name="address_name">
+                                    <!--                                        <field name="type"-->
+                                    <!--                                               attrs="{'invisible': [('is_company','=', True)], 'required': [('is_company','!=', True)], 'readonly': [('user_ids', '!=', [])]}"-->
+                                    <!--                                               class="fw-bold"/>-->
+                                    <b>
+                                        Address
+                                    </b>
+                                </span>
+                                <div class="o_address_format">
+                                    <field name="partner_street"
+                                        placeholder="Street..."
+                                        class="o_address_street"/>
+                                    <field name="partner_street2"
+                                        placeholder="Street 2..."
+                                        class="o_address_street"/>
+                                    <field name="partner_city"
+                                        placeholder="City"
+                                        class="o_address_city"/>
+                                    <field name="partner_state_id"
+                                        class="o_address_state"
+                                        placeholder="State"
+                                        options="{'no_open': True, 'no_quick_create': True}"/>
+                                    <field name="partner_zip" placeholder="ZIP"
+                                        class="o_address_zip"/>
+                                    <div name="partner_address_country"
+                                        class="d-flex justify-content-between">
+                                        <field name="partner_country_id"
+                                            placeholder="Country"
+                                            class="o_address_country"
+                                            options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                    </div>
+                                </div>
+                                <field name="is_maintenance_request" invisible="1"/>
+                                <field name="inspection_count" invisible="1"/>
+                                <field name="ticket_job_card_id" invisible="1"/>
+                                <field name="user_check" invisible="1"/>
+                                <field name="submit_check" invisible="1"/>
+                                <field name="check_inspection_finish" invisible="1"/>
+                                <field name="check_inventory_approve" invisible="1"/>
+                                <field name="check_approved" invisible="1"/>
+                                <field name="is_job_card_created" invisible="1"/>
+                                <field name="is_job_card_create" invisible="1"/>
+                                <field name="check_work_done" invisible="1"/>
+                                <field name="is_in_progress_stage" invisible="1"/>
+                                <field name="is_card_decline" invisible="1"/>
+                                <field name="is_card_approved" invisible="1"/>
+                                <field name="is_job_assigned" invisible="1"/>
+                                <field name="is_task_solved" invisible="1"/>
+                                <field name="task_solved" invisible="1"/>
+                            </group>
+                        </group>
+                    </page>
+                    <!--                    <page string="Inventory Required"-->
+                    <!--                          name="required_inventories"-->
+                    <!--                          attrs="{'invisible': [('is_inventory_required', '!=', 'yes')]}">-->
+                    <!--                        <field name="required_inventory_ids"-->
+                    <!--                               nolabel="1">-->
+                    <!--                            <tree string="Inventory Required Items"-->
+                    <!--                                  editable="bottom">-->
+                    <!--                                <field name="product_id"/>-->
+                    <!--                                <field name="product_uom_qty"/>-->
+                    <!--                                <field name="price_unit"/>-->
+                    <!--                                <field name="price_subtotal"/>-->
+                    <!--                                <field name="required_inventory" invisible="1"/>-->
+                    <!--                            </tree>-->
+                    <!--                        </field>-->
+                    <!--                    </page>-->
+                    <page string="Inspection Details"
+                          attrs="{'invisible': [('check_inspection_finish', '!=', True)]}">
+                        <group>
+                            <field name="inspected_detail"/>
+                        </group>
+
+                        <group>
+                            <field name="inspected_document_ids"
+                                   widget="many2many_binary"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="image_1" widget="image"/>
+                                <field name="image_2" widget="image"/>
+                                <field name="image_3" widget="image"/>
+                            </group>
+                            <group>
+                                <field name="image_4" widget="image"/>
+                                <field name="image_5" widget="image"/>
+                                <field name="image_6" widget="image"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="helpdesk_ticket_base_list">
+        <field name="name">helpdesk.ticket.list.view</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id"
+               ref="helpdesk.helpdesk_tickets_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="default_order">create_date DESC</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="type" decoration-danger="type == 'major'"
+                       decoration-warning="type == 'minor'" widget="badge"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="string">Name of incident</attribute>
+            </xpath>
+            <xpath expr="//field[@name='team_id']" position="attributes">
+                <attribute name="string">Channel</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="department"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

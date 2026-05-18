@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="action_quality_control_peer" model="ir.actions.act_window">
+        <field name="name">Quality Control - Internal Peer Review</field>
+        <field name="res_model">quality.control.peer</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Quality Control
+            </p>
+            <p>
+                Create and manage the Quality Control - Internal Peer Review;
+            </p>
+        </field>
+    </record>
+    <record id="quality_control_peer_view_form" model="ir.ui.view">
+        <field name="name">quality.control.peer.view.form</field>
+        <field name="model">quality.control.peer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                            invisible="state != 'preparer' or uid != user_reviewer_1_ids"
+                            string="Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object" invisible="state != 'first_reviewer' or uid != user_reviewer_2_ids" string="2nd Review" class="oe_highlight"/>
+                    <button name="action_approve" type="object"
+                            invisible="state != 'second_reviewer' or uid != user_approver_ids"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_mark_discrepancy" type="object"
+                            invisible="state in ['approved', 'reverted', 'rejected']"
+                            string="Refuse"/>
+                    <button name="action_send_back_review" type="object"
+                            invisible="state in ['rejected','reverted', 'preparer','approved']"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_send_back_new" type="object"
+                            invisible="state not in [ 'rejected']"
+                            string="Move To New" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"
+                                   readonly="state in ['approved', 'rejected']"/>
+                            <field name="sequence_no"/>
+                            <field name="requirements"
+                                   style="height: 105px;"
+                                   readonly="state in ['approved', 'rejected']"/>
+                            <field name="record_work_done"
+                                   style="height: 105px;"
+                                   readonly="state in ['approved', 'rejected']"/>
+                            <field name="conclusion" style="height: 105px;"
+                                   readonly="state in ['approved', 'rejected']"/>
+                            <field name="folder_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="user_preparer_ids" widget="many2one_avatar_user"/>
+<!--                            <field name="user_reviewer_1_ids" widget="many2one_avatar_user"/>-->
+<!--                            <field name="user_reviewer_2_ids" widget="many2one_avatar_user"/>-->
+<!--                            <field name="user_approver_ids" widget="many2one_avatar_user"/>-->
+                            <field name="user_ids" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Upload Internal Peer Review Reports">
+                            <group>
+                                <group>
+                                    <field name="attachment_ids"
+                                           widget="many2many_binary"
+                                           readonly="state in ['approved', 'rejected']"/>
+                                </group>
+                                <group>
+                                    <button name="action_view_documents"
+                                            invisible="not attachment_ids"
+                                            type="object" icon="fa-file-text-o"
+                                            string="Open Documents"/>
+
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Documents">
+                            <group>
+                                <group>
+                                    <field name="document_ids"
+                                           widget="many2many_binary">
+                                    </field>
+                                </group>
+                                <group>
+                                    <button name="action_view_documents"
+                                            invisible="not document_ids"
+                                            type="object" icon="fa-file-text-o"
+                                            string="Open Documents"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Comments">
+                            <field name="comments" style="height: 225px;"/>
+                        </page>
+<!--                        <page string="Feedback">-->
+<!--                            <group>-->
+<!--                                <field name="feedback"-->
+<!--                                    readonly="state not in ['rejected']"/>-->
+<!--                            </group>-->
+<!--                        </page>-->
+                        <page string="Tracking"
+                              name="quality_control_peer_tracking">
+                            <field name="quality_control_peer_tracking_ids"
+                                   options="{'no_create_edit': True, 'no_quick_create': True, 'no_open': True}">
+                                <list editable="bottom" create="0" edit="0">
+                                    <field name="user_id"/>
+                                    <field name="previous_stage_id"/>
+                                    <field name="new_stage_id"/>
+                                    <field name="comment"/>
+                                    <field name="date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="quality_control_peer_view_tree" model="ir.ui.view">
+        <field name="name">quality.control.peer.view.tree</field>
+        <field name="model">quality.control.peer</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="sequence_no"/>
+                <field name="requirements"/>
+                <field name="team_id"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('preparer')"
+                       decoration-warning="state in ('rejected')"
+                       decoration-success="state in ('approved')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_quality_control_outsourced_peer"
+            model="ir.actions.act_window">
+        <field name="name">Quality Control - Outsourced Peer Review</field>
+        <field name="res_model">quality.control.outsourced.peer</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Quality Control
+            </p>
+            <p>
+                Create and manage the Quality Control - Internal Peer Review;
+            </p>
+        </field>
+    </record>
+    <record id="quality_control_outsourced_peer_view_form" model="ir.ui.view">
+        <field name="name">quality.control.outsourced.peer.view.form</field>
+        <field name="model">quality.control.outsourced.peer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                            invisible="state != 'preparer' or uid not in user_reviewer_1_ids"
+                            string="Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object" invisible="state != 'first_reviewer' or uid not in user_reviewer_2_ids" string="2nd Review" class="oe_highlight"/>
+                    <button name="action_approve" type="object"
+                            invisible="state != 'second_reviewer' or uid not in user_approver_ids"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_mark_discrepancy" type="object"
+                            invisible="state in ['reverted', 'rejected']"
+                            string="Refuse"/>
+                    <button name="action_send_back_review" type="object"
+                            invisible="state in ['rejected', 'reverted', 'preparer','approved']"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_send_back_new" type="object"
+                            invisible="state != 'rejected'"
+                            string="Move To New" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"
+                                   readonly="state in ['approved', 'rejected']"/>
+                            <field name="sequence_no"/>
+                            <field name="requirements"
+                                   readonly="state in ['approved', 'rejected']" style="height: 105px;"/>
+                            <field name="user_id"
+                                   readonly="state in ['approved', 'rejected']" invisible="1"/>
+                            <field name="record_work_done" style="height: 105px;"/>
+                            <field name="conclusion" style="height: 105px;"/>
+                            <field name="folder_id" invisible="1"/>
+                        </group>
+                        <group>
+<!--                            <field name="team_id"-->
+<!--                                   readonly="state in ['approved', 'rejected']"/>-->
+                            <field name="user_preparer_ids" widget="many2many_avatar_user"/>
+<!--                            <field name="user_reviewer_1_ids" widget="many2many_avatar_user"/>-->
+<!--                            <field name="user_reviewer_2_ids" widget="many2many_avatar_user"/>-->
+<!--                            <field name="user_approver_ids" widget="many2many_avatar_user"/>-->
+                            <field name="user_ids" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Upload Outsourced Peer Review Documents">
+                            <group>
+                                <group>
+                                    <field name="attachment_ids"
+                                           widget="many2many_binary"
+                                           readonly="state in ['approved', 'rejected']"/>
+                                </group>
+                                <group>
+                                    <button name="action_view_documents"
+                                            invisible="not attachment_ids"
+                                            type="object" icon="fa-file-text-o"
+                                            string="Open Documents"/>
+
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Documents">
+                            <group>
+                                <group>
+                                    <field name="document_ids"
+                                           widget="many2many_binary">
+                                    </field>
+                                </group>
+                                <group>
+                                    <button name="action_view_documents"
+                                            invisible="not document_ids"
+                                            type="object" icon="fa-file-text-o"
+                                            string="Open Documents"/>
+
+                                </group>
+                            </group>
+                        </page>
+<!--                        <page string="Feedback">-->
+<!--                            <group>-->
+<!--                                <field name="feedback"-->
+<!--                                    readonly="state not in ['rejected']"/>-->
+<!--                            </group>-->
+<!--                        </page>-->
+                        <page string="Comments">
+                            <field name="comments" style="height: 225px;"/>
+                        </page>
+                        <page string="Tracking"
+                              name="quality_control_outsourced_peer_tracking">
+                            <field name="quality_control_outsourced_peer_tracking_ids"
+                                   options="{'no_create_edit': True, 'no_quick_create': True, 'no_open': True}">
+                                <list editable="bottom" create="0" edit="0">
+                                    <field name="user_id"/>
+                                    <field name="previous_stage_id"/>
+                                    <field name="new_stage_id"/>
+                                    <field name="comment"/>
+                                    <field name="date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="quality_control_outsourced_peer_view_tree" model="ir.ui.view">
+        <field name="name">quality.control.outsourced.peer.view.tree</field>
+        <field name="model">quality.control.outsourced.peer</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="sequence_no"/>
+                <field name="requirements"/>
+                <field name="team_id"/>
+                <!--                <field name="role_id"/>-->
+                <field name="state" widget="badge"
+                       decoration-info="state in ('preparer')"
+                       decoration-warning="state in ('reverted')"
+                       decoration-success="state in ('approved')"/>
+            </list>
+        </field>
+    </record>
+<!--    <menuitem id="high_quality_control_peer_menu"-->
+<!--              name="Quality Control - Internal Peer Review"-->
+<!--              parent="internal_audit_management.high_level_documents_menu"-->
+<!--              action="action_quality_control_peer"-->
+<!--              sequence="16"/>-->
+<!--    <menuitem id="high_quality_control_outsourced_peer_menu"-->
+<!--              name="Quality Control - Outsourced Peer Review"-->
+<!--              parent="internal_audit_management.high_level_documents_menu"-->
+<!--              action="action_quality_control_outsourced_peer"-->
+<!--              sequence="18"/>-->
+</odoo>

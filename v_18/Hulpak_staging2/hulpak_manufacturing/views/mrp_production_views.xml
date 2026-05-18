@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="mrp_production_form_view" model="ir.ui.view">
+        <field name="name">mrp.production.view.form</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_cancel']" position="after">
+                <button name="action_mark_as_done" type="object" string="Mark as Done"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <record id="mrp_production_form_view_inherit" model="ir.ui.view">
+        <field name="name">mrp.production.view.form.inherit</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/div[not(@name)][2]" position="after">
+                <field name="x_studio_case"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mrp_production_search_view" model="ir.ui.view">
+        <field name="name">mrp.production.search</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='name']" position="before">
+                <field name="lot_producing_id"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+

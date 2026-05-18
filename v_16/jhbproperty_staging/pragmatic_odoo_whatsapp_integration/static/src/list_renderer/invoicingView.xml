@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<!--t-if="message.author === env.messaging.currentPartner" style="margin: 0px 200px 0px;" -->
+    <t t-name="basic.invoicingView" owl="1">
+        <div>
+            <h1>Products</h1>
+        </div>
+        <div name="root" style="display: -webkit-box; flex-flow: row wrap;">
+            <script>
+                function dragStartImg (ev) {
+                    console.log(ev);
+                    console.log(ev.target.innerHTML);
+                    ev.dataTransfer.setData("text",  ev.target.id);
+                    ev.dataTransfer.effectAllowed = "copy";
+                }
+                function dragStartInvoice (ev) {
+                    console.log(ev);
+                    console.log(ev.target.firstElementChild.innerHTML);
+                    ev.dataTransfer.setData("text",  (ev.target.childNodes[1].innerText + " "+ev.target.childNodes[2].innerText + " "+ev.target.childNodes[3].innerText + " "+ev.target.childNodes[4].innerText + " "+ev.target.childNodes[5].innerText + " Report: "+ ev.target.childNodes[7].firstElementChild.firstElementChild.href));
+                    ev.dataTransfer.effectAllowed = "copy";
+                }
+            </script>
+            <t t-if="invoicingView">
+                <div class="o_list_view o_sale_order o_list_optional_columns">
+                    <div class="table-responsive">
+                        <table class="o_list_table table table-sm table-hover table-striped o_list_table_ungrouped" style="table-layout: fixed;">
+                            <thead>
+                                <tr>
+                                    <th class="o_list_record_selector" style="width: 40px;">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" id="checkbox-15" class="custom-control-input"/>
+                                            <label for="checkbox-15" class="custom-control-label">​</label>
+                                        </div>
+                                    </th>
+                                    <th data-name="name" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 99px;">
+                                        Number
+                                        <span class="o_resize"></span>
+                                    </th>
+                                    <th data-name="invoice_date" class="o_date_cell o_column_sortable" tabindex="-1" data-original-title="" title="" style="min-width: 92px; width: 119px;">
+                                        Invoice Date
+                                        <span class="o_resize"></span>
+                                    </th>
+                                    <th data-name="partner_id" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 90px;">
+                                        Customer<span class="o_resize"></span>
+                                    </th>
+                                    <th data-name="invoice_payment_term_id" class="o_many2one_avatar_user_cell o_column_sortable" tabindex="-1" data-original-title="" title="" style="width: 120px;">
+                                        Due Date<span class="o_resize"></span>
+                                    </th>
+                                    <th data-name="amount_total_in_currency_signed" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 80px;">
+                                        Total<span class="o_resize"></span>
+                                    </th>
+                                    <th data-name="state" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 95px;">
+                                        Status<span class="o_resize"></span>
+                                    </th>
+                                    <!-- <th data-name="activity_ids" class="o_list_activity_cell" tabindex="-1" data-original-title="" title="" style="width: 316px;">
+                                        Next Activity<span class="o_resize"></span>
+                                    </th> -->
+                                </tr>
+                            </thead>
+                            <tbody class="ui-sortable" t-foreach="invoicingView" t-as="record" t-key="record.id">
+                                <!-- <div t-foreach="SalesViews" t-as="record" t-key="record.id"> -->
+                                    <tr class="o_data_row" t-attf-data-id="account.move_{{record.id}}" draggable="true" ondragstart="dragStartInvoice(event)">
+                                        <td class="o_list_record_selector">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" t-attf-id="checkbox-invoicing-{{record.id}}" class="custom-control-input"/>
+                                                <label t-attf-for="checkbox-invoicing-{{record.id}}" class="custom-control-label">​</label>
+                                            </div>
+                                        </td>
+                                        <td class="o_data_cell o_field_cell o_list_char o_readonly_modifier o_required_modifier font-weight-bold" tabindex="-1" t-att-title="record.name" name="name">
+                                            <t t-esc="record.name"/>
+                                        </td>
+                                        <td class="o_data_cell o_field_cell o_date_cell o_readonly_modifier" tabindex="-1">
+                                            <span class="o_field_date o_field_widget o_quick_editable o_readonly_modifier" name="invoice_date"><t t-esc="record.invoice_date"/></span>
+                                        </td>
+                                        <td class="o_data_cell o_field_cell o_list_many2one o_readonly_modifier o_required_modifier" tabindex="-1" t-att-title="record.partner_id[1]" name="partner_id"><t t-esc="record.partner_id[1]"/></td>
+                                        <td class="o_data_cell o_field_cell o_list_many2one o_many2one_avatar_user_cell" tabindex="-1">
+                                            <span><t t-esc="record.invoice_payment_term_id[1]"/></span>
+                                        </td>
+                                        <!-- <td class="o_data_cell o_field_cell o_list_activity_cell" tabindex="-1">
+                                            <div class="o_kanban_inline_block dropdown o_mail_activity o_field_widget" name="activity_ids">
+                                                <a class="dropdown-toggle o-no-caret o_activity_btn" data-boundary="viewport" data-flip="false" data-toggle="dropdown" role="button">                               
+                                                    <span title="Overdue" role="img" class="fa fa-lg fa-fw o_activity_color_overdue fa-tasks"></span>
+                                                </a>
+                                                <div class="dropdown-menu o_activity" role="menu"></div>
+                                                <span class="o_activity_summary">Check delivery requirements</span>
+                                            </div>
+                                        </td> -->
+                                        <td class="o_data_cell o_field_cell o_list_number o_monetary_cell o_readonly_modifier" tabindex="-1">
+                                            <span class="o_field_monetary o_field_number o_field_widget o_quick_editable text-bf o_readonly_modifier" name="amount_total_in_currency_signed">
+                                                <t t-if="record.currency_id"><t t-esc="record.currency_symbol"/></t><t t-esc="record.amount_total_in_currency_signed"/>
+                                            </span>
+                                        </td>
+                                        <td class="o_data_cell o_field_cell o_badge_cell o_readonly_modifier" tabindex="-1">
+                                            <span class="badge badge-pill o_field_badge o_field_widget o_readonly_modifier bg-success-light" name="state"><t t-esc="record.state"/></span>
+                                        </td>
+                                        <td class="o_data_cell o_field_cell o_badge_cell o_readonly_modifier" tabindex="-1">
+                                            <div aria-label="Preview" tabindex="0" data-mimetype="application/pdf" class="o_AttachmentCard_image o_image o-attachment-viewable" 
+                                            draggable="true" ondragstart="dragStartPDF(event)" style="background-image: url(/web/static/img/mimetypes/pdf.svg); max-height: 19px; max-width: 14px; margin: 0px;">
+                                                <a t-attf-href="/report/pdf/account.report_invoice_with_payments/{{record.id}}"></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <!-- </div> -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td class="name"></td>
+                                    <td class="create_date"></td>
+                                    <td class="partner_id"></td>
+                                    <td class="user_id"></td>
+                                    <td class="activity_ids"></td>
+                                    <td class="company_id"></td>
+                                    <td class="amount_total o_list_number" title="Total Tax Included">12,537.90</td>
+                                    <td class="state"></td>
+                                </tr>
+                            </tfoot>
+                            <i class="o_optional_columns_dropdown_toggle fa fa-ellipsis-v"></i>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

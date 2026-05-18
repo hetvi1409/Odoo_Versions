@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_grave_grave_form" model="ir.ui.view">
+        <field name="name">grave.grave.form</field>
+        <field name="model">grave.grave</field>
+        <field name="arch" type="xml">
+            <form string="Grave">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="municipality_id"/>
+                            <field name="cemetery_id"/>
+                            <field name="section_id" domain="[('cemetery_id', '=', cemetery_id)]"/>
+                            <field name="occupied" widget="boolean_toggle"/>
+                            <field name="category"/>
+                            <field name="surveyor_general_number"/>
+                            <field name="in_use"/>
+                            <field name="rented"/>
+                            <field name="grave_rental_value" invisible="not rented"/>
+                            <field name="purchased"/>
+                            <field name="grave_purchase_value" invisible="not purchased"/>
+                            <field name="re_use" invisible="in_use != True"/>
+                        </group>
+                        <group>
+                            <field name="number"/>
+                            <field name="grave_type" widget="radio"/>
+                            <field name="company_id"/>
+                            <field name="lease_id"/>
+                            <field name="date_initial_use"/>
+                            <field name="burial_type"/>
+                            <field name="tasks"/>
+                            <field name="images" widget="image"/>
+                            <field name="documents" widget="binary"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Person Details" invisible="in_use != True">
+                            <field name="person_details_ids">
+                                <list create="0">
+                                    <field name="surname"/>
+                                    <field name="date_of_birth" />
+                                    <field name="date_of_death"/>
+                                    <field name="age"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_grave_grave_tree" model="ir.ui.view">
+        <field name="name">grave.grave.list</field>
+        <field name="model">grave.grave</field>
+        <field name="arch" type="xml">
+            <list string="Grave Records">
+                <field name="name"/>
+                <field name="number"/>
+                <field name="section_id"/>
+                <field name="grave_type"/>
+                <field name="category"/>
+                <field name="occupied"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_grave_grave" model="ir.actions.act_window">
+        <field name="name">Graves</field>
+        <field name="res_model">grave.grave</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

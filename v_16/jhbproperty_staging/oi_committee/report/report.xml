@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="report_committee_meeting">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="web.internal_layout">
+					<div class="page" style="border:3px solid ;height:1070px;page-break-inside: avoid;">
+						<style>
+							.o_signature_seg {
+								height : 50px;
+							}
+							thead tr th {
+								background-color : whitesmoke;
+								text-align : center;
+							}
+							.no_page_break {
+								page-break-inside : avoid;
+							}
+						</style>						
+						<br/>
+						<p class="text-center h2"><span t-esc="o.subject" /></p>			
+						<br/>
+						<br/>
+						<p style="margin-left: 40px;">
+							Description: 
+							<br/>
+							<span t-field="o.description" />
+						</p>				
+						<div name="report" style="margin-left: 40px;">
+							Report: <t t-raw="o.report" />
+						</div>
+						<br/>
+						<br/>
+						<div class="no_page_break">
+							<p class="text-center">Committee members</p>
+							<t t-set="rowcount" t-value="int(len(o.attendance_ids)/3)+1" />
+							<div class="row" t-foreach="range(rowcount)" t-as="rownum">
+								<t t-set="index" t-value="rownum * 3" />
+								<div class="col-4" t-foreach="o.attendance_ids[index: index + 3]" t-as="member">
+									<table class="table table-bordered" style="width:77%;border: 1px solid black;  margin-left: 40px;margin-right: 40px;">
+										<thead style="background-color:#ebf0f9;text-align: center;">
+											<tr>
+												<th><span t-field="member.member_type" /></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td class="text-center"><span t-field="member.employee_id.name" /></td>
+											</tr>										
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>		
+			
+	<record id="action_report_committee_meeting" model="ir.actions.report">
+		<field name="name">Meeting Report</field>
+		<field name="model">committee.meeting</field>
+		<field name="report_type">qweb-pdf</field>
+		<field name="report_name">oi_committee.report_committee_meeting</field>
+		<field name="report_file">oi_committee.report_committee_meeting</field>
+	</record>
+	
+</odoo>

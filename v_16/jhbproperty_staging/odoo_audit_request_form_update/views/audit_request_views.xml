@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <menuitem id="odoo_audit_request_form.custom_audit_request_main_menu_root"
+                web_icon="odoo_audit_request_form_update,static/description/icon.png"
+              name="Internal Audit"/>
+    <menuitem id="odoo_audit_request_form.custom_audit_request_menu_probc" name="Audit Requests" parent="odoo_audit_request_form.custom_audit_request_main_menu_root"/>
+<!--        action="odoo_audit_request_form.custom_action_audit_request_type_probc" sequence="2"/>-->
+    <menuitem id="odoo_audit_request_form.custom_audit_request_configuration_menu" name="Configuration" parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+        groups="odoo_audit_request_form.custom_group_audit_approve_probc" sequence="20"/>
+
+
+    <record id="custom_audit_category_view_graph_analysis" model="ir.ui.view">
+        <field name="name">custom.audit.request.view.graph</field>
+        <field name="model">custom.audit.request</field>
+        <field name="arch" type="xml">
+            <graph string="Audit Category" sample="1" stacked="0">
+                <field name="audit_category_id"/>
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+    <record id="custom_audit_category_view_pivot__analysis" model="ir.ui.view">
+        <field name="name">custom.audit.request.view.pivot</field>
+        <field name="model">custom.audit.request</field>
+        <field name="arch" type="xml">
+            <pivot string="Audit Category" >
+                <field name="audit_category_id" type="row"/>
+                <field name="state" type="row"/>
+                <field name="create_date" interval="month" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_custom_audit_request_report"
+            model="ir.actions.act_window">
+        <field name="name">Audit</field>
+        <field name="res_model">custom.audit.request</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No data found!
+            </p>
+            <p>
+                This analysis shows you how many audit have been created.
+            </p>
+        </field>
+        <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'graph', 'view_id': ref('custom_audit_category_view_graph_analysis')}),
+                          (0, 0, {'view_mode': 'pivot', 'view_id': ref('custom_audit_category_view_pivot__analysis')})
+                          ]"/>
+    </record>
+
+    <menuitem id="custom_audit_request_menu_reporting"
+              name="Reporting"
+              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+              sequence="10"/>
+    <menuitem id="custom_audit_request_menu_reporting_graph"
+              name="Performance Report"
+              action="odoo_audit_request_form_update.action_custom_audit_request_report"
+              parent="odoo_audit_request_form_update.custom_audit_request_menu_reporting"
+              sequence="10"/>
+
+
+</odoo>

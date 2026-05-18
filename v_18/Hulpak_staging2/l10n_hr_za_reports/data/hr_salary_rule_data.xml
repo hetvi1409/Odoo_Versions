@@ -1,0 +1,304 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="l10n_za_uif_rule" model="hr.salary.rule">
+        <field name="name">UIF</field>
+        <field name="category_id" ref="l10n_hr_za_reports.TAX"/>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_salary"/>
+        <field name="code">UIF</field>
+        <field name="sequence">101</field>
+        <field name="active" eval="True"/>
+        <field name="appears_on_payslip" eval="True"/>
+        <field name="appears_on_employee_cost_dashboard" eval="True"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+UIF= result_rules['GROSS']['total'] * payslip._rule_parameter('UIF_Percent')/100
+if UIF >= payslip._rule_parameter('UIF_UL') : r = payslip._rule_parameter('UIF_UL')
+else : r = UIF
+result = -r
+        </field>
+    </record>
+
+    <record id="l10n_za_paye_rule" model="hr.salary.rule">
+        <field name="name">PAYE</field>
+        <field name="category_id" ref="l10n_hr_za_reports.TAX"/>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_salary"/>
+        <field name="code">PAYE</field>
+        <field name="sequence">110</field>
+        <field name="active" eval="True"/>
+        <field name="appears_on_payslip" eval="True"/>
+        <field name="appears_on_employee_cost_dashboard" eval="True"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+brackets = [
+    (payslip._rule_parameter('PAYE01_LL'),payslip._rule_parameter('PAYE01_UL'),payslip._rule_parameter('PAYE01_Percent')),
+    (payslip._rule_parameter('PAYE02_LL'),payslip._rule_parameter('PAYE02_UL'),payslip._rule_parameter('PAYE02_Percent')),
+    (payslip._rule_parameter('PAYE03_LL'),payslip._rule_parameter('PAYE03_UL'),payslip._rule_parameter('PAYE03_Percent')),
+    (payslip._rule_parameter('PAYE04_LL'),payslip._rule_parameter('PAYE04_UL'),payslip._rule_parameter('PAYE04_Percent')),
+    (payslip._rule_parameter('PAYE05_LL'),payslip._rule_parameter('PAYE05_UL'),payslip._rule_parameter('PAYE05_Percent')),
+    (payslip._rule_parameter('PAYE06_LL'),payslip._rule_parameter('PAYE06_UL'),payslip._rule_parameter('PAYE06_Percent')),
+]
+today=date.today()
+
+born= employee.birthday
+if (employee.birthday ==""): born=date.today()
+
+age = today.year - born.year - ((today.month, today.day) &lt; (born.month, born.day))
+tax_rebate=0
+if (age >= payslip._rule_parameter('PAYE_Retirement_03')): tax_rebate = payslip._rule_parameter('PAYE_Retirement_03_Amount')
+elif (age >= payslip._rule_parameter('PAYE_Retirement_02')) : tax_rebate = payslip._rule_parameter('PAYE_Retirement_02_Amount')
+else : tax_rebate = payslip._rule_parameter('PAYE_Retirement_01_Amount')
+
+total_tax = 0
+taxable_income=result_rules['GROSS']['total']*12
+
+for bracket_ll, bracket_ul, rate in brackets:
+    if taxable_income > bracket_ul:
+            total_tax += (bracket_ul - bracket_ll + 1) * rate
+    elif taxable_income > bracket_ll:
+            total_tax += (taxable_income - bracket_ll + 1) * rate
+            break
+
+# Apply the highest rate for the remaining income
+if taxable_income > payslip._rule_parameter('PAYE07_LL'):
+    total_tax += (taxable_income - payslip._rule_parameter('PAYE07_LL') + 1) * payslip._rule_parameter('PAYE07_Percent')
+
+total_rebate=total_tax - tax_rebate
+if total_rebate &lt;= 0: result=0
+else: result= -total_rebate/12
+        </field>
+    </record>
+
+    <record id="l10n_za_uif_employer_rule" model="hr.salary.rule">
+        <field name="name">UIF Employer</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_salary"/>
+        <field name="code">UIF_Employer</field>
+        <field name="sequence">215</field>
+        <field name="active" eval="True"/>
+        <field name="appears_on_payslip" eval="True"/>
+        <field name="appears_on_employee_cost_dashboard" eval="True"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+UIF_Employer= result_rules['GROSS']['total'] * payslip._rule_parameter('UIF_Percent')/100
+if UIF_Employer >= payslip._rule_parameter('UIF_UL'): r = payslip._rule_parameter('UIF_UL')
+else : r = UIF_Employer
+result = -r
+        </field>
+    </record>
+
+    <record id="l10n_za_sdl_rule" model="hr.salary.rule">
+        <field name="name">SDL</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_salary"/>
+        <field name="code">SDL</field>
+        <field name="sequence">220</field>
+        <field name="active" eval="True"/>
+        <field name="appears_on_payslip" eval="True"/>
+        <field name="appears_on_employee_cost_dashboard" eval="True"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = -categories['BASIC'] * payslip._rule_parameter('SDL_Percent')/100
+        </field>
+    </record>
+
+    <record id="default_non_tax_deduction_rule" model="hr.salary.rule">
+        <field name="category_id" ref="l10n_hr_za_reports.NON_TAX_DEDUCTION"/>
+        <field name="name">Non Tax Deduction</field>
+        <field name="sequence">230</field>
+        <field name="code">NON_TAX_DEDUCTION</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = 'NON_TAX_DEDUCTION' in inputs</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = -inputs['NON_TAX_DEDUCTION'].amount
+result_name = inputs['NON_TAX_DEDUCTION'].name
+        </field>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_salary"/>
+    </record>
+
+    <record id="default_non_tax_income_rule" model="hr.salary.rule">
+        <field name="category_id" ref="l10n_hr_za_reports.NON_TAX_INCOME"/>
+        <field name="name">Non Tax Income</field>
+        <field name="sequence">240</field>
+        <field name="code">NON_TAX_INCOME</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = 'NON_TAX_INCOME' in inputs</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = inputs['NON_TAX_INCOME'].amount
+result_name = inputs['NON_TAX_INCOME'].name
+        </field>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_salary"/>
+    </record>
+
+    <record id="l10n_za_net_salary" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.NET"/>
+        <field name="name">Net Salary</field>
+        <field name="sequence">200</field>
+        <field name="code">NET</field>
+        <field name="active" eval="True"/>
+        <field name="appears_on_payslip" eval="True"/>
+        <field name="appears_on_employee_cost_dashboard">True</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = categories['BASIC'] + categories['ALW'] + categories['DED'] + categories['TAX']
+        </field>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_salary"/>
+    </record>
+
+    <record id="l10n_za_uif_weekly_rule" model="hr.salary.rule">
+        <field name="name">UIF</field>
+        <field name="category_id" ref="l10n_hr_za_reports.TAX"/>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_wage"/>
+        <field name="code">UIF</field>
+        <field name="sequence">101</field>
+        <field name="active" eval="True"/>
+        <field name="appears_on_payslip" eval="True"/>
+        <field name="appears_on_employee_cost_dashboard" eval="True"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+UIF= result_rules['GROSS']['total'] * payslip._rule_parameter('UIF_Percent')/100
+if UIF >=  (payslip._rule_parameter('UIF_UL_Weekly')) : r = payslip._rule_parameter('UIF_UL_Weekly')
+else : r = UIF
+result = -r
+        </field>
+    </record>
+
+    <record id="l10n_za_paye_weekly_rule" model="hr.salary.rule">
+        <field name="name">PAYE</field>
+        <field name="category_id" ref="l10n_hr_za_reports.TAX"/>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_wage"/>
+        <field name="code">PAYE</field>
+        <field name="sequence">110</field>
+        <field name="active" eval="True"/>
+        <field name="appears_on_payslip" eval="True"/>
+        <field name="appears_on_employee_cost_dashboard" eval="True"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+brackets = [
+    (payslip._rule_parameter('PAYE01_LL'),payslip._rule_parameter('PAYE01_UL'),payslip._rule_parameter('PAYE01_Percent')),
+    (payslip._rule_parameter('PAYE02_LL'),payslip._rule_parameter('PAYE02_UL'),payslip._rule_parameter('PAYE02_Percent')),
+    (payslip._rule_parameter('PAYE03_LL'),payslip._rule_parameter('PAYE03_UL'),payslip._rule_parameter('PAYE03_Percent')),
+    (payslip._rule_parameter('PAYE04_LL'),payslip._rule_parameter('PAYE04_UL'),payslip._rule_parameter('PAYE04_Percent')),
+    (payslip._rule_parameter('PAYE05_LL'),payslip._rule_parameter('PAYE05_UL'),payslip._rule_parameter('PAYE05_Percent')),
+    (payslip._rule_parameter('PAYE06_LL'),payslip._rule_parameter('PAYE06_UL'),payslip._rule_parameter('PAYE06_Percent')),
+]
+today=date.today()
+
+born= employee.birthday
+if (employee.birthday ==""): born=date.today()
+
+age = today.year - born.year - ((today.month, today.day) &lt; (born.month, born.day))
+tax_rebate=0
+if (age >= payslip._rule_parameter('PAYE_Retirement_03')): tax_rebate = payslip._rule_parameter('PAYE_Retirement_03_Amount')
+elif (age >= payslip._rule_parameter('PAYE_Retirement_02')) : tax_rebate = payslip._rule_parameter('PAYE_Retirement_02_Amount')
+else : tax_rebate = payslip._rule_parameter('PAYE_Retirement_01_Amount')
+
+total_tax = 0
+taxable_income=result_rules['GROSS']['total']*52
+
+for bracket_ll, bracket_ul, rate in brackets:
+    if taxable_income > bracket_ul:
+            total_tax += (bracket_ul - bracket_ll + 1) * rate
+    elif taxable_income > bracket_ll:
+            total_tax += (taxable_income - bracket_ll + 1) * rate
+            break
+
+# Apply the highest rate for the remaining income
+if taxable_income > payslip._rule_parameter('PAYE07_LL'):
+    total_tax += (taxable_income - payslip._rule_parameter('PAYE07_LL') + 1) * payslip._rule_parameter('PAYE07_Percent')
+
+total_rebate=total_tax - tax_rebate
+if total_rebate &lt;= 0: result=0
+else: result= -total_rebate/52
+        </field>
+    </record>
+
+    <record id="l10n_za_uif_employer_weekly_rule" model="hr.salary.rule">
+        <field name="name">UIF Employer</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_wage"/>
+        <field name="code">UIF_Employer</field>
+        <field name="sequence">215</field>
+        <field name="active" eval="True"/>
+        <field name="appears_on_payslip" eval="True"/>
+        <field name="appears_on_employee_cost_dashboard" eval="True"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+UIF_Employer= result_rules['GROSS']['total'] * payslip._rule_parameter('UIF_Percent')/100
+if (UIF_Employer*4) >= payslip._rule_parameter('UIF_UL') : r = payslip._rule_parameter('UIF_UL') / 4
+else : r = UIF_Employer
+result = -r
+        </field>
+    </record>
+
+    <record id="l10n_za_sdl_weekly_rule" model="hr.salary.rule">
+        <field name="name">SDL</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_wage"/>
+        <field name="code">SDL</field>
+        <field name="sequence">220</field>
+        <field name="active" eval="True"/>
+        <field name="appears_on_payslip" eval="True"/>
+        <field name="appears_on_employee_cost_dashboard" eval="True"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = -(categories['BASIC'] * payslip._rule_parameter('SDL_Percent')/100)
+        </field>
+    </record>
+
+    <record id="default_non_tax_deduction_weekly_rule" model="hr.salary.rule">
+        <field name="category_id" ref="l10n_hr_za_reports.NON_TAX_DEDUCTION"/>
+        <field name="name">Non Tax Deduction</field>
+        <field name="sequence">230</field>
+        <field name="code">NON_TAX_DEDUCTION</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = 'NON_TAX_DEDUCTION' in inputs</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = -inputs['NON_TAX_DEDUCTION'].amount
+result_name = inputs['NON_TAX_DEDUCTION'].name
+        </field>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_wage"/>
+    </record>
+
+    <record id="default_non_tax_income_weekly_rule" model="hr.salary.rule">
+        <field name="category_id" ref="l10n_hr_za_reports.NON_TAX_INCOME"/>
+        <field name="name">Non Tax Income</field>
+        <field name="sequence">240</field>
+        <field name="code">NON_TAX_INCOME</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = 'NON_TAX_INCOME' in inputs</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = inputs['NON_TAX_INCOME'].amount
+result_name = inputs['NON_TAX_INCOME'].name
+        </field>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_wage"/>
+    </record>
+
+    <record id="l10n_za_net_salary_weekly" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.NET"/>
+        <field name="name">Net Salary</field>
+        <field name="sequence">200</field>
+        <field name="code">NET</field>
+        <field name="active" eval="True"/>
+        <field name="appears_on_payslip" eval="True"/>
+        <field name="appears_on_employee_cost_dashboard">True</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = categories['BASIC'] + categories['ALW'] + categories['DED'] + categories['TAX']
+        </field>
+        <field name="struct_id" ref="l10n_hr_za_reports.hr_payroll_structure_za_wage"/>
+    </record>
+</odoo>

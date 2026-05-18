@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="module_category_property_intelligence" model="ir.module.category">
+        <field name="name">Property Intelligence</field>
+        <field name="description">User access levels for management roles</field>
+        <field name="sequence">10</field>
+    </record>
+    <record model="res.groups.privilege" id="res_groups_privilege_property_intelligence">
+        <field name="name">Property Intelligence</field>
+        <field name="sequence">10</field>
+        <field name="category_id" ref="module_category_property_intelligence"/>
+    </record>
+    <!-- Manager Group -->
+    <record id="group_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="privilege_id" ref="res_groups_privilege_property_intelligence"/>
+    </record>
+
+    <!-- Senior Manager Group -->
+    <record id="group_senior_manager" model="res.groups">
+        <field name="name">Senior Manager</field>
+        <field name="privilege_id" ref="res_groups_privilege_property_intelligence"/>
+        <field name="implied_ids" eval="[(4, ref('property_intelligence.group_manager'))]"/>
+    </record>
+
+    <!-- General Manager Group -->
+    <record id="group_general_manager" model="res.groups">
+        <field name="name">General Manager</field>
+        <field name="privilege_id" ref="res_groups_privilege_property_intelligence"/>
+        <field name="implied_ids" eval="[(4, ref('property_intelligence.group_senior_manager'))]"/>
+    </record>
+</odoo>

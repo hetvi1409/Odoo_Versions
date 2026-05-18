@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_rs" model="ir.ui.view">
+    <field name="name">res.config.settings.view.form.inherit.rs</field>
+    <field name="model">res.config.settings</field>
+    <field name="priority" eval="70"/>
+    <field name="inherit_id" ref="mail.res_config_settings_view_form"/>
+    <field name="arch" type="xml">
+
+        <xpath expr="//form" position="inside">
+
+            <!-- Real Estate APP -->
+            <app data-string="Real Estate" string="Real Estate" name="itsys_real_estate">
+
+                <!-- Reservations Block -->
+                <block title="Reservations">
+                    <setting string="Reservation Hours"
+                             help="Set here number of hours to release units reservation">
+                        <field name="reservation_hours"/>
+                    </setting>
+                </block>
+
+                <!-- Ownership Contracts Block -->
+                <block title="Ownership Contracts">
+                    <setting string="Contracts Income Account"
+                             help="Set default Income Account for properties">
+                        <field name="income_account"
+                               options="{'no_create_edit': True, 'no_open': True}"
+                               context="{'active_test': False}"/>
+                    </setting>
+                </block>
+
+                <!-- Rental Contracts Block -->
+                <block title="Rental Contracts">
+
+                    <setting string="Security Deposit"
+                             help="Set default Security Deposit account for properties">
+                        <field name="security_deposit_account"
+                               options="{'no_create_edit': True, 'no_open': True}"
+                               context="{'active_test': False}"/>
+                    </setting>
+
+                    <setting string="Revenue"
+                             help="Revenue Account used in contracts">
+                        <field name="revenue_account"
+                               options="{'no_create_edit': True, 'no_open': True}"
+                               context="{'active_test': False}"/>
+                    </setting>
+
+                </block>
+
+            </app>
+
+        </xpath>
+
+    </field>
+</record>
+
+
+    <record id="action_real_estate_config" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'module' : 'itsys_real_estate'}</field>
+    </record>
+
+    <menuitem id="menu_real_estate_config"
+              name="Settings" parent="itsys_real_estate.menu_settings"
+              sequence="1000"
+              groups="base.group_system"
+              action="action_real_estate_config"/>
+
+</odoo>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="outlook_link" model="project.dashboard.link">
+            <field name="name">Outlook</field>
+            <field name="url">https://outlook.office.com/owa/</field>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="icon" type="base64" file="project_porfolio_management/static/image/outlook.png"/>
+            <field name="is_default" eval="True"/>
+        </record>
+        <record id="teams_link" model="project.dashboard.link">
+            <field name="name">Teams</field>
+            <field name="url">https://aka.ms/mstfw</field>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="icon" type="base64" file="project_porfolio_management/static/image/teams.png"/>
+            <field name="is_default" eval="True"/>
+        </record>
+<!--        <record id="ppo_link" model="project.dashboard.link">-->
+<!--            <field name="name">What's New in PPO</field>-->
+<!--            <field name="url">https://www.odoo.com/sl_SI/app/elearning-features/</field>-->
+<!--            <field name="user_id" ref="base.user_admin"/>-->
+<!--            <field name="icon" type="base64" file="project_porfolio_management/static/image/ppo.png"/>-->
+<!--            <field name="is_default" eval="True"/>-->
+<!--        </record>-->
+<!--        <record id="online_training_link" model="project.dashboard.link">-->
+<!--            <field name="name">Online Training</field>-->
+<!--            <field name="url">https://www.odoo.com/sl_SI/slides/all/</field>-->
+<!--            <field name="user_id" ref="base.user_admin"/>-->
+<!--            <field name="icon" type="base64" file="project_porfolio_management/static/image/online_training.png"/>-->
+<!--            <field name="is_default" eval="True"/>-->
+<!--        </record>-->
+        <record id="calender_link" model="project.dashboard.link">
+            <field name="name">Calender</field>
+            <field name="url">/odoo/calendar</field>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="icon" type="base64" file="project_porfolio_management/static/image/calender.png"/>
+            <field name="is_default" eval="True"/>
+        </record>
+        <record id="discuss_link" model="project.dashboard.link">
+            <field name="name">Discuss</field>
+            <field name="url">/odoo/discuss</field>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="icon" type="base64" file="project_porfolio_management/static/image/discuss.png"/>
+            <field name="is_default" eval="True"/>
+        </record>
+        <record id="reminder_link" model="project.dashboard.link">
+            <field name="name">Reminder</field>
+            <field name="url">/odoo/action-calendar.action_calendar_alarm</field>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="icon" type="base64" file="project_porfolio_management/static/image/reminder.png"/>
+            <field name="is_default" eval="True"/>
+        </record>
+
+        <record id="project.group_project_user" model="res.groups">
+            <field name="name">Project Team Members</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="base.module_category_services_project"/>
+        </record>
+
+        <record id="group_ppo_manager" model="res.groups">
+            <field name="name">Project Managers</field>
+            <field name="implied_ids" eval="[(4, ref('project.group_project_user'))]"/>
+            <field name="category_id" ref="base.module_category_services_project"/>
+        </record>
+
+        <record id="group_ppo_executives" model="res.groups">
+            <field name="name">Project Executives</field>
+            <field name="implied_ids" eval="[(4, ref('project_porfolio_management.group_ppo_manager'))]"/>
+            <field name="category_id" ref="base.module_category_services_project"/>
+        </record>
+
+        <record id="project.group_project_manager" model="res.groups">
+            <field name="name">PPO Administrators</field>
+            <field name="category_id" ref="base.module_category_services_project"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('project_porfolio_management.group_ppo_executives')), (4, ref('mail.group_mail_canned_response_admin'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+    </data>
+</odoo>

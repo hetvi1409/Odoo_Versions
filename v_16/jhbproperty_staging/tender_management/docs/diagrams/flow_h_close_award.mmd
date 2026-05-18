@@ -1,0 +1,21 @@
+flowchart LR
+  subgraph SYS[System Cron]
+    A([Start]) --> B[check_tender_status job]
+    B --> C{open and closing_date reached?}
+    C -->|Yes| D[Set state closed]
+    C -->|No| E[No state change]
+  end
+  subgraph IN[Internal User]
+    D --> F[Start adjudication]
+    F --> G[Award]
+  end
+  subgraph BE[Workflow Backend]
+    F --> H[closed to adjudication_in_progress]
+    G --> I[adjudication_in_progress to awarded]
+  end
+  subgraph FE[Website]
+    I --> J[Show closed status banner]
+    J --> K[Hide Next and block submissions]
+    E --> L([End])
+    K --> L
+  end

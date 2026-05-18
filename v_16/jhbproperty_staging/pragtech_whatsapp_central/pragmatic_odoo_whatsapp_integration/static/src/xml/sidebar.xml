@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="conversations.Sidebar" owl="1">
+        <t t-if="discussView">
+            <div name="root" class="o_DiscussSidebar2" t-ref="root">
+                <hr class="o_DiscussSidebar_separator w-100 border-top"/>
+                <t t-if="messaging.models['Thread'].all(thread => thread.isPinned and thread.model === 'mail.channel').length > 19">
+                    <input class="o_DiscussSidebar_quickSearch form-control mx-4 mb-2 rounded-3 w-auto" t-on-input="discussView.onInputQuickSearch" placeholder="Quick search..." t-ref="quickSearchInput" t-esc="discussView.discuss.sidebarQuickSearchValue"/>
+                </t>
+                <div>
+                    <div class="o_DiscussSidebar_groupHeaderItem o_DiscussSidebar_groupHeaderItemAdd fa fa-plus" 
+                    t-on-click="_onClickChannelAdd" style="margin-left: 110px; margin-bottom: 10px;" title="Add a new chat"/>
+                </div>
+                <hr class="o_DiscussSidebar_separator w-100 border-top"/>
+                <t t-if="MultiLivechatGroups and MultiLivechatGroups.length > 0">
+                    <t t-foreach="MultiLivechatGroups" t-as="livechat_group" t-key="livechat_group.channel_type">
+                        <t t-if="livechat_group.channel_type == 'multi_livechat_NAMEs'">
+                            <t t-if="livechat_group.chats">
+                                <div t-attf-class="{{livechat_group.name}}">
+                                    <!-- <t t-foreach="livechat_group.chats" t-as="chat" t-key="chat.localId"> -->
+                                        <!-- <t t-if="chat and chat.channel.discussSidebarCategory"> -->
+                                            <!-- <WhatsappSidebarCategory
+                                                t-if="chat.channel.discussSidebarCategory"
+                                                className="'o_DiscussSidebar_item scoop-name-menu'"
+                                                record="chat.channel.discussSidebarCategory"
+                                            /> -->
+                                            <WhatsappSidebarCategory
+                                                t-if="livechat_group.chats.channel.discussSidebarCategory"
+                                                className="'o_DiscussSidebar_item scoop-name-menu'"
+                                                record="livechat_group.chats.channel.discussSidebarCategory"
+                                            />
+                                        <!-- </t>
+                                    </t> -->
+                                </div>
+                            </t>
+                        </t>
+                    </t>
+                </t>
+                <button class="fa fa-refresh" t-on-click="_onClickRefresh" style="background-color: var(--o-cc1-btn-primary); color: gainsboro; padding: 10px 10px 10px 10px; border-radius: 100%; width: fit-content;margin-top: auto;margin-left: 40%;"></button>
+            </div>
+        </t>
+    </t>
+
+</templates>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="portal_my_home_menu_job_applications"
+              name="Portal layout : Job Applications menu entries"
+              inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'job_applications' or job_applications"
+                t-attf-class="breadcrumb-item #{'active' if not job_applications else ''}">
+                <a t-attf-href="/my/job_applications?{{ keep_query() }}">
+                    Job Applications
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_job_applications" name="Job Applications"
+              customize_show="True" inherit_id="portal.portal_my_home"
+              priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_vendor_category_enable" t-value="True"/>
+        </xpath>
+        <div id="portal_vendor_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/account/static/src/img/Bill.svg'"/>
+                <t t-set="title">Job Applications</t>
+                <t t-set="text">Follow your Job Applications</t>
+                <t t-set="url" t-value="'/my/job_applications'"/>
+                <t t-set="placeholder_count"
+                   t-value="'job_application_count'"/>
+            </t>
+        </div>
+    </template>
+    <template id="my_job_applications" name="Applications">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Job Applications</t>
+            </t>
+            <t t-if="job_applications" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Application Name #</th>
+                        <th class="text-end">Applied Job</th>
+                        <th class="text-end">Department</th>
+                        <th class="text-end">Expected Salary</th>
+                        <th class="text-end">Proposed Salary</th>
+                        <th class="text-end">Status</th>
+                    </tr>
+                </thead>
+                <t t-foreach="job_applications" t-as="res">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/job_application_details_portal/#{res.id}">
+                                <t t-out="res.name"/>
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="res.job_id.name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="res.department_id.name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="res.salary_expected"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="res.salary_proposed"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="res.stage_id.sudo().name"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no job application.</p>
+        </t>
+    </template>
+
+    <template id="job_application_details" name="Job Application">
+        <t t-call="portal.portal_layout">
+            <div class="card col-12 col-lg justify-content-end"
+                 style="padding: 10px;">
+                <div class="pb-2 pt-3">
+                    <h2 class="my-0">
+                        Job Application:
+                        <em t-esc="job_applications.name"/>
+                    </h2>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <p>Your job application is currently in
+                            <span t-field="job_applications.stage_id.sudo().name"/>
+                            State
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="service_order_communication" class="mt-4">
+                <h2>History</h2>
+                <t t-call="portal.message_thread">
+                    <t t-set="object" t-value="job_applications"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+</odoo>

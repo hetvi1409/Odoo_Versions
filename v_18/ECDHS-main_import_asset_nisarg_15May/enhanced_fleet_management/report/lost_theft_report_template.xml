@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_lost_theft_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2 class="text-danger">FLEET LOST &amp; THEFT REPORT</h2>
+                            <h3><t t-esc="o.reference"/></h3>
+                            <p><span class="badge badge-danger"><t t-esc="dict(o._fields['incident_type'].selection).get(o.incident_type)"/></span></p>
+                        </div>
+
+                        <h4 class="mt-4">Vehicle Information</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="30%"><strong>Vehicle:</strong></td>
+                                <td><t t-esc="o.vehicle_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>License Plate:</strong></td>
+                                <td><t t-esc="o.license_plate"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>VIN Number:</strong></td>
+                                <td><t t-esc="o.vehicle_vin or '-'"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Engine Number:</strong></td>
+                                <td><t t-esc="o.engine_number or '-'"/></td>
+                            </tr>
+                        </table>
+
+                        <h4 class="mt-4">Incident Details</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="30%"><strong>Incident Type:</strong></td>
+                                <td><t t-esc="dict(o._fields['incident_type'].selection).get(o.incident_type)"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Date &amp; Time:</strong></td>
+                                <td><t t-esc="o.incident_date"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Date Discovered:</strong></td>
+                                <td><t t-esc="o.discovered_date"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Location:</strong></td>
+                                <td><t t-esc="o.incident_location"/></td>
+                            </tr>
+                            <tr t-if="o.incident_address">
+                                <td><strong>Detailed Address:</strong></td>
+                                <td><t t-esc="o.incident_address"/></td>
+                            </tr>
+                        </table>
+
+                        <h4 class="mt-4">Reporting Information</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="30%"><strong>Reported By:</strong></td>
+                                <td><t t-esc="o.reported_by_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Contact Phone:</strong></td>
+                                <td><t t-esc="o.reporter_phone"/></td>
+                            </tr>
+                            <tr t-if="o.driver_id">
+                                <td><strong>Driver:</strong></td>
+                                <td><t t-esc="o.driver_id.name or o.driver_name"/></td>
+                            </tr>
+                        </table>
+
+                        <h4 class="mt-4">Incident Description</h4>
+                        <div class="border p-3">
+                            <p><t t-esc="o.incident_description"/></p>
+                        </div>
+
+                        <div t-if="o.items_description" class="mt-3">
+                            <h4>Items Lost/Stolen</h4>
+                            <div class="border p-3">
+                                <p><t t-esc="o.items_description"/></p>
+                                <p><strong>Estimated Value:</strong> <t t-esc="o.estimated_value"/></p>
+                            </div>
+                        </div>
+
+                        <h4 class="mt-4">Police Report</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="30%"><strong>Reported to Police:</strong></td>
+                                <td><span t-attf-class="badge badge-{{ 'success' if o.police_reported else 'secondary' }}">
+                                    <t t-esc="'YES' if o.police_reported else 'NO'"/>
+                                </span></td>
+                            </tr>
+                            <tr t-if="o.police_reported">
+                                <td><strong>Police Station:</strong></td>
+                                <td><t t-esc="o.police_station or '-'"/></td>
+                            </tr>
+                            <tr t-if="o.police_case_number">
+                                <td><strong>Case Number:</strong></td>
+                                <td><strong><t t-esc="o.police_case_number"/></strong></td>
+                            </tr>
+                            <tr t-if="o.police_officer_name">
+                                <td><strong>Investigating Officer:</strong></td>
+                                <td><t t-esc="o.police_officer_name"/></td>
+                            </tr>
+                        </table>
+
+                        <h4 class="mt-4">Insurance Claim</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="30%"><strong>Insurance Notified:</strong></td>
+                                <td><span t-attf-class="badge badge-{{ 'success' if o.insurance_notified else 'secondary' }}">
+                                    <t t-esc="'YES' if o.insurance_notified else 'NO'"/>
+                                </span></td>
+                            </tr>
+                            <tr t-if="o.insurance_company">
+                                <td><strong>Insurance Company:</strong></td>
+                                <td><t t-esc="o.insurance_company"/></td>
+                            </tr>
+                            <tr t-if="o.insurance_claim_number">
+                                <td><strong>Claim Number:</strong></td>
+                                <td><strong><t t-esc="o.insurance_claim_number"/></strong></td>
+                            </tr>
+                        </table>
+
+                        <div t-if="o.vehicle_recovered" class="mt-4">
+                            <div class="alert alert-success">
+                                <h4>Vehicle Recovered</h4>
+                                <p><strong>Recovery Date:</strong> <t t-esc="o.recovery_date"/></p>
+                                <p><strong>Location:</strong> <t t-esc="o.recovery_location"/></p>
+                                <p t-if="o.recovery_condition"><strong>Condition:</strong> <t t-esc="o.recovery_condition"/></p>
+                            </div>
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <div class="border-top pt-2">
+                                    <strong>Reported By:</strong><br/>
+                                    <t t-esc="o.reported_by_id.name"/><br/>
+                                    Date: <t t-esc="o.create_date.strftime('%Y-%m-%d')"/>
+                                </div>
+                            </div>
+                            <div class="col-6" t-if="o.investigation_officer_id">
+                                <div class="border-top pt-2">
+                                    <strong>Investigation Officer:</strong><br/>
+                                    <t t-esc="o.investigation_officer_id.name"/><br/>
+                                    Date: _______________
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-center">
+                            <p class="text-muted"><small>This is a confidential document for official use only</small></p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

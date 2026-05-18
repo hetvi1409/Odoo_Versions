@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="whatsapp_helpdesk_messages_form" model="ir.ui.view">
+        <field name="name">whatsapp.helpdesk.messages.form</field>
+        <field name="model">whatsapp.helpdesk.messages</field>
+        <field name="arch" type="xml">
+            <form string="Whatsapp Central Messages">
+                <header>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="parent_id"/>
+                            <field name="integrators" invisible="1"/>
+                        </group>
+                        <group>
+                            <div id="o_wha_help_mess_right">
+                                <field name="image_1024" widget='image' class="oe_avatar"/>
+                            </div>
+                        </group>
+                        <group></group>
+                        <group>
+                            <div id="o_work_employee_main" position="after">
+                                <div id="o_employee_right" class="col-lg-4 px-0 ps-lg-5 pe-lg-0">
+                                    <h4 class="o_org_chart_title mb16 mt0">Whatsapp Central Chart</h4>
+                                    <field name="child_ids" widget="wh_org_chart" readonly="1"/>
+                                </div>
+                            </div>
+                        </group>
+                        <group col="4" attrs="{'invisible':[('integrators', '=', 'apichat')]}">
+                            <field name="attachment_ids" widget="many2many_binary" string="Attach a file" nolabel="1"
+                                   colspan="2"/>
+                        </group>
+                    </group>
+                                        <notebook attrs="{'invisible':[('integrators', '=', 'chatapi')]}">
+                                            <page string="Action">
+                                                <field name="action_type_ids">
+                                                    <tree editable="bottom">
+                                                        <field name="action_type" required="1"/>
+                                                        <field name="name"/>
+                                                        <field name="url" required="1"/>
+                                                    </tree>
+                                                </field>
+                                            </page>
+                                        </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="whatsapp_helpdesk_messages_tree" model="ir.ui.view">
+        <field name="name">whatsapp.helpdesk.messages.tree</field>
+        <field name="model">whatsapp.helpdesk.messages</field>
+        <field name="arch" type="xml">
+            <tree string="Whatsapp Central">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="parent_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="whatsapp_helpdesk_messages_pivot" model="ir.ui.view">
+        <field name="name">whatsapp.helpdesk.messages</field>
+        <field name="model">whatsapp.helpdesk.messages</field>
+        <field name="priority">60</field>
+        <field name="arch" type="xml">
+            <pivot string="Pipeline Analysis" sample="1">
+                <field name="parent_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="whatsapp_helpdesk_messages_action">
+        <field name="name">Whatsapp Central</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="res_model">whatsapp.helpdesk.messages</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_whatsapp_helpdesk_messages_main"
+              name="Whatsapp Central"/>
+
+    <menuitem id="menu_whatsapp_helpdesk_messages"
+              action="whatsapp_helpdesk_messages_action"
+              name="Whatsapp Central" sequence="2"
+              parent="menu_whatsapp_helpdesk_messages_main"/>
+
+    <menuitem id="menu_config_whatsapp_helpdesk"
+              name="Configuration" sequence="10"
+              parent="menu_whatsapp_helpdesk_messages_main"/>
+
+</odoo>
+

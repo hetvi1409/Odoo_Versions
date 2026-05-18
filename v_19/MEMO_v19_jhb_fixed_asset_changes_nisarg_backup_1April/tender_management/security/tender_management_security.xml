@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    Multi company record rules-->
+    <!--    model_tender_request-->
+    <record id="tender_tender_public" model="ir.rule">
+        <field name="name">Tenders: Public</field>
+        <field name="model_id" ref="model_tender_tender"/>
+        <field name="domain_force">[('website_published', '=', True)]</field>
+        <field name="groups" eval="[(4, ref('base.group_public'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    <record id="tender_tender_portal" model="ir.rule">
+        <field name="name">Tenders: Portal</field>
+        <field name="model_id" ref="model_tender_tender"/>
+        <field name="domain_force">[('website_published', '=', True)]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    <record id="tender_multi_company_rule" model="ir.rule">
+        <field name="name">Tender Multi Company</field>
+        <field name="model_id" ref="model_tender_tender"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!--     model_tender_bid-->
+    <record id="tender_bid_multi_company_rule" model="ir.rule">
+        <field name="name">Bid Multi Company</field>
+        <field name="model_id" ref="model_tender_bid"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+<!--       User Group Access Rule-->
+    <record id="tender_user_rule" model="ir.rule">
+        <field name="name">Access Only Tender Request Created By User</field>
+        <field ref="model_tender_tender" name="model_id"/>
+        <field name="domain_force">[('create_uid', '=', user.id)]</field>
+        <field name="groups"
+               eval="[(4, ref('tender_management.tender_management_group_supplier'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record model="ir.module.category" id="asset_approve_management">
+        <field name="name">Asset</field>
+        <field name="description">Access levels for Finance</field>
+        <field name="sequence">10</field>
+    </record>
+        <!-- Create a new group for Asset Manager -->
+        <record id="group_asset_manager" model="res.groups">
+            <field name="name">Asset Manager</field>
+            <field name="category_id" ref="asset_approve_management"/>
+        </record>
+        <record id="asset_property_rule_manager" model="ir.rule">
+            <field name="name">Fixed Asset - Manager Access</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="domain_force">[(1, '=', 1)]</field> <!-- Allows access to all records -->
+            <field name="groups" eval="[(4, ref('asset_approval.group_asset_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

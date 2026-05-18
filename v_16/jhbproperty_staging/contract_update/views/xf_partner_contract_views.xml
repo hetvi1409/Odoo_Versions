@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Inherit Form View to Modify it-->
+    <record id="inherit_xf_partner_contract_form" model="ir.ui.view">
+        <field name="name">xf Partner Contract</field>
+        <field name="model">xf.partner.contract</field>
+        <field name="inherit_id" ref="xf_partner_contract.xf_partner_contract_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="list_invoice_raised"
+                      string="List of invoice raised">
+                    <field name="invoice_list_ids">
+                        <tree editable="bottom">
+                            <field name="invoice_date"/>
+                            <field name="invoice_number"/>
+                            <field name="invoice_amount"/>
+                            <field name="due"/>
+                            <field name="invoice_list" invisible="True"/>
+                        </tree>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="total_list_invoices"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//notebook/page[@name='list_invoice_raised']" position="after">
+                <page name="documents"
+                      string="Documents">
+                    <group>
+                    <field name="sla_contract_signed"/>
+                    <field name="arrival_letter"/>
+                    <field name="variation_orders"/>
+                    <field name="extension_of_time"/>
+                    <field name="penalties"/>
+                    <field name="completion_letter"/>
+                    </group>
+                </page>
+            </xpath>
+
+            <!--            <xpath expr="//field[@name='use_lines']" position="after">-->
+<!--                <field name="fair_value_adjustment"-->
+<!--                       string="Fair Value Adjustment"/>-->
+<!--            </xpath>-->
+            <xpath expr="//field[@name='use_lines']" position="attributes">
+                <attribute name="string">Bill of Quantities/Deliverables</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="sequence_number" invisible="1"/>
+                <field name="tender_number"/>
+                <field name="classification" />
+            </xpath>
+            <xpath expr="//field[@name='date_end']" position="after">
+                <field name="extension_period"/>
+                <field name="revised_end_date"/>
+            </xpath>
+            <xpath expr="//field[@name='expiring_state']" position="after">
+                    <field name="cost_based" widget="progressbar"/>
+                    <field name="time_based" widget="progressbar"/>
+                    <field name="variation_order_amt"/>
+                    <field name="variation_order_per" widget="percentage"/>
+                    <field name="reversal_contract_amt"/>
+            </xpath>
+            <xpath expr="//field[@name='amount']" position="before">
+                <field name="contract_duration"/>
+                <field name="remaining_contract_duration"/>
+                <field name="contract_amt_type"/>
+            </xpath>
+            <xpath expr="//field[@name='ref']" position="attributes">
+                <attribute name="string">Contract Number</attribute>
+                <attribute name="readonly">1</attribute>
+                <attribute name="required">0</attribute>
+            </xpath>
+            <xpath expr="//field[@name='type']" position="attributes">
+                <attribute name="string">Contract Type</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="string">Vendor</attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount']" position="attributes">
+                <attribute name="string">Contract Amount</attribute>
+            </xpath>
+            <xpath expr="//page[@name='lines']" position="attributes">
+                <attribute name="string">Bill of Quantities/Deliverables</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

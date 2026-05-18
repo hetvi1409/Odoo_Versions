@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="wizard_consultation_invoice_form_view" model="ir.ui.view">
+            <field name="name">wizard.consultation.invoice.form.view</field>
+            <field name="model">wizard.consultation.invoice</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="invoice_type"/>
+                                <field name="amount" />
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Create Invoice" name="btn_create_consultation_invoice"
+                                type="object" class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="wizard_create_matter_invoice_action" model="ir.actions.act_window">
+            <field name="name">Create Invoice</field>
+            <field name="res_model">wizard.consultation.invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+    </data>
+</odoo>
+

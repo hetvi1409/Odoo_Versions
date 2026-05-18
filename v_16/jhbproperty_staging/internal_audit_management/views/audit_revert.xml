@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Action Definition -->
+    <record id="action_audit_revert" model="ir.actions.act_window">
+        <field name="name">Audit Revert</field>
+        <field name="res_model">audit.revert</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Audit Finding
+            </p>
+            <p>
+                Create and manage the Internal Audit Finding;
+            </p>
+        </field>
+    </record>
+    <record id="audit_revert_view__form" model="ir.ui.view">
+        <field name="name">audit.revert.view.form</field>
+        <field name="model">audit.revert</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                           
+                            string="Approve" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'ongoing')]}"/>
+                    <button name="send_follow_up_mail" type="object"
+                           
+                            string="Send Follow Up Mail" attrs="{'invisible': [('state', '!=', 'ongoing')]}"/>
+                    <button name="action_rejected" type="object"
+                           
+                            string="Rejected" attrs="{'invisible': [('state', '!=', 'ongoing')]}"/>
+                    <button name="action_move_to_new" type="object"
+                           
+                            string="Move To New" attrs="{'invisible': [('state', '!=', 'rejected')]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object" string="Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1 class="d-flex flex-row">
+                            <field name="name" options="{'line_breaks': False}"
+                                   widget="text" class="o_text_overflow"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="reference_type" readonly="1"/>
+                            <field name="record_state" readonly="1"/>
+                            <field name="user_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="res_id" readonly="1"/>
+                            <field name="res_model" readonly="1"/>
+                            <field name="res_user_id" readonly="1"/>
+                            <field name="reference" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="comments" readonly="1"/>
+                        <field name="audit_findings"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+    <!-- Tree View Definition -->
+    <record id="audit_revert_view_tree" model="ir.ui.view">
+        <field name="name">audit.revert.view.tree</field>
+        <field name="model">audit.revert</field>
+        <field name="arch" type="xml">
+            <tree default_order="date desc">
+                <field name="name" />
+                <field name="date" />
+                <field name="audit_findings" />
+                <field name="comments" />
+                <field name="user_id"/>
+                <!-- Uncomment if needed -->
+                <!-- <field name="internal_control_deficiency" /> -->
+            </tree>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem name="Audit Reverts"
+              id="audit_revert_conf_menu"
+              parent="project.menu_project_config"
+              sequence="4"
+              action="action_audit_revert" />
+</odoo>

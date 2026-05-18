@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<record id="server_action_launch_asset_removal" model="ir.actions.server">
+    <field name="name">Asset Disposal</field>
+    <field name="model_id" ref="account_asset.model_account_asset"/>
+    <field name="binding_model_id" ref="account_asset.model_account_asset"/>
+    <field name="state">code</field>
+    <field name="code">
+      if records:
+    records.write({'state': 'asset_disposed'})
+    action = {
+        'type': 'ir.actions.act_window',
+        'res_model': 'asset.removal.approvals',
+        'view_mode': 'form',
+        'target': 'new',
+        'context': {
+            'default_assets_ids': records.ids,
+        },
+    }
+
+    </field>
+</record>
+
+</odoo>

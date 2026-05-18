@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_report_asset_verification_report" model="ir.actions.report">
+        <field name="name">Asset Verification Report</field>
+        <field name="model">account.asset</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">asset_verification_report.asset_verification_report</field>
+        <field name="report_file">asset_verification_report.asset_verification_report</field>
+<!--        <field name="binding_model_id" ref="account_asset.model_account_asset"/>-->
+        <field name="binding_type">report</field>
+    </record>
+    <template id="asset_verification_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+
+                <div class="page" style="font-family: 'Poppins', sans-serif;">
+                    <h2 style="text-align:center; color:#008F30; margin-bottom:22px;">
+                        Asset Verification Report
+                    </h2>
+                    <table class="table table-sm o_main_table"
+                           style="width:100%; border-collapse:collapse; font-size:13px;">
+                        <thead>
+                            <tr style="background-color:#008F30; color:#FFFFFF; text-align:center;">
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Asset</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Barcode</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Category</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Verified By</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Verification Status</th>
+                                <!-- <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Condition</th> -->
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Condition</th>
+                                <!-- <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Department</th> -->
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Past Year</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">This Year</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Comments</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Job Location</th>
+                                <!-- <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Date Of Verification</th> -->
+                                <!-- <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Verifier</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="docs" t-as="o">
+                            <t t-if="o and o._name == 'asset.verification.history'">
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.history_id.name"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.parent_barcode"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.history_id.afs_classification.name"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.asset_verification_user_id.name"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.is_verified"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <t t-if="o.condition">
+                                        <span t-esc="o.condition.name"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span>-</span>
+                                    </t>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.past_year"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.this_year"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.comments"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.history_id.job_location_id.name"/>
+                                </td>
+                            </t>
+                            <t t-elif="o and o._name == 'account.asset'">
+                                <t t-set="verified_lines" t-value="job_lines.filtered(lambda l: l.asset_id.id == o.id and l.verified)"/>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.name"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.alternative_ref"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.afs_classification.name"/>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <!-- <t t-if="verified_lines">
+                                        <t t-foreach="verified_lines" t-as="line">
+                                            <span t-field="line.asset_id.history_ids[-1].asset_verification_user_id.name"/>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <span>-</span>
+                                    </t> -->
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <t t-if="verified_lines">
+                                        <span>Verified</span>
+                                    </t>
+                                    <t t-else="">
+                                        <span>Not Verified</span>
+                                    </t>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <t t-if="verified_lines">
+                                        <t t-foreach="verified_lines" t-as="line">
+                                            <span t-field="line.asset_id.history_ids[-1].condition.name"/>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <!-- <span t-esc="o.condition"/> -->
+                                    </t>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <t t-if="verified_lines">
+                                        <t t-foreach="verified_lines" t-as="line">
+                                            <span t-field="line.asset_id.history_ids[-1].past_year"/>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <!-- <span t-esc="o.past_year"/> -->
+                                    </t>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <t t-if="verified_lines">
+                                        <t t-foreach="verified_lines" t-as="line">
+                                            <span t-field="line.asset_id.history_ids[-1].this_year"/>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <!-- <span t-esc="o.this_year"/> -->
+                                    </t>
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <!-- <span t-field="o.comments"/> -->
+                                </td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.job_location_id.name"/>
+                                </td>
+                            </t>
+                            <t t-else="">
+                                <span>-</span>
+                            </t>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

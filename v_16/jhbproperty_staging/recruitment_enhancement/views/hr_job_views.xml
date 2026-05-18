@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_job_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.job.form</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="before">
+                <style>
+                        .o_form_view .o_field_widget:not(.o_field_many2one):not(.o_field_many2many_tags):not(.o_field_many2one_avatar_user) .o_input {
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_many2one{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_many2many_tags{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_many2one_avatar_user{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+            </xpath>
+             <xpath expr="//group[@name='recruitment']" position="inside">
+                <field name="closing_date" required="1"/>
+                <field name="job_purpose" required="1"/>
+                <field name="company_overview" required="1"/>
+                <field name="minimum_qualifications" required="1"/>
+                <field name="required_experience" required="1"/>
+                <field name="expected_degree"/>
+                <field name="kpi_ids" widget="many2many_tags" required="1"/>
+                <field name="kpi_names" invisible="1"/>
+                <field name="user_role_id" required="1"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_hr_job_form_recruitment_enhancement" model="ir.ui.view">
+        <field name="name">hr.job.form.recruitment.enhancement</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_job_survey"/>
+        <field name="arch" type="xml">
+            <!-- <xpath expr="//div[@name='button_box']" position="before">
+                <style>
+                        .o_input{
+                         border-color: black !important;
+                        border:1px solid black;
+                        padding:10px;
+                        border-radius:6px;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+            </xpath> -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_requisitions" type="object" class="oe_stat_button" icon="fa-files-o">
+                    <field name="requisition_count" widget="statinfo" string="Requisitions"/>
+                </button>
+                <button name="action_view_advert_pdf"
+                        string="View Job Advert"
+                        type="object"
+                        class="oe_stat_button"
+                        attrs="{'invisible': [('attachment_id', '=', False)]}"
+                        icon="fa-file-pdf-o"/>
+                <field name="attachment_id" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_job_form_inherit" model="ir.ui.view">
+        <field name="model">hr.job</field>
+        <field name="name">hr.job.view.form.inherit</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+            <!-- <xpath expr="//div[@name='button_box']" position="before">
+                <style>
+                        .o_input{
+                        border-color: black !important;
+                        border:1px solid black;
+                        padding:10px;
+                        border-radius:6px;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+            </xpath> -->
+
+            <xpath expr="/form/sheet/notebook/page[@name='recruitment_page']" position="after">
+
+                <page string="Summary">
+                    <group>
+                        <field name="job_details"/>
+                    </group>
+                </page>
+                <page string="Expected skills">
+                    <div class="row">
+                        <div class="o_hr_skills_editable o_hr_skills_group o_group_skills col-lg-5 d-flex flex-column">
+                            <separator string="Expected Skills" class="mb-4"/>
+                            <field mode="tree"
+                                nolabel="1"
+                                name="job_skill_ids"
+                                widget="skills_one2many">
+                                <tree>
+                                    <field name="skill_type_id" column_invisible="1"/>
+                                    <field name="skill_id"/>
+                                    <field name="skill_level_id"/>
+                                    <field name="level_progress" widget="progressbar"/>
+                                </tree>
+                            </field>
+                        </div>
+                    </div>
+                </page>
+
+
+                <page string="Notes">
+                    <group>
+                        <field name="notes" required="1"/>
+                    </group>
+                </page>
+
+            </xpath>
+
+            <xpath expr="//page[@name='recruitment_page']/field[@name='job_details']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='recruitment_page']/label[@for='job_details']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='default_contract_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_hr_job_kanban" model="ir.ui.view">
+        <field name="model">hr.job</field>
+        <field name="name">hr.job.view.kanban</field>
+        <field name="inherit_id" ref="hr_recruitment.view_hr_job_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@role='menuitem'][@name='menu_view_applications']" position="after">
+                <div role="menuitem">
+                    <a name="action_search_matching_candidates" type="object">
+                        Matching Candidates custom
+                    </a>
+                </div>
+            </xpath>
+
+
+           <xpath expr="//li[field[@name='application_count']]" position="after">
+                <li t-if="record.qualification_application_count.raw_value > 0">
+                    <a name="action_view_qualification_applications" type="object">
+                        <field name="qualification_application_count"/> Qualification Applications
+                    </a>
+                </li>
+            </xpath>
+
+
+            <xpath expr="//button[@name='%(hr_recruitment.action_hr_job_applications)d']" position="after">
+                <div style="margin-top: 5px;">
+                    <button class="btn btn-primary"
+                            name="action_view_stage_applications"
+                            type="object">
+                        <field name="stage_application_count"/> Stage Applications
+                    </button>
+                </div>
+            </xpath>
+
+            <xpath expr="//button[@name='%(hr_recruitment.action_hr_job_applications)d']" position="replace">
+                <button class="btn btn-primary"
+                        name="action_view_new_applications"
+                        type="object">
+                    <field name="new_application_count"/> New Applications
+                </button>
+            </xpath>
+
+
+           <!-- <xpath expr="//field[@name='new_application_count']" position="replace">
+               <button class="btn btn-link p-0 border-0"
+                       name="%(hr_recruitment.action_hr_job_applications)d"
+                       type="action"
+                       context="{'search_default_job_id': id}">
+                   <field name="new_application_count" class="number"/>
+                   Staging Applications
+               </button>
+           </xpath>
+
+           <xpath expr="//field[@name='open_application_count']" position="replace">
+               <button class="btn btn-link p-0 border-0"
+                       name="%(hr_recruitment.action_hr_job_applications)d"
+                       type="action"
+                       context="{'search_default_job_id': id}">
+                   <field name="open_application_count" class="number"/>
+                   Qualification Applications
+               </button>
+           </xpath> -->
+
+        </field>
+    </record>
+
+    <!--    <record id="view_hr_job_survey_inherit" model="ir.ui.view">-->
+    <!--        <field name="model">hr.job</field>-->
+    <!--        <field name="name">hr.job.form.view</field>-->
+    <!--        <field name="inherit_id" ref="hr_recruitment.hr_job_survey"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//field[@name='user_id']" position="replace">-->
+    <!--            </xpath>-->
+    <!--            <xpath expr="//field[@name='address_id']" position="attributes">-->
+    <!--                <attribute name="invisible">1</attribute>-->
+    <!--            </xpath>-->
+    <!--            <xpath expr="//div[@name='alias_def']" position="after">-->
+    <!--                <field name="purpose_job_main"/>-->
+    <!--                <field name="minimum_qualifications"/>-->
+    <!--                <field name="required_experience"/>-->
+    <!--                <field name="extend_travel"/>-->
+    <!--                <field name="budget_approved"/>-->
+    <!--            </xpath>-->
+    <!--            <xpath expr="//field[@name='department_id']" position="after">-->
+    <!--                <label for="job_location_id"/>-->
+    <!--                <div class="o_row">-->
+    <!--                    <span invisible="job_location_id" class="oe_read_only">Remote-->
+    <!--                    </span>-->
+    <!--                    <field name="job_location_id" context="{'show_address': 1}"-->
+    <!--                           placeholder="Remote"/>-->
+    <!--                </div>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
+    <!--    <menuitem-->
+    <!--            id="hr_recruitment_menu_job_position"-->
+    <!--            name="Job Requisition"-->
+    <!--            action="hr_recruitment.action_hr_job"-->
+    <!--            parent="hr_recruitment.menu_hr_recruitment_root"-->
+    <!--            sequence="21"/>-->
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--     Setting the paper format -->
+   <record id="paperformat_coc" model="report.paperformat">
+        <field name="name">COC A4 Portrait</field>
+        <field name="format">custom</field>    
+        <field name="default" eval="True"/>
+        <field name="page_height">297</field>
+        <field name="page_width">210</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">32</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">30</field>
+        <field name="dpi">110</field>
+    </record>
+    <!--Generate the pdf report-->
+    <record id="action_generate_coc" model="ir.actions.report">
+        <field name="name">Certificate Of Conformance (CoC)</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hulpak_stock.report_coc_slip</field>
+        <field name="report_file">hulpak_stock.report_coc_slip</field>
+        <field name="paperformat_id" ref="hulpak_stock.paperformat_coc"/>
+        <field name="binding_model_id" ref="model_stock_picking"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

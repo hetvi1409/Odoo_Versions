@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.ui.view" id="title_deeds_view_tree">
+        <field name="name">title.deeds.view.tree</field>
+        <field name="model">title.deeds</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <tree string="Documents" create="1" edit="0">
+                <field name="name"/>
+                <field name="jmc_number"/>
+                <field name="number"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="title_deeds_view_search" model="ir.ui.view">
+        <field name="name">title.deeds.view.search</field>
+        <field name="model">title.deeds</field>
+        <field name="arch" type="xml">
+            <search string="Search Trim Docs Fields">
+                    <field name="jmc_number" string="JMC Number" />
+                    <field name="name" string="JMC Number" />
+                    <field name="number" string="JMC Number" />
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="active" string="Archived" domain="[('active', '=', False)]"/>
+                <separator/>
+<!--                <filter name="no_jmc_number" string="No JMC Number" domain="[('building_id', '=', False)]"/>-->
+<!--                <filter name="no_trim_id" string="No Trim ID" domain="[('trim_documentid', '=', False)]"/>-->
+                <group expand="0" string="Group By">
+                    <filter string="Building" name="jmc_number" domain="[]" context="{'group_by':'building_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="title_deeds_view_form">
+        <field name="name">title.deeds.view.form</field>
+        <field name="model">title.deeds</field>
+        <field name="priority">1</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Documents" create="1" edit="1">
+                <header>
+                    <button name="open_trim_images" type="object" string="Trim Open" class="oe_highlight" attrs="{'invisible': [('type' , '!=', 'trim')]}"/>
+                    <button name="download_tiff" type="object" string="Download" class="oe_highlight" attrs="{'invisible': [('type' , '!=', 'trim')]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <widget name="web_ribbon" title="Archived"
+                            bg_color="bg-danger"
+                            attrs="{'invisible': [('active', '=', True)]}"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="active" invisible="1"/>
+                            <field name="jmc_number"/>
+                            <field name="file_path"/>
+                        </group>
+                        <group>
+                            <field name="type" required="1"/>
+                            <field name="building_id" attrs="{'invisible': [('type' , '!=', 'title')]}"/>
+                            <field name="trim_building_id" attrs="{'invisible': [('type' , '!=', 'trim')]}"/>
+                            <field name="file" widget="binary" filename="filename"/>
+                        </group>
+                    </group>
+                    <group attrs="{'invisible': [('type' , '!=', 'title')]}">
+                        <group>
+<!--                            <field name="name"/>-->
+<!--                            <field name="active" invisible="1"/>-->
+<!--                            <field name="jmc_number"/>-->
+                            <field name="number"/>
+<!--                            <field name="file_path"/>-->
+<!--                            <field name="file"/>-->
+                        </group>
+                        <group>
+<!--                            <field name="type" readonly="True"/>-->
+                            <field name="full_jmc_number"/>
+                            <field name="year"/>
+<!--                            <field name="building_id"/>-->
+                        </group>
+                    </group>
+                    <group attrs="{'invisible': [('type' , '!=', 'trim')]}">
+                        <group>
+                            <field name="uri"/>
+                            <field name="full_record_id"/>
+                        </group>
+                        <group>
+                            <field name="filename"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Message" name="message">
+                            <field name="message"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_title_deeds" model="ir.actions.act_window">
+        <field name="name">Title Deeds Documents</field>
+        <field name="res_model">title.deeds</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('type', '=', 'title')]</field>
+        <field name="context">{'default_type': 'title',}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click Here to create Title Deeds Documents.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_title_deeds" name="Title Deeds Documents"
+              parent="itsys_real_estate.menu_building_list"
+              action="action_title_deeds" sequence="40"/>
+
+    <record id="action_trim_documents" model="ir.actions.act_window">
+        <field name="name">Trim Documents</field>
+        <field name="res_model">title.deeds</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('type', '=', 'trim')]</field>
+        <field name="context">{'default_type': 'trim',}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click Here to create Trim Documents.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_trim_documents" name="Trim Documents"
+              parent="itsys_real_estate.menu_building_list"
+              action="action_trim_documents" sequence="40"/>
+
+    <record model="ir.ui.view" id="title_document_view_form">
+        <field name="name">title.document.view.form</field>
+        <field name="model">title.document</field>
+        <field name="priority">1</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Documents" create="1" edit="0">
+                <sheet>
+                    <group>
+                        <field name="image" widget="image" attrs="{'invisible': [('type', '!=', 'image')]}"/>
+                        <field name="pdf" widget="pdf_viewer" attrs="{'invisible': [('type', '!=', 'pdf')]}"/>
+                    </group>
+                    <group>
+                        <field name="type" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="btn-secondary"
+                                special="cancel" data-hotkey="z"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

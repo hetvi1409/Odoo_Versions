@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_objective_details">
+        <t t-call="web.html_container">
+
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h1>Objective Details</h1>
+                        <p>Title of the objective is <b><span  t-field="o.name"/> </b></p>
+
+                        <table class="table table-condensed">
+                            <tr>
+                                <td>
+                                    Objective ID
+                                </td>
+                                <td>
+                                    <span t-field="o.ref"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    Start Date
+                                </td>
+                                <td>
+                                    <span t-field="o.start_date"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    End Date
+                                </td>
+                                <td>
+                                    <span t-field="o.end_date"/>
+                                </td>
+                            </tr>
+                              <tr>
+                                <td>
+                                  Goal
+                                </td>
+                                <td>
+                                    <span t-field="o.goal"/>
+                                </td>
+                            </tr>
+                          </table>
+
+                              <t t-if="o.projects">
+                            <table class="table table-condensed">
+                                <tr>
+                                    <th><b>Projects</b></th></tr>
+                                <t t-foreach="o.projects" t-as="line">
+                                    <tr>
+                                        <td>
+                                            <span t-field="line.name"/>
+                                            <span t-field="line.last_update_status"/>
+
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </t>
+
+
+                    </div>
+                </t>
+            </t>
+        </t>
+
+    </template>
+</odoo>

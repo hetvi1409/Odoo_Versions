@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_survey_form_inherit_job" model="ir.ui.view">
+        <field name="name">survey.survey.form.inherit.job</field>
+        <field name="model">survey.survey</field>
+        <field name="inherit_id" ref="survey.survey_survey_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <group>
+                    <field name="job_id"/>
+                </group>
+            </xpath>
+            <xpath expr="//notebook/page[@name='options']/group/group[@name='questions']/field[@name='questions_selection']"
+                   position="after">
+                <field name="total_score"/>
+                <label for="required_score" string="Required Score"/>
+                <div class="d-inline-flex">
+                    <field name="required_score" nolabel="1"/>
+                    <span>%</span>
+                </div>
+            </xpath>
+            <xpath expr="//notebook/page[@name='questions']/field[@name='question_and_page_ids']/tree/field[@name='question_type']" position="after">
+                <field name="elimination_question"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- Report action -->
+    <record id="action_report_contract_document" model="ir.actions.report">
+        <field name="name">Contract Document</field>
+        <field name="model">xf.partner.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">xf_partner_contract.report_contract_document_template</field>
+        <field name="report_file">xf_partner_contract.report_contract_document_template</field>
+        <field name="print_report_name">'Contract - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_xf_partner_contract"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- QWeb report template -->
+    <template id="report_contract_document_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- Header -->
+                        <div class="row mb-4">
+                            <div class="col-12 text-center">
+                                <h2 style="text-transform: uppercase; letter-spacing: 2px;">
+                                    <t t-out="doc.type == 'sale' and 'Service Level Agreement' or 'Vendor Contract'"/>
+                                </h2>
+                                <h3><t t-out="doc.name"/></h3>
+                                <p class="text-muted">Ref: <t t-out="doc.ref or 'N/A'"/></p>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <!-- Parties -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <h5>Department / Client</h5>
+                                <t t-if="doc.company_id">
+                                    <p>
+                                        <strong><t t-out="doc.company_id.name"/></strong><br/>
+                                        <t t-if="doc.company_id.street">
+                                            <t t-out="doc.company_id.street"/><br/>
+                                        </t>
+                                        <t t-if="doc.company_id.city">
+                                            <t t-out="doc.company_id.city"/>,
+                                        </t>
+                                        <t t-if="doc.company_id.zip">
+                                            <t t-out="doc.company_id.zip"/>
+                                        </t>
+                                    </p>
+                                </t>
+                            </div>
+                            <div class="col-6">
+                                <h5>Service Provider / Counterparty</h5>
+                                <t t-if="doc.partner_id">
+                                    <p>
+                                        <strong><t t-out="doc.partner_id.name"/></strong><br/>
+                                        <t t-if="doc.partner_id.street">
+                                            <t t-out="doc.partner_id.street"/><br/>
+                                        </t>
+                                        <t t-if="doc.partner_id.city">
+                                            <t t-out="doc.partner_id.city"/>,
+                                        </t>
+                                        <t t-if="doc.partner_id.zip">
+                                            <t t-out="doc.partner_id.zip"/>
+                                        </t>
+                                    </p>
+                                </t>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <!-- Contract Details -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <h5>Contract Details</h5>
+                                <table class="table table-sm table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <td class="fw-bold" style="width:35%">Contract Reference</td>
+                                            <td><t t-out="doc.ref or 'N/A'"/></td>
+                                            <td class="fw-bold" style="width:35%">Contract Type</td>
+                                            <td><t t-out="dict(doc.fields_get(['type'])['type']['selection'])[doc.type]"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Start Date</td>
+                                            <td><t t-out="doc.date_start"/></td>
+                                            <td class="fw-bold">End Date</td>
+                                            <td><t t-out="doc.date_end or 'Open-ended'"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Contract Amount</td>
+                                            <td>
+                                                <t t-out="doc.currency_id.symbol or 'R'"/>
+                                                <t t-out="'{:,.2f}'.format(doc.amount or 0)"/>
+                                            </td>
+                                            <td class="fw-bold">Classification</td>
+                                            <td><t t-out="doc.classification or 'N/A'"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Tender / Bid Number</td>
+                                            <td><t t-out="doc.tender_number or 'N/A'"/></td>
+                                            <td class="fw-bold">Responsible Officer</td>
+                                            <td><t t-out="doc.user_id.name or 'N/A'"/></td>
+                                        </tr>
+                                        <t t-if="doc.region_id or doc.municipality_id">
+                                            <tr>
+                                                <td class="fw-bold">Region</td>
+                                                <td><t t-out="doc.region_id.display_name or 'N/A'"/></td>
+                                                <td class="fw-bold">Municipality</td>
+                                                <td><t t-out="doc.municipality_id.display_name or 'N/A'"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Scope of Work -->
+                        <t t-if="doc.scope_of_work">
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h5>Scope of Work</h5>
+                                    <t t-out="doc.scope_of_work"/>
+                                </div>
+                            </div>
+                            <hr/>
+                        </t>
+
+                        <!-- Contract Lines -->
+                        <t t-if="doc.use_lines and doc.line_ids">
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h5>Contract Lines / Deliverables</h5>
+                                    <table class="table table-sm table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Description</th>
+                                                <th class="text-end">Qty</th>
+                                                <th class="text-end">Unit Price</th>
+                                                <th class="text-end">Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="doc.line_ids" t-as="line">
+                                                <tr>
+                                                    <td><t t-out="line.name"/></td>
+                                                    <td class="text-end"><t t-out="line.quantity"/></td>
+                                                    <td class="text-end">
+                                                        <t t-out="'{:,.2f}'.format(line.price_unit or 0)"/>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <t t-out="'{:,.2f}'.format((line.quantity or 0) * (line.price_unit or 0))"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Terms and Conditions -->
+                        <t t-if="doc.notes">
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h5>Terms and Conditions</h5>
+                                    <t t-out="doc.notes"/>
+                                </div>
+                            </div>
+                            <hr/>
+                        </t>
+
+                        <!-- Signature Block -->
+                        <div class="row mt-5">
+                            <div class="col-12">
+                                <h5>Signatures</h5>
+                            </div>
+                            <div class="col-6">
+                                <p class="fw-bold">For and on behalf of the Department:</p>
+                                <br/>
+                                <p>___________________________</p>
+                                <p>Name: ___________________</p>
+                                <p>Designation: ___________________</p>
+                                <p>Date: ___________________</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="fw-bold">For and on behalf of the Service Provider:</p>
+                                <br/>
+                                <p>___________________________</p>
+                                <p>Name: ___________________</p>
+                                <p>Designation: ___________________</p>
+                                <p>Date: ___________________</p>
+                            </div>
+                        </div>
+
+                        <!-- Footer note -->
+                        <div class="row mt-4">
+                            <div class="col-12 text-center text-muted">
+                                <small>
+                                    Generated on
+                                    <t t-out="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                                    | Contract Version <t t-out="doc.current_version or 1"/>
+                                </small>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

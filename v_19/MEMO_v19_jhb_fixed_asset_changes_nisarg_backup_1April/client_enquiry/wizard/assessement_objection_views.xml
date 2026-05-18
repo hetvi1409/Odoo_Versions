@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="assessment_objection_view_form" model="ir.ui.view">
+        <field name="name">assessment.objection.form.view</field>
+        <field name="model">assessment.objection</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="assessment_id" readonly="1"/>
+                        <field name="circulation_id" readonly="1"/>
+                        <field name="outcome"/>
+                    </group>
+                    <group invisible="circulation_id != False">
+                        <field name="is_object_valid" invisible="outcome != 'yes'"/>
+<!--                        <field name="is_negotiation" attrs="{'invisible': [('outcome', '!=', 'yes')], 'required': [('outcome', '=', 'yes')]}"/>-->
+                    </group>
+                    <group invisible="circulation_id == False">
+                        <field name="is_municipal_department" invisible="outcome != 'no'" required="circulation_id != False and outcome == 'no'"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_submit"
+                            string="Submit"
+                            type="object"
+                            class="btn-primary"
+                            data-hotkey="t"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+    <record id="assessment_accept_view_form" model="ir.ui.view">
+        <field name="name">assessment.accept.form.view</field>
+        <field name="model">assessment.accept</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="assessment_id" readonly="1"/>
+                        <field name="transaction_id" readonly="1"/>
+                        <field name="endorse"/>
+                        <field name="comments"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_submit"
+                            string="Submit"
+                            type="object"
+                            class="btn-primary"
+                            data-hotkey="t"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+    <record id="assessment_spec_view_form" model="ir.ui.view">
+        <field name="name">assessment.spec.form.view</field>
+        <field name="model">assessment.spec</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="assessment_id" readonly="1"/>
+                        <field name="transaction_id" readonly="1"/>
+                        <field name="endorse"/>
+                        <field name="comments"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_submit"
+                            string="Submit"
+                            type="object"
+                            class="btn-primary"
+                            data-hotkey="t"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+    <record id="eac_review_view_form" model="ir.ui.view">
+        <field name="name">eac.review.form.view</field>
+        <field name="model">eac.review</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="eac_id" readonly="1"/>
+                        <field name="comments"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_submit"
+                            string="Submit"
+                            type="object"
+                            class="btn-primary"
+                            data-hotkey="t"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+</odoo>

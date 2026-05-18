@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="whatsapp_message_form" model="ir.ui.view">
+        <field name="name">whatsapp.messages.form</field>
+        <field name="model">whatsapp.messages</field>
+        <field name="inherit_id" ref="pragtech_whatsapp_base.view_whatsapp_message_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='time']" position="after">
+                <field name="msg_status" readonly="1"/>
+                <field name="time_sent" readonly="1"/>
+                <field name="time_delivered" readonly="1"/>
+                <field name="time_read" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="whatsapp_messages_tree" model="ir.ui.view">
+        <field name="name">whatsapp.messages.tree</field>
+        <field name="model">whatsapp.messages</field>
+        <field name="arch" type="xml">
+            <tree string="Whatsapp Messages" create="0" edit="0">
+                <field name="senderName"/>
+                <field name="to"/>
+                <field name="message_body"/>
+                <field name="time" readonly="1"/>
+                <field name="msg_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="whatsapp_messages_search" model="ir.ui.view">
+        <field name="name">whatsapp.messages.view.search</field>
+        <field name="model">whatsapp.messages</field>
+        <field name="arch" type="xml">
+            <search string="Whatsapp Message">
+                <group expand="1" string="Group By">
+                    <filter string="Partner" name="partner" context="{'group_by':'partner_id'}"/>
+                    <filter string="Date" name="date" context="{'group_by':'time'}"/>
+                    <filter string="Chat Id" name="chat_id" context="{'group_by':'chatId'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="whatsapp_messages_action">
+        <field name="name">Whatsapp Messages</field>
+        <field name="view_mode">tree,form</field>
+        <field name="res_model">whatsapp.messages</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_whatsapp_messages"
+              action="whatsapp_messages_action"
+              name="Whatsapp Messages" sequence="2"
+              parent="contacts.menu_contacts"/>
+
+
+</odoo>
+

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="internal_rolling_plan_report_action" model="ir.actions.report">
+        <field name="name">PDF Report</field>
+        <field name="model">rolling.plan</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">internal_audit_management.rolling_plan_report</field>
+        <field name="report_file">internal_audit_management.rolling_plan_report</field>
+        <field name="binding_model_id" ref="model_rolling_plan"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Audit Universe - %s' % object.name
+        </field>
+    </record>
+
+    <template id="rolling_plan_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="col-xs-4" style="padding:0;">
+                            <center>
+                                <h2 t-esc="doc.name"/>
+                            </center>
+                            <table class="table table-striped align_center">
+                                <tr>
+                                    <td>
+                                        <strong>ARP Number:</strong>
+                                    </td>
+                                    <td>
+                                        <t t-esc="doc.sequence_no"/>
+                                    </td>
+                                    <td>
+                                        <strong>Plan:</strong>
+                                    </td>
+                                    <td>
+                                        <t t-esc="doc.plan_id.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table table-striped align_center">
+                                <tr>
+                                    <td>
+                                        <strong>Department:</strong>
+                                    </td>
+                                    <td>
+                                        <t t-foreach="doc.department_ids"
+                                           t-as="department">
+                                            <span t-field="department.name"/>,
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <strong>Year:</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.arp_year_id.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <center>
+                                <h4>Internal Audit Operational Plan</h4>
+                            </center>
+                            <t t-if="doc.operational_plan_ids">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ARP Number</th>
+                                            <th>ARP Name</th>
+                                            <th>AOP Name</th>
+                                            <th>Internal Audit Rolling Plan 3</th>
+                                            <th>Project Number</th>
+                                            <th>Motivation/Link</th>
+                                            <th>Scope Of Work</th>
+                                            <th>Type Of Audit</th>
+                                            <th>Department</th>
+                                            <th>Risk Description</th>
+                                            <th>Risk Priority Rating</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="doc.operational_plan_ids"
+                                            t-as="line">
+                                            <td>
+                                                <t t-esc="line.sequence_number"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.rolling_plan_id.name"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.plan_id.name"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.project_number"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.name"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.description"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.scope_of_work"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.assurance_consulting"/>
+                                            </td>
+                                            <td>
+                                                <t t-foreach="line.department_ids"
+                                                   t-as="dept">
+                                                    <span t-field="dept.name"/>,
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.risk_priority_rating"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.risk_description"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.start_date"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.date_end"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+<!--                                <center>-->
+<!--                                    <h4>Revert Details</h4>-->
+<!--                                </center>-->
+<!--                                <t t-if="doc.feedback">-->
+<!--                                    <table class="table table-striped align_center">-->
+<!--                                        <tr>-->
+<!--                                            <td>-->
+<!--                                                <strong>Feedback:</strong>-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                                <span t-field="doc.feedback"/>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+<!--                                    </table>-->
+<!--                                </t>-->
+<!--                                <t t-set="reverts"-->
+<!--                                   t-value="doc.env['audit.revert'].search([('res_id', '=', doc.id), ('res_model', '=', doc._name)])"/>-->
+<!--                                <t t-if="reverts">-->
+<!--                                    <table class="table table-bordered">-->
+<!--                                        <thead>-->
+<!--                                            <tr>-->
+<!--                                                <th>Revert Name</th>-->
+<!--                                                <th>Created Date</th>-->
+<!--                                                <th>Review Comments</th>-->
+<!--                                                <th>Audit Proposal</th>-->
+<!--                                                <th>State</th>-->
+<!--                                            </tr>-->
+<!--                                        </thead>-->
+<!--                                        <tbody>-->
+<!--                                            <tr t-foreach="reverts"-->
+<!--                                                t-as="revert">-->
+<!--                                                <td>-->
+<!--                                                    <t t-esc="revert.name"/>-->
+<!--                                                </td>-->
+<!--                                                <td>-->
+<!--                                                    <t t-esc="revert.date"/>-->
+<!--                                                </td>-->
+<!--                                                <td>-->
+<!--                                                    <t t-esc="revert.comments"/>-->
+<!--                                                </td>-->
+<!--                                                <td>-->
+<!--                                                    <t t-esc="revert.audit_findings"/>-->
+<!--                                                </td>-->
+<!--                                                <td>-->
+<!--                                                    <span t-field="revert.state"/>-->
+<!--                                                </td>-->
+<!--                                            </tr>-->
+<!--                                        </tbody>-->
+<!--                                    </table>-->
+<!--                                </t>-->
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

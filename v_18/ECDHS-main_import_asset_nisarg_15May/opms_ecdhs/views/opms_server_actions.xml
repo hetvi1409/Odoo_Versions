@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="ir_actions_server_opms_reset_labels_defaults" model="ir.actions.server">
+            <field name="name">Reset OPMS Labels To Defaults</field>
+            <field name="model_id" ref="base.model_res_config_settings"/>
+            <field name="binding_model_id" ref="base.model_res_config_settings"/>
+            <field name="binding_type">action</field>
+            <field name="binding_view_types">form</field>
+            <field name="state">code</field>
+            <field name="code">action = env['res.config.settings'].sudo().action_reset_opms_labels_to_defaults()</field>
+        </record>
+
+        <record id="ir_actions_server_opms_quarter_force_open_selected" model="ir.actions.server">
+            <field name="name">Open Selected Quarters Now</field>
+            <field name="model_id" ref="model_opms_quarter"/>
+            <field name="binding_model_id" ref="model_opms_quarter"/>
+            <field name="binding_type">action</field>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">records.action_force_open_selected_quarters()</field>
+        </record>
+
+        <record id="ir_actions_server_opms_quarter_force_close_selected" model="ir.actions.server">
+            <field name="name">Close Selected Quarters Now</field>
+            <field name="model_id" ref="model_opms_quarter"/>
+            <field name="binding_model_id" ref="model_opms_quarter"/>
+            <field name="binding_type">action</field>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">records.action_force_close_selected_quarters()</field>
+        </record>
+    </data>
+</odoo>

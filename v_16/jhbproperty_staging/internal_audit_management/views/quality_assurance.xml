@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_quality_assurance" model="ir.actions.act_window">
+        <field name="name">Quality Assurance</field>
+        <field name="res_model">quality.assurance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Quality Assurance
+            </p>
+            <p>
+                Create and manage the Quality Assurance
+            </p>
+        </field>
+    </record>
+    <record id="quality_assurance_tree" model="ir.ui.view">
+        <field name="name">quality.assurance.view.form</field>
+        <field name="model">quality.assurance</field>
+        <field name="arch" type="xml">
+            <tree duplicate="0">
+                <field name="name"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_print_quality_assurance" model="ir.actions.report">
+        <field name="name">Quality Assurance</field>
+        <field name="model">ir.actions.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">internal_audit_management.report_quality_assurance</field>
+        <field name="print_report_name">'Quality Assurance'</field>
+    </record>
+    <record id="quality_assurance_form" model="ir.ui.view">
+        <field name="name">view.quality.assurance.form</field>
+        <field name="model">quality.assurance</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                           
+                            string="1st Review" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'preparer')]}"/>
+                    <button name="action_2nd_review" type="object"
+                           
+                            string="2nd Review" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'first_reviewer')]}"/>
+                    <button name="action_approve" type="object"
+                           
+                            string="Approve" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'second_reviewer')]}"/>
+                    <button name="action_revert" type="object"
+                           
+                            string="Revert" class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['first_reviewer', 'second_reviewer'])]}"/>
+                    <button name="action_reject" type="object"
+                           
+                            string="Reject" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'second_reviewer')]}"/>
+                    <button name="action_update" type="object"
+                           
+                            string="Updated" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'reverted')]}"/>
+                    <button name="action_print_quality_assurance" type="object" string="Print" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="preparer,first_reviewer,second_reviewer,approved,reverted,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <h2 style="text-align:center;"><b>Quality Assurance Review</b></h2>
+                    <div style="width:100%">
+                        <table style="width:100%">
+                            <tr>
+                                <td>
+                                    <group>
+                                        <field name="name"/>
+                                    </group>
+                                </td>
+                                <td>
+                                    <group><field name="subject" readonly="False"/></group>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <group><field name="assurance_number"/></group>
+                                </td>
+                                <td>
+                                    Period:
+                                    <field name="period_start"/> -->
+                                    <field name="period_end"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <group>
+                                        <field name="user_preparer_ids"/>
+                                    </group>
+                                </td>
+                                <td>
+                                    <group>
+                                        <field name="user_reviewer_1_ids"/>
+                                    </group>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <group>
+                                        <field name="user_reviewer_2_ids"/>
+                                    </group>
+                                </td>
+                                <td>
+                                    <group>
+                                        <field name="user_approver_ids"/>
+                                    </group>
+                                </td>
+                            </tr>
+                        </table>
+                        <h4><b>Planning and Administration: </b></h4>
+                        <field name="planing_admin_ids" style="border-collapse: collapse; width: 100%; border: 2px solid black;">
+                            <tree options='{"no_open": True}'>
+                                <field name="requirement" string=" " style="border: 1px solid black; padding: 8px;"/>
+                                <field name="standards" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="yes_bool" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="no_bool" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="wp_ref" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="remark" style="border: 1px solid black; padding: 8px;"/>
+                            </tree>
+                        </field>
+                    </div>
+                    <div style="width:100%">
+                        <h4><b>Fieldwork phase: </b></h4>
+                        <field name="field_work_phase" style="border-collapse: collapse; width: 100%; border: 2px solid black;">
+                            <tree options='{"no_open": True}'>
+                                <field name="requirement" string=" " style="border: 1px solid black; padding: 8px;"/>
+                                <field name="standards" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="yes_bool" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="no_bool" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="wp_ref" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="remark" style="border: 1px solid black; padding: 8px;"/>
+                            </tree>
+                        </field>
+                    </div>
+                    <div style="width:100%">
+                        <h4><b>Reporting phase: </b></h4>
+                        <field name="reporting_phase" style="border-collapse: collapse; width: 100%; border: 2px solid black;">
+                            <tree options='{"no_open": True}'>
+                                <field name="requirement" string=" " style="border: 1px solid black; padding: 8px;"/>
+                                <field name="standards" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="yes_bool" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="no_bool" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="wp_ref" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="remark" style="border: 1px solid black; padding: 8px;"/>
+                            </tree>
+                        </field>
+                    </div>
+                    <div style="width:100%">
+                        <h4><b>General: </b></h4>
+                        <field name="general" style="border-collapse: collapse; width: 100%; border: 2px solid black;">
+                            <tree options='{"no_open": True}'>
+                                <field name="requirement" string=" " style="border: 1px solid black; padding: 8px;"/>
+                                <field name="standards" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="yes_bool" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="no_bool" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="wp_ref" style="border: 1px solid black; padding: 8px;"/>
+                                <field name="remark" style="border: 1px solid black; padding: 8px;"/>
+                            </tree>
+                        </field>
+                    </div>
+                    <div style="width: 100%">
+                        <table style="width: 100%">
+                            <tr>
+                                <td>
+                                    <strong>General Notes:  </strong>
+                                    <field name="general_note" style="height: 225px;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Conclusion :  </strong>
+                                    <field name="conclusion" style="height: 225px;"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <notebook>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                        <page string="Documents">
+                            <field name="document_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+</odoo>

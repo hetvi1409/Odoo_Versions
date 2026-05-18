@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="asset_sage_integration_action" model="ir.actions.act_window">
+        <field name="name">Asset Integration</field>
+        <field name="res_model">asset.sage.integration</field>
+        <field name="view_mode">form</field>
+		<field name="target">new</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new Asset Category.
+            </p>
+        </field>
+    </record>
+    	<record id="asset_sage_integration_view_form" model="ir.ui.view">
+		<field name="name">asset.sage.integration.view.form</field>
+		<field name="model">asset.sage.integration</field>
+		<field name="arch" type="xml">
+			<form>
+				<group>
+				</group>
+				<group>
+					<field name="name"/>
+					<field name="encrypt_password" widget="boolean_toggle"/>
+				</group>
+				<group>
+					<group>
+						<field name="username"/>
+					</group>
+					<group>
+						<field name="password"/>
+					</group>
+				</group>
+				<group invisible="encrypt_password != True">
+					<group>
+						<field name="user_password"/>
+						<field name="private_key"/>
+					</group>
+					<group>
+						<field name="participant_reference"/>
+					</group>
+				</group>
+				<group invisible="encrypt_password == True">
+					<group>
+						<field name="type"/>
+					</group>
+					<group>
+						<field name="scoaVersionId" invisible="type != 'account'"/>
+						<field name="date_from" invisible="type not in ['acquisitions','transaction']"/>
+						<field name="date_to" invisible="type not in ['acquisitions','transaction']"/>
+						<field name="account" invisible="type not in ['acquisitions','transaction']"/>
+					</group>
+				</group>
+				<footer>
+					<button string="Call API" name="action_get_general_ledger" invisible="encrypt_password == True" type="object" class="btn-primary" />
+<!--					<button string="Encrypt Password" name="action_get_password" attrs="{'invisible': [('encrypt_password', '!=', True)]}" type="object" class="btn-primary" />-->
+					<button string="Cancel" class="btn-default" special="cancel" />
+				</footer>
+			</form>
+		</field>
+	</record>
+
+    <menuitem parent="account.account_account_menu"
+              id="menu_asset_sage_integration" name="Sage"
+              action="asset_sage_integration_action" sequence="101"/>
+    <menuitem id="account_accountant.menu_accounting" name="Fixed Asset"/>
+</odoo>

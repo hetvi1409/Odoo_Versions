@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Sign Request Changes Dialog Template (7.2)
+    ================================================================= -->
+    <t t-name="ecdhs_contract_management.SignRequestChangesDialog" owl="1">
+        <Dialog title="Request Changes Before Signing">
+            <div class="o_sign_request_changes_dialog">
+                <div class="o_sign_request_changes_body">
+                    <p class="o_sign_request_changes_intro">
+                        <strong>Describe the changes or updates you would like before signing this contract:</strong>
+                    </p>
+
+                    <div class="form-group">
+                        <textarea
+                            class="form-control o_sign_changes_textarea"
+                            t-att-value="state.changeReason"
+                            t-on-change="(e) => state.changeReason = e.target.value"
+                            t-on-keydown="onKeyDown"
+                            rows="8"
+                            placeholder="E.g., Please clarify the payment terms in section 3.2, or update the delivery schedule to align with our operational capacity..."
+                            t-att-disabled="state.isSubmitting"
+                        />
+                    </div>
+
+                    <!-- Validation hint -->
+                    <t t-if="!isValidReason() and state.changeReason.trim()">
+                        <div class="alert alert-warning small" role="alert">
+                            <i class="fa fa-info-circle"></i>
+                            Please provide a meaningful reason with at least one real word.
+                        </div>
+                    </t>
+
+                    <!-- Error message -->
+                    <t t-if="state.error">
+                        <div class="alert alert-danger small" role="alert">
+                            <i class="fa fa-exclamation-circle"></i>
+                            <t t-esc="state.error"/>
+                        </div>
+                    </t>
+
+                    <!-- Helper text -->
+                    <div class="small text-muted mt-2">
+                        <p>
+                            <i class="fa fa-lightbulb-o"></i>
+                            <strong>Tip:</strong> Be specific about what changes are needed.
+                            The contract management team will review your request and follow up with you.
+                        </p>
+                        <p>
+                            <i class="fa fa-keyboard-o"></i>
+                            <strong>Keyboard shortcut:</strong> Press Ctrl+Enter to submit.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        t-on-click="() => close()"
+                        t-att-disabled="state.isSubmitting"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary o_sign_submit_changes_btn"
+                        t-on-click="submitChangeRequest"
+                        t-att-disabled="state.isSubmitting or !isValidReason()"
+                    >
+                        <t t-if="state.isSubmitting">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            Submitting...
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-send"></i>
+                            Submit Change Request
+                        </t>
+                    </button>
+                </div>
+            </div>
+        </Dialog>
+    </t>
+
+    <!-- ================================================================
+         CSS Styling for Request Changes Dialog
+    ================================================================= -->
+    <style>
+        .o_sign_request_changes_dialog {
+            padding: 1rem;
+        }
+
+        .o_sign_request_changes_body {
+            margin-bottom: 1rem;
+        }
+
+        .o_sign_request_changes_intro {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .o_sign_changes_textarea {
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            resize: vertical;
+        }
+
+        .o_sign_changes_textarea:focus {
+            border-color: #875A7B;
+            box-shadow: 0 0 0 0.2rem rgba(135, 90, 123, 0.25);
+        }
+
+        .o_sign_submit_changes_btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 576px) {
+            .o_sign_request_changes_dialog {
+                padding: 0.5rem;
+            }
+
+            .o_sign_changes_textarea {
+                font-size: 16px; /* Prevents zoom on mobile */
+            }
+        }
+    </style>
+
+</odoo>

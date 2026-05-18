@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="purchase_requisition_action" model="ir.actions.act_window">
+        <field name="name">Purchase Requisition</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.requisition</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new record!
+            </p>
+        </field>
+    </record>
+    <record id="purchase_requisition_view_form" model="ir.ui.view">
+        <field name="name">purchase.requisition.view.form</field>
+        <field name="model">purchase.requisition</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget='statusbar'
+                           statusbar_visible='draft,first_approve,second_approve'/>
+                    <button name="action_first_approve"
+                            class="oe_highlight"  invisible="state != 'draft'"
+                            string="First Approval" type="object"
+                            groups="supply_chain_management.purchase_requisition_user_manager"/>
+                    <button name="action_first_review"
+                            class="btn btn-secondary"  invisible="state != 'draft'"
+                            string="Refuse" type="object"
+                            groups="supply_chain_management.purchase_requisition_user_manager"/>
+                    <button name="action_budget_approve"
+                            class="oe_highlight"  invisible="state != 'first_approve'"
+                            string="Approve Budget" type="object"
+                            groups="supply_chain_management.purchase_requisition_finance"/>
+                    <button name="action_budget_refuse"
+                            class="btn btn-secondary" invisible="state != 'first_approve'"
+                            string="Refuse" type="object"
+                            groups="supply_chain_management.purchase_requisition_finance"/>
+                    <button name="action_create_meeting"
+                            class="btn btn-secondary"
+                            string="Create Meeting" type="object"
+                            invisible="state != 'second_approve' or type != 'competitive_bid'"
+                            groups="supply_chain_management.purchase_requisition_scm"/>
+                    <button name="action_approve"
+                            class="oe_highlight" string="Approve" type="object"
+                            invisible="state != 'second_approve' or type != 'not_competitive'"
+                            groups="supply_chain_management.purchase_requisition_scm_manager"/>
+                    <button name="action_refuse" string="Refuse" type="object"
+                            invisible="state != 'second_approve' or type != 'not_competitive'"
+                            class="btn btn-secondary"
+                            groups="supply_chain_management.purchase_requisition_scm_manager"/>
+                    <button name="action_approve_spec"
+                            class="oe_highlight" string="Approve" type="object"
+                            invisible="state != 'second_approve' or type != 'competitive_bid'"
+                            groups="supply_chain_management.purchase_requisition_scm"/>
+                    <button name="action_refuse_spec" string="Refuse" type="object"
+                            invisible="state != 'second_approve' or type != 'competitive_bid'"
+                            class="btn btn-secondary"
+                            groups="supply_chain_management.purchase_requisition_scm"/>
+                    <button name="action_create_po"
+                            class="oe_highlight" string="Create Purchase Order" type="object"
+                            invisible="state != 'approve' or type != 'not_competitive'"
+                            groups="supply_chain_management.purchase_requisition_scm_manager"/>
+                    <button name="action_create_po"
+                            class="oe_highlight" string="Create Purchase Order" type="object"
+                            invisible="state != 'agreement' or type != 'competitive_bid'"
+                            groups="supply_chain_management.purchase_requisition_scm_manager"/>
+                    <button name="action_tender_advertisement"
+                            class="oe_highlight" string="Tender Advertisement" type="object"
+                            invisible="state != 'approve' or type != 'competitive_bid'"
+                            groups="supply_chain_management.purchase_requisition_scm_manager"/>
+                    <button name="action_send_audit_report"
+                            class="oe_highlight" string="Send the report" type="object"
+                            invisible="state  != 'advertisement' or type != 'competitive_bid'"
+                            groups="supply_chain_management.purchase_requisition_scm_manager"/>
+                    <button name="action_bid_evaluation"
+                            class="oe_highlight" string="Bid Evaluation" type="object"
+                            invisible="state != 'advertisement' or type != 'competitive_bid'"
+                            groups="supply_chain_management.purchase_requisition_scm_manager"/>
+                    <button name="action_edc_meeting"
+                            class="oe_highlight" string="Create Meeting" type="object"
+                            invisible="state != 'bid_evaluated' or type != 'competitive_bid'"
+                            groups="supply_chain_management.purchase_requisition_scm_manager"/>
+                    <button name="action_edc"
+                            class="oe_highlight" string="Evaluation Review" type="object"
+                            invisible="state != 'bid_evaluated' or type != 'competitive_bid'"
+                            groups="supply_chain_management.purchase_requisition_scm_eac"/>
+                    <button name="reset_drafts" class="btn btn-secondary"
+                            groups="supply_chain_management.purchase_requisition_user"
+                            invisible="state not in ['first_approve','second_approve','cancelled']"
+                            string="Set to Draft" type="object"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="get_budget_details"
+                                invisible="state =='draft' or budget_count == '0'"
+                                icon="fa-credit-card">
+                            <field string="Budget details"
+                                   name="budget_count" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="get_memo_details"
+                                invisible="memo_id == False"
+                                icon="fa-book">
+                            Memo
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                            name="get_committee_meeting_details"
+                            icon="fa-calendar">
+                            <field string="Meetings" name="meeting_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="New"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="type"
+                                   readonly="state != 'draft'"/>
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="partner_ids" widget="many2many_tags"
+                                   readonly="state !=  'draft'"/>
+                            <field name="company_id"
+                                    readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="selected_partner_id"
+                                   domain="[('id', 'in', partner_ids)]"
+                                   options="{'no_create': True}"
+                                    invisible="state in ['draft', 'first_approve']"/>
+                            <field name="requisition_date"
+                                   readonly="state != 'draft'"/>
+                            <field name="budget_count" invisible="0"/>
+                            <field name="memo_id"
+                                   readonly="state != 'draft'"/>
+                            <field name="independent_advisor_id"
+                                   invisible="state in  ['draft', 'first_approve', 'second_approve', 'approve', 'created_po']"/>
+                            <field name="report_send" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Requisition Orders ">
+                            <field name="line_ids"
+                                   readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="description"/>
+                                    <field name="quantity"/>
+                                    <field name="uom"/>
+                                    <field name="amount"/>
+                                    <field name="sub_total"/>
+                                </list>
+                            </field>
+
+                            <group class="oe_subtotal_footer oe_right"
+                                   colspan="2">
+                                <div class="oe_inline o_td_label">
+                                    <label for="amount_total"/>
+                                </div>
+                                <field name="amount_total" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Quote">
+                            <field name="quote_line_ids">
+                                <list editable="bottom">
+                                    <field name="partner_id"
+                                           domain="[('id', 'in', parent.partner_ids)]"
+                                           options="{'no_create': True}"/>
+                                    <field name="description" />
+                                    <field name="amount"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Document">
+                            <group>
+                            <button name="supply_document_upload" type="object"
+                                    string="UPLOAD"
+                                    class="btn-primary"/>
+                            </group>
+                        </page>
+
+                        <page string="Recommendation Report"
+                              invisible="state not in ['advertisement', 'bid_evaluated'] or type != 'competitive_bid'">
+                            <group>
+                                <field name="recommendation_report" widget="html"/>
+                            </group>
+                        </page>
+                        <page string="Documents" invisible="state not in ['advertisement', 'bid_evaluated'] or type != 'competitive_bid'">
+                            <group>
+                                <field name="attachment_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="purchase_requisition_view_tree" model="ir.ui.view">
+        <field name="name">purchase.requisition.view.tree</field>
+        <field name="model">purchase.requisition</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="type"/>
+                <field name="amount_total"/>
+                <field name="state" decoration-info="state == 'draft'"
+                       decoration-success="state in ('approve', 'created_po')"
+                       decoration-muted="state in ('second_approve', 'first_approve')"
+                       decoration-danger="state == 'cancelled'" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <menuitem id="purchase_requisition_menu"
+              name="Purchase Requisition"
+              parent="purchase.menu_procurement_management"
+              action="purchase_requisition_action"
+              groups="supply_chain_management.purchase_requisition_user"/>
+
+</odoo>

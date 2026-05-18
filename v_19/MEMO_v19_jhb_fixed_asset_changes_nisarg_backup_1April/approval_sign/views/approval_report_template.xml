@@ -1,0 +1,80 @@
+<odoo>
+    <template id="report_approval_request_template">
+        <t t-call="web.external_layout_standard">
+            <div class="page">
+                <t t-foreach="docs" t-as="doc">
+                    <h2>Approval Request</h2>
+                    <p>
+                        <strong>Name:</strong>
+                        <t t-esc="doc.name"/>
+                    </p>
+                    <p>
+                        <strong>Requester:</strong>
+                        <t t-esc="doc.request_owner_id.name"/>
+                    </p>
+                    <p>
+                        <strong>Status:</strong>
+                        <t t-esc="doc.request_status"/>
+                    </p>
+
+                    <!-- Signature Section -->
+                    <p>
+                        <strong>Signature:</strong>
+                    </p>
+                    <t t-if="doc.signature">
+                        <img style="height: 100px; padding-left: 30px;"
+                             t-att-src="image_data_uri(doc.signature)"/>
+                    </t>
+                    <t t-if="not doc.signature">
+                        <p>No signature available</p>
+                    </t>
+
+                    <!-- Table Section to display details -->
+                    <h3>Request Details</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong>Approval Request Name</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Requester</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.request_owner_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Status</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.request_status"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Request Date</strong>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.create_date"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

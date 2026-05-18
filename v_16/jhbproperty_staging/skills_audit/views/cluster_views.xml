@@ -1,0 +1,72 @@
+
+<odoo>
+  <record id="view_cluster_tree" model="ir.ui.view">
+    <field name="name">scs.cluster.tree</field>
+    <field name="model">scs.cluster</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="sequence"/>
+        <field name="name"/>
+        <field name="code"/>
+      </tree>
+    </field>
+  </record>
+  <record id="view_cluster_form" model="ir.ui.view">
+    <field name="name">scs.cluster.form</field>
+    <field name="model">scs.cluster</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <style>
+              .o_form_view:not(.o_field_highlight)
+              .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+              .o_input:not(:hover):not(:focus) {
+              --o-input-border-color: black !important;
+              }
+              .o_form_view:not(o_field_highlight)
+              .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+              .note-editable:not(:focus) {
+              border-color: black !important;
+              }
+              .form-check:not(:hover),
+              .form-check:not(:hover) .form-check-input:not(:disabled),
+              .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+              border-color: black !important;
+              }
+          </style>
+          <div class="oe_title pe-0">
+            <h1 class="d-flex flex-row justify-content-between">
+              <field name="name" placeholder="Cluster Name"/>
+            </h1>
+          </div>
+          <group>
+            <group>
+              <field name="sequence"/>
+              <field name="code"/>
+            </group>
+            <group>
+              <group>
+                <!-- <field name="met_count" readonly="1"/> -->
+              </group>
+            </group>
+          </group>
+          <notebook>
+            <page string="Competencies">
+              <field name="competency_ids">
+                <tree editable="bottom">
+                  <field name="code"/>
+                  <field name="name"/>
+                </tree>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+        <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+      </form>
+    </field>
+  </record>
+</odoo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_custom_project_task_form" model="ir.ui.view">
+        <field name="name">project.task.form.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_assign_to_me']"
+                   position="after">
+                <button name="action_save"
+                        attrs="{'invisible':[('is_save', '=' ,True)]}"
+                        type="object"
+                        string="Save"
+                        class="btn-primary"/>
+                <button name="inspection_start"
+                        attrs="{'invisible':[('check_inspection_start', '=' ,True)]}"
+                        type="object"
+                        string="Inspection Start"
+                        class="btn-primary"/>
+                <button name="inspection_finish"
+                        attrs="{'invisible':['|', ('check_inspection_start', '!=' ,True), ('check_inspection_finish', '=' ,True)]}"
+                        type="object"
+                        string="Inspection Finish"
+                        class="btn-primary"/>
+                <button name="action_work_start"
+                        attrs="{'invisible':['|', ('is_job_card_created', '!=' ,True), ('check_work_start', '=', True)]}"
+                        type="object"
+                        string="Work Start"
+                        class="btn-primary"/>
+            </xpath>
+            <xpath expr="//sheet/div[@name='button_box']" position="inside">
+                <button name="action_inspection" type="object"
+                        class="oe_stat_button" icon="fa-legal"
+                        attrs="{'invisible':[('check_inspection_start', '!=' ,True)]}">
+                    <span class="o_stat_text">Inspection</span>
+                </button>
+                <button name="action_job_card_show" type="object"
+                        class="oe_stat_button" icon="fa-address-card"
+                        attrs="{'invisible':[('is_job_card_created', '!=' ,True)]}">
+                    <span class="o_stat_text">Job Card</span>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="jmc_number" invisible="1"/>
+                <field name="manager_id"/>
+                <field name="check_inspection_start" invisible="1"/>
+                <field name="check_inspection_finish" invisible="1"/>
+                <field name="is_job_card_created" invisible="1"/>
+                <field name="check_work_start" invisible="1"/>
+                <field name="check_work_done" invisible="1"/>
+                <field name="is_save" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

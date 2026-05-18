@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="email_template_send_contract" model="mail.template">
+        <field name="name">Send Contract</field>
+        <field name="model_id"
+               ref="xf_partner_contract_management.model_xf_partner_contract"/>
+        <field name="subject">The Contract {{ object.name or 'n/a' }} is
+            Verified.
+        </field>
+        <field name="description">send to the customers.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi<t t-out="object.partner_id.name"/>,
+                    <br/>
+                    The Contract
+                    <t t-out="object.name"/>
+                    was Verified.
+                </p>
+            </div>
+            <div style="margin: 16px 0px 16px 0px;">
+                <a t-att-href="(object.get_list_url())"
+                   style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                    <t>
+                        Open
+                        <t t-out="object.name"/>
+                    </t>
+                </a>
+            </div>
+
+        </field>
+    </record>
+    <record id="email_template_send_contract_not_verified"
+            model="mail.template">
+        <field name="name">Send Contract</field>
+        <field name="model_id"
+               ref="xf_partner_contract_management.model_xf_partner_contract"/>
+        <field name="subject">The Contract {{ object.name or 'n/a' }} Not
+            Verified.
+        </field>
+        <field name="description">send to the customers.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi<t t-out="object.partner_id.name"/>,
+                    <br/>
+                    The Contract
+                    <t t-out="object.name"/>
+                    was Not Verified.
+                </p>
+            </div>
+            <div style="margin: 16px 0px 16px 0px;">
+                <a t-att-href="(object.get_list_url())"
+                   style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                    <t>
+                        Open
+                        <t t-out="object.name"/>
+                    </t>
+                </a>
+            </div>
+        </field>
+    </record>
+        <record id="email_template_send_contract_amend_created"
+            model="mail.template">
+        <field name="name">Send Contract</field>
+        <field name="model_id"
+               ref="xf_partner_contract_management.model_xf_partner_contract"/>
+        <field name="subject">The Contract {{ object.name or 'n/a' }} Amend
+            Created.
+        </field>
+        <field name="description">send to the customers.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi<t t-out="object.partner_id.name"/>,
+                    <br/>
+                    The Contract
+                    <t t-out="object.name"/>
+                    Amend Created.
+                </p>
+            </div>
+            <div style="margin: 16px 0px 16px 0px;">
+                <a t-att-href="(object.get_list_url())"
+                   style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                    <t>
+                        Open
+                        <t t-out="object.name"/>
+                    </t>
+                </a>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_send_contract_send_for_betting"
+            model="mail.template">
+        <field name="name">Send Contract</field>
+        <field name="model_id"
+               ref="xf_partner_contract_management.model_xf_partner_contract"/>
+        <field name="subject">The Contract {{ object.name or 'n/a' }} Reviewed .
+        </field>
+        <field name="description">send to the customers.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi<t t-out="object.partner_id.name"/>,
+                    <br/>
+                    The Contract
+                    <t t-out="object.name"/>
+                    was reviewed. Please check and sign the request.
+                </p>
+            </div>
+            <div style="margin: 16px 0px 16px 0px;">
+                <a t-att-href="(object.get_list_url())"
+                   style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                    <t>
+                        Open
+                        <t t-out="object.name"/>
+                    </t>
+                </a>
+            </div>
+        </field>
+    </record>
+        <record id="email_template_send_contract_approval_termination"
+            model="mail.template">
+        <field name="name">Send Contract</field>
+        <field name="model_id"
+               ref="xf_partner_contract_management.model_xf_partner_contract"/>
+        <field name="subject">The Contract {{ object.name or 'n/a' }} Termination Request .
+        </field>
+        <field name="description">send to the customers.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi<t t-out="object.partner_id.name"/>,
+                    <br/>
+                    The Contract
+                    <t t-out="object.name"/>
+                    was raise a approval request for termination. Please check and sign the request.
+                </p>
+            </div>
+            <div style="margin: 16px 0px 16px 0px;">
+                <a t-att-href="(object.get_list_url())"
+                   style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                    <t>
+                        Open
+                        <t t-out="object.name"/>
+                    </t>
+                </a>
+            </div>
+        </field>
+    </record>
+        <record id="email_template_send_contract_refused_termination"
+            model="mail.template">
+        <field name="name">Send Contract</field>
+        <field name="model_id"
+               ref="xf_partner_contract_management.model_xf_partner_contract"/>
+        <field name="subject">The Contract {{ object.name or 'n/a' }} Termination Request Refused .
+        </field>
+        <field name="description">send to the customers.</field>
+        <field name="body_html" type="html">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi<t t-out="object.partner_id.name"/>,
+                    <br/>
+                    The termination request for the Contract
+                    <t t-out="object.name"/>
+                    was rejected . Please check and sign the request.
+                </p>
+            <div style="margin: 16px 0px 16px 0px;">
+                <a t-att-href="(object.get_list_url())"
+                   style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                    <t>
+                        Open
+                        <t t-out="object.name"/>
+                    </t>
+                </a>
+            </div>
+        </field>
+    </record>
+        <record id="email_template_send_contract_approved_termination"
+            model="mail.template">
+        <field name="name">Send Contract</field>
+        <field name="model_id"
+               ref="xf_partner_contract_management.model_xf_partner_contract"/>
+        <field name="subject">The Contract {{ object.name or 'n/a' }} Termination Request was approved.
+        </field>
+        <field name="description">send to the customers.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi<t t-out="object.partner_id.name"/>,
+                    <br/>
+                    The termination request for the Contract
+                    <t t-out="object.name"/>
+                    was approved . Please check and sign the request.
+                </p>
+            </div>
+            <div style="margin: 16px 0px 16px 0px;">
+                <a t-att-href="(object.get_list_url())"
+                   style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                    <t>
+                        Open
+                        <t t-out="object.name"/>
+                    </t>
+                </a>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_send_contract_procurement_submitted"
+            model="mail.template">
+        <field name="name">Send Contract</field>
+        <field name="model_id"
+               ref="xf_partner_contract_management.model_xf_partner_contract"/>
+        <field name="subject">The Contract {{ object.name or 'n/a' }} Procurement Submitted.
+        </field>
+        <field name="description">send to the customers.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi<t t-out="object.partner_id.name"/>,
+                    <br/>
+                    The Procurement request for the Contract
+                    <t t-out="object.name"/>
+                    was submitted . Please check and sign the request.
+                </p>
+            </div>
+            <div style="margin: 16px 0px 16px 0px;">
+                <a t-att-href="(object.get_list_url())"
+                   style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                    <t>
+                        Open
+                        <t t-out="object.name"/>
+                    </t>
+                </a>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_send_contract_procurement_approved"
+            model="mail.template">
+        <field name="name">Send Contract</field>
+        <field name="model_id"
+               ref="xf_partner_contract_management.model_xf_partner_contract"/>
+        <field name="subject">The Contract {{ object.name or 'n/a' }} Procurement Approved.
+        </field>
+        <field name="description">send to the customers.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi<t t-out="object.partner_id.name"/>,
+                    <br/>
+                    The Procurement request for the Contract
+                    <t t-out="object.name"/>
+                    was approved . Please check and sign the request.
+                </p>
+            </div>
+            <div style="margin: 16px 0px 16px 0px;">
+                <a t-att-href="(object.get_list_url())"
+                   style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                    <t>
+                        Open
+                        <t t-out="object.name"/>
+                    </t>
+                </a>
+            </div>
+        </field>
+    </record>
+
+
+    <record id="email_template_non_compliance" model="mail.template">
+        <field name="name">Non-Compliance Notification</field>
+        <field name="model_id" ref="xf_partner_contract_management.model_contract_monitoring_report"/>
+        <field name="email_from">{{ object.company_id.email or '' }}</field>
+        <field name="email_to">{{ object.partner_id.email or '' }}</field>
+        <field name="subject">Contract Non-Compliance Notification: {{ object.contract_id.name or 'n/a' }}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>Dear <t t-out="object.partner_id.name or 'Sir/Madam'"/>,</p>
+                <p>We have identified non-compliance issues in contract
+                    <strong><t t-out="object.contract_id.name"/></strong>.
+                </p>
+                <p>Please address these issues within 7 days.</p>
+            </div>
+        </field>
+    </record>
+
+    <record id="email_template_contract_expiry_notice" model="mail.template">
+        <field name="name">Contract Expiry Notice (6 Months)</field>
+        <field name="model_id" ref="xf_partner_contract_management.model_xf_partner_contract"/>
+        <field name="subject">Contract {{ object.name or 'n/a' }} expires on {{ object.date_end or '' }}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>Dear <t t-out="object.user_id.name or 'Colleague'"/>,</p>
+                <p>The contract <strong><t t-out="object.name"/></strong> is due to expire on
+                    <strong><t t-out="object.date_end"/></strong>.
+                </p>
+                <p>Please complete the SOP expiry checklist and start procurement in time where continuation is required.</p>
+                <p>
+                    <a t-att-href="object.get_list_url()">Open Contract</a>
+                </p>
+            </div>
+        </field>
+    </record>
+</odoo>

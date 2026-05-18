@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<record id="view_client_enquiry_sla_policy_status_tree" model="ir.ui.view">
+    <field name="name">client.enquiry.sla.policy.status.tree</field>
+    <field name="model">client.enquiry.sla.policy.status</field>
+    <field name="arch" type="xml">
+        <tree>
+            <field name="name"/>
+        </tree>
+    </field>
+</record>
+
+<!-- Form View -->
+<record id="view_client_enquiry_sla_policy_status_form" model="ir.ui.view">
+    <field name="name">client.enquiry.sla.policy.status.form</field>
+    <field name="model">client.enquiry.sla.policy.status</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                <group>
+                    <field name="name"/>
+                    <field name="deadline"/>
+                    <field name="status"/>
+                    <field name="exceeded_hours"/>
+                </group>
+                <group>
+                    <field name="process_status"/>
+                    <field name="assessment_id" attrs="{'invisible': [('process_status', '!=', 'assessment')]}"/>
+                    <field name="comment_id" attrs="{'invisible': [('process_status', 'not in', ('sent_for_comments', 'ptob'))]}"/>
+                    <field name="valuation_id" attrs="{'invisible': [('process_status', '!=', 'valuation')]}"/>
+                    <field name="transaction_id" attrs="{'invisible': [('process_status', '!=', 'transaction')]}"/>
+                    <field name="eac_id" attrs="{'invisible': [('process_status', '!=', 'eac')]}"/>
+                    <field name="land_id" attrs="{'invisible': [('process_status', '!=', 'land_regularization')]}"/>
+                    <field name="policy_id"/>
+                    <field name="reached_datetime"/>
+                </group>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+</odoo>

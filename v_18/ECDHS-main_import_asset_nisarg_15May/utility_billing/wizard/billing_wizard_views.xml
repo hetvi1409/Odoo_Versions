@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <record id="view_utility_billing_wizard" model="ir.ui.view">
+    <field name="name">utility.billing.wizard.form</field>
+    <field name="model">utility.billing.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Batch Utility Billing">
+        <group>
+          <field name="company_id"/>
+          <field name="utility_type"/>
+        </group>
+        <group>
+          <field name="period_start"/>
+          <field name="period_end"/>
+          <field name="auto_invoice_date"/>
+        </group>
+        <group>
+          <field name="only_active_meters"/>
+        </group>
+        <footer>
+          <button name="action_generate" type="object" string="Generate Invoices" class="btn-primary"/>
+          <button string="Cancel" class="btn-secondary" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+  <record id="action_open_billing_wizard" model="ir.actions.act_window">
+    <field name="name">Batch Billing</field>
+    <field name="res_model">utility.billing.wizard</field>
+    <field name="view_mode">form</field>
+  </record>
+
+<!--  <act_window id="action_open_billing_wizard"-->
+<!--              name="Batch Billing"-->
+<!--              res_model="utility.billing.wizard"-->
+<!--              src_model="utility.meter.reading"-->
+<!--              view_mode="form"-->
+<!--              target="new"/>-->
+</odoo>
+

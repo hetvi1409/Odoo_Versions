@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="0">
+        <!-- Email Template for Bid Award -->
+        <record id="email_template_bid_award" model="mail.template">
+            <field name="name">Bid Award Email Template</field>
+            <field name="model_id" ref="tender_management.model_bid_award"/>
+            <field name="subject">Award Letter for {{ object.bid_id.name }}</field>
+            <field name="email_from">{{ object.env.user.email_formatted }}</field>
+            <field name="email_to">{{ object.vendor_id.email }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        <br/>
+                        <b>
+                        <t t-out="object.subject"/>
+                        </b>
+                        <br/>
+                        <br/>
+                        <br/>
+                            <t t-out="object.body"/>
+                    </p>
+                </div>
+            </field>
+
+<!--                        <field name="attachment_ids" eval="[(6, 0, [attachment.id for attachment in object.attachment_ids])]"/>-->
+        </record>
+        <record id="email_template_tender_submitted" model="mail.template">
+            <field name="name">Tender Email Template</field>
+            <field name="model_id" ref="tender_management.model_tender_tender"/>
+            <field name="subject">Tender {{ object.name }}: Submitted</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi Team,<br/>
+                        The Tender <t t-out="object.name"/> was submitted. Please review.
+                    </p>
+                    <div style="margin: 16px 0px 16px 0px;">
+                        <a t-att-href="(object.get_list_url())"
+                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                            <t>
+                                Open <t t-out="object.name"/>
+                            </t>
+                        </a>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

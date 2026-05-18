@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="AssetRegisterReport" owl="1">
+        <!-- Section contains a structure for the purchase report, including a filter
+        view and a table view. It has div elements for the filter view and table view,
+        with respective classes for styling. -->
+        <div class="">
+            <div>
+                <center>
+                    <h1 style="margin: 20px;">Asset Register Report</h1>
+                </center>
+            </div>
+        </div>
+        <div class="print-btns">
+            <div class="sub_container_left print-actions">
+                <button type="button" class="btn btn-primary action-btn"
+                        t-on-click="printPdf">
+                    Print (PDF)
+                </button>
+
+                <button type="button" class="btn btn-primary action-btn"
+                        t-on-click="print_xlsx">
+                    Export (XLSX)
+                </button>
+            </div>
+            <br/>
+            <div class="sub_container_right filter-container">
+                <!-- Custodian Filter -->
+                <div class="filter-item">
+                    <label>
+                        <strong>Custodian</strong>
+                    </label>
+                    <select class="form-control" t-ref="custodian">
+                        <option value="">-- Select Custodian --</option>
+                        <t t-foreach="state.custodian_list" t-as="c"
+                           t-key="c['id']">
+                            <option t-att-value="c.id">
+                                <t t-esc="c.name"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+
+                <!-- Department Filter -->
+                <div class="filter-item">
+                    <label>
+                        <strong>Department</strong>
+                    </label>
+                    <select class="form-control" t-ref="department">
+                        <option value="">-- Select Department --</option>
+                        <t t-foreach="state.department_list" t-as="d"
+                           t-key="d['id']">
+                            <option t-att-value="d.id">
+                                <t t-esc="d.name"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+
+                <!-- Type Filter -->
+                <div class="filter-item">
+                    <label>
+                        <strong>Type</strong>
+                    </label>
+                    <select class="form-control" t-ref="report_type">
+                        <option value="">-- Select Type --</option>
+                        <option value="minor">Minor</option>
+                        <option value="major">Major</option>
+                    </select>
+                </div>
+
+                <!-- Filter Button -->
+                <div class="filter-button">
+                    <button type="button" class="btn btn-primary"
+                            t-on-click="load_data">
+                        Filter
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <!-- ===== KPI CARD BLOCKS ===== -->
+        <div class="row" style="margin: 20px 10px;">
+
+            <!-- Total Assets -->
+            <div class="col-3">
+                <div class="card shadow-sm text-center p-3"
+                     style="border-radius:10px;">
+<!--                    background:#f4f6f9; -->
+                    <h5>Total Assets</h5>
+                    <h2>
+                        <t t-esc="state.total_asset"/>
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Assets In Use -->
+            <div class="col-3">
+                <div class="card shadow-sm text-center p-3"
+                     style="border-radius:10px;">
+<!--                    background:#e8f5e9; -->
+                    <h5>In Use Asset</h5>
+                    <h2>
+<!--                        <t t-esc="state.assets.filter(a => a.state === 'open').length"/>-->
+                        <t t-esc="state.assets.filter(a => a.state === 'draft').length"/>
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Removed -->
+            <div class="col-3">
+                <div class="card shadow-sm text-center p-3"
+                     style="border-radius:10px;">
+                     <!-- background:#fff3e0;  -->
+                    <h5>Good Asset</h5>
+                    <h2>
+                        <t t-esc="state.good_asset"/>
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Disposed -->
+            <div class="col-3">
+                <div class="card shadow-sm text-center p-3"
+                     style="border-radius:10px;">
+                     <!-- background:#ffebee;  -->
+                    <h5>Disposed Asset</h5>
+                    <h2>
+                        <t t-esc="state.disposed_asset"/>
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin: 20px 10px;">
+            <div class="col-3">
+                <div class="card shadow-sm text-center p-3"
+                     style="border-radius:10px;">
+                     <!-- background:#ffebfd;  -->
+                    <h5>Damaged Asset</h5>
+                    <h2>
+                        <t t-esc="state.damaged_asset"/>
+                    </h2>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card shadow-sm text-center p-3"
+                     style="border-radius:10px;">
+                     <!-- background:#ecebff;  -->
+                    <h5>Cancelled</h5>
+                    <h2>
+                        <t t-esc="state.cancelled_asset"/>
+                    </h2>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card shadow-sm text-center p-3"
+                     style="border-radius:10px;">
+                     <!-- background:#f7ffeb;  -->
+                    <h5>Lost Asset</h5>
+                    <h2>
+                        <t t-esc="state.lost_asset"/>
+                    </h2>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card shadow-sm text-center p-3"
+                     style="border-radius:10px;">
+                     <!-- background:#fffeeb;  -->
+                    <h5>Written Off Asset</h5>
+                    <h2>
+                        <t t-esc="state.written_off_asset"/>
+                    </h2>
+                </div>
+            </div>
+
+        </div>
+        <!-- ===== END KPI CARDS ===== -->
+
+        <div class="overflow-auto" style="height: 70vh; padding:10px">
+            <div>
+                <div class="table_main_view">
+                    <table cellspacing="0" width="100%">
+                        <thead>
+                            <tr class="table_pr_head">
+                                <th class="mon_fld">Asset Name</th>
+                                <th class="mon_fld">Asset Number</th>
+                                <th class="mon_fld">Description</th>
+                                <th class="mon_fld">Value</th>
+                                <th class="mon_fld">Location</th>
+                                <th class="mon_fld">Custodian</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.assets"
+                               t-as="asset"
+                               t-key="asset['id']">
+                                <tr style="border: 1.5px solid black;"
+                                    class="pr-line"
+                                    t-att-data-account-id="asset['id']"
+                                    t-attf-data-target=".a{{asset['id']}}">
+                                    <td>
+                                        <t t-if="asset['id']">
+                                            <div>
+                                                <a data-toggle="dropdown"
+                                                >
+                                                    <span class="caret"/>
+                                                    <span>
+                                                        <t t-esc="asset['name']"/>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </t>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span>
+                                            <t t-esc="asset['alternative_ref'] or ''"/>
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span>
+                                        <!-- Do not show false value, show empty string instead -->
+                                            <t t-esc="asset['description'] or ''"/>
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span>
+                                            <t t-esc="asset['original_value']"/>
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span>
+                                            <t t-esc="asset['job_location_id'][1]"/>
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span>
+                                            <t t-if="asset['custodian_id']">
+                                                <t t-esc="asset['custodian_id'][1]"/>
+                                            </t>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

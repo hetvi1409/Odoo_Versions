@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_challenges_tag_tree" model="ir.ui.view">
+        <field name="name">challenges.tag.tree</field>
+        <field name="model">challenges.tag</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_challenges_tag_form" model="ir.ui.view">
+        <field name="name">challenges.tag.form</field>
+        <field name="model">challenges.tag</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="color" widget="color_picker"/>
+                            <field name="color_2" widget="color" groups="base.group_no_one"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_challenges_tag" model="ir.actions.act_window">
+        <field name="name">Challenges Tags</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">challenges.tag</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+
+            <p class="'o_view_nocontent_smiling_face">
+                Create your first tag !
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            id="menu_challenges_tag"
+            name="Challenges Categories"
+            action="action_challenges_tag"
+            parent="menu_register"
+            sequence="20"/>
+
+
+</odoo>

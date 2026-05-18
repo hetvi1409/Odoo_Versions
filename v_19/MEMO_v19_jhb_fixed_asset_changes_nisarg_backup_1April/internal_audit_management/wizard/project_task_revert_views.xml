@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="project_task_revert_view_form" model="ir.ui.view">
+        <field name="name">project.task.revert.form.view</field>
+        <field name="model">project.task.revert</field>
+        <field name="arch" type="xml">
+            <form create="0" duplicate="0">
+                <header>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="task_id"/>
+                    </group>
+                    <group>
+                        <field name="comments"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_submit"
+                            string="Create Project"
+                            type="object"
+                            class="btn-primary"
+                            data-hotkey="t"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="audit_finding_view_tree" model="ir.ui.view">
+        <field name="name">audit.finding.view.list</field>
+        <field name="model">audit.finding</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="impact" />
+                <field name="audit_requirement" />
+                <field name="internal_control_deficiency" />
+                <field name="recommendation" />
+<!--                <field name="is_finding_resolved" />-->
+                <field name="auditor_conclusion" optional="show"/>
+                <field name="audit_finding" optional="show"/>
+                <field name="department_id" optional="show"/>
+            </list>
+        </field>
+    </record>
+</odoo>

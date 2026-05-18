@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tender_list" model="ir.ui.view">
+        <field name="name">sagovtender.tender.list</field>
+        <field name="model">sagovtender.tender</field>
+        <field name="arch" type="xml">
+            <list decoration-info="stage_key=='draft'" decoration-success="stage_key=='awarded'">
+                <field name="stage_key" invisible="1"/>
+                <field name="name"/>
+                <field name="title"/>
+                <field name="department_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="tender_type_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="estimated_value" widget="monetary"/>
+                <field name="closing_date"/>
+                <field name="bid_count"/>
+                <field name="current_workflow_stage_name" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tender_kanban" model="ir.ui.view">
+        <field name="name">sagovtender.tender.kanban</field>
+        <field name="model">sagovtender.tender</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="stage_key"/>
+                <field name="current_workflow_stage_name"/>
+                <field name="estimated_value"/>
+                <field name="closing_date"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <strong><field name="name"/>: <field name="title"/></strong>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <field name="estimated_value" widget="monetary"/>
+                                <br/>
+                                <i>Closing: <field name="closing_date"/></i>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <field name="current_workflow_stage_name" widget="badge"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_tender_form" model="ir.ui.view">
+        <field name="name">sagovtender.tender.form</field>
+        <field name="model">sagovtender.tender</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="validate_document_requirements" string="Validate Documents" type="object" class="btn-primary" invisible="stage_key in ['awarded', 'cancelled', 'rejected']"/>
+                    <button name="action_start_scm_processing" string="Start SCM Processing" type="object" class="btn-primary" invisible="not show_btn_start_scm_processing"/>
+                    <button name="action_publish_tender" string="Publish/Advertise" type="object" class="btn-success" invisible="not show_btn_publish_tender"/>
+                    <button name="action_start_briefing" string="Schedule Briefing" type="object" class="btn-primary" invisible="not show_btn_start_briefing or not has_briefing_session"/>
+                    <button name="action_schedule_briefing" string="Add Briefing Session" type="object" class="btn-info" invisible="not show_btn_schedule_briefing or briefing_session_count > 0"/>
+                    <button name="action_complete_briefing" string="Complete Briefing" type="object" class="btn-success" invisible="not show_btn_complete_briefing"/>
+                    <button name="action_open_bid_submission" string="Open Bid Submission" type="object" class="btn-success" invisible="not show_btn_open_bid_submission or (stage_key == 'advertised' and has_briefing_session)"/>
+                    <!-- <button name="action_view_bids" string="Add Bidders" type="object" class="btn-success" invisible="state != 'bid_submission'"/> -->
+                    <button name="action_close_submission" string="Close Bid Submission" type="object" invisible="not show_btn_close_submission or not bid_ids"/>
+                    <button name="action_conduct_opening" string="Start Tender Opening" type="object" invisible="not show_btn_conduct_opening"/>
+                        <button name="action_close_opening" string="Finish Tender Opening" type="object" invisible="not show_btn_close_opening"/>
+                    <button name="action_start_sagovcompliance_check" string="Conduct Compliance Check" type="object" invisible="not show_btn_start_compliance_check"/>
+                    <button name="action_end_sagovcompliance_check" string="Complete Compliance Check" type="object" invisible="not show_btn_end_compliance_check"/>
+                    <button name="action_request_declarations" string="Request Declarations" type="object" invisible="not show_btn_request_declarations"/>
+                    <button name="action_start_evaluation" string="Start Evaluation" type="object" invisible="not show_btn_start_evaluation"/>
+                    <button name="action_send_to_bac" string="Send to BAC" type="object" invisible="not show_btn_send_to_bac"/>
+                    <button name="action_bac_review" string="BAC Review" type="object" invisible="not show_btn_bac_review"/>
+                    <button name="action_award_tender" string="Award Tender" type="object" class="btn-success" invisible="not show_btn_award_tender"/>
+                    <button name="action_view_award" string="View Award" type="object" class="btn-success" invisible="not show_btn_view_award"/>
+                    <button name="action_cancel_tender" string="Cancel" type="object" invisible="not show_btn_cancel_tender"/>
+                    <field name="workflow_stage_ids" invisible="1"/>
+                    <field name="stage_key" invisible="1"/>
+                    <!-- <field name="state" widget="statusbar" statusbar_visible="draft,advertised,briefing,opening,compliance,evaluation,sagovbac_review,awarded"/> -->
+                    <button name="action_next_workflow_stage" string="Next Stage" type="object" class="btn-secondary" icon="fa-arrow-circle-right" invisible="not show_btn_next_stage"/>
+                    <field name="current_workflow_stage_id" widget="statusbar" options="{'clickable': False}"/>
+                </header>
+                <sheet>
+                    <group invisible="1">
+                        <field name="show_btn_start_scm_processing"/>
+                        <field name="show_btn_publish_tender"/>
+                        <field name="show_btn_start_briefing"/>
+                        <field name="show_btn_schedule_briefing"/>
+                        <field name="show_btn_complete_briefing"/>
+                        <field name="show_btn_open_bid_submission"/>
+                        <field name="show_btn_close_submission"/>
+                        <field name="show_btn_conduct_opening"/>
+                        <field name="show_btn_close_opening"/>
+                        <field name="show_btn_start_compliance_check"/>
+                        <field name="show_btn_end_compliance_check"/>
+                        <field name="show_btn_request_declarations"/>
+                        <field name="show_btn_start_evaluation"/>
+                        <field name="show_btn_send_to_bac"/>
+                        <field name="show_btn_bac_review"/>
+                        <field name="show_btn_award_tender"/>
+                        <field name="show_btn_view_award"/>
+                        <field name="show_btn_cancel_tender"/>
+                        <field name="show_btn_next_stage"/>
+                        <field name="show_tab_description"/>
+                        <field name="show_tab_document_checklist"/>
+                        <field name="show_tab_documents"/>
+                        <field name="show_tab_advertisement"/>
+                        <field name="show_tab_briefing_sessions"/>
+                        <field name="show_tab_tender_opening"/>
+                        <field name="show_tab_bids"/>
+                        <field name="show_tab_compliance"/>
+                        <field name="show_tab_declarations"/>
+                        <field name="show_tab_evaluation"/>
+                        <field name="show_tab_sagovbac_review"/>
+                        <field name="show_tab_award"/>
+                        <field name="show_tab_purchase_order"/>
+                        <field name="show_tab_downloads"/>
+                    </group>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_bids" type="object" class="oe_stat_button" icon="fa-file-text" string="Bids">
+                            <field name="bid_count" widget="statbutton" string="Bids"/>
+                            <span class="o_stat_text">. Bids</span>
+                        </button>
+                        <button name="%(action_sagovtender_bid)d" type="action" class="oe_stat_button" icon="fa-check-circle" string="Compliant" context="{'search_default_tender_id': id, 'search_default_compliant': 1}">
+                            <field name="compliant_bid_count" widget="statbutton" string="Compliant"/>
+                            <span class="o_stat_text">. Compliant</span>
+                        </button>
+                        <button name="action_view_briefing_sessions" type="object" class="oe_stat_button" icon="fa-users" string="Briefings" invisible="not has_briefing_session">
+                            <field name="briefing_session_count" widget="statbutton" string="Briefings"/>
+                            <span class="o_stat_text">. Briefings</span>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                        <h2><field name="title" placeholder="Tender Title..." required="name != False" readonly="is_locked"/></h2>
+                    </div>
+                    <group>
+                        <group string="Basic Information">
+                            <field name="title" placeholder="Tender Title..." required="name != False" readonly="is_locked"/>
+                            <field name="has_briefing_session" readonly="is_locked"/>
+                            <!-- <field name="briefing_completed" invisible="not has_briefing_session" readonly="is_locked"/> -->
+                            <field name="briefing_completed" invisible="1" readonly="is_locked"/>
+                            <field name="requisition_id" string="Requisition" domain="[('state', '=', 'approved')] + ([('app_id', '=', requisition_app_id)] if requisition_app_id else [])" context="{'requisition_app_id': requisition_app_id}" required="name != False" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}" help="Select a requisition. If an APP is chosen, this list is filtered to that APP."/>
+                            <field name="specification_id" required="name != False" domain="[('requisition_id', '=', requisition_id)]" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="estimated_value" widget="monetary" required="name != False" readonly="1"/>
+                            <field name="approved_budget" widget="monetary" required="name != False" readonly="1"/>
+                            <field name="preference_system" required="name != False" readonly="1" invisible="1"/>
+                            <field name="procurement_method" required="name != False" readonly="1" invisible="1"/>
+                            <field name="procurement_method_config_id" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="preference_point_system_config_id" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="tender_type_id" required="name != False" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                        <group string="Additional Information">
+                            <field name="requisition_app_id" placeholder="Optional APP..." readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}" help="Optional. Choose an APP to filter requisitions; leave blank to see all approved requisitions."/>
+                            <field name="has_functionality" readonly="is_locked"/>
+                            <field name="functionality_threshold" invisible="not has_functionality" readonly="is_locked"/>
+                            <field name="department_id" required="name != False" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="scm_officer_id" required="name != False" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="responsible_user_id" required="name != False" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="currency_id" invisible="0" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Dates">
+                            <field name="publication_date" required="name != False" readonly="is_locked"/>
+                            <field name="closing_date" required="name != False" readonly="is_locked"/>
+                            <field name="opening_date" required="name != False" readonly="is_locked"/>
+                            <field name="validity_period" required="name != False" readonly="is_locked"/>
+                        </group>
+                        <group string="Committees">
+                            <field name="bec_committee_id" required="name != False" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="bac_committee_id" required="name != False" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description" invisible="not show_tab_description">
+                            <field name="description" widget="html" placeholder="Full tender description..." readonly="is_locked"/>
+                        </page>
+                        <page string="Tender Documents Checklist" name="document_checklist" invisible="not show_tab_document_checklist">
+                            <group>
+                                <group>
+                                    <field name="mandatory_documents_uploaded" widget="boolean"/>
+                                    <field name="documents_completion_rate" widget="progressbar"/>
+                                </group>
+                                <group>
+                                </group>
+                            </group>
+                            <field name="document_checklist_ids">
+                                <list decoration-success="state=='verified'"
+                                      decoration-info="state=='uploaded'"
+                                      decoration-danger="state=='rejected' or (mandatory and state=='pending')"
+                                      editable="bottom">
+                                    <field name="sequence" readonly="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="document_type" readonly="1"/>
+                                    <field name="mandatory" widget="boolean" readonly="1"/>
+                                    <field name="uploaded" widget="boolean" readonly="1"/>
+                                    <field name="tender_document_id"
+                                           options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="uploaded_by_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="upload_date" readonly="1"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state=='verified'"
+                                           decoration-info="state=='uploaded'"
+                                           decoration-danger="state=='rejected'"
+                                           decoration-muted="state=='pending'"/>
+                                    <button name="action_upload_document" string="Upload"
+                                            type="object" icon="fa-upload"
+                                            invisible="uploaded"/>
+                                    <button name="action_verify_document" string="Verify"
+                                            type="object" icon="fa-check"
+                                            invisible="state != 'uploaded'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Tender Documents" name="documents">
+                            <field name="sagovtender_document_ids" readonly="is_locked">
+                                <list decoration-info="sequence">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="attachment_id" domain="[('id', '=', False)]"
+                                           options="{'create': false, 'create_edit': false}"
+                                           column_invisible="True"/>
+                                    <field name="datas" filename="attachment_filename" string="File"/>
+                                    <button name="action_preview_document" type="object" string="Preview"
+                                            class="btn-primary"
+                                            invisible="attachment_id == False"/>
+                                    <field name="document_type"/>
+                                    <field name="name" string="Document Name"/>
+                                    <field name="mandatory"/>
+                                    <field name="public"/>
+                                    <field name="version"/>
+                                    <field name="upload_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Advertisement" name="advertisement">
+                            <group>
+                                <group>
+                                    <field name="advertisement_text"
+                                        widget="html"
+                                        placeholder="Enter the advertisement text for the sagovtender."
+                                        help="Enter the advertisement text for the sagovtender." readonly="is_locked"/>
+                                </group>
+                                <group>
+                                    <field name="advertisement_platform_ids" widget="many2many_tags" readonly="is_locked"/>
+                                    <field name="published_url" readonly="is_locked"/>
+                                </group>
+                            </group>
+                        </page>
+                        <!-- <page string="Briefing Sessions" name="briefing_sessions" invisible="not has_briefing_session"> -->
+                        <page string="Briefing Sessions" name="briefing_sessions">
+                            <field name="briefing_session_ids" readonly="stage_key != 'briefing'" open_form_view="1">
+                                <list decoration-info="state=='scheduled'" decoration-success="state=='completed'" decoration-muted="state=='cancelled'">
+                                    <field name="name"/>
+                                    <field name="session_type"/>
+                                    <field name="session_date"/>
+                                    <field name="venue"/>
+                                    <field name="is_compulsory" widget="boolean_toggle"/>
+                                    <field name="registered_count"/>
+                                    <field name="attended_count"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Tender Opening" name="tender_opening">
+                            <group>
+                                <group>
+                                    <field name="opening_date" readonly="is_locked"/>
+                                    <field name="opening_register_id" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                </group>
+                                <group>
+                                    <field name="published_url" readonly="is_locked"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Bids" name="bids">
+                            <field name="bid_ids" readonly="is_locked">
+                                <list string="Bids" default_order="id desc" open_form_view="1">
+                                    <field name="tender_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="name"/>
+                                    <!-- <field name="partner_id" domain="[('id', '=', bid_id.partner_id.id)]" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/> -->
+                                    <field name="partner_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="bid_amount" widget="monetary"/>
+                                    <field name="submission_date"/>
+                                    <field name="is_compliant"/>
+                                    <field name="total_score"/>
+                                    <field name="state" widget="badge" decoration-info="state=='draft'" decoration-success="state=='awarded'" decoration-danger="state=='rejected'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Compliance" name="compliance">
+                            <field name="sagovcompliance_check_ids" readonly="1">
+                                <list widget="badge" decoration-info="state=='draft'" decoration-success="state=='compliant'" decoration-danger="state=='non_compliant'" default_order="id desc" editable="bottom" open_form_view="1">
+                                    <field name="tender_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="name"/>
+                                    <field name="bid_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <!-- <field name="partner_id" domain="[('id', '=', bid_id.partner_id.id)]" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/> -->
+                                    <field name="partner_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="state" widget="badge" decoration-info="state=='draft'" decoration-success="state=='compliant'" decoration-danger="state=='non_compliant'"/>
+                                    <field name="is_compliant"/>
+                                    <field name="checked_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="check_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Declarations (BEC)" name="declarations">
+                            <group>
+                                <field name="declarations_complete" readonly="is_locked"/>
+                            </group>
+                            <field name="declaration_ids" readonly="1">
+                                <list widget="badge" decoration-info="state=='draft'" decoration-success="state=='approved'" default_order="id desc" editable="bottom" open_form_view="1">
+                                    <field name="name"/>
+                                    <field name="user_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="committee_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="declaration_acknowledged"/>
+                                    <field name="state" widget="badge" decoration-info="state=='draft'" decoration-success="state=='approved'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Evaluation (BEC)" name="evaluation">
+                            <group>
+                                <field name="bec_completed" readonly="is_locked"/>
+                                <field name="bec_report_id" widget="binary" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            </group>
+                            <field name="evaluation_ids" readonly="1">
+                                <list widget="badge" decoration-info="state=='draft'" decoration-success="state=='approved'" default_order="id desc" editable="bottom" open_form_view="1">
+                                    <field name="name"/>
+                                    <field name="partner_id" domain="[('id', '=', bid_id.partner_id.id)]" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="evaluation_date"/>
+                                    <field name="state" widget="badge" decoration-info="state=='draft'" decoration-success="state=='approved'"/>
+                                    <field name="recommended"/>
+                                    <field name="functionality_score"/>
+                                    <field name="price_score"/>
+                                    <field name="bbbee_score"/>
+                                    <field name="bbbee_level"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="(BAC) Review" name="sagovbac_review">
+                            <group>
+                                <field name="bac_recommendation" readonly="is_locked"/>
+                                <field name="bac_report_id" widget="binary" readonly="is_locked" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            </group>
+                            <field name="sagovbac_review_ids" readonly="1">
+                                <list widget="badge" decoration-info="state=='draft'" decoration-success="state=='approved'" default_order="id desc" editable="bottom" open_form_view="1">
+                                    <field name="name"/>
+                                    <field name="review_date"/>
+                                    <field name="state" widget="badge" decoration-info="state=='draft'" decoration-success="state=='approved'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Award" name="award">
+                            <group>
+                                <field name="award_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <field name="awarded_partner_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            </group>
+                        </page>
+                        <page string="Purchase Order" name="purchase_order">
+                            <group>
+                                <field name="purchase_order_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            </group>
+                        </page>
+                        <page string="Downloads" name="downloads">
+                            <!-- <button name="action_create_requisition" string="Add New Requisition" type="object" class="btn-success" invisible="state != 'approved'"/> -->
+                            <!-- <button name="action_report_sagovbid_opening_register" type="object" class="btn-success" icon="fa-users" string="Bid Opening Register"/> -->
+                            <!-- <button name="action_report_bec_evaluation" type="object" class="btn-success" icon="fa-users" string="BEC Evaluation Report"/> -->
+                            <!-- <button name="action_report_sagovbac_review" type="object" class="btn-success" icon="fa-users" string="BAC Review Report"/> -->
+                            <!-- <button name="action_report_sagovdeclaration_interest" type="object" class="btn-success" icon="fa-users" string="Declaration of Interest Report"/> -->
+                            <!-- <button name="action_report_award_letter" type="object" class="btn-success" icon="fa-users" string="Award Letter"/> -->
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tender_search" model="ir.ui.view">
+        <field name="name">sagovtender.tender.search</field>
+        <field name="model">sagovtender.tender</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="title"/>
+                <field name="department_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="tender_type_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <filter string="My Tenders" name="my_tenders" domain="[('responsible_user_id','=',uid)]"/>
+                <filter string="Draft" name="draft" domain="[('stage_key','=','draft')]"/>
+                <filter string="Advertised" name="advertised" domain="[('stage_key','=','advertised')]"/>
+                <filter string="Bid Submission" name="bid_submission" domain="[('stage_key','=','bid_submission')]"/>
+                <filter string="Evaluation" name="evaluation" domain="[('stage_key','=','evaluation')]"/>
+                <filter string="Awarded" name="awarded" domain="[('stage_key','=','awarded')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Department" name="group_department" context="{'group_by':'department_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by':'stage_key'}"/>
+                    <filter string="Type" name="group_type" context="{'group_by':'tender_type_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_tender" model="ir.actions.act_window">
+        <field name="name">Quotations/RFQ/RFP's</field>
+        <field name="res_model">sagovtender.tender</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first tender
+            </p>
+        </field>
+    </record>
+
+    <!-- Tender Type Views -->
+    <record id="view_sagovtender_type_list" model="ir.ui.view">
+        <field name="name">sagovtender.type.list</field>
+        <field name="model">sagovtender.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="description"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sagovtender_type" model="ir.actions.act_window">
+        <field name="name">Tender Types</field>
+        <field name="res_model">sagovtender.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Advertisement Platform Views -->
+    <record id="view_advertisement_platform_list" model="ir.ui.view">
+        <field name="name">sagovtender.advert.platform.list</field>
+        <field name="model">sagovtender.advert.platform</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="platform_type"/>
+                <field name="url"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_advertisement_platform" model="ir.actions.act_window">
+        <field name="name">Advertisement Platforms</field>
+        <field name="res_model">sagovtender.advert.platform</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Document Checklist Views -->
+    <record id="view_sagovtender_document_checklist_tree" model="ir.ui.view">
+        <field name="name">sagovtender.document.checklist.tree</field>
+        <field name="model">sagovtender.document.checklist</field>
+        <field name="arch" type="xml">
+            <list string="Document Checklist"
+                  decoration-success="state=='verified'"
+                  decoration-info="state=='uploaded'"
+                  decoration-danger="state=='rejected' or (mandatory and state=='pending')">
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="document_type"/>
+                <field name="mandatory" widget="boolean"/>
+                <field name="uploaded" widget="boolean"/>
+                <field name="uploaded_by_id"/>
+                <field name="upload_date"/>
+                <field name="state"/>
+                <button name="action_upload_document" string="Upload"
+                        type="object" icon="fa-upload"
+                        invisible="uploaded"/>
+                <button name="action_verify_document" string="Verify"
+                        type="object" icon="fa-check"
+                        invisible="state != 'uploaded'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sagovtender_document_checklist_form" model="ir.ui.view">
+        <field name="name">sagovtender.document.checklist.form</field>
+        <field name="model">sagovtender.document.checklist</field>
+        <field name="arch" type="xml">
+            <form string="Document Checklist Item">
+                <header>
+                    <button name="action_upload_document" string="Upload Document"
+                            type="object" class="oe_highlight"
+                            invisible="uploaded"/>
+                    <button name="action_verify_document" string="Verify"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'uploaded'"/>
+                    <button name="action_reject_document" string="Reject"
+                            type="object"
+                            invisible="state not in ['uploaded', 'verified']"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="tender_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="document_requirement_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="document_type"/>
+                            <field name="mandatory"/>
+                            <field name="uploaded"/>
+                            <field name="tender_document_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <group string="Upload Information" invisible="not uploaded">
+                        <group>
+                            <field name="uploaded_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="upload_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Document requirements and description..."/>
+                    </group>
+                    <group string="Verification Notes" invisible="state not in ['verified', 'rejected']">
+                        <field name="verification_notes" placeholder="Verification or rejection notes..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sagovtender_document_checklist_kanban" model="ir.ui.view">
+        <field name="name">sagovtender.document.checklist.kanban</field>
+        <field name="model">sagovtender.document.checklist</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" default_group_by="state">
+                <field name="name"/>
+                <field name="mandatory"/>
+                <field name="uploaded"/>
+                <field name="document_type"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                        <t t-if="record.mandatory.raw_value">
+                                            <span class="badge badge-danger">Mandatory</span>
+                                        </t>
+                                    </strong>
+                                </div>
+                                <span class="float-right">
+                                    <t t-if="record.uploaded.raw_value">
+                                        <i class="fa fa-check-circle text-success" title="Uploaded"/>
+                                    </t>
+                                    <t t-else="">
+                                        <i class="fa fa-circle-o text-muted" title="Pending"/>
+                                    </t>
+                                </span>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <field name="document_type" widget="badge"/>
+                                <t t-if="record.uploaded_by_id.value">
+                                    <div class="text-muted">
+                                        <i class="fa fa-user"/> <field name="uploaded_by_id"/>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_sagovtender_document_checklist" model="ir.actions.act_window">
+        <field name="name">Document Checklist</field>
+        <field name="res_model">sagovtender.document.checklist</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context">{'search_default_pending': 1}</field>
+    </record>
+
+        <!-- Search Views -->
+    <record id="view_sagovtender_document_checklist_search" model="ir.ui.view">
+        <field name="name">sagovtender.document.checklist.search</field>
+        <field name="model">sagovtender.document.checklist</field>
+        <field name="arch" type="xml">
+            <search string="Document Checklist">
+                <field name="name"/>
+                <field name="tender_id"/>
+                <field name="document_type"/>
+                <filter name="pending" string="Pending Upload"
+                        domain="[('state', '=', 'pending')]"/>
+                <filter name="mandatory" string="Mandatory Documents"
+                        domain="[('mandatory', '=', True)]"/>
+                <filter name="uploaded" string="Uploaded"
+                        domain="[('uploaded', '=', True)]"/>
+                <filter name="verified" string="Verified"
+                        domain="[('state', '=', 'verified')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_tender" string="Tender"
+                            context="{'group_by': 'tender_id'}"/>
+                    <filter name="group_by_type" string="Document Type"
+                            context="{'group_by': 'document_type'}"/>
+                    <filter name="group_by_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

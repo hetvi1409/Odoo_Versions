@@ -1,0 +1,64 @@
+<odoo>
+    <!-- Kanban View -->
+    <record id="view_general_kanban" model="ir.ui.view">
+        <field name="name">general.general.kanban</field>
+        <field name="model">memo.memo</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card">
+                            <div class="o_kanban_details">
+                                <strong>
+                                    <field name="name"/>
+                                </strong>
+                                <div>
+                                    <field name="state" widget="badge"/>
+                                    <br/>
+                                    <field name="date"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="view_general_graph" model="ir.ui.view">
+        <field name="name">general.general.graph</field>
+        <field name="model">memo.memo</field>
+        <field name="arch" type="xml">
+            <graph string="General Statistics" type="bar">
+                <field name="state"/>
+                <field name="id" type="count"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_general_search" model="ir.ui.view">
+    <field name="name">general.general.search</field>
+    <field name="model">memo.memo</field>
+    <field name="arch" type="xml">
+        <search string="Search Generals">
+            <field name="name"/>
+            <field name="memo_number" string="General Number"/>
+            <field name="state"/>
+            <field name="date" string="General Date"/>
+            <field name="create_uid"/>
+
+            <filter name="filter_draft" string="Draft" domain="[('state','=','draft')]"/>
+            <filter name="filter_published" string="Published" domain="[('state','=','published')]"/>
+            <filter name="filter_signed" string="Signed" domain="[('state','=','signed')]"/>
+
+            <separator />
+                <filter name="group_by_state" string="State" context="{'group_by':'state'}"/>
+                <filter name="group_by_creator" string="Created By" context="{'group_by':'create_uid'}"/>
+        </search>
+    </field>
+</record>
+
+
+</odoo>

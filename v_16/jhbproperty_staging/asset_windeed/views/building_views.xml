@@ -1,0 +1,73 @@
+<odoo>
+    <record id="view_building_form_windeed" model="ir.ui.view">
+        <field name="name">building.form</field>
+        <field name="model">building</field>
+        <field name="inherit_id" ref="itsys_real_estate.building_base_pages_form"/> <!-- Use the correct reference -->
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='pricing']" position="after">
+                <field name="history_amount" string="Historical Amount"/>
+            </xpath>
+            <!-- Add the new tab 'Windeed' inside the notebook tag -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Windeed">
+                    <group string="Property Details">
+                        <group>
+                            <field name="property_type"/>
+                            <field name="diagram_deed_number"/>
+                            <field name="township"/>
+                            <field name="local_authority"/>
+                        </group>
+                        <group>
+                            <field name="erf_number"/>
+                            <field name="province"/>
+                            <field name="portion_number"/>
+                            <field name="extent"/>
+                        </group>
+                        <group>
+                            <field name="registration_division"/>
+                            <field name="lpi_code"/>
+                        </group>
+                    </group>
+
+                    <group string="Ownership">
+                        <group>
+                            <field name="person_type"/>
+                            <field name="id_number"/>
+                            <field name="owner_name"/>
+                            <field name="multiple_owners"/>
+                        </group>
+                        <group>
+                            <field name="multiple_properties"/>
+                            <field name="share_percentage"/>
+                            <field name="ownership_document"/>
+                            <field name="microfilm_scanned_date"/>
+                        </group>
+                        <group>
+                            <field name="purchase_price"/>
+                            <field name="purchase_date_ownership"/>
+                            <field name="registration_date_ownership"/>
+                        </group>
+                    </group>
+
+                    <group string="Endorsements">
+                        <group>
+                            <field name="endorsement_document"/>
+                            <field name="institution"/>
+                            <field name="endorsement_amount"/>
+                            <field name="endorsement_microfilm_date"/>
+                        </group>
+                    </group>
+
+                    <group string="History of Documents">
+                        <group>
+                            <field name="history_document"/>
+                            <field name="history_institution"/>
+                            <field name="history_amount"/>
+                            <field name="history_microfilm_date"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

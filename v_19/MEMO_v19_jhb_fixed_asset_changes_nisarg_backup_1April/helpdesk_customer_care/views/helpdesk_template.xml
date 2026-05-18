@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="website_helpdesk.team" name="Helpdesk Team - Fully Overridden">
+        <!-- Remove all existing content in the template -->
+        <t t-call="website.layout">
+            <t t-set="additional_title">Submit a Ticket</t>
+            <div id="wrap" class="container mt-4">
+                <t t-set="editor_message">DROP BUILDING BLOCKS HERE TO MAKE THEM AVAILABLE ACROSS ALL HELPDESK TEAMS</t>
+                <div class="row mb16">
+                    <div class="oe_structure oe_empty w-100 mb-2" id="oe_structure_website_helpdesk_team_1" t-att-data-editor-message="editor_message"/>
+                    <div class="col-md-9">
+                        <h2 class="o_page_header mt0 d-none" id="team-page"/>
+                    </div>
+                    <div class="col-md-12 ps-4">
+                        <div t-if="team.use_website_helpdesk_form">
+                            <t t-set="template_xmlid" t-value="team.website_form_view_id.xml_id"/>
+                            <t t-call="#{template_xmlid}"/>
+                        </div>
+                    </div>
+<!--                    <div class="col-md-4" id="right-column">-->
+<!--                        <div class="oe_structure oe_empty" id="oe_structure_website_helpdesk_team_2" t-att-data-editor-message="editor_message"/>-->
+<!--                        <t t-if="not is_html_empty(team.description)">-->
+<!--                            <div class="card bg-secondary mt-2 w-75 pull-right" id="about_team">-->
+<!--                                <h6 class="card-header"><b>About our team</b></h6>-->
+<!--                            <div class="card-body">-->
+<!--                                <span t-field="team.description"/>-->
+<!--                            </div>-->
+<!--                            </div>-->
+<!--                        </t>-->
+<!--                        <div class="oe_structure oe_empty" id="oe_structure_website_helpdesk_team_3" t-att-data-editor-message="editor_message"/>-->
+<!--                    </div>-->
+                </div>
+                <div class="oe_structure oe_empty" id="oe_structure_website_helpdesk_team_4" t-att-data-editor-message="editor_message"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="ticket_submit_form" name="Helpdesk: Submit a Ticket Form">
+        <div class="container">
+            <div class="navbar navbar-expand-lg custom-navbar">
+                <a class="navbar-brand" href="#">Teams</a>
+                <t t-foreach="request.env['helpdesk.team'].sudo().search([('use_website_helpdesk_form', '=', True)])"
+                   t-as="nav_team">
+                    <a t-att-href="'/helpdesk/' + str(nav_team.id)"
+                       class="team-tab">
+                        <t t-esc="nav_team.name"/>
+                    </a>
+                </t>
+            </div>
+            <h2 class="text-muted">
+                Submit a Ticket
+                <t t-if="multiple_teams"> - <t t-out="team.name" /></t>
+            </h2>
+            <div class="oe_structure" id="oe_structure_whelpdesk_form_1"/>
+            <span class="hidden" data-for="helpdesk_ticket_form" t-att-data-values="{'team_id': team and team.id or ''}" />
+            <div class="row mb16">
+                <div id="helpdesk_section" class="col-md-8 ps-4">
+                    <section class="s_website_form pt16 pb16 o_colored_level" data-vcss="001" data-snippet="s_website_form" data-name="Form">
+                        <div class="container">
+                            <form id="helpdesk_ticket_form" action="/website/form/" method="post" enctype="multipart/form-data" class="o_mark_required" data-mark="*" data-pre-fill="true" data-success-mode="redirect" data-success-page="/your-ticket-has-been-submitted" data-model_name="helpdesk.ticket" hide-change-model="true">
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                    <div class="mb-0 py-2 s_website_form_field col-12 s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="helpdesk1">
+                                                <span class="s_website_form_label_content">Full Name</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input type="text" class="form-control s_website_form_input" name="partner_name" required="1" data-fill-with="name" id="helpdesk1"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-0 py-2 s_website_form_field col-12 s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="helpdesk2">
+                                                <span class="s_website_form_label_content">Phone Number</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input type="tel" class="form-control s_website_form_input" name="partner_phone" data-fill-with="phone" id="helpdesk2"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-0 py-2 s_website_form_field col-12 s_website_form_required" data-type="email" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label " style="width: 200px" for="helpdesk3">
+                                                <span class="s_website_form_label_content">Email Address</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input type="email" class="form-control s_website_form_input" name="partner_email" required="1" data-fill-with="email" id="helpdesk3"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-0 py-2 s_website_form_field col-12 s_website_form_custom" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="helpdesk4">
+                                                <span class="s_website_form_label_content">Company Name</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input type="text" class="form-control s_website_form_input" name="partner_company_name" data-fill-with="commercial_company_name" id="helpdesk4"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-0 py-2 s_website_form_field col-12 s_website_form_model_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label " style="width: 200px" for="helpdesk5">
+                                                <span class="s_website_form_label_content">Message Subject</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input type="text" class="form-control s_website_form_input" name="name" required="true" id="helpdesk5"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-0 py-2 s_website_form_field col-12" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label " style="width: 200px" for="helpdesk6">
+                                                <span class="s_website_form_label_content">Ask Your Question</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <textarea type="text" class="form-control s_website_form_input" name="description" required="true" id="helpdesk6" rows="5"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-0 py-2 s_website_form_field col-12 s_website_form_required"
+                                                 data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label " style="width: 200px" for="helpdesk_category">
+                                                <span class="s_website_form_label_content">Category</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <select id="helpdesk_category" name="category_id" class="form-control s_website_form_input" >
+                                                    <option/>
+                                                    <t t-foreach="request.env['helpdesk.category'].sudo().search([('team_id', '=', team.id)])" t-as="category">
+                                                        <option t-att-value="category.id">
+                                                            <t t-esc="category.name"/>
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                                </div>
+                                        </div>
+                                            </div>
+                                    <div class="mb-0 py-2 s_website_form_field col-12 s_website_form_required"
+                                                 data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label " style="width: 200px" for="helpdesk_sub_category">
+                                                <span class="s_website_form_label_content">Sub Category</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <select id="helpdesk_sub_category" name="sub_category_id" class="form-control s_website_form_input">
+                                                    <option/>
+                                                </select>
+    <!--                                            <select id="helpdesk_sub_category" name="sub_category_id" class="form-control s_website_form_input" >-->
+    <!--                                                <option/>-->
+    <!--                                                <t t-esc="request.env['helpdesk.sub.category'].sudo().search([('category_id', '=', category_sub)])"/>-->
+    <!--                                                <t t-esc="category_sub"/>-->
+    <!--                                                <t t-foreach="request.env['helpdesk.sub.category'].sudo().search([('category_id', '=', category_sub)])" t-as="sub_category">-->
+    <!--                                                    <option t-att-value="sub_category.id">-->
+    <!--                                                        <t t-esc="sub_category.name"/>-->
+    <!--                                                    </option>-->
+    <!--                                                </t>-->
+    <!--                                            </select>-->
+                                                </div>
+                                        </div>
+                                            </div>
+                                    <div class="mb-0 py-2 s_website_form_field col-12 s_website_form_custom" data-type="binary" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class=" col-sm-auto s_website_form_label " style="width: 200px" for="helpdesk7">
+                                                <span class="s_website_form_label_content">Attachment</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input type="file" class="form-control s_website_form_input" name="Attachment" id="helpdesk7"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-0 py-2 s_website_form_field col-12 s_website_form_dnone" data-name="Field"
+                                         data-type="record" data-model="helpdesk.team">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px">
+                                                <span class="s_website_form_label_content">Helpdesk Team</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input type="hidden" class="form-control s_website_form_input" name="team_id" id="helpdesk8" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-0 py-2 col-12 s_website_form_submit" data-name="Submit Button">
+                                        <div style="width: 200px;" class="s_website_form_label"/>
+                                        <a href="#" role="button" class="btn btn-primary btn-lg s_website_form_send o_default_snippet_text">Submit Ticket</a>
+                                        <span id="s_website_form_result"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-md-4" id="right-column">
+                    <a class="mb-5" id="submit-ticket" href="/my/tickets">
+                        <button class="btn btn-primary col-md-12 mb-2">View my
+                            Tickets
+                        </button>
+                    </a>
+                    <div class="oe_structure oe_empty" id="oe_structure_website_helpdesk_team_2" t-att-data-editor-message="editor_message"/>
+                    <t t-if="not is_html_empty(team.description)">
+                        <div class="card bg-secondary mt-2 w-75 pull-right" id="about_team">
+                            <h6 class="card-header"><b>About our team</b></h6>
+                        <div class="card-body">
+                            <span t-field="team.description"/>
+                        </div>
+                        </div>
+                    </t>
+                    <div class="oe_structure oe_empty" id="oe_structure_website_helpdesk_team_3" t-att-data-editor-message="editor_message"/>
+                </div>
+            </div>
+        </div>
+    </template>
+
+</odoo>

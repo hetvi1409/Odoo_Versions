@@ -1,0 +1,43 @@
+flowchart LR
+    subgraph IU[Internal User Frontend]
+      A[Open New Contract from Template] --> B[Fill wizard and Create Contract]
+      C[Click Verify] --> D[Click Send for Provider Signing]
+      H[If amendments needed: Review/Amend] --> I[Click Verify Amendment]
+      N[Click Approve] --> O[Click Send for Internal Signing]
+      P[Click Create On-site Meeting]
+      U[During Running: Create Procurement]
+    end
+
+    subgraph SP[Service Provider Frontend]
+      E[Receive signing request] --> F[Open sign page]
+      F --> G[Sign POD/contract document]
+    end
+
+    subgraph LA[Deputy + Legal + Approval Roles]
+      J[Deputy Recommendation] --> K[Legal Recommendation]
+      K --> L[Vetting complete]
+      L --> M[Approval decision]
+    end
+
+    subgraph BE[Odoo Backend]
+      B --> B1[Create xf.partner.contract in Draft]
+      C --> C1[Set state Verify + send verified email]
+      D --> D1[Create sign.request and set Sent to Service Provider]
+      G --> G1[Sync signature status to backend]
+      I --> I1[State Verify Contract]
+      J --> J1[State Recommend by Deputy]
+      K --> K1[State Recommend by Legal]
+      M --> M1[State Approval; enforce >=500k legal gate]
+      O --> O1[Allow only if provider signed]
+      P --> P1[Create meeting and set Running]
+      P1 --> Q1[Daily monitoring cron]
+      P1 --> R1[Monthly expiry notice cron]
+      R1 --> U1[Create activity + email for 6-month expiry]
+      U --> V1[Create procurement request and track completion]
+      V1 --> W1[End: Renewed/Closed/Expired/Cancelled]
+    end
+
+    D1 --> E
+    G1 --> H
+    I1 --> J
+    O1 --> P

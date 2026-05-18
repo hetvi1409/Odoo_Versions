@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Policy Document Report Template -->
+    <template id="report_policy_document_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="text-center">
+                            <strong>FLEET MANAGEMENT POLICY</strong>
+                        </h2>
+                    </div>
+                </div>
+
+                <table class="table table-bordered mt-3">
+                    <tbody>
+                        <tr>
+                            <th style="width: 25%;">Policy Name</th>
+                            <td style="width: 25%;"><span t-field="o.name"/></td>
+                            <th style="width: 25%;">Type</th>
+                            <td style="width: 25%;"><span t-field="o.policy_type"/></td>
+                        </tr>
+                        <tr>
+                            <th>Effective Date</th>
+                            <td><span t-field="o.effective_date"/></td>
+                            <th>Document No</th>
+                            <td>________________</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5><strong>Policy Details</strong></h5>
+                        <p t-field="o.description"/>
+                    </div>
+                </div>
+
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_policy_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="fleet_vehicle_inspection_management.report_policy_document_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

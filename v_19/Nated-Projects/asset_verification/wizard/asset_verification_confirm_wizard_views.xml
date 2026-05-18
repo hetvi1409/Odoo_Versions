@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_asset_verification_confirm_wizard_form" model="ir.ui.view">
+        <field name="name">view.asset.confirm.wizard.form</field>
+        <field name="model">asset.verification.confirm.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Action">
+                <sheet>
+                    <group>
+                        <field name="custodian_id" readonly="1"/>
+                        <field name="asset_ids" readonly="1"/>
+                        <field name="new_custodian_id"/>
+                    </group>
+                    <footer>
+                        <button string="Confirm" type="object" name="action_confirm" class="btn-primary"/>
+                        <button string="Cancel" type="object" name="action_cancel" class="btn-secondary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+          <!-- Action to open the wizard -->
+    <record id="action_confirm_wizard" model="ir.actions.act_window">
+        <field name="name">Confirm Action</field>
+        <field name="res_model">asset.verification.confirm.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_asset_verification_confirm_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

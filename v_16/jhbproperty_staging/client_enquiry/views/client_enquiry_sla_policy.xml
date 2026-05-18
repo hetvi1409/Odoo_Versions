@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_client_enquiry_sla_policy_inherit_form">
+        <field name="name">client.enquiry.sla.policy.inherit.form</field>
+        <field name="model">client.enquiry.sla.policy</field>
+        <field name="inherit_id" ref="client_enquiry.client_enquiry_sla_policy_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='description']" position="before">
+                <field name="process_status"/>
+                <field name="reached_state_assessment" attrs="{'invisible': [('process_status', '!=', 'assessment')]}"/>
+                <field name="reached_state_valuations" attrs="{'invisible': [('process_status', '!=', 'valuation')]}"/>
+                <field name="reached_state_transaction" attrs="{'invisible': [('process_status', '!=', 'transaction')]}"/>
+                <field name="reached_state_eac" attrs="{'invisible': [('process_status', '!=', 'eac')]}"/>
+                <field name="reached_state_legal" attrs="{'invisible': [('process_status', '!=', 'legal')]}"/>
+                <field name="reached_state_enquiry" attrs="{'invisible': [('process_status', '!=', 'enquiry')]}"/>
+                <field name="reached_state_property_intelligence" attrs="{'invisible': [('process_status', '!=', 'property_intelligence')]}"/>
+                    <field name="reached_state_comments"  attrs="{'invisible': [('process_status', 'not in', ('sent_for_comments', 'ptob'))]}"/>
+            </xpath>
+             <xpath expr="//field[@name='name']" position="attributes">
+                                     <attribute name="readonly">0</attribute>
+             </xpath>
+              <xpath expr="//field[@name='state']" position="attributes">
+                                     <attribute name="invisible">1</attribute>
+             </xpath>
+
+
+
+        </field>
+    </record>
+</odoo>

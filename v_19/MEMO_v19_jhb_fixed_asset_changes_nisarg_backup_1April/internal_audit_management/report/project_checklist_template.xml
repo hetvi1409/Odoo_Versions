@@ -1,0 +1,121 @@
+<odoo>
+    <template id="report_project_checklist">
+        <t t-call="web.basic_layout">
+            <t t-set="title">Project Checklist</t>
+            <div class="page">
+                <table style="width:100%; margin-bottom:20px;" border="1">
+                    <tr>
+                        <td><img src="/internal_audit_management/static/src/image/img.png" style="height:90px; width:150px;"/></td>
+                    </tr>
+                    <tr>
+                        <td><h5 style="text-align:left;">PROJECT CHECKLIST AND AUDIT CONSIDERATIONS</h5></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Title: <span t-esc="data.project_title"/></strong><strong>Project: <span t-esc="data.project_id.name"/></strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Project #: <span t-esc="data.project"/></strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Preparer: <span t-esc="data.user_preparer_ids and data.user_preparer_ids.name"/></strong>
+                        </td>
+                        <td><strong>First Reviewer #: <span t-esc="data.user_reviewer_1_ids and data.user_reviewer_1_ids.name"/></strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Second Reviewer: <span t-esc="data.user_reviewer_2_ids and data.user_reviewer_2_ids.name"/></strong>
+                        </td>
+                        <td><strong>Approver: <span t-esc="data.user_approver_ids"/></strong>
+                        </td>
+                    </tr>
+                </table>
+                <h4><b>Planning: </b></h4>
+                <table style="width:100%; border-collapse:collapse; margin-top:20px; height:300px;" border="1">
+                    <thead>
+                        <tr style="background-color:#db6a1f; vertical-align:middle">
+                            <th style="width:50%"> </th>
+                            <th style="width:25%">Date</th>
+                            <th style="width:25%">Initials</th>
+                        </tr>
+                    </thead>
+                    <t t-set="plan" t-value="data.planing_checklist_ids"/>
+                    <t t-foreach="plan" t-as="docs">
+                        <tbody>
+                            <tr>
+                                <td><span t-esc="docs.description"/></td>
+                                <td><span t-esc="docs.plan_date"/></td>
+                                <td><span t-esc="docs.initials"/></td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+                <h4><b>Preliminary Survey: </b></h4>
+                <table style="width:100%; border-collapse:collapse; margin-top:20px; height:300px;" border="1">
+                    <thead>
+                        <tr style="background-color:#db6a1f; vertical-align:middle">
+                            <th style="width:50%"> </th>
+                            <th style="width:25%">Date</th>
+                            <th style="width:25%">Initials</th>
+                        </tr>
+                    </thead>
+                    <t t-set="prem" t-value="data.preliminary_survey_ids"/>
+                    <t t-foreach="prem" t-as="docs">
+                        <tbody>
+                            <tr>
+                                <td><span t-esc="docs.description"/></td>
+                                <td><span t-esc="docs.plan_date"/></td>
+                                <td><span t-esc="docs.initials"/></td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+                <h4><b>FIELD WORK PHASE: </b></h4>
+                <table style="width:100%; border-collapse:collapse; margin-top:20px; height:300px;" border="1">
+                    <thead>
+                        <tr style="background-color:#db6a1f; vertical-align:middle">
+                            <th style="width:50%"> </th>
+                            <th style="width:25%">Date</th>
+                            <th style="width:25%">Initials</th>
+                        </tr>
+                    </thead>
+                    <t t-set="field" t-value="data.field_work_ids"/>
+                    <t t-foreach="field" t-as="docs">
+                        <tbody>
+                            <tr>
+                                <td><span t-esc="docs.description"/></td>
+                                <td><span t-esc="docs.plan_date"/></td>
+                                <td><span t-esc="docs.initials"/></td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+                <h4><b>FINAL PHASE: </b></h4>
+                <table style="width:100%; border-collapse:collapse; margin-top:20px; height:300px;" border="1">
+                    <thead>
+                        <tr style="background-color:#db6a1f; vertical-align:middle">
+                            <th style="width:50%"> </th>
+                            <th style="width:25%">Date</th>
+                            <th style="width:25%">Initials</th>
+                        </tr>
+                    </thead>
+                    <t t-set="final" t-value="data.final_phase_ids"/>
+                    <t t-foreach="final" t-as="docs">
+                        <tbody>
+                            <tr>
+                                <td><span t-esc="docs.description"/></td>
+                                <td><span t-esc="docs.plan_date"/></td>
+                                <td><span t-esc="docs.initials"/></td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+                <table style="width:100%">
+                    <tr>
+                        <td><strong>Auditor-in-Charge:  <span t-esc="data.auditor_in_charge and data.auditor_in_charge.name"/></strong></td>
+                        <td><strong>Audit Manager : <span t-esc="data.auditor_manager and data.auditor_manager.name"/></strong></td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

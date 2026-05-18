@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!--
+        @param {mail/static/src/widgets/discuss/discuss.js} widget
+    -->
+    <t t-name="mail.widgets.Conversation2">        
+        <div class="main-div" style="height: 100%; overflow: hidden;">
+            <!-- <div class="o_widget_Discuss" style="overflow: hidden;"/> -->
+            <div class="container-fluid-dashboard m-2" style="width: 43%;float: right; overflow-y: scroll; height: 100%;">
+                <script>
+                    function allowDrop (ev) {
+                        ev.preventDefault();
+                    }
+                    function dragStart (ev) {
+                        console.log(ev);
+                        console.log(ev.target.firstElementChild.firstChild.src);
+                        console.log(ev.target.firstElementChild.innerHTML);
+                        ev.dataTransfer.setData("text",  ev.target.innerText);
+                        ev.dataTransfer.setData("image",  ev.target.firstElementChild.firstChild.src);
+                        ev.dataTransfer.effectAllowed = "copy";
+                    }
+                    function dragStartImg (ev) {
+                        console.log(ev);
+                        console.log(ev.target.src);
+                        console.log(ev.target.innerHTML);
+                        ev.dataTransfer.setData("text",  ev.target.id);
+                        ev.dataTransfer.effectAllowed = "copy";
+                    }
+                </script>
+                <style>
+                    .searchclear {
+                        position: absolute;
+                        right: 10px;
+                        top: 5px;
+                        height: 14px;
+                        margin: auto;
+                        font-size: 14px;
+                        cursor: pointer;
+                        color: #ccc;
+                    }
+                    .answerstack {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        grid-gap: 20px;
+                    }
+                </style>
+                <div class="o_notebook d-flex w-100 horizontal flex-column">
+                    <div class="o_notebook_headers">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item flex-nowrap cursor-pointer">
+                                <a data-bs-toggle="tab" disable_anchor="true" class="nav-link" id="nav_tabs_link_1661215776203_43" href="#nav_tabs_content_1661215776203_43" role="tab" aria-controls="nav_tabs_content_1661215776203_43" aria-selected="false"><i class="fa fa-shopping-basket"></i> Products</a>
+                            </li>
+                            <li class="nav-item flex-nowrap cursor-pointer">
+                                <a data-bs-toggle="tab" disable_anchor="true" class="nav-link" id="nav_tabs_link_1661215776203_42" href="#nav_tabs_content_1661215776203_42" role="tab" aria-controls="nav_tabs_content_1661215776203_42" aria-selected="false"><i class="fa fa-exchange"></i> Purchases</a>
+                            </li>
+                            <li class="nav-item flex-nowrap cursor-pointer">
+                                <a data-bs-toggle="tab" disable_anchor="true" class="nav-link" id="nav_tabs_link_1661215776203_41" href="#nav_tabs_content_1661215776203_41" role="tab" aria-selected="false"><i class="fa fa-book"></i> Invoicing</a>
+                            </li>
+                            <li class="nav-item flex-nowrap cursor-pointer">
+                                <a data-bs-toggle="tab" disable_anchor="true" class="nav-link" id="nav_tabs_link_1661215776203_40" href="#nav_tabs_content_1661215776203_40" role="tab" aria-selected="false"><i class="fa fa-fw o_button_icon fa-usd"></i> Sales</a>
+                            </li>
+                            <li class="nav-item flex-nowrap cursor-pointer">
+                                <a data-bs-toggle="tab" disable_anchor="true" class="nav-link active" id="nav_tabs_link_1661215776203_39" href="#nav_tabs_content_1661215776203_39" role="tab" aria-selected="true"><i class="fa fa-address-book"></i> Contacts</a>
+                            </li>
+                            <li class="nav-item flex-nowrap cursor-pointer">
+                                <a data-bs-toggle="tab" disable_anchor="true" class="nav-link" id="nav_tabs_link_1661215776203_38" href="#nav_tabs_content_1661215776203_38" role="tab" aria-selected="false"><i class="fa fa-bar-chart"></i> Report</a>
+                            </li>
+                            <li class="nav-item flex-nowrap cursor-pointer">
+                                <a data-bs-toggle="tab" disable_anchor="true" class="nav-link" id="nav_tabs_link_1661215776203_37" href="#nav_tabs_content_1661215776203_37" role="tab" aria-selected="false"><i class="fa fa-bar-chart"></i> Default Answers</a>
+                            </li>
+                        </ul>
+                        <div class="hr"/>
+                    </div>
+                    <div class="o_notebook_content tab-content" id="inner_content">
+                        <div class="tab-pane fade" id="nav_tabs_content_1661215776203_43" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_43">
+                            <div class="oe_structure oe_empty">
+                                <section class="s_text_block" style="background-image: none;" data-name="Text">
+                                    <div class="s_allow_columns product-container">
+                                        <button class="btn btn-primary my-2 mr-4 mt-2" type="button" id="create_products">Create</button>
+                                        <div class="btn-group ml-4">
+                                            <input class="form-control mr-sm-2" type="text" placeholder="Search" id="search-input-product"
+                                                aria-label="Search"/>
+                                            <span id="product_searchclear" class="searchclear">
+                                                <i class='fa fa-times'/>
+                                            </span>
+                                        </div>
+                                        <button class="btn btn-outline-primary my-2 my-sm-0" type="button" id="product-search-button">Search</button>
+                                        <span class="o_pager_counter mr-2" style="margin-left: 8pc;">
+                                            <span class="o_pager_value" id="o_product_pager_value">1-20</span>
+                                            <span> / </span>
+                                            <span class="o_pager_limit" id="o_product_pager_limit">--</span>
+                                        </span>
+                                        <span aria-atomic="true" class="btn-group">
+                                            <button type="button" id="previous_button" disabled="true" accesskey="p" aria-label="Previous page" title="Previous page" tabindex="-1" class="fa fa-chevron-left btn btn-secondary o_pager_previous rounded-left"></button>
+                                            <button type="button" id="next_button" accesskey="n" aria-label="Next page" title="Next page" tabindex="-1" class="fa fa-chevron-right btn btn-secondary o_pager_next rounded-right"></button>
+                                        </span>
+                                        <div id="productstack" class="o_kanban_renderer o_renderer o_kanban_ungrouped" style="display: contents;">
+                                        </div>
+                                        <!-- <Views /> -->
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav_tabs_content_1661215776203_42" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_42">
+                            <div class="oe_structure oe_empty">
+                                <section class="s_text_block" style="background-image: none;" data-name="Text">
+                                    <div class="s_allow_columns">
+                                        <button class="btn btn-primary my-2 mr-4 mt-2" type="button" id="create_purchases">Create</button>
+                                        <div class="btn-group ml-4">
+                                            <input class="form-control mr-sm-2" type="text" placeholder="Search" id="search-input-purchase"
+                                                aria-label="Search"/>
+                                            <span id="purchase_searchclear" class="searchclear">
+                                                <i class='fa fa-times'/>
+                                            </span>
+                                        </div>
+                                        <button class="btn btn-outline-primary my-2 my-sm-0" type="button" id="purchase-search-button">Search</button>
+                                        <span class="o_pager_counter mr-2" style="margin-left: 8pc;">
+                                            <span class="o_pager_value" id="o_purchase_pager_value">1-20</span>
+                                            <span> / </span>
+                                            <span class="o_pager_limit" id="o_purchase_pager_limit">--</span>
+                                        </span>
+                                        <span aria-atomic="true" class="btn-group">
+                                            <button type="button" id="purchase_previous_button" disabled="true" accesskey="p" aria-label="Previous page" title="Previous page" tabindex="-1" class="fa fa-chevron-left btn btn-secondary o_pager_previous rounded-left"></button>
+                                            <button type="button" id="purchase_next_button" accesskey="n" aria-label="Next page" title="Next page" tabindex="-1" class="fa fa-chevron-right btn btn-secondary o_pager_next rounded-right"></button>
+                                        </span>
+                                        <div id="purchase-stack" class="o_list_renderer o_renderer table-responsive o_purchase_order o_list_optional_columns">
+                                            <div class="table-responsive">
+                                                <table class="o_list_table table table-sm table-hover table-striped o_list_table_ungrouped purchase-container" style="table-layout: fixed;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="o_list_record_selector" style="width: 40px;">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" id="checkbox-15" class="custom-control-input"/>
+                                                                    <label for="checkbox-15" class="custom-control-label">​</label>
+                                                                </div>
+                                                            </th>
+                                                            <th data-name="name" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 91px;">
+                                                                Reference
+                                                                <span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="create_date" class="o_date_cell o_column_sortable" tabindex="-1" data-original-title="" title="" style="min-width: 92px; width: 119px;">
+                                                                Creation Date
+                                                                <span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="partner_id" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 90px;">
+                                                                Vendor<span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="user_id" class="o_many2one_avatar_user_cell o_column_sortable" tabindex="-1" data-original-title="" title="" style="width: 120px;">
+                                                                Purchase representative<span class="o_resize"></span>
+                                                            </th>
+                                                            <!-- <th data-name="activity_ids" class="o_list_activity_cell" tabindex="-1" data-original-title="" title="" style="width: 316px;">
+                                                                Next Activity<span class="o_resize"></span>
+                                                            </th> -->
+                                                            <th data-name="amount_total" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 80px;">
+                                                                Total<span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="state" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 95px;">
+                                                                Status<span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="state" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 60px;">
+                                                                Report<span class="o_resize"></span>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="ui-sortable" id="purchasebody">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- <PurchaseViews /> -->
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav_tabs_content_1661215776203_41" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_41">
+                            <div class="oe_structure oe_empty">
+                                <section class="s_text_block" style="background-image: none;" data-name="Text">
+                                    <div class="s_allow_columns">
+                                        <div class="o_list_view o_sale_order o_list_optional_columns">
+                                            <div class="table-responsive">
+                                                <table class="o_list_table table table-sm table-hover table-striped o_list_table_ungrouped invoice-container" style="table-layout: fixed;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="o_list_record_selector" style="width: 40px;">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" id="checkbox-15" class="custom-control-input"/>
+                                                                    <label for="checkbox-15" class="custom-control-label">​</label>
+                                                                </div>
+                                                            </th>
+                                                            <th data-name="name" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 112px;">
+                                                                Number
+                                                                <span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="invoice_date" class="o_date_cell o_column_sortable" tabindex="-1" data-original-title="" title="" style="min-width: 92px; width: 119px;">
+                                                                Invoice Date
+                                                                <span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="partner_id" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 90px;">
+                                                                Customer<span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="invoice_payment_term_id" class="o_many2one_avatar_user_cell o_column_sortable" tabindex="-1" data-original-title="" title="" style="width: 120px;">
+                                                                Due Date<span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="amount_total_in_currency_signed" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 80px;">
+                                                                Total<span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="state" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 95px;">
+                                                                Status<span class="o_resize"></span>
+                                                            </th>
+                                                            <!-- <th data-name="activity_ids" class="o_list_activity_cell" tabindex="-1" data-original-title="" title="" style="width: 316px;">
+                                                                Next Activity<span class="o_resize"></span>
+                                                            </th> -->
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="ui-sortable" id="invoicebody">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav_tabs_content_1661215776203_40" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_40">
+                            <div class="oe_structure oe_empty">
+                                <section class="s_text_block" style="background-image: none;" data-name="Text">
+                                    <div class="s_allow_columns">
+                                        <button class="btn btn-primary my-2 mr-4 mt-2" type="button" id="create_sale">Create</button>
+                                        <div class="btn-group ml-4">
+                                            <input class="form-control mr-sm-2" type="text" placeholder="Search" id="search-input-sale"
+                                                aria-label="Search"/>
+                                            <span id="sale_searchclear" class="searchclear">
+                                                <i class='fa fa-times'/>
+                                            </span>
+                                        </div>
+                                        <button class="btn btn-outline-primary my-2 my-sm-0" type="button" id="sale-search-button">Search</button>
+                                        <span class="o_pager_counter mr-2" style="margin-left: 8pc;">
+                                            <span class="o_pager_value" id="o_sale_pager_value">1-20</span>
+                                            <span> / </span>
+                                            <span class="o_pager_limit" id="o_sale_pager_limit">--</span>
+                                        </span>
+                                        <span aria-atomic="true" class="btn-group">
+                                            <button type="button" id="sale_previous_button" disabled="true" accesskey="p" aria-label="Previous page" title="Previous page" tabindex="-1" class="fa fa-chevron-left btn btn-secondary o_pager_previous rounded-left"></button>
+                                            <button type="button" id="sale_next_button" accesskey="n" aria-label="Next page" title="Next page" tabindex="-1" class="fa fa-chevron-right btn btn-secondary o_pager_next rounded-right"></button>
+                                        </span>
+                                        <div class="o_list_renderer o_renderer table-responsive o_sale_order o_list_optional_columns">
+                                            <div class="table-responsive">
+                                                <table class="o_list_table table table-sm table-hover table-striped o_list_table_ungrouped sale-container" style="table-layout: fixed;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="o_list_record_selector" style="width: 40px;">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" id="checkbox-15" class="custom-control-input"/>
+                                                                    <label for="checkbox-15" class="custom-control-label">​</label>
+                                                                </div>
+                                                            </th>
+                                                            <th data-name="name" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 93px;">
+                                                                Number
+                                                                <span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="create_date" class="o_date_cell o_column_sortable" tabindex="-1" data-original-title="" title="" style="min-width: 92px; width: 119px;">
+                                                                Creation Date
+                                                                <span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="partner_id" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 90px;">
+                                                                Customer<span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="user_id" class="o_many2one_avatar_user_cell o_column_sortable" tabindex="-1" data-original-title="" title="" style="width: 120px;">
+                                                                Salesperson<span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="amount_total" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 80px;">
+                                                                Total<span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="state" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 70px;">
+                                                                Status<span class="o_resize"></span>
+                                                            </th>
+                                                            <th data-name="state" tabindex="-1" class="o_column_sortable" data-original-title="" title="" style="width: 60px;">
+                                                                Report<span class="o_resize"></span>
+                                                            </th>
+                                                            
+                                                            <!-- <th data-name="activity_ids" class="o_list_activity_cell" tabindex="-1" data-original-title="" title="" style="width: 316px;">
+                                                                Next Activity<span class="o_resize"></span>
+                                                            </th> -->
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="ui-sortable" id="salesbody">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- <SalesViews /> -->
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade active show" id="nav_tabs_content_1661215776203_39" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_39">
+                            <div class="oe_structure oe_empty">
+                                <section class="s_text_block" style="background-image: none;" data-name="Text">
+                                    <div class="s_allow_columns contact-container">
+                                        <button class="btn btn-primary my-2 mr-4 mt-2" type="button" id="create_contacts">Create</button>
+                                        <div class="btn-group ml-4">
+                                            <input class="form-control mr-sm-2" type="text" placeholder="Search" id="search-input-contact"
+                                                aria-label="Search"/>
+                                            <span id="contact_searchclear" class="searchclear">
+                                                <i class='fa fa-times'/>
+                                            </span>
+                                        </div>
+                                        <button class="btn btn-outline-primary my-2 my-sm-0" type="button" id="contact-search-button">Search</button>
+                                        <span class="o_pager_counter mr-2" style="margin-left: 8pc;">
+                                            <span class="o_pager_value" id="o_contact_pager_value">1-20</span>
+                                            <span> / </span>
+                                            <span class="o_pager_limit" id="o_contact_pager_limit">--</span>
+                                        </span>
+                                        <span aria-atomic="true" class="btn-group">
+                                            <button type="button" id="contact_previous_button" disabled="true" accesskey="p" aria-label="Previous page" title="Previous page" tabindex="-1" class="fa fa-chevron-left btn btn-secondary o_pager_previous rounded-left"></button>
+                                            <button type="button" id="contact_next_button" accesskey="n" aria-label="Next page" title="Next page" tabindex="-1" class="fa fa-chevron-right btn btn-secondary o_pager_next rounded-right"></button>
+                                        </span>
+                                        <div id="contactstack" class="o_kanban_renderer o_renderer o_kanban_ungrouped o_res_partner_kanban" style="display: contents;">
+                                            
+                                        </div>
+                                        <!-- <ContactViews /> -->
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav_tabs_content_1661215776203_38" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_38">
+                            <div class="oe_structure oe_empty">
+                                <section class="s_text_block" style="background-image: none;" data-name="Text">                       
+                                    <div class="grid-stack" id="grid-stack">
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav_tabs_content_1661215776203_37" role="tabpanel" aria-labelledby="nav_tabs_link_1661215776203_37">
+                            <div class="oe_structure oe_empty">
+                                <section class="s_text_block" style="background-image: none;" data-name="Text">                       
+                                    <div class="answerstack" id="answerstack">
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>

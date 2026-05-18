@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+   <t t-name="document_update.DocumentsInspector.documentsInfo"
+      t-inherit="documents.DocumentsInspector.documentsInfo"
+      t-inherit-mode="extension" owl="1">
+       <xpath expr="//tbody" position="inside">
+           <t t-if="nbPreviews === 1">
+               <t>
+                   <t t-log="show_folder(),'dsfdsdsfs'"/>
+                   <t t-log="this.props.selection[0]._values.general_type,'dsfdsdsfs'"/>
+                   <t t-call="documents.DocumentsInspector.field">
+                       <t t-set="field" t-translation="off">general_type</t>
+                   </t>
+                   <t t-call="documents.DocumentsInspector.field"
+                      t-if="this.props.selection[0]._values.general_type == 'property'">
+                   <t t-set="field" t-translation="off"
+                      t-on-change-stop="OnclickJMCNUMBEr">jmc_property_id</t>
+                   <t t-set="additionalProps"
+                      t-value="{canOpen: false, canCreate: false, canCreateEdit: false, canQuickCreate: false}"/>
+                   </t>
+                   <div
+                      t-if="this.props.selection[0]._values.general_type == 'property'">
+                    <button class="btn fa fa-refresh text-white bg-primary o_inspector_trigger_rule"
+                       t-on-click.stop.prevent="(ev) => this.OnclickJMCNumber()"> Update</button>
+                   </div>
+               </t>
+
+               <t t-call="documents.DocumentsInspector.field"
+                      t-if="this.props.selection[0]._values.general_type == 'property'">
+                   <t t-set="field" t-translation="off">erf_number</t>
+               </t>
+               <t t-call="documents.DocumentsInspector.field"
+                      t-if="this.props.selection[0]._values.general_type == 'property'">
+                   <t t-set="field" t-translation="off">address</t>
+               </t>
+           </t>
+
+       </xpath>
+   </t>
+    <!--    <t t-name="document_update.DocumentsViews.Buttons" t-inherit="documents.DocumentsViews.Buttons" t-inherit-mode="extension">-->
+    <!--        <xpath expr="//button[contains(@t-attf-class, 'o_documents_kanban_upload')]" position="after">-->
+    <!--            <button type="button" t-attf-class="btn btn-primary o_documents_kanban_spreadsheet {{additionalClasses}}" t-att-disabled="disabled"-->
+    <!--                t-on-click.stop.prevent="onClickCreateDocumentJMC">-->
+    <!--                Upload Document with JMC Number-->
+    <!--            </button>-->
+    <!--        </xpath>-->
+    <!--    </t>-->
+
+</templates>

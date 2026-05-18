@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="survey_survey_view_form" model="ir.ui.view">
+        <field name="name">survey.survey.form.inherit.job</field>
+        <field name="model">survey.survey</field>
+        <field name="inherit_id" ref="survey.survey_survey_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <group>
+                    <field name="bursary_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record id="survey_user_input_view_form" model="ir.ui.view">
+        <field name="name">survey.user_input.form.inherited</field>
+        <field name="model">survey.user_input</field>
+        <field name="inherit_id" ref="survey.survey_user_input_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='email']" position="after">
+                <field name="bursary_application_id"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

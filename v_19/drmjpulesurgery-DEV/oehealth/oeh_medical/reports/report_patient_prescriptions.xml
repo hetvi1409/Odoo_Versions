@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_oeh_medical_patient_prescription_document">
+        <t t-call="web.html_container">
+
+            <!-- Custom Header -->
+            <div class="header"
+                 style="border-bottom: 2px solid #000; padding: 15px 0; display: flex; justify-content: space-between; align-items: center;">
+                 <div style="width:20%; text-align:left;">
+                    <img src="/oehealth/static/src/img/medical_symbol.png" height="60" width="60"/>
+                </div>
+
+
+                <!-- Left/Center Section: Doctor's Name & Details -->
+                <div style="text-align: center; flex: 1;">
+                    <h2 style="margin: 0; font-size: 22px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;"
+                        t-field="o.doctor.name"/>
+                    <p style="margin: 2px 0; font-size: 14px; color: #555;">
+                        <t t-if="o.doctor.degree_names">
+                            <t t-esc="o.doctor.degree_names"/>
+                        </t>
+                    </p>
+                    <p style="margin: 2px 0; font-size: 14px; color: #555;">
+                        <t t-if="o.doctor.code">License:
+                            <t t-esc="o.doctor.code"/>
+                        </t>
+                    </p>
+                </div>
+
+                <!-- Right Section: Doctor's Address -->
+                <div style="text-align: right; font-size: 13px; color: #555; min-width: 200px;">
+                    <t t-if="o.doctor.address_id">
+                        <t t-esc="o.doctor.address_id.name"/>
+                        <br/>
+                        <t t-if="o.doctor.address_id.street">
+                            <t t-esc="o.doctor.address_id.street"/>
+                            <br/>
+                        </t>
+                        <t t-if="o.doctor.address_id.street2">
+                            <t t-esc="o.doctor.address_id.street2"/>
+                            <br/>
+                        </t>
+                        <t t-if="o.doctor.address_id.city">
+                            <t t-esc="o.doctor.address_id.city"/>
+                        </t>
+                        <t t-if="o.doctor.address_id.state_id">
+                            ,
+                            <t t-esc="o.doctor.address_id.state_id.name"/>
+                        </t>
+                        <br/>
+                        <t t-if="o.doctor.work_phone">
+                            Phone:
+                            <t t-esc="o.doctor.work_phone"/>
+                            <br/>
+                        </t>
+                    </t>/
+                </div>
+            </div>
+
+            <!-- Report Content -->
+            <div class="page" style="padding: 20px;">
+                <t t-raw="0"/> <!-- Main template content goes here -->
+            </div>
+
+            <!-- Custom Footer -->
+            <div class="footer" style="border-top: 2px solid #000; padding: 10px; font-size: 12px; text-align: center;">
+                <p style="margin: 0;">Disclaimer: This prescription is issued based on the consultation.</p>
+                <p style="margin: 0;">©
+                    <t t-esc="datetime.date.today().year"/>
+                </p>
+            </div>
+        </t>
+    </template>
+
+    <!-- 2️⃣ Prescription Report Using Custom Layout -->
+    <template id="report_oeh_medical_patient_prescription_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o.with_context({'lang': o.patient.partner_id.lang})"/>
+            <t t-set="address">
+                <div t-field="o.patient.partner_id"
+                     t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+            </t>
+
+            <style>
+                /* ===== Prescription Report Styles ===== */
+                h2 {
+                text-align: center;
+                font-size: 22px;
+                font-weight: bold;
+                color: #2c3e50;
+                margin-top: 15px;
+                text-transform: uppercase;
+                border-bottom: 2px solid #2c3e50;
+                padding-bottom: 5px;
+                }
+                .prescription-info {
+                margin-top: 15px;
+                margin-bottom: 20px;
+                font-size: 14px;
+                }
+                .prescription-info strong {
+                display: inline-block;
+                min-width: 120px;
+                color: #34495e;
+                }
+                .table {
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 13px;
+                margin-top: 20px;
+                }
+                .table th {
+                background-color: #f0f0f0;
+                padding: 6px;
+                border: 1px solid #ccc;
+                font-weight: bold;
+                text-align: center;
+                }
+                .table td {
+                padding: 6px;
+                border: 1px solid #ccc;
+                vertical-align: top;
+                }
+                .footer-note {
+                margin-top: 25px;
+                font-size: 12px;
+                color: #7f8c8d;
+                text-align: center;
+                border-top: 1px dashed #7f8c8d;
+                padding-top: 8px;
+                }
+            </style>
+
+            <h2>Prescription Detail</h2>
+
+            <div class="prescription-info">
+                <div t-if="o.patient">
+                    <strong>Patient:</strong>
+                    <span t-field="o.patient.name"/>
+                </div>
+                <div t-if="o.name">
+                    <strong>Prescription#:</strong>
+                    <span t-field="o.name"/>
+                </div>
+                <div t-if="o.doctor">
+                    <strong>Doctor:</strong>
+                    <span t-field="o.doctor.name"/>
+                </div>
+                <div t-if="o.date">
+                    <strong>Date:</strong>
+                    <span t-field="o.date"/>
+                </div>
+                <div t-if="o.pharmacy">
+                    <strong>Pharmacy:</strong>
+                    <span t-field="o.pharmacy"/>
+                </div>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Medicine</th>
+                        <th>Indication</th>
+                        <th>Dose</th>
+                        <th>Form</th>
+                        <th>X</th>
+                        <th>Treatment Duration</th>
+                        <th>Treatment Period</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="o.prescription_line" t-as="l">
+                        <td>
+                            <strong>
+                                <span t-field="l.name.name"/>
+                            </strong>
+                        </td>
+                        <td>
+                            <span t-field="l.indication.name"/>
+                        </td>
+                        <td>
+                            <span t-field="l.dose"/>
+                            <span t-field="l.dose_unit.name"/>
+                        </td>
+                        <td>
+                            <span t-field="l.dose_form.name"/>
+                        </td>
+                        <td style="text-align:center;">
+                            <span t-field="l.qty"/>
+                        </td>
+                        <td style="text-align:center;">
+                            <span t-field="l.duration"/>
+                        </td>
+                        <td style="text-align:center;">
+                            <span t-field="l.duration_period"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </t>
+    </template>
+    <template id="report_oeh_medical_patient_prescription">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="oehealth.report_oeh_medical_patient_prescription_document"
+                   t-lang="o.patient.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

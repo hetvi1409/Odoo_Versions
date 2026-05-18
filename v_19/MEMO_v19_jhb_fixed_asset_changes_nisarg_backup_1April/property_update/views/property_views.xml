@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.ui.view" id="building_search_view">
+        <field name="name">building.search.view</field>
+        <field name="model">building</field>
+        <field name="inherit_id" ref="itsys_real_estate.building_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="jmc_number"/>
+            </xpath>
+            <xpath expr="//field[@name='title_deed_number']" position="after">
+<!--                <field name="property_condition"/>-->
+<!--                <field name="ward"/>-->
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="building_list_web">
+        <field name="name">building.view.list</field>
+        <field name="model">building</field>
+        <field name="inherit_id" ref="itsys_real_estate.building_list_web"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sequence']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="jmc_number"/>
+                <field name="code"/>
+                <field name="address"/>
+                <field name="property_condition"/>
+                <field name="ward"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="building_list">
+        <field name="name">building.view.list</field>
+        <field name="model">building</field>
+        <field name="inherit_id" ref="itsys_real_estate.building_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='region_id']" position="after">
+                <field name="state"/>
+                <field name="rental_count" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="jmc_number"/>
+                <field name="address"/>
+                <field name="property_condition"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='building_area']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='land_area']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='constructed']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='lift']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="building_base_pages_form">
+        <field name="name">building.form.view</field>
+        <field name="model">building</field>
+        <field name="inherit_id"
+               ref="itsys_real_estate.building_base_pages_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="jmc_number"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="after">
+                <widget name="web_ribbon" title="Leased" bg_color="bg-success" invisible="state != 'on_lease'"/>
+                <!--                <widget name="web_ribbon" title="Contracted" bg_color="bg-success" attrs="{'invisible': [('state', 'not in', ['on_lease', 'reserved'])]}"/>-->
+            </xpath>
+            <xpath expr="//notebook" position="before">
+                <group>
+                    <group>
+                        <field name="theoretical_amount"/>
+                        <field name="history_amount" string="Historical Book Value"/>
+                        <field name="market_value"/>
+                        <field name="zoning_id"/>
+                        <field name="sg_id"/>
+                        <field name="title_deed_number"/>
+                    </group>
+                    <group>
+                        <field name="ward"/>
+                        <field name="township"/>
+                        <field name="department_id"/>
+                        <field name="leased_state" widget="badge" decoration-danger="leased_state == 'not_leased'"
+                               decoration-success="leased_state == 'leased'"/>
+                        <field name="property_condition"/>
+                        <field name="category_id"/>
+                        <field name="current_use"/>
+                    </group>
+
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='pricing']" position="after">
+
+                <field name="theoretical_amount"/>
+                <!--                <field name="history_amount" string="Historical Amount"/>-->
+                <field name="property_condition"/>
+                <field name="latitude"/>
+                <field name="longitude"/>
+                <field name="category_id"/>
+                <field name="category_amp_id"/>
+                <field name="current_use"/>
+            </xpath>
+            <xpath expr="//field[@name='west']" position="after">
+                <field name="ward"/>
+                <field name="zoning_id"/>
+                <field name="sg_id"/>
+                <field name="department_id"/>
+            </xpath>
+            <xpath expr="//field[@name='address']"
+                   position="after">
+                <field name="property_condition"/>
+                <field name="ward"/>
+                <field name="zoning_id"/>
+                <field name="latitude"/>
+                <field name="longitude"/>
+                <field name="sg_id"/>
+                <field name="department_id"/>
+                <field name="category_id"/>
+                <field name="category_amp_id"/>
+                <field name="current_use"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="get_rental_contract_details" invisible="rental_count == '0'"
+                        icon="fa-credit-card">
+                    <field string="Leases"
+                           name="rental_count" widget="statinfo"/>
+                </button>
+                <button class="oe_stat_button" type="object"
+                        name="view_trade_rental_contract"
+                        icon="fa-credit-card">
+                    <field string="Informal Trade Lease "
+                           name="trade_count" widget="statinfo"/>
+                </button>
+            </xpath>
+            <!--            <xpath expr="//notebook" position="inside">-->
+            <!--                <page string="GEOLIS" name="geolis">-->
+            <!--                    <iframe id="custom_src" name="custom_src"-->
+            <!--                            src="https://ags.joburg.org.za/cgis/index.aspx"-->
+            <!--                            width="100%" height="500"/>-->
+            <!--                </page>-->
+            <!--            </xpath>-->
+            <xpath expr="//header" position="inside">
+                <button name="action_submit_for_approval" string="Submit For Approval" type="object"
+                        invisible="state != 'draft'"/>
+                <button name="action_approve" string="Approve" type="object" class="oe_highlight"
+                        invisible="state != 'submit'" groups="itsys_real_estate_approval.group_property_approval_manager"/>
+                <button name="action_reject" string="Reject" type="object" invisible="state != 'submit'"
+                        groups="itsys_real_estate_approval.group_property_approval_manager"/>
+                <button name="action_create_assessment" type="object" string="Create Assessment" class="oe_highlight"/>
+                <!--                <button name="make_reservation" type="object" string="Reservation"/> -->
+                <field name="state" widget="statusbar"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="building_base_pages_form_pages">
+        <field name="name">building.form.view</field>
+        <field name="model">building</field>
+        <field name="inherit_id"
+               ref="itsys_real_estate.building_base_pages_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <!--                <page string="Title Deeds" name="title_deeds">-->
+                <!--                    <field name="title_deeds_documents_ids">-->
+                <!--                        <list editable="bottom">-->
+                <!--                            <field name="name"/>-->
+                <!--                            <field name="file"/>-->
+                <!--                            <button name="download_file" type="object"-->
+                <!--                                    string="Download" attrs="{'invisible': [('file', '=', False)]}"-->
+                <!--                                    class="oe-highlight"/>-->
+                <!--                        </list>-->
+                <!--                    </field>-->
+                <!--                </page>-->
+                <page string="Contracts" name="contracts">
+                    <field name="contract_documents_ids">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <field name="file"/>
+                            <button name="download_file" type="object" invisible="file == False"
+                                    string="Download"
+                                    class="oe-highlight"/>
+                        </list>
+                    </field>
+                </page>
+                <page name="building_file_plan_documents" string="File Plan Documents">
+                    <field name="building_documents_ids" mode="list,form">
+                        <list editable="bottom">
+                            <field name="name" readonly="1" required="0"/>
+                            <field name="attachment_id" string="Upload Document" domain="[('id', '=', False)]"
+                                   options="{'no_open': True, 'no_create': False}" readonly="0" required="1"
+                                   force_save="1"/>
+                            <field name="folder_id" string="File Plan" options="{'no_open': True, 'no_create': True}"
+                                   readonly="0" required="1" force_save="1" context="{'searchpanel_default_folder_id':False}"/>
+                            <field name="jmc_property_id" options="{'no_open': True, 'no_create': True}" readonly="1"
+                                   required="1" force_save="1"/>
+                            <button name="action_preview_document" type="object" string="Preview"
+                                    class="btn-primary" invisible="attachment_id == False"/>
+                        </list>
+                    </field>
+                </page>
+                <!--                <page string="Trim Documents">-->
+                <!--                    <field name="trim_documents_ids">-->
+                <!--                        <list editable="bottom">-->
+                <!--                            <field name="trim_documentid" optional="show" widget="many2one_reference"/>-->
+                <!--                            <field name="trim_documentid" widget="integer" readonly="1"/>-->
+                <!--                            <field name="trim_doc_link" optional="show" readonly="1"/>-->
+                <!--                            <field name="building_id" readonly="1"/>-->
+                <!--                            <field name="trim_document_file" readonly="1"/>-->
+                <!--                        </list>-->
+                <!--                    </field>-->
+                <!--                </page>-->
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="building_filter">
+        <field name="name">building.search.view</field>
+        <field name="model">building</field>
+        <field name="inherit_id"
+               ref="itsys_real_estate.building_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="department_id"/>
+            </xpath>
+            <xpath expr="//filter[@name='group_by_region']" position="inside">
+                <filter name="department" string="User Department" domain="[]" context="{'group_by': 'department_id'}"/>
+            </xpath>
+        </field>
+    </record>
+    <menuitem
+            id="itsys_real_estate.menu_building_list"
+            name="Property"
+            parent="itsys_real_estate.menu_itsys_real_estate"
+            sequence="1"/>
+    <menuitem
+            sequence="3"
+            name="Property"
+            action="itsys_real_estate.building_act1"
+            id="itsys_real_estate.menu_building_list_sub"
+            parent="itsys_real_estate.menu_building_list"/>
+</odoo>

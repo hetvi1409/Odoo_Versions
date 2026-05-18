@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="document_classification_type_view_order_form"
+            model="ir.ui.view">
+        <field name="name">document.classification.type.form</field>
+        <field name="model">document.classification.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="document_classification_type_view_order_tree" model="ir.ui.view">
+            <field name="name">document.classification.type.tree</field>
+            <field name="model">document.classification.type</field>
+            <field name="type">list</field>
+            <field name="arch" type="xml">
+                    <list>
+                        <field name="name"/>
+                    </list>
+            </field>
+        </record>
+
+    <record model="ir.actions.act_window" id="document_classification_type_action">
+            <field name="name">Document Classification Type</field>
+            <field name="res_model">document.classification.type</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="document_classification_type_view_order_tree"/>
+        </record>
+
+    <menuitem id="menu_document_classification_type"
+              name="Document Classification Type"
+              action="document_classification_type_action"
+              parent="itsys_real_estate.menu_settings"/>
+</odoo>

@@ -1,0 +1,166 @@
+# -*- coding: utf-8 -*-
+
+from odoo import api, models
+from odoo.addons.base.models.ir_model import MODULE_UNINSTALL_FLAG
+from lxml import etree
+from lxml.builder import E
+from collections import defaultdict
+
+
+class ResGroups(models.Model):
+    _inherit = 'res.groups'
+
+    def name_boolean_group(self, id):
+        return 'in_group_' + str(id)
+
+    def name_selection_groups(self, ids):
+        return 'sel_groups_' + '_'.join(str(it) for it in sorted(ids))
+
+    def is_boolean_group(name):
+        return name.startswith('in_group_')
+
+    def is_selection_groups(name):
+        return name.startswith('sel_groups_')
+
+    def get_boolean_group(name):
+        return int(name[9:])
+
+    def get_selection_groups(name):
+        return [int(v) for v in name[11:].split('_')]
+
+    @api.model
+    def _register_hook(self):
+        super()._register_hook()
+        self._update_role_groups_view()
+        return True
+
+    @api.model
+    def _update_role_groups_view(self):
+        """Modify the view with xmlid ``base.user_groups_view``, which inherits
+        the user form view, and introduces the reified group fields."""
+        self = self.with_context(lang=None)
+        view = self.env.ref('security_role.role_group_view', raise_if_not_found=False)
+
+        if not (view and view._name == 'ir.ui.view'):
+            return
+
+        if self._context.get('install_filename') or self._context.get(
+                MODULE_UNINSTALL_FLAG):
+            xml = E.field(name="groups_id", position="after")
+        else:
+            group_no_one = view.env.ref('base.group_no_one')
+            xml0, xml2, xml3, xml4 = [], [], [], []
+            xml_by_category = {}
+            sorted_tuples = sorted(self.get_groups_by_application(),
+                                   key=lambda t: t[0].xml_id != 'base.module_category_user_type')
+
+            invisible_information = (
+                "All fields linked to groups must be present in the view "
+                "due to the overwrite of create and write. "
+                "The implied groups are calculated using this values.")
+            for app, kind, gs, category_name in sorted_tuples:
+                attrs = {}
+                if kind == 'selection':
+                    field_name = self.name_selection_groups(gs.ids)
+                    attrs['on_change'] = '1'
+                    if category_name not in xml_by_category:
+                        xml_by_category[category_name] = []
+                        xml_by_category[category_name].append(E.newline())
+                    xml_by_category[category_name].append(
+                        E.field(name=field_name, **attrs))
+                    xml_by_category[category_name].append(E.newline())
+                    if attrs.get('groups') == 'base.group_no_one':
+                        xml0.append(E.field(name=field_name,
+                                            **dict(attrs, invisible="True",
+                                                   groups='!base.group_no_one')))
+                        xml0.append(etree.Comment(invisible_information))
+                else:
+                    app_name = app.name or 'Other'
+                    xml4.append(E.separator(string=app_name, **attrs))
+                    left_group, right_group = [], []
+                    group_count = 0
+                    for g in gs:
+                        field_name = self.name_boolean_group(g.id)
+                        dest_group = left_group if group_count % 2 == 0 else right_group
+                        if g == group_no_one:
+                            dest_group.append(
+                                E.field(name=field_name, invisible="True", **attrs))
+                            dest_group.append(etree.Comment(invisible_information))
+                        else:
+                            dest_group.append(E.field(name=field_name, **attrs))
+                        xml0.append(E.field(name=field_name,
+                                            **dict(attrs, invisible="True",
+                                                   groups='!base.group_no_one')))
+                        xml0.append(etree.Comment(invisible_information))
+                        group_count += 1
+                    xml4.append(E.group(*left_group))
+                    xml4.append(E.group(*right_group))
+            xml4.append({'class': "o_label_nowrap"})
+            for xml_cat in sorted(xml_by_category.keys(), key=lambda it: it[0]):
+                master_category_name = xml_cat[1]
+                xml3.append(
+                    E.group(*(xml_by_category[xml_cat]), string=master_category_name))
+            xml = E.field(
+                *(xml0),
+                E.group(*(xml2), groups='base.group_no_one'),
+                E.group(*(xml3), groups='base.group_no_one'),
+                E.group(*(xml4), groups='base.group_no_one'),
+                name="groups_id", position="replace")
+            xml.addprevious(etree.Comment("GENERATED AUTOMATICALLY BY GROUPS"))
+        xml_content = etree.tostring(xml, pretty_print=True, encoding="unicode")
+        if xml_content != view.arch:
+            new_context = dict(view._context)
+            new_context.pop('install_filename', None)
+            new_context['lang'] = None
+            view.with_context(new_context).write({'arch': xml_content})
+
+    def get_application_groups(self, domain):
+        """ Return the non-share groups that satisfy ``domain``. """
+        return self.search(domain + [('share', '=', False)])
+
+    @api.model
+    def get_groups_by_application(self):
+        """ Return all groups classified by application (module category), as a list::
+
+                [(app, kind, groups), ...],
+
+            where ``app`` and ``groups`` are recordsets, and ``kind`` is either
+            ``'boolean'`` or ``'selection'``. Applications are given in sequence
+            order.  If ``kind`` is ``'selection'``, ``groups`` are given in
+            reverse implication order.
+        """
+        def linearize(app, gs, category_name):
+            # 'User Type' is an exception
+            if app.xml_id == 'base.module_category_user_type':
+                return (app, 'selection', gs.sorted('id'), category_name)
+            # determine sequence order: a group appears after its implied groups
+            order = {g: len(g.trans_implied_ids & gs) for g in gs}
+            # We want a selection for Accounting too. Auditor and Invoice are both
+            # children of Accountant, but the two of them make a full accountant
+            # so it makes no sense to have checkboxes.
+            if app.xml_id == 'base.module_category_accounting_accounting':
+                return (app, 'selection', gs.sorted(key=order.get), category_name)
+            # check whether order is total, i.e., sequence orders are distinct
+            if len(set(order.values())) == len(gs):
+                return (app, 'selection', gs.sorted(key=order.get), category_name)
+            else:
+                return (app, 'boolean', gs, (100, 'Other'))
+        # classify all groups by application
+        by_app, others = defaultdict(self.browse), self.browse()
+        for g in self.get_application_groups([]):
+            if g.category_id:
+                by_app[g.category_id] += g
+            else:
+                others += g
+        # build the result
+        res = []
+        for app, gs in sorted(by_app.items(), key=lambda it: it[0].sequence or 0):
+            if app.parent_id:
+                res.append(
+                    linearize(app, gs, (app.parent_id.sequence, app.parent_id.name)))
+            else:
+                res.append(linearize(app, gs, (100, 'Other')))
+        if others:
+            res.append(
+                (self.env['ir.module.category'], 'boolean', others, (100, 'Other')))
+        return res

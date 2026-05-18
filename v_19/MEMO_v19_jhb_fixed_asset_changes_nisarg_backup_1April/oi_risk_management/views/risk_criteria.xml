@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- risk criteria general form view  -->
+        <record model="ir.ui.view" id="oi_risk_management.risk_criteria_form">
+            <field name="name">oi_risk_management.risk_criteria.view.form</field>
+            <field name="model">oi_risk_management.risk_criteria</field>
+            <field name="arch" type="xml">
+                <form create="0">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="type" readonly="1"/>
+                                <field name="score" readonly="1"/>
+                                <field name="color" widget="color_picker" readonly="1"/>
+                                <field name="name" string="Rating"/>
+                            </group>
+
+                            <group>
+                                <field name="ehs" string="EHS" invisible="type != 'severity'"/>
+                                <field name="value" invisible="type != 'severity'"/>
+                                <field name="reputation" invisible="type != 'severity'"/>
+
+                                <field name="percentage" invisible="type != 'likehood'"/>
+                                <field name="frequency" invisible="type != 'likehood'"/>
+
+                                <field name="description" invisible="type != 'control_effectiveness'"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- risk severity tree view  -->
+        <record model="ir.ui.view" id="oi_risk_management.risk_severity_tree">
+            <field name="name">oi_risk_management.risk_severity.view.list</field>
+            <field name="model">oi_risk_management.risk_criteria</field>
+            <field name="arch" type="xml">
+                <list editable="bottom" create="0" delete="0">
+                    <field name="type" invisible="1"/>
+                    <field name="score" readonly="1"/>
+                    <field name="color" widget="color_picker" nolabel="1" readonly="1"/>
+                    <field name="name"/>
+                    <field name="ehs" string="EHS"/>
+                    <field name="value"/>
+                    <field name="reputation"/>
+                </list>
+            </field>
+        </record>
+
+
+        <!-- risk likelihood tree view  -->
+        <record model="ir.ui.view" id="oi_risk_management.risk_likelihood_tree">
+            <field name="name">oi_risk_management.risk_likelihood.view.list</field>
+            <field name="model">oi_risk_management.risk_criteria</field>
+            <field name="arch" type="xml">
+                <list editable="bottom" create="0" delete="0">
+                    <field name="type" invisible="1"/>
+                    <field name="score" readonly="1"/>
+                    <field name="color" widget="color_picker" nolabel="1" readonly="1"/>
+                    <field name="name"/>
+                    <field name="percentage"/>
+                    <field name="frequency"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- risk control effectiveness tree view  -->
+        <record model="ir.ui.view" id="oi_risk_management.risk_control_effectiveness_tree">
+            <field name="name">oi_risk_management.risk_control_effectiveness.view.list</field>
+            <field name="model">oi_risk_management.risk_criteria</field>
+            <field name="arch" type="xml">
+                <list editable="bottom" create="0" delete="0">
+                    <field name="type" invisible="1"/>
+                    <field name="score" readonly="1"/>
+                    <field name="color" widget="color_picker" nolabel="1" readonly="1"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                </list>
+            </field>
+        </record>
+    </data>
+</odoo>

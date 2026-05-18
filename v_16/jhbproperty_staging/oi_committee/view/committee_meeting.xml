@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="view_committee_meeting_form" model="ir.ui.view">
+		<field name="name">committee.meeting.form</field>
+		<field name="model">committee.meeting</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<field name="state" widget="statusbar" />
+					<field name="workflow_states" invisible="1" />
+					<field name="user_can_approve" invisible="1" />
+					<field name="button_approve_enabled" invisible="1" />
+					<field name="button_forward_enabled" invisible="1" />
+					<field name="button_return_enabled" invisible="1" />															
+					<field name="approve_button_name" invisible="1" />
+					<field name="approve_confirm_msg" invisible="1" />
+					<field name="reject_button_wizard" invisible="1" />
+					<field name="reject_button_name" invisible="1" />
+					<field name="reject_confirm_msg" invisible="1" />
+					<button name="action_approve" type="object" string="Confirm" class="oe_highlight" states="draft" />
+					<button name="action_approve" type="object" string="Approve" class="oe_highlight oe_workflow_approve"
+						attrs="{'invisible' : [('user_can_approve','=', False)]}" />
+					<button name="action_reject_wizard" type="object" string="Reject" class="oe_workflow_reject"
+						attrs="{'invisible' : ['|', '|', ('user_can_approve','=', False), ('reject_button_name', '=', False), ('reject_button_wizard', '=', False)]}" />
+					<button name="action_reject" type="object" string="Reject" class="oe_workflow_reject"
+						attrs="{'invisible' : ['|','|', ('user_can_approve','=', False), ('reject_button_name', '=', False), ('reject_button_wizard', '=', True)]}" />
+					<button name="action_draft" type="object" confirm="Reset to draft ?" string="Reset to draft" states="rejected" />
+					<button name="action_forward" type="object" string="Forward" attrs="{'invisible' : [('button_forward_enabled','=', False)]}" />
+					<button name="action_return" type="object" string="Return" attrs="{'invisible' : [('button_return_enabled','=', False)]}" />															
+				</header>
+				<sheet>
+					<div class="oe_button_box" name="button_box">
+						<button name="action_view_record" type="object" class="oe_stat_button" icon="fa-file-text-o"
+							attrs="{'invisible' : [('record_name','=', False)]}">
+							<field name="record_name" nolabel="1" widget="statinfo" />
+						</button>
+						<button name="action_report" type="object" string="Report" class="oe_stat_button" icon="fa-file-pdf-o" />						
+					</div>				
+					<div class="oe_title">
+						<h1>
+							<field name="name" />
+						</h1>
+					</div>
+					<group>
+						<group>
+							<field name="res_id" invisible="1" />
+							<field name="type_id" invisible="1" />
+							<field name="type_xml_id" invisible="1" />
+							<field name="type_code" invisible="1" />
+							<field name="committee_id" options="{'no_create_edit' : True}" />
+						</group>
+						<group>
+							<field name="date_start" />
+							<field name="date_end" />
+						</group>
+					</group>
+					<group>
+						<field name="subject" />
+						<field name="description" />
+					</group>
+					<group string="Attendance" name="attendance">
+						<field name="attendance_ids" nolabel="1" mode="kanban" colspan="2">
+							<kanban class="o_hr_employee_kanban">
+								<field name="id" />
+								<field name="sequence" />
+								<field name="employee_id" />
+								<field name="member_type" />
+								<field name="department_id" />
+								<field name="job_id" />
+								<templates>
+									<t t-name="kanban-box">
+										<div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
+											<!-- Medium employee's picture -->
+											<div class="o_kanban_image_fill_left d-none d-md-block"
+												t-attf-style="background-image: url(#{kanban_image('hr.employee', 'image_medium', record.employee_id.raw_value)})" role="img" />
+											<!-- Employee's picture optimized for mobile -->
+											<div class="o_kanban_image d-md-none rounded-circle"
+												t-attf-style="background-image: url(#{kanban_image('hr.employee', 'image_small', record.employee_id.raw_value)})" role="img" />
+
+											<div class="oe_kanban_details">
+												<div class="o_kanban_record_top">
+													<div class="o_kanban_record_headings">
+														<strong class="o_kanban_record_title">
+															<field name="employee_id" />
+														</strong>
+														<span t-if="record.job_id.raw_value" class="o_kanban_record_subtitle">
+															<field name="job_id" />
+														</span>
+													</div>
+												</div>
+												<div class="o_kanban_record_bottom">
+													<div class="oe_kanban_bottom_left text-muted">
+														<span></span>
+													</div>
+													<div class="oe_kanban_bottom_right">
+														<span class="float-right text-right">
+															<field name="member_type" widget="label_selection"
+																options="{'classes': {'president': 'success', 'secretary': 'info', 'member' : 'primary', 'reserve' : 'warning'}}" />
+														</span>
+													</div>
+												</div>
+
+											</div>
+										</div>
+									</t>
+								</templates>
+							</kanban>
+
+							<tree>
+								<field name="employee_id" />
+								<field name="member_type" />
+								<field name="job_id" />
+								<field name="department_id" />
+							</tree>
+						</field>
+					</group>
+
+					<group string="Report">
+						<field name="report" nolabel="1" colspan="2"/>
+					</group>
+				</sheet>
+				<div class="oe_chatter" modifiers="{}">
+					<field name="message_follower_ids" widget="mail_followers" modifiers="{}" />
+					<field name="activity_ids" widget="mail_activity" modifiers="{}" />
+					<field name="message_ids" widget="mail_thread" modifiers="{}" options="{'display_log_button': True}" />
+				</div>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_committee_meeting_tree" model="ir.ui.view">
+		<field name="name">committee.meeting.tree</field>
+		<field name="model">committee.meeting</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name" />
+				<field name="committee_id" />
+				<field name="subject" />
+				<field name="date_start" />
+				<field name="date_end" />
+				<field name="state" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_committee_meeting_calendar" model="ir.ui.view">
+		<field name="name">committee.meeting.calendar</field>
+		<field name="model">committee.meeting</field>
+		<field name="arch" type="xml">
+			<calendar string="Committee Meeting" date_start="date_start" date_stop="date_end" mode="month" quick_add="False">
+				<field name="display_name" />
+			</calendar>
+		</field>
+	</record>
+
+	<record id="view_committee_meeting_search" model="ir.ui.view">
+		<field name="name">committee.meeting.search</field>
+		<field name="model">committee.meeting</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="name" />
+				<filter string="Active" name="active" domain="[('state', 'not in', ['approved', 'rejected'])]" />
+				<separator />
+				<filter string="Waiting My Approval" name="my_approval" domain="[('approval_user_ids', '=', uid)]" />
+				<filter string="Waiting Approval" name="approval" domain="[('waiting_approval', '=', True)]" />				
+				<separator />
+				<filter string="My Activities" name="activities_my" domain="[('activity_ids.user_id', '=', uid)]" />
+				<separator />
+				<filter string="Late Activities" name="activities_overdue" domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+					help="Show all records which has next action date is before today" />
+				<filter string="Today Activities" name="activities_today" domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]" />
+				<filter string="Future Activities" name="activities_upcoming_all"
+					domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))
+                        ]" />
+				<group expand="0" string="Group By">
+					<filter string="Status" name="status" domain="[]" context="{'group_by':'state'}" />
+					<filter string="Created on" name="create_date" domain="[]" context="{'group_by':'create_date'}" />
+				</group>
+			</search>
+		</field>
+	</record>
+
+
+</odoo>

@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.view.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Description" name="description">
+                    <field name="description"/>
+                </page>
+                <page string="Asset Details" name="asset_details">
+                    <group>
+                        <group string="Stock Details">
+                            <field name="location_id"/>
+                            <field name="office"/>
+                            <span class="o_form_label o_td_label"
+                                  name="address_name">
+                                <b>Physical Address</b>
+                            </span>
+
+                            <div class="o_address_format">
+                                <field name="physical_street"
+                                       placeholder="Street..."
+                                       class="o_address_street"/>
+                                <field name="physical_street2"
+                                       placeholder="Street 2..."
+                                       class="o_address_street"/>
+                                <field name="physical_city" placeholder="City"
+                                       class="o_address_city"/>
+                                <field name="physical_state_id"
+                                       class="o_address_state"
+                                       placeholder="State"
+                                       options="{'no_open': True, 'no_quick_create': True}"/>
+                                <field name="physical_zip" placeholder="ZIP"
+                                       class="o_address_zip"/>
+                                <div name="partner_address_country"
+                                     class="d-flex justify-content-between">
+                                    <field name="physical_country_id"
+                                           placeholder="Country"
+                                           class="o_address_country"
+                                           options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                </div>
+                            </div>
+                            <field name="building"/>
+                            <field name="room_number"/>
+                            <field name="days_from_last_run"/>
+                        </group>
+                        <group string="Asset Id">
+                            <field name="asset_category_id"/>
+                            <field name="asset_type_id"/>
+                            <field name="asset_sub_category_id"/>
+                            <field name="model_id"/>
+                            <field name="asset_barcode"/>
+                            <field name="department_id"/>
+                            <field name="division_id"/>
+                            <field name="ownership_id"/>
+                            <field name="serial_number"/>
+                            <field name="identification_number"/>
+                            <field name="deed_number"/>
+                            <field name="stand_number"/>
+                            <field name="serial_number"/>
+                        </group>
+                        <group string="Asset Transfer">
+                            <field name="transfer_department_id"/>
+                            <field name="transfer_division_id"/>
+                            <field name="transfer_ownership_id"/>
+                            <field name="transfer_from_custodian_name"/>
+                            <field name="transfer_from_custodian_id_number"/>
+                            <field name="transfer_new_department_id"/>
+                            <field name="transfer_new_division_id"/>
+                            <field name="transfer_new_ownership_id"/>
+                            <field name="transfer_to_new_custodian_name"/>
+                            <field name="transfer_to_new_custodian_id_number"/>
+                        </group>
+                        <group string="Revaluation Details">
+                            <field name="revaluation_date"/>
+                            <field name="re_valued_value"/>
+                            <field name="funding_source"/>
+                        </group>
+                        <group string="Other Details">
+                            <!--<field name="disposal"/>
+                            <field name="addition"/>-->
+                            <field name="adjustment"/>
+                            <field name="method_disposal"/>
+                            <field name="condition_asset"/>
+                            <field name="remaining_life"/>
+                            <field name="expected_life"/>
+                            <field name="conditional_assessment"/>
+                            <field name="condition"/>
+                            <field name="custodian"/>
+                            <field name="component"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Asset Disposal" name="asset_loss"
+                      attrs="{'invisible': [('loss_asset', '=', False)]}">
+                    <group invisible="1">
+                        <field name="loss_asset"/>
+                        <field name="loss_description"/>
+                    </group>
+                    <group>
+                        <field name="asset_reason"/>
+                        <field name="disposal_date"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="disposal_type"/>
+                            <field name="direct_attachement_ids"
+                                   widget="many2many_binary"/>
+                        </group>
+                        <group>
+                            <field name="cash_type"
+                                   attrs="{'invisible': [('disposal_type', '!=', 'cash')], 'required': [('disposal_type', '=', 'cash')]}"/>
+                            <field name="non_cash_type"
+                                   attrs="{'invisible': [('disposal_type', '!=', 'non_cash')], 'required': [('disposal_type', '=', 'non_cash')]}"/>
+                            <field name="direct_disposal_amount"/>
+
+                        </group>
+                    </group>
+
+                </page>
+                <page string="Asset Useful life" name="useful_life">
+                    <group>
+                        <group>
+                            <field name="useful_life_month"/>
+                            <field name="remaining_useful_life_month"/>
+                        </group>
+                        <group>
+                            <field name="useful_life_day"/>
+                            <field name="remaining_useful_life_day"/>
+                        </group>
+                    </group>
+                    <field name="useful_life_ids">
+                        <tree editable="bottom">
+                            <field name="date"/>
+                            <!--<field name="amount"/>-->
+                            <field name="original_useful_life"/>
+                            <field name="reserved_useful_life"/>
+                            <field name="remaining_useful_life"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Asset Impairment" name="asset_impairment"
+                      attrs="{'invisible': [('state', 'not in', ['impaired', 'cancelled'])]}">
+                    <group>
+                        <field name="reason_impairment"/>
+                        <field name="is_impaired" invisible="1"/>
+                        <field name="impairment_date"/>
+                    </group>
+                    <group string="External sources of information">
+                        <group>
+                            <field name="cessation"/>
+                        </group>
+                        <group>
+                            <field name="long_term_change"/>
+                        </group>
+                    </group>
+                    <group string="Internal sources of information">
+                        <group>
+                            <field name="evidence"/>
+                        </group>
+                        <group>
+                            <field name="evidence_document_ids"
+                                   widget="many2many_binary"
+                                   attrs="{'invisible': [('evidence','!=', 'yes')]}"/>
+                        </group>
+                        <group>
+                            <field name="significant_long_term_change"/>
+                            <field name="evidence_internal_report"/>
+                        </group>
+                        <group>
+                            <field name="decision"/>
+                            <field name="evidence_internal_report_document_ids"
+                                   widget="many2many_binary"
+                                   attrs="{'invisible': [('evidence_internal_report','!=', 'yes')]}"/>
+                        </group>
+                    </group>
+
+                </page>
+                <page string="Asset Transfer"
+                      attrs="{'invisible': [('is_transferred', '=', False)]}">
+                    <group>
+                        <field name="is_transferred" invisible="True"/>
+                        <field name="date"/>
+                        <field name="asset_barcode"/>
+                        <field name="department_id"/>
+                        <field name="transfer_description"/>
+                        <field name="transfer_condition"/>
+                        <field name="reason"/>
+                    </group>
+                    <group string="Requesting official">
+                        <field name="name_surname"/>
+                        <field name="sign_signature" widget="signature"
+                               options="{'size': [200,'']}"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="current_location"/>
+                            <field name="current_department"/>
+                            <field name="current_unit"/>
+                            <field name="transferring_official"/>
+                            <field name="transferring_official_signature"
+                                   widget="signature"
+                                   options="{'size': [200,'']}"/>
+                        </group>
+                        <group>
+                            <field name="new_location"/>
+                            <field name="new_department"/>
+                            <field name="new_unit"/>
+                            <field name="receiving_official"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="gm_name_surname"/>
+                            <field name="gm_signature" widget="signature"
+                                   options="{'size': [200,'']}"/>
+                            <field name="date_transferred"/>
+                        </group>
+                        <group>
+                            <field name="new_gm_name_surname"/>
+                            <field name="new_gm_signature" widget="signature"
+                                   options="{'size': [200,'']}"/>
+                            <field name="date_received"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Insurance Details">
+                    <group>
+                        <group>
+                            <field name="insured_value"/>
+                            <field name="premium_monthly"/>
+                            <field name="insured_period"/>
+                        </group>
+                        <group>
+                            <field name="policy_number"/>
+                            <field name="premium_annually"/>
+                            <field name="claim_date"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='original_value']" position="after">
+                <field name="opening_cost"/>
+                <field name="money_received_sale_asset"/>
+                <field name="current_value_asset"/>
+                <field name="carrying_amount"/>
+                <field name="value_in_use"/>
+                <field name="fair_value_less_cost_to_sell"/>
+                <field name="carrying_amount"/>
+                <field name="asset_parent_id"/>
+            </xpath>
+            <xpath expr="//field[@name='analytic_distribution']"
+                   position="after">
+                <field name="opening_cost"/>
+                <field name="addition"/>
+                <field name="disposal"/>
+                <field name="transfer"/>
+                <field name="closing_cost"/>
+                <field name="depreciation_charge"/>
+                <field name="accumulated_depreciation"/>
+                <field name="accumulated_depreciation_transfer"/>
+                <field name="impairment"/>
+                <field name="accumulated_impairment_disposal"/>
+                <field name="accumulated_impairment_transfer"/>
+                <field name="life_in_months"/>
+                <field name="acc_dep_opening"/>
+                <field name="closing_accumulated_depreciation"/>
+                <field name="opening_book_value_july_22"/>
+                <field name="closing_book_value_july_22"/>
+                <field name="original_useful_life"/>
+                <field name="expense_cost"/>
+                <field name="capitalise_costs"/>
+                <field name="replacement_value"/>
+                <field name="market_value"/>
+                <field name="ready_for_use"/>
+                <field name="sub_category_description"/>
+            </xpath>
+            <xpath expr="//page[@name='main_page']" position="attributes">
+                <attribute name="string">Asset Account</attribute>
+            </xpath>
+            <xpath expr="//page[@name='main_page']" position="attributes">
+                <attribute name="string">Asset Account</attribute>
+            </xpath>
+            <xpath expr="//page[@name='related_items']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='model_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='prorata_date']" position="after">
+                <!--<field name="opening_cost"/>
+                <field name="accumulated_depreciation"/>
+                <field name="depreciation_charge"/>
+                <field name="impairment_losses"/>
+                <field name="life_in_months"/>
+                <field name="closing_cost"/>-->
+            </xpath>
+            <xpath expr="//div[hasclass('oe_title')]" position="after">
+            </xpath>
+
+            <xpath expr="//button[@name='compute_depreciation_board']"
+                   position="attributes">
+                <attribute name="string">Asset Depreciation</attribute>
+            </xpath>
+            <!--            <xpath expr="//button[@name='set_to_cancelled']"-->
+            <!--                   position="attributes">-->
+            <!--                <attribute name="attrs">{'invisible': ['|', ('state', '!=', 'open', '), ('asset_type', '!=', 'purchase')]}</attribute>-->
+            <!--            </xpath>-->
+            <xpath expr="//header" position="inside">
+                <button type="object" name="action_asset_addition"
+                        string="Asset Addition"
+                        attrs="{'invisible': [('state', 'in', ['close', 'model', 'cancelled', 'impaired'])]}"/>
+<!--                <button type="object" name="action_asset_lose"-->
+<!--                        string="Asset Disposal"-->
+<!--                        attrs="{'invisible': [('state', 'in', ['close', 'model', 'cancelled'])]}"/>-->
+                <button type="object" name="action_asset_transfer"
+                        string="Asset Movement"
+                        attrs="{'invisible': [('state', 'in', ['model'])]}"/>
+                <button type="object" name="action_asset_impairment"
+                        string="Asset Impairment"
+                        attrs="{'invisible': [('state', 'in', ['close', 'model', 'cancelled', 'impaired'])]}"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_account_asset_search" model="ir.ui.view">
+        <field name="name">account.asset.view.search</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter string="FAR" name="type"
+                        domain="[('type', '=', 'FAR')]"/>
+                <filter string="INFRASTRUCTURE" name="type"
+                        domain="[('type', '=', 'INFRASTRUCTURE')]"/>
+                <filter string="Impaired Asset" name="state"
+                        domain="[('state', '=', 'impaired')]"/>
+            </xpath>
+        </field>
+    </record>
+    <menuitem parent="account.menu_finance_entries_management"
+              id="account_asset.menu_action_account_asset_form"
+              action="account_asset.action_account_asset_form" sequence="101"
+              groups="asset_registration.asset_registration_group_chief_financial_officer"/>
+    <menuitem parent="account_accountant.menu_accounting"
+              id="menu_account_assets_full_list" name="Assets"
+              action="account_asset.action_account_asset_form" sequence="0"/>
+</odoo>

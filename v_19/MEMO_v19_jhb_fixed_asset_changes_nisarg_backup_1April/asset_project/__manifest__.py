@@ -1,0 +1,25 @@
+{
+    'name': "WIP",
+    'description': """WIP""",
+    'summary': """WIP""",
+    'version': '19.0.1.0.0',
+    'sequence': '20',
+    'category': 'Accounting',
+    'depends': ['account_asset', 'project','account','asset_registry'],
+    'data': [
+        'data/project_data.xml',
+        'data/data_sequence.xml',
+        'security/ir.model.access.csv',
+        'views/project_task_views.xml',
+        'views/project_project_views.xml',
+        'views/account_move_views.xml',
+        # 'views/asset_type_views.xml',
+        'wizard/import_project_task_views.xml',
+    ],
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+
+}

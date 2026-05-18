@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_view_land_regularization" model="ir.actions.act_window">
+        <field name="name">Land Regularization</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">land.regularization</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="land_regularization_view_form" model="ir.ui.view">
+        <field name="name">Land Regularization</field>
+        <field name="model">land.regularization</field>
+        <field name="arch" type="xml">
+            <form create="false">
+                <header>
+                    <field name="state" widget="statusbar"/>
+<!--                    <button name="action_create_regularisation" states="draft"-->
+<!--                            string="Create inquiry" type="object"-->
+<!--                            class="btn btn-primary"/>-->
+<!--                    <button name="action_create_assessment" states="inquiry"-->
+<!--                            string="Create Assessment" type="object"-->
+<!--                            class="btn btn-primary"/>-->
+                    <button name="action_request_document" invisible="state != 'assessment'"
+                            string="Request Documents" type="object"
+                            class="btn btn-primary"/>
+                    <button name="action_review_document" invisible="state != 'requested_doc'"
+                            string="Review Documents" type="object"
+                            class="btn btn-primary"/>
+                    <button name="action_send_document" invisible="state != 'review_doc'"
+                            string="Send Documents" type="object"
+                            class="btn btn-primary"/>
+                </header>
+                <sheet>
+ <style>
+                    .o_form_view:not(.o_field_highlight)
+                    .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                    .o_input:not(:hover):not(:focus) {
+                              --o-input-border-color: black !important;
+                              }
+                  </style>
+                    <group>
+                        <group>
+    <!--                        <field name="name"/>-->
+                            <field name="type"/>
+                            <field name="date_regularisation"/>
+                            <field name="requester_infos"/>
+                        </group>
+                        <group>
+                            <field name="assessment_result"/>
+                            <field name="enquiry_id"/>
+                            <field name="assessment_id"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Supporting Documents">
+                            <group>
+                                <group>
+                                    <field name="church_const_doc" invisible="type == 'shop'" widget="many2many_binary"/>
+                                    <field name="church_photo_doc" invisible="type == 'shop'" widget="many2many_binary"/>
+                                    <field name="shop_license_doc" invisible="type == 'church'" widget="many2many_binary"/>
+                                    <field name="shop_permit_doc" invisible="type == 'church'" widget="many2many_binary"/>
+                                    <field name="shop_id_doc" invisible="type == 'church'" widget="many2many_binary"/>
+                                </group>
+                                <group>
+                                    <field name="church_corner_doc" invisible="type == 'shop'" widget="many2many_binary"/>
+                                    <field name="church_bishop_doc" invisible="type == 'shop'" widget="many2many_binary"/>
+                                    <field name="church_other_doc" invisible="type == 'shop'" widget="many2many_binary"/>
+                                    <field name="shop_death_doc" invisible="type == 'church'" widget="many2many_binary"/>
+                                    <field name="shop_affidavit_doc" invisible="type == 'church'" widget="many2many_binary"/>
+                                    <field name="shop_other_doc" invisible="type == 'church'" widget="many2many_binary"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Title Deed" invisible="state != 'send_doc'">
+                            <field name="deed_details_id">
+                                <list editable="bottom">
+                                    <field name="deed_number"/>
+                                    <field name="deed_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Handover Event" invisible="state != 'send_doc'">
+                            <field name="hand_over_ids">
+                                <list editable="bottom">
+                                    <field name="hand_date"/>
+                                    <field name="participants"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Case Handling" invisible="state != 'send_doc'">
+                            <field name="case_handling_ids">
+                                <list editable="bottom">
+                                    <field name="year"/>
+                                    <field name="procedure"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="GEOLIS">
+                            <iframe id="custom_src" name="custom_src"
+                                    src="https://ags.joburg.org.za/cgis/index.aspx"
+                                    width="100%" height="500"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="land_regularization_view_tree" model="ir.ui.view">
+        <field name="name">Land Regularization</field>
+        <field name="model">land.regularization</field>
+        <field name="arch" type="xml">
+            <list create="false">
+                <field name="type"/>
+                <field name="date_regularisation"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="academic_year_view_tree" model="ir.ui.view">
+        <field name="name">academic.year.view.tree</field>
+        <field name="model">academic.year</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="academic_year_view_form" model="ir.ui.view">
+        <field name="name">academic.year.view.form</field>
+        <field name="model">academic.year</field>
+        <field name="arch" type="xml">
+            <form string="Bursary">
+                <sheet>
+                    <div class="oe_title">
+                        <field name="name"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                        </group>
+                        <group>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_academic_year" model="ir.actions.act_window">
+        <field name="name">Academic Year</field>
+        <field name="res_model">academic.year</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="course_type_view_tree" model="ir.ui.view">
+        <field name="name">course.type.view.tree</field>
+        <field name="model">course.type</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_course_type" model="ir.actions.act_window">
+        <field name="name">Field Of Study</field>
+        <field name="res_model">course.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="field_study_view_tree" model="ir.ui.view">
+        <field name="name">field.study.view.tree</field>
+        <field name="model">field.study</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="field_study_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_field_study" model="ir.actions.act_window">
+        <field name="name">Sub-Field Of Study</field>
+        <field name="res_model">field.study</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

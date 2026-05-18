@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- FORM VIEW -->
+    <record id="view_dwelling_types_form" model="ir.ui.view">
+        <field name="name">Dwelling Types Form</field>
+        <field name="model">x.dwelling.types</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="x_active" invisible="1"/>
+                        <field name="x_name" required="1" placeholder="Name..."/>
+                        <field name="x_studio_partner_id"/>
+                        <field name="x_studio_partner_phone" widget="phone"/>
+<!--                        <field name="x_studio_partner_email" widget="email"/>-->
+                    </group>
+                    <group>
+                        <field name="x_studio_notes" nolabel="1" placeholder="Type notes here..." colspan="2"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- TREE VIEW -->
+    <record id="view_dwelling_types_tree" model="ir.ui.view">
+        <field name="name">Dwelling Types List</field>
+        <field name="model">x.dwelling.types</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="x_studio_sequence" widget="handle"/>
+                <field name="x_name"/>
+                <field name="x_studio_partner_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="view_dwelling_types_search" model="ir.ui.view">
+        <field name="name">Dwelling Types Search</field>
+        <field name="model">x.dwelling.types</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="x_name"/>
+                <field name="x_studio_partner_id" operator="child_of"/>
+                <filter name="archived" string="Archived" domain="[('x_active','=',False)]"/>
+                <filter name="groupby_partner" string="Partner" context="{'group_by':'x_studio_partner_id'}"/>
+            </search>
+        </field>
+    </record>
+
+</odoo>

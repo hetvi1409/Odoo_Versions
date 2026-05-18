@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="category_performance" model="ir.module.category">
+            <field name="name">Performance Contract</field>
+        </record>
+
+        <record model="res.groups.privilege" id="module_category_performance_privilege">
+            <field name="name">Performance Contract</field>
+            <field name="category_id" ref="category_performance"/>
+            <field name="sequence">8</field>
+        </record>
+
+        <record id="group_performance_user" model="res.groups">
+            <field name="name">Performance User</field>
+            <field name="privilege_id" ref="module_category_performance_privilege"/>
+        </record>
+
+        <record id="group_performance_evaluator" model="res.groups">
+            <field name="name">Evaluator</field>
+            <field name="privilege_id" ref="module_category_performance_privilege"/>
+            <field name="implied_ids" eval="[(4, ref('performance_contract.group_performance_user'))]"/>
+        </record>
+
+        <!-- <record id="performance_contract_rule_performance_user" model="ir.rule">
+            <field name="name">Performance Contract: performance user access</field>
+            <field name="model_id" ref="performance_contract.model_performance_contract"/>
+            <field name="domain_force">[('user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('performance_contract.group_performance_user'))]"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="perm_read" eval="1"/>
+        </record> -->
+<!-- performance_contract.access_performance_contract,access_performance_contract,performance_contract.model_performance_contract,hr.group_hr_manager,1,1,1,1 -->
+
+
+
+    </data>
+
+</odoo>

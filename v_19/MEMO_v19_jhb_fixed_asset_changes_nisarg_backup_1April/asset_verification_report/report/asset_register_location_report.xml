@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_report_asset_register_location_report" model="ir.actions.report">
+        <field name="name">Asset Register By Location Report</field>
+        <field name="model">account.asset</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">asset_verification_report.asset_register_location_report</field>
+        <field name="report_file">asset_verification_report.asset_register_location_report</field>
+        <field name="binding_type">report</field>
+    </record>
+
+
+<template id="asset_register_location_report">
+    <t t-call="web.html_container">
+        <div class="page" style="font-family: 'Poppins', sans-serif;">
+
+            <!-- HEADER (inline, repeated on each page) -->
+            <div class="header" style="padding-bottom:10px; margin-bottom:20px;">
+                    <div style="width:100%; border:none !important;">
+                        <div class="d-flex row">
+                            <div class="col-6" style="vertical-align:middle;">
+                                <t t-if="docs">
+                                    <img t-if="docs[0].company_id.logo" t-att-src="image_data_uri(docs[0].company_id.logo)" style="max-height:80px;"/>
+                                </t>
+                            </div>
+                            <div class="col-4" style="text-align:left; font-size:12px;">
+                                <strong>GAAL Inventory Sheet</strong>
+                                <!-- <ol style="margin:5px 0 0 15px; padding:0;">
+                                    <li>Please review and check the physical existence of all assets captured on the inventory sheet as correct prior to appending your signature.</li>
+                                    <li>Do not move any assets as captured on the Inventory sheet without informing the Asset Management Section within your core function and completing the necessary</li>
+                                    <li>Note that you are accountable for all the assets signed-off on your Inventory Sheet.</li>
+                                    <li>Disciplinary measures will be taken for all failure to safeguard assets signed off as per your inventory sheet.</li>
+                                </ol> -->
+                                <ol style="margin:5px 0 0 15px; padding:0;">
+                                    <li>Please verify physical existence of all assets.</li>
+                                    <li>No movement without Asset Management approval.</li>
+                                    <li>You are accountable for signed assets.</li>
+                                    <li>Disciplinary action applies for negligence.</li>
+                                </ol>
+                            </div>
+                            <div class="col-2" style="text-align:center;">
+                                <div style="background:#4F7BD9; color:#fff; padding:15px; font-weight:bold; font-size:14px;">
+                                    2026<br/>Financial Year
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- REPORT CONTENT -->
+            <h2 style="text-align:center; color:#008F30; margin-bottom:22px;">
+                Asset Register By Location Report
+            </h2>
+            <div style=" text-align:center; font-size: large; font-weight:bold;">
+                Location:<t t-esc="docs.job_location_id.name"/>
+            </div>
+
+
+            <table class="table table-sm o_main_table" style="width:100%; border-collapse:collapse; font-size:13px;">
+                <thead>
+                    <tr style="background-color:#008F30; color:#FFFFFF; text-align:center;">
+                        <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Name</th>
+                        <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Category</th>
+                        <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Item Description</th>
+                        <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Barcode</th>
+                        <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Condition</th>
+                        <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Office</th>
+                        <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Building</th>
+                        <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Serial Number</th>
+                        <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Location</th>
+                        <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Custodian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="docs" t-as="o">
+                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                            <span t-field="o.name"/>
+                        </td>
+                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                            <span t-field="o.afs_classification"/>
+                        </td>
+                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                            <span t-field="o.description"/>
+                        </td>
+                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                            <span t-field="o.alternative_ref"/>
+                        </td>
+                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                            <span t-field="o.condition"/>
+                        </td>
+                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                            <!-- Office field -->
+                        </td>
+                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                            <span t-field="o.job_location_id.building_id.name"/>
+                        </td>
+                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                            <span t-field="o.serial_number"/>
+                        </td>
+                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                            <span t-field="o.job_location_id.name"/>
+                        </td>
+                        <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                            <span t-field="o.custodian_id.name"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- SIGNATURE SECTION -->
+            <!-- <div style="margin-top:60px; overflow:hidden;">
+                <div style="float:left; width:45%; padding:10px;">
+                    <div style="margin:40px 0 10px 0; border-bottom:1px solid #000; width:60%;"></div>
+                    <div style="font-size:12px; font-weight:bold; margin-bottom:5px;">
+                        Custodian Signature
+                    </div>
+                </div> -->
+            <div style="margin-top:60px; overflow:hidden;">
+                <!-- Asset Custodian -->
+                <div style="float:left; width:30%; padding:10px;">
+                    <div style="margin:40px 0 10px 0; border-bottom:1px solid #000; width:90%;"></div>
+                    <div style="font-size:12px; font-weight:bold;">
+                                            Asset Custodian
+                    </div>
+                </div>
+                <!-- Date -->
+                <div style="float:left; width:30%; padding:10px;">
+                    <div style="margin:40px 0 10px 0; border-bottom:1px solid #000; width:90%;"></div>
+                    <div style="font-size:12px; font-weight:bold;">
+                                            Date
+                    </div>
+                </div>
+                <!-- Signature -->
+                <div style="float:left; width:30%; padding:10px;">
+                    <div style="margin:40px 0 10px 0; border-bottom:1px solid #000; width:90%;"></div>
+                    <div style="font-size:12px; font-weight:bold;">
+                                            Signature
+                    </div>
+                </div>
+
+                <!-- Clear Float -->
+                <div style="clear:both;"></div>
+            </div>
+
+        </div>
+    </t>
+</template>
+
+
+
+
+</odoo>

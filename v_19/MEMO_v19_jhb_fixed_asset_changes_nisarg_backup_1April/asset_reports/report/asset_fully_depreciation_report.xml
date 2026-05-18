@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_report_asset_fully_depreciation" model="ir.actions.report">
+        <field name="name">Asset Fully Depreciated</field>
+        <field name="model">asset.fully.depreciation.reports</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">asset_reports.report_asset_fully_depreciation</field>
+        <field name="report_file">asset_reports.report_asset_fully_depreciation</field>
+        <field name="print_report_name">'Asset Depreciation - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_asset_impairment_reports"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_asset_fully_depreciation">
+        <t t-call="web.html_container">
+            <!--            <t t-foreach="docs" t-as="doc">-->
+            <t t-call="web.external_layout">
+                <div calss="page">
+<!--                    <img class="img"-->
+<!--                         src="/asset_reports/static/src/img/report_icon.png"/>-->
+                    <br/>
+                    <h3>Depreciation</h3>
+                    <table class="table">
+                        <tbody class="order_body">
+                            <tr>
+                                <td>
+                                    Cost Centre:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Facility:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Department:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Function:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Class:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Fund:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Item:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Region:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Project:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Dim 12:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Supplier:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Dim 13:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Cost:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Dim 14:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr class="text-center">
+                                <th class="text-right">Selected End Date</th>
+                                <th class="text-right">Barcode</th>
+                                <th class="text-right">Asset Description</th>
+                                <th class="text-right">Classification</th>
+                                <th class="text-right">Cost Centre</th>
+                                <th class="text-right">Department</th>
+                                <th class="text-right">Book Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="data" t-as="rec" class="text-center">
+                                <td class="text-right">
+                                    <span t-esc="rec[0]"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="rec[1]"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="rec[2]"/>, <span t-esc="rec[3]"/>
+                                </td>
+                                <td class="text-right">
+                                    <t t-if="len(rec) > 4">
+                                        <span t-esc="rec[4]"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span>No data available</span>
+                                    </t>
+                                </td>
+                                <td></td>
+                                <td class="text-right">
+                                    <t t-if="len(rec) > 5">
+                                        <span t-esc="rec[5]"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span>No data available</span>
+                                    </t>
+                                </td>
+                                <td class="text-right">
+                                    <t t-if="len(rec) > 6">
+                                        <span t-esc="rec[6]"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span>No data available</span>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

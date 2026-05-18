@@ -1,0 +1,1057 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="housing_subsidy_application_form" name="Application">
+        <t t-call="website.layout">
+            <center>
+                <header id="home" class="hero-section">
+                    <div class="container">
+                        <h1>Housing Subsidy Application</h1>
+                        <p>You can create your application form from here</p>
+                    </div>
+                </header>
+            </center>
+            <div id="wrap"
+                 class="oe_structure oe_empty housing_subsidy_application">
+                <form action="/submit/beneficiary"
+                      enctype="multipart/form-data"
+                      class="o_mark_required" data-mark="*"
+                      data-model_name="" method="post">
+                    <center>
+                        <table border="1" cellpadding="6" cellspacing="0"
+                               width="1500px">
+                            <tr>
+                                <td>Name: </td>
+                                <td><input type="text"
+                                           name="emergency_contact_name"
+                                           id="emergency_contact_name"
+                                           class="form-control"/></td>
+                            </tr>
+                            <tr>
+                                <td>Street: </td>
+                                <td><input type="text"
+                                           name="street"
+                                           id="street"
+                                           class="form-control"/></td>
+                            </tr>
+                            <tr>
+                                <td>Street 2: </td>
+                                <td><input type="text"
+                                           name="street2"
+                                           id="street2"
+                                           class="form-control"/></td>
+                            </tr>
+                            <tr>
+                                <td>ZIP: </td>
+                                <td><input type="text"
+                                           name="zip"
+                                           id="zip"
+                                           class="form-control"/></td>
+                            </tr>
+                            <tr>
+                                <td>City: </td>
+                                <td><input type="text"
+                                           name="city"
+                                           id="city"
+                                           class="form-control"/></td>
+                            </tr>
+                            <tr>
+                                <td>Country: </td>
+                                <td>
+                                    <select name="country_id"
+                                            id="country_id"
+                                            class="form-control">
+                                        <option value="">Select Country</option>
+                                        <t t-foreach="country" t-as="countries">
+                                            <option t-att-value="countries.id">
+                                                <t t-esc="countries.name"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>State: </td>
+                                <td>
+                                    <select name="state_id" id="state_id" class="form-control">
+                                        <option value="">Select State</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Telephone Number: </td>
+                                <td><input type="text"
+                                           name="telephone_number"
+                                           id="telephone_number"
+                                           class="form-control"/></td>
+                            </tr>
+                        </table>
+                    </center>
+                    <br/>
+                    <br/>
+                    <center>
+                        <table border="1" cellpadding="6" cellspacing="0"
+                               width="1500px">
+                            <tr>
+                                <td colspan="4">
+                                    <b>TABLE 1</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>THE FOLLOWING DOCUMENTS MUST BE ATTACHED
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Certified copy of Marriage Certificate</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input id="mrg_certificate"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="mrg_certificate"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_one"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Certified copy of R.S.A. Bar Coded Identity
+                                    Document
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        &amp;nbsp;
+                                        <input id="identity_doc_self"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="identity_doc_self"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_two"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        Spouse&amp;nbsp;
+                                        <input id="identity_doc_spouse"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="identity_doc_spouse"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_three"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Certified copy of Divorce Settlement</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input id="divorce_certificate"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="divorce_certificate"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_four"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Certified copy of Spouse’s Death
+                                    Certificate
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input id="spouse_death_certificate"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="spouse_death_certificate"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_five"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Proof of Disability (Appendix 1)</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input id="proof_of_disability"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="proof_of_disability"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_six"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Proof of loan granted by lender, where
+                                    applicable
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input id="proof_of_loan"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="proof_of_loan"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_seven"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Certified copy of Agreement of Sale</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input id="agreement_of_sale"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="agreement_of_sale"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_eight"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Social compact agreement (where
+                                    necessary)
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input id="compact_agreement"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="compact_agreement"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_nine"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Certified copy of Agreement with
+                                    Conveyancer (in the case of individual non
+                                    credit linked subsidies)
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input id="agreement_with_conveyancer"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="agreement_with_conveyancer"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_ten"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Certified copy of Building Contract and
+                                    Approved Building Plan
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input id="building_contract_certificate"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="building_contract_certificate"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_eleven"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Certified copy of Proof of Monthly Income
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input id="proof_of_income_certificate"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="proof_of_income_certificate"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_twelve"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Certified copy of Permanent Residence
+                                    Permit (Bar Coded Permit)
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input id="residence_certificate"
+                                               type="file"
+                                               class="form-control s_website_form_input o_resume_input me-2"
+                                               name="residence_certificate"
+                                               multiple="true"
+                                               style="width: auto;"/>
+                                        <i class="fa fa-trash text-danger trash_thirteen"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                    <br/>
+                    <br/>
+                    <center>
+                        <table border="1" cellpadding="6" cellspacing="0"
+                               width="1500px">
+                            <tr>
+                                <td colspan="4">
+                                    <b>SECTION A: PERSONAL DETAILS</b>
+                                    <i>(To be completed by all applicants)</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">A "Spouse" is defined as a
+                                    Husband, Wife or Long Term Partner
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <b>Married, living with long term partner
+                                        or single with dependants
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> </td>
+                                <td>
+                                    <b>Period</b>
+                                </td>
+                                <td> </td>
+                                <td>
+                                    <b>Period</b>
+                                </td>
+                                <td>
+                                    <b>Period</b>
+
+                                </td>
+                                <td> </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <br/>Married*
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           name="married" id="married"
+                                           class="form-control"/>
+                                </td>
+                                <td>
+                                    <br/>Habitually Co-habiting with long term
+                                    partner*
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           name="hab_long_partner"
+                                           id="hab_long_partner"
+                                           class="form-control"/>
+                                </td>
+                                <td>
+                                    <br/>Widow/Widower with dependants*
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           name="widow_depend"
+                                           id="widow_depend"
+                                           class="form-control"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Divorced with dependants*</td>
+                                <td>
+                                    <input type="text"
+                                           name="divorced_with_dept"
+                                           id="divorced_with_dept"
+                                           class="form-control"/>
+                                </td>
+                                <td>Single with dependants*</td>
+                                <td>
+                                    <input type="text"
+                                           name="single_depend"
+                                           id="single_depend"
+                                           class="form-control"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center">
+                                    <b>APPLICANT</b>
+                                </td>
+                                <td colspan="2" align="center">
+                                    <b>SPOUSE<br/>(or Deceased Partner)
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Surname:
+                                    <br/>
+                                    <input type="text" name="applicant_surname"
+                                           class="form-control"/>
+                                    <br/>
+                                </td>
+                                <td colspan="2">Surname:
+                                    <br/>
+                                    <input type="text" name="spouse_surname"
+                                           class="form-control"/>
+                                    <br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Maiden or Former Surname:
+                                    <br/>
+                                    <input type="text"
+                                           name="applicant_maiden_surname"
+                                           class="form-control"/>
+                                    <br/>
+                                </td>
+                                <td colspan="2">Maiden or Former Surname:
+                                    <br/>
+                                    <input type="text"
+                                           name="spouse_maiden_surname"
+                                           class="form-control"/>
+                                    <br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Full Names (First Three Only):
+                                    <br/>
+                                    <input type="text"
+                                           name="applicant_full_name"
+                                           class="form-control"/>
+                                    <br/>
+                                </td>
+                                <td colspan="2">Full Names (First Three Only):
+                                    <br/>
+                                    <input type="text" name="spouse_full_name"
+                                           class="form-control"/>
+                                    <br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Identity Number:
+                                    <br/>
+                                    <input type="text" name="identity_number"
+                                           class="form-control"/>
+                                    <br/>
+                                </td>
+                                <td colspan="2">Identity Number:
+                                    <br/>
+                                    <input type="text"
+                                           name="identity_number_spouse"
+                                           class="form-control"/>
+                                    <br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Gender:
+                                    <br/>
+                                    <select name="applicant_gender"
+                                            class="form-control">
+                                        <option value="male">Male
+                                        </option>
+                                        <option value="female">Female
+                                        </option>
+                                    </select>
+                                </td>
+                                <td colspan="2">Gender:
+                                    <br/>
+                                    <select name="spouse_gender"
+                                            class="form-control">
+                                        <option value="male">Male
+                                        </option>
+                                        <option value="female">Female
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Race:
+                                    <br/>
+                                    <select name="race_applicant"
+                                            id="race_applicant"
+                                            class="form-control">
+                                        <option value="">Select Race</option>
+                                        <t t-foreach="races" t-as="race">
+                                            <option t-att-value="race.id">
+                                                <t t-esc="race.race"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </td>
+                                <td colspan="2">Race:
+                                    <br/>
+                                    <select name="race_spouse" id="race_spouse"
+                                            class="form-control">
+                                        <option value="">Select Race</option>
+                                        <t t-foreach="races" t-as="race">
+                                            <option t-att-value="race.id">
+                                                <t t-esc="race.race"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Residential Address:
+                                    <br/>
+                                    <input type="text"
+                                           name="residential_address"
+                                           id="residential_address"
+                                           class="form-control"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">* * Disabled &amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                    <input type="checkbox"
+                                           name="disabled"
+                                           id="disabled"
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    * * If you or any of your dependants are
+                                    disabled and you are applying for
+                                    additional subsidy, please attach
+                                    original medical form (Appendix 1), duly
+                                    completed and signed by your District
+                                    Surgeon/Medical Practitioner,
+                                    registered with the Medical and Dental
+                                    Council.
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                    <br/>
+                    <br/>
+                    <center>
+                        <table border="1" cellpadding="6" cellspacing="0"
+                               width="1500px">
+                            <tr>
+                                <td colspan="5">
+                                    <b>SECTION B: DETAILS OF DEPENDANTS</b>
+                                    <i>(Information on only 2 dependants to be
+                                        supplied by applicant)
+                                    </i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Surname</b>
+                                </td>
+                                <td>
+                                    <b>Initials</b>
+                                </td>
+                                <td>
+                                    <b>Relationship to Applicant</b>
+                                </td>
+                                <td>
+                                    <b>Age</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" name="dependant_name_1"
+                                           class="form-control"/>
+                                </td>
+                                <td>
+                                    <input type="text" name="dependant_initials_1"
+                                           class="form-control"/>
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           name="dependant_relation_1"
+                                           class="form-control"/>
+                                </td>
+                                <td>
+                                    <input type="number" name="dependant_age_1"
+                                           class="form-control"/>
+                                </td>
+                                <td>
+                                    <select name="dependant_gender_1"
+                                            class="form-control">
+                                        <option value="male">Male
+                                        </option>
+                                        <option value="female">Female
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" name="dependant_name_2"
+                                           class="form-control"/>
+                                </td>
+                                <td>
+                                    <input type="text" name="dependant_initials_2"
+                                           class="form-control"/>
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           name="dependant_relation_2"
+                                           class="form-control"/>
+                                </td>
+                                <td>
+                                    <input type="number" name="dependant_age_2"
+                                           class="form-control"/>
+                                </td>
+                                <td>
+                                    <select name="dependant_gender_2"
+                                            class="form-control">
+                                        <option value="male">Male
+                                        </option>
+                                        <option value="female">Female
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                    <br/>
+                    <br/>
+                    <center>
+                        <table border="1" cellpadding="6" cellspacing="0"
+                               width="1500px">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        <b>SECTION C: MONTHLY INCOME DETAILS
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th> </th>
+                                    <th>Applicant</th>
+                                    <th>Spouse</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Indicate If you are?</td>
+                                    <td><select name="applicant_emp_details"
+                                            class="form-control">
+                                        <option value="unemployed">Unemployed</option>
+                                        <option value="employed">Employed</option>
+                                        <option value="self_employed">Self Employed</option>
+                                        <option value="pensioner">Pensioner</option>
+                                    </select></td>
+                                    <td><select name="spouse_emp_details"
+                                            class="form-control">
+                                        <option value="unemployed">Unemployed</option>
+                                        <option value="employed">Employed</option>
+                                        <option value="self_employed">Self Employed</option>
+                                        <option value="pensioner">Pensioner</option>
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td>Basic Monthly Income</td>
+                                    <td>
+                                        <input type="text"
+                                               name="applicant_basic_income"
+                                               class="form-control applicant_income"
+                                               placeholder="R"/>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               name="spouse_basic_income"
+                                               class="form-control spouse_income"
+                                               placeholder="R"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Regular Periodic Allowances</td>
+                                    <td>
+                                        <input type="text"
+                                               name="applicant_allowances"
+                                               class="form-control applicant_income"
+                                               placeholder="R"/>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               name="spouse_allowances"
+                                               class="form-control spouse_income"
+                                               placeholder="R"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Housing Allowance Payable</td>
+                                    <td>
+                                        <input type="text"
+                                               name="applicant_housing_allowance"
+                                               class="form-control applicant_income"
+                                               placeholder="R"/>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               name="spouse_housing_allowance"
+                                               class="form-control spouse_income"
+                                               placeholder="R"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Regular financial obligations met by employer on behalf of applicant/spouse</td>
+                                    <td>
+                                        <input type="text"
+                                               name="applicant_employer_obligation"
+                                               class="form-control applicant_income"
+                                               placeholder="R"/>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               name="spouse_employer_obligation"
+                                               class="form-control spouse_income"
+                                               placeholder="R"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Commission Received (12 months)</td>
+                                    <td>
+                                        <input type="text"
+                                               name="applicant_commission"
+                                               class="form-control applicant_income"
+                                               placeholder="R"/>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               name="spouse_commission"
+                                               class="form-control spouse_income"
+                                               placeholder="R"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Pension/Disability Grant</td>
+                                    <td>
+                                        <input type="text"
+                                               name="applicant_pension_grant"
+                                               class="form-control applicant_income"
+                                               placeholder="R"/>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               name="spouse_pension_grant"
+                                               class="form-control spouse_income"
+                                               placeholder="R"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>TOTAL</strong>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               name="applicant_total"
+                                               id="applicant_total"
+                                               class="form-control"
+                                               placeholder="R"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="spouse_total"
+                                               id="spouse_total"
+                                               class="form-control"
+                                               placeholder="R"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>JOINT TOTAL</strong>
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="text" name="joint_total"
+                                               id="joint_total"
+                                               class="form-control"
+                                               placeholder="R"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Subsidy Applied For</strong>
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="text"
+                                               name="subsidy_amount"
+                                               class="form-control"
+                                               placeholder="R"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </center>
+                    <br/>
+                    <br/>
+
+                    <center>
+                        <table border="1" cellpadding="6" cellspacing="0"
+                               width="1500px">
+                            <tr>
+                                <td>
+                                    <b>SECTION D: DETAILS OF CITIZENSHIP</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Are you a South African Citizen?</td>
+                                <td><input type="checkbox" name="citizen" id="citizen"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Country of Citizenship:</td>
+                                <td>
+                                    <select name="citizen_country_id"
+                                            id="citizen_country_id"
+                                            class="form-control">
+                                        <option value="">Select Country</option>
+                                        <t t-foreach="country" t-as="countries">
+                                            <option t-att-value="countries.id">
+                                                <t t-esc="countries.name"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Permanent Residence Permit Number:</td>
+                                <td>
+                                    <input type="text"
+                                           name="residence_permit_number"
+                                           class="form-control"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Date Permit was Issued:</td>
+                                <td>
+                                    <input type="date" name="permit_issue_date"
+                                           class="form-control"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                    <br/>
+                    <br/>
+                    <center>
+                        <table border="1" cellpadding="6" cellspacing="0"
+                               width="1500px">
+                            <tr>
+                                <td>
+                                    <b>SECTION E: DETAILS OF PROPERTY TO BE
+                                        PURCHASED WITH SUBSIDY
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Name of Seller:</td>
+                                <td>
+                                    <input type="text" name="seller_name"
+                                           class="form-control"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>District:</td>
+                                <td>
+                                    <select name="district"
+                                            id="district"
+                                            class="form-control">
+                                        <option value="">Select District</option>
+                                        <t t-foreach="district" t-as="district_id">
+                                            <option t-att-value="district_id.id">
+                                                <t t-esc="district_id.region"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Municipality:</td>
+                                <td>
+                                    <select name="municipality_id" id="municipality_id" class="form-control">
+                                        <option value="">Select Municipality</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Township:</td>
+                                <td>
+                                    <input type="text" name="township"
+                                           class="form-control"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Erf (Stand)/Lot Number:</td>
+                                <td>
+                                    <input type="text" name="lot_number"
+                                           class="form-control"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Township Extension:</td>
+                                <td>
+                                    <input type="text"
+                                           name="township_extension"
+                                           class="form-control"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Unit Number:</td>
+                                <td>
+                                    <input type="text" name="unit_number"
+                                           class="form-control"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Description of Dwelling:</td>
+                                <td>
+                                    Flat (Name of Building)
+                                    <input type="text" name="flat_name"
+                                           class="form-control"/>
+                                </td>
+                                <td>House (Street Address)
+                                    <input type="text" name="house"
+                                           class="form-control"/>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>Type of Tenure:</td>
+                                <td>
+                                    <select name="tenure" id="tenure" class="form-control">
+                                        <option value="ownership">Ownership</option>
+                                        <option value="leasehold">Leasehold</option>
+                                        <option value="deed_of_grant">Deed of Grant</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    If Other, please specify:
+                                </td>
+                                <td>
+                                    <input type="text" name="other_tenure"
+                                           class="form-control"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                    <br/>
+                    <br/>
+                    <!-- SECTION F(i): Funding Details (Applicant) -->
+                    <center>
+                        <table border="1" cellpadding="6" cellspacing="0"
+                               width="1500px">
+                            <tr>
+                                <td>
+                                    <b>
+                                        SECTION F(i): FUNDING DETAILS IN
+                                        RESPECT OF PURCHASE OF
+                                        PROPERTY
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>(To be completed by applicant)</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Total Product Price</strong>
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           name="total_product_price"
+                                           class="form-control"
+                                           placeholder="R"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>a) Subsidy</td>
+                                <td>
+                                    <input type="text" name="subsidy"
+                                           class="form-control funding_input"
+                                           placeholder="R"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>b) Amount of Home Loan, if applicable</td>
+                                <td>
+                                    <input type="text" name="home_loan"
+                                           class="form-control funding_input"
+                                           placeholder="R"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>c) Employer’s Contribution, if any</td>
+                                <td>
+                                    <input type="text"
+                                           name="employer_contribution"
+                                           class="form-control funding_input"
+                                           placeholder="R"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>d) Own Cash Contribution</td>
+                                <td>
+                                    <input type="text"
+                                           name="own_cash_contribution"
+                                           class="form-control funding_input"
+                                           placeholder="R"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>e) Own Building Material Contribution</td>
+                                <td>
+                                    <input type="text"
+                                           name="own_material_contribution"
+                                           class="form-control funding_input"
+                                           placeholder="R"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Total</strong>
+                                </td>
+                                <td>
+                                    <input type="text" name="funding_total"
+                                           class="form-control" id="funding_total"
+                                           placeholder="R"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                    <br/>
+                    <br/>
+                    <center>
+                        <button type="submit" class="btn btn-primary">Submit
+                        </button>
+                    </center>
+                    <br/>
+                    <br/>
+                </form>
+            </div>
+        </t>
+    </template>
+    <template id="thank_you_page" name="Thank You Page">
+        <t t-call="website.layout">
+            <div class="container text-center mt-5">
+                <h2>Thank you for your application!</h2>
+                <p>We have received your details. You will be contacted if
+                    needed.
+                </p>
+                <p><strong>Application Number:</strong> <t t-esc="application.individual_reg_number"/></p>
+            </div>
+        </t>
+    </template>
+    <record id="website_menu_housing_subsidy_menu" model="website.menu">
+        <field name="name">Housing Subsidy</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">4</field>
+        <field name="url">/housing-subsidy-application</field>
+    </record>
+</odoo>

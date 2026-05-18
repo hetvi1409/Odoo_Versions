@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="alert_reminder_report_cation" model="ir.actions.report">
+        <field name="name">Alert And Reminder Report</field>
+        <field name="model">project.project</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">project_porfolio_management.alert_reminder_report</field>
+        <field name="report_file">project_porfolio_management.alert_reminder_report</field>
+<!--        <field name="binding_model_id" ref="model_audit_action_plan"/>-->
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'%s' % object.name</field>
+    </record>
+
+    <template id="alert_reminder_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <center>
+                        <h2>Alert and Reminder Report</h2>
+                    </center>
+                    <div style="background:#28a745; color:white; padding:6px; font-weight:bold; margin:10px 0;">
+                        Overdue Items
+                    </div>
+                    <div style="background:#004080; color:white; padding:6px; font-weight:bold; margin:10px 0;">
+                        Tasks
+                    </div>
+                    <table class="table table-sm o_main_table"
+                           style="width:100%; border-collapse: collapse;"
+                           border="1">
+                        <thead style="background:#dcdcdc;">
+                            <tr>
+                                <th style="padding:5px; text-align:center;">Name
+                                </th>
+                                <th style="padding:5px; text-align:center;">Type
+                                </th>
+                                <th style="padding:5px; text-align:center;">
+                                    Responsibility
+                                </th>
+                                <th style="padding:5px; text-align:center;">
+                                    Planned End Date
+                                </th>
+                                <th style="padding:5px; text-align:center;">
+                                    Estimated End Date
+                                </th>
+                                <th style="padding:5px; text-align:center;">
+                                    Planned Progress %
+                                </th>
+                                <th style="padding:5px; text-align:center;">
+                                    Actual Progress %
+                                </th>
+                                <th style="padding:5px; text-align:center;">
+                                    Overdue Days
+                                </th>
+                            </tr>
+                        </thead>
+                        <t t-foreach="docs" t-as="project">
+                            <tbody style="background:#dcdcdc;">
+                                <tr t-if="project.task_ids">
+                                    <td nowrap="nowrap" colspan="100%">
+                                        <t t-esc="project.name"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr t-foreach="project.task_ids" t-as="task">
+                                    <td style="padding:5px; text-align:center;">
+                                        <span t-esc="task.name"/>
+                                    </td>
+                                    <td style="padding:5px; text-align:center;">
+                                        <span t-field="task.type"/>
+                                    </td>
+                                    <td style="padding:5px; text-align:center;">
+                                        <span t-esc="', '.join(task.user_ids.mapped('name'))"/>
+                                    </td>
+                                    <td style="padding:5px; text-align:center;">
+                                        <span t-att-style="'color:red;'"
+                                              t-esc="task.date_deadline"/>
+                                    </td>
+                                    <td style="padding:5px; text-align:center;">
+                                        <span t-esc="task.baseline_end_date or ''"/>
+                                    </td>
+                                    <td style="padding:5px; text-align:center;">
+                                        <span t-esc="task.planned_progress or 0"/> %
+                                    </td>
+                                    <td style="padding:5px; text-align:center;">
+                                        <span t-esc="task.allocation or 0"/> %
+                                    </td >
+                                    <td style="padding:5px; text-align:center;">
+                                        <span t-esc="task.days_overdue or 0"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </t>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

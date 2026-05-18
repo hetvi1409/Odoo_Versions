@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_servitude_register_tree_view" model="ir.ui.view">
+		<field name="name">servitude.register.tree.view</field>
+		<field name="model">servitude.register</field>
+		<field name="arch" type="xml">
+			<tree>
+                <field name="name"/>
+                <field name="servitude_type"/>
+                <field name="registration_date"/>
+                <field name="holder_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_servitude_register_form_view" model="ir.ui.view">
+		<field name="name">servitude.register.form.view</field>
+		<field name="model">servitude.register</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+                    <field name="state" widget="statusbar"/>
+					<button name="action_submit" string="Submit" groups="servitude_register.group_servitude_register_legal_officer" type="object" states="draft" />
+					<button name="action_approve" string="Approve" groups="servitude_register.group_servitude_register_legal_officer" type="object" states="submit" />
+					<button name="action_reject" string="Reject" groups="servitude_register.group_servitude_register_legal_officer" type="object" states="submit" />
+					<button name="action_create_invoices" string="Create Invoice" groups="servitude_register.group_servitude_register_finance_officer" type="object" states="approve" />
+				</header>
+				<sheet>
+					<div class="oe_button_box" name="button_box">
+                        <button name="action_view_property" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('property_ids', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Property</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+					<group>
+						<group>
+							<field name="servitude_type" />
+							<field name="holder_id" />
+							<field name="deed_number" />
+						</group>
+						<group>
+							<field name="property_ids" widget="many2many_tags"
+                            options="{'no_quick_create': True}"/>
+							<field name="grantor_ids" widget="many2many_tags"/>
+						</group>
+					</group>
+                    <group>
+                        <group>
+                            <field name="registration_date" />
+                            <field name="payment_amount" />
+                        </group>
+                        <group>
+                            <field name="expiry_date" />
+                            <field name="payment_state" widget="badge" decoration-danger="payment_state == 'not_paid'" decoration-warning="payment_state in ('partial', 'in_payment')" decoration-success="payment_state in ('paid', 'reversed')" attrs="{'invisible': [('payment_state', 'in', ('invoicing_legacy'))]}"/>
+                        </group>
+                    </group>
+					<notebook>
+                        <page name="description" string="Description">
+                            <group>
+                                <field name="description"/>
+                            </group>
+                        </page>
+                        <page name="documents" string="Documents">
+                            <group>
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </group>
+                        </page>
+                        <page name="other_info" string="Other Info">
+                            <group>
+                                <field name="invoice_id"/>
+                            </group>
+                        </page>
+					</notebook>
+
+				</sheet>
+                                    				<div class="oe_chatter" modifiers="{}">
+					<field name="message_follower_ids" widget="mail_followers" modifiers="{}" />
+					<field name="activity_ids" widget="mail_activity" modifiers="{}" />
+					<field name="message_ids" widget="mail_thread" modifiers="{}" options="{'display_log_button': True}" />
+				</div>
+
+			</form>
+		</field>
+	</record>
+
+    <record id="servitude_register_action" model="ir.actions.act_window">
+        <field name="name">Servitude Register</field>
+        <field name="res_model">servitude.register</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_servitude_register"
+        name="Servitude Register"
+        action="servitude_register_action"
+        parent="itsys_real_estate.menu_itsys_real_estate"
+        sequence="1"/>
+
+</odoo>

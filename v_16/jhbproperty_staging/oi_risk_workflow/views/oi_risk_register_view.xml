@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_risk_register_list">
+        <field name="name">risk.register.list</field>
+        <field name="model">risk.register</field>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Register Name"/>
+                <field name="fy_start_date"/>
+                <field name="fy_end_date"/>
+                <field name="project_name"/>
+                <field name="project_amount"/>
+                <field name="project_start_date"/>
+                <field name="project_end_date"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_risk_register_form" model="ir.ui.view">
+        <field name="name">risk.register.form</field>
+        <field name="model">risk.register</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="risk_register_state" widget="statusbar" options="{'clickable': '1'}"/>
+                    <button name="action_risk_register_prepare" type="object" string="Prepare"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_register_state', '!=', 'draft'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_risk_register_reviewed" type="object" string="Reviewed"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_register_state', '!=', 'prepared'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_risk_register_approved" type="object" string="Approved"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_register_state', '!=', 'reviewed'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_risk_register_rejected" type="object" string="Rejected"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('risk_register_state', '!=', 'reviewed'), ('can_edit', '!=', False)]}"/>
+                    <button name="action_register_revert" type="object"
+                           
+                            string="Revert" class="oe_highlight" attrs="{'invisible': [('risk_register_state', 'not in', ['prepared', 'reviewed'])]}"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <h1 class="font-weight-bold text-center my-2" style="color: #666" colspan="2">Project Risk
+                            Register
+                        </h1>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="name" string="Register Name" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                            <label for="fy_start_date" string="Financial Year"/>
+                            <div class="o_row">
+                                <field name="fy_start_date" nolabel="1" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                                <span class="mx-2">to</span>
+                                <field name="fy_end_date" nolabel="1" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                            </div>
+                        </group>
+
+                        <group string="Project Details">
+                            <field name="project_name" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                            <field name="project_amount" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                            <label for="project_start_date" string="Project Period"/>
+                            <div class="o_row">
+                                <field name="project_start_date" nolabel="1" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                                <span class="mx-2">to</span>
+                                <field name="project_end_date" nolabel="1" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                            </div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Risk Register Lines">
+                            <field name="line_ids" attrs="{'readonly': [('can_edit', '!=', False)]}">
+                                <tree editable="bottom" open_form_view="True">
+                                    <field name="sequence"/>
+                                    <field name="risk_description"/>
+                                    <field name="probability_id"/>
+                                    <field name="impact_id"/>
+                                    <field name="inherent_risk"/>
+                                    <field name="controls"/>
+                                    <field name="control_effectiveness_id"/>
+                                    <field name="residual_risk"/>
+                                    <field name="action_plans"/>
+                                </tree>
+                                <form string="Risk Line">
+                                    <sheet>
+                                        <style>
+                                            .o_form_view:not(.o_field_highlight)
+                                            .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                                            .o_input:not(:hover):not(:focus) {
+                                            --o-input-border-color: black !important;
+                                        </style>
+                                        <group>
+                                            <field name="sequence"/>
+                                            <field name="risk_description"/>
+                                            <field name="probability_id"/>
+                                            <field name="impact_id"/>
+                                            <field name="inherent_risk"/>
+                                        </group>
+                                        <field name="matrix_html" widget="html" readonly="1"/>
+                                        <field name="control_effectiveness_html" widget="html" readonly="1"/>
+                                        <field name="residual_risk_html" widget="html" readonly="1"/>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Approvers">
+                            <group>
+                                <group>
+                                    <field name="can_edit" invisible="1"/>
+                                    <field name="preparer_id" widget="many2one_avatar_user"/>
+                                    <field name="reviewer_id" widget="many2one_avatar_user"/>
+                                    <field name="approver_id" widget="many2one_avatar_user"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback" attrs="{'readonly': [('can_edit', '!=', False)]}"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_risk_register_view">
+        <field name="name">Risk Register</field>
+        <field name="res_model">risk.register</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+        <field name="domain"></field>
+        <field name="context"></field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('oi_risk_workflow.view_risk_register_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('oi_risk_workflow.view_risk_register_form')})]"/>
+
+    </record>
+    <menuitem name="Risk Register" id="risk_register_menu"
+              parent="oi_risk_management.menu_root"
+              action="oi_risk_workflow.action_risk_register_view" sequence="5"/>
+</odoo>

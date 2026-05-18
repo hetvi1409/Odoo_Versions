@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <data>
+
+        <record id="email_template_goal_deadline_reminder" model="mail.template">
+            <field name="name">Goal Deadline Reminder</field>
+            <field name="email_from">{(user.email or '')}</field>
+            <field name="email_to">{(object.employee_id.work_email or '')}</field>
+            <field name="subject">Goal Deadline Reminder</field>
+            <field name="model_id" ref="model_hr_appraisal_goal"/>
+            <field name="body_html" type="html">
+                <p>Dear <t t-esc="object.employee_id.name"/>,</p>
+                <p>This is to inform you that your performance contract titled "<strong><t t-esc="object.name"/></strong></p>
+                <p>Please take the necessary actions to renew or discuss the contract with your manager.</p>
+                <ul>
+                    <li>Goal: <t t-esc="object.name"/></li>
+                    <li>Deadline: <t t-esc="object.deadline"/></li>
+                    <li>Progress: <t t-esc="object.progression"/>%</li>
+                    <li>Description: <t t-esc="object.description or ''"/></li>
+                </ul>
+                <p>
+                    Best regards,<br/>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_employee_sign_contract" model="mail.template">
+            <field name="name">Sign Performance Contract</field>
+            <field name="email_from">{(user.email or '')}</field>
+            <field name="email_to">{(object.employee_id.work_email or '')}</field>
+            <field name="subject">Please Sign Your Performance Contract</field>
+            <field name="model_id" ref="model_performance_contract"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+                <p>Dear <t t-esc="object.employee_id.name"/>,</p>
+                <p>Your performance contract titled "<strong><t t-esc="object.name"/></strong>" is now ready for your signature.</p>
+                <p>Please review and sign the contract at your earliest convenience.</p>
+                <ul>
+                    <li>Contract Name: <t t-esc="object.name"/></li>
+                    <li>Start Date: <t t-esc="object.start_date"/></li>
+                    <li>End Date: <t t-esc="object.end_date"/></li>
+                </ul>
+                <div>
+                    <p>To sign the contract, please click on the following link:</p>
+                        <a t-att-href="'/web#id=%s&amp;model=performance.contract&amp;view_type=form' % object.id"
+                            style="display:inline-block;padding:10px 20px;color:#fff;background:#28a745;border-radius:5px;text-decoration:none;">
+                            Open in Sign Contract
+                        </a>
+                </div>
+
+                <p>
+                    Best regards,<br/>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_manager_sign_contract" model="mail.template">
+            <field name="name">Manager Sign Performance Contract</field>
+            <field name="email_from">{(user.email or '')}</field>
+            <field name="email_to">{(object.employee_id.parent_id.work_email or '')}</field>
+            <field name="subject">Please Sign Performance Contract for</field>
+            <field name="model_id" ref="model_performance_contract"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+                <p>Dear <t t-esc="object.employee_id.parent_id.name"/>,</p>
+                <p>The performance contract titled "<strong><t t-esc="object.name"/>
+                    </strong>" for your team member <strong><t t-esc="object.employee_id.name"/>
+                    </strong> is now ready for your signature.</p>
+                <p>Please review and sign the contract at your earliest convenience.</p>
+                <ul>
+                    <li>Contract Name: <t t-esc="object.name"/></li>
+                    <li>Employee: <t t-esc="object.employee_id.name"/></li>
+                    <li>Start Date: <t t-esc="object.start_date"/></li>
+                    <li>End Date: <t t-esc="object.end_date"/></li>
+                </ul>
+                <div>
+                    <p>To sign the contract, please click on the following link:</p>
+                        <a t-att-href="'/web#id=%s&amp;model=performance.contract&amp;view_type=form' % object.id"
+                            style="display:inline-block;padding:10px 20px;color:#fff;background:#28a745;border-radius:5px;text-decoration:none;">
+                            Open in Sign Contract
+                        </a>
+                </div>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
+
+
+
+

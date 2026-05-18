@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherent.oi_risk_management</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="70"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Risk Management" string="Risk" name="oi_risk_management">
+                    <block title="Risks" name="oi_risk_management" >
+                        <setting string="Evaluation" company_dependent="1" >
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <div>
+                                        <label for="evaluation_system" string="The type of system to use for evaluation" class="col-2 o_light_label"/>
+                                        <field name="evaluation_system" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <div>
+                                        <label for="main_risk_type" string="Main risk type used in calculations" class="col-2 o_light_label"/>
+                                        <field name="main_risk_type" />
+                                    </div>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Evaluation" company_dependent="1" invisible="evaluation_system == 'symmetric'">
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <div>
+                                        <label for="asymmetric_evaluation_very_high_ids" string="The criteria for very high evaluation score" class="col-2 o_light_label"/>
+                                        <field name="asymmetric_evaluation_very_high_ids" widget="many2many_tags"/>
+                                        <field name="asymmetric_evaluation_very_high_str" invisible="1"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <div>
+                                        <label for="asymmetric_evaluation_high_ids" string="The criteria for high evaluation score" class="col-2 o_light_label"/>
+                                        <field name="asymmetric_evaluation_high_ids" widget="many2many_tags"/>
+                                        <field name="asymmetric_evaluation_high_str" invisible="1"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <div>
+                                        <label for="asymmetric_evaluation_medium_ids" string="The criteria for medium evaluation score" class="col-2 o_light_label"/>
+                                        <field name="asymmetric_evaluation_medium_ids" widget="many2many_tags"/>
+                                        <field name="asymmetric_evaluation_medium_str" invisible="1"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <div>
+                                        <label for="asymmetric_evaluation_low_ids" string="The criteria for low evaluation score" class="col-2 o_light_label"/>
+                                        <field name="asymmetric_evaluation_low_ids" widget="many2many_tags"/>
+                                        <field name="asymmetric_evaluation_low_str" invisible="1"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Risk Treatments" company_dependent="1" >
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <div>
+                                        <label for="do_risk_treatments_have_owner" string="Treatments can have an owner" class="col-2 o_light_label"/>
+                                        <field name="do_risk_treatments_have_owner" />
+                                    </div>
+                                </div>
+                            </div>
+                        </setting>
+
+                    </block>
+                </app>
+            </xpath>
+<!--            <xpath expr="//div[hasclass('settings')]" position="inside">-->
+<!--                <div class="app_settings_block" data-string="Risk Management" string="Risk Management"-->
+<!--                     data-key="oi_risk_management" groups="oi_risk_management.group_risk_manager,base.group_system">-->
+<!--                    <h2>Evaluation</h2>-->
+<!--                    <div class="row mt16 o_settings_container" name="risk_management_setting_container">-->
+<!--                        <div class="col-12 col-lg-6 o_setting_box" id="default_company_schedule_setting">-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <label for="evaluation_system"/>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="text-muted col-lg-8">-->
+<!--                                        The type of system to use for evaluation-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="content-group">-->
+<!--                                    <div class="mt16">-->
+<!--                                        <field name="evaluation_system"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-12 col-lg-6 o_setting_box" id="default_company_schedule_setting">-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <label for="main_risk_type"/>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="text-muted col-lg-8">-->
+<!--                                        Main risk type used in calculations-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="content-group">-->
+<!--                                    <div class="mt16">-->
+<!--                                        <field name="main_risk_type"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row mt16 o_settings_container" name="risk_management_setting_container"-->
+<!--                         attrs="{'invisible': [('evaluation_system', '=', 'symmetric')]}">-->
+<!--                        <div class="col-12 col-lg-6 o_setting_box" id="default_company_schedule_setting">-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <label for="asymmetric_evaluation_very_high_ids"/>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="text-muted col-lg-8">-->
+<!--                                        The criteria for very high evaluation score-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="content-group">-->
+<!--                                    <div class="mt16">-->
+<!--                                        <field name="asymmetric_evaluation_very_high_ids" widget="many2many_tags"/>-->
+<!--                                        <field name="asymmetric_evaluation_very_high_str" invisible="1"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-12 col-lg-6 o_setting_box" id="default_company_schedule_setting">-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <label for="asymmetric_evaluation_high_ids"/>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="text-muted col-lg-8">-->
+<!--                                        The criteria for high evaluation score-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="content-group">-->
+<!--                                    <div class="mt16">-->
+<!--                                        <field name="asymmetric_evaluation_high_ids" widget="many2many_tags"/>-->
+<!--                                        <field name="asymmetric_evaluation_high_str" invisible="1"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-12 col-lg-6 o_setting_box" id="default_company_schedule_setting">-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <label for="asymmetric_evaluation_medium_ids"/>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="text-muted col-lg-8">-->
+<!--                                        The criteria for medium evaluation score-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="content-group">-->
+<!--                                    <div class="mt16">-->
+<!--                                        <field name="asymmetric_evaluation_medium_ids" widget="many2many_tags"/>-->
+<!--                                        <field name="asymmetric_evaluation_medium_str" invisible="1"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-12 col-lg-6 o_setting_box" id="default_company_schedule_setting">-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <label for="asymmetric_evaluation_low_ids"/>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="text-muted col-lg-8">-->
+<!--                                        The criteria for low evaluation score-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="content-group">-->
+<!--                                    <div class="mt16">-->
+<!--                                        <field name="asymmetric_evaluation_low_ids" widget="many2many_tags"/>-->
+<!--                                        <field name="asymmetric_evaluation_low_str" invisible="1"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <h2>Risk Treatments</h2>-->
+<!--                    <div class="row mt16 o_settings_container" name="risk_management_setting_container">-->
+<!--                        <div class="col-12 col-lg-6 o_setting_box" id="enrich_risk_management_setting">-->
+<!--                            <div class="o_setting_left_pane">-->
+<!--                                <field name="do_risk_treatments_have_owner"/>-->
+<!--                            </div>-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <label for="do_risk_treatments_have_owner"/>-->
+<!--                                <div class="text-muted">-->
+<!--                                    Treatments can have an owner-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+
+    <record id="oi_risk_management.configuration_settings_view_action" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'oi_risk_management'}</field>
+    </record>
+
+</odoo>

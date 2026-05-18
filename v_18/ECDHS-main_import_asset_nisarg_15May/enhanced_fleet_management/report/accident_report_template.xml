@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_accident_report_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Accident Report (RT46)</h2>
+                        <p><strong>Reference:</strong> <span t-esc="doc.reference"/></p>
+                        <p><strong>Date &amp; Time:</strong> <span t-esc="doc.accident_date"/></p>
+                        <p><strong>Vehicle:</strong> <span t-esc="doc.vehicle_id.name"/> (<span t-esc="doc.vehicle_registration"/>)</p>
+                        <p><strong>Driver:</strong> <span t-esc="doc.driver_id.name"/></p>
+                        <p><strong>Location:</strong> <span t-esc="doc.accident_location"/></p>
+                        <p><strong>Accident Type:</strong> <span t-esc="dict(doc._fields['accident_type'].selection).get(doc.accident_type)"/></p>
+                        <p><strong>Severity:</strong> <span t-esc="dict(doc._fields['severity_level'].selection).get(doc.severity_level)"/></p>
+                        <p><strong>Total Injuries:</strong> <span t-esc="doc.total_injuries"/></p>
+                        <h3>Description</h3>
+                        <p t-esc="doc.accident_description"/>
+                        <h3>Damage</h3>
+                        <p t-esc="doc.damage_description"/>
+                        <h3>Insurance</h3>
+                        <p><strong>Claim Number:</strong> <span t-esc="doc.claim_number"/></p>
+                        <p><strong>Claim Status:</strong> <span t-esc="dict(doc._fields['claim_status'].selection).get(doc.claim_status)"/></p>
+                        <h3>Investigation</h3>
+                        <p><strong>Officer:</strong> <span t-esc="doc.investigation_officer_id.name"/></p>
+                        <p><strong>Fault:</strong> <span t-esc="dict(doc._fields['fault_determination'].selection).get(doc.fault_determination)"/></p>
+                        <p t-esc="doc.investigation_notes"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

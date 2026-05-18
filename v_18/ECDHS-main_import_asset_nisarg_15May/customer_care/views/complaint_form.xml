@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="helpdesk_all_team_inherite" inherit_id="website_helpdesk.helpdesk_all_team">
+        <xpath expr="//article[hasclass('team_card')]" position="replace">
+            <article class="card border-1 shadow-sm h-100 team_card">
+                <a t-attf-href="/complaint?team_id=#{team.id}"
+                   class="text-reset text-decoration-none h-100 d-flex flex-column">
+                    <img src="/website_helpdesk/static/src/img/team_image.jpg" alt="Image"/>
+                    <main class="card-body d-flex flex-column">
+                        <h2 t-attf-class="fw-bold my-3">
+                            <span t-field="team.name" itemprop="name"/>
+                        </h2>
+                        <div class="navbar-brand fw-bold text-primary text-uppercase h5 me-auto w-100">
+                            Contact us
+                            <i class="oi oi-arrow-right"/>
+                        </div>
+                    </main>
+                </a>
+            </article>
+        </xpath>
+    </template>
+
+    <template id="complaint_form_template" name="Complaint Form">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001"
+                         data-snippet="s_title" data-scroll-background-ratio="1">
+                    <span class="s_parallax_bg oe_img_bg"
+                          style="background-image: url('/web/image/website.s_parallax_default_image'); background-position: 50% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container">
+                        <h1>Submit a Query</h1>
+                    </div>
+                </section>
+                <section class="s_text_block pt40 pb40 o_colored_level " data-snippet="s_text_block">
+                    <div class="container s_allow_columns">
+                        <div class="row">
+                            <div class="col-lg-7 mt-4 mt-lg-0">
+                                <p class="lead">
+                                    Contact US about anything related to our company or services.
+                                    <br/>
+                                    We'll do our best to get back to you as soon as possible.
+                                </p>
+                                <section data-vcss="001" data-snippet="s_website_form">
+                                    <div class="container">
+                                        <form id="complaint_form" action="/complaint/submit" method="post"
+                                              enctype="multipart/form-data" class="o_mark_required" data-mark="*"
+                                              data-success-mode="redirect"
+                                              data-success-page="/complaint/thankyou" data-pre-fill="true">
+                                            <div class="s_website_form_rows row s_col_no_bgcolor">
+                                                <input type="hidden" name="csrf_token"
+                                                       t-att-value="request.csrf_token()"/>
+                                                <input type="hidden" name="team_id"
+                                                       t-att-value="team.id if team else ''"/>
+                                                <div class="mb-3 col-lg-6 s_website_form_field s_website_form_required"
+                                                     data-type="char" data-name="Field">
+                                                    <label class="s_website_form_label" style="width: 200px"
+                                                           for="complaint1">
+                                                        <span class="s_website_form_label_content">Name</span>
+                                                        <span class="s_website_form_mark">*</span>
+                                                    </label>
+                                                    <input id="complaint1" type="text"
+                                                           placeholder="Enter your first name"
+                                                           class="form-control s_website_form_input" name="name"
+                                                           required="" data-fill-with="name"/>
+                                                </div>
+                                                <div class="mb-3 col-lg-6 s_website_form_field s_website_form_required"
+                                                     data-type="char" data-name="Field">
+                                                    <label class="s_website_form_label" style="width: 200px"
+                                                           for="complaint2">
+                                                        <span class="s_website_form_label_content">Surname</span>
+                                                        <span class="s_website_form_mark">*</span>
+                                                    </label>
+                                                    <input id="complaint2" type="text" placeholder="Enter your surname"
+                                                           class="form-control s_website_form_input" name="surname"
+                                                           required="" data-fill-with="surname"/>
+                                                </div>
+                                                <div class="mb-3 col-lg-6 s_website_form_field s_website_form_required"
+                                                     data-type="char" data-name="Field">
+                                                    <label class="s_website_form_label" style="width: 200px"
+                                                           for="complaint3">
+                                                        <span class="s_website_form_label_content">ID Number</span>
+                                                        <span class="s_website_form_mark">*</span>
+                                                    </label>
+                                                    <input id="complaint3" type="text" required=""
+                                                           placeholder="RSA ID / National ID / Passport number"
+                                                           class="form-control s_website_form_input" name="id_number"
+                                                           data-fill-with="id_number"
+                                                           pattern="\d{13}"
+                                                           maxlength="13"
+                                                           title="Please enter a valid 13-digit South African ID number"
+                                                           onblur="validateSAID(this)"/>
+                                                    <div class="invalid-feedback d-block" id="complaint3-error" style="display:none!important;"></div>
+                                                </div>
+                                                <script><![CDATA[
+                                                    function validateSAID(input) {
+                                                        var idNumber = input.value.trim();
+                                                        console.log('idNumber:', idNumber);
+                                                        var errorDiv = document.getElementById('complaint3-error');
+
+                                                        // Reset error state
+                                                        errorDiv.style.display = 'none';
+                                                        errorDiv.textContent = '';
+                                                        input.setCustomValidity('');
+
+                                                        if (idNumber.length === 0) return;
+
+                                                        // Check if it's 13 digits
+                                                        if (!/^\d{13}$/.test(idNumber)) {
+                                                            showError(input, errorDiv, 'ID number must be exactly 13 digits');
+                                                            return false;
+                                                        }
+
+                                                        // Validate date of birth (first 6 digits)
+                                                        var year = parseInt(idNumber.substr(0, 2));
+                                                        var month = parseInt(idNumber.substr(2, 2));
+                                                        var day = parseInt(idNumber.substr(4, 2));
+
+                                                        if (month < 1 || month > 12) {
+                                                            showError(input, errorDiv, 'Invalid month in ID number');
+                                                            return false;
+                                                        }
+
+                                                        if (day < 1 || day > 31) {
+                                                            showError(input, errorDiv, 'Invalid day in ID number');
+                                                            return false;
+                                                        }
+
+                                                        // Luhn algorithm checksum validation
+                                                        var sum = 0;
+                                                        for (var i = 0; i < 13; i++) {
+                                                            var digit = parseInt(idNumber.charAt(i));
+                                                            if (i % 2 === 0) {
+                                                                sum += digit;
+                                                            } else {
+                                                                var doubled = digit * 2;
+                                                                sum += doubled > 9 ? doubled - 9 : doubled;
+                                                            }
+                                                        }
+
+                                                        if (sum % 10 !== 0) {
+                                                            showError(input, errorDiv, 'Invalid ID number checksum. Please verify your ID number.');
+                                                            return false;
+                                                        }
+
+                                                        return true;
+                                                    }
+
+                                                    function showError(input, errorDiv, message) {
+                                                        errorDiv.textContent = message;
+                                                        errorDiv.style.display = 'block';
+                                                        input.setCustomValidity(message);
+                                                    }
+
+                                                    // Add form submit validation
+                                                    document.addEventListener('DOMContentLoaded', function() {
+                                                        var form = document.getElementById('complaint_form');
+                                                        if (form) {
+                                                            form.addEventListener('submit', function(e) {
+                                                                var idInput = document.getElementById('complaint3');
+                                                                if (idInput && idInput.value && !validateSAID(idInput)) {
+                                                                    e.preventDefault();
+                                                                    idInput.focus();
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                ]]></script>
+                                                <div class="mb-3 col-lg-6 s_website_form_field" data-type="char"
+                                                     data-name="Field">
+                                                    <label class="s_website_form_label" style="width: 200px"
+                                                           for="complaint4">
+                                                        <span class="s_website_form_label_content">Contact Number</span>
+                                                    </label>
+                                                    <input id="complaint4" type="tel" placeholder="+27 98765 43210"
+                                                           class="form-control s_website_form_input"
+                                                           name="contact_number" data-fill-with="contact_number"/>
+                                                </div>
+                                                <div class="mb-3 col-lg-6 s_website_form_field s_website_form_required"
+                                                     data-type="email" data-name="Field">
+                                                    <label class="s_website_form_label" style="width: 200px"
+                                                           for="complaint5">
+                                                        <span class="s_website_form_label_content">Email</span>
+                                                        <span class="s_website_form_mark">*</span>
+                                                    </label>
+                                                    <input id="complaint5" type="email" placeholder="example@email.com"
+                                                           class="form-control s_website_form_input" name="email_from"
+                                                           required="" data-fill-with="email"/>
+                                                </div>
+                                                <div class="mb-3 col-12 s_website_form_field s_website_form_required"
+                                                     data-type="char" data-name="Field">
+                                                    <label class="s_website_form_label" style="width: 200px"
+                                                           for="complaint6">
+                                                        <span class="s_website_form_label_content">Subject</span>
+                                                        <span class="s_website_form_mark">*</span>
+                                                    </label>
+                                                    <input id="complaint6" type="text"
+                                                           placeholder="Brief summary of your issue"
+                                                           class="form-control s_website_form_input" name="subject"
+                                                           required=""/>
+                                                </div>
+                                                <div class="mb-3 col-12 s_website_form_field s_website_form_required"
+                                                     data-type="char" data-name="Field">
+                                                    <label class="s_website_form_label" style="width: 200px"
+                                                           for="complaint7">
+                                                        <span class="s_website_form_label_content">Municipality
+                                                            (Region)
+                                                        </span>
+                                                        <span class="s_website_form_mark">*</span>
+                                                    </label>
+                                                    <select id="complaint7" name="region" class="form-select"
+                                                            required="">
+                                                        <option value="">Select Municipality</option>
+                                                        <t t-foreach="regions" t-as="region">
+                                                            <option t-att-value="region.id">
+                                                                <t t-esc="region.municipality"/>
+                                                            </option>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3 col-12 s_website_form_field s_website_form_required"
+                                                     data-type="char" data-name="Field">
+                                                    <label class="s_website_form_label" style="width: 200px"
+                                                           for="complaint8">
+                                                        <span class="s_website_form_label_content">Category</span>
+                                                        <span class="s_website_form_mark">*</span>
+                                                    </label>
+                                                    <select id="complaint8" name="category" class="form-select"
+                                                            required="">
+                                                        <option value="">Select Category</option>
+                                                        <t t-foreach="categories" t-as="category">
+                                                            <option t-att-value="category[0]">
+                                                                <t t-esc="category[1]"/>
+                                                            </option>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3 col-12 s_website_form_field s_website_form_required"
+                                                     data-type="text" data-name="Field">
+                                                    <label class="s_website_form_label" style="width: 200px"
+                                                           for="complaint9">
+                                                        <span class="s_website_form_label_content">Description</span>
+                                                        <span class="s_website_form_mark">*</span>
+                                                    </label>
+                                                    <textarea id="complaint9" class="form-control s_website_form_input"
+                                                              name="description" required="" rows="8"
+                                                              placeholder="Please describe your issue in detail. Include dates, reference numbers, or any relevant information."></textarea>
+                                                </div>
+                                                <div class="mb-3 col-12 s_website_form_field" data-type="binary"
+                                                     data-name="Attachment">
+                                                    <label class="s_website_form_label" for="complaint10">
+                                                        <span class="s_website_form_label_content">Attachments</span>
+                                                    </label>
+                                                    <input id="complaint10" type="file" multiple="multiple"
+                                                           name="attachment"
+                                                           class="form-control"/>
+                                                    <small class="form-text text-muted">You can upload multiple files.
+                                                    </small>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 text-end"
+                                                     data-name="Submit Button">
+                                                    <button class="btn btn-primary" type="submit">Submit</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="col-lg-4 offset-lg-1 mt-4 mt-lg-0">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <template id="complaint_thankyou_template" name="Complaint Thank You">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="s_text_block pt40 pb40 o_colored_level " data-snippet="s_text_block">
+                    <div class="container s_allow_columns">
+                        <div class="row">
+                            <div class="col-lg-6 offset-lg-1 text-center">
+                                <div class="d-inline-block mx-auto p-4">
+                                    <i class="fa fa-paper-plane fa-2x mb-3 rounded-circle text-bg-success"
+                                       role="presentation"/>
+                                    <h1 class="fw-bolder">Thank You!</h1>
+                                    <t t-if="team">
+                                        <p class="text-muted">
+                                            Submitting complaint for:
+                                            <strong t-esc="team.name"/>
+                                        </p>
+                                    </t>
+                                    <t t-else="">
+                                        <p class="lead mb-0">Your complaint has been sent.</p>
+                                    </t>
+                                    <p class="lead">We will get back to you shortly.</p>
+                                    <a href="/">Go to Homepage</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <record id="website_menu_complaint" model="website.menu">
+        <field name="name">Query</field>
+        <field name="url">/complaint</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">50</field>
+    </record>
+</odoo>

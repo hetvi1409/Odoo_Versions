@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="internal_audit_view_form" model="ir.ui.view">
+        <field name="name">internal.audit.method.form</field>
+        <field name="model">internal.audit.method</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="internal_audit_management.internal_audit_method_view_form"/>
+        <field name="arch" type="xml">
+            <!--            <xpath expr="//header" position="replace">-->
+            <!--                <header>-->
+            <!--                    <field name="state" widget="statusbar" options="{'clickable': '1'}"-->
+            <!--                           statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>-->
+            <!--                    <button name="action_2nd_review" type="object" string="Prepare"-->
+            <!--                            class="oe_highlight"-->
+            <!--                            invisible="state != 'preparer'"/>-->
+            <!--                    <button name="action_approve" type="object" string="Reviewed"-->
+            <!--                            class="oe_highlight"-->
+            <!--                            invisible="state != 'second_reviewer'"/>-->
+            <!--                    <button name="action_mark_discrepancy" type="object"-->
+            <!--                            invisible="state in ['reverted', 'rejected', 'approved']"-->
+            <!--                            string="Refuse"/>-->
+            <!--                    <button name="action_send_back_review" type="object"-->
+            <!--                            invisible="state in ['preparer', 'reverted', 'rejected', 'approved']"-->
+            <!--                            string="Revert" class="oe_highlight"/>-->
+            <!--                    <button name="action_send_back_new" type="object"-->
+            <!--                            invisible="state != 'rejected'"-->
+            <!--                            string="Move To New" class="oe_highlight"/>-->
+            <!--                </header>-->
+            <!--            </xpath>-->
+            <!--            <xpath expr="//field[@name='team_id']" position="after">-->
+            <!--                <field name="preparer_id" widget="many2one_avatar_user"/>-->
+            <!--                <field name="reviewer_id" widget="many2one_avatar_user"/>-->
+            <!--                <field name="approver_id" widget="many2one_avatar_user"/>-->
+            <!--            </xpath>-->
+            <xpath expr="//form" position="replace">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar" options="{'clickable': '1'}"
+                               statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>
+                        <button name="action_2nd_review" type="object" string="Prepare"
+                                class="oe_highlight"
+                                invisible="state != 'preparer'"/>
+                        <button name="action_approve" type="object" string="Reviewed"
+                                class="oe_highlight"
+                                invisible="state != 'second_reviewer'"/>
+                        <button name="action_mark_discrepancy" type="object"
+                                invisible="state in ['reverted', 'rejected', 'approved']"
+                                string="Refuse"/>
+                        <button name="action_send_back_review" type="object"
+                                invisible="state in ['preparer', 'reverted', 'rejected', 'approved']"
+                                string="Revert" class="oe_highlight"/>
+                        <button name="action_send_back_new" type="object"
+                                invisible="state != 'rejected'"
+                                string="Move To New" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_records" type="object"
+                                    string="Revert Records"
+                                    class="oe_stat_button" icon="fa-book">
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" readonly="not can_edit"/>
+                                <field name="sequence_no" readonly="1"/>
+                                <field name="date_from" readonly="not can_edit"/>
+                                <field name="date_to" readonly="not can_edit"/>
+                            </group>
+                            <group>
+                                <field name="team_id"
+                                       readonly="state in ['approved', 'rejected']"/>
+                                <field name="can_edit" invisible="1"/>
+                                <field name="preparer_id" widget="many2one_avatar_user"/>
+                                <field name="reviewer_id" widget="many2one_avatar_user"/>
+                                <field name="approver_id" widget="many2one_avatar_user"/>
+                                <field name="user_ids" invisible="1"/>
+                                <field name="memo_template" readonly="not can_edit"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="attachment_ids"
+                                       widget="many2many_binary"
+                                       readonly="state in ['approved', 'rejected']"/>
+                            </group>
+                            <group>
+                                <button name="action_view_documents"
+                                        invisible="not attachment_ids"
+                                        type="object" icon="fa-file-text-o"
+                                        string="Open Documents"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Content">
+                                <group>
+                                    <field name="background_body" readonly="not can_edit"/>
+                                </group>
+                            </page>
+                            <page string="Documents">
+                                <group>
+                                    <group>
+                                        <field name="document_ids" readonly="not can_edit"
+                                               widget="many2many_binary">
+                                        </field>
+                                    </group>
+                                    <group>
+                                        <button name="action_view_documents"
+                                                invisible="not document_ids"
+                                                type="object" icon="fa-file-text-o"
+                                                string="Open Documents"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Tracking"
+                                  name="methodology_tracking">
+                                <field name="methodology_tracking_ids" readonly="not can_edit"
+                                       options="{'no_create_edit': True, 'no_quick_create': True, 'no_open': True}">
+                                    <list editable="bottom" create="0" edit="0">
+                                        <field name="user_id"/>
+                                        <field name="previous_stage_id"/>
+                                        <field name="new_stage_id"/>
+                                        <field name="comment"/>
+                                        <field name="date"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Audit Reverts/ Review Notes">
+                                <group>
+                                    <field name="feedback" readonly="not can_edit"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </xpath>
+        </field>
+    </record>
+</odoo>

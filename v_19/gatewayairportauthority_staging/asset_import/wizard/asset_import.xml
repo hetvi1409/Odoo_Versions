@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <record id="view_asset_import_wizard" model="ir.ui.view">
+        <field name="name">asset.import.wizard.form</field>
+        <field name="model">asset.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Excel Locations">
+                <group>
+                    <field name="file" filename="filename"/>
+                    <field name="filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="action_import" type="object" string="Import" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_asset_import" model="ir.actions.act_window">
+        <field name="name">Import Asset</field>
+        <field name="res_model">asset.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+    <menuitem id="asset_import.menu_asset_import" name="Import Data"
+              parent="fixed_assets.menu_action_fixed_assets" sequence="12"/>
+
+    <menuitem id="asset_import.menu_asset_import_data" name="Import Asset"
+              parent="asset_import.menu_asset_import" action="asset_import.action_asset_import" sequence="13"/>
+
+</odoo>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="building_base_pages_form">
+        <field name="name">building.form.view</field>
+        <field name="model">building</field>
+        <field name="inherit_id"
+               ref="itsys_real_estate.building_base_pages_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']"
+                   position="after">
+                <field name="stand_number"/>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="building_filter">
+        <field name="name">building.search.view</field>
+        <field name="model">building</field>
+        <field name="inherit_id"
+               ref="itsys_real_estate.building_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="stand_number"/>
+                <field name="address"/>
+            </xpath>
+        </field>
+     </record>
+</odoo>

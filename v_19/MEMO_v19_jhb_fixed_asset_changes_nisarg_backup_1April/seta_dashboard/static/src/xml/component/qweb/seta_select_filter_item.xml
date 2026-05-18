@@ -1,0 +1,99 @@
+<template>
+    <div t-name="SETACurrentFilterItem" t-att-id="'seta_accordion_current_filter_'+id">
+        <div class="seta_current_filter_item seta_item seta_btn seta_btn_wlct seta_w100 seta_rd8 active" data-toggle="collapse" t-att-data-target="'#collapseCurrentFilter_'+id" aria-expanded="false" t-att-aria-controls="'collapseCurrentFilter_'+id">
+            <span class="material-icons-outlined seta_btn_icon_left">
+                <t t-esc="field_icon"/>
+            </span>
+            <span class="seta_text seta_block_left" t-att-title="name">
+                <t t-esc="name"/>
+            </span>
+            <span t-att-data-filter_id="filter_id" class="seta_remove_filter_item material-icons seta_btn_icon_right seta_hover_highlight" t-esc="'highlight_off'"/>
+        </div>
+        <div t-att-id="'collapseCurrentFilter_'+id" class="collapse seta_item seta_w100 seta_rd" data-parent="#seta_accordion_current_filter">
+            <form t-att-id="'current_form_filter_'+id">
+                <div class="form-group">
+                    <select class="form-control" t-att-id="'current_condition_'+id">
+                        <option value="" disabled="disabled">Choose operator</option>
+                        <option t-if="condition == 'and'" value="or" selected="selected">AND</option>
+                        <option t-else="" value="and">AND</option>
+                        <option t-if="condition == 'or'" value="or" selected="selected">OR</option>
+                        <option t-else="" value="or">OR</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" t-att-id="'current_field_'+name" t-att-value="name" readonly="readonly"/>
+                </div>
+                <!-- <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" t-att-id="'openBracket_'+id"/>
+                        <label class="form-check-label" t-att-for="'openBracket_'+id">Open Bracket</label>
+                    </div> -->
+                <div class="form-group">
+                    <select class="form-control" t-att-id="'current_operator_'+id">
+                        <option value="" disabled="disabled">Choose operator</option>
+                        <t t-foreach="filter_operators" t-key="key" t-as="operator">
+                            <option t-if="current_operator_id == operator.operator_id" t-att-value="operator.operator_id" selected="selected">
+                                <t t-esc="operator.operator_name"/> 
+                            </option>
+                            <option t-else="" t-att-value="operator.operator_id">
+                                <t t-esc="operator.operator_name"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" t-att-id="'current_value_'+id" t-att-value="value" required="required" placeholder="Value"/>
+                </div>
+                <!-- <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" t-att-id="'closeBracket_'+id"/>
+                        <label class="form-check-label" t-att-for="'closeBracket_'+id">Close Bracket</label>
+                    </div> -->
+                <button type="button" class="btn btn-primary seta_update_current_filter_item seta_item seta_btn seta_btn_wctb seta_w100 seta_rd" t-att-data-id="id" t-att-data-filter_id="filter_id">Update</button>
+            </form>
+        </div>
+        <div style="clear:both"/>
+    </div>
+    <div t-name="SETASelectFilterItem" t-att-id="'seta_accordion_select_filter_'+id">
+        <div class="seta_item seta_btn seta_btn_wlct seta_w100 seta_rd" data-toggle="collapse" t-att-data-target="'#collapseSelectFilter_'+id" aria-expanded="false" t-att-aria-controls="'collapseSelectFilter_'+id">
+            <span class="material-icons-outlined seta_btn_icon_left">
+                <t t-esc="field_icon"/>
+            </span>
+            <span class="seta_text seta_block_left" t-att-title="name">
+                <t t-esc="name"/>
+            </span>
+        </div>
+        <div t-att-id="'collapseSelectFilter_'+id" class="collapse seta_item seta_w100 seta_rd6 seta_p10" data-parent="#seta_accordion_select_filter">
+            <form t-att-id="'select_form_filter_'+id">
+                <div class="form-group">
+                    <select class="form-control" t-att-id="'select_condition_'+id">
+                        <option value="" disabled="disabled" selected="selected">Choose operator</option>
+                        <option value="and">AND</option>
+                        <option value="or">OR</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" t-att-id="'select_field_'+name" t-att-value="name" readonly="readonly"/>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" t-att-id="'select_operator_'+id">
+                        <option value="" disabled="disabled" selected="selected">Choose operator</option>
+                        <t t-foreach="filter_operators" t-key="key" t-as="operator">
+                            <option t-att-value="operator.operator_id">
+                                <t t-esc="operator.operator_name"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" t-att-id="'select_value_'+id" required="required" placeholder="Value"/>
+                </div>
+                
+                <div class="seta_select_filter_item seta_btn seta_btn_wctb seta_wfull seta_align_center">
+                    <div class="seta_display_inline_block">
+                        <span class="material-icons seta_btn_icon_left" t-esc="'save'"/> Save Filter
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div style="clear:both"/>
+    </div>
+</template>

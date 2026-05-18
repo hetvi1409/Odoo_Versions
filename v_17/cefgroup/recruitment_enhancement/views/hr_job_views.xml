@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Form view modification to add requisition buttons -->
+    <record id="view_job_form" model="ir.ui.view">
+        <field name="name">hr.job.form</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+            <!-- Add header -->
+            <xpath expr="//form/sheet" position="before">
+                <header position="inside">
+                    <!-- Start Approval: only when not yet started -->
+                    <button name="action_start_approval_process"
+                            string="Start Approval Process"
+                            type="object"
+                            class="btn-primary"
+                            invisible="requisition_state not in ['draft']"/>
+
+                    <!-- Approve: only for current approver when partially approved -->
+                    <button name="action_approve_requisition_flow"
+                            string="Approve"
+                            type="object"
+                            class="btn-success"
+                            invisible="not is_current_approver or approval_status != 'partially_approved'"/>
+
+                    <!-- Reject: only for current approver when partially approved -->
+                    <button name="action_reject_requisition_flow"
+                            string="Reject"
+                            type="object"
+                            class="btn-danger"
+                            invisible="not is_current_approver or approval_status != 'partially_approved'"/>
+
+                    <button name="action_job_advertise" type="object"
+                            string="Advertise Job" class="oe_highlight"/>
+
+                    <field name="requisition_state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,rejected"/>
+                </header>
+
+                <!--                <header>-->
+                <!--                    <button name="action_submit_requisition" type="object"-->
+                <!--                            string="Submit for Approval" class="oe_highlight"-->
+                <!--                            invisible="requisition_state != 'draft'"-->
+                <!--                            groups="recruitment_enhancement.departmental_line_manager_group"/>-->
+
+                <!--                    <button name="action_job_advertise" type="object"-->
+                <!--                            string="Advertise Job" class="oe_highlight"/>-->
+
+                <!--                    <button name="action_department_line_manager_approve"-->
+                <!--                            string="1st Approval"-->
+                <!--                            type="object" class="btn-primary"-->
+                <!--                            invisible="requisition_state != 'submitted' or approval_state != False"-->
+                <!--                            groups="recruitment_enhancement.departmental_line_manager_group"/>-->
+                <!--                    <button name="action_department_line_manager_revert"-->
+                <!--                            string="Revert"-->
+                <!--                            type="object" class="btn-primary"-->
+                <!--                            invisible="requisition_state != 'submitted' or approval_state != False"-->
+                <!--                            groups="recruitment_enhancement.departmental_line_executive_group"/>-->
+
+                <!--                    <button name="action_department_line_executive_approval"-->
+                <!--                            string="2nd Approval"-->
+                <!--                            type="object" class="btn-primary"-->
+                <!--                            invisible="requisition_state != 'department_line_manager' or approval_state != 'department_line_manager_approve'"-->
+                <!--                            groups="recruitment_enhancement.departmental_line_executive_group"/>-->
+
+                <!--                    <button name="action_department_line_executive_revert"-->
+                <!--                            string="Revert"-->
+                <!--                            type="object" class="btn-primary"-->
+                <!--                            invisible="requisition_state != 'department_line_manager' or approval_state != 'department_line_manager_approve'"-->
+                <!--                            groups="recruitment_enhancement.departmental_line_executive_group"/>-->
+
+
+                <!--                    <button name="action_od_manager_approval"-->
+                <!--                            string="3rd Approval"-->
+                <!--                            type="object" class="btn-primary"-->
+                <!--                            invisible="requisition_state != 'department_line_executive' or approval_state != 'department_line_executive_approval'"-->
+                <!--                            groups="recruitment_enhancement.od_manager_group"/>-->
+
+                <!--                    <button name="action_od_manager_revert"-->
+                <!--                            string="Revert"-->
+                <!--                            type="object" class="btn-primary"-->
+                <!--                            invisible="requisition_state != 'department_line_executive' or approval_state != 'department_line_executive_approval'"-->
+                <!--                            groups="recruitment_enhancement.od_manager_group"/>-->
+
+                <!--                    <button name="action_cost_management_accounting_approval"-->
+                <!--                            string="4th Approval"-->
+                <!--                            type="object" class="btn-primary"-->
+                <!--                            invisible="requisition_state != 'od_manager' or approval_state != 'od_manager_approval'"-->
+                <!--                            groups="recruitment_enhancement.cost_management_accounting_group"/>-->
+                <!--                    <button name="action_cost_management_accounting_revert"-->
+                <!--                            string="Revert"-->
+                <!--                            type="object" class="btn-primary"-->
+                <!--                            invisible="requisition_state != 'od_manager' or approval_state != 'od_manager_approval'"-->
+                <!--                            groups="recruitment_enhancement.od_manager_group"/>-->
+
+                <!--                    <button name="action_group_executive_approval"-->
+                <!--                            string="5th Approval"-->
+                <!--                            type="object" class="btn-primary"-->
+                <!--                            invisible="requisition_state != 'cost_management_accounting' or approval_state != 'cost_management_accounting_approval'"-->
+                <!--                            groups="recruitment_enhancement.group_executive_group"/>-->
+                <!--                    <button name="action_group_executive_revert"-->
+                <!--                            string="Revert"-->
+                <!--                            type="object" class="btn-primary"-->
+                <!--                            invisible="requisition_state != 'cost_management_accounting' or approval_state != 'cost_management_accounting_approval'"-->
+                <!--                            groups="recruitment_enhancement.group_executive_group"/>-->
+
+                <!--                    <button name="action_reject_requisition" string="Reject"-->
+                <!--                            type="object"-->
+                <!--                            groups="hr_recruitment.group_hr_recruitment_manager"-->
+                <!--                            invisible="requisition_state not in ['submitted','department_line_manager','department_line_executive','od_manager','cost_management_accounting','group_executive']"/>-->
+
+                <!--                    <field name="requisition_state" widget="statusbar"-->
+                <!--                           statusbar_visible="draft,submitted,approved,rejected"/>-->
+                <!--                </header>-->
+            </xpath>
+            <div name="recruitment_target" position="after">
+                <field name="vacancy_reason"/>
+                <field name="employee_replaced_id"/>
+                <field name="position_on_approved_structure"/>
+                <field name="sourcing_method"/>
+                <field name="publish_date"/>
+                <field name="unpublish_date"/>
+            </div>
+
+            <xpath expr="//sheet/div[hasclass('oe_title')]" position="replace">
+                <div class="oe_title">
+                    <label for="name"/>
+                    <h1>
+                        <field name="name" options="{'line_breaks': False}"
+                               widget="text" placeholder="e.g. Sales Manager"/>
+                    </h1>
+                </div>
+            </xpath>
+            <xpath expr="//page[@name='job_description_page']" position="after">
+                <page string="Pre-Screening">
+                    <group>
+                        <group>
+                            <field name="need_prescreening"/>
+                        </group>
+                        <group invisible="not need_prescreening">
+                            <button name="action_start_prescreening_survey"
+                                    type="object"
+                                    string="Start Pre-Screening"
+                                    class="btn-primary"
+                                    icon="fa-edit"
+                                    groups="recruitment_enhancement.departmental_line_manager_group"/>
+                        </group>
+                        <group invisible="not need_prescreening">
+                            <field name="survey_id" readonly="1"/>
+                            <field name="attachment_id" invisible="1"/>
+                        </group>
+                        <field name="question_and_page_ids" invisible="not need_prescreening">
+                            <tree create="0">
+                                <field name="title" required="1"/>
+                                <field name="survey_id" required="1"/>
+                                <field name="question_type" required="1"/>
+                                <field name="elimination_question" required="1"/>
+                                <field name="constr_mandatory" required="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+                <page name="Authorization">
+                    <group>
+                        <group>
+                            <field name="requested_by"/>
+                            <field name="requested_date"/>
+                            <field name="position_approval"/>
+                            <field name="position_approved_date"/>
+                            <field name="budget_approve_not"/>
+                            <field name="budget_approve_date"/>
+                        </group>
+                        <group>
+                            <field name="position_filled"/>
+                            <field name="position_filled_date"/>
+                            <field name="requisition_approve_not"/>
+                            <field name="requisition_approve_date"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Approval Signatories">
+                    <field name="approval_line_ids" required="1" readonly="requisition_state not in ['draft']">
+                        <tree editable="bottom" create="1" required="1">
+                            <field name="approver_role_id" required="1"/>
+                            <field name="user_id" options="{'no_create': True,'no_open': True,}"/>
+                            <field name="approval_date" readonly="1"/>
+                            <field name="signature" widget="signature" readonly="1"/>
+                            <field name="status" widget="badge" decoration-success="status == 'approved'"
+                                   decoration-info="status =='pending'"
+                                   decoration-danger="status =='rejected'" readonly="1"/>
+                            <field name="reject_reason" optional="hide" readonly="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="after">
+                <widget name="web_ribbon" title="Line Manager"
+                        bg_color="text-bg-success"
+                        invisible="requisition_state != 'department_line_manager' or approval_state != 'department_line_manager_approve'"/>
+                <widget name="web_ribbon" title="Line Executive"
+                        bg_color="text-bg-success"
+                        invisible="requisition_state != 'department_line_executive' or approval_state != 'department_line_executive_approval'"/>
+                <widget name="web_ribbon" title="OD Manager"
+                        bg_color="text-bg-success"
+                        invisible="requisition_state != 'od_manager' or approval_state != 'od_manager_approval'"/>
+                <widget name="web_ribbon" title="Cost Management"
+                        bg_color="text-bg-success"
+                        invisible="requisition_state != 'cost_management_accounting' or approval_state != 'cost_management_accounting_approval'"/>
+
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_view_advert_pdf"
+                        string="View Job Advert"
+                        type="object"
+                        class="oe_stat_button" invisible="attachment_id == False"
+                        icon="fa-file-pdf-o"/>
+                <!--                groups="hr_recruitment.group_hr_recruitment_user,hr_recruitment.group_hr_recruitment_manager"/>-->
+            </xpath>
+            <xpath expr="//field[@name='default_contract_id']" position="after">
+                <field name="skill_ids" widget="many2many_tags"/>
+                <field name="work_level"/>
+                <field name="salary"/>
+                <field name="ee_position"/>
+                <field name="job_requirements"/>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="before">
+                <field name="user_id" widget="many2one_avatar_user" invisible="1"/>
+                <field name="allowed_user_ids" invisible="1"/>
+                <field name="is_re_advertised"/>
+                <field name="re_advertised_job_id"/>
+                <field name="user_role_id" widget="many2one_avatar_employee"/>
+                <field name="job_grade"/>
+                <field name="cost_center"/>
+            </xpath>
+            <xpath expr="//field[@name='contract_type_id']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="contract_type_id"/>
+                <field name="approval_state" invisible="1"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="attributes">
+                <attribute name="domain">[('recruit_dept', '=', True)]</attribute>
+            </xpath>
+
+        </field>
+    </record>
+    <record id="view_job_filter" model="ir.ui.view">
+        <field name="name">hr.job.search</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_job_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='employment_type']" position="after">
+                <filter string="Status" name="requisition_state" domain="[]"
+                        context="{'group_by': 'requisition_state'}"/>
+                <filter string="Source Method" name="sourcing_method"
+                        domain="[]" context="{'group_by': 'sourcing_method'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_job_kanban" model="ir.ui.view">
+        <field name="model">hr.job</field>
+        <field name="name">hr.job.view.kanban</field>
+        <field name="inherit_id" ref="hr_recruitment.view_hr_job_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_kanban_card_manage_section')][1]/h5"
+                   position="after">
+                <div role="menuitem">
+                    <a name="action_search_matching_candidates" type="object">
+                        Matching Candidates
+                    </a>
+                </div>
+            </xpath>
+            <xpath expr="//div[@class='col-7']/button" position="after">
+                <button class="btn btn-secondary"
+                        name="%(recruitment_enhancement.action_hr_applications_failed)d"
+                        type="action">
+                    <field name="staging_application_count"/>
+                    Staging Applications
+                </button>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_hr_job_survey_inherit" model="ir.ui.view">
+        <field name="model">hr.job</field>
+        <field name="name">hr.job.form.view</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_job_survey"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='address_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//div[@name='alias_def']" position="after">
+                <field name="purpose_job_main"/>
+                <field name="minimum_qualifications"/>
+                <field name="required_experience"/>
+                <field name="extend_travel"/>
+                <field name="budget_approved"/>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="after">
+                <label for="job_location_id"/>
+                <div class="o_row">
+                    <span invisible="job_location_id" class="oe_read_only">Remote
+                    </span>
+                    <field name="job_location_id" context="{'show_address': 1}"
+                           placeholder="Remote"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+    <menuitem
+            id="hr_recruitment_menu_job_position"
+            name="Job Requisition"
+            action="l10n_be_hr_contract_salary.action_hr_job_payroll_configuration"
+            parent="hr_recruitment.menu_hr_recruitment_root"
+            sequence="21"/>
+</odoo>

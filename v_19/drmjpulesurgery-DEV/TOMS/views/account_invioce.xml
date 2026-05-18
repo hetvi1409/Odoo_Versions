@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+<!--        <record id="inherit_view_account_invoice_gp_tree" model="ir.ui.view">-->
+<!--            <field name="name">account.invoice.list.gp</field>-->
+<!--            <field name="model">account.invoice</field>-->
+<!--            <field name="inherit_id" ref="account.invoice_tree_with_onboarding"/>-->
+<!--&lt;!&ndash;            <field name="mode">primary</field>&ndash;&gt;-->
+<!--            <field name="arch" type="xml">-->
+<!--                <list>-->
+<!--                    <field name="standard_price"/>-->
+<!--                    <field name="gp_list_view"/>-->
+<!--                    <field name="gp_percent" avg="gp" widget="progressbar"/>-->
+
+<!--&lt;!&ndash;                    <field name="due_date" invisible="1"/>&ndash;&gt;-->
+<!--                </list>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <!-- Inherit Form View to Modify it -->
+<!--        <record id="inherit_view_account_invoice_gp_search" model="ir.ui.view">-->
+<!--            <field name="name">account.invoice.search.gp</field>-->
+<!--            <field name="model">account.invoice</field>-->
+<!--            <field name="inherit_id" ref="account.view_account_invoice_filter"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='partner_id']" position="after">-->
+<!--                    <field name="gp_percent" string="Gross Profit Percent"/>-->
+<!--                    <field name="company_id"/>-->
+<!--                </xpath>-->
+
+<!--            </field>-->
+<!--        </record>-->
+
+
+        <record id="inherit_invoice_form_view" model="ir.ui.view">
+            <field name="name">Customer Invoice</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+<!--            <field name="group_ids" eval="[(6, 0, [ref('base.group_user') ])]" />-->
+            <field name="arch" type="xml">
+<!--                <xpath expr="//form//sheet//div[@class='oe_button_box']" position="inside">-->
+<!--                        <button class="oe_stat_button" type="object" name="invoice_gp_view"-->
+<!--                            icon="fa-money" groups="TOMS.group_humint_see_gp_percent">-->
+<!--                            <field string="GP%" name="invoice_gp" widget="statinfo"/>-->
+<!--                        </button>-->
+<!--                </xpath>-->
+                <field name="delivery_date" position="after">
+                    <field name="pricelist_id"/>
+                </field>
+                <field name="partner_id" position="after">
+<!--                    <field name="patient_id" context="{'patient_ctx_toms':True}"/>-->
+                    <field name="invoice_has_outstanding" invisible="1"/>
+                </field>
+<!--                <xpath expr="//form//field[@name='patient_id']" position="after">-->
+<!--                    <field name="medical_aid"></field>-->
+<!--                </xpath>-->
+                <xpath expr="//form//sheet//notebook//page[1]//field[@name='product_id']"
+                       position="before">
+                    <field name="final_rx_id" create="0"/>
+                    <field name="saoa_code_id" create="0"/>
+                    <field name="ppn1_code_id" create="0"/>
+                    <field name="icd_codes_ids" widget="many2many_tags"/>
+                </xpath>
+                <xpath expr="//form//sheet//notebook//page[1]//field[@name='name']"
+                       position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+
+<!--                 <xpath expr="//field[@name='invoice_date']" position="attributes">-->
+<!--                     <attribute name="readonly">1</attribute>-->
+<!--                </xpath>-->
+
+<!--                 <xpath expr="//button[@name='action']"-->
+<!--                       position="replace">-->
+<!--                    <button name="action_invoice_open" type="object" states="draft" string="Validate" class="oe_highlight o_invoice_validate"/>-->
+<!--                </xpath>-->
+
+                <xpath expr="//form//sheet//notebook//page[1]//field[@name='price_unit']"
+                       position="after">
+                    <field name="approved_amount" sum="Approved Amount Total"/>
+                    <field name="balance_amount" sum="Balance Amount Total"/>
+                </xpath>
+                <xpath expr="//form//sheet//notebook//page[1]//field[@name='quantity']" position="attributes">
+                    <attribute name="string">Qty</attribute>
+                </xpath>
+                <xpath expr="//form//sheet//notebook//page[1]//field[@name='price_subtotal']"
+                       position="after">
+                    <field name="claim_status"/>
+                    <field name="description_line"/>
+                    <field name="commments_line"/>
+                </xpath>
+                <xpath expr="//form//sheet//notebook//page[1]//field[@name='price_unit']"
+                       position="attributes">
+                    <attribute name="sum">Price Total</attribute>
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+                <xpath expr="//form//sheet//notebook//page[@name='other_info']/group/group"
+                       position="before">
+                    <group col="4">
+                        <field name="optometrist_id" required="1"/>
+                        <field name="dispenser_id" required="1"/>
+                        <field name="frontliner_id" required="1"/>
+                        <field name="exam_date"/>
+                        <field name="refund_reason_id"/>
+                    </group>
+                </xpath>
+                <xpath expr="//form//sheet//notebook//page[1]//field[@name='price_unit']"
+                       position="after">
+                    <field name="approved_amount" class="oe_subtotal_footer_separator"></field>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Form view to give write access to accountants -->
+<!--        <record id="inherit_invoice_form_view_manager" model="ir.ui.view">-->
+<!--            <field name="name">Customer Invoice</field>-->
+<!--            <field name="model">account.move</field>-->
+<!--            <field name="inherit_id" ref="TOMS.inherit_invoice_form_view"/>-->
+<!--            <field name="group_ids" eval="[(6, 0, [ref('TOMS.group_invoice_date') ])]" />-->
+<!--            <field name="arch" type="xml">-->
+
+<!--                 <xpath expr="//field[@name='invoice_date']" position="attributes">-->
+<!--                     <attribute name="readonly">0</attribute>-->
+<!--                </xpath>-->
+
+<!--            </field>-->
+<!--        </record>-->
+
+        <!--Form view to give write access Clinical manager -->
+        <record id="inherit_invoice_form_view_clinical_manager" model="ir.ui.view">
+            <field name="name">Customer Invoice</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="TOMS.inherit_invoice_form_view"/>
+<!--            <field name="group_ids" eval="[(6, 0, [ref('TOMS.group_clinical_manager') ])]" />-->
+            <field name="arch" type="xml">
+                 <xpath expr="//form//sheet//notebook//page[1]//field[@name='price_unit']" position="attributes">
+                    <attribute name="sum">Price Total</attribute>
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="inherit_view_account_invoice_tree" model="ir.ui.view">
+            <field name="name">account.invoice.list</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='invoice_origin']" position="before">
+                    <field name="account_number" string="Account"/>
+<!--                    <field name="name" string="Account"/>-->
+                </xpath>
+                <xpath expr="//field[@name='status_in_payment']" position="after" >
+                    <field name="standard_price" groups="TOMS.group_humint_see_gp_percent"/>
+                    <field name="gp_list_view" groups="TOMS.group_humint_see_gp_percent"/>
+                    <field name="gp_percent" avg="gp" widget="progressbar" groups="TOMS.group_humint_see_gp_percent"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <template id="invoice_report_inherit" inherit_id="account.report_invoice_document">
+            <div name="comment" position="replace"></div>
+        </template>
+
+
+        <record id="inherit_view_account_invoice_refund" model="ir.ui.view">
+            <field name="name">account.move.reversal</field>
+            <field name="model">account.move.reversal</field>
+            <field name="inherit_id" ref="account.view_account_move_reversal"/>
+            <field name="arch" type="xml">
+                <field name="reason" position="after">
+                    <field name="refund_reason_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="refund_reason_tree_view" model="ir.ui.view">
+            <field name="name">Refund Reason</field>
+            <field name="model">account.invoice.refund.reason</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="refund_reason_form_view" model="ir.ui.view">
+            <field name="name">Refund Reason</field>
+            <field name="model">account.invoice.refund.reason</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <h1>
+                            <field name="name" placeholder="Name/Description" required="1"/>
+                        </h1>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="account_invoice_line_form_124">
+            <field name="name">account.move.line.form</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form//field[@name='quantity']" position="after">
+                    <field name="balance_amount"/>
+                    <field name="claim_status"/>
+                </xpath>
+                <xpath expr="//form//field[@name='tax_ids']" position="after">
+                    <field name="approved_amount"/>
+                    <field name="description_line"/>
+                    <field name="commments_line"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="refund_reason_action" model="ir.actions.act_window">
+            <field name="name">Refund Reason</field>
+            <field name="res_model">account.invoice.refund.reason</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="refund_reason_action_menu" name="Refund Reason" action="refund_reason_action"
+                  parent="account.menu_finance_configuration"/>
+
+        <!--Cash Sales View-->
+        <record id="invoice_form_cash_sales" model="ir.ui.view">
+            <field name="name">account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <form string="Invoice" class="o_invoice_form">
+                    <header>
+                        <button name="action_invoice_sent" string="Send &amp; Print" type="object" invisible="state not in ('post','in_payment','paid')"
+                                class="oe_highlight" groups="base.group_user"/>
+                        <button name="action_invoice_sent" string="Send &amp; Print" type="object" invisible="state not in ('post','in_payment','paid')"
+                                groups="base.group_user"/>
+                        <button name="action_invoice_open" type="object" string="Validate" invisible="state != 'draft'"
+                                class="oe_highlight o_invoice_validate" groups="account.group_account_invoice"/>
+                        <button name="preview_invoice" type="object" string="Preview"/>
+                        <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,open,paid"/>
+                        <field name="invoice_has_outstanding" invisible="1"/>
+                    </header>
+                    <div groups="account.group_account_invoice" class="alert alert-info" role="alert"
+                         style="margin-bottom:0px;" invisible="invoice_has_outstanding == False">
+                        You have
+                        <bold>
+                            <a class="alert-link" href="#outstanding" role="button">outstanding payments</a>
+                        </bold>
+                        for this customer. You can allocate them to mark this invoice as paid.
+                    </div>
+
+                    <sheet string="Invoice">
+                        <div class="oe_button_box" name="button_box">
+                        </div>
+                        <span class="o_form_label" invisible="state == 'draft' or move_type != 'out_refund'">Credit Note
+                        </span>
+<!--                        <h1 class="mt0">-->
+<!--                            <div invisible="sequence_number_next_prefix != False">-->
+<!--                                <label for="number" string="Draft Invoice" invisible="state != 'draft' or move_type != 'out_refund'"/>-->
+<!--                                <label for="number" string="Draft Credit Note" invisible="state != 'draft' or move_type != 'out_refund'"/>-->
+<!--                                <field name="number" readonly="True" class="oe_inline" invisible="state != 'draft'"/>-->
+<!--                            </div>-->
+<!--                            <div invisible="sequence_number_next_prefix == False">-->
+<!--                                <label for="sequence_number_next_prefix" string="Invoice Number:"/>-->
+<!--                                <br/>-->
+<!--                                <field name="sequence_number_next_prefix" class="oe_inline"/>-->
+<!--                                <field name="sequence_number_next" class="oe_inline"/>-->
+<!--                            </div>-->
+<!--                        </h1>-->
+                        <field name="move_type" invisible="1"/>
+                        <group>
+                            <group>
+                                <field string="Customer" name="partner_id"
+                                       widget="res_partner_many2one"
+                                       context="{'search_default_customer':1, 'show_address': 1, 'default_is_company': True, 'show_vat': True}"
+                                       options='{"always_reload": True, "no_quick_create": True}'
+                                       domain="[('customer_rank' ,'>', 0)]" required="1"/>
+<!--                                <field name="patient_id" context="{'patient_ctx_toms':True}"/>-->
+                                <field name="medical_aid"/>
+                                <field name="partner_shipping_id"/>
+<!--                                <field name="payment_term_id"/>-->
+<!--                                <field name="cash_rounding_id" groups="account.group_cash_rounding"/>-->
+                            </group>
+                            <group>
+                                <field name="invoice_date" options="{'datepicker': {'warn_future': true}}"/>
+<!--                                <field name="date_due" readonly="payment_term_id != False or state in ('post', 'in_payment', 'paid')"-->
+<!--                                       force_save="1"/>-->
+<!--                                <field name="picking_transfer_id"/>-->
+                                <field name="name" invisible="1"/>
+                                <field name="user_id" groups="base.group_user"/>
+                                <field name="team_id"/>
+<!--                                <field name="pricelist_id"/>-->
+                                <label for="currency_id" groups="base.group_multi_currency"/>
+                                <div groups="base.group_multi_currency">
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}"
+                                           class="oe_inline"/>
+                                    <field name="company_currency_id" invisible="1"/>
+                                </div>
+                            </group>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Invoice Lines">
+                                <field
+                                        name="invoice_line_ids"
+                                        nolabel="1"
+                                        widget="section_and_note_one2many"
+                                        mode="tree,kanban"
+                                        context="{'move_type': move_type, 'journal_id': journal_id, 'default_invoice_id': id}"
+                                >
+                                    <list string="Invoice Lines" editable="bottom">
+                                        <control>
+                                            <create string="Add a line"/>
+                                            <create string="Add a section"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                                            <create string="Add a note"
+                                                    context="{'default_display_type': 'line_note'}"/>
+                                        </control>
+
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="saoa_code_id"/>
+                                        <field name="ppn1_code_id"/>
+                                        <field name="icd_codes_ids"/>
+                                        <field name="product_id" domain="[('sale_ok','=',True)]"/>
+<!--                                        <field name="origin" invisible="1"/>-->
+<!--                                        <field name="is_rounding_line" invisible="1"/>-->
+                                        <field name="name" widget="section_and_note_text"/>
+                                        <field name="display_type" invisible="1"/>
+                                        <field name="company_id" invisible="1"/>
+                                        <field
+                                                name="account_id"
+                                                groups="account.group_account_user" required="display_type == False"
+                                                domain="[('deprecated', '=', False)]"
+                                        />
+                                        <field name="analytic_distribution" widget="analytic_distribution" groups="analytic.group_analytic_accounting"/>
+<!--                                        <field name="analytic_tag_ids" groups="analytic.group_analytic_tags"-->
+<!--                                               widget="many2many_tags" options="{'color_field': 'color'}"/>-->
+                                        <field name="quantity"/>
+<!--                                        <field name="uom_id" groups="uom.group_uom"/>-->
+                                        <field name="price_unit" string="Price"/>
+                                        <field name="discount" groups="base.group_no_one" string="Disc (%)"/>
+                                        <field name="tax_ids" widget="many2many_tags"
+                                               options="{'no_create': True}"
+                                               context="{'move_type':parent.move_type, 'tree_view_ref': 'account.account_tax_view_tree', 'search_view_ref': 'account.account_tax_view_search'}"
+                                               domain="[('type_tax_use','=','sale'),('company_id', '=', parent.company_id)]"/>
+                                        <field name="price_subtotal" string="Subtotal"/>
+                                        <field name="price_total" string="Total"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </list>
+                                    <kanban class="o_kanban_mobile">
+                                        <field name="name"/>
+                                        <field name="product_id"/>
+                                        <field name="price_subtotal"/>
+                                        <field name="price_total"/>
+                                        <field name="quantity"/>
+<!--                                        <field name="uom_id" groups="uom.group_uom"/>-->
+                                        <field name="price_unit"/>
+                                        <field name="display_type"/>
+                                        <templates>
+                                            <t t-name="card">
+                                                <div t-attf-class="oe_kanban_card oe_kanban_global_click {{ record.display_type.raw_value ? 'o_is_' + record.display_type.raw_value : '' }}">
+                                                    <t t-if="!record.display_type.raw_value">
+                                                        <div class="row">
+                                                            <div class="col-8">
+                                                                <strong>
+                                                                    <span>
+                                                                        <t t-esc="record.product_id.value"/>
+                                                                    </span>
+                                                                </strong>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <strong>
+                                                                    <span class="float-right text-right">
+                                                                        <t t-esc="record.price_subtotal.value"/>
+                                                                        <t t-esc="record.price_total.value"/>
+                                                                    </span>
+                                                                </strong>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-12 text-muted">
+                                                                <span>
+                                                                    Quantity:
+                                                                    <t t-esc="record.quantity.value"/>
+                                                                    <t t-esc="record.uom_id.value"/>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-12 text-muted">
+                                                                <span>
+                                                                    Unit Price:
+                                                                    <t t-esc="record.price_unit.value"/>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                    <t t-if="record.display_type.raw_value === 'line_section' || record.display_type.raw_value === 'line_note'">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <span>
+                                                                    <t t-esc="record.name.value"/>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                                <group col="12" class="oe_invoice_lines_tab overflow-hidden">
+                                    <group colspan="8">
+                                        <field name="narration" placeholder="Terms and Conditions" nolabel="1"/>
+                                    </group>
+                                    <!-- Totals (only invoices / receipts) -->
+                                    <group colspan="4">
+                                        <group class="oe_subtotal_footer"
+                                            invisible="move_type not in ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt') or payment_state == 'invoicing_legacy'">
+
+                                            <field name="tax_totals" widget="account-tax-totals-field" nolabel="1" colspan="2"
+                                                   readonly="state != 'draft' or (move_type not in ('in_invoice', 'in_refund', 'in_receipt') and not quick_edit_mode)"/>
+
+                                            <field name="invoice_payments_widget" colspan="2" nolabel="1" widget="payment"/>
+                                            <field name="amount_residual" class="oe_subtotal_footer_separator" invisible="state == 'draft'"/>
+                                        </group>
+                                        <field name="invoice_outstanding_credits_debits_widget"
+                                            class="oe_invoice_outstanding_credits_debits py-3"
+                                            colspan="2" nolabel="1" widget="payment"
+                                            invisible="state != 'posted' or not invoice_has_outstanding"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Other Info" name="other_info">
+                                <group>
+                                    <group col="4">
+                                        <!--                                <field name="optometrist_id" required="0"/>
+                                                                        <field name="dispenser_id" required="0"/>-->
+                                        <field name="frontliner_id" required="1"/>
+                                        <field name="exam_date"/>
+                                        <field name="refund_reason_id"/>
+                                    </group>
+                                    <group>
+                                        <field name="journal_id" groups="account.group_account_user"
+                                               options="{'no_create': True}" readonly="name != False"/>
+<!--                                        <field domain="[('deprecated', '=', False)]"-->
+<!--                                               name="account_id" groups="account.group_account_user"/>-->
+                                        <field name="company_id" options="{'no_create': True}"
+                                               groups="base.group_multi_company"/>
+<!--                                        <field name="reference" readonly="state != 'draft'"/>-->
+                                        <field name="name"/>
+                                    </group>
+                                    <group>
+<!--                                        <field name="incoterm_id" options="{'no_create': True}"/>-->
+                                        <field name="fiscal_position_id" options="{'no_create': True}"/>
+<!--                                        <field name="move_id" groups="account.group_account_user" invisible="move_id == False"/>-->
+<!--                                        <field name="origin" groups="base.group_user" invisible="origin == False"/>-->
+                                        <!-- Since the same form view is used for customer invoices and credit notes,
+                                        we can't set a domain or a default value context on partner_bank_id. We must
+                                        rely on the onchange -->
+                                        <field name="partner_bank_id"/>
+                                    </group>
+                                </group>
+<!--                                <field name="tax_line_ids">-->
+<!--                                    <list editable="bottom" string="Taxes" create="0">-->
+<!--                                        <field name="name"/>-->
+<!--                                        &lt;!&ndash;Need invisible fields for on_change to create all necessary info &ndash;&gt;-->
+<!--                                        <field name="tax_id" invisible="1"/>-->
+<!--                                        <field name="sequence" invisible="1"/>-->
+<!--                                        <field name="manual" invisible="1"/>-->
+<!--                                        <field name="account_id" groups="account.group_account_user"/>-->
+<!--                                        <field name="amount" invisible="1"/>-->
+<!--                                        <field name="account_analytic_id"-->
+<!--                                               domain="[('company_id', '=', parent.company_id)]"-->
+<!--                                               groups="analytic.group_analytic_accounting"/>-->
+<!--                                        <field name="analytic_tag_ids" groups="analytic.group_analytic_tags"-->
+<!--                                               widget="many2many_tags" options="{'color_field': 'color'}"/>-->
+<!--                                        <field name="amount_rounding" invisible="1"/>-->
+<!--                                        <field name="amount_total"/>-->
+<!--                                        <field name="currency_id" invisible="1" force_save="1"/>-->
+<!--                                    </list>-->
+<!--                                </field>-->
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="cash_sale_action" model="ir.actions.act_window">
+            <field name="name">Cash Sale</field>
+            <field name="res_model">account.move</field>
+            <field name="view_id" ref="invoice_form_cash_sales"/>
+            <field name="context" eval="{'cash_sale': True}"/>
+            <field name="view_mode">form,list</field>
+        </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="sales_cash_sale" name="Cash Sale" parent="sale.menu_sale_invoicing" action="cash_sale_action"
+                  sequence="1"/>
+    </data>
+</odoo>

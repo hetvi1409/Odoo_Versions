@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="customer_care_summary_report">
+        <t t-call="web.html_container">
+            <!-- <t t-call="web.external_layout"> -->
+
+                <div class="page">
+                    <!-- Custom HEADER -->
+                    <div class="header o_company_custom_layout" style="padding-top: 5px;">
+                        <t t-set="company" t-value="docs.company_id"/>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <img t-if="company.logo" class="o_company_logo_big" t-att-src="image_data_uri(company.logo)"
+                                alt="Logo"/>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; width: 100%; margin: 10px 0;">
+                        <img src="/customer_care/static/description/line.png" style="height:5px; width: 1200px; display: inline-block;"/>
+                    </div>
+
+                    <div class="company-info" style="text-align: center; margin-bottom: 20px;">
+                        <t t-if="company">
+                            <div><strong t-esc="company.name"/></div>
+                            <div>
+                                <t t-if="company.street">
+                                    <t t-esc="company.street"/>
+                                </t>
+                                <t t-if="company.street2">
+                                    <t t-esc="company.street2"/>
+                                </t>
+                                <t t-if="company.zip">
+                                    <t t-esc="company.zip"/>
+                                </t>
+                                <t t-if="company.state_id">
+                                    <t t-esc="company.state_id.name"/>
+                                </t>
+                                <t t-if="company.country_id">
+                                    <t t-esc="company.country_id.name"/>
+                                </t>
+                                <t t-if="company.city">
+                                    <t t-esc="company.city"/>
+                                </t>
+                                <t t-if="company.phone">
+                                    <t t-esc="company.phone"/>
+                                </t>
+                                <t t-if="company.email">
+                                    <t t-esc="company.email"/>
+                                </t>
+                            </div>
+                        </t>
+                    </div>
+
+                    <t t-set="quarter_label"
+                        t-value="dict([('1','1st'),('2','2nd'),('3','3rd'),('4','4th')]).get(data.get('quarter'))"/>
+
+                    <h2 style="text-align:center; margin-top:10px; margin-bottom:15px;">
+                        Customer Care Case Summary -
+                        <span t-esc="quarter_label"/> Quarter
+                        <span t-esc="data.get('year')"/>
+                    </h2>
+
+                    <br/>
+
+                    <!-- Grand Total -->
+                    <t t-set="grand_total" t-value="0"/>
+
+                    <table style="width:100%; border-collapse:collapse; font-size:16px;">
+                        <thead>
+                            <tr>
+                                <th class="border" style="width:15%;">REGION</th>
+                                <th class="border" style="width:45%;">NATURE OF CASES</th>
+                                <th class="border" style="width:15%; text-align:center;">TOTALS</th>
+                                <th class="border" style="width:25%;">NATURE OF LODGING A CASE</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <!-- Loop Regions -->
+                            <t t-foreach="docs.mapped('region')" t-as="region">
+                                <t t-set="region_cases"
+                                t-value="docs.filtered(lambda r: r.region == region)"/>
+                                <t t-set="region_total" t-value="len(region_cases)"/>
+                                <t t-set="grand_total" t-value="grand_total + region_total"/>
+
+                                <tr>
+                                    <td class="border">
+                                        <strong t-esc="region.municipality"/>
+                                    </td>
+
+                                    <td class="border">
+                                        <t t-foreach="region_cases.mapped('category')" t-as="case_type">
+
+                                            <t t-set="case_count"
+                                            t-value="len(region_cases.filtered(lambda r: r.category == case_type))"/>
+
+                                            <div>
+                                                <span t-esc="case_type"/>
+                                                <!-- <span t-esc="case_count"/> -->
+                                            </div>
+
+                                        </t>
+                                    </td>
+
+                                    <!-- TOTAL -->
+                                    <td class="border" style="text-align:center; font-weight:bold;">
+                                        <span t-esc="region_total"/>
+                                    </td>
+
+                                    <!-- NATURE OF LODGING A CASE -->
+                                    <td class="border">
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <br/><br/>
+
+                    <div style="font-weight:bold;">
+                        TOTAL NUMBER OF CASES RECEIVED IN THE <span t-esc="quarter_label"/> Quarter
+                        <span t-esc="data.get('year')"/> FINANCIAL YEAR
+                    </div>
+
+                    <div style="margin-top:10px; font-weight:bold;">
+                        TOTAL NUMBER OF CASES IS
+                        <span t-esc="grand_total"/>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="footer o_company_custom_layout text-muted">
+                        <div style="margin-top: 20px; display: flex; justify-content: center;">
+                            <img src="/customer_care/static/description/line.png" style="height:5px;" loading="lazy"/>
+                        </div>
+                    <div style="margin-top: 20px; display: flex; justify-content: end; height: 100px;">
+                        <img src="/customer_care/static/description/footer.png" loading="lazy"/>
+                    </div>
+                </div>
+
+                <!-- STYLE -->
+                <style>
+                    .border {
+                        border: 1px solid black;
+                        padding: 6px;
+                        vertical-align: top;
+                    }
+
+                </style>
+
+            <!-- </t> -->
+        </t>
+    </template>
+
+    <record id="customer_care_summary_report_action" model="ir.actions.report">
+        <field name="name">Customer Care Summary Report</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">customer_care.customer_care_summary_report</field>
+        <!-- <field name="binding_model_id" ref="model_helpdesk_ticket"/> -->
+    </record>
+
+
+</odoo>

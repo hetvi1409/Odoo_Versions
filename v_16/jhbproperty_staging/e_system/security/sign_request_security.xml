@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <record id="sign_request_user_rule" model="ir.rule">
+            <field name="name">Sign Request: linked users only</field>
+            <field name="model_id" ref="sign.model_sign_request"/>
+            <field name="domain_force">
+                user.has_group('base.group_system') and [(1, '=', 1)] or ['|', ('create_uid', '=', user.id), ('request_item_ids.partner_id.user_ids', 'in', [user.id])]
+            </field>
+            <field name="groups" eval="[(4, ref('sign.group_sign_user'))]"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="login" inherit_id="web.login" name="Login">
+        <xpath expr="//form/div[hasclass('field-login')]" position="before">
+            <div t-attf-class="text-center pb-3 border-bottom {{'mb-3' if form_small else 'mb-4'}}">
+                <img t-attf-src="/web/binary/company_logo{{ '?dbname='+db if db else '' }}"
+                     alt="Logo"
+                     style="max-height:120px; max-width: 100%; width:auto"/>
+            </div>
+        </xpath>
+    </template>
+    <template id="reset_password" inherit_id="auth_signup.reset_password"
+              name="Reset password">
+        <xpath expr="//div[hasclass('field-login')]" position="before">
+            <div t-attf-class="text-center pb-3 border-bottom {{'mb-3' if form_small else 'mb-4'}}">
+                <img t-attf-src="/web/binary/company_logo{{ '?dbname='+db if db else '' }}"
+                     alt="Logo"
+                     style="max-height:120px; max-width: 100%; width:auto"/>
+            </div>
+        </xpath>
+    </template>
+    <template id="fields" inherit_id="auth_signup.fields"
+              name="Auth Signup/ResetPassword form fields">
+        <xpath expr="//div[hasclass('field-login')]" position="before">
+            <div t-attf-class="text-center pb-3 border-bottom {{'mb-3' if form_small else 'mb-4'}}">
+                <img t-attf-src="/web/binary/company_logo{{ '?dbname='+db if db else '' }}"
+                     alt="Logo"
+                     style="max-height:120px; max-width: 100%; width:auto"/>
+            </div>
+        </xpath>
+    </template>
+    <template id="header_call_to_action"
+              inherit_id="website.header_call_to_action"
+              name="Header Call to Action">
+        <xpath expr="//div/section[hasclass('s_text_block')]"
+               position="replace">
+
+        </xpath>
+    </template>
+</odoo>

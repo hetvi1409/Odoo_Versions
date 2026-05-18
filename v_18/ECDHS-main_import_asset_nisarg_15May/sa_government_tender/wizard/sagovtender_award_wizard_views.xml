@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sagovtender_award_wizard_form" model="ir.ui.view">
+        <field name="name">sagovtender.award.wizard.form</field>
+        <field name="model">sagovtender.award.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Award Tender">
+                <group>
+
+                    <field name="tender_id" readonly="1" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                    <field name="awarded_bid_id" readonly="0" domain="[('tender_id', '=', tender_id)]" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                    <field name="awarded_partner_id" readonly="1" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                    <field name="award_value" widget="monetary"/>
+                    <field name="currency_id" invisible="0" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                </group>
+                <group>
+                    <field name="award_date"/>
+                    <field name="contract_start_date"/>
+                    <field name="contract_end_date"/>
+                </group>
+                <group>
+                    <field name="award_justification" widget="html"/>
+                </group>
+                <group>
+                    <field name="create_purchase_order"/>
+                    <field name="publish_award"/>
+                </group>
+                <footer>
+                    <button name="action_award" string="Award" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

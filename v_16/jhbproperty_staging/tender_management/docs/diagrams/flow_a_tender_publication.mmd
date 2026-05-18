@@ -1,0 +1,22 @@
+flowchart LR
+  subgraph U[Internal User]
+    A([Start]) --> B[Create Tender in Draft]
+    B --> C[Upload RFQ Documents]
+    C --> D[Submit]
+    D --> E[Verify]
+    E --> F[Approve]
+    F --> G[Publish]
+  end
+  subgraph B1[Odoo Backend]
+    D --> H{Checks Pass?}
+    H -->|No| X[Show Validation Error]
+    H -->|Yes| I[draft to submit]
+    E --> J[submit to verify]
+    F --> K[verify to approve]
+    G --> L[approve to open]
+    L --> M[Set website published flags]
+  end
+  subgraph W[Website]
+    M --> N[Tender listed on website pages]
+    N --> O([End])
+  end

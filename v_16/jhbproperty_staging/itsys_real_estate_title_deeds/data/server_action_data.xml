@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="title_deeds_creation" model="ir.actions.server">
+        <field name="name">Update Title Trim Deeds Documents</field>
+        <field name="model_id" ref="itsys_real_estate_title_deeds.model_building"/>
+        <field name="binding_model_id" ref="itsys_real_estate_title_deeds.model_building"/>
+        <field name="binding_view_types">tree,form</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_update_title_deeds()</field>
+    </record>
+    <record id="trim_documents_creation" model="ir.actions.server">
+        <field name="name">Update Trim Documents</field>
+        <field name="model_id" ref="itsys_real_estate_title_deeds.model_building"/>
+        <field name="binding_model_id" ref="itsys_real_estate_title_deeds.model_building"/>
+        <field name="binding_view_types">tree,form</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_update_trim_documents()</field>
+    </record>
+
+    <record id="cron_update_title_deeds" model="ir.cron">
+        <field name="name">Nightly: Update Trim Title Deeds</field>
+        <field name="model_id" ref="itsys_real_estate_title_deeds.model_building"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_update_title_deeds()</field>
+        <field name="interval_number">10</field>
+        <field name="interval_type">minutes</field>
+        <field name="nextcall">2026-03-17 00:00:00</field>
+        <field name="numbercall">-1</field>
+        <field name="active">False</field>
+    </record>
+
+    <record id="cron_update_trim_documents" model="ir.cron">
+        <field name="name">Nightly: Update Trim Documents</field>
+        <field name="model_id" ref="itsys_real_estate_title_deeds.model_building"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_update_trim_documents()</field>
+        <field name="interval_number">10</field>
+        <field name="interval_type">minutes</field>
+        <field name="nextcall">2026-03-17 00:00:00</field>
+        <field name="numbercall">-1</field>
+        <field name="active">False</field>
+    </record>
+
+</odoo>

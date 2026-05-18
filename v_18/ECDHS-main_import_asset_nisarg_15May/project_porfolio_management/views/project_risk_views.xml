@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_project_risk_list" model="ir.ui.view">
+        <field name="name">project.risk.list</field>
+        <field name="model">project.risk</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="title"/>
+                <field name="rag" widget="badge" decoration-success="rag == 'G'" decoration-warning="rag == 'A'"
+                       decoration-danger="rag == 'R'"/>
+                <field name="status"/>
+                <field name="risk_owner_id"/>
+                <field name="follow_up_date"/>
+                <field name="is_overdue" widget="badge" decoration-success="is_overdue == 'not_overdue'"
+                       decoration-warning="is_overdue == 'due_soon'" decoration-danger="is_overdue == 'overdue'"/>
+                <field name="write_date"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_project_risk_form" model="ir.ui.view">
+        <field name="name">project.risk.form</field>
+        <field name="model">project.risk</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover),
+                        .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover)
+                        .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover)
+                        .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group string="Risk Information">
+                        <field name="name" readonly="1"/>
+                        <field name="project_id" context="{'form_view_ref': 'project_porfolio_management.edit_project_ppe'}"/>
+                        <field name="title"/>
+                        <field name="description"/>
+                        <field name="contact_person_id"/>
+                    </group>
+
+                    <group string="Risk Classification" colspan="2">
+                        <group>
+                            <field name="type"/>
+                            <field name="status"/>
+                            <field name="probability"/>
+                            <field name="impact"/>
+                        </group>
+                        <group>
+                            <field name="rating" readonly="1"/>
+
+                            <field name="rag" readonly="1" widget="badge" decoration-success="rag == 'G'"
+                                   decoration-warning="rag == 'A'" decoration-danger="rag == 'R'"/>
+                        </group>
+                    </group>
+
+                    <group string="Risk Management" colspan="2">
+                        <group>
+                            <field name="risk_owner_id"/>
+                            <field name="follow_up_date"/>
+                            <field name="logged_date"/>
+                        </group>
+                        <group>
+                            <field name="age" readonly="1"/>
+                            <field name="days_overdue" readonly="1"/>
+                            <field name="is_overdue" widget="badge" decoration-success="is_overdue == 'not_overdue'"
+                                   decoration-warning="is_overdue == 'due_soon'" decoration-danger="is_overdue == 'overdue'"/>
+                        </group>
+                    </group>
+
+                    <group string="Update Detail">
+                        <field name="write_uid" widget="many2one_avatar" readonly="1"/>
+                        <field name="write_date" readonly="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action + Menu -->
+    <record id="action_project_risk" model="ir.actions.act_window">
+        <field name="name">Project Risks</field>
+        <field name="res_model">project.risk</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_ppo_raid" name="RAID" sequence="0"
+              parent="project_porfolio_management.projects_ppo_mian_menu"/>
+    <menuitem id="menu_project_risk_root"
+              name="Risks" sequence="1"
+              parent="project_porfolio_management.menu_ppo_raid"
+              action="action_project_risk"/>
+</odoo>

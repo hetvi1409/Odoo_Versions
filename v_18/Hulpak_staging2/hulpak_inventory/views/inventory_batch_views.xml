@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="view_inventory_adjust_batch_form" model="ir.ui.view">
+    <field name="name">inventory.adjust.batch.form</field>
+    <field name="model">inventory.adjust.batch</field>
+    <field name="arch" type="xml">
+      <form string="Inventory Adjustment Batch">
+        <header>
+          <!-- Button 1: open wizard via server method (no XML-ID) -->
+          <button name="action_open_import_wizard"
+                  type="object"
+                  string="1) Import Excel"
+                  class="oe_highlight"/>
+          <!-- Button 2: prepare lines (already a server method) -->
+          <button name="action_prepare_processing"
+                  type="object"
+                  string="2) Prepare Processing"/>
+          <!-- Button 3: apply (already a server method) -->
+          <button name="action_apply_adjustments"
+                  type="object"
+                  string="3) Apply Adjustments"/>
+
+          <button name="action_update_product_cost"
+                  type="object"
+                  string="Apply Cost"
+                  help="Set product cost = Production Cost for this line"/>
+
+
+          <field name="state" widget="statusbar" statusbar_visible="draft,imported,prepared,applied"/>
+        </header>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="company_id" readonly="1"/>
+            <field name="location_id" options="{'no_create': True}"/>
+          </group>
+          <notebook>
+            <page string="Raw Excel Rows">
+              <field name="raw_data_ids">
+                <list editable="bottom">
+                  <field name="row_index" readonly="1"/>
+                  <field name="row_json" widget="json"/>
+                </list>
+              </field>
+            </page>
+            <page string="Processing Lines">
+              <field name="processing_ids">
+                <list editable="bottom" create="false">
+                  <field name="row_index"/>
+                  <field name="family"/>
+                  <field name="sku"/>
+                  <field name="product_id"/>
+                  <field name="uom_id" readonly="1"/>
+                  <field name="qty_on_hand" readonly="1"/>
+                  <field name="qty_update"/>
+                  <field name="final_qty" readonly="1"/>
+                  <field name="current_cost" readonly="1"/>
+                  <field name="production_cost"/>
+                  <field name="status"/>
+                  <field name="note"/>
+                  <button name="action_update_product_cost"
+                          type="object"
+                          string="Apply Cost"
+                          help="Set product cost = Production Cost for this line"/>
+                </list>
+              </field>
+            </page>
+            <page string="Cost Split Updates">
+
+            <button name="action_prepare_cost_splits"
+                    type="object"
+                    string="Prepare Cost Splits"
+                    invisible="state == 'applied'"/>
+
+            <button name="action_apply_cost_splits"
+                    type="object"
+                    string="Apply Cost Splits"
+                    invisible="not cost_split_update_ids"/>
+              <br/>
+              <field name="cost_split_update_ids">
+                <list editable="bottom" create="false">
+                  <field name="row_index"/>
+                  <field name="main_product_id"/>
+                  <field name="split_id" readonly="1"/>
+                  <field name="metal_amount"/>
+                  <field name="outer_carton_amount"/>
+                  <field name="pollybag_amount"/>
+                  <field name="filler_amount"/>
+                  <field name="status"/>
+                  <field name="note"/>
+                </list>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="view_inventory_adjust_batch_list" model="ir.ui.view">
+    <field name="name">inventory.adjust.batch.list</field>
+    <field name="model">inventory.adjust.batch</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="company_id"/>
+        <field name="location_id"/>
+        <field name="state"/>
+        <field name="create_date"/>
+      </list>
+    </field>
+  </record>
+  <record id="action_inventory_adjust_batch" model="ir.actions.act_window">
+    <field name="name">Inventory Batches (Excel)</field>
+    <field name="res_model">inventory.adjust.batch</field>
+    <field name="view_mode">list,form</field>
+  </record>
+  <!-- <menuitem id="menu_inventory_adjust_root" name="Production Adjustments" parent="stock.menu_stock_adjustments" sequence="90"/> -->
+  <menuitem id="menu_inventory_adjust_batch" name="Production Batches Adjustments"
+            parent="stock.menu_stock_adjustments" action="action_inventory_adjust_batch" sequence="10"/>
+</odoo>

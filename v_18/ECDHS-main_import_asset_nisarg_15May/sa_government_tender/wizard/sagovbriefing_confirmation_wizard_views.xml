@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Briefing Confirmation Wizard Form View -->
+    <record id="view_briefing_confirmation_wizard_form" model="ir.ui.view">
+        <field name="name">sagovtender.briefing.confirmation.wizard.form</field>
+        <field name="model">sagovtender.briefing.confirmation.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <field name="tender_id" invisible="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        <field name="message" widget="html" nolabel="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_briefing_required"
+                            string="Briefing Session Required"
+                            type="object"
+                            class="btn-success"/>
+                    <button name="action_no_briefing_required"
+                            string="No Briefing Session Required"
+                            type="object"
+                            class="btn-danger"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Briefing Confirmation Wizard Action -->
+    <record id="action_briefing_confirmation_wizard" model="ir.actions.act_window">
+        <field name="name">Confirm Briefing Session</field>
+        <field name="res_model">sagovtender.briefing.confirmation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_sagovtender_tender"/>
+    </record>
+</odoo>

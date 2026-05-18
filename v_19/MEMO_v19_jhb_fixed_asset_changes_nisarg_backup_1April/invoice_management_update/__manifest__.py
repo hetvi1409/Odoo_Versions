@@ -1,0 +1,31 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Invoice Update",
+    'description': """Invoice Update""",
+    'summary': """Invoice Update""",
+    'version': '19.0.1.1.0',
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': 'https://natedsystems.co.za/',
+    'sequence': '20',
+    'category': 'Accounting',
+    'depends': ['account', 'product'],
+    'data': [
+        'data/product_product_data.xml',
+        'security/ir.model.access.csv',
+        'security/account_move_groups.xml',
+        'views/account_move_views.xml',
+        'views/account_payment_views.xml',
+        'wizard/invoice_compliance_views.xml',
+        'wizard/invoice_interest_views.xml',
+        'wizard/account_move_reversal_views.xml',
+        'wizard/amendments_bill_views.xml',
+        'wizard/bill_interset_views.xml'
+    ],
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+}

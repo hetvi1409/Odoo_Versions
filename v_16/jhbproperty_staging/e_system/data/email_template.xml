@@ -1,0 +1,235 @@
+<odoo>
+    <data>
+        <record id="email_template_submit_quality_assurance" model="mail.template">
+            <field name="name">Memo Submit For Quality Assurance</field>
+            <field name="model_id" ref="model_memo_memo"/>
+            <field name="subject">{{ object.name }} Submit For Quality Assurance</field>
+            <field name="email_cc">{{ object.create_uid.email_formatted }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello <t t-out="ctx.get('approve_user', 'Quality Assurance User')">Quality Assurance</t>,
+                        <br/>
+                        <br/>
+                        <p>The e-submission memo application
+                            <strong>
+                                <t t-out="object.name or ''">Memo-1</t>
+                            </strong>
+                            has just submit for quality assurance.
+                        </p>
+                        <p>You can view it by clicking the link below:</p>
+                        <p>
+                            <a t-att-href="ctx.get('url')"
+                                    style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                    Open
+                                </a>
+                        </p>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="object.requester_id.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <record id="email_template_complete_quality_assurance" model="mail.template">
+            <field name="name">Memo Complete Quality Assurance</field>
+            <field name="model_id" ref="model_memo_memo"/>
+            <field name="subject">{{ object.name }} Complete Quality Assurance</field>
+            <field name="partner_to">{{ object.requester_id.partner_id.id }}</field>
+            <field name="email_cc">{{ object.create_uid.email_formatted }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello <t t-out="ctx.get('approve_user', 'Requester User')">Requester</t>,
+                        <br/>
+                        <br/>
+                        <p>The e-submission memo application
+                            <strong>
+                                <t t-out="object.name or ''">Memo-1</t>
+                            </strong>
+                            has completed quality assurance.
+                        </p>
+                        <p>You can view it by clicking the link below:</p>
+                        <p>
+                            <a t-att-href="ctx.get('url')"
+                                    style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                    Open
+                                </a>
+                        </p>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="user.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <record id="mail_template_memo_submit" model="mail.template">
+            <field name="name">Memo Submit Notification</field>
+            <field name="model_id" ref="e_system.model_memo_memo"/>
+            <field name="subject">{{ object.name }}</field>
+            <field name="email_from">{{ object.requester_id.email or 'noreply@example.com' }}</field>
+            <field name="partner_to">{{ ctx.get('partner_ids') }}</field>
+            <field name="email_cc">{{ object.create_uid.email_formatted }}</field>
+<!--            <field name="description">Sent manually to selected partners when memo is assigned/shared</field>-->
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello <t t-out="ctx.get('approve_user', 'Approve User')">Approver</t>,
+                        <br/>
+                        <br/>
+                        <p>You have received a Memo titled
+                            <strong>
+                                <t t-out="object.name or ''">Memo-Title</t>
+                            </strong>
+                            <t t-out="ctx.get('request', 'approve')"/> request
+                            <br/>
+                            You can find the Memo document link below.
+                            <br/>
+                            <br/>
+                            <a t-att-href="ctx.get('url')"
+                                    style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                    Open Memo Document
+                                </a>
+                        </p>
+                        <div><t t-out="object.purpose_body or ''"/></div><br/>
+                        <div><t t-out="object.background_body or ''"/></div><br/>
+                        <div><t t-out="object.motivation_body or ''"/></div>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="object.requester_id.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <record id="mail_template_circular_submit" model="mail.template">
+            <field name="name">Circular Submit Notification</field>
+            <field name="model_id" ref="e_system.model_memo_memo"/>
+            <field name="subject">{{ object.name }}</field>
+            <field name="email_from">{{ object.requester_id.email or 'noreply@example.com' }}</field>
+            <field name="partner_to">{{ ctx.get('partner_ids') }}</field>
+            <field name="email_cc">{{ object.create_uid.email_formatted }}</field>
+<!--            <field name="description">Sent manually to selected partners when circular is assigned/shared</field>-->
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello <t t-out="ctx.get('approve_user', 'Approve User')">Approver</t>,
+                        <br/>
+                        <br/>
+                        <p>You have received a Circular Memo titled
+                            <strong>
+                                <t t-out="object.name or ''">Circular-Title</t>
+                            </strong>
+                            <t t-out="ctx.get('request', 'approve')"/> request
+                            <br/>
+                            You can find the Circular Memo document link below.
+                            <br/>
+                            <br/>
+                            <a t-att-href="ctx.get('url')"
+                                    style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                    Open Circular Document
+                                </a>
+                        </p>
+                        <div><t t-out="object.purpose_body or ''"/></div><br/>
+                        <div><t t-out="object.background_body or ''"/></div><br/>
+                        <div><t t-out="object.motivation_body or ''"/></div>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="object.requester_id.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <record id="mail_template_procurement_submit" model="mail.template">
+            <field name="name">Procurement Submit Notification</field>
+            <field name="model_id" ref="e_system.model_memo_memo"/>
+            <field name="subject">{{ object.name }}</field>
+            <field name="email_from">{{ object.requester_id.email or 'noreply@example.com' }}</field>
+            <field name="partner_to">{{ ctx.get('partner_ids') }}</field>
+            <field name="email_cc">{{ object.create_uid.email_formatted }}</field>
+<!--            <field name="description">Sent manually to selected partners when procurement is assigned/shared</field>-->
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello <t t-out="ctx.get('approve_user', 'Approve User')">Approver</t>,
+                        <br/>
+                        <br/>
+                        <p>You have received a Procurement Memo titled
+                            <strong>
+                                <t t-out="object.name or ''">Procurement-Title</t>
+                            </strong>
+                            <t t-out="ctx.get('request', 'approve')"/> request
+                            <br/>
+                            You can find the Procurement Memo document link below.
+                            <br/>
+                            <br/>
+                            <a t-att-href="ctx.get('url')"
+                                    style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                    Open Procurement Document
+                                </a>
+                        </p>
+                        <div><t t-out="object.purpose_body or ''"/></div><br/>
+                        <div><t t-out="object.background_body or ''"/></div><br/>
+                        <div><t t-out="object.motivation_body or ''"/></div>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="object.requester_id.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <record id="mail_template_memo_content_changed" model="mail.template">
+            <field name="name">Memo Content Changed</field>
+            <field name="model_id" ref="model_memo_memo"/>
+            <field name="subject">{{ object.name }} Notify For Memo Content Changed</field>
+            <field name="email_cc">{{ object.create_uid.email_formatted }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello,
+                        <br/>
+                        <br/>
+                        <p>The e-submission memo application
+                            <strong>
+                                <t t-out="object.name or ''">Memo-1</t>
+                            </strong>
+                            Content had been changed.
+                        </p>
+                        <p>You can view it by clicking the link below:</p>
+                        <p>
+                            <a t-att-href="ctx.get('url')"
+                                    style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                    Open
+                                </a>
+                        </p>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="object.write_uid.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
+</odoo>

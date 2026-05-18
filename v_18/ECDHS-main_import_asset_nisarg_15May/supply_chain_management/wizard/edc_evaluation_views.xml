@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edc_evaluation_view_form" model="ir.ui.view">
+        <field name="name">edc.evaluation.view.form</field>
+        <field name="model">edc.evaluation</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="purchase_requisition_id" readonly="True"/>
+                    <field name="review_status"/>
+                    <field name="reason" invisible="review_status != 'no'"/>
+                    <field name="partner_ids" widget="many2many_tags" invisible="1"/>
+                    <field name="selected_partner_id"
+                           domain="[('id', 'in', partner_ids)]"
+                           options="{'no_create': True}" invisible="review_status !=  'yes'"/>
+                </group>
+                <footer>
+                    <button name="action_submit" string="Submit" type="object"
+                            default_focus="1" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

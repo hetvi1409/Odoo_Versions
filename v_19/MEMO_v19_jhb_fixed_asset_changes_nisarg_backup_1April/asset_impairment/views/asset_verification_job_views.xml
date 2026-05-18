@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+<record id="view_asset_verification_job_form" model="ir.ui.view">
+    <field name="name">asset.verification.job.form</field>
+    <field name="model">asset.verification.job</field>
+    <field name="arch" type="xml">
+        <form string="Asset Verification Job">
+            <header>
+<!--                <button name="action_start_verification" type="object" string="Start Verification" class="oe_highlight" states="draft"/>-->
+<!--                <button name="action_complete_verification" type="object" string="Complete Job" states="in_progress"/>-->
+                                <button name="action_download_report" type="object" string="Download Report"
+                        class="oe_highlight"/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,completed"/>
+            </header>
+            <sheet>
+                <group>
+                    <field name="name"/>
+                    <!-- Quarterly Period Selection -->
+                        <field name="verification_period_from" widget="datetime"/>
+                        <field name="verification_period_to" widget="datetime"/>
+                    <field name="user_id" readonly="1"/>
+                </group>
+                <group>
+                    <field name="total_assets" readonly="1"/>
+                    <field name="verified_count" readonly="1"/>
+                    <field name="not_verified_count" readonly="1"/>
+                    <field name="completion_percentage" readonly="1"/>
+                    <field name="location_id"/>
+                </group>
+                <notebook>
+                    <page string="Assets">
+                        <field name="asset_ids">
+                            <list editable="bottom" default_order="verified desc">
+                                <field name="asset_id"/>
+                                <field name="verified"/>
+                                <field name="asset_verification_line_id" optional="hide"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </sheet>
+        </form>
+    </field>
+</record>
+    <record id="view_asset_verification_job_tree" model="ir.ui.view">
+    <field name="name">asset.verification.job.list</field>
+    <field name="model">asset.verification.job</field>
+    <field name="arch" type="xml">
+        <list string="Asset Verification Jobs">
+            <field name="name"/>
+            <field name="verification_period"/>
+            <field name="user_id"/>
+            <field name="state"/>
+            <field name="total_assets" readonly="1"/>
+            <field name="verified_count" readonly="1"/>
+            <field name="not_verified_count" readonly="1"/>
+            <field name="completion_percentage" readonly="1"/>
+        </list>
+    </field>
+</record>
+</odoo>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_template_quarterly_id" t-name="performance_management.report_template_quarterly_id">
+    <t t-call="web.external_layout">
+      <t t-call="web.html_container">
+        <div class="page">
+          <style>
+            /* Styling aligned with report_template.xml */
+            .table { width:100%; border-collapse:collapse; font-size:12px; }
+            .table thead th {
+              background-color:#253B88;
+              color:#fff;
+              text-align:center;
+              vertical-align:middle;
+            }
+            .table th, .table td { border:1px solid #000; padding:5px; }
+            .table td { vertical-align:top; text-align:center; }
+            .text-left-align { text-align:left; }
+            .indicator-number { font-weight:bold; margin-right:6px; }
+            /* Use same sub-header color as main header for consistency */
+            .q-sub th { background:#253B88; color:#fff; }
+            .slno-col { width:40px; text-align:center; }
+          </style>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th rowspan="2" class="slno-col">#</th> <!-- NEW COLUMN -->
+                <th rowspan="2">Outputs</th>
+                <th rowspan="2">Output Indicators</th>
+                <th rowspan="2">Annual Target <t t-esc="target_name"/></th>
+                <t t-if="target_quarters">
+                  <th t-att-colspan="len(target_quarters)">Quarterly Targets</th>
+                </t>
+                <t t-if="not target_quarters">
+                  <th colspan="4">Quarterly Targets</th>
+                </t>
+              </tr>
+              <tr class="q-sub">
+                <!-- Dynamic quarter headers -->
+                <t t-if="target_quarters">
+                  <t t-foreach="target_quarters" t-as="q">
+                    <th><t t-esc="q.quarter"/></th>
+                  </t>
+                </t>
+                <t t-if="not target_quarters">
+                  <th>Q1</th>
+                  <th>Q2</th>
+                  <th>Q3</th>
+                  <th>Q4</th>
+                </t>
+              </tr>
+            </thead>
+
+            <tbody>
+              <t t-set="counter" t-value="11"/>
+              <t t-foreach="outcome_indicator" t-as="indicator">
+                <tr>
+                  <!-- Sl. No -->
+                  <td><t t-esc="'1.' + str(counter % 10)"/></td>
+
+                  <!-- Outputs -->
+                  <td class="text-left-align">
+                    <t t-esc="indicator.output_id and indicator.output_id.name or '-'"/>
+                  </td>
+
+                  <!-- Output Indicators -->
+                  <td class="text-left-align"><t t-esc="indicator.name"/></td>
+
+                  <!-- Annual Target -->
+                  <td>
+                    <t t-set="annual_tgt" t-value="False"/>
+                    <t t-foreach="annual_targets" t-as="annual_target">
+                      <t t-foreach="indicator.target_ids" t-as="tgt">
+                        <t t-if="annual_target and tgt.id == annual_target.id and not annual_tgt">
+                          <t t-set="annual_tgt" t-value="tgt"/>
+                        </t>
+                        <t t-elif="not annual_target and tgt.target_name_id and tgt.target_name_id.name == target_name and not annual_tgt">
+                          <t t-set="annual_tgt" t-value="tgt"/>
+                        </t>
+                      </t>
+                    </t>
+                    <t t-esc="annual_tgt and (annual_tgt.target_numeric or annual_tgt.target) or '-'"/>
+                  </td>
+
+                  <!-- Quarterly Targets -->
+                  <t t-if="target_quarters">
+                    <t t-foreach="target_quarters" t-as="q">
+                      <td>
+                        <t t-set="val" t-value="None"/>
+                        <t t-if="annual_tgt">
+                          <t t-set="quarter_rec" t-value="indicator.target_quarter_ids.filtered(lambda r: r.annual_target_id and r.annual_target_id.id == annual_tgt.id and r.quarter == q.quarter)"/>
+                          <t t-if="quarter_rec and len(quarter_rec) &gt; 0">
+                            <t t-set="qr" t-value="quarter_rec[0]"/>
+                            <t t-set="val" t-value="qr.value_numeric if qr.value_numeric not in (None, False) else (qr.value_text if qr.value_text else '-')"/>
+                          </t>
+                          <t t-if="not val">
+                            <t t-foreach="annual_tgt.quarter_ids" t-as="qt">
+                              <t t-if="qt.quarter == q.quarter and val is None">
+                                <t t-set="val" t-value="qt.value_numeric if qt.value_numeric not in (None, False) else (qt.value_text if qt.value_text else '-')"/>
+                              </t>
+                            </t>
+                          </t>
+                        </t>
+                        <t t-esc="val if val not in (None, False) else '-'"/>
+                      </td>
+                    </t>
+                  </t>
+
+                  <!-- Fallback Q1-Q4 -->
+                  <t t-if="not target_quarters">
+                    <t t-set="q1" t-value="None"/>
+                    <t t-set="q2" t-value="None"/>
+                    <t t-set="q3" t-value="None"/>
+                    <t t-set="q4" t-value="None"/>
+                    <t t-if="annual_tgt">
+                      <t t-foreach="annual_tgt.quarter_ids" t-as="qt">
+                        <t t-if="qt.quarter == 'Q1' and q1 is None"><t t-set="q1" t-value="qt.value_numeric or qt.value_text"/></t>
+                        <t t-if="qt.quarter == 'Q2' and q2 is None"><t t-set="q2" t-value="qt.value_numeric or qt.value_text"/></t>
+                        <t t-if="qt.quarter == 'Q3' and q3 is None"><t t-set="q3" t-value="qt.value_numeric or qt.value_text"/></t>
+                        <t t-if="qt.quarter == 'Q4' and q4 is None"><t t-set="q4" t-value="qt.value_numeric or qt.value_text"/></t>
+                      </t>
+                    </t>
+                    <td><t t-esc="q1 if q1 not in (None, False) else '-'"/></td>
+                    <td><t t-esc="q2 if q2 not in (None, False) else '-'"/></td>
+                    <td><t t-esc="q3 if q3 not in (None, False) else '-'"/></td>
+                    <td><t t-esc="q4 if q4 not in (None, False) else '-'"/></td>
+                  </t>
+                </tr>
+                <t t-set="counter" t-value="counter + 1"/>
+              </t>
+            </tbody>
+          </table>
+        </div>
+      </t>
+    </t>
+  </template>
+</odoo>

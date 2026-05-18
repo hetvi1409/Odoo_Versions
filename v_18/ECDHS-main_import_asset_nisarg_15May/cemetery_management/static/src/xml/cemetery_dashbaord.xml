@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="cemetery_management.CemeteryDashboard">
+        <section class="dashboard_main_section" id="main_section_login">
+            <div class="row">
+                <div class="col-sm-12 dashboard-header">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-8">
+                            <h2 class="section-header">Cemetery Dashboard</h2>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-4">
+                        </div>
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+        </section>
+        <div class="o_governance_dashboard"/>
+        <t t-call="cemetery_management.CemeteryData"/>
+    </t>
+    <t t-name="cemetery_management.CemeteryData">
+        <section class="dashboard_main_section" id="main_section_manager">
+            <div class="cemetery_dashboard_card row">
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.OpenCemetery(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-hospital-o"></i>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Cemeteries</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="cemetery_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.OpenCemeterySection(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Cemetery Sections</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="cemetery_section_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.OpenGrave(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Graves</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="grave_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <center><h3>Burial Booking</h3></center>
+            <div class="cemetery_dashboard_card row">
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.OpenCemeteryApplication(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Application</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="application_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.OpenSubmittedCemeteryApplication(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Submitted Application</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="submitted_application_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.OpenApprovedCemeteryApplication(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Approved Application</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="approved_application_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.OpenBurialCemeteryApplication(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Burial Application</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="burial_application_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.OpenCremationCemeteryApplication(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8">
+                                <div class="card-icon">
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">
+                                        Cremation Application
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="cremation_application_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <center><h3>Grave Purchase</h3></center>
+            <div class="cemetery_dashboard_card row">
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.GravePurchase(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Grave Purchase</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="grave_purchase_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.GraveSubmittedPurchase(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Submitted: Grave Purchase</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="submitted_grave_purchase_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.GraveQuotationPurchase(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Quotation: Grave Purchase</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="quotation_grave_purchase_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.GraveApprovedPurchase(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Approved: Grave Purchase</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="approved_grave_purchase_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <center><h3>Grave Lease</h3></center>
+            <div class="cemetery_dashboard_card row">
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.GraveLease(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Grave Lease</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="grave_lease_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.GraveSubmittedLease(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Submitted: Grave Lease</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="grave_submitted_lease_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.GraveQuotationLease(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Quotation: Grave Lease</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="grave_quotation_lease_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="dashboard-card card-shadow my_lead"
+                         t-on-click="(e) => this.GraveApprovedLease(e)">
+                        <div class="row" style="padding: 0px 10px 0px 10px">
+                            <div class="col-sm-8" >
+                                <div class="card-icon" >
+                                    <i class="fa fa-list-alt"/>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 20px;  padding: 0px 0px 10px">Approved: Grave Lease</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <span style="font-size: 44px; font-family: serif;">
+                                    <div id="grave_approved_lease_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </t>
+</templates>

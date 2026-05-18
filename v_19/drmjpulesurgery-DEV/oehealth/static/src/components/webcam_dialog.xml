@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="oehealth.WebcamDialog">
+        <Dialog size="'md'" title="props.title">
+            <video t-ref="video" class="w-100 h-auto"/>
+            <img t-ref="image" alt="The screen capture will appear in this box." class="w-100 h-auto d-none"/>
+            <t t-set-slot="footer">
+                <t t-if="state.image">
+                    <button class="btn btn-success" t-on-click="confirm">
+                        Confirm
+                    </button>
+                    <button class="btn btn-info" t-on-click="recaptureImage">
+                        Retake Image
+                    </button>
+                </t>
+                <t t-else="">
+                    <button class="btn btn-primary" t-on-click="captureImage">
+                        Take Image
+                    </button>
+                </t>
+                <button class="btn btn-secondary" t-on-click="stopWebcam">
+                    Close
+                </button>
+            </t>
+        </Dialog>
+    </t>
+</templates>

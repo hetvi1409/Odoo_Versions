@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_inherit_client_enquiry_sla_policy_status_form" model="ir.ui.view">
+        <field name="name">client.enquiry.sla.policy.status.form.inherit</field>
+        <field name="model">client.enquiry.sla.policy.status</field>
+        <field name="inherit_id" ref="client_enquiry.view_client_enquiry_sla_policy_status_form"/>
+        <field name="arch" type="xml">
+            <!-- Add a field below the process_status field inside the form -->
+            <xpath expr="//field[@name='process_status']" position="after">
+                <field name="property_intelligence_id"/>
+            </xpath>
+             <xpath expr="//field[@name='property_intelligence_id']" position="attributes">
+    <attribute name="invisible">process_status != 'property_intelligence'</attribute>
+</xpath>
+        </field>
+    </record>
+</odoo>

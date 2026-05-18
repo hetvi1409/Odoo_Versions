@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fleet_fuel_register_action" model="ir.actions.act_window">
+        <field name="name">Fuel Registers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fleet.fuel.register</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="fleet_fuel_register_menu"
+              name="Fuel Register"
+              parent="fleet_vehicle_inspection_management.fleet_operations_menu"
+              action="fleet_fuel_register_action"/>
+
+    <record id="fleet_fuel_register_view_form" model="ir.ui.view">
+        <field name="name">fleet.fuel.register.view.form</field>
+        <field name="model">fleet.fuel.register</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="month"/>
+                            <field name="year"/>
+                            <field name="depot_name"/>
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <tree editable="bottom">
+                            <field name="date"/>
+                            <field name="driver_id"/>
+                            <field name="vehicle_id"/>
+                            <field name="opening_odometer"/>
+                            <field name="closing_odometer"/>
+                            <field name="total_kms"/>
+                            <field name="liters"/>
+                            <field name="fuel_value"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="fleet_fuel_register_view_tree" model="ir.ui.view">
+        <field name="name">fleet.fuel.register.view.tree</field>
+        <field name="model">fleet.fuel.register</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="month"/>
+                <field name="year"/>
+                <field name="depot_name"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

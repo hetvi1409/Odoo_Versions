@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fleet_accident_report_action" model="ir.actions.act_window">
+        <field name="name">Accident Reports</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fleet.vehicle.accident.report</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="fleet_accident_report_menu"
+              name="Accident Reports"
+              parent="fleet_vehicle_inspection_management.fleet_operations_menu"
+              action="fleet_accident_report_action"/>
+
+    <record id="fleet_accident_report_view_form" model="ir.ui.view">
+        <field name="name">fleet.vehicle.accident.report.view.form</field>
+        <field name="model">fleet.vehicle.accident.report</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle Accident Report">
+                <sheet>
+                    <!-- Title -->
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="accident_date"/>
+                            <field name="accident_time"/>
+                            <field name="location"/>
+                        </group>
+                        <group>
+                            <field name="vehicle_id"/>
+                            <field name="driver_id"/>
+                            <field name="odometer"/>
+                        </group>
+                    </group>
+
+                    <!-- Insurance Info -->
+                    <group>
+                        <group>
+                            <field name="policy_number"/>
+                            <field name="policy_expiry_date"/>
+                            <field name="insurer"/>
+                            <field name="claim_number"/>
+                        </group>
+                        <group>
+                            <field name="claim_intimation_date"/>
+                            <field name="surveyor_name"/>
+                            <field name="survey_date"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+
+                        <!-- Driver Details -->
+                        <page string="Driver Details">
+                            <group>
+                                <group>
+                                    <field name="driver_id"/>
+                                    <field name="driver_license_number"/>
+                                    <field name="driver_phone"/>
+                                </group>
+                                <group>
+                                    <field name="driver_address"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Vehicle Details -->
+                        <page string="Vehicle Details">
+                            <group>
+                                <group>
+                                    <field name="vehicle_id"/>
+                                    <field name="vehicle_registration_no"/>
+                                    <field name="vehicle_make"/>
+                                    <field name="vehicle_model"/>
+                                </group>
+                                <group>
+                                    <field name="vehicle_year"/>
+                                    <field name="chassis_number"/>
+                                    <field name="engine_number"/>
+                                    <field name="vehicle_use"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Accident Details -->
+                        <page string="Accident Details">
+                            <group>
+                                <group>
+                                    <field name="weather_condition"/>
+                                    <field name="road_type"/>
+                                    <field name="road_condition"/>
+                                    <field name="light_condition"/>
+                                </group>
+                                <group>
+                                    <field name="estimated_speed"/>
+                                    <field name="alcohol_test"/>
+                                    <field name="police_called"/>
+                                    <field name="police_report_number"/>
+                                </group>
+                            </group>
+
+                            <group>
+                                <field name="description"/>
+                                <field name="accident_description"/>
+                                <field name="damage_to_vehicle"/>
+                                <field name="other_vehicles"/>
+                                <field name="injuries"/>
+                                <field name="witness_details"/>
+                                <field name="action_taken"/>
+                            </group>
+                        </page>
+
+                        <!-- Third Party -->
+                        <page string="Third Party">
+                            <group>
+                                <group>
+                                    <field name="third_party_name"/>
+                                    <field name="third_party_contact"/>
+                                </group>
+                                <group>
+                                    <field name="third_party_vehicle_no"/>
+                                    <field name="third_party_insurer"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Passenger & Medical -->
+                        <page string="Passengers &amp; Medical">
+                            <group>
+                                <group>
+                                    <field name="passenger_count"/>
+                                    <field name="passenger_injuries"/>
+                                </group>
+                                <group>
+                                    <field name="hospital_name"/>
+                                    <field name="hospital_address"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Damage & Cost -->
+                        <page string="Damage &amp; Cost">
+                            <group>
+                                <group>
+                                    <field name="property_damage_details"/>
+                                    <field name="repair_estimate"/>
+                                </group>
+                                <group>
+                                    <field name="towing_required"/>
+                                    <field name="towing_company"/>
+                                    <field name="towing_cost"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Reporter -->
+                        <page string="Reporting">
+                            <group>
+                                <group>
+                                    <field name="reported_by"/>
+                                    <field name="reporter_contact"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Attachments -->
+                        <page string="Attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+
+                        <!-- Signatures -->
+                        <page string="Signatures">
+                            <group>
+                                <group>
+                                    <field name="driver_signature" widget="signature"/>
+                                </group>
+                                <group>
+                                    <field name="officer_signature" widget="signature"/>
+                                </group>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="fleet_accident_report_view_tree" model="ir.ui.view">
+        <field name="name">fleet.vehicle.accident.report.view.tree</field>
+        <field name="model">fleet.vehicle.accident.report</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="accident_date"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

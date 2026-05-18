@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="tender_information_list" name="Website Tenders">
+        <!-- Template extending website.layout -->
+        <t t-call="website.layout">
+<!--            <header  class="o_header_standard">-->
+                <nav class="navbar navbar-expand-lg navbar-light bg-light border-top border-bottom">
+                    <div class="container">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/tenders">HOME</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders-rfqs">REQUEST FOR QUOTATIONS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders-rfps">REQUEST FOR PROPOSALS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/bid-status">BID STATUS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders-archive">ARCHIVE</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+<!--            </header>-->
+            <div id="wrap" class="o_portal_wrap">
+                <section
+                        class="s_title parallax s_parallax_is_fixed bg-black-50"
+                        data-vcss="001" data-snippet="s_title"
+                        data-scroll-background-ratio="1"
+                        style="padding-bottom: 25px !important;padding-top: 35px !important;">
+                    <span class="s_parallax_bg oe_img_bg"
+                          style="background-image: url('/tender_management/static/src/img/image.jpg'); background-position: 85% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container" style="text-align: center;">
+                        <h3>PROCUREMENT</h3>
+                        <p>
+                            We are committed to fair, transparent, and inclusive procurement processes
+                            that empower local enterprises and drive sustainable development across our city.
+                        </p>
+                    </div>
+                </section>
+            </div>
+            <div class="container">
+                <div class="bg-light p-2 d-flex align-items-center">
+                    <strong class="me-2">STAY UP TO DATE :</strong>
+                    <marquee behavior="scroll" direction="left" class="text-muted">
+                      newspapers on behalf of the City of Joburg Property Company SOC Ltd
+                      Appointment of a professional valuer to conduct property valuations for various projects
+                    </marquee>
+                  </div>
+                <div class="row text-center mt-5 mb-5">
+                    <a href="/tenders-rfqs" class="col-md-4 link text-decoration-none text-dark">
+                        <div class="border p-4 shadow-sm">
+                            <i class="fa fa-bookmark fa-2x mb-2"></i>
+                            <h5>RFQs</h5>
+                        </div>
+                    </a>
+                    <a href="/tenders-rfps" class="col-md-4 link text-decoration-none text-dark">
+                        <div class="border p-4 shadow-sm">
+                            <i class="fa fa-bookmark fa-2x mb-2"></i>
+                            <h5>RFPs</h5>
+                        </div>
+                    </a>
+                    <a href="/bid-status" class="col-md-4 link text-decoration-none text-dark">
+                        <div class="border p-4 shadow-sm">
+                            <i class="fa fa-bookmark fa-2x mb-2"></i>
+                            <h5>BID STATUS</h5>
+                        </div>
+                    </a>
+              </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="tender_rfq_information_list" name="Website Tenders">
+        <t t-call="website.layout">
+<!--            <header  class="o_header_standard">-->
+                <nav class="navbar navbar-expand-lg navbar-light bg-light border-top border-bottom">
+                    <div class="container">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders">HOME</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/tenders-rfqs">REQUEST FOR QUOTATIONS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders-rfps">REQUEST FOR PROPOSALS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/bid-status">BID STATUS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders-archive">ARCHIVE</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+<!--            </header>-->
+
+            <div id="wrap" class="o_portal_wrap">
+                <section
+                        class="s_title parallax s_parallax_is_fixed bg-black-50"
+                        data-vcss="001" data-snippet="s_title"
+                        data-scroll-background-ratio="1"
+                        style="padding-bottom: 25px !important;padding-top: 35px !important;">
+                    <span class="s_parallax_bg oe_img_bg"
+                          style="background-image: url('/tender_management/static/src/img/image.jpg'); background-position: 85% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container" style="text-align: center;">
+                        <h3 style="font-family: monospace;">PROCUREMENT</h3>
+                        <h3 style="font-family: monospace;">Request For Quotations (RFQs)</h3>
+                        <div style="display: flex; justify-content: center;">
+                            <span><a class="nav-link active" href="/tenders">Home</a></span>
+                            <span><a>--></a></span>
+                            <span >
+                                <a class="nav-link active">RFQs</a>
+                            </span>
+                        </div>
+                    </div>
+
+                </section>
+                <div class="container col-xs-12 responsive-card-table">
+
+                    <form class="form-inline" name="frmsearch"
+                          action="/tenders-rfqs" method="POST" autocomplete="off">
+                        <input type="hidden"
+                               name="csrf_token"
+                               t-att-value="request.csrf_token()"
+                               autocomplete="off"/>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="street">Search:
+                                    <input type="text"
+                                           placeholder="Search"
+                                           id="searchRefNo"
+                                           name="searchRefNo"
+                                           class="form-control"
+                                           t-att-value="searchRefNo"
+                                           maxlength="50">
+                                    </input>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br/>
+                    <table id="tender_information"
+                           class="table table-bordered table-hover">
+                        <thead style="background-color: #729bcf;">
+                            <tr class="active">
+                                <th class="text-center">
+                                    Opening Date
+                                </th>
+                                <th class="text-center">
+                                    Tender ID
+                                </th>
+                                <th class="text-center">
+                                    Tender Name
+                                </th>
+                                <th class="text-center">
+                                    Tender Description
+                                </th>
+                                <th class="text-center">
+                                    Closing Date
+                                </th>
+                                <th class="text-center">
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Looping over the tenders_information to show the tender details -->
+                                <tr t-foreach="rfqs" t-as="tender">
+                                    <td class="text-center">
+                                        <t t-esc="tender.start_time"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="tender.sequence_number"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="tender.name"/>
+                                    </td>
+                                    <td class="text-center" >
+                                        <a t-att-href="'/tender/%d' % tender.id" t-esc="tender.description"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="tender.closing_date"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="tender.state"/>
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                    <t t-call="website.pager">
+                        <t t-set="pager" t-value="pager"/>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="tender_rfp_information_list" name="Website Tenders">
+        <!-- Template extending website.layout -->
+        <t t-call="website.layout">
+<!--            <header  class="o_header_standard">-->
+                <nav class="navbar navbar-expand-lg navbar-light bg-light border-top border-bottom">
+                    <div class="container">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link " href="/tenders">HOME</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders-rfqs">REQUEST FOR QUOTATIONS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/tenders-rfps">REQUEST FOR PROPOSALS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/bid-status">BID STATUS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders-archive">ARCHIVE</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+<!--            </header>-->
+            <div id="wrap" class="o_portal_wrap">
+                <section
+                        class="s_title parallax s_parallax_is_fixed bg-black-50"
+                        data-vcss="001" data-snippet="s_title"
+                        data-scroll-background-ratio="1"
+                        style="padding-bottom: 25px !important;padding-top: 35px !important;">
+                    <span class="s_parallax_bg oe_img_bg"
+                          style="background-image: url('/tender_management/static/src/img/image.jpg'); background-position: 85% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container" style="text-align: center;">
+                        <h3 style="font-family: monospace;">PROCUREMENT</h3>
+                        <h3 style="font-family: monospace;">Request For Proposals (RFPs)</h3>
+                        <div style="display: flex; justify-content: center;">
+                            <span><a class="nav-link active" href="/tenders">Home</a></span>
+                            <span><a>--></a></span>
+                            <span >
+                                <a class="nav-link active">RFPs</a>
+                            </span>
+                        </div>
+                    </div>
+
+                </section>
+                <div class="container col-xs-12 responsive-card-table">
+                    <form class="form-inline" name="frmsearch"
+                          action="/tenders-rfps" method="POST" autocomplete="off">
+                        <input type="hidden"
+                               name="csrf_token"
+                               t-att-value="request.csrf_token()"
+                               autocomplete="off"/>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="street">Search:
+                                    <input type="text"
+                                           placeholder="Search"
+                                           id="searchRefNo"
+                                           name="searchRefNo"
+                                           class="form-control"
+                                           t-att-value="searchRefNo"
+                                           maxlength="50">
+                                    </input>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br/>
+                    <table id="tender_information"
+                           class="table table-bordered table-hover">
+                        <thead style="background-color: #729bcf;">
+                            <tr class="active">
+                                <th class="text-center">
+                                    Opening Date
+                                </th>
+                                <th class="text-center">
+                                    Tender ID
+                                </th>
+                                <th class="text-center">
+                                    Tender Name
+                                </th>
+                                <th class="text-center">
+                                    Tender Description
+                                </th>
+                                <th class="text-center">
+                                    Closing Date
+                                </th>
+                                <th class="text-center">
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Looping over the tenders_information to show the tender details -->
+                                <tr t-foreach="rfps" t-as="tender">
+                                    <td class="text-center">
+                                        <t t-esc="tender.start_time"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="tender.sequence_number"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <a t-att-href="'/tender/%d' % tender.id" t-esc="tender.name"/>
+                                    </td>
+                                    <td class="text-center" >
+                                        <a t-att-href="'/tender/%d' % tender.id" t-esc="tender.description"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="tender.closing_date"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="tender.state"/>
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                    <t t-call="website.pager">
+                        <t t-set="pager" t-value="pager"/>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="tender_bid_status_information" name="Website Tenders">
+        <!-- Template extending website.layout -->
+        <t t-call="website.layout">
+<!--            <header  class="o_header_standard">-->
+                <nav class="navbar navbar-expand-lg navbar-light bg-light border-top border-bottom">
+                    <div class="container">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link " href="/tenders">HOME</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders-rfqs">REQUEST FOR QUOTATIONS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders-rfps">REQUEST FOR PROPOSALS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/bid-status">BID STATUS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders-archive">ARCHIVE</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+<!--            </header>-->
+            <div id="wrap" class="o_portal_wrap">
+                <section
+                        class="s_title parallax s_parallax_is_fixed bg-black-50"
+                        data-vcss="001" data-snippet="s_title"
+                        data-scroll-background-ratio="1"
+                        style="padding-bottom: 25px !important;padding-top: 35px !important;">
+                    <span class="s_parallax_bg oe_img_bg"
+                          style="background-image: url('/tender_management/static/src/img/image.jpg'); background-position: 85% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container" style="text-align: center;">
+                        <h3 style="font-family: monospace;">PROCUREMENT</h3>
+                        <h3 style="font-family: monospace;">Awarded, Non-Award, Cancelled Bids</h3>
+                        <div style="display: flex; justify-content: center;">
+                            <span><a class="nav-link active" href="/tenders">Home</a></span>
+                            <span><a>--></a></span>
+                            <span ><a class="nav-link active">Awarded Bids</a></span>
+                        </div>
+                    </div>
+
+                </section>
+                <div class="container col-xs-12 responsive-card-table">
+                    <form class="form-inline" name="frmsearch"
+                          action="/tenders-rfps" method="POST" autocomplete="off">
+                        <input type="hidden"
+                               name="csrf_token"
+                               t-att-value="request.csrf_token()"
+                               autocomplete="off"/>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="street">Search:
+                                    <input type="text"
+                                           placeholder="Search"
+                                           id="searchRefNo"
+                                           name="searchRefNo"
+                                           class="form-control"
+                                           t-att-value="searchRefNo"
+                                           maxlength="50">
+                                    </input>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br/>
+                    <table id="tender_information"
+                           class="table table-bordered table-hover">
+                        <thead style="background-color: #729bcf;">
+                            <tr class="active">
+                                <th class="text-center">
+                                    BID NUMBER
+                                </th>
+                                <th class="text-center">
+                                    BID DESCRIPTION
+                                </th>
+                                <th class="text-center">
+                                    PUBLISH DATE
+                                </th>
+                                <th class="text-center">
+                                    CLOSING DATE
+                                </th>
+                                <th class="text-center">
+                                    STATUS
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Looping over the tenders_information to show the tender details -->
+                                <tr t-foreach="bid" t-as="tender">
+                                    <td class="text-center">
+                                        <t t-esc="tender.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <a t-att-href="'/bid_application_details_portal/%d' % tender.id" t-esc="tender.bid_name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="tender.submission_deadline"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="tender.closing_date"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="tender.state"/>
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                    <t t-call="website.pager">
+                        <t t-set="pager" t-value="pager"/>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="tender_archive_information_list" name="Website Tenders">
+        <!-- Template extending website.layout -->
+        <t t-call="website.layout">
+<!--            <header  class="o_header_standard">-->
+                <nav class="navbar navbar-expand-lg navbar-light bg-light border-top border-bottom">
+                    <div class="container">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link " href="/tenders">HOME</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tenders-rfqs">REQUEST FOR QUOTATIONS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="/tenders-rfps">REQUEST FOR PROPOSALS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/bid-status">BID STATUS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/tenders-archive">ARCHIVE</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+<!--            </header>-->
+            <div id="wrap" class="o_portal_wrap">
+                <section
+                        class="s_title parallax s_parallax_is_fixed bg-black-50"
+                        data-vcss="001" data-snippet="s_title"
+                        data-scroll-background-ratio="1"
+                        style="padding-bottom: 25px !important;padding-top: 35px !important;">
+                    <span class="s_parallax_bg oe_img_bg"
+                          style="background-image: url('/tender_management/static/src/img/image.jpg'); background-position: 85% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container" style="text-align: center;">
+                        <h3 style="font-family: monospace;">PROCUREMENT</h3>
+                        <h3 style="font-family: monospace;">Archive (RFQs)</h3>
+                        <div style="display: flex; justify-content: center;">
+                            <span><a class="nav-link active" href="/tenders">Home</a></span>
+                            <span><a>--></a></span>
+                            <span >
+                                <a class="nav-link">Archive (RFQs)</a>
+                            </span>
+                        </div>
+                    </div>
+
+                </section>
+                <div class="container col-xs-12 responsive-card-table">
+                    <form class="form-inline" name="frmsearch"
+                          action="/tenders-archive" method="POST" autocomplete="off">
+                        <input type="hidden"
+                               name="csrf_token"
+                               t-att-value="request.csrf_token()"
+                               autocomplete="off"/>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="street">Search:
+                                    <input type="text"
+                                           placeholder="Search"
+                                           id="searchRefNo"
+                                           name="searchRefNo"
+                                           class="form-control"
+                                           t-att-value="searchRefNo"
+                                           maxlength="50">
+                                    </input>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br/>
+                    <table id="tender_information"
+                           class="table table-bordered table-hover">
+                        <thead style="background-color: #729bcf;">
+                            <tr class="active">
+                                <th class="text-center">
+                                    Opening Date
+                                </th>
+                                <th class="text-center">
+                                    Tender ID
+                                </th>
+                                <th class="text-center">
+                                    Tender Name
+                                </th>
+                                <th class="text-center">
+                                    Tender Description
+                                </th>
+                                <th class="text-center">
+                                    Closing Date
+                                </th>
+                                <th class="text-center">
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Looping over the tenders_information to show the tender details -->
+                                <tr t-foreach="rfps" t-as="tender">
+                                    <td class="text-center">
+                                        <t t-esc="tender.start_time"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="tender.sequence_number"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <a t-att-href="'/tender/%d' % tender.id" t-esc="tender.name"/>
+                                    </td>
+                                    <td class="text-center" >
+                                        <a t-att-href="'/tender/%d' % tender.id" t-esc="tender.description"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="tender.closing_date"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="tender.state"/>
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                    <t t-call="website.pager">
+                        <t t-set="pager" t-value="pager"/>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

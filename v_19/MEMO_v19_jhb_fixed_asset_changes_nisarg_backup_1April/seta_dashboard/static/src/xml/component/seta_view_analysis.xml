@@ -1,0 +1,56 @@
+<template>
+    <div t-name="SETAViewAnalysis" class="seta_view_analysis">
+        <!-- Explore -->
+        <div class="seta_dialog" style="display:none;">
+            <div class="seta_view_analysis_explore_bg"></div>
+            <div class="seta_view_analysis_explore_header">
+                Explore Analysis Variations With AI
+                <span class="subtitle">These are some generated analysis from AI. Select one or more generated analysis below and then click the button to save it!</span>
+            </div>
+            <div class="seta_view_analysis_explore">
+            </div>
+            <div class="seta_view_analysis_explore_footer">
+                <div class="seta_submit_analysis_explore seta_btn seta_btn_purple collapsed">
+                    <span class="material-icons seta_btn_icon_left" t-esc="'magic_button'"/> Save Analysis
+                </div>
+                <input type="hidden" class="seta_select2" id="seta_select2_dashboard_explore"/>
+            </div>
+        </div>
+        <!-- Analysis -->
+        <div class="seta_dashboard_block_item">
+            <div class="seta_dashboard_block_header flex-row">
+                <h4 class="seta_dashboard_block_title flex-1" t-esc="widget.analysis_name"></h4>
+            </div>
+            <div class="seta_dashboard_block_content"></div>
+        </div>
+        <!-- Script Editor -->
+        <div class="seta_dashboard_script_editor" style="left: -1000px;">
+            <span class="material-icons seta_dashboard_script_close">close</span>
+            <img class="seta_dashboard_script_type" src="/seta_dashboard/static/src/img/js.png"/>
+            <h4></h4>
+            <div class="seta_dashboard_script_editor_content" onmousedown="event.preventDefault(); event.stopPropagation();">
+                <div class="seta_script_tab">
+                    <div class="seta_script_tab_button seta_tab_active" id="seta_tab_js">JS</div>
+                    <div class="seta_script_tab_button" id="seta_tab_css">CSS</div>
+                </div>
+                <div id="seta_script_editor"></div>
+                <div id="seta_script_editor_css" class="d-none"></div>
+            </div>
+            <div class="seta_dashboard_script_editor_button_container">
+                <div class="seta_update_script seta_btn seta_btn_purple collapsed mr8">
+                    <span class="material-icons seta_btn_icon_left" t-esc="'play_arrow'"/> Save &amp; Run
+                </div>
+                <div class="seta_script_ai seta_btn seta_btn_blue collapsed mr8">
+                    <span class="material-icons seta_btn_icon_left" t-esc="'magic_button'"/> Generate Code
+                </div>
+                <!-- <div class="seta_close_script seta_btn collapsed mr8">
+                    <span class="material-icons seta_btn_icon_left" t-esc="'close'"/> Cancel
+                </div> -->
+                <!-- <div class="seta_toggle_float_script seta_float_button">
+                    <span class="material-icons" t-esc="'open_in_new'"/>
+                </div> -->
+                <div style="clear:both"></div>
+            </div>
+        </div>
+    </div>
+</template>

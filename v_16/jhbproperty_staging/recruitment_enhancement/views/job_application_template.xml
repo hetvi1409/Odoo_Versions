@@ -1,0 +1,1814 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="website_hr_job_recruitment_index" name="Job:"
+              inherit_id="website_hr_recruitment.index">
+        <xpath expr="//div[@id='jobs_grid']" position="replace">
+            <div class="col-lg" id="jobs_grid">
+                <div class="row flex-column">
+                    <t t-if="not jobs">
+                        <div class="col">
+                            <div t-if="search"
+                                 class="alert alert-warning text-center"
+                                 role="alert">
+                                No results found for '<span t-out="search"/>'.
+                            </div>
+                            <div class="alert alert-info text-center text-muted"
+                                 groups="hr_recruitment.group_hr_recruitment_manager">
+                                Create new job pages from the
+                                <strong>+
+                                    <i>New</i>
+                                </strong>
+                                top-right button.
+                            </div>
+                            <div class="col-lg-12 text-center pt24">
+                                <p class="h5 fw-light text-muted pb24">
+                                    There are currently no open job
+                                    opportunities,
+                                    <br class="mb-2"/>
+                                    but feel free to <span class="fw-bold">
+                                    contact us
+                                </span> for a spontaneous application.
+                                </p>
+                                <img class="img-fluid o_we_custom_image pb24"
+                                     src="/website_hr_recruitment/static/src/img/job_not_found.svg"
+                                     style="width: 50% !important;"
+                                     alt="Job not found"/>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-elif="search and original_search">
+                        <div class="col">
+                            <div class="alert alert-info text-center"
+                                 role="alert">
+                                No results found for '<span
+                                    t-out="original_search"/>'. Showing results
+                                for '<span t-out="search"/>'.
+                                <t t-set="search" t-value="original_search"/>
+                            </div>
+                        </div>
+                    </t>
+                    <div t-foreach="jobs" t-as="job" class="col-lg mb32">
+                        <div t-attf-class="card #{not job.website_published and 'o_jobs_unpublished'}">
+                            <a t-attf-href="/jobs/#{ slug(job) }"
+                               t-attf-class="text-decoration-none text-reset"
+                               draggable="false">
+                                <div class="card-body p-4">
+                                    <div class="mt0 d-flex justify-content-between align-items-center">
+                                        <h3 t-field="job.name"/>
+                                        <span t-if="not job.website_published"
+                                              class="badge bg-danger mb8 p-2">
+                                            unpublished
+                                        </span>
+                                    </div>
+                                    <h5 t-if="job.no_of_recruitment >= 3"
+                                        class="text-reset">
+                                        <span t-field="job.no_of_recruitment"/>
+                                        open positions
+                                    </h5>
+                                    <t t-set="job_desc_edition_placeholder">
+                                        Insert a Job Description...
+                                    </t>
+                                    <div class="oe_empty text-muted mb16"
+                                         t-field="job.description"
+                                         t-att-data-editor-message="job_desc_edition_placeholder"/>
+                                    <div class="o_job_infos d-flex flex-column"
+                                         style="justify-content:end;">
+                                        <span t-field="job.address_id"
+                                              class="fw-light"
+                                              t-options='{"widget": "contact", "fields": ["city"], "no_tag_br": True, "null_text": "Remote"}'/>
+                                    </div>
+                                    <div class="float-end"
+                                         style="padding: 10px !important;">
+                                        <div>
+                                            <a role="button"
+                                               t-attf-href="/jobs/apply/#{slug(job)}"
+                                               style="margin: 0 5px;"
+                                               class="btn btn-primary float-end">
+                                                Apply Now!
+                                            </a>
+<!--                                            <a role="button"-->
+<!--                                               t-attf-href="/jobs/#{ slug(job) }"-->
+<!--                                               class="btn btn-primary float-end">-->
+<!--                                                Read More-->
+<!--                                            </a>-->
+                                            <a role="button"
+                                                t-attf-href="/jobs/detail/#{ slug(job) }"
+                                                class="btn btn-primary float-end">
+                                                 Read More
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//div[@class='oe_empty text-muted mb16']"
+               position="replace">
+            <div class="oe_empty text-muted mb16"
+                 t-field="job.description"
+                 style="display:none;"
+                 t-att-data-editor-message="job_desc_edition_placeholder"/>
+        </xpath>
+    </template>
+    <template id="website_hr_job_recruitment_index_style" inherit_id="base.contact">
+        <xpath expr="//address" position="replace">
+            <address t-ignore="true"
+                     class="o_portal_address custom-portal-address mb-0"
+                     itemscope="itemscope"
+                     itemtype="http://schema.org/Organization">
+                <div t-if="not (('name' in fields) or (address and 'address' in fields) or (city and 'city' in fields) or (mobile and 'mobile' in fields) or (website and 'website' in fields) or (email and 'email' in fields))"
+                     class="css_non_editable_mode_hidden">
+                    --<span class="text-muted" t-esc="name"/>--
+                </div>
+                <t t-if="object.country_id.name_position != 'after'">
+                    <t t-call="base.contact_name"/>
+                </t>
+                <div class="gap-2" itemprop="address" itemscope="itemscope"
+                     itemtype="http://schema.org/PostalAddress">
+                    <div t-if="address and 'address' in fields"
+                         t-attf-class="d-flex align-items-baseline gap-1">
+                        <i t-if="not options.get('no_marker')"
+                           class="fa fa-map-marker fa-fw" role="img"
+                           aria-label="Address" title="Address"/>
+                        <span class="d-block w-100 lh-sm"
+                              itemprop="streetAddress" t-esc="address"/>
+                    </div>
+                    <div t-if="city and 'city' in fields"
+                         t-attf-class="d-flex align-items-baseline gap-1">
+                        <i t-if="not options.get('no_marker')"
+                           class="fa fa-map-marker fa-fw" role="img"
+                           aria-label="Address" title="Address"/>
+                        <span>
+                            <div>
+                                <span itemprop="addressLocality" t-esc="city"/>,
+                                <span itemprop="addressCountry" t-esc="country_id"/>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center gap-1"
+                         t-if="phone and 'phone' in fields">
+                        <i t-if="not options.get('no_marker') or options.get('phone_icons')"
+                           class='fa fa-phone fa-fw' role="img"
+                           aria-label="Phone" title="Phone"/>
+                        <span class="o_force_ltr" itemprop="telephone" t-esc="phone"/>
+                    </div>
+                    <div class="d-flex align-items-center gap-1"
+                         t-if="mobile and 'mobile' in fields">
+                        <i t-if="not options.get('no_marker') or options.get('phone_icons')"
+                           class='fa fa-mobile fa-fw' role="img"
+                           aria-label="Mobile" title="Mobile"/>
+                        <span class="o_force_ltr" itemprop="telephone" t-esc="mobile"/>
+                    </div>
+                    <div class="d-flex align-items-center gap-1"
+                         t-if="website and 'website' in fields">
+                        <i t-if="not options.get('no_marker')"
+                           class='fa fa-globe fa-fw' role="img"
+                           aria-label="Website" title="Website"/>
+                        <a t-att-href="website and '%s%s' % ('http://' if '://' not in website else '',website)">
+                            <span itemprop="website" t-esc="website"/>
+                        </a>
+                    </div>
+                    <div class="d-flex align-items-center gap-1"
+                         t-if="email and 'email' in fields">
+                        <i t-if="not options.get('no_marker')"
+                           class='fa fa-envelope fa-fw' role="img"
+                           aria-label="Email" title="Email"/>
+                        <span class="text-break" itemprop="email" t-esc="email"/>
+                    </div>
+                </div>
+                <div t-if="vat and 'vat' in fields"><span t-esc="vat_label"/>:
+                    <span itemprop="vatID" t-esc="vat"/>
+                </div>
+                <t t-if="object.country_id and object.country_id.name_position == 'after'">
+                    <t t-call="base.contact_name"/>
+                </t>
+            </address>
+
+        </xpath>
+    </template>
+    <template id="website_hr_job_recruitment_detail" name="Job: Details"
+              inherit_id="website_hr_recruitment.detail">
+        <xpath expr="//div[@class='js_hr_recruitment']/div/section"
+               position="after">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 pb32" itemprop="description">
+                        <div t-field="job.description"/>
+                    </div>
+                </div>
+                <div class="o_job_infos d-flex flex-column">
+                    <div t-if="job.work_level"
+                         class="d-inline-flex align-items-center">
+                        <i class="fa fa-bolt fa-fw" title="Salary"
+                           role="img" aria-label="Work Level"/>
+                        Work Level:
+                        <span t-field="job.work_level" class="fw-light"
+                              style="margin-left: 5px;"/>
+                    </div>
+                    <div t-if="job.salary"
+                         class="d-inline-flex align-items-center">
+                        <i class="fa fa-suitcase fa-fw" title="Salary"
+                           role="img" aria-label="Salary"/>
+                        Salary:
+                        <span t-field="job.salary" class="fw-light"
+                              style="margin-left: 5px;"/>
+                    </div>
+                    <div t-if="job.ee_position"
+                         class="d-inline-flex align-items-center">
+                        <i class="fa fa-suitcase fa-fw" title="Salary"
+                           role="img" aria-label="EE Position"/>
+                        EE Position:
+                        <span t-field="job.ee_position" class="fw-light"
+                              style="margin-left: 5px;"/>
+                    </div>
+                    <div t-if="job.department_id"
+                         class="d-inline-flex align-items-center">
+                        <i class="fa fa-suitcase fa-fw" title="Salary"
+                           role="img" aria-label="EE Position"/>
+                        Department:
+                        <span t-field="job.department_id" class="fw-light"
+                              style="margin-left: 5px;"/>
+                    </div>
+                    <!-- <div t-if="job.contract_type_id"
+                         class="d-inline-flex align-items-center">
+                        <i class="fa fa-suitcase fa-fw" title="Salary"
+                           role="img" aria-label="EE Position"/>
+                        Contract Type:
+                        <span t-field="job.contract_type_id" class="fw-light"
+                              style="margin-left: 5px;"/>
+                    </div> -->
+                    <div class="float-start"
+                         style="padding: 10px !important;">
+                        <div>
+                            <a role="button"
+                               t-attf-href="/jobs/apply/#{slug(job)}"
+                               style="margin: 0 5px;"
+                               class="btn btn-primary float-end">
+                                Apply Now!
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        </xpath>
+        <xpath expr="//div[hasclass('js_hr_recruitment')]/div/section"
+               position="replace">
+            <section class="pb32">
+                <div class="container">
+                    <div class="mt32">
+                        <h1 t-field="job.name"/>
+                        <h5 class="fw-light o_not_editable"
+                            t-field="job.address_id" t-options='{
+                                "widget": "contact",
+                                "fields": ["city"],
+                                "no_tag_br": True,
+                                "null_text": "Remote"
+                            }'/>
+                    </div>
+                </div>
+            </section>
+        </xpath>
+        <xpath expr="//div[hasclass('js_hr_recruitment')]/div[@t-field='job.website_description']"
+               position="replace">
+
+        </xpath>
+        <xpath expr="//div[hasclass('js_hr_recruitment')]/div/section" position="replace">
+        </xpath>
+    </template>
+
+    <template id="website_hr_recruitment.apply" name="Recruitment">
+        <t t-call="website.layout">
+            <t t-set="additional_title">Apply Job</t>
+            <div id="wrap" class="container">
+                <nav aria-label="breadcrumb" class="mt-5">
+                    <ol class="breadcrumb ps-0 mb-0 pb-1">
+                        <li class="breadcrumb-item">
+                            <a href="/jobs" class="text-secondary fw-bold">
+                                Jobs
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <a t-attf-href="/jobs/detail/#{slug(job)}">
+                                <span t-field="job.name"/>
+                            </a>
+                        </li>
+                    </ol>
+                </nav>
+                <h1 class="mb-4"
+                    style="font-size: 26px; text-shadow: 1px 1px 0 #fff; text-transform: uppercase;">
+                    Please complete the following details to continue
+                </h1>
+                <span class="hidden" data-for="hr_recruitment_form"
+                      t-att-data-values="{'department_id': job and job.department_id.id or '', 'job_id': job and job.id or ''}"/>
+                <div id="jobs_section" class="container">
+                    <div class="row">
+                        <section id="forms"
+                                 class="col-12 col-md-9 s_website_form"
+                                 data-vcss="001" data-snippet="s_website_form">
+                            <div class="container">
+                                <form id="hr_recruitment_form"
+                                      action="/website/form/" method="post"
+                                      enctype="multipart/form-data"
+                                      class="o_mark_required row"
+                                      data-mark="*"
+                                      data-model_name="hr.applicant"
+                                      data-success-mode="redirect"
+                                      data-success-page="/recruitment"
+                                      hide-change-model="true">
+                                    <div class="s_website_form_rows row s_col_no_bgcolor">
+                                        <div class="col-12 mb-0 py-2 s_website_form_field s_website_form_dnone">
+                                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                <input id="recruitment7"
+                                                       type="hidden"
+                                                       class="form-control s_website_form_input"
+                                                       name="job_id"/>
+                                            </div>
+                                        </div>
+                                        <div class="s_website_form_field mb-3 col-6 s_website_form_required"
+                                             data-type="char" data-name="Field">
+                                            <label class="col-form-label col-sm-auto s_website_form_label"
+                                                   for="title"
+                                                   style="font-size: 16px;">
+                                                <span class="s_website_form_label_content">
+                                                    Title
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="title"
+                                                    name="title"
+                                                    class="form-control"
+                                                    required="1">
+                                                <option value="">Choose Title...</option>
+                                                <option value="Mr">Mr</option>
+                                                <option value="Mrs">Mrs</option>
+                                                <option value="Miss">Miss</option>
+                                                <option value="Ms">Ms</option>
+                                                <option value="Dr">Dr</option>
+                                                <option value="Prof">Prof</option>
+                                            </select>
+                                        </div>
+                                        <div class="s_website_form_field mb-3 col-6 s_website_form_required"
+                                             data-type="char" data-name="Field">
+                                            <label class="col-form-label col-sm-auto s_website_form_label"
+                                                   for="initial">
+                                                <span class="s_website_form_label_content">
+                                                    Initial
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input class="form-control s_website_form_input"
+                                                   type="text"
+                                                   name="initial"
+                                                   required="1"
+                                                   placeholder="null"
+                                                   id="initial"
+                                                   data-fill-with="initial"
+                                            />
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required s_website_form_model_required"
+                                             data-type="char" data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="partner_name">
+                                                <span class="s_website_form_label_content">
+                                                    First Name
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="partner_name"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="partner_name"
+                                                   required=""
+                                                   data-fill-with="name"
+                                            />
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="surname"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="surname">
+                                                <span class="s_website_form_label_content">
+                                                    Last Name
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="surname"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="surname"
+                                                   required=""
+                                                   data-fill-with="surname"
+                                            />
+                                            <div class="alert alert-warning mt-2"
+                                                 id="email-message"
+                                                 style="display:none;"/>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="is_sa_citizen"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="is_sa_citizen">
+                                                <span class="s_website_form_label_content">
+                                                    Are you a South African Citizen ?
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="is_sa_citizen"
+                                                    class="form-control s_website_form_input"
+                                                    name="is_sa_citizen"
+                                                    required=""
+                                                    data-fill-with="is_sa_citizen">
+                                                <option value="by_birth">
+                                                    <!--                                                        t-att-selected="request.env['applicant.profile'].sudo().search([('user_id', '=', request.env.user.id)],limit=1).disability == 'no'">-->
+                                                    By Birth
+                                                </option>
+                                                <option value="by_naturalisation" selected="1">
+                                                    <!--                                                        t-att-selected="request.env['applicant.profile'].sudo().search([('user_id', '=', request.env.user.id)],limit=1).disability == 'yes'">-->
+                                                    By Naturalisation
+                                                </option>
+                                                <option value="no">
+                                                    <!--                                                        t-att-selected="request.env['applicant.profile'].sudo().search([('user_id', '=', request.env.user.id)],limit=1).disability == 'yes'">-->
+                                                    No
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field"
+                                             data-type="char" style="display:none;" id="sa_identity_number"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="sa_id_number">
+                                                <span class="s_website_form_label_content">
+                                                    Please provide your SA Identity Number
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="sa_id_number"
+                                                   type="text"
+                                                   class="form-control s_website_form_input" min="1"
+                                                   max="13"
+                                                   name="sa_id_number" placeholder="YYMMDDSSSSCAZ:"
+                                                   data-fill-with="sa_id_number"/>
+                                            <!--                                                   t-att-value="request.env['applicant.profile'].sudo().search([('user_id', '=', request.env.user.id)],limit=1).phone"/>-->
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field"
+                                             data-type="date" id="date_of_naturalisation"
+                                             data-name="naturalisation_date">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="naturalisation_date">
+                                                <span class="s_website_form_label_content">
+                                                    Please provide a date of naturalisation
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="naturalisation_date"
+                                                   type="date"
+                                                   class="form-control s_website_form_input"
+                                                   name="naturalisation_date"/>
+                                            <!--                                                   t-att-value="request.env['applicant.profile'].sudo().search([('user_id', '=', request.env.user.id)],limit=1).date_of_birth"/>-->
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field"
+                                             data-type="char" style="display:none;" id="passport_number"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="passport">
+                                                <span class="s_website_form_label_content">
+                                                    Please provide your Passport Number
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="passport"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="passport"
+                                                   data-fill-with="passport"/>
+                                        </div>
+
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="email"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="email_from">
+                                                <span class="s_website_form_label_content">
+                                                    Email
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="email_from"
+                                                   type="email"
+                                                   class="form-control s_website_form_input"
+                                                   name="email_from"
+                                                   required=""
+                                                   data-fill-with="email"
+                                            />
+                                            <div class="alert alert-warning mt-2"
+                                                 id="email-message"
+                                                 style="display:none;"/>
+                                        </div>
+
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="date_of_birth"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="date_of_birth">
+                                                <span class="s_website_form_label_content">
+                                                    Date of Birth
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="date_of_birth"
+                                                   type="date"
+                                                   class="form-control s_website_form_input"
+                                                   name="date_of_birth"
+                                                   required=""
+                                                   data-fill-with="date_of_birth"
+                                            />
+                                        </div>
+
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="country_id"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="country_id">
+                                                <span class="s_website_form_label_content">
+                                                    Nationality
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="country_id"
+                                                    name="country_id"
+                                                    class="form-control">
+                                                <t t-foreach="request.env['res.country'].sudo().search([])"
+                                                   t-as="country">
+                                                    <option t-att-value="country.id"
+                                                            t-att-selected="country.id == request.env.ref('base.za').id and 'selected'">
+                                                        <t t-esc="country.name"
+                                                        />
+                                                    </option>
+                                                </t>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="language_id"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="language_id">
+                                                <span class="s_website_form_label_content">
+                                                    Home Language
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select name="language_id"
+                                                    class="form-control">
+                                                <t t-foreach="request.env['res.lang'].sudo().search([])"
+                                                   t-as="language">
+                                                    <option t-att-value="language.id">
+                                                        <t t-esc="language.name or ''"/>
+                                                    </option>
+                                                </t>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="char"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="partner_phone">
+                                                <span class="s_website_form_label_content">
+                                                    Telephone
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="partner_phone"
+                                                   type="tel"
+                                                   class="form-control s_website_form_input"
+                                                   name="partner_phone"
+                                                   required=""
+                                                   data-fill-with="phone"
+                                            />
+                                        </div>
+
+
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="gender"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="id_number">
+                                                <span class="s_website_form_label_content">
+                                                    Gender
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="gender"
+                                                    class="form-control s_website_form_input"
+                                                    name="gender"
+                                                    required=""
+                                                    data-fill-with="gender"
+                                            >
+                                                <option value=""/>
+                                                <option value="female"
+                                                >
+                                                    Female
+                                                </option>
+                                                <option value="male"
+                                                >
+                                                    Male
+                                                </option>
+                                                <option value="other"
+                                                >
+                                                    Other
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="race"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="id_number">
+                                                <span class="s_website_form_label_content">
+                                                    Race
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="race"
+                                                    class="form-control s_website_form_input"
+                                                    name="race"
+                                                    required=""
+                                                    data-fill-with="race">
+                                                <option value=""/>
+                                                <option value="african"
+                                                >
+                                                    African
+                                                </option>
+                                                <option value="white"
+                                                >
+                                                    White
+                                                </option>
+                                                <option value="coloured"
+                                                >
+                                                    Coloured
+                                                </option>
+                                                <option value="indian"
+                                                >
+                                                    Indian
+                                                </option>
+                                                <option value="other"
+                                                >
+                                                    Other
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="disability"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="disability">
+                                                <span class="s_website_form_label_content">
+                                                    Disability
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="disability"
+                                                    class="form-control s_website_form_input"
+                                                    name="disability"
+                                                    required=""
+                                                    data-fill-with="disability">
+                                                <option value="no"
+                                                >
+                                                    No
+                                                </option>
+                                                <option value="yes"
+                                                >
+                                                    Yes
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-6 mb-0 py-2 s_website_form_field" style="display:none;"
+                                             data-type="disability_specify" id="desc_disability_visible"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="disability_specify">
+                                                <span class="s_website_form_label_content">
+                                                    If you selected "Yes" above, kindly specify the Disability
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="disability_specify"
+                                                    class="form-control s_website_form_input"
+                                                    name="disability_specify"
+                                                    data-fill-with="disability_specify">
+                                                <!--                                                <option value="" disabled selected>Please Select</option>-->
+                                                <option value="spinal_cord_injuries">Spinal cord injuries</option>
+                                                <option value="amputations">Amputations</option>
+                                                <option value="cerebral_palsy">Cerebral palsy</option>
+                                                <option value="muscular_dystrophy">Muscular dystrophy</option>
+                                                <option value="arthritis" selected="1">Arthritis</option>
+                                                <option value="multiple_sclerosis">Multiple sclerosis</option>
+                                                <option value="blindness">Blindness</option>
+                                                <option value="low_vision">Low vision</option>
+                                                <option value="deafness">Deafness</option>
+                                                <option value="hard_of_hearing">Hard of hearing</option>
+                                                <option value="balance_disorders">Balance disorders</option>
+                                                <option value="vestibular_dysfunction">Vestibular dysfunction</option>
+                                                <option value="down_syndrome">Down syndrome</option>
+                                                <option value="fragile_x_syndrome">Fragile X syndrome</option>
+                                                <option value="williams_syndrome">Williams syndrome</option>
+                                                <option value="autism_spectrum_disorder">Autism spectrum disorder
+                                                </option>
+                                                <option value="anxiety_disorders">Anxiety disorders</option>
+                                                <option value="depression">Depression</option>
+                                                <option value="bipolar_disorder">Bipolar disorder</option>
+                                                <option value="schizophrenia">Schizophrenia</option>
+                                                <option value="eating_disorders">Eating disorders</option>
+                                                <option value="dyslexia">Dyslexia</option>
+                                                <option value="dysgraphia">Dysgraphia</option>
+                                                <option value="dyscalculia">Dyscalculia</option>
+                                                <option value="auditory_processing_disorder">Auditory processing
+                                                    disorder
+                                                </option>
+                                                <option value="visual_processing_disorder">Visual processing disorder
+                                                </option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="source_id"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="source_id">
+                                                <span class="s_website_form_label_content">
+                                                    Source
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select name="source_id"
+                                                    class="form-control">
+                                                <t t-foreach="request.env['utm.source'].sudo().search([])"
+                                                   t-as="source">
+                                                    <option t-att-value="source.id">
+                                                        <t t-esc="source.name or ''"/>
+                                                    </option>
+                                                </t>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="current_salary"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="current_salary">
+                                                <span class="s_website_form_label_content">
+                                                    Current Salary (Total cost
+                                                    to company)
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="current_salary"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="current_salary"
+                                                   data-fill-with="current_salary"
+                                            />
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="higher_qualification"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="higher_qualification">
+                                                <span class="s_website_form_label_content">
+                                                    Higher Educational Qualification
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="higher_qualification"
+                                                    class="form-control s_website_form_input"
+                                                    name="higher_qualification"
+                                                    required=""
+                                                    data-fill-with="higher_qualification">
+                                                <option value="grade_8">Grade 8</option>
+                                                <option value="grade_9">Grade 9</option>
+                                                <option value="grade_10">Grade 10</option>
+                                                <option value="grade_11">Grade 11</option>
+                                                <option value="grade_12">Grade 12</option>
+                                                <option value="national">National Certificate (NFQ Level 4)</option>
+                                                <option value="higher">Higher Certificate (NFQ Level 5)</option>
+                                                <option value="diploma">Diploma / Advanced Certificate (NFQ Level 6)
+                                                </option>
+                                                <option value="bachelor">Bachelor's Degree / Advanced Diploma (NFQ Level
+                                                    7)
+                                                </option>
+                                                <option value="honours">Bachelor Honours Degree / Postgraduate Diploma /
+                                                    Bachelor's Degree (NFQ Level 8)
+                                                </option>
+                                                <option value="master">Master's Degree (NFQ Level 9)</option>
+                                                <option value="doctoral">Doctoral Degree (NFQ Level 10)</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="other_higher_qualification" style="display:none;" id="other_higher_qualification"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="other_higher_qualification">
+                                                <span class="s_website_form_label_content">
+                                                    If you have selected "other" (Highest qualification/s), provide your
+                                                    highest qualification here
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="other_higher_qualification"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="other_higher_qualification"
+                                                   data-fill-with="other_higher_qualification"
+                                            />
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="Char" data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   style="width: 200px"
+                                                   for="field_study">
+                                                <span class="s_website_form_label_content">
+                                                    Field of Study
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="field_study"
+                                                    class="form-control s_website_form_input"
+                                                    name="field_study"
+                                                    required=""
+                                                    data-fill-with="field_study">
+                                                <option label="Agriculture" value="Agriculture">Agriculture</option>
+                                                <option label="Architecture" value="Architecture">Architecture</option>
+                                                <option label="Arts" value="Arts">Arts</option>
+                                                <option label="Business Administration" value="Business Administration">
+                                                    Business Administration
+                                                </option>
+                                                <option label="Business Management" value="Business Management">Business
+                                                    Management
+                                                </option>
+                                                <option label="Commerce" value="Commerce">Commerce</option>
+                                                <option label="Communication and Journalism"
+                                                        value="Communication and Journalism">Communication and
+                                                    Journalism
+                                                </option>
+                                                <option label="Education" value="Education">Education</option>
+                                                <option label="Engineering" value="Engineering">Engineering</option>
+                                                <option label="Environmental Science" value="Environmental Science">
+                                                    Environmental Science
+                                                </option>
+                                                <option label="Finance" value="Finance">Finance</option>
+                                                <option label="Graphic Design" value="Graphic Design">Graphic Design
+                                                </option>
+                                                <option label="Health" value="Health">Health</option>
+                                                <option label="Human Resources" value="Human Resources">Human
+                                                    Resources
+                                                </option>
+                                                <option label="Information Technology" value="Information Technology">
+                                                    Information Technology
+                                                </option>
+                                                <option label="Languages" value="Languages">Languages</option>
+                                                <option label="Legal" value="Legal">Legal</option>
+                                                <option label="NQF Level 2" value="NQF Level 2">NQF Level 2</option>
+                                                <option label="NQF Level 3" value="NQF Level 3">NQF Level 3</option>
+                                                <option label="NQF Level 4" value="NQF Level 4">NQF Level 4</option>
+                                                <option label="NQF Level 5" value="NQF Level 5">NQF Level 5</option>
+                                                <option label="NQF Level 6" value="NQF Level 6">NQF Level 6</option>
+                                                <option label="NQF Level 7" value="NQF Level 7">NQF Level 7</option>
+                                                <option label="NQF Level 8" value="NQF Level 8">NQF Level 8</option>
+                                                <option label="NQF Level 9" value="NQF Level 9">NQF Level 9</option>
+                                                <option label="NQF Level 10" value="NQF Level 10">NQF Level 10</option>
+                                                <option label="Public Relations" value="Public Relations">Public
+                                                    Relations
+                                                </option>
+                                                <option label="Social Science" value="Social Science">Social Science
+                                                </option>
+                                                <option label="TV &amp; Radio" value="TV &amp; Radio">TV &amp;amp;
+                                                    Radio
+                                                </option>
+                                                <option label="Transport" value="Transport">Transport</option>
+                                                <option label="Urban Planning" value="Urban Planning">Urban Planning
+                                                </option>
+                                                <option label="Other" value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="other_field_study" style="display:none;" id="other_field_study"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="other_field_study">
+                                                <span class="s_website_form_label_content">
+                                                    If you have selected "other" (Field of Study/s), provide your field
+                                                    of study here
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="other_field_study"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="other_field_study"
+                                                   data-fill-with="other_field_study"
+                                            />
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="char"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="award_sanction">
+                                                <span class="s_website_form_label_content">
+                                                    Award/Sanction
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="award_sanction"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="award_sanction"
+                                                   data-fill-with="award_sanction"/>
+                                            <!--                                                   t-att-value="request.env['applicant.profile'].sudo().search([('user_id', '=', request.env.user.id)],limit=1).phone"/>-->
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="criminal_record"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="criminal_record">
+                                                <span class="s_website_form_label_content">
+                                                    Do you have a criminal record?
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="criminal_record"
+                                                    class="form-control s_website_form_input"
+                                                    name="criminal_record"
+                                                    required=""
+                                                    data-fill-with="criminal_record">
+                                                <option value="yes">Yes</option>
+                                                <option value="no" selected="1">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field"
+                                             data-type="char" style="display:none;" id="type_criminal_act"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="criminal_act_type">
+                                                <span class="s_website_form_label_content">
+                                                    If yes, type of criminal act
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="criminal_act_type"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="criminal_act_type"
+                                                   data-fill-with="criminal_act_type"/>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="criminal_case_date" style="display:none;"
+                                             id="criminal_case_finalised_date"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="criminal_case_date">
+                                                <span class="s_website_form_label_content">
+                                                    Date of criminal case finalised
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="criminal_case_date"
+                                                   type="date"
+                                                   class="form-control s_website_form_input"
+                                                   name="criminal_case_date"
+                                                   data-fill-with="criminal_case_date"/>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="char" style="display:none;" id="criminal_outcome_judgment"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="outcome_judgment">
+                                                <span class="s_website_form_label_content">
+                                                    Outcome/Judgment
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="outcome_judgment"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="outcome_judgment"
+                                                   data-fill-with="outcome_judgment"/>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="relocate"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="relocate">
+                                                <span class="s_website_form_label_content">
+                                                    Willing to Relocate
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="relocate"
+                                                    class="form-control s_website_form_input"
+                                                    name="relocate"
+                                                    required=""
+                                                    data-fill-with="relocate">
+                                                <option value=""/>
+                                                <option value="yes"
+                                                >
+                                                    Yes
+                                                </option>
+                                                <option value="no"
+                                                >
+                                                    No
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="notice_period"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="notice_period">
+                                                <span class="s_website_form_label_content">
+                                                    Notice Period
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="notice_period"
+                                                    class="form-control s_website_form_input"
+                                                    name="notice_period"
+                                                    required=""
+                                                    data-fill-with="notice_period">
+                                                <option value=""/>
+                                                <option value="days"
+                                                >
+                                                    30 Days
+                                                </option>
+                                                <option value="month"
+                                                >
+                                                    1 Calender Month
+                                                </option>
+                                                <option value="immediate"
+                                                >
+                                                    Immediately
+                                                </option>
+                                                <option value="other"
+                                                >
+                                                    other
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="employee_status"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="employee_status">
+                                                <span class="s_website_form_label_content">
+                                                    Employee Status
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="employee_status"
+                                                    class="form-control s_website_form_input"
+                                                    name="employee_status"
+                                                    required=""
+                                                    data-fill-with="employee_status">
+                                                <option value=""/>
+                                                <option value="internal"
+                                                >
+                                                    Internal
+                                                </option>
+                                                <option value="external"
+                                                >
+                                                    External
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="employee_no"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="employee_no">
+                                                <span class="s_website_form_label_content">
+                                                    If you are an internal applicant, please provide your employee no
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="employee_no"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="employee_no"
+                                                   data-fill-with="employee_no"
+                                            />
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="work_experience"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="notice_period">
+                                                <span class="s_website_form_label_content">
+                                                    Work Experience
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="work_experience"
+                                                    class="form-control s_website_form_input"
+                                                    name="work_experience"
+                                                    required="1"
+                                                    data-fill-with="work_experience">
+                                                <option value=""/>
+                                                <option value="1_5">
+                                                    1-5 Years
+                                                </option>
+                                                <option value="6_10">
+                                                    6-10 Years
+                                                </option>
+                                                <option value="11_15">
+                                                    11-15 Years
+                                                </option>
+                                                <option value="16_20">
+                                                    16-20 Years
+                                                </option>
+                                                <option value="21_25">
+                                                    21-25 Years
+                                                </option>
+                                                <option value="26_30">
+                                                    26-30 Years
+                                                </option>
+                                                <option value="30_above">
+                                                    30-above
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="last_role"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="last_role">
+                                                <span class="s_website_form_label_content">
+                                                    Last/current role &amp;
+                                                    Company with time period
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="last_role"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="last_role"
+                                                   required="1"
+                                                   data-fill-with="last_role"/>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="exp_by_role"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="exp_by_role">
+                                                <span class="s_website_form_label_content">
+                                                    Number of years of
+                                                    experience in different
+                                                    roles/fields if any - Please
+                                                    specify
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="exp_by_role"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="exp_by_role"
+                                                   required="1"
+                                                   data-fill-with="exp_by_role"/>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="have_honours"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="have_honours">
+                                                <span class="s_website_form_label_content">
+                                                    Do you have honours?
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="have_honours"
+                                                    class="form-control s_website_form_input"
+                                                    name="have_honours"
+                                                    required=""
+                                                    data-fill-with="have_honours">
+                                                <option value=""/>
+                                                <option value="yes">
+                                                    Yes
+                                                </option>
+                                                <option value="no">
+                                                    No
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="have_master"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="have_master">
+                                                <span class="s_website_form_label_content">
+                                                    Do you have Masters?
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="have_master"
+                                                    class="form-control s_website_form_input"
+                                                    name="have_master"
+                                                    data-fill-with="have_master">
+                                                <option value=""/>
+                                                <option value="yes">
+                                                    Yes
+                                                </option>
+                                                <option value="no">
+                                                    No
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="professional_body"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="professional_body">
+                                                <span class="s_website_form_label_content">
+                                                    Are registered with any
+                                                    professional body?
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <select id="professional_body"
+                                                    class="form-control s_website_form_input"
+                                                    name="professional_body"
+                                                    data-fill-with="professional_body">
+                                                <option value=""/>
+                                                <option value="yes">
+                                                    Yes
+                                                </option>
+                                                <option value="no">
+                                                    No
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="char"
+                                             data-name="Field">
+                                            <label class="col-4 col-sm-auto s_website_form_label"
+                                                   for="profile_description">
+                                                <span class="s_website_form_label_content">
+                                                    Brief description of your profile
+                                                </span>
+                                                <span class="s_website_form_mark">
+                                                    *
+                                                </span>
+                                            </label>
+                                            <input id="profile_description"
+                                                   type="text"
+                                                   class="form-control s_website_form_input"
+                                                   name="profile_description"
+                                                   required=""
+                                                   data-fill-with="profile_description"/>
+                                            <!--                                                   t-att-value="request.env['applicant.profile'].sudo().search([('user_id', '=', request.env.user.id)],limit=1).phone"/>-->
+                                        </div>
+
+                                        <div id="skills_container">
+                                                <div class="skill-row mb-3">
+                                                    <!-- &lt;!&ndash; Skill Type &ndash;&gt; -->
+                                                    <label class="col-4 col-sm-auto s_website_form_label"
+                                                            for="skill_type">
+                                                        <span class="s_website_form_label_content">
+                                                            Skill Type
+                                                        </span>
+                                                        <span class="s_website_form_mark">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <select id="skill_type" name="skill_type[]"
+                                                            class="form-control skill-type" data-fill-with="skill_type"
+                                                            required="required">
+                                                        <option value=""/>
+                                                        <t t-foreach="request.env['hr.skill.type'].sudo().search([])"
+                                                            t-as="skill_type">
+                                                            <option t-att-value="skill_type.id">
+                                                                <t t-esc="skill_type.name"/>
+                                                            </option>
+                                                        </t>
+                                                    </select>
+
+    <!--                                                &lt;!&ndash; Skills &ndash;&gt;-->
+                                                    <label class="col-4 col-sm-auto s_website_form_label"
+                                                            for="skill_ids">
+                                                        <span class="s_website_form_label_content">
+                                                            Skill
+                                                        </span>
+                                                        <span class="s_website_form_mark">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <select id="skill_ids" name="skill_ids[]" class="form-control skill"
+                                                            data-fill-with="skill_ids" required="" disabled="disabled">
+                                                        <option value="">Select Skill</option>
+                                                    </select>
+
+    <!--                                                &lt;!&ndash; Level &ndash;&gt;-->
+                                                    <label class="col-4 col-sm-auto s_website_form_label"
+                                                            for="skill_level_ids">
+                                                        <span class="s_website_form_label_content">
+                                                            Level
+                                                        </span>
+                                                        <span class="s_website_form_mark">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <select id="skill_level_ids" name="skill_level_ids[]"
+                                                            class="form-control level" data-fill-with="skill_level_ids"
+                                                            required="required" disabled="disabled">
+                                                        <option value="">Select Level</option>
+                                                    </select>
+
+                                                    <button type="button" class="btn btn-danger remove-row mt-2">Remove
+                                                    </button>
+
+                                                </div>
+
+                                            </div>
+
+                                            <button type="button" id="add_skill_row" class="btn btn-primary mt-2">
+                                                Add Skill
+                                            </button>
+
+
+
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function () {
+                                                    const container = document.getElementById('skills_container');
+                                                    const addBtn = document.getElementById('add_skill_row');
+                                                    const form = document.getElementById('hr_recruitment_form');
+
+                                                    function validateSkills() {
+                                                        const rows = container.querySelectorAll('.skill-row');
+                                                        let valid = true;
+
+                                                        container.querySelectorAll('.skill-error').forEach(el => el.remove());
+                                                        container.querySelectorAll('select').forEach(el => el.style.borderColor = '');
+
+                                                        rows.forEach(function (row, index) {
+                                                            const skillType = row.querySelector('.skill-type');
+                                                            const skillSel = row.querySelector('.skill');
+                                                            const levelSel = row.querySelector('.level');
+
+                                                            if (!skillType.value) {
+                                                                skillType.style.borderColor = 'red';
+                                                                skillType.style.outline = '1px solid red';
+                                                                valid = false;
+                                                            }
+                                                            if (!skillSel.value) {
+                                                                skillSel.style.borderColor = 'red';
+                                                                skillSel.style.outline = '1px solid red';
+                                                                valid = false;
+                                                            }
+                                                            if (!levelSel.value) {
+                                                                levelSel.style.borderColor = 'red';
+                                                                levelSel.style.outline = '1px solid red';
+                                                                valid = false;
+                                                            }
+                                                        });
+
+                                                        return valid;
+                                                    }
+
+                                                    const applyBtn = document.getElementById('apply-btn');
+
+                                                    applyBtn.addEventListener('click', function (e) {
+                                                        const skillsValid = validateSkills();
+                                                        if (!skillsValid) {
+                                                            e.preventDefault();
+                                                            e.stopImmediatePropagation();
+
+                                                            const warning = document.getElementById('warning-message');
+                                                            if (warning) {
+                                                                warning.textContent = 'Please complete all Skill Type, Skill, and Level fields.';
+                                                                warning.classList.remove('d-none');
+                                                            }
+
+                                                            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                        } else {
+                                                            const warning = document.getElementById('warning-message');
+                                                            if (warning) warning.classList.add('d-none');
+
+                                                            container.querySelectorAll('select').forEach(el => {
+                                                                el.style.borderColor = '';
+                                                                el.style.outline = '';
+                                                            });
+                                                        }
+                                                    }, true);
+
+                                                    if (form) {
+                                                        form.addEventListener('submit', function (e) {
+                                                            if (!validateSkills()) {
+                                                                e.preventDefault();
+                                                                e.stopImmediatePropagation();
+                                                                const warning = document.getElementById('warning-message');
+                                                                if (warning) {
+                                                                    warning.textContent = 'Please complete all Skill Type, Skill, and Level fields.';
+                                                                    warning.classList.remove('d-none');
+                                                                }
+                                                                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                            }
+                                                        }, true);
+                                                    }
+
+                                                    addBtn.addEventListener('click', function () {
+                                                        const firstRow = container.querySelector('.skill-row');
+                                                        const newRow = firstRow.cloneNode(true);
+
+                                                        newRow.querySelectorAll('select').forEach(el => {
+                                                            el.innerHTML = '<option value="">Select...</option>';
+                                                            el.disabled = true;
+                                                            el.style.borderColor = '';
+                                                            el.style.outline = '';
+                                                        });
+
+                                                        newRow.querySelector('.skill-type').innerHTML = firstRow.querySelector('.skill-type').innerHTML;
+                                                        newRow.querySelector('.skill-type').disabled = false;
+
+                                                        container.appendChild(newRow);
+                                                    });
+
+                                                    container.addEventListener('click', function (e) {
+                                                        if (e.target.classList.contains('remove-row')) {
+                                                            if (container.querySelectorAll('.skill-row').length > 1) {
+                                                                e.target.closest('.skill-row').remove();
+                                                            }
+                                                        }
+                                                    });
+
+                                                    container.addEventListener('change', function (e) {
+                                                        const row = e.target.closest('.skill-row');
+
+                                                        e.target.style.borderColor = '';
+                                                        e.target.style.outline = '';
+
+                                                        if (e.target.classList.contains('skill-type')) {
+                                                            const skillTypeId = e.target.value;
+                                                            const skillSelect = row.querySelector('.skill');
+                                                            const levelSelect = row.querySelector('.level');
+
+                                                            skillSelect.innerHTML = '<option value="">Loading...</option>';
+                                                            levelSelect.innerHTML = '<option value="">Select Skill First</option>';
+                                                            levelSelect.disabled = true;
+
+                                                            fetch('/get/skills', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({
+                                                                    jsonrpc: "2.0",
+                                                                    method: "call",
+                                                                    params: { skill_type_id: skillTypeId },
+                                                                    id: Date.now()
+                                                                })
+                                                            })
+                                                            .then(res => res.json())
+                                                            .then(data => {
+                                                                skillSelect.innerHTML = '<option value="">Select Skill</option>';
+                                                                data.result.forEach(skill => {
+                                                                    skillSelect.innerHTML += `<option value="${skill.id}">${skill.name}</option>`;
+                                                                });
+                                                                skillSelect.disabled = false;
+                                                            });
+                                                        }
+
+                                                        if (e.target.classList.contains('skill')) {
+                                                            const skillId = e.target.value;
+                                                            const levelSelect = row.querySelector('.level');
+
+                                                            levelSelect.innerHTML = '<option>Loading...</option>';
+
+                                                            fetch('/get/skill/levels', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({
+                                                                    jsonrpc: "2.0",
+                                                                    method: "call",
+                                                                    params: { skill_id: skillId },
+                                                                    id: Date.now()
+                                                                })
+                                                            })
+                                                            .then(res => res.json())
+                                                            .then(data => {
+                                                                levelSelect.innerHTML = '<option value="">Select Level</option>';
+                                                                data.result.forEach(level => {
+                                                                    levelSelect.innerHTML += `<option value="${level.id}">${level.name}</option>`;
+                                                                });
+                                                                levelSelect.disabled = false;
+                                                            });
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+
+                                        <div class="col-12 mt-4 mb-0 py-2 s_website_form_field s_website_form_custom"
+                                             data-type="binary"
+                                             data-name="Field">
+                                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                <label class="col-4 col-sm-auto s_website_form_label"
+                                                       style="width: 200px"
+                                                       for="recruitment6">
+                                                    <span class="s_website_form_label_content">
+                                                        CV
+                                                    </span>
+                                                </label>
+                                                <div class="col-sm">
+                                                    <input id="recruitment6"
+                                                           type="file"
+                                                           class="form-control s_website_form_input o_resume_input"
+                                                           required=""
+                                                           name="Resume"/>
+                                                    <span class="text-muted small">
+                                                        maximum allowed file
+                                                        size
+                                                        is 4 MB
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-0 py-2 s_website_form_field s_website_form_custom"
+                                             data-type="binary"
+                                             data-name="Field">
+                                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                <label class="col-4 col-sm-auto s_website_form_label"
+                                                       style="width: 200px"
+                                                       for="recruitment6">
+                                                    <span class="s_website_form_label_content">
+                                                        Picture
+                                                    </span>
+                                                </label>
+                                                <div class="col-sm">
+                                                    <input id="recruitment6"
+                                                           type="file"
+                                                           required="required"
+                                                           class="form-control s_website_form_input o_resume_input"
+                                                           name="picture"/>
+                                                    <span class="text-muted small">
+                                                        maximum allowed file
+                                                        size
+                                                        is 4 MB
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-0 py-2 s_website_form_field s_website_form_custom"
+                                             data-type="binary"
+                                             data-name="Field">
+                                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                <label class="col-4 col-sm-auto s_website_form_label"
+                                                       style="width: 200px"
+                                                       for="recruitment6">
+                                                    <span class="s_website_form_label_content">
+                                                        Copy of
+                                                        Qualification
+                                                    </span>
+                                                </label>
+                                                <div class="col-sm">
+                                                    <input id="recruitment6"
+                                                           type="file"
+                                                           class="form-control s_website_form_input o_resume_input"
+                                                           required=""
+                                                           name="qualification_copy"/>
+                                                    <span class="text-muted small">
+                                                        maximum allowed file
+                                                        size
+                                                        is 4 MB
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-0 py-2 s_website_form_field s_website_form_custom"
+                                             data-type="binary"
+                                             data-name="Field">
+                                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                <label class="col-4 col-sm-auto s_website_form_label"
+                                                       style="width: 200px"
+                                                       for="recruitment6">
+                                                    <span class="s_website_form_label_content">
+                                                        Copy of ID /
+                                                        Passport /
+                                                        Visa Number
+                                                    </span>
+                                                </label>
+                                                <div class="col-sm">
+                                                    <input id="recruitment6"
+                                                           type="file"
+                                                           required="required"
+                                                           class="form-control s_website_form_input o_resume_input"
+                                                           name="qualification_copy"/>
+                                                    <span class="text-muted small">
+                                                        maximum allowed file
+                                                        size
+                                                        is 4 MB
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-0 py-2 s_website_form_field s_website_form_required"
+                                             data-type="boolean"
+                                             data-name="Field">
+                                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                <label class="col-6 md-4 col-sm-auto s_website_form_label"
+                                                       for="terms_conditions">
+                                                    <span class="s_website_form_label_content">
+                                                        <a href="/terms-and-conditions"
+                                                           target="_blank">Do
+                                                            you agree to
+                                                            terms and
+                                                            conditions?
+                                                        </a>
+                                                    </span>
+                                                    <span class="s_website_form_mark">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <div class="col-sm"
+                                                     style="padding-left: 0;">
+                                                    <input type="checkbox"
+                                                           value="Yes"
+                                                           class="s_website_form_input"
+                                                           name="terms_conditions"
+                                                           id="terms_conditions"
+                                                           required="1"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--                                        <t t-if="job.question_and_page_ids">-->
+                                        <div class="col-12 s_website_form_submit mb64"
+                                            data-name="Submit Button">
+                                            <div class="alert alert-warning mt-2 d-none" id="warning-message"></div>
+                                            <div style="width: 200px"
+                                                class="s_website_form_label"/>
+                                            <a role="button"
+                                              class="btn btn-primary btn-lg s_website_form_send"
+                                              id="apply-btn">Next
+                                            </a>
+                                            <span id="s_website_form_result"></span>
+                                        </div>
+                                        <!--                                        </t>-->
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="oe_structure mt-2"/>
+            </div>
+        </t>
+    </template>
+    <record id="website_hr_recruitment.thankyou" model="website.page">
+        <field name="url">/job-thank-you</field>
+        <field name="is_published">True</field>
+        <field name="website_indexed" eval="False"/>
+        <field name="name">Thank you (Recruitment)</field>
+        <field name="type">qweb</field>
+        <field name="key">website_hr_recruitment.thankyou</field>
+        <field name="arch" type="xml">
+            <t name="Thank you (Recruitment)"
+               t-name="website_hr_recruitment.thankyou">
+                <t t-if="request.session.get('form_builder_model_model', '') == 'hr.applicant'">
+                    <t t-set="job_sudo"
+                       t-value="request.website._website_form_last_record().sudo().job_id"/>
+                </t>
+                <t t-call="website.layout">
+                    <div id="wrap">
+                        <div class="oe_structure"/>
+                        <div id="jobs_thankyou" class="container">
+                            <div class="row pt24 pb24">
+                                <div class="col pt24 pb24 text-center">
+                                    <h1 class="fw-bolder">Congratulations!</h1>
+                                    <p class="fw-light pb24">
+                                        Your application has been posted
+                                        successfully,
+                                        <br class="mb-2"/>
+                                        We usually respond within 3 days...
+                                    </p>
+                                    <img class="img-fluid o_we_custom_image"
+                                         t-attf-style="width:{{ '50%' if (job_sudo and job_sudo.user_id) else '25%' }} !important;"
+                                         src="/recruitment_enhancement/static/src/img/brand_icon.svg"
+                                         alt="Congratulations!"/>
+                                    <div class="row"
+                                         id="o_recruitment_thank_cta">
+                                        <div class="col-lg-12 text-center mt32 mb48">
+                                            <p>
+                                                <span class="h5 fw-light">In the
+                                                    meantime,
+                                                </span>
+                                                <br/>
+                                                <span class="h3 mt8 mb32 fw-bold">
+                                                    Take a look around our
+                                                    website:
+                                                </span>
+                                            </p>
+                                            <a role="button" href="/"
+                                               class="btn btn-primary btn-lg">
+                                                Home
+                                            </a>
+                                            <a role="button" href="/"
+                                               class="btn btn-primary btn-lg ms-3">
+                                                About Us
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="oe_structure"/>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+    <record id="menu_job_application" model="website.menu">
+        <field name="name">Jobs</field>
+        <field name="url">/jobs</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">5</field>
+    </record>
+</odoo>
+

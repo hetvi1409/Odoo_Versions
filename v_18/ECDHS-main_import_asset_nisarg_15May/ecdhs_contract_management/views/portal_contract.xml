@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Public provider portal – shown at /contract/review/<id>/<token>
+        No login required.  Token-authenticated, read-only contract view
+        with a provider signature form for pending sections.
+    -->
+    <template id="portal_contract_review" name="Contract Review Portal">
+        <html lang="en">
+        <head>
+            <meta charset="utf-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <title><t t-out="contract.name"/> - Contract Review</title>
+            <style>
+                *,*::before,*::after{box-sizing:border-box}
+                body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6f9;color:#222;margin:0;padding:0}
+                .wrap{max-width:900px;margin:32px auto;padding:0 16px 48px}
+                .hdr{background:#0f4c81;color:#fff;border-radius:8px 8px 0 0;padding:24px 28px 18px}
+                .hdr h1{margin:0 0 4px;font-size:1.45rem}
+                .hdr .sub{opacity:.85;font-size:.9rem}
+                .card{background:#fff;border:1px solid #dde3ea;border-radius:0 0 8px 8px;padding:24px 28px;margin-bottom:24px}
+                .sec{margin-bottom:24px}
+                .sec h3{font-size:1rem;margin:0 0 10px;color:#0f4c81;border-bottom:1px solid #e2e8f0;padding-bottom:5px}
+                dl.meta{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;font-size:.88rem}
+                dl.meta dt{color:#666;text-transform:uppercase;font-size:.74rem;letter-spacing:.05em;margin:0 0 2px}
+                dl.meta dd{font-weight:600;margin:0 0 10px}
+                .terms-box{border:1px solid #dde3ea;border-radius:6px;padding:16px;background:#fafbfc;max-height:480px;overflow-y:auto;font-size:.9rem;line-height:1.6}
+                table.tbl{width:100%;border-collapse:collapse;font-size:.87rem}
+                .tbl th{background:#f0f4f8;text-align:left;padding:7px 10px;border-bottom:2px solid #cdd5df}
+                .tbl td{padding:7px 10px;border-bottom:1px solid #e8ecf0;vertical-align:middle}
+                .tbl tr:last-child td{border-bottom:none}
+                .b-signed{background:#d1fae5;color:#065f46;border-radius:10px;padding:2px 9px;font-size:.77rem;font-weight:700}
+                .b-pending{background:#fef3c7;color:#92400e;border-radius:10px;padding:2px 9px;font-size:.77rem;font-weight:700}
+                .b-na{background:#f1f5f9;color:#64748b;border-radius:10px;padding:2px 9px;font-size:.77rem}
+                .alert{border-radius:6px;padding:12px 16px;margin-bottom:18px;font-size:.9rem}
+                .alert.err{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b}
+                .alert.ok{background:#f0fdf4;border:1px solid #86efac;color:#166534}
+                .alert.inf{background:#eff6ff;border:1px solid #93c5fd;color:#1e40af}
+                .alert.warn{background:#fffbeb;border:1px solid #fcd34d;color:#78350f}
+                .alert.danger{background:#fff1f2;border:1px solid #fda4af;color:#881337}
+                .signform{background:#f8fafc;border:1px solid #dde3ea;border-radius:8px;padding:22px 24px}
+                .signform label{display:block;font-weight:600;margin-bottom:6px;font-size:.9rem}
+                .signform input{width:100%;border:1px solid #94a3b8;border-radius:5px;padding:9px 13px;font-size:.97rem;margin-bottom:14px}
+                .signform input:focus{outline:none;border-color:#0f4c81;box-shadow:0 0 0 3px rgba(15,76,129,.15)}
+                .btn{display:inline-block;padding:10px 26px;border-radius:5px;font-weight:600;font-size:.93rem;cursor:pointer;border:none;background:#0f4c81;color:#fff}
+                .btn:hover{background:#0a3a6a}
+                .footer{margin-top:28px;text-align:center;color:#888;font-size:.75rem}
+                .state-badge{display:inline-block;border-radius:12px;padding:3px 12px;font-size:.78rem;font-weight:700;margin-top:10px;letter-spacing:.03em}
+                .state-not-sent{background:rgba(255,255,255,.15);color:#e2e8f0}
+                .state-sent{background:#bfdbfe;color:#1e3a8a}
+                .state-changes{background:#fef08a;color:#713f12}
+                .state-accepted{background:#bbf7d0;color:#14532d}
+                .state-rejected{background:#fecaca;color:#7f1d1d}
+            </style>
+        </head>
+        <body>
+        <div class="wrap">
+
+            <div class="hdr">
+                <div class="sub">Eastern Cape Department of Human Settlements</div>
+                <h1><t t-out="contract.name"/></h1>
+                <div class="sub"><t t-out="contract.subject"/></div>
+                <div>
+                    <t t-set="_rs" t-value="contract.provider_review_state"/>
+                    <t t-set="_rs_css" t-value="'state-sent' if _rs in ('sent_for_review','revised_sent') else 'state-changes' if _rs == 'provider_changes_requested' else 'state-accepted' if _rs == 'provider_accepted' else 'state-rejected' if _rs == 'provider_rejected' else 'state-not-sent'"/>
+                    <span t-attf-class="state-badge #{_rs_css}">&#128203; Review Status: <t t-out="dict(contract._fields['provider_review_state'].selection).get(_rs, _rs)"/></span>
+                </div>
+            </div>
+
+            <div class="card">
+
+                <!-- Feedback banners -->
+                <t t-if="error">
+                    <div class="alert err"><strong>Error:</strong> <t t-out="error"/></div>
+                </t>
+                <t t-if="success">
+                    <div class="alert ok">&#10003; <t t-out="success"/></div>
+                </t>
+                <t t-if="all_provider_signed and not success">
+                    <div class="alert inf">
+                        &#10003; All required sections have been signed. Thank you,
+                        <strong><t t-out="provider_signed[0].provider_signatory_name if provider_signed else contract.service_provider_id.name"/></strong>.
+                    </div>
+                </t>
+                <t t-if="changes_pending and not success">
+                    <div class="alert warn">
+                        <strong>&#9888;&#65039; Change Request Submitted — Awaiting Revised Draft</strong><br/>
+                        Your change request has been received and is under review by the ECDHS team.
+                        Rejection is disabled until a revised draft is sent to you.
+                    </div>
+                </t>
+                <t t-if="draft_rejected and not success">
+                    <div class="alert danger">
+                        <strong>&#10060; Draft Rejected</strong><br/>
+                        You have rejected this draft contract.
+                        The ECDHS team will contact you regarding next steps.
+                        No further actions are available on this draft.
+                    </div>
+                </t>
+
+                <!-- Contract metadata -->
+                <div class="sec">
+                    <h3>Contract Details</h3>
+                    <dl class="meta">
+                        <dt>Contract Reference</dt><dd><t t-out="contract.name"/></dd>
+                        <dt>Contract Type</dt><dd><t t-out="dict(contract._fields['contract_type'].selection).get(contract.contract_type, contract.contract_type)"/></dd>
+                        <dt>Service Provider</dt><dd><t t-out="contract.service_provider_id.name"/></dd>
+                        <dt>End-User Department</dt><dd><t t-out="contract.end_user_department_id.name or '\u2014'"/></dd>
+                        <dt>Contract Start</dt><dd><t t-out="contract.date_start"/></dd>
+                        <dt>Contract End</dt><dd><t t-out="contract.date_end or ('No Fixed End Date' if contract.is_indefinite else '\u2014')"/></dd>
+                        <dt>Total Contract Value</dt><dd>R <t t-out="'{:,.2f}'.format(contract.original_contract_value or contract.contract_value or 0)"/></dd>
+                        <dt>Draft Version</dt><dd>v<t t-out="contract.draft_version"/></dd>
+                    </dl>
+                </div>
+
+                <!-- Contract terms (HTML field, sanitise-safe via t-out) -->
+                <div class="sec">
+                    <h3>Draft Contract Terms and Working Arrangements</h3>
+                    <t t-if="contract.contract_terms_summary">
+                        <div class="terms-box">
+                            <t t-out="contract.contract_terms_summary"/>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <p style="color:#888;">No contract terms have been drafted yet.</p>
+                    </t>
+                </div>
+
+                <!-- Section Signatures table – DISABLED: providers no longer sign individual sections -->
+                <!--
+                <div class="sec">
+                    <h3>Section Signatures</h3>
+                    <table class="tbl">
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Section</th><th>Reference</th>
+                                <th>Provider Signature</th><th>Signed By / Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="all_sections" t-as="sec">
+                                <tr>
+                                    <td><t t-out="sec_index + 1"/></td>
+                                    <td><t t-out="sec.name"/></td>
+                                    <td><t t-out="sec.section_reference or '&#x2014;'"/></td>
+                                    <td>
+                                        <t t-if="not sec.provider_signature_required"><span class="b-na">Not required</span></t>
+                                        <t t-elif="sec.provider_signed"><span class="b-signed">&#10003; Signed</span></t>
+                                        <t t-else=""><span class="b-pending">Pending</span></t>
+                                    </td>
+                                    <td>
+                                        <t t-if="sec.provider_signed">
+                                            <strong><t t-out="sec.provider_signatory_name"/></strong><br/>
+                                            <small><t t-out="sec.provider_signed_on"/></small>
+                                        </t>
+                                        <t t-else="">&#8212;</t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+                -->
+
+                <!-- Sign-the-Contract form – DISABLED: providers no longer sign individual sections -->
+                <!--
+                <t t-if="provider_pending and not changes_pending and not draft_rejected">
+                    <div class="signform">
+                        <h3 style="margin-top:0;color:#0f4c81;">Sign the Contract</h3>
+                        <p style="margin-bottom:14px;font-size:.9rem;">
+                            By entering your full legal name and clicking
+                            <strong>Confirm My Signature</strong>, you acknowledge that you
+                            have read the contract terms above and agree to the obligations
+                            set out in the following sections:
+                        </p>
+                        <ul style="font-size:.88rem;margin-bottom:18px;">
+                            <t t-foreach="provider_pending" t-as="ps">
+                                <li><t t-out="ps.name"/> (<t t-out="ps.section_reference or ps.name"/>)</li>
+                            </t>
+                        </ul>
+                        <form method="POST"
+                              t-attf-action="/contract/review/#{contract.id}/#{access_token}">
+                            <input type="hidden" name="provider_action" value="sign"/>
+                            <label for="signatory_name">Full Legal Name *</label>
+                            <input type="text"
+                                   id="signatory_name"
+                                   name="signatory_name"
+                                   placeholder="Enter your full legal name as it appears on official documents"
+                                   required="required"
+                                   autocomplete="name"/>
+                            <button type="submit" class="btn">Confirm My Signature</button>
+                        </form>
+                    </div>
+                </t>
+                -->
+
+                <!-- Confirm Draft button – shown while draft is under active review -->
+                <t t-if="can_submit_feedback and not changes_pending and not draft_rejected">
+                    <div class="signform" style="margin-bottom:16px;">
+                        <h3 style="margin-top:0;color:#0f4c81;">Confirm Draft Acceptance</h3>
+                        <p style="margin-bottom:14px;font-size:.9rem;">
+                            If you have reviewed the draft contract terms above and are satisfied,
+                            click the button below to confirm your acceptance.
+                            The ECDHS team will be notified and the contract will proceed to the next stage.
+                        </p>
+                        <form method="POST" t-attf-action="/contract/review/#{contract.id}/#{access_token}">
+                            <input type="hidden" name="provider_action" value="accept"/>
+                            <button type="submit" class="btn" style="background:#166534;">&#10003; I Accept this Draft</button>
+                        </form>
+                    </div>
+                </t>
+
+                <!-- Provider feedback form: request changes / reject -->
+                <t t-if="can_submit_feedback">
+                    <div class="signform" style="margin-top:16px;">
+                        <h3 style="margin-top:0;color:#0f4c81;">Need Changes or Want to Reject?</h3>
+                        <p style="margin-bottom:14px;font-size:.9rem;">
+                            Use this form to submit a change request for a specific section,
+                            or reject the current draft with a reason.
+                        </p>
+
+                        <form method="POST" t-attf-action="/contract/review/#{contract.id}/#{access_token}" style="margin-bottom:18px;">
+                            <input type="hidden" name="provider_action" value="request_changes"/>
+                            <label for="section_reference">Section / Clause Reference *</label>
+                            <input type="text"
+                                   id="section_reference"
+                                   name="section_reference"
+                                   placeholder="Example: Section B - Pricing and Payment Terms"
+                                   required="required"/>
+
+                            <label for="requested_change">Requested Change *</label>
+                            <textarea id="requested_change"
+                                      name="requested_change"
+                                      placeholder="Describe what must be changed and why"
+                                      required="required"
+                                      style="width:100%;border:1px solid #94a3b8;border-radius:5px;padding:10px 13px;font-size:.95rem;min-height:120px;margin-bottom:14px;"></textarea>
+                            <button type="submit" class="btn">Submit Change Request</button>
+                        </form>
+
+                        <form method="POST" t-attf-action="/contract/review/#{contract.id}/#{access_token}">
+                            <input type="hidden" name="provider_action" value="reject"/>
+                            <label for="rejection_reason">Rejection Reason *</label>
+                            <textarea id="rejection_reason"
+                                      name="rejection_reason"
+                                      placeholder="State why this draft is rejected"
+                                      required="required"
+                                      style="width:100%;border:1px solid #94a3b8;border-radius:5px;padding:10px 13px;font-size:.95rem;min-height:100px;margin-bottom:14px;"></textarea>
+                            <button type="submit" class="btn" style="background:#b42318;">Reject Draft</button>
+                        </form>
+                    </div>
+                </t>
+
+            </div>
+
+            <div class="footer">
+                Eastern Cape Department of Human Settlements &#183;
+                Procurement Contract Management System &#183;
+                All access is logged.
+            </div>
+
+        </div>
+        </body>
+        </html>
+    </template>
+</odoo>

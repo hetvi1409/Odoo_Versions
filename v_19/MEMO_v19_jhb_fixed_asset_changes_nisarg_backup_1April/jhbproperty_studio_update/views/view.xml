@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="jhb_view_users_tree_inherit" model="ir.ui.view">
+        <field name="name">res.users.list.inherit</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="id" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="employee" optional="show"/>
+                <field name="employee_id" optional="show"/>
+                <field name="employee_ids" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="jhb_rental_contract_tree_view_inherit" model="ir.ui.view">
+        <field name="name">rental.contract.tree customization</field>
+        <field name="model">rental.contract</field>
+        <field name="inherit_id" ref="itsys_real_estate.rental_contract_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='address']" position="replace"/>
+            <xpath expr="//field[@name='insurance_fee']" position="replace"/>
+            <xpath expr="//field[@name='floor']" position="replace"/>
+            <xpath expr="//field[@name='building_unit']" position="replace"/>
+            <xpath expr="//field[@name='user_id']" position="replace">
+                <field name="message_attachment_count" optional="show"/>
+            </xpath>
+            <xpath expr="//list[1]/field[@name='name']" position="after">
+                <field name="jmc_number" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="jhb_view_property_intelligence_form_inherit" model="ir.ui.view">
+        <field name="name">property.intelligence.form customization</field>
+        <field name="model">property.intelligence</field>
+        <field name="inherit_id" ref="property_intelligence.view_property_intelligence_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='supporting_document_ids']" position="attributes">
+                <attribute name="string">GFIS Documents</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="jhb_outdoor_advertisement_view_tree_inherit" model="ir.ui.view">
+        <field name="name">outdoor.advertisement.view.tree customization</field>
+        <field name="model">outdoor.advertisement</field>
+        <field name="inherit_id" ref="property_update.outdoor_advertisement_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='jmc_number']" position="after">
+                <field name="owned_id" optional="show" string="Owner"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="jhb_outdoor_advertisement_view_form_inherit" model="ir.ui.view">
+        <field name="name">outdoor.advertisement.view.form customization</field>
+        <field name="model">outdoor.advertisement</field>
+        <field name="inherit_id" ref="property_update.outdoor_advertisement_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='surbub']" position="attributes">
+                <attribute name="string">Suburb</attribute>
+            </xpath>
+            <xpath expr="//field[@name='file']" position="attributes">
+                <attribute name="widget">pdf_viewer</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="jhb_view_memo_list_inherit" model="ir.ui.view">
+        <field name="name">memo.memo.list customization</field>
+        <field name="model">memo.memo</field>
+        <field name="inherit_id" ref="e_system.view_memo_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='requester_id']" position="after">
+                <field name="approver_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="jhb_view_memo_form_inherit" model="ir.ui.view">
+        <field name="name">memo.memo.form customization</field>
+        <field name="model">memo.memo</field>
+        <field name="inherit_id" ref="e_system.view_memo_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/sheet[1]/div[1]/h1[1]/field[@name='name']" position="attributes">
+                <attribute name="invisible">submission_type != 'memo'</attribute>
+                <attribute name="force_save">True</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[1]" position="attributes">
+                <attribute name="string">Memo Details</attribute>
+            </xpath>
+            <xpath expr="//field[@name='subject']" position="attributes">
+                <attribute name="string">Subject</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="jhb_view_employee_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.tree customization</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="user_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+<!--    <record id="jhb_view_attendance_tree_inherit" model="ir.ui.view">-->
+<!--        <field name="name">hr.employee.tree customization</field>-->
+<!--        <field name="model">hr.attendance</field>-->
+<!--        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//list[1]" position="attributes">-->
+<!--                <attribute name="editable">bottom</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='time_off_type_id']" position="attributes">-->
+<!--                <attribute name="widget">selection</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='overtime_approved']" position="attributes">-->
+<!--                <attribute name="readonly">1</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='approved_document_id']" position="attributes">-->
+<!--                <attribute name="required">overtime_approved == True</attribute>-->
+<!--                <attribute name="invisible">1</attribute>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="jhb_helpdesk_ticket_view_form_inherit" model="ir.ui.view">-->
+<!--        <field name="name">helpdesk.ticket.form customization</field>-->
+<!--        <field name="model">helpdesk.ticket</field>-->
+<!--        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//button[@name='action_generate_fsm_task']" position="attributes">-->
+<!--                <attribute name="groups"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='assign_for_inspection_check']" position="attributes">-->
+<!--                <attribute name="invisible"/>-->
+<!--                <attribute name="readonly">id == 1</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='assignee_for_inspection']" position="attributes">-->
+<!--&lt;!&ndash;                <attribute name="attrs">{}</attribute>&ndash;&gt;-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="jhb_enquiry_assessment_view_form_inherit" model="ir.ui.view">
+        <field name="name">Enquiry Assessment customization</field>
+        <field name="model">enquiry.assessment</field>
+        <field name="inherit_id" ref="client_enquiry.enquiry_assessment_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_create_committee_meeting_for_transaction']" position="attributes">
+                <attribute name="groups">client_enquiry.group_property_manager,base.group_user</attribute>
+            </xpath>
+            <xpath expr="//field[@name='land_regularisation_id']" position="attributes">
+<!--                <attribute name="attrs">{}</attribute>-->
+                <attribute name="force_save">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_domain_ids']" position="attributes">
+<!--                <attribute name="attrs">{}</attribute>-->
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="jhb_client_enquiry_view_form_inherit" model="ir.ui.view">
+        <field name="name">Client Enquiry customization</field>
+        <field name="model">client.enquiry</field>
+        <field name="inherit_id" ref="client_enquiry.client_enquiry_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='entire_property']" position="attributes">
+                <attribute name="string">Does the enquiry relate to the entire property ?</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="jhb_building_list_inherit" model="ir.ui.view">
+        <field name="name">building.tree customization</field>
+        <field name="model">building</field>
+        <field name="inherit_id" ref="itsys_real_estate.building_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='address']" position="after">
+                <field name="ward" optional="show"/>
+                <field name="attach_line" optional="show"/>
+                <field name="trim_document_ids" optional="show"/>
+                <field name="zone_code" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="string">Status</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="jhb_approval_category_view_kanban_inherit" model="ir.ui.view">
+        <field name="name">approval.category.views.kanban customization</field>
+        <field name="model">approval.category</field>
+        <field name="inherit_id" ref="approvals.approval_category_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban[1]" position="attributes">
+                <attribute name="create">true</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

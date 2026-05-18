@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_opms_sub_entity_report_wizard_form" model="ir.ui.view">
+            <field name="name">opms.sub.entity.report.wizard.form</field>
+            <field name="model">opms.sub.entity.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="OPMS Reports">
+                    <group>
+                        <field name="report_template" widget="radio" options="{'horizontal': true}"/>
+                        <field name="programme_id"
+                               invisible="report_template != 'app_annual'"
+                               required="report_template == 'app_annual'"
+                               options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                           <field name="report_scope"
+                               widget="radio"
+                               options="{'horizontal': true}"
+                               invisible="report_template != 'sub_entity'"/>
+                        <field name="sub_programme_id"
+                           invisible="report_template != 'sub_entity' or report_scope == 'directorate'"
+                           required="report_template == 'sub_entity' and report_scope in ('sub_programme', 'both')"
+                               options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                        <field name="directorate_id"
+                           invisible="report_template != 'sub_entity' or report_scope == 'sub_programme'"
+                           required="report_template == 'sub_entity' and report_scope in ('directorate', 'both')"
+                           domain="[('sub_programme_id', '=', sub_programme_id)]"
+                               options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                        <field name="fiscal_year_id"
+                               invisible="report_template != 'sub_entity'"
+                               required="report_template == 'sub_entity'"
+                               options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    </group>
+                          <group string="Output Options">
+                           <field name="output_mode" widget="radio" options="{'horizontal': true}"/>
+                           <field name="spreadsheet_sync_mode"
+                               invisible="output_mode != 'spreadsheet'"
+                               required="output_mode == 'spreadsheet'"
+                               options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                           <field name="spreadsheet_name"
+                               invisible="spreadsheet_sync_mode == 'none' and output_mode == 'pdf'"/>
+                           <field name="existing_spreadsheet_id"
+                               invisible="spreadsheet_sync_mode != 'update'"
+                               required="spreadsheet_sync_mode == 'update'"
+                               options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                          </group>
+                          <group string="Dashboard Options" invisible="output_mode != 'spreadsheet'">
+                           <field name="dashboard_sync_mode"
+                               options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                           <field name="dashboard_name"
+                               invisible="dashboard_sync_mode == 'none'"/>
+                           <field name="dashboard_id"
+                               invisible="dashboard_sync_mode != 'update'"
+                               required="dashboard_sync_mode == 'update'"
+                               options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                           <field name="dashboard_group_id"
+                               invisible="dashboard_sync_mode != 'create'"
+                               required="dashboard_sync_mode == 'create'"
+                               options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                           <field name="open_dashboard_after_generation"
+                               invisible="output_mode != 'spreadsheet' or dashboard_sync_mode == 'none'"/>
+                          </group>
+                    <group string="Generated Links" invisible="not result_spreadsheet_id and not result_dashboard_id">
+                        <field name="generated_spreadsheet_url" widget="url" readonly="1" invisible="not generated_spreadsheet_url"/>
+                        <field name="result_spreadsheet_url" widget="url" readonly="1" invisible="not result_spreadsheet_url"/>
+                        <field name="generated_dashboard_url" widget="url" readonly="1" invisible="not generated_dashboard_url"/>
+                        <field name="result_dashboard_url" widget="url" readonly="1" invisible="not result_dashboard_url"/>
+                    </group>
+                    <footer>
+                        <button name="action_print_report" string="Generate" type="object" class="btn-primary"/>
+                        <button name="action_generate_with_links" string="Generate and Show Links" type="object" class="btn-secondary" invisible="output_mode != 'spreadsheet'"/>
+                        <button string="Cancel" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_sub_entity_report_wizard" model="ir.actions.act_window">
+            <field name="name">OPMS Reports</field>
+            <field name="res_model">opms.sub.entity.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_opms_sub_entity_report"
+                  name="Reports Generator"
+                  parent="opms_ecdhs.menu_opms_reporting_root"
+                  action="action_opms_sub_entity_report_wizard"
+                  sequence="35"/>
+    </data>
+</odoo>

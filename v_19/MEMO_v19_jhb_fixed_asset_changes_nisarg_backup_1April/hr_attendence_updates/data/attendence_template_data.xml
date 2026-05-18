@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="0">
+        <record id="email_template_to_attendance" model="mail.template">
+            <field name="name">Attendance Report</field>
+            <field name="model_id" ref="model_hr_attendance"/>
+            <field name="subject">Attendance Report: Approval Request</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear<t t-esc="ctx.get('recipient_name')"/>,
+                    </p>
+                    <p>Find Attendance Report for
+                        <t t-esc="ctx.get('employee_name')"/>
+                        for your approval
+                    </p>
+                    <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                        <thead style="background-color: #f2f2f2;">
+                            <tr>
+                                <th>Employee</th>
+                                <th>Check In</th>
+                                <th>Check Out</th>
+                                <th>Worked Hours</th>
+                                <th>Extra Hours</th>
+                                <th>Timesheet Status</th>
+                                <th>Overtime Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="ctx.get('attendance_records', [])" t-as="attendance">
+                                <tr>
+                                    <td>
+                                        <t t-esc="attendance.employee_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="attendance.check_in"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="attendance.check_out"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="attendance.worked_hours"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="attendance.validated_overtime_hours or '0.0'"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="attendance.timesheet_status"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="attendance.overtime_status"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div style="margin: 16px 0px 16px 0px; text-align: center;">
+                        <t t-set="attendance_ids" t-value="ctx.get('attendance_ids', [])"/>
+                        <t t-set="attendance_ids_str" t-value="','.join(str(id) for id in attendance_ids)"/>
+
+                        <a t-attf-href="/timesheet/review?attendance_ids={{ ctx.get('attendance_ids', []) }}" style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color:
+                            #fff; border-radius: 5px; font-size:13px;">
+                            Click to Review Timesheets
+                        </a>
+
+                        <!--                        <a href="#"-->
+                        <!--                           t-attf-href="{{ctx.get('base_url')}}/web#action={{ctx.get('action_id')}}&amp;model=timesheet.approval.wizard&amp;view_type=form&amp;context=%7B%22attendance_ids%22%3A{{ctx.get('attendance_ids')}}%7D"-->
+                        <!--                           style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">-->
+                        <!--                            Click to Review Timesheets-->
+                        <!--                        </a>-->
+                    </div>
+                    <p>Best regards,</p>
+                </div>
+            </field>
+        </record>
+
+        <!-- Response Template -->
+        <record id="email_template_attendance_response" model="mail.template">
+            <field name="name">Attendance Response</field>
+            <field name="model_id" ref="model_hr_attendance"/>
+            <field name="subject">Attendance Report: Status Update</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear<t t-esc="ctx.get('employee_name')"/>,
+                    </p>
+                    <p>Your timesheet records have been reviewed. Here are the results:</p>
+                    <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                        <thead style="background-color: #f2f2f2;">
+                            <tr>
+                                <th>Check In</th>
+                                <th>Check Out</th>
+                                <th>Worked Hours</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="ctx.get('attendance_records', [])" t-as="attendance">
+                                <tr>
+                                    <td>
+                                        <t t-esc="attendance.check_in"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="attendance.check_out"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="attendance.worked_hours"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="attendance.timesheet_status"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <p>Best regards,</p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

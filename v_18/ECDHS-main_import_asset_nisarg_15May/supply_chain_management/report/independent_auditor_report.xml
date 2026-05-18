@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_independent_auditor">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="web.external_layout">
+					<center>
+						<b>
+							<h2>Independent Audit</h2>
+						</b>
+					</center>
+					<br/>
+					<p class="text-center h2">
+						<span t-esc="o.name"/>
+					</p>
+					<br/>
+					<br/>
+					<p style="margin-left: 40px;">
+						Customer:
+						<br/>
+						<span t-field="o.partner_id.name"/>
+					</p>
+					<div name="report" style="margin-left: 40px;">
+						Report:
+						<t t-raw="o.recommendation_report"/>
+					</div>
+					<table class="table table-bordered mt32">
+						<thead>
+							<tr>
+								<th class="text-center">
+									<span>Customer</span>
+								</th>
+								<th class="text-center">
+									<span>Description</span>
+								</th>
+								<th class="text-center">
+									<span>Amount</span>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="text-center" t-foreach="o.quote_line_ids"
+								t-as="line">
+								<td>
+									<span t-field="line.partner_id.name"/>
+								</td>
+								<td>
+									<span t-field="line.description"/>
+								</td>
+								<td>
+									<span t-field="line.amount"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+				</t>
+			</t>
+		</t>
+	</template>
+    <record id="action_report_independent_auditor" model="ir.actions.report">
+		<field name="name">Independent Audit Report</field>
+		<field name="model">purchase.requisition</field>
+		<field name="report_type">qweb-pdf</field>
+		<field name="report_name">supply_chain_management.report_independent_auditor</field>
+		<field name="report_file">supply_chain_management.report_independent_auditor</field>
+		<field name="binding_model_id" ref="model_purchase_requisition"/>
+		<field name="binding_type">report</field>
+		<field name="print_report_name">'Independent Audit Report - %s' % (object.name)</field>
+	</record>
+</odoo>

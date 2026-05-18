@@ -1,0 +1,611 @@
+<odoo>
+    <record id="view_memo_form" model="ir.ui.view">
+        <field name="name">memo.memo.form</field>
+        <field name="model">memo.memo</field>
+        <field name="arch" type="xml">
+            <form string="Memo" class="o_form_full">
+                <header>
+                    <button name="action_save_version"
+                            type="object"
+                            string="Save Version"
+                            class="btn-secondary"
+                            invisible="state in ['approved', 'rejected']"/>
+                    <button name="%(action_memo_email_wizard)d" type="action"
+                            string="Send by Email" class="oe_highlight"
+                            invisible="state in ['draft','approved'] or submission_type == 'general'"/>
+                    <button name="action_download_memo" type="object"
+                            string="Download General" class="btn-primary"
+                            invisible="submission_type != 'general'"
+                            context="{'lang': 'en_US'}"/>
+                    <button name="action_download_memo" type="object"
+                            string="Download Memo" class="btn-primary"
+                            invisible="submission_type != 'memo'"
+                            context="{'lang': 'en_US'}"/>
+                    <button name="action_download_memo" type="object"
+                            string="Download Circular" class="btn-primary"
+                            invisible="submission_type != 'circular'"
+                            context="{'lang': 'en_US'}"/>
+                    <button name="action_download_memo" type="object"
+                            string="Download Procurement" class="btn-primary"
+                            invisible="submission_type != 'procurement'"
+                            context="{'lang': 'en_US'}"/>
+                    <button name="action_load_template"
+                            type="object"
+                            string="Load from Template"
+                            class="btn-primary"
+                            invisible="template_id == False or state not in ['draft'] or submission_type == 'general'"/>
+                    <button name="action_save_as_template"
+                            type="object"
+                            string="Save as Template"
+                            class="btn-primary"/>
+                    <button name="action_preview_report" type="object" string="Preview" class="btn-primary"/>
+                    <button name="action_quality_assurance" type="object" string="Submit for Quality Assurance"
+                            invisible="show_submit_qa == False"/>
+                    <button name="action_done_quality_assurance" type="object" string="Complete Quality Assurance"
+                            invisible="show_complete_qa == False"/>
+                    <button name="action_submit" type="object" string="Submit for Recommendation"
+                            invisible="show_submit_recommendation == False or submission_type in ['general','circular']"/>
+                    <button name="action_submit_for_approval" type="object" string="Submit for Approval"
+                            invisible="state != 'draft' or quality_assurance_required == True"/>
+                    <button name="action_open_change_request_wizard" type="object" string="Request Change"
+                            invisible="show_change_request == False"/>
+                    <button name="action_approve_memo" type="object" string="Approve"
+                            invisible="state != 'pending_approval' or approver_id != uid"/>
+                    <!--                            invisible="submission_recommended == False or state in ['approved','rejected']"/>-->
+                    <!--                    invisible="state in ['draft', 'quality_assurance', 'approved','rejected']"/>-->
+                    <button name="action_open_reject_wizard" type="object" string="Reject"
+                            invisible="state != 'pending_approval' or approver_id != uid"/>
+                    <!--                            invisible="state in ['approved','rejected']"/>-->
+            <!--                    <button name="action_acknowledge" type="object" string="Acknowledge"-->
+            <!--                            invisible="ack_required == False or state != 'approved' or acknowledged_sign != False"/>-->
+<!--                    <button name="action_publish" type="object" string="Publish"-->
+<!--                            invisible="state != 'approved' or submission_type == 'general'"/>-->
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft" class="btn-primary"
+                            invisible="state in ['draft', 'approved','rejected'] or not (create_uid == uid or requester_id == uid or uid in qa_user_ids or uid in admin_it_group)"/>
+                    <field name="state" widget="statusbar" invisible="is_creator == True"/>
+                    <field name="state" widget="statusbar" statusbar_visible="" invisible="is_creator == False"/>
+                    <!-- <field name="state" widget="statusbar" invisible="submission_type == 'general'"/> -->
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_title pe-0">
+                        <h1 class="d-flex flex-row justify-content-between">
+                            <field name="name" placeholder="General Title..." invisible="submission_type != 'general'"
+                                   readonly="state in ['approved','rejected','locked']"/>
+                            <field name="name" placeholder="Memo Title..." invisible="submission_type != 'memo'"
+                                   readonly="state in ['approved','rejected','locked']"/>
+                            <field name="name" placeholder="Circular Title..."
+                                   invisible="submission_type != 'circular'"
+                                   readonly="state in ['approved','rejected','locked']"/>
+                            <field name="name" placeholder="Procurement Title..."
+                                   invisible="submission_type != 'procurement'"
+                                   readonly="state in ['approved','rejected','locked']"/>
+                            <field name="submission_recommended" invisible="1"/>
+                            <field name="show_submit_qa" invisible="1"/>
+                            <field name="show_complete_qa" invisible="1"/>
+                            <field name="show_change_request" invisible="1"/>
+                            <field name="show_submit_recommendation" invisible="1"/>
+                            <field name="make_readonly" invisible="1"/>
+                            <field name="is_creator" invisible="1"/>
+                            <field name="show_acting_letter" invisible="1"/>
+                            <field name="qa_user_ids" invisible="1"/>
+                            <field name="can_delete_lines" invisible="1"/>
+                            <field name="admin_it_group" invisible="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <!--                            <field name="name"/>-->
+                            <field name="memo_number" readonly="1" string="General Number"
+                                   invisible="submission_type != 'general'"/>
+                            <field name="memo_number" readonly="1" string="Memo Number"
+                                   invisible="submission_type != 'memo'"/>
+                            <field name="memo_number" readonly="1" string="Circular Number"
+                                   invisible="submission_type != 'circular'"/>
+                            <field name="memo_number" readonly="1" string="Procurement Number"
+                                   invisible="submission_type != 'procurement'"/>
+                            <field name="date" string="General Date" invisible="submission_type != 'general'"
+                                   readonly="True"/>
+                            <field name="date" string="Memo Date" invisible="submission_type != 'memo'"
+                                   readonly="True"/>
+                            <field name="date" string="Circular Date" invisible="submission_type != 'circular'"
+                                   readonly="True"/>
+                            <field name="date" string="Procurement Date" invisible="submission_type != 'procurement'"
+                                   readonly="True"/>
+                            <field name="template_id" widget="many2one" options="{'no_open': True, 'no_create': True}"
+                                   placeholder="Choose template"
+                                   readonly="state in ['complete_quality_assurance','recommend', 'approved',]"/>
+                            <field name="submission_type" required="True" readonly="True"/>
+                            <field name="target_group_ids" widget="many2many_tags"
+                                   options="{'no_open': True, 'no_create': True}" invisible="1"
+                                   readonly="state in ['approved','rejected','locked'] or make_readonly == True"/>
+                            <field name="target_audience_ids" widget="many2many_tags"
+                                   options="{'no_open': True, 'no_create': True}" readonly="True"/>
+                            <field name="attachment_id" invisible="1"
+                                   readonly="state in ['approved','rejected','locked']"/>
+                            <field name="recipient" string="Recipient (TO)" required="submission_type != 'general'"
+                                   invisible="submission_type == 'general'"
+                                   readonly="state in ['approved','rejected','locked'] or make_readonly == True"/>
+                            <field name="enquiries" string="Enquiries" required="submission_type != 'general'"
+                                   invisible="submission_type == 'general'"
+                                   readonly="make_readonly == True"/>
+                            <field name="record_security" required="submission_type != 'general'"
+                                   invisible="submission_type == 'general'"
+                                   readonly="state in ['approved', 'rejected','locked']"/>
+                            <field name="folder_id" invisible="0" widget="documents_folder_many2one"
+                                   readonly="True"/>
+                            <!-- readonly="state in ['approved', 'rejected','locked']"/> -->
+                            <field name="quality_assurance_required" invisible="submission_type == 'memo'"
+                                   readonly="state != 'draft'"/>
+                            <field name="ack_required" invisible="submission_type != 'general'"/>
+
+                        </group>
+                        <group name="general_information" string="General Information">
+                            <field name="subject" required="submission_type != 'general'"
+                                   invisible="submission_type == 'general'"
+                                   readonly="state in ['approved', 'rejected'] or make_readonly == True"/>
+                            <field name="change_reason" invisible="state not in ['change_requested']"
+                                   readonly="state in ['approved', 'rejected'] or make_readonly == True"/>
+                            <field name="rejection_reason" invisible="state not in ['rejected']"
+                                   readonly="state in ['approved', 'rejected','locked'] or make_readonly == True"/>
+                            <field name="chief_directorate_id" required="1" domain="[('parent_id', '=', False)]"
+                                   context="{'hierarchical_naming':False}"
+                                   options="{'no_open': True, 'no_create': True}"
+                                   readonly="state in ['approved', 'rejected','locked'] or make_readonly == True"/>
+                            <field name="directorate_id" required="chief_directorate_id != False"
+                                   domain="[('parent_id', '=', chief_directorate_id)]"
+                                   options="{'no_open': True, 'no_create': True}"
+                                   context="{'hierarchical_naming':False}"
+                                   readonly="state in ['approved', 'rejected','locked'] or make_readonly == True"/>
+                            <field name="company_id" string="Location" options="{'no_open': True, 'no_create': True}"
+                                   readonly="state in ['approved', 'rejected','locked'] or make_readonly == True"/>
+                            <label for="department_detail_street" string="Address"/>
+                            <div class="o_address_format">
+                                <field name="department_detail_street" placeholder="Street..."
+                                       class="o_address_street"
+                                       readonly="state in ['approved', 'rejected','locked'] or make_readonly == True"/>
+                                <field name="department_detail_street2" placeholder="Street 2..."
+                                       class="o_address_street"
+                                       readonly="state in ['approved', 'rejected','locked'] or make_readonly == True"/>
+                                <field name="department_detail_city" placeholder="City" class="o_address_city"
+                                       readonly="state in ['approved', 'rejected','locked'] or make_readonly == True"/>
+                                <field name="department_detail_state_id" class="o_address_state" placeholder="State"
+                                       readonly="state in ['approved', 'rejected','locked']"
+                                       options="{'no_open': True,'no_create': True}"/>
+                                <field name="department_detail_zip" placeholder="ZIP" class="o_address_zip"
+                                       readonly="state in ['approved', 'rejected','locked']"/>
+                                <field name="department_detail_country_id" placeholder="Country"
+                                       readonly="state in ['approved', 'rejected','locked']"
+                                       class="o_address_country"
+                                       options="{'no_open': True, 'no_create': True}"/>
+                            </div>
+                            <field name="department_detail_email"
+                                   readonly="state in ['approved', 'rejected','locked']"/>
+                            <field name="department_detail_phone" readonly="True" invisible="True"/>
+                            <field name="department_detail_mobile"
+                                   readonly="state in ['approved', 'rejected','locked']"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="General Content" invisible="submission_type != 'general'">
+                            <group>
+                                <field name="background_body" string="Body" widget="html" class="o_fullscreen_editor"
+                                       placeholder="Add General Background here..."
+                                       readonly="state in ['complete_quality_assurance','recommend', 'approved', 'locked'] or make_readonly == True"/>
+                            </group>
+                        </page>
+                        <page string="Memo Content" invisible="submission_type != 'memo'">
+                            <group>
+                                <!-- <field name="purpose_body" widget="html" class="o_fullscreen_editor"
+                                       placeholder="Add Memo Purpose here..." required="submission_type != 'general'"
+                                       readonly="state in ['complete_quality_assurance','recommend', 'approved']"/> -->
+                                <field name="background_body" widget="html" class="o_fullscreen_editor"
+                                       placeholder="Add Memo Background here..." string="Memo Body"
+                                       required="submission_type != 'general'"
+                                       readonly="state in ['complete_quality_assurance','recommend', 'approved'] or make_readonly == True"/>
+                                <!-- <field name="is_project_status"/>
+                                <field name="project_status" widget="html" class="o_fullscreen_editor"
+                                       placeholder="Add Project Status here..." required="is_project_status != False" invisible="is_project_status == False"
+                                       readonly="state in ['complete_quality_assurance','recommend', 'approved']"/> -->
+                                <!-- <field name="motivation_body" widget="html" class="o_fullscreen_editor"
+                                       placeholder="Add Memo Motivation here..." required="submission_type != 'general'"
+                                       readonly="state in ['complete_quality_assurance','recommend', 'approved']"/> -->
+
+                            </group>
+                        </page>
+                        <page string="Circular Content" invisible="submission_type != 'circular'">
+                            <group>
+                                <field name="background_body" widget="html" class="o_fullscreen_editor"
+                                       placeholder="Add Circular Background here..." string="Circular Body"
+                                       required="submission_type != 'general'"
+                                       readonly="state in ['complete_quality_assurance','recommend', 'approved'] or make_readonly == True"/>
+                            </group>
+                        </page>
+                        <page string="Procurement Content" invisible="submission_type != 'procurement'">
+                            <group>
+                                <!-- <field name="purpose_body" widget="html" class="o_fullscreen_editor"
+                                       placeholder="Add Procurement Purpose here..."
+                                       required="submission_type != 'general'"
+                                       readonly="state in ['complete_quality_assurance','recommend', 'approved']"/> -->
+                                <field name="background_body" widget="html" class="o_fullscreen_editor"
+                                       placeholder="Add Procurement Background here..."
+                                       string="Procurement Background"
+                                       required="submission_type != 'general'"
+                                       readonly="state in ['complete_quality_assurance','recommend', 'approved'] or make_readonly == True"/>
+                                <!-- <field name="is_project_status"/>
+                                <field name="project_status" widget="html" class="o_fullscreen_editor"
+                                       placeholder="Add Project Status here..." required="is_project_status != False" invisible="is_project_status == False"
+                                       readonly="state in ['complete_quality_assurance','recommend', 'approved']"/> -->
+                                <!-- <field name="motivation_body" widget="html" class="o_fullscreen_editor"
+                                       placeholder="Add Procurement Motivation here..."
+                                       required="submission_type != 'general'"
+                                       readonly="state in ['complete_quality_assurance','recommend', 'approved']"/> -->
+                            </group>
+                        </page>
+                        <page string="Attachments">
+                            <field name="document_upload_ids" mode="list,form" required="True"
+                                   readonly="state in ['approved', 'rejected','locked']">
+                                <list editable="bottom" decoration-info="sequence">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="attachment_id" domain="[('id', '=', False)]"
+                                           options="{'create': false, 'create_edit': false}"
+                                           context="{'default_res_model': 'memo.document.upload'}"
+                                           column_invisible="True"/>
+                                    <field name="datas" filename="name" string="File"/>
+                                    <field name="name" column_invisible="False" string="Document Name"/>
+                                    <field name="sign_required"/>
+                                    <field name="signature_status" invisible="sign_required == False"
+                                           readonly="sign_required == True"/>
+                                    <field name="sign_request_id" invisible="sign_required == False"
+                                           readonly="sign_required == True"/>
+                                    <button name="action_preview_document" type="object" string="Preview"
+                                            class="btn-primary"
+                                            invisible="sign_required == False or attachment_id == False"/>
+                                    <button name="action_doc_sign_request" type="object" string="Sign Request"
+                                            class="btn-primary"
+                                            invisible="sign_required == False or sign_request_id or attachment_id == False"/>
+                                    <button name="action_doc_sign_now" type="object" string="Sign Now"
+                                            class="btn-primary" invisible="1"/>
+                                    <!--                                            invisible="sign_required == False or sign_request_id or attachment_id == False"/>-->
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- <page string="Financial Implications" invisible="submission_type in ['general','circular']">
+                            <group>
+                                <group>
+                                    <field name="is_financial" required="submission_type == 'procurement'"/>
+                                    <field name="under_grant_management" invisible="is_financial == False" required="is_financial == True"/>
+                                </group>
+                                <group>
+                                    <field name="financial_sentence" required="submission_type == 'procurement'"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="funds" required="submission_type == 'procurement' and is_financial == True"/>
+                                    <field name="responsibility" required="submission_type == 'procurement'"/>
+                                    <field name="objective" required="submission_type == 'procurement'"/>
+                                    <field name="item" required="submission_type == 'procurement'"/>
+                                    <field name="project" required="submission_type == 'procurement'"/>
+                                </group>
+                                <group>
+                                    <field name="asset" required="submission_type == 'procurement'"/>
+                                    <field name="regional_identifier" required="submission_type == 'procurement'"/>
+                                    <field name="amount_paid" required="submission_type == 'procurement'"/>
+                                    <field name="service_provider" required="submission_type == 'procurement'"/>
+                                    <field name="infrastructure" required="submission_type == 'procurement'"/>
+                                </group>
+                            </group>
+                        </page> -->
+                        <page string="Responsible Officer" invisible="submission_type in ['general','circular']">
+                            <group>
+                                <field name="requester_id" string="Responsible Officer"
+                                       options="{'no_open': True, 'no_create': True}"
+                                       readonly="requester_sign != False or make_readonly == True"/>
+                                <label for="requester_sign" class="oe_inline"/>
+                                <div class="o_row o_row_readonly">
+                                    <field name="requester_sign" widget="image" options="{'size': [0, 50]}"
+                                           readonly="True"/>
+                                    <button name="action_sign_request" type="object" string="Sign Request"
+                                            class="oe_highlight" invisible="requester_sign != False"/>
+                                </div>
+                            </group>
+                        </page>
+                        <page name="quality_assurance_page" string="Quality Assurance"
+                              invisible="quality_assurance_required != True">
+                            <!--                            <group>-->
+                            <!--                                <field name="quality_assurance_id" required="submission_type != 'general'" options="{'no_open': True, 'no_create': True}"/>-->
+                            <!--                            </group>-->
+                            <field name="quality_assurance_ids" mode="list,kanban"
+                                   required="submission_type != 'general'"
+                                   options="{'delete': [('can_delete_lines', '=', True)]}"
+                                   readonly="state not in ['draft','quality_assurance','complete_quality_assurance','change_requested']">
+                                <list editable="bottom" decoration-success="status=='Completed'"
+                                      decoration-danger="status=='Non-Completed'" no_open="1">
+                                    <field name="existing_request_user_ids" column_invisible="True"/>
+                                    <field name="is_editable" column_invisible="True"/>
+                                    <field name="display_name" column_invisible="True"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="user_id" string="Quality Assurance User" force_save="1"
+                                           options="{'no_open': True, 'no_create': True}"
+                                           readonly="sign_initials != False or parent.make_readonly == True or is_editable == False"/>
+                                    <field name="required" force_save="1"/>
+                                    <field name="date" readonly="1" force_save="1"/>
+                                    <field name="status" force_save="1"
+                                           readonly="parent.make_readonly == False or is_editable == False"/>
+                                    <field name="comment" force_save="1" readonly="is_editable == False"/>
+                                    <field name="sign_initials" widget="image" options="{'size': [0, 50]}"
+                                           readonly="True"/>
+                                    <button string="Sign" type="object" name="action_sign_line"
+                                            invisible="sign_initials != False"/>
+                                    <field name="acting_letter_id" domain="[('id', '=', False)]"
+                                           options="{'no_quick_create': True,'no_create_edit': False}"
+                                           context="{'default_res_model': 'memo.quality.assurance'}"
+                                           column_invisible="True"/>
+                                    <field name="datas" filename="acting_letter_name" string="Acting Letter Evidence"
+                                           column_invisible="parent.show_acting_letter == False"/>
+                                    <field name="acting_letter_name" column_invisible="True"
+                                           string="Acting Letter Name"/>
+                                </list>
+                                <kanban class="o_kanban_mobile">
+                                    <templates>
+                                        <t t-name="card" class="flex-row">
+                                            <field name="user_id"/>
+                                            <t t-if="record.status.raw_value">
+                                                <t t-set="classname"
+                                                   t-value="{'Completed': 'text-bg-success','Non-Completed': 'text-bg-danger'}[record.status.raw_value] || 'text-bg-light'"/>
+                                                <span t-attf-class="ms-auto rounded-pill {{ classname }}">
+                                                    <field name="status"/>
+                                                </span>
+                                            </t>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                                <form>
+                                    <group>
+                                        <field name="existing_request_user_ids" invisible="1"/>
+                                        <field name="user_id"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+
+                        <page string="Recommendation" invisible="submission_type in ['general','circular']">
+                            <group>
+                                <!-- <field name="recommendation"/> -->
+                            </group>
+                            <field name="recommender_ids" mode="list,kanban" required="submission_type != 'general'"
+                                   options="{'delete': [('can_delete_lines', '=', True)]}"
+                                   readonly="state not in ['draft','quality_assurance','complete_quality_assurance','change_requested','recommend']">
+                                <list editable="bottom"
+                                      decoration-success="status in ('Recommended','Funds Available','Supported')"
+                                      decoration-danger="status in ('Non-Recommended','Funds Not Available','Not Supported')"
+                                      no_open="1">
+                                    <field name="existing_request_user_ids" column_invisible="True"/>
+                                    <field name="is_editable" column_invisible="True"/>
+                                    <field name="display_name" column_invisible="True"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="user_id" string="Recommender" force_save="1"
+                                           options="{'no_open': True, 'no_create': True}"
+                                           readonly="sign_initials != False or is_editable == False"/>
+                                    <field name="required" force_save="1"/>
+                                    <field name="date" readonly="1" force_save="1"/>
+                                    <field name="status" force_save="1"
+                                           readonly="parent.make_readonly == False or is_editable == False"/>
+                                    <field name="comment" force_save="1" readonly="is_editable == False"/>
+                                    <field name="sign_initials" widget="image" options="{'size': [0, 50]}"
+                                           readonly="True"/>
+                                    <button string="Sign" type="object" name="action_sign_line"
+                                            invisible="sign_initials != False"/>
+                                    <field name="sent_date" column_invisible="True"/>
+                                    <field name="acting_letter_id" domain="[('id', '=', False)]"
+                                           options="{'no_quick_create': True,'no_create_edit': False}"
+                                           context="{'default_res_model': 'memo.approver'}"
+                                           column_invisible="True"/>
+                                    <field name="datas" filename="acting_letter_name" string="Acting Letter Evidence"
+                                           column_invisible="parent.show_acting_letter == False"/>
+                                    <field name="acting_letter_name" column_invisible="True"
+                                           string="Acting Letter Name"/>
+                                </list>
+                                <kanban class="o_kanban_mobile">
+                                    <templates>
+                                        <t t-name="card" class="flex-row">
+                                            <field name="user_id"/>
+                                            <t t-if="record.status.raw_value">
+                                                <t t-set="classname"
+                                                   t-value="{'Recommended': 'text-bg-success','Funds Available': 'text-bg-success','Supported': 'text-bg-success','Non-Recommended': 'text-bg-danger','Funds Not Available': 'text-bg-danger','Not Supported': 'text-bg-danger'}[record.status.raw_value] || 'text-bg-light'"/>
+                                                <span t-attf-class="ms-auto rounded-pill {{ classname }}">
+                                                    <field name="status"/>
+                                                </span>
+                                            </t>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                                <form>
+                                    <group>
+                                        <field name="existing_request_user_ids" invisible="1"/>
+                                        <field name="user_id"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Approver">
+                            <group>
+                                <field name="approver_id" required="True"
+                                       options="{'no_open': True, 'no_create': True}"
+                                       readonly="approver_sign != False or make_readonly == True"/>
+                                <label for="approver_sign" class="oe_inline"/>
+                                <div class="o_row o_row_readonly">
+                                    <field name="approver_sign" widget="image" options="{'size': [0, 50]}"
+                                           readonly="True"/>
+                                    <button name="action_sign_approver" type="object" string="Sign Approver"
+                                            class="oe_highlight" invisible="approver_sign != False"/>
+                                </div>
+                                <field name="approve_date" readonly="True"/>
+                                <field name="approve_comment"/>
+                                <field name="acting_letter_id" domain="[('id', '=', False)]"
+                                       options="{'no_quick_create': True,'no_create_edit': False}"
+                                       context="{'default_res_model': 'memo.mamo'}"
+                                       invisible="True"/>
+                                <field name="datas" filename="acting_letter_name" string="Acting Letter Evidence"
+                                       invisible="show_acting_letter == False"/>
+                                <field name="acting_letter_name" invisible="True" string="Acting Letter Name"/>
+                                <!-- <field name="approve_date" readonly="submission_type != 'general'"/> -->
+                            </group>
+                        </page>
+                        <page string="Acknowledgment" invisible="submission_type != 'general' or ack_required == False">
+                            <group>
+                                <field name="acknowledged_ids" widget="many2many_tags" required="ack_required == True"
+                                       options="{'no_open': True, 'no_create': True}"/>
+                                <field name="read_count" readonly="1" invisible="1"/>
+                                <field name="acknowledged_body" widget="html" class="o_fullscreen_editor"
+                                       placeholder="Add Acknowledgment here..."/>
+                                <label for="acknowledged_sign" class="oe_inline"/>
+                                <div class="o_row o_row_readonly">
+                                    <field name="acknowledged_sign" widget="image" options="{'size': [0, 50]}"
+                                           readonly="True"/>
+                                    <button name="action_sign_acknowledged" type="object" string="Signature"
+                                            class="oe_highlight" invisible="acknowledged_sign != False"/>
+                                </div>
+                                <field name="acknowledged_date" string="Date"/>
+                            </group>
+                        </page>
+                        <page string="Followers">
+                            <field name="message_follower_ids"
+                                   context="{'default_res_model': 'memo.memo','default_res_id': id}">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                    <field name="email"/>
+                                    <field name="res_model" column_invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Versions">
+                            <field name="version_ids" readonly="state in ['approved', 'rejected','locked']">
+                                <list string="Memo Versions" default_order="id" edit="0" create="0">
+                                    <field name="version_number"/>
+                                    <field name="comment"/>
+                                    <field name="created_by"/>
+                                    <field name="date"/>
+                                    <button string="Revert" type="object" name="action_revert_version"
+                                            invisible="parent.state in ['recommend','pending_approval','approved', 'rejected','locked']"/>
+                                </list>
+                                <form>
+                                    <button string="Revert" type="object" name="action_revert_version"
+                                            invisible="parent.state in ['recommend','pending_approval','approved', 'rejected','locked']"/>
+                                    <group>
+                                        <group>
+                                            <field name="version_number"/>
+                                            <field name="comment"/>
+                                        </group>
+                                        <group>
+                                            <field name="created_by"/>
+                                            <field name="date"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <field name="memo_name"/>
+                                        <field name="subject"/>
+                                        <!-- <field name="purpose_body" widget="html" class="o_fullscreen_editor"/> -->
+                                        <field name="background_body" widget="html" class="o_fullscreen_editor"/>
+                                        <!-- <field name="motivation_body" widget="html" class="o_fullscreen_editor"/>
+                                        <field name="project_status" widget="html" class="o_fullscreen_editor"/> -->
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_all_memo_list" model="ir.ui.view">
+        <field name="name">all.memo.list</field>
+        <field name="model">memo.memo</field>
+        <field name="arch" type="xml">
+            <list string="All Memo">
+                <field name="memo_number" string="Number"/>
+                <field name="name"/>
+                <field name="requester_id"/>
+                <field name="state"/>
+                <field name="date" string="Date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_general_list" model="ir.ui.view">
+        <field name="name">general.general.list</field>
+        <field name="model">memo.memo</field>
+        <field name="arch" type="xml">
+            <list string="General">
+                <field name="memo_number" string="General Number"/>
+                <field name="name"/>
+                <field name="requester_id"/>
+                <field name="state"/>
+                <field name="date" string="General Date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_memo_list" model="ir.ui.view">
+        <field name="name">memo.memo.list</field>
+        <field name="model">memo.memo</field>
+        <field name="arch" type="xml">
+            <list string="Memos">
+                <field name="memo_number" string="Memo Number"/>
+                <field name="name"/>
+                <field name="requester_id"/>
+                <field name="state"/>
+                <field name="date" string="Memo Date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_circular_list" model="ir.ui.view">
+        <field name="name">circular.circular.list</field>
+        <field name="model">memo.memo</field>
+        <field name="arch" type="xml">
+            <list string="Circulars">
+                <field name="memo_number" string="Circular Number"/>
+                <field name="name"/>
+                <field name="requester_id"/>
+                <field name="state"/>
+                <field name="date" string="Circular Date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_procurement_list" model="ir.ui.view">
+        <field name="name">procurement.procurement.list</field>
+        <field name="model">memo.memo</field>
+        <field name="arch" type="xml">
+            <list string="Procurements">
+                <field name="memo_number" string="Procurement Number"/>
+                <field name="name"/>
+                <field name="requester_id"/>
+                <field name="state"/>
+                <field name="date" string="Procurement Date"/>
+            </list>
+        </field>
+    </record>
+</odoo>

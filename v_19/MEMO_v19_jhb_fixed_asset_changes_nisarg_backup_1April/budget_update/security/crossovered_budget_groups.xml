@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="finance_budget_management">
+        <field name="name">Finance</field>
+        <field name="description">Access levels for Finance</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record model="res.groups.privilege" id="res_groups_privilege_budget_management">
+        <field name="name">Finance</field>
+        <field name="sequence">10</field>
+        <field name="category_id" ref="budget_update.finance_budget_management"/>
+    </record>
+
+    <record id="finance_users_access" model="res.groups">
+        <field name="name">Finance User</field>
+        <field name="privilege_id" ref="res_groups_privilege_budget_management"/>
+    </record>
+
+    <record id="finance_managers_access" model="res.groups">
+        <field name="name">Finance Manager</field>
+        <field name="privilege_id" ref="res_groups_privilege_budget_management"/>
+    </record>
+</odoo>

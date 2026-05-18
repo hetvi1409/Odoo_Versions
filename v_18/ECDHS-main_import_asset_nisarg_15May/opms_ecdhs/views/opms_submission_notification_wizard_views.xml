@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_opms_submission_notification_wizard_form" model="ir.ui.view">
+            <field name="name">opms.submission.notification.wizard.form</field>
+            <field name="model">opms.submission.notification.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Send Submission Notification">
+                    <sheet>
+                        <group string="Notification Details">
+                            <field name="notification_type"/>
+                            <field name="custom_note" placeholder="Optional — additional context to include in the notification email"/>
+                        </group>
+                        <group string="Submissions">
+                            <field name="submission_ids" nolabel="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="submitted_by"/>
+                                    <field name="quarter_id"/>
+                                    <field name="output_indicator_id"/>
+                                    <field name="workflow_status" widget="badge"
+                                           decoration-success="workflow_status == 'approved'"
+                                           decoration-warning="workflow_status == 'director_review'"
+                                           decoration-info="workflow_status == 'submitted'"
+                                           decoration-muted="workflow_status == 'draft'"
+                                           decoration-danger="workflow_status == 'rejected'"/>
+                                </list>
+                            </field>
+                        </group>
+                        <div class="alert alert-info" role="alert">
+                            <strong>Manager Submission Alert</strong> sends an email only to active
+                            <em>OPMS Managers</em> linked to each submission's <em>Directorate</em>.
+                            <br/>
+                            <strong>Submitter Rejection Alert</strong> sends the rejection email to the
+                            <em>Submitted By</em> user for each selected rejected submission.
+                            Notifications are recorded in each submission's chatter.
+                        </div>
+                    </sheet>
+                    <footer>
+                        <button name="action_send" type="object" string="Send Notification" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_submission_notification_wizard" model="ir.actions.act_window">
+            <field name="name">Send Submission Notification</field>
+            <field name="res_model">opms.submission.notification.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

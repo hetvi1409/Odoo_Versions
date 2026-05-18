@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="law_task_list_form_view" model="ir.ui.view">
+            <field name="name">law.task.list.form.view</field>
+            <field name="model">law.task.list</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title mb24">
+                            <h1>
+                                <field class="text-break" name="name"
+                                       placeholder="Ex. Divorce"
+                                       default_focus="1" required="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="task_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="law_task_list_tree_view" model="ir.ui.view">
+            <field name="name">law.task.list.list.view</field>
+            <field name="model">law.task.list</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="law_task_list_act_action" model="ir.actions.act_window">
+            <field name="name">Task List</field>
+            <field name="res_model">law.task.list</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="law_task_form_view" model="ir.ui.view">
+            <field name="name">law.task.form.view</field>
+            <field name="model">law.task</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title mb24">
+                            <h1>
+                                <field class="text-break" name="name" placeholder="Task Name"
+                                       default_focus="1" required="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="law_task_type"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description">
+                                <field name="description" placeholder="Task Description..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="law_task_tree_view" model="ir.ui.view">
+            <field name="name">law.task.list.view</field>
+            <field name="model">law.task</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="law_task_act_action" model="ir.actions.act_window">
+            <field name="name">Default Task</field>
+            <field name="res_model">law.task</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

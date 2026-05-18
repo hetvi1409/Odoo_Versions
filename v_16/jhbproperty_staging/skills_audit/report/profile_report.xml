@@ -1,0 +1,53 @@
+<odoo>
+  <record id="action_report_profile" model="ir.actions.report">
+    <field name="name">Employee Skills Gap Report</field>
+    <field name="model">scs.employee.profile</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">skills_audit.report_profile</field>
+    <!-- safe print name expression -->
+    <field name="print_report_name">(object.name or 'Profile') + ' - Skills Gap'</field>
+  </record>
+
+  <template id="report_profile">
+    <t t-call="web.external_layout">
++      <!-- Provide a 'doc' variable for the template when 'docs' is available -->
++      <t t-set="doc" t-value="doc or (docs and docs[0])"/>
+      <!-- Ensure a <main> element exists for base._prepare_html to find -->
+      <main role="main" class="o_report_main">
+        <div class="page">
+          <h2>Employee Skills Gap Report</h2>
+          <p><strong>Employee:</strong> <t t-esc="doc.employee_id.name"/></p>
+          <p><strong>Role:</strong> <t t-esc="doc.role_id.name"/></p>
+          <p>
+            <strong>Total competencies:</strong> <t t-esc="doc.total_competencies"/>
+            |
+            <strong>Gaps:</strong> <t t-esc="doc.gap_count"/> (<t t-esc="'%.1f' % (doc.gap_percent * 100)"/>%)
+          </p>
+          <table class="table table-sm o_main_table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Competency</th>
+                <th>Required</th>
+                <th>Final</th>
+                <th>Gap</th>
+              </tr>
+            </thead>
+            <tbody>
+              <t t-set="latest" t-value="doc.assessment_ids.filtered(lambda a: a.state=='done') and doc.assessment_ids.filtered(lambda a: a.state=='done')[-1]"/>
+              <t t-foreach="latest and latest.line_ids or []" t-as="l">
+                <tr>
+                  <td><t t-esc="l.competency_id.code"/></td>
+                  <td><t t-esc="l.competency_id.name"/></td>
+                  <td><t t-esc="dict(l._fields['required_level'].selection).get(l.required_level)"/></td>
+                  <td><t t-esc="l.final_level and dict(l._fields['final_level'].selection).get(l.final_level) or '-'"/></td>
+                  <td><t t-esc="l.gap"/></td>
+                </tr>
+              </t>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </t>
+  </template>
+</odoo>

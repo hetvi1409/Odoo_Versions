@@ -1,0 +1,22 @@
+<odoo>
+    <!-- Define a new module category for Asset Impairment -->
+    <record id="module_category_asset_impairment" model="ir.module.category">
+        <field name="name">Asset Impairment</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- Asset Impairment Manager Group -->
+    <record id="group_asset_impairment_manager" model="res.groups">
+        <field name="name">Asset Impairment Manager</field>
+        <field name="category_id" ref="module_category_asset_impairment"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+
+    <!-- Asset Impairment User Group -->
+    <record id="group_asset_impairment_user" model="res.groups">
+        <field name="name">Asset Impairment User</field>
+        <field name="category_id" ref="module_category_asset_impairment"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+</odoo>

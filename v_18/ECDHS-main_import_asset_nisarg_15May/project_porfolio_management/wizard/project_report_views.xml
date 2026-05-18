@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="project_report_view_form" model="ir.ui.view">
+        <field name="name">project.report.view.form</field>
+        <field name="model">project.report</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="project_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_print" string="Print PDF Report"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn_default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="project_reporting_action" model="ir.actions.act_window">
+        <field name="name">Report</field>
+        <field name="res_model">project.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="project_report_view_form"/>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="project_excel_report_root"
+              name="Project Report "
+              parent="project.menu_project_report"
+              action="project_reporting_action"
+              sequence="4"/>
+
+</odoo>

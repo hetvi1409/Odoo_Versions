@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_candidate_declaration">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page o_content_pdf">
+                        <div style="text-align:center; margin-bottom: 12px;">
+                            <span style="font-weight: bold;">
+                                CANDIDATE DECLARATION
+                            </span>
+                        </div>
+
+                        <table style="width: 100%; margin-bottom: 10px;" class="table table-borderless avoid-page-break-inside">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 38%; font-weight: bold;">Position Applied For</td>
+                                    <td style="width: 2%;">:</td>
+                                    <td style="width: 60%;">
+                                        <span t-esc="o.job_id.name or ''"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Department</td>
+                                    <td>:</td>
+                                    <td>
+                                        <span t-esc="o.department_id.name or o.job_id.department_id.name or ''"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Date of Interview</td>
+                                    <td>:</td>
+                                    <td>
+                                        <t t-set="meeting_id" t-value="env['calendar.event'].sudo().search([('applicant_id','=','o.id')],order='id desc', limit=1)"/>
+                                        <t t-if="meeting_id"><span t-field="meeting_id.start" t-options='{"widget": "date"}'/></t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px;">
+                            <thead>
+                                <tr>
+                                    <th style="border: 1px solid #000; width: 6%; text-align: center;">No</th>
+                                    <th style="border: 1px solid #000; width: 74%; text-align: left; padding: 4px;">Question</th>
+                                    <th style="border: 1px solid #000; width: 20%; text-align: center;">YES/NO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="border: 1px solid #000; text-align: center;">1.</td>
+                                    <td style="border: 1px solid #000; padding: 4px;">
+                                        Please confirm that all information you have disclosed in all personal documents
+                                        submitted and during this interview is accurate and factual?
+                                    </td>
+                                    <td style="border: 1px solid #000; text-align: center;">
+<!--                                        <t t-if="o.declaration_information_accurate">Yes</t>-->
+<!--                                        <t t-else="">No</t>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; text-align: center;">2.</td>
+                                    <td style="border: 1px solid #000; padding: 4px;">
+                                        In the event that you are appointed is there anything either in your work or
+                                        personal life that may impact negatively on your ability to fulfil the
+                                        responsibilities and execute this role competently?
+<!--                                        <t t-if="o.declaration_role_impact">-->
+<!--                                            <div style="margin-top: 4px;">-->
+<!--                                                <strong>Details:</strong>-->
+<!--                                                <span t-esc="o.declaration_role_impact"/>-->
+<!--                                            </div>-->
+<!--                                        </t>-->
+                                    </td>
+                                    <td style="border: 1px solid #000; text-align: center;">
+<!--                                        <t t-if="o.declaration_role_impact">Yes</t>-->
+<!--                                        <t t-else="">No</t>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; text-align: center;">3.</td>
+                                    <td style="border: 1px solid #000; padding: 4px;">
+                                        Are you involved in any positions / roles or have any interest that would
+                                        present any conflict of interest for this position? (if yes, provide declaration
+                                        details)
+<!--                                        <t t-if="o.declaration_conflict_details">-->
+<!--                                            <div style="margin-top: 4px;">-->
+<!--                                                <strong>Details:</strong>-->
+<!--                                                <span t-esc="o.declaration_conflict_details"/>-->
+<!--                                            </div>-->
+<!--                                        </t>-->
+                                    </td>
+                                    <td style="border: 1px solid #000; text-align: center;">
+<!--                                        <t t-if="o.declaration_conflict_of_interest">Yes</t>-->
+<!--                                        <t t-else="">No</t>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; text-align: center;">4.</td>
+                                    <td style="border: 1px solid #000; padding: 4px;">
+                                        Should you be the recommended candidate, how soon can you assume duties?
+                                    </td>
+                                    <td style="border: 1px solid #000; text-align: center;">
+<!--                                        <span t-field="o.availability_to_join" t-options='{"widget": "date"}'/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; text-align: center;">5.</td>
+                                    <td style="border: 1px solid #000; padding: 4px;">
+                                        Was the interview what you expected? Do you think the interview was fair?
+                                    </td>
+                                    <td style="border: 1px solid #000; text-align: center;">
+<!--                                        <t t-if="o.declaration_interview_fair">Yes</t>-->
+<!--                                        <t t-else="">No</t>-->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table style="width: 100%; margin-top: 10px;" class="table table-borderless avoid-page-break-inside">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 35%; font-weight: bold;">INITIALS AND SURNAME</td>
+                                    <td style="width: 5%;">:</td>
+                                    <td style="width: 60%; border-bottom: 1px solid #000;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; padding-top: 8px;">SIGNATURE BY CANDIDATE</td>
+                                    <td style="padding-top: 8px;">:</td>
+                                    <td style="padding-top: 8px; border-bottom: 1px solid #000;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; padding-top: 8px;">DATE</td>
+                                    <td style="padding-top: 8px;">:</td>
+                                    <td style="padding-top: 8px; border-bottom: 1px solid #000;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_candidate_declaration" model="ir.actions.report">
+        <field name="name">Candidate Declaration</field>
+        <field name="model">hr.applicant</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">recruitment_enhancement.report_candidate_declaration</field>
+        <field name="report_file">recruitment_enhancement.report_candidate_declaration</field>
+        <field name="print_report_name">
+            'Candidate Declaration - %s' % (object.partner_name or object.name or '')
+        </field>
+        <field name="binding_model_id" ref="model_hr_applicant"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="remove_odoo_after_powered_by" inherit_id="web.brand_promotion_message">
+        <xpath expr="//t[@t-set='odoo_logo']" position="replace">
+            <t t-set="odoo_logo"></t>
+        </xpath>
+        <xpath expr="//t[@t-set='final_message']" position="replace">
+            <t t-set="final_message">Powered by%s</t>
+        </xpath>
+        <xpath expr="//t[@t-out]" position="replace">
+            <t t-out="final_message % (_message and (' - ' + _message) or '')"/>
+        </xpath>
+    </template>
+</odoo>

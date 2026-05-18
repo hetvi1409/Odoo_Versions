@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_employee_inherit_from_view_jhb"
+                model="ir.ui.view">
+            <field name="name">HR Employee</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='hr_settings']" position="inside">
+                    <group>
+                        <group string="Overtime Pay" name="aspl_hr_overtime">
+                            <field name="weekday_ot_rate" groups="hr.group_hr_manager"/>
+                            <field name="weekend_ot_rate" groups="hr.group_hr_manager"/>
+                            <field name="holiday_ot_rate" groups="hr.group_hr_manager"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

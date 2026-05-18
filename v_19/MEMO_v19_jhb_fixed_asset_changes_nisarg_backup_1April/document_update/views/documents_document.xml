@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="documents_document_model_list_view" model="ir.ui.view">
+        <field name="name">documents.document.list.form</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.documents_view_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="retention_type"/>
+                <field name="retention_frame"/>
+                <field name="retention_unit" nolabel="1"/>
+                <field name="time_remaining" invisible="0"/>
+                <field name="retention_end_date"/>
+                <field name="jmc_number" optional="show"/>
+                <field name="jmc_property_id" optional="show"/>
+                <field name="erf_number" optional="show"/>
+                <field name="address" optional="show"/>
+                <field name="address" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="document_view_search" model="ir.ui.view">
+        <field name="name">documents.document.view.search</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.document_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='index_content']" position="after">
+                <field name="jmc_number" string="JMC Number"/>
+                <field name="erf_number" string="Erf Number"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="document_view_kanban" model="ir.ui.view">
+        <field name="name">documents.document.view.kanban</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.document_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='active']" position="after">
+                <field name="general_type" string="Document Type"/>
+                <field name="jmc_number" string="JMC Number"/>
+                <field name="erf_number" string="Erf Number"/>
+                <field name="address" string="Address"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

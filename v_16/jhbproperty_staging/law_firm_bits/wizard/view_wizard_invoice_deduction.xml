@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="wizard_invoice_deduction_form_view" model="ir.ui.view">
+            <field name="name">wizard.invoice.deduction.form.view</field>
+            <field name="model">wizard.invoice.deduction</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="expense_ids"
+                                   domain="[('partner_id', '=', partner_id), ('move_line_ids', '=', False)]">
+                                <tree create="0">
+                                    <field name="name"/>
+                                    <field name="total_amount"/>
+                                </tree>
+                            </field>
+                            <field name="fund_ids"
+                                   domain="[('partner_id', '=', partner_id), ('move_line_ids', '=', False)]">
+                                <tree create="0">
+                                    <field name="name"/>
+                                    <field name="amount" string="Total Amount"/>
+                                    <field name="amount_due" string="Available Amount"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Submit" name="btn_submit_add_lines"
+                                type="object" class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
+

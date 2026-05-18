@@ -1,0 +1,75 @@
+erDiagram
+    DOCUMENTS_DOCUMENT {
+        char name
+        selection reference_month
+        selection reference_year
+        html description_1
+        html description_2
+        many2one sender_id
+        many2one receiver_id
+        many2one department_id
+        many2one location_id
+        char d_number
+        char umz_number
+        datetime submission_date
+        many2one folder_id
+        many2one attachment_id
+    }
+
+    PHYSICAL_RECORD_KEEPER {
+        selection reference_month
+        selection reference_year
+        many2one attachment_id
+        many2one folder_id
+    }
+
+    REQUEST_WIZARD {
+        char name
+        many2one department_id
+        many2one location_id
+        char d_number
+        char umz_number
+        many2one requester_id
+        many2one requestee_id
+        datetime request_date
+        many2one folder_id
+    }
+
+    RES_USERS {
+        char name
+        char email
+    }
+
+    HR_DEPARTMENT {
+        char name
+    }
+
+    CUSTOM_PHYSICAL_LOCATION {
+        char name
+    }
+
+    IR_ATTACHMENT {
+        char name
+        binary datas
+    }
+
+    DOCUMENTS_FOLDER {
+        char name
+    }
+
+    PHYSICAL_RECORD_KEEPER ||--|| IR_ATTACHMENT : has
+    PHYSICAL_RECORD_KEEPER ||--|| DOCUMENTS_FOLDER : belongs_to
+    PHYSICAL_RECORD_KEEPER ||--o| DOCUMENTS_DOCUMENT : syncs_to
+
+    DOCUMENTS_DOCUMENT ||--o| IR_ATTACHMENT : contains
+    DOCUMENTS_DOCUMENT ||--|| DOCUMENTS_FOLDER : stored_in
+    DOCUMENTS_DOCUMENT }o--|| RES_USERS : sender
+    DOCUMENTS_DOCUMENT }o--|| RES_USERS : receiver
+    DOCUMENTS_DOCUMENT }o--|| HR_DEPARTMENT : department
+    DOCUMENTS_DOCUMENT }o--|| CUSTOM_PHYSICAL_LOCATION : location
+
+    REQUEST_WIZARD }o--|| RES_USERS : requester
+    REQUEST_WIZARD }o--|| RES_USERS : requestee
+    REQUEST_WIZARD }o--|| HR_DEPARTMENT : department
+    REQUEST_WIZARD }o--|| CUSTOM_PHYSICAL_LOCATION : location
+    REQUEST_WIZARD }o--|| DOCUMENTS_FOLDER : target_folder

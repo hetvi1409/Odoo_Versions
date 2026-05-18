@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_recruitment_interview_session_list" model="ir.ui.view">
+        <field name="name">recruitment.interview.session.list</field>
+        <field name="model">recruitment.interview.session</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="requisition_id"/>
+                <field name="job_id"/>
+                <field name="interview_datetime"/>
+                <field name="venue"/>
+                <field name="recommendation_applicant_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_recruitment_interview_session_form" model="ir.ui.view">
+        <field name="name">recruitment.interview.session.form</field>
+        <field name="model">recruitment.interview.session</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_prepare" string="Prepare" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_start" string="Start Interviews" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'prepared')]}"/>
+                    <button name="action_done" string="Finalize" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+                    <button name="action_create_background_checks" string="Create Background Checks" type="object"
+                            class="btn-secondary"
+                            attrs="{'invisible': [('state', '!=', 'done')]}"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-secondary"
+                            attrs="{'invisible': [('state', 'in', ['done', 'cancelled'])]}"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,prepared,in_progress,done,cancelled"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view .o_field_widget:not(.o_field_many2one):not(.o_field_selection).o_input {
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_selection{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_many2one{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="requisition_id"/>
+                            <field name="shortlisting_id"/>
+                            <field name="job_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="interview_datetime"/>
+                            <field name="venue"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Panel Declarations">
+                            <field name="panel_line_ids">
+                                <tree editable="bottom">
+                                    <field name="user_id"/>
+                                    <field name="role"/>
+                                    <field name="confidentiality_signed"/>
+                                    <field name="no_personal_interest"/>
+                                    <field name="no_relationship"/>
+                                    <field name="no_conflict_of_interest"/>
+                                    <field name="signature_name"/>
+                                    <field name="signed_on"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Candidate Interviews">
+                            <field name="candidate_line_ids">
+                                <tree editable="bottom">
+                                    <field name="applicant_id" domain="[('job_id', '=', parent.job_id)]"/>
+                                    <field name="attended"/>
+                                    <field name="arrival_datetime"/>
+                                    <field name="score_technical"/>
+                                    <field name="score_competency"/>
+                                    <field name="score_culture"/>
+                                    <field name="total_score" readonly="1"/>
+                                    <field name="declaration_information_accurate"/>
+                                    <field name="declaration_conflict_of_interest"/>
+                                    <field name="availability_to_join"/>
+                                    <field name="declaration_interview_fair"/>
+                                    <field name="candidate_signed"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Recommendation">
+                            <group>
+                                <field name="recommendation_applicant_id"/>
+                                <field name="reserve_applicant_ids" widget="many2many_tags"/>
+                                <field name="recommendation_note"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_recruitment_interview_session" model="ir.actions.act_window">
+        <field name="name">Interview Sessions</field>
+        <field name="res_model">recruitment.interview.session</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="view_recruitment_interview_form" model="ir.ui.view">
+        <field name="name">recruitment.interview.form</field>
+        <field name="model">recruitment.interview</field>
+        <field name="arch" type="xml">
+            <form string="Recruitment Interview">
+                <header>
+                    <!-- Send Survey: manual trigger, always available when scheduled -->
+                    <button name="action_send_interview_survey"
+                            string="Send Inteview"
+                            type="object"
+                            class="btn-secondary"
+                            attrs="{'invisible': [('state', '!=', 'scheduled')]}"/>
+
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="scheduled,shortlisted,rejected"
+                           options="{'clickable': '1'}"/>
+
+                    <!-- Second Interview: opens wizard pre-filled with this applicant -->
+                    <!-- CORRECT -->
+                    <button name="%(action_recruitment_requisition_interview_wizard)d"
+                            type="action"
+                            string="Second Interview"
+                            class="btn-primary"
+                            context="{'active_model': 'recruitment.interview', 'active_id': id}"
+                            attrs="{'invisible': ['|', ('is_second_interview', '=', True), ('state', '!=', 'shortlisted')]}"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view .o_field_widget:not(.o_field_many2one):not(.o_field_selection):not(.o_field_many2many_tags) .o_input {
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_selection{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_many2one{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .o_field_many2many_tags{
+                            border: 1px solid black !important;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <!-- Title Row -->
+                    <div class="oe_title mb-3">
+                        <h1 class="o_field_widget">
+                            <field name="name" readonly="1" placeholder="Interview Reference"/>
+                        </h1>
+                    </div>
+
+                    <!-- Section 1: Core Info -->
+                    <group string="Interview Details">
+                        <group>
+                            <field name="application_id"
+                                   options="{'no_create': True}"
+                                   attrs="{'readonly': [('state', '!=', 'scheduled')]}"/>
+                            <field name="is_second_interview" invisible="1"/>
+                            <field name="job_id"
+                                   options="{'no_create': True}"
+                                   attrs="{'readonly': [('state', '!=', 'scheduled')]}"/>
+                            <field name="interview_type"
+                                   widget="radio"
+                                   attrs="{'readonly': [('state', '!=', 'scheduled')]}"/>
+<!--                            <field name="ee_representative" attrs="{'readonly': [('state', '!=', 'scheduled')]}"/>-->
+<!--                            <field name="panelist_representative" attrs="{'readonly': [('state', '!=', 'scheduled')]}"/>-->
+                        </group>
+                        <group>
+                            <field name="interview_time"
+                                   attrs="{'readonly': [('state', '!=', 'scheduled')]}"/>
+                            <field name="duration"
+                                   string="Duration (Hours)"
+                                   widget="float_time"
+                                   attrs="{'readonly': [('state', '!=', 'scheduled')]}"/>
+                        </group>
+                    </group>
+
+                    <!-- Section 2: People -->
+                    <group string="Participants">
+                        <group>
+                            <field name="recruiter_id"
+                                   options="{'no_create': True}"
+                                   attrs="{'readonly': [('state', '!=', 'scheduled')]}"/>
+                            <field name="recruiter_phone" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="interviewer_ids"
+                                   widget="many2many_tags"
+                                   options="{'no_create': True}"
+                                   attrs="{'readonly': [('state', '!=', 'scheduled')]}"/>
+                        </group>
+                    </group>
+
+                    <!-- Section 3: Notes & Attachments -->
+                    <notebook>
+                        <page string="HR Note" name="hr_note">
+                            <field name="hr_note"
+                                   widget="html"
+                                   nolabel="1"
+                                   style="min-height: 150px;"
+                                   attrs="{'readonly': [('state', '!=', 'scheduled')]}"
+                                   placeholder="Add internal notes for this interview..."/>
+                            <separator string="Attachments"/>
+                            <field name="attachment_ids"
+                                   widget="many2many_binary"
+                                   string="Attach a file"
+                                   nolabel="1"
+                                   attrs="{'readonly': [('state', '!=', 'scheduled')]}"/>
+                        </page>
+
+                        <page string="Skills" name="skills">
+                            <div class="row">
+                                <div class="o_hr_skills_editable o_hr_skills_group o_group_skills col-lg-5 d-flex flex-column">
+                                    <separator string="Expected Skills" class="mb-4"/>
+                                    <field name="id" invisible="1"/>
+                                    <field mode="tree"
+                                        nolabel="1"
+                                        name="current_applicant_skill_ids"
+                                        context="{'default_applicant_id': application_id, 'no_timeline': True}"
+                                        widget="skills_one2many" readonly="1">
+                                        <tree>
+                                            <field name="skill_type_id" column_invisible="1"/>
+                                            <field name="skill_id"/>
+                                            <field name="skill_level_id"/>
+                                            <field name="level_progress" widget="progressbar"/>
+                                        </tree>
+                                    </field>
+                                </div>
+                            </div>
+                        </page>
+
+                        <page string="Pre-Screening Questions" name="questions">
+                            <field name="question_and_page_ids" nolabel="1" readonly="1">
+                                <tree create="0" delete="0">
+                                    <field name="title" string="Question"/>
+                                    <field name="question_type" string="Type"/>
+                                    <field name="elimination_question" string="Elimination" widget="boolean_toggle"/>
+                                    <field name="constr_mandatory" string="Mandatory" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="view_recruitment_interview_tree" model="ir.ui.view">
+        <field name="name">recruitment.interview.tree</field>
+        <field name="model">recruitment.interview</field>
+        <field name="arch" type="xml">
+            <tree string="Interviews" decoration-info="state == 'scheduled'" decoration-success="state == 'shortlisted'"
+                  decoration-danger="state == 'rejected'" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="application_id"/>
+                <field name="job_id"/>
+                <field name="interview_time"/>
+                <field name="interviewer_ids" widget="many2many_tags"/>
+                <field name="state" widget="badge" decoration-info="state == 'scheduled'"
+                       decoration-success="state == 'shortlisted'" decoration-danger="state == 'rejected'"
+                       decoration-muted="state == 'cancel'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_recruitment_interview_calendar" model="ir.ui.view">
+        <field name="name">recruitment.interview.calendar</field>
+        <field name="model">recruitment.interview</field>
+        <field name="arch" type="xml">
+            <calendar string="Interviews"
+                      date_start="interview_time"
+                      color="recruiter_id"
+                      mode="month"
+                      event_open_popup="true">
+                <field name="name"/>
+                <field name="application_id"/>
+                <field name="job_id"/>
+                <field name="interviewer_ids" widget="many2many_tags"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_recruitment_interview" model="ir.actions.act_window">
+        <field name="name">Interviews</field>
+        <field name="res_model">recruitment.interview</field>
+        <field name="view_mode">tree,calendar,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No interviews scheduled yet!
+            </p>
+        </field>
+    </record>
+</odoo>

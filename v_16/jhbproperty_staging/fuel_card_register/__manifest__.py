@@ -1,0 +1,32 @@
+{
+    'name': "Fuel Card Register",
+    'description': """Fuel Card Register""",
+    'summary': """Fuel Card Register""",
+    'version': '16.0.1.0.0',
+    'category': 'Services',
+    'depends': ['fleet', 'hr','mail'],
+    'data': [
+        'data/ir_action_data.xml',
+        'data/mail_template_fuel_card.xml',
+        'security/fuel_card_security.xml',
+        'security/ir.model.access.csv',
+        'views/fuel_card_transaction_views.xml',
+        'report/fuel_tank_views.xml',
+        'views/fuel_card_views.xml',
+        'views/issued_cards.xml',
+        'views/fuel_type.xml',
+        'views/fleet_vehicles_views.xml',
+        'views/fuel_tank_views.xml',
+        'wizard/fuel_card_transaction_wizard.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'fuel_card_register/static/src/js/action_manager.js',
+        ],
+    },
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

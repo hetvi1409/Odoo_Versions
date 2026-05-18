@@ -1,0 +1,1344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Demo Partners (Drivers) -->
+        <record id="demo_driver_john" model="res.partner">
+            <field name="name">John Smith</field>
+            <field name="is_fleet_driver" eval="True"/>
+            <field name="phone">+27 82 123 4567</field>
+            <field name="email">john.smith@company.com</field>
+            <field name="driver_license_number">DL123456789</field>
+            <field name="street">45 Oak Avenue</field>
+            <field name="city">Johannesburg</field>
+            <field name="state_id" ref="base.state_za_gt"/>
+            <field name="zip">2001</field>
+            <field name="country_id" ref="base.za"/>
+        </record>
+
+        <record id="demo_driver_sarah" model="res.partner">
+            <field name="name">Sarah Johnson</field>
+            <field name="is_fleet_driver" eval="True"/>
+            <field name="phone">+27 83 234 5678</field>
+            <field name="email">sarah.johnson@company.com</field>
+            <field name="driver_license_number">DL987654321</field>
+            <field name="street">12 Maple Street</field>
+            <field name="city">Pretoria</field>
+            <field name="state_id" ref="base.state_za_gt"/>
+            <field name="zip">0001</field>
+            <field name="country_id" ref="base.za"/>
+        </record>
+
+        <record id="demo_driver_michael" model="res.partner">
+            <field name="name">Michael Brown</field>
+            <field name="is_fleet_driver" eval="True"/>
+            <field name="phone">+27 84 345 6789</field>
+            <field name="email">michael.brown@company.com</field>
+            <field name="driver_license_number">DL456789123</field>
+            <field name="street">78 Pine Road</field>
+            <field name="city">Sandton</field>
+            <field name="state_id" ref="base.state_za_gt"/>
+            <field name="zip">2196</field>
+            <field name="country_id" ref="base.za"/>
+        </record>
+
+        <record id="demo_driver_thabo" model="res.partner">
+            <field name="name">Thabo Mthembu</field>
+            <field name="is_fleet_driver" eval="True"/>
+            <field name="phone">+27 81 456 7890</field>
+            <field name="email">thabo.mthembu@company.com</field>
+            <field name="driver_license_number">DL789123456</field>
+            <field name="street">23 Acacia Drive</field>
+            <field name="city">Midrand</field>
+            <field name="state_id" ref="base.state_za_gt"/>
+            <field name="zip">1685</field>
+            <field name="country_id" ref="base.za"/>
+        </record>
+
+        <record id="demo_driver_nomsa" model="res.partner">
+            <field name="name">Nomsa Dlamini</field>
+            <field name="is_fleet_driver" eval="True"/>
+            <field name="phone">+27 82 567 8901</field>
+            <field name="email">nomsa.dlamini@company.com</field>
+            <field name="driver_license_number">DL321654987</field>
+            <field name="street">56 Willow Lane</field>
+            <field name="city">Johannesburg</field>
+            <field name="state_id" ref="base.state_za_gt"/>
+            <field name="zip">2000</field>
+            <field name="country_id" ref="base.za"/>
+        </record>
+
+        <!-- Local brand/model data to avoid missing external IDs when fleet demo is not installed -->
+        <record id="efm_vehicle_brand_toyota" model="fleet.vehicle.model.brand">
+            <field name="name">Toyota</field>
+        </record>
+
+        <record id="efm_vehicle_brand_ford" model="fleet.vehicle.model.brand">
+            <field name="name">Ford</field>
+        </record>
+
+        <record id="efm_vehicle_brand_isuzu" model="fleet.vehicle.model.brand">
+            <field name="name">Isuzu</field>
+        </record>
+
+        <record id="efm_vehicle_brand_mercedes" model="fleet.vehicle.model.brand">
+            <field name="name">Mercedes-Benz</field>
+        </record>
+
+        <record id="efm_vehicle_brand_honda" model="fleet.vehicle.model.brand">
+            <field name="name">Honda</field>
+        </record>
+
+        <record id="efm_model_corolla" model="fleet.vehicle.model">
+            <field name="name">Corolla</field>
+            <field name="brand_id" ref="efm_vehicle_brand_toyota"/>
+        </record>
+
+        <record id="efm_model_ranger" model="fleet.vehicle.model">
+            <field name="name">Ranger</field>
+            <field name="brand_id" ref="efm_vehicle_brand_ford"/>
+        </record>
+
+        <record id="efm_model_d_max" model="fleet.vehicle.model">
+            <field name="name">D-Max</field>
+            <field name="brand_id" ref="efm_vehicle_brand_isuzu"/>
+        </record>
+
+        <record id="efm_model_sprinter" model="fleet.vehicle.model">
+            <field name="name">Sprinter</field>
+            <field name="brand_id" ref="efm_vehicle_brand_mercedes"/>
+        </record>
+
+        <record id="efm_model_crf250" model="fleet.vehicle.model">
+            <field name="name">CRF250</field>
+            <field name="brand_id" ref="efm_vehicle_brand_honda"/>
+        </record>
+
+        <!-- Fleet vehicle states (local) -->
+        <record id="efm_vehicle_state_available" model="fleet.vehicle.state">
+            <field name="name">Available</field>
+            <field name="sequence">1</field>
+        </record>
+        <record id="efm_vehicle_state_in_service" model="fleet.vehicle.state">
+            <field name="name">In Service</field>
+            <field name="sequence">2</field>
+        </record>
+        <record id="efm_vehicle_state_workshop" model="fleet.vehicle.state">
+            <field name="name">Workshop</field>
+            <field name="sequence">3</field>
+        </record>
+        <record id="efm_vehicle_state_retired" model="fleet.vehicle.state">
+            <field name="name">Retired</field>
+            <field name="sequence">99</field>
+        </record>
+
+        <!-- Demo Vehicles with Fleet Register Data (FLEET_REGISTER_HUMAN_SETTLEMENTS.pdf) -->
+        <record id="demo_vehicle_sedan" model="fleet.vehicle">
+            <field name="name">Toyota Corolla - ABC123GP</field>
+            <field name="license_plate">ABC123GP</field>
+            <field name="vin_sn">JT2BF28K9X0123456</field>
+            <field name="chassis_number">JT2BF28K9X0123456</field>
+            <field name="model_id" ref="efm_model_corolla"/>
+            <field name="odometer">45000</field>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="state_id" ref="efm_vehicle_state_available"/>
+            <field name="vehicle_category">1</field>
+            <field name="maintenance_contract_type">fml</field>
+            <field name="contract_term">36</field>
+            <field name="monthly_cost">4500.00</field>
+            <field name="date_received" eval="(DateTime.now() - timedelta(days=730)).strftime('%Y-%m-%d')"/>
+            <field name="section_assignment">Administration</field>
+            <field name="cost_center">CC-001-ADM</field>
+            <field name="has_radio" eval="True"/>
+            <field name="has_aircon" eval="True"/>
+            <field name="has_canopy" eval="False"/>
+            <field name="license_renewal_date" eval="(DateTime.now() + timedelta(days=90)).strftime('%Y-%m-%d')"/>
+            <field name="insurance_company">Santam Insurance</field>
+            <field name="insurance_policy_number">POL-2024-ABC123</field>
+            <field name="insurance_expiry_date" eval="(DateTime.now() + timedelta(days=180)).strftime('%Y-%m-%d')"/>
+            <field name="engine_number">1ZZ-FE-123456</field>
+            <field name="alarm_fitted" eval="True"/>
+            <field name="tracking_device_fitted" eval="True"/>
+            <field name="tracking_company">Tracker SA</field>
+        </record>
+
+        <record id="demo_vehicle_suv" model="fleet.vehicle">
+            <field name="name">Ford Ranger - XYZ789GP</field>
+            <field name="license_plate">XYZ789GP</field>
+            <field name="vin_sn">1FTYR14D1XPA12345</field>
+            <field name="chassis_number">1FTYR14D1XPA12345</field>
+            <field name="model_id" ref="efm_model_ranger"/>
+            <field name="odometer">78000</field>
+            <field name="driver_id" ref="demo_driver_sarah"/>
+            <field name="state_id" ref="efm_vehicle_state_available"/>
+            <field name="vehicle_category">5</field>
+            <field name="maintenance_contract_type">mm</field>
+            <field name="contract_term">48</field>
+            <field name="contract_km_coverage">120000</field>
+            <field name="monthly_cost">6800.00</field>
+            <field name="date_received" eval="(DateTime.now() - timedelta(days=1095)).strftime('%Y-%m-%d')"/>
+            <field name="section_assignment">Field Operations</field>
+            <field name="cost_center">CC-002-OPS</field>
+            <field name="has_radio" eval="True"/>
+            <field name="has_aircon" eval="True"/>
+            <field name="has_canopy" eval="True"/>
+            <field name="license_renewal_date" eval="(DateTime.now() + timedelta(days=120)).strftime('%Y-%m-%d')"/>
+            <field name="insurance_company">Santam Insurance</field>
+            <field name="insurance_policy_number">POL-2024-XYZ789</field>
+            <field name="insurance_expiry_date" eval="(DateTime.now() + timedelta(days=210)).strftime('%Y-%m-%d')"/>
+            <field name="engine_number">DURATORQ-789456</field>
+            <field name="alarm_fitted" eval="True"/>
+            <field name="tracking_device_fitted" eval="True"/>
+            <field name="tracking_company">Tracker SA</field>
+        </record>
+
+        <!-- Demo Transport Requests (TRANSPORT_REQUEST_FORM.pdf) -->
+        <record id="demo_transport_request_1" model="fleet.transport.request">
+            <field name="reference">TR/2026/0001</field>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="date_required" eval="(DateTime.now() + timedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="time_required">8.0</field>
+            <field name="transport_type">return</field>
+            <field name="priority">1</field>
+            <field name="purpose">Client meeting in Sandton - Annual Review Presentation</field>
+            <field name="number_of_passengers">3</field>
+            <field name="passenger_names">Jane Doe; Tom Lee; Mary Wilson</field>
+            <field name="pickup_location">Head Office, 123 Main Street, Johannesburg</field>
+            <field name="destination">Sandton Convention Centre, Sandton</field>
+            <field name="distance_km">25</field>
+            <field name="return_date" eval="(DateTime.now() + timedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="return_time">16.0</field>
+            <field name="special_requirements">Require vehicle with air conditioning. Presentation materials and laptop equipment will be transported.</field>
+            <field name="state">approved</field>
+        </record>
+
+        <record id="demo_transport_request_2" model="fleet.transport.request">
+            <field name="reference">TR/2026/0002</field>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="date_required" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="time_required">6.0</field>
+            <field name="transport_type">return</field>
+            <field name="priority">3</field>
+            <field name="purpose">Emergency site visit - equipment failure at Pretoria facility</field>
+            <field name="number_of_passengers">2</field>
+            <field name="pickup_location">Head Office, Johannesburg</field>
+            <field name="destination">Pretoria Industrial Park, Rigel Avenue</field>
+            <field name="distance_km">60</field>
+            <field name="return_date" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="return_time">17.0</field>
+            <field name="special_requirements">Urgent - equipment failure affecting operations. Require LDV for tools and equipment transport.</field>
+            <field name="is_urgent" eval="True"/>
+            <field name="state">submitted</field>
+        </record>
+
+        <record id="demo_transport_request_3" model="fleet.transport.request">
+            <field name="reference">TR/2026/0003</field>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="date_required" eval="(DateTime.now() + timedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="time_required">7.0</field>
+            <field name="transport_type">return</field>
+            <field name="priority">1</field>
+            <field name="purpose">Staff transport to training workshop - Change Management</field>
+            <field name="number_of_passengers">12</field>
+            <field name="pickup_location">Head Office, Johannesburg</field>
+            <field name="destination">Training Centre, Midrand</field>
+            <field name="distance_km">35</field>
+            <field name="return_date" eval="(DateTime.now() + timedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="return_time">18.0</field>
+            <field name="special_requirements">Require bus or large vehicle for 12 passengers. Workshop materials will be transported.</field>
+            <field name="state">draft</field>
+        </record>
+
+        <record id="demo_transport_request_4" model="fleet.transport.request">
+            <field name="reference">TR/2026/0004</field>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="date_required" eval="(DateTime.now() + timedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="time_required">6.0</field>
+            <field name="transport_type">return</field>
+            <field name="priority">2</field>
+            <field name="purpose">Equipment delivery to Cape Town project site</field>
+            <field name="number_of_passengers">2</field>
+            <field name="pickup_location">Head Office, Johannesburg</field>
+            <field name="destination">Cape Town Project Site, Century City</field>
+            <field name="distance_km">1400</field>
+            <field name="return_date" eval="(DateTime.now() + timedelta(days=12)).strftime('%Y-%m-%d')"/>
+            <field name="return_time">14.0</field>
+            <field name="special_requirements">Long-distance trip. Require LDV with canopy for equipment protection. Overnight accommodation required (2 nights). Fuel card and toll gate card needed.</field>
+            <field name="state">approved</field>
+        </record>
+
+        <record id="demo_transport_request_5" model="fleet.transport.request">
+            <field name="reference">TR/2026/0005</field>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="date_required" eval="(DateTime.now() + timedelta(hours=4)).strftime('%Y-%m-%d')"/>
+            <field name="time_required">12.0</field>
+            <field name="transport_type">one_way</field>
+            <field name="priority">3</field>
+            <field name="purpose">Emergency response - site incident requiring management presence</field>
+            <field name="number_of_passengers">3</field>
+            <field name="pickup_location">Head Office, Johannesburg</field>
+            <field name="destination">Durban Site Office</field>
+            <field name="distance_km">600</field>
+            <field name="special_requirements">URGENT - Site incident requires immediate management response. Require reliable vehicle with good fuel economy for long-distance travel.</field>
+            <field name="is_urgent" eval="True"/>
+            <field name="state">submitted</field>
+        </record>
+
+        <record id="demo_vehicle_truck" model="fleet.vehicle">
+            <field name="name">Isuzu KB - DEF456GP</field>
+            <field name="license_plate">DEF456GP</field>
+            <field name="vin_sn">JAAFD48V1X7123456</field>
+            <field name="chassis_number">JAAFD48V1X7123456</field>
+            <field name="model_id" ref="efm_model_d_max"/>
+            <field name="odometer">112000</field>
+            <field name="driver_id" ref="demo_driver_michael"/>
+            <field name="state_id" ref="efm_vehicle_state_available"/>
+            <field name="vehicle_category">6</field>
+            <field name="maintenance_contract_type">fml</field>
+            <field name="contract_term">60</field>
+            <field name="monthly_cost">7200.00</field>
+            <field name="date_received" eval="(DateTime.now() - timedelta(days=1460)).strftime('%Y-%m-%d')"/>
+            <field name="section_assignment">Maintenance</field>
+            <field name="cost_center">CC-003-MNT</field>
+            <field name="has_radio" eval="True"/>
+            <field name="has_aircon" eval="False"/>
+            <field name="has_canopy" eval="True"/>
+            <field name="license_renewal_date" eval="(DateTime.now() + timedelta(days=60)).strftime('%Y-%m-%d')"/>
+            <field name="insurance_company">Santam Insurance</field>
+            <field name="insurance_policy_number">POL-2024-DEF456</field>
+            <field name="insurance_expiry_date" eval="(DateTime.now() + timedelta(days=150)).strftime('%Y-%m-%d')"/>
+            <field name="engine_number">4JJ1-TC-456789</field>
+            <field name="alarm_fitted" eval="True"/>
+            <field name="tracking_device_fitted" eval="True"/>
+            <field name="tracking_company">Ctrack</field>
+        </record>
+
+        <record id="demo_vehicle_bus" model="fleet.vehicle">
+            <field name="name">Mercedes Sprinter - BUS001GP</field>
+            <field name="license_plate">BUS001GP</field>
+            <field name="vin_sn">WDB9066331N123456</field>
+            <field name="chassis_number">WDB9066331N123456</field>
+            <field name="model_id" ref="efm_model_sprinter"/>
+            <field name="odometer">95000</field>
+            <field name="state_id" ref="efm_vehicle_state_available"/>
+            <field name="vehicle_category">15</field>
+            <field name="maintenance_contract_type">mm</field>
+            <field name="contract_term">36</field>
+            <field name="contract_km_coverage">100000</field>
+            <field name="monthly_cost">8500.00</field>
+            <field name="date_received" eval="(DateTime.now() - timedelta(days=900)).strftime('%Y-%m-%d')"/>
+            <field name="section_assignment">Transport Services</field>
+            <field name="cost_center">CC-004-TRN</field>
+        </record>
+
+        <!-- Demo Trip Authorities with Trip Numbers (MANUAL_TRIP_AUTHORISATION_2018.pdf) -->
+        <record id="demo_trip_authority_1" model="fleet.trip.authority">
+            <field name="reference">TA/2026/0001</field>
+            <field name="trip_number">GGG145776/01/2026</field>
+            <field name="transport_request_id" ref="demo_transport_request_1"/>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="employee_id" ref="hr.employee_admin"/>
+            <field name="departure_date" eval="(DateTime.now() + timedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="departure_time">8.0</field>
+            <field name="return_date" eval="(DateTime.now() + timedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="return_time">14.0</field>
+            <field name="destination">Sandton Convention Centre</field>
+            <field name="route_description">N1 South to Sandton, via Rivonia Road</field>
+            <field name="purpose">Client meeting and presentation - Annual Review</field>
+            <field name="number_of_passengers">3</field>
+            <field name="odometer_start">45000</field>
+            <field name="fuel_level_start">100</field>
+            <field name="state">issued</field>
+        </record>
+
+        <record id="demo_trip_authority_2" model="fleet.trip.authority">
+            <field name="reference">TA/2026/0002</field>
+            <field name="trip_number">GGG145777/01/2026</field>
+            <field name="vehicle_id" ref="demo_vehicle_suv"/>
+            <field name="driver_id" ref="demo_driver_sarah"/>
+            <field name="employee_id" ref="hr.employee_admin"/>
+            <field name="departure_date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="departure_time">6.0</field>
+            <field name="return_date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="return_time">18.0</field>
+            <field name="destination">Durban Port</field>
+            <field name="route_description">N3 to Durban via Harrismith and Pietermaritzburg</field>
+            <field name="purpose">Equipment collection and delivery to coastal projects</field>
+            <field name="number_of_passengers">1</field>
+            <field name="odometer_start">77000</field>
+            <field name="odometer_end">78200</field>
+            <field name="fuel_level_start">100</field>
+            <field name="fuel_level_end">25</field>
+            <field name="distance_travelled">1200</field>
+            <field name="actual_return_date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="state">completed</field>
+        </record>
+
+        <record id="demo_trip_authority_3" model="fleet.trip.authority">
+            <field name="reference">TA/2026/0003</field>
+            <field name="trip_number">GGG145778/01/2026</field>
+            <field name="vehicle_id" ref="demo_vehicle_truck"/>
+            <field name="driver_id" ref="demo_driver_michael"/>
+            <field name="employee_id" ref="hr.employee_admin"/>
+            <field name="departure_date" eval="(DateTime.now() + timedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="departure_time">7.0</field>
+            <field name="return_date" eval="(DateTime.now() + timedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="return_time">16.0</field>
+            <field name="destination">Pretoria Industrial Park</field>
+            <field name="route_description">N1 North to Pretoria, exit at Rigel Avenue</field>
+            <field name="purpose">Equipment delivery and site inspection</field>
+            <field name="number_of_passengers">2</field>
+            <field name="odometer_start">112000</field>
+            <field name="fuel_level_start">75</field>
+            <field name="state">draft</field>
+        </record>
+
+        <record id="demo_trip_authority_4" model="fleet.trip.authority">
+            <field name="reference">TA/2026/0004</field>
+            <field name="trip_number">GGG145779/01/2026</field>
+            <field name="vehicle_id" ref="demo_vehicle_bus"/>
+            <field name="employee_id" ref="hr.employee_admin"/>
+            <field name="departure_date" eval="(DateTime.now() + timedelta(days=7)).strftime('%Y-%m-%d')"/>
+            <field name="departure_time">6.0</field>
+            <field name="return_date" eval="(DateTime.now() + timedelta(days=7)).strftime('%Y-%m-%d')"/>
+            <field name="return_time">17.0</field>
+            <field name="destination">Cape Town Conference Centre</field>
+            <field name="route_description">N1 South via Bloemfontein and Beaufort West</field>
+            <field name="purpose">Staff transport to annual conference</field>
+            <field name="number_of_passengers">15</field>
+            <field name="odometer_start">95000</field>
+            <field name="fuel_level_start">100</field>
+            <field name="state">draft</field>
+            <field name="has_radio" eval="True"/>
+            <field name="has_aircon" eval="True"/>
+            <field name="has_canopy" eval="False"/>
+            <field name="license_renewal_date" eval="(DateTime.now() + timedelta(days=45)).strftime('%Y-%m-%d')"/>
+            <field name="insurance_company">Santam Insurance</field>
+            <field name="insurance_policy_number">POL-2024-BUS001</field>
+            <field name="insurance_expiry_date" eval="(DateTime.now() + timedelta(days=120)).strftime('%Y-%m-%d')"/>
+            <field name="engine_number">OM651-BUS-001</field>
+            <field name="alarm_fitted" eval="True"/>
+            <field name="tracking_device_fitted" eval="True"/>
+            <field name="tracking_company">Tracker SA</field>
+        </record>
+
+        <!-- Demo Odometer Readings -->
+        <record id="demo_odometer_1" model="fleet.odometer.reading">
+            <field name="reference">ODO/2026/0001</field>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="reading_date" eval="(DateTime.now() - timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">44500</field>
+            <field name="reading_type">regular</field>
+            <field name="location">Head Office</field>
+            <field name="fuel_level">three_quarter</field>
+            <field name="verified" eval="True"/>
+            <field name="verified_by_id" ref="base.user_admin"/>
+            <field name="notes">Weekly odometer reading - vehicle in good condition</field>
+        </record>
+
+        <record id="demo_odometer_2" model="fleet.odometer.reading">
+            <field name="reference">ODO/2026/0002</field>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="reading_date" eval="(DateTime.now() - timedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">44850</field>
+            <field name="reading_type">regular</field>
+            <field name="location">Head Office</field>
+            <field name="fuel_level">half</field>
+            <field name="verified" eval="True"/>
+            <field name="verified_by_id" ref="base.user_admin"/>
+            <field name="notes">Mid-week reading - 350km traveled since last reading</field>
+        </record>
+
+        <record id="demo_odometer_3" model="fleet.odometer.reading">
+            <field name="reference">ODO/2026/0003</field>
+            <field name="vehicle_id" ref="demo_vehicle_suv"/>
+            <field name="driver_id" ref="demo_driver_sarah"/>
+            <field name="reading_date" eval="(DateTime.now() - timedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">77500</field>
+            <field name="reading_type">fuel</field>
+            <field name="location">Shell Garage, Pretoria</field>
+            <field name="fuel_level">full</field>
+            <field name="fuel_quantity">65.5</field>
+            <field name="fuel_cost">1310.00</field>
+            <field name="verified" eval="True"/>
+            <field name="notes">Fuel stop during Pretoria trip - full tank refuel</field>
+        </record>
+
+        <record id="demo_odometer_4" model="fleet.odometer.reading">
+            <field name="reference">ODO/2026/0004</field>
+            <field name="vehicle_id" ref="demo_vehicle_truck"/>
+            <field name="driver_id" ref="demo_driver_michael"/>
+            <field name="reading_date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">111500</field>
+            <field name="reading_type">regular</field>
+            <field name="location">Head Office</field>
+            <field name="fuel_level">full</field>
+            <field name="verified" eval="True"/>
+            <field name="verified_by_id" ref="base.user_admin"/>
+            <field name="notes">Pre-trip reading before long-distance delivery</field>
+        </record>
+
+        <record id="demo_odometer_5" model="fleet.odometer.reading">
+            <field name="reference">ODO/2026/0005</field>
+            <field name="vehicle_id" ref="demo_vehicle_truck"/>
+            <field name="driver_id" ref="demo_driver_michael"/>
+            <field name="reading_date" eval="(DateTime.now() - timedelta(days=8)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">112000</field>
+            <field name="reading_type">regular</field>
+            <field name="location">Head Office</field>
+            <field name="fuel_level">quarter</field>
+            <field name="verified" eval="True"/>
+            <field name="verified_by_id" ref="base.user_admin"/>
+            <field name="notes">Post-trip reading - 500km traveled on delivery run</field>
+        </record>
+
+        <record id="demo_odometer_6" model="fleet.odometer.reading">
+            <field name="reference">ODO/2026/0006</field>
+            <field name="vehicle_id" ref="demo_vehicle_bus"/>
+            <field name="reading_date" eval="(DateTime.now() - timedelta(days=4)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">95000</field>
+            <field name="reading_type">maintenance</field>
+            <field name="location">Mercedes-Benz Service Centre</field>
+            <field name="fuel_level">three_quarter</field>
+            <field name="verified" eval="True"/>
+            <field name="verified_by_id" ref="base.user_admin"/>
+            <field name="notes">Reading taken at service centre for scheduled maintenance</field>
+        </record>
+
+        <record id="demo_odometer_7" model="fleet.odometer.reading">
+            <field name="reference">ODO/2026/0007</field>
+            <field name="vehicle_id" ref="demo_vehicle_motorcycle"/>
+            <field name="reading_date" eval="(DateTime.now() - timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">15000</field>
+            <field name="reading_type">maintenance</field>
+            <field name="location">Honda Service Centre</field>
+            <field name="fuel_level">full</field>
+            <field name="verified" eval="True"/>
+            <field name="verified_by_id" ref="base.user_admin"/>
+            <field name="notes">15,000km service due - reading taken before service</field>
+        </record>
+
+        <record id="demo_odometer_8" model="fleet.odometer.reading">
+            <field name="reference">ODO/2026/0008</field>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="reading_date" eval="(DateTime.now() - timedelta(hours=6)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">45120</field>
+            <field name="reading_type">fuel</field>
+            <field name="location">Engen Garage, Sandton</field>
+            <field name="fuel_level">full</field>
+            <field name="fuel_quantity">42.0</field>
+            <field name="fuel_cost">840.00</field>
+            <field name="verified" eval="False"/>
+            <field name="notes">Fuel stop during client visit - awaiting verification</field>
+        </record>
+
+        <record id="demo_vehicle_motorcycle" model="fleet.vehicle">
+            <field name="name">Honda CRF250 - MOTO01GP</field>
+            <field name="license_plate">MOTO01GP</field>
+            <field name="vin_sn">JH2MD43A1XK123456</field>
+            <field name="chassis_number">JH2MD43A1XK123456</field>
+            <field name="model_id" ref="efm_model_crf250"/>
+            <field name="odometer">15000</field>
+            <field name="state_id" ref="efm_vehicle_state_available"/>
+            <field name="vehicle_category">5</field>
+            <field name="maintenance_contract_type">fml</field>
+            <field name="contract_term">24</field>
+            <field name="monthly_cost">1200.00</field>
+            <field name="date_received" eval="(DateTime.now() - timedelta(days=365)).strftime('%Y-%m-%d')"/>
+            <field name="section_assignment">Security</field>
+            <field name="cost_center">CC-005-SEC</field>
+            <field name="has_radio" eval="False"/>
+            <field name="has_aircon" eval="False"/>
+            <field name="has_canopy" eval="False"/>
+            <field name="license_renewal_date" eval="(DateTime.now() + timedelta(days=150)).strftime('%Y-%m-%d')"/>
+            <field name="insurance_company">Santam Insurance</field>
+            <field name="insurance_policy_number">POL-2024-MOTO01</field>
+            <field name="insurance_expiry_date" eval="(DateTime.now() + timedelta(days=200)).strftime('%Y-%m-%d')"/>
+            <field name="engine_number">CRF250-MOTO-001</field>
+        </record>
+
+        <!-- Demo Vehicle Checklists (VEHICLE_CHECKLIST_FORM.pdf) -->
+        <record id="demo_checklist_1" model="fleet.vehicle.checklist">
+            <field name="reference">CHK/2026/0001</field>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="trip_authority_id" ref="demo_trip_authority_1"/>
+            <field name="checklist_type">pre_trip</field>
+            <field name="checklist_date" eval="(DateTime.now() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">45120</field>
+            <field name="fuel_level">full</field>
+            <field name="exterior_clean" eval="True"/>
+            <field name="interior_clean" eval="True"/>
+            <field name="tire_condition_ok" eval="True"/>
+            <field name="tire_pressure_ok" eval="True"/>
+            <field name="lights_working" eval="True"/>
+            <field name="windscreen_ok" eval="True"/>
+            <field name="mirrors_ok" eval="True"/>
+            <field name="wipers_ok" eval="True"/>
+            <field name="brakes_ok" eval="True"/>
+            <field name="horn_ok" eval="True"/>
+            <field name="steering_ok" eval="True"/>
+            <field name="seatbelts_ok" eval="True"/>
+            <field name="first_aid_kit" eval="True"/>
+            <field name="fire_extinguisher" eval="True"/>
+            <field name="warning_triangle" eval="True"/>
+            <field name="spare_tire" eval="True"/>
+            <field name="jack_tools" eval="True"/>
+            <field name="reflective_vest" eval="True"/>
+            <field name="vehicle_documents" eval="True"/>
+            <field name="state">completed</field>
+        </record>
+
+        <record id="demo_checklist_2" model="fleet.vehicle.checklist">
+            <field name="reference">CHK/2026/0002</field>
+            <field name="vehicle_id" ref="demo_vehicle_suv"/>
+            <field name="driver_id" ref="demo_driver_sarah"/>
+            <field name="trip_authority_id" ref="demo_trip_authority_2"/>
+            <field name="checklist_type">post_trip</field>
+            <field name="checklist_date" eval="(DateTime.now() - timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">78250</field>
+            <field name="fuel_level">half</field>
+            <field name="exterior_clean" eval="False"/>
+            <field name="interior_clean" eval="True"/>
+            <field name="tire_condition_ok" eval="True"/>
+            <field name="tire_pressure_ok" eval="True"/>
+            <field name="lights_working" eval="True"/>
+            <field name="windscreen_ok" eval="True"/>
+            <field name="mirrors_ok" eval="True"/>
+            <field name="wipers_ok" eval="True"/>
+            <field name="brakes_ok" eval="True"/>
+            <field name="horn_ok" eval="True"/>
+            <field name="steering_ok" eval="True"/>
+            <field name="seatbelts_ok" eval="True"/>
+            <field name="issues_noted" eval="True"/>
+            <field name="issues_description">Vehicle exterior dirty from long-distance trip. Requires washing. Minor stone chips on windscreen.</field>
+            <field name="state">completed</field>
+        </record>
+
+        <record id="demo_checklist_3" model="fleet.vehicle.checklist">
+            <field name="reference">CHK/2026/0003</field>
+            <field name="vehicle_id" ref="demo_vehicle_truck"/>
+            <field name="driver_id" ref="demo_driver_michael"/>
+            <field name="checklist_type">pre_trip</field>
+            <field name="checklist_date" eval="(DateTime.now() - timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">112150</field>
+            <field name="fuel_level">three_quarter</field>
+            <field name="exterior_clean" eval="True"/>
+            <field name="interior_clean" eval="True"/>
+            <field name="tire_condition_ok" eval="True"/>
+            <field name="tire_pressure_ok" eval="True"/>
+            <field name="lights_working" eval="True"/>
+            <field name="windscreen_ok" eval="True"/>
+            <field name="mirrors_ok" eval="True"/>
+            <field name="wipers_ok" eval="True"/>
+            <field name="brakes_ok" eval="True"/>
+            <field name="horn_ok" eval="True"/>
+            <field name="steering_ok" eval="True"/>
+            <field name="seatbelts_ok" eval="True"/>
+            <field name="first_aid_kit" eval="True"/>
+            <field name="fire_extinguisher" eval="True"/>
+            <field name="warning_triangle" eval="True"/>
+            <field name="spare_tire" eval="True"/>
+            <field name="jack_tools" eval="True"/>
+            <field name="reflective_vest" eval="True"/>
+            <field name="vehicle_documents" eval="True"/>
+            <field name="state">completed</field>
+        </record>
+
+        <!-- Demo Accident Report (ACCIDENT_REPORT_FORM.pdf) -->
+        <record id="demo_accident_1" model="fleet.accident.report">
+            <field name="reference">ACC/2026/0001</field>
+            <field name="vehicle_id" ref="demo_vehicle_truck"/>
+            <field name="driver_id" ref="demo_driver_michael"/>
+            <field name="accident_date" eval="(DateTime.now() - timedelta(days=15)).strftime('%Y-%m-%d')"/>
+            <field name="accident_time">14.5</field>
+            <field name="accident_location">N1 Highway near Midrand</field>
+            <field name="accident_address">N1 North, approximately 5km north of Midrand exit, Gauteng</field>
+            <field name="weather_conditions">rain</field>
+            <field name="road_conditions">wet</field>
+            <field name="accident_type">collision</field>
+            <field name="passenger_count">1</field>
+            <field name="passenger_details">Assistant: David Wilson (Employee #EMP-456)</field>
+            <field name="injuries_reported" eval="False"/>
+            <field name="third_party_involved" eval="True"/>
+            <field name="third_party_name">Peter Anderson</field>
+            <field name="third_party_contact">082 555 1234</field>
+            <field name="third_party_address">45 Oak Street, Midrand, 1685</field>
+            <field name="third_party_vehicle_reg">GHI789GP</field>
+            <field name="third_party_vehicle_make">Volkswagen Polo</field>
+            <field name="third_party_insurance">Budget Insurance</field>
+            <field name="third_party_policy_number">BUD-2024-789456</field>
+            <field name="accident_description">Vehicle was traveling north on N1 in heavy rain at approximately 80 km/h. Third party vehicle (GHI789GP) changed lanes suddenly from the right lane to the left lane without indicating, causing our driver to brake hard to avoid collision. Due to wet road conditions, the vehicle's ABS engaged but the vehicle continued sliding forward, making contact with the rear bumper of the third party vehicle. Impact was minor but caused damage to both vehicles.</field>
+            <field name="damage_description">Front bumper damaged with cracks and dents, right headlight assembly cracked and non-functional, bonnet slightly dented near the latch area. Paint scratches on front right fender. Estimated repair cost R15,000 - R18,000.</field>
+            <field name="speed_at_accident">80</field>
+            <field name="driver_statement">I was driving in the left lane at approximately 80 km/h in heavy rain. The vehicle ahead (GHI789GP) suddenly changed lanes from right to left without indicating. I immediately applied brakes but due to wet conditions, the vehicle slid forward despite ABS activation. I made contact with the rear of the other vehicle. I was not speeding and was driving cautiously due to weather conditions.</field>
+            <field name="witness_present" eval="True"/>
+            <field name="witness_details">Traffic officer on scene: Officer J. Mthembu, Badge #12345, Midrand Traffic Department. Also witnessed by: Sarah Nkosi (passenger in third party vehicle), Contact: 083 444 5555</field>
+            <field name="police_notified" eval="True"/>
+            <field name="police_station">Midrand Police Station</field>
+            <field name="police_case_number">CAS123/01/2026</field>
+            <field name="police_officer_name">Officer J. Mthembu</field>
+            <field name="police_officer_badge">12345</field>
+            <field name="vehicle_driveable" eval="True"/>
+            <field name="vehicle_towed" eval="False"/>
+            <field name="estimated_repair_cost">15000.00</field>
+            <field name="fault_determination">third_party</field>
+            <field name="insurance_claim_number">SANTAM-2026-ACC-001</field>
+            <field name="state">investigation</field>
+        </record>
+
+        <record id="demo_accident_2" model="fleet.accident.report">
+            <field name="reference">ACC/2026/0002</field>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="accident_date" eval="(DateTime.now() - timedelta(days=45)).strftime('%Y-%m-%d')"/>
+        </record>
+
+        <!-- Demo Lost & Theft Report (LOST_THEFT_INCIDENT_REPORT.pdf) -->
+        <record id="demo_lost_theft_1" model="fleet.lost.theft">
+            <field name="reference">LT/2026/0001</field>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="incident_type">theft_attempt</field>
+            <field name="incident_date" eval="(DateTime.now() - timedelta(days=30)).strftime('%Y-%m-%d')"/>
+            <field name="incident_time">2.25</field>
+            <field name="incident_location">Company Parking Lot, Head Office</field>
+            <field name="incident_address">123 Main Street, Johannesburg, Gauteng, 2001</field>
+            <field name="incident_description">Attempted theft of vehicle radio and sound system. Suspect broke driver's side window using unknown object (possibly rock or hammer). Security alarm activated and security personnel responded within 3 minutes. Suspect fled the scene before removing any items. CCTV footage captured suspect approaching vehicle at 02:15 AM and fleeing at 02:18 AM. Suspect wore dark clothing and face covering.</field>
+            <field name="items_involved">Car radio (Pioneer DEH-X6900BT), 4x speakers (Pioneer TS-G1620F), driver's side window glass</field>
+            <field name="estimated_value">8500.00</field>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="last_seen_location">Company Parking Lot - Bay B12</field>
+            <field name="last_seen_date" eval="(DateTime.now() - timedelta(days=30, hours=10)).strftime('%Y-%m-%d')"/>
+            <field name="last_seen_time">16.0</field>
+            <field name="police_notified" eval="True"/>
+            <field name="police_station">Johannesburg Central Police Station</field>
+            <field name="police_case_number">CAS456/12/2025</field>
+            <field name="police_officer_name">Detective S. Naidoo</field>
+            <field name="police_officer_badge">DET-789</field>
+            <field name="insurance_notified" eval="True"/>
+            <field name="insurance_claim_number">SANTAM-2025-THEFT-001</field>
+            <field name="security_footage" eval="True"/>
+            <field name="security_footage_details">CCTV footage shows suspect approaching vehicle at 02:15 AM from the north entrance. Suspect spent approximately 3 minutes attempting to remove radio before security arrived. Clear images of suspect's build and clothing captured. Footage provided to SAPS on USB drive (Evidence #EV-456-001).</field>
+            <field name="witness_present" eval="True"/>
+            <field name="witness_details">Security Guard: Thomas Mbeki (Employee #SEC-001), Contact: 082 111 2222. Guard was on patrol and responded to alarm activation. Did not see suspect's face but observed suspect fleeing towards north exit.</field>
+            <field name="state">investigation</field>
+        </record>
+
+        <record id="demo_lost_theft_2" model="fleet.lost.theft">
+            <field name="reference">LT/2026/0002</field>
+            <field name="vehicle_id" ref="demo_vehicle_motorcycle"/>
+            <field name="incident_type">theft</field>
+            <field name="incident_date" eval="(DateTime.now() - timedelta(days=90)).strftime('%Y-%m-%d')"/>
+            <field name="incident_time">22.0</field>
+            <field name="incident_location">Shopping Centre Parking</field>
+            <field name="incident_address">Sandton City Shopping Centre, Sandton, Gauteng</field>
+            <field name="incident_description">Motorcycle stolen from shopping centre parking area. Vehicle was locked and secured with disc lock. Security footage shows two suspects arriving in white Toyota Corolla (no visible registration). Suspects lifted motorcycle into vehicle and departed within 2 minutes. Incident occurred during evening shopping hours.</field>
+            <field name="items_involved">Honda CRF250 Motorcycle (MOTO01GP), disc lock, helmet (stored in top box), riding jacket</field>
+            <field name="estimated_value">85000.00</field>
+            <field name="last_seen_location">Sandton City Shopping Centre - Parking Level 2, Bay 45</field>
+            <field name="last_seen_date" eval="(DateTime.now() - timedelta(days=90)).strftime('%Y-%m-%d')"/>
+            <field name="last_seen_time">19.30</field>
+            <field name="discovered_date" eval="(DateTime.now() - timedelta(days=90)).strftime('%Y-%m-%d')"/>
+            <field name="discovered_time">22.0</field>
+            <field name="police_notified" eval="True"/>
+            <field name="police_station">Sandton Police Station</field>
+            <field name="police_case_number">CAS789/10/2025</field>
+            <field name="police_officer_name">Detective M. Khumalo</field>
+            <field name="police_officer_badge">DET-456</field>
+            <field name="insurance_notified" eval="True"/>
+            <field name="insurance_claim_number">SANTAM-2025-THEFT-002</field>
+            <field name="insurance_claim_amount">85000.00</field>
+            <field name="security_footage" eval="True"/>
+            <field name="security_footage_details">Shopping centre CCTV captured theft. White Toyota Corolla (registration obscured) arrived at 21:55. Two suspects exited vehicle, lifted motorcycle, and departed at 21:57. Footage provided to SAPS.</field>
+            <field name="tracking_device_active" eval="True"/>
+            <field name="tracking_details">Ctrack device active at time of theft. Last signal received from Tembisa area at 23:45 same evening. Device subsequently went offline (likely disabled or destroyed).</field>
+            <field name="state">closed</field>
+            <field name="recovery_status">not_recovered</field>
+        </record>
+
+        <record id="demo_lost_theft_3" model="fleet.lost.theft">
+            <field name="reference">LT/2026/0003</field>
+            <field name="incident_type">lost_item</field>
+            <field name="incident_date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="incident_time">14.0</field>
+            <field name="incident_location">Pretoria Industrial Park</field>
+            <field name="incident_address">Rigel Avenue, Pretoria Industrial Park, Pretoria</field>
+            <field name="incident_description">Vehicle spare tire and jack went missing during site visit. Driver parked vehicle and attended meeting for approximately 2 hours. Upon return, discovered rear compartment open and spare tire and jack missing. No signs of forced entry - compartment may have been left unlocked.</field>
+            <field name="items_involved">Spare tire (Goodyear 265/70R16), jack and wheel brace set</field>
+            <field name="estimated_value">3500.00</field>
+            <field name="driver_id" ref="demo_driver_sarah"/>
+            <field name="vehicle_id" ref="demo_vehicle_suv"/>
+            <field name="last_seen_location">Pretoria Industrial Park - Visitor Parking</field>
+            <field name="last_seen_date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="last_seen_time">12.0</field>
+            <field name="discovered_date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="discovered_time">14.0</field>
+            <field name="police_notified" eval="True"/>
+            <field name="police_station">Pretoria Central Police Station</field>
+            <field name="police_case_number">CAS321/01/2026</field>
+            <field name="insurance_notified" eval="False"/>
+            <field name="security_footage" eval="False"/>
+            <field name="state">investigation</field>
+        </record>
+
+        <record id="demo_lost_theft_4" model="fleet.lost.theft">
+            <field name="reference">LT/2026/0004</field>
+            <field name="vehicle_id" ref="demo_vehicle_trailer"/>
+            <field name="incident_type">theft_attempt</field>
+            <field name="incident_date" eval="(DateTime.now() - timedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="incident_time">3.0</field>
+            <field name="incident_location">Company Depot</field>
+            <field name="incident_address">789 Industrial Road, Johannesburg, Gauteng</field>
+            <field name="incident_description">Attempted theft of utility trailer. Suspects cut through perimeter fence and attempted to hitch trailer to unknown vehicle. Security patrol interrupted attempt. Suspects fled leaving bolt cutters and tow hitch at scene. Trailer coupling lock damaged but trailer not removed from premises.</field>
+            <field name="items_involved">Trailer coupling lock (damaged), perimeter fence section (cut)</field>
+            <field name="estimated_value">1200.00</field>
+            <field name="last_seen_location">Company Depot - Storage Yard Section C</field>
+            <field name="last_seen_date" eval="(DateTime.now() - timedelta(days=5, hours=8)).strftime('%Y-%m-%d')"/>
+            <field name="last_seen_time">17.0</field>
+            <field name="police_notified" eval="True"/>
+            <field name="police_station">Johannesburg South Police Station</field>
+            <field name="police_case_number">CAS654/01/2026</field>
+            <field name="police_officer_name">Constable T. Dlamini</field>
+            <field name="police_officer_badge">CONST-123</field>
+            <field name="insurance_notified" eval="False"/>
+            <field name="security_footage" eval="True"/>
+            <field name="security_footage_details">Depot CCTV shows two suspects entering through cut fence at 02:55. Suspects approached trailer at 02:58. Security patrol vehicle visible at 03:02, suspects fled immediately. Partial vehicle registration visible: GP XXX (last digits unclear).</field>
+            <field name="witness_present" eval="True"/>
+            <field name="witness_details">Security Guard: John Sithole (Employee #SEC-003), Contact: 083 222 3333. Guard on mobile patrol spotted suspects and activated alarm. Suspects fled before guard could apprehend.</field>
+            <field name="state">investigation</field>
+        </record>
+
+        <!-- Demo Vehicle Relief Request (VEHICLE_RELIEF_REPLACEMENT_REQUEST.pdf) -->
+        <record id="demo_relief_1" model="fleet.vehicle.relief">
+            <field name="reference">REL/2026/0001</field>
+            <field name="request_date" eval="(DateTime.now() - timedelta(days=8)).strftime('%Y-%m-%d')"/>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="original_vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="relief_reason">maintenance</field>
+            <field name="reason_description">Scheduled 45,000km service including oil change, oil filter replacement, air filter replacement, brake pad inspection and replacement if necessary, wheel alignment, and full vehicle inspection as per manufacturer's service schedule.</field>
+            <field name="start_date" eval="(DateTime.now() - timedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="expected_end_date" eval="(DateTime.now() + timedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="handover_odometer">45000</field>
+            <field name="handover_fuel_level">three_quarter</field>
+            <field name="handover_condition">Vehicle in good condition. Minor scratches on rear bumper from previous parking incident. All equipment present including first aid kit, fire extinguisher, warning triangle, spare tire, and jack. Radio and air conditioning functional. All lights operational.</field>
+            <field name="daily_rate">350.00</field>
+            <field name="priority">normal</field>
+            <field name="state">approved</field>
+        </record>
+
+        <record id="demo_relief_2" model="fleet.vehicle.relief">
+            <field name="reference">REL/2026/0002</field>
+            <field name="request_date" eval="(DateTime.now() - timedelta(days=15)).strftime('%Y-%m-%d')"/>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="original_vehicle_id" ref="demo_vehicle_truck"/>
+            <field name="accident_report_id" ref="demo_accident_1"/>
+            <field name="relief_reason">accident</field>
+            <field name="reason_description">Vehicle involved in accident on N1 Highway near Midrand. Front-end damage requires body shop repairs including bumper replacement, headlight assembly replacement, bonnet panel beating and repainting. Vehicle at approved panel beater: AutoFix Body Shop, Midrand.</field>
+            <field name="start_date" eval="(DateTime.now() - timedelta(days=14)).strftime('%Y-%m-%d')"/>
+            <field name="expected_end_date" eval="(DateTime.now() + timedelta(days=7)).strftime('%Y-%m-%d')"/>
+            <field name="actual_end_date" eval="False"/>
+            <field name="relief_vehicle_id" ref="demo_vehicle_suv"/>
+            <field name="driver_id" ref="demo_driver_michael"/>
+            <field name="relief_assigned_date" eval="(DateTime.now() - timedelta(days=13)).strftime('%Y-%m-%d')"/>
+            <field name="handover_odometer">77800</field>
+            <field name="handover_fuel_level">full</field>
+            <field name="handover_condition">Relief vehicle (XYZ789GP) in excellent condition. All equipment present and functional. Vehicle cleaned and fueled before handover.</field>
+            <field name="daily_rate">450.00</field>
+            <field name="priority">urgent</field>
+            <field name="state">active</field>
+        </record>
+
+        <record id="demo_relief_3" model="fleet.vehicle.relief">
+            <field name="reference">REL/2026/0003</field>
+            <field name="request_date" eval="(DateTime.now() - timedelta(days=60)).strftime('%Y-%m-%d')"/>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="original_vehicle_id" ref="demo_vehicle_bus"/>
+            <field name="relief_reason">breakdown</field>
+            <field name="reason_description">Engine overheating issue. Coolant leak detected. Vehicle requires radiator replacement and cooling system overhaul. Vehicle at Mercedes-Benz Service Centre, Johannesburg.</field>
+            <field name="start_date" eval="(DateTime.now() - timedelta(days=58)).strftime('%Y-%m-%d')"/>
+            <field name="expected_end_date" eval="(DateTime.now() - timedelta(days=48)).strftime('%Y-%m-%d')"/>
+            <field name="actual_end_date" eval="(DateTime.now() - timedelta(days=47)).strftime('%Y-%m-%d')"/>
+            <field name="driver_id" ref="demo_driver_sarah"/>
+            <field name="handover_odometer">94500</field>
+            <field name="handover_fuel_level">half</field>
+            <field name="handover_condition">Vehicle towed to service centre due to overheating. All equipment removed and stored at depot.</field>
+            <field name="return_odometer">94520</field>
+            <field name="return_fuel_level">three_quarter</field>
+            <field name="return_condition">Vehicle repaired and tested. New radiator installed, cooling system flushed and refilled. All equipment reinstalled. Vehicle ready for service.</field>
+            <field name="daily_rate">500.00</field>
+            <field name="total_cost">5500.00</field>
+            <field name="priority">urgent</field>
+            <field name="state">completed</field>
+        </record>
+
+        <record id="demo_relief_4" model="fleet.vehicle.relief">
+            <field name="reference">REL/2026/0004</field>
+            <field name="request_date" eval="(DateTime.now() - timedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="original_vehicle_id" ref="demo_vehicle_motorcycle"/>
+            <field name="relief_reason">maintenance</field>
+            <field name="reason_description">15,000km service - oil change, chain adjustment, brake inspection, tire pressure check, and general safety inspection.</field>
+            <field name="start_date" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="expected_end_date" eval="(DateTime.now() + timedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="handover_odometer">15000</field>
+            <field name="handover_fuel_level">full</field>
+            <field name="handover_condition">Motorcycle in good condition. Minor scratches on fairings. All equipment present.</field>
+            <field name="daily_rate">150.00</field>
+            <field name="priority">normal</field>
+            <field name="state">draft</field>
+        </record>
+
+        <!-- Demo Accident Report (ACCIDENT_REPORT_FORM.pdf) -->
+        <record id="demo_accident_2" model="fleet.accident.report">
+            <field name="reference">ACC/2026/0002</field>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="accident_date" eval="(DateTime.now() - timedelta(days=45)).strftime('%Y-%m-%d')"/>
+            <field name="accident_time">8.25</field>
+            <field name="accident_location">Company Parking Lot</field>
+            <field name="accident_address">123 Main Street, Johannesburg, Gauteng</field>
+            <field name="weather_conditions">clear</field>
+            <field name="road_conditions">dry</field>
+            <field name="accident_type">parking</field>
+            <field name="passenger_count">0</field>
+            <field name="injuries_reported" eval="False"/>
+            <field name="third_party_involved" eval="False"/>
+            <field name="accident_description">While reversing into parking bay B12, driver misjudged distance to concrete pillar. Rear bumper made contact with pillar causing minor damage.</field>
+            <field name="damage_description">Rear bumper scratched and slightly dented on right side. Reverse sensor damaged. Estimated repair cost R3,500.</field>
+            <field name="speed_at_accident">5</field>
+            <field name="driver_statement">I was reversing slowly into my designated parking bay. The sun was in my eyes and I misjudged the distance to the pillar. I accept full responsibility for the incident.</field>
+            <field name="witness_present" eval="True"/>
+            <field name="witness_details">Security guard: Thomas Mbeki, witnessed incident on CCTV</field>
+            <field name="police_notified" eval="False"/>
+            <field name="vehicle_driveable" eval="True"/>
+            <field name="vehicle_towed" eval="False"/>
+            <field name="estimated_repair_cost">3500.00</field>
+            <field name="fault_determination">own_driver</field>
+            <field name="insurance_claim_number">SANTAM-2026-ACC-002</field>
+            <field name="state">closed</field>
+        </record>
+
+        <record id="demo_checklist_4" model="fleet.vehicle.checklist">
+            <field name="reference">CHK/2026/0004</field>
+            <field name="vehicle_id" ref="demo_vehicle_bus"/>
+            <field name="checklist_type">pre_trip</field>
+            <field name="checklist_date" eval="(DateTime.now() - timedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">95200</field>
+            <field name="fuel_level">full</field>
+            <field name="exterior_clean" eval="True"/>
+            <field name="interior_clean" eval="True"/>
+            <field name="tire_condition_ok" eval="True"/>
+            <field name="tire_pressure_ok" eval="True"/>
+            <field name="lights_working" eval="True"/>
+            <field name="windscreen_ok" eval="True"/>
+            <field name="mirrors_ok" eval="True"/>
+            <field name="wipers_ok" eval="True"/>
+            <field name="brakes_ok" eval="True"/>
+            <field name="horn_ok" eval="True"/>
+            <field name="steering_ok" eval="True"/>
+            <field name="seatbelts_ok" eval="True"/>
+            <field name="first_aid_kit" eval="True"/>
+            <field name="fire_extinguisher" eval="True"/>
+            <field name="warning_triangle" eval="True"/>
+            <field name="spare_tire" eval="True"/>
+            <field name="jack_tools" eval="True"/>
+            <field name="reflective_vest" eval="True"/>
+            <field name="vehicle_documents" eval="True"/>
+            <field name="emergency_exits_ok" eval="True"/>
+            <field name="passenger_seats_ok" eval="True"/>
+            <field name="state">completed</field>
+        </record>
+        <record id="demo_vehicle_trailer" model="fleet.vehicle">
+            <field name="name">Utility Trailer - TRL001GP</field>
+            <field name="license_plate">TRL001GP</field>
+            <field name="vin_sn">TRAIL123456789ABC</field>
+            <field name="chassis_number">TRAIL123456789ABC</field>
+            <field name="odometer">0</field>
+            <field name="state_id" ref="efm_vehicle_state_available"/>
+            <field name="vehicle_category">11</field>
+            <field name="maintenance_contract_type">fml</field>
+            <field name="contract_term">60</field>
+            <field name="monthly_cost">800.00</field>
+            <field name="date_received" eval="(DateTime.now() - timedelta(days=1825)).strftime('%Y-%m-%d')"/>
+            <field name="section_assignment">Logistics</field>
+            <field name="cost_center">CC-006-LOG</field>
+            <field name="has_radio" eval="False"/>
+            <field name="has_aircon" eval="False"/>
+            <field name="has_canopy" eval="True"/>
+            <field name="license_renewal_date" eval="(DateTime.now() + timedelta(days=75)).strftime('%Y-%m-%d')"/>
+            <field name="insurance_company">Santam Insurance</field>
+            <field name="insurance_policy_number">POL-2024-TRL001</field>
+            <field name="insurance_expiry_date" eval="(DateTime.now() + timedelta(days=160)).strftime('%Y-%m-%d')"/>
+            <field name="alarm_fitted" eval="False"/>
+            <field name="tracking_device_fitted" eval="False"/>
+        </record>
+
+        <!-- Demo Transport Requests -->
+        <record id="demo_transport_request_1" model="fleet.transport.request">
+            <field name="reference">TR/2026/0001</field>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="request_date" eval="(DateTime.now() - timedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="transport_type">official</field>
+            <field name="priority">normal</field>
+            <field name="purpose">Client meeting in Sandton</field>
+            <field name="passengers">3</field>
+            <field name="origin">Head Office, Johannesburg</field>
+            <field name="destination">Sandton Convention Centre</field>
+            <field name="distance">25</field>
+            <field name="trip_start_date" eval="(DateTime.now() + timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="trip_end_date" eval="(DateTime.now() + timedelta(days=2, hours=4)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="state">approved</field>
+        </record>
+
+        <record id="demo_transport_request_2" model="fleet.transport.request">
+            <field name="reference">TR/2026/0002</field>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="request_date" eval="(DateTime.now() - timedelta(days=3)).strftime('%Y-%m-%d')"/>
+            <field name="transport_type">emergency</field>
+            <field name="priority">urgent</field>
+            <field name="purpose">Emergency site visit - equipment failure</field>
+            <field name="passengers">2</field>
+            <field name="origin">Head Office, Johannesburg</field>
+            <field name="destination">Pretoria Industrial Park</field>
+            <field name="distance">60</field>
+            <field name="trip_start_date" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="trip_end_date" eval="(DateTime.now() + timedelta(days=1, hours=6)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="state">submitted</field>
+        </record>
+
+        <!-- Demo Trip Authorities -->
+        <record id="demo_trip_authority_1" model="fleet.trip.authority">
+            <field name="reference">TA/2026/0001</field>
+            <field name="transport_request_id" ref="demo_transport_request_1"/>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="employee_id" ref="hr.employee_admin"/>
+            <field name="departure_date" eval="(DateTime.now() + timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="return_date" eval="(DateTime.now() + timedelta(days=2, hours=4)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="origin">Head Office, Johannesburg</field>
+            <field name="destination">Sandton Convention Centre</field>
+            <field name="purpose">Client meeting and presentation</field>
+            <field name="estimated_distance">50</field>
+            <field name="passenger_count">3</field>
+            <field name="passenger_details">Jane Doe (Marketing), Tom Lee (Sales), Mary Wilson (Admin)</field>
+            <field name="departure_odometer">45000</field>
+            <field name="state">approved</field>
+        </record>
+
+        <record id="demo_trip_authority_2" model="fleet.trip.authority">
+            <field name="reference">TA/2026/0002</field>
+            <field name="vehicle_id" ref="demo_vehicle_suv"/>
+            <field name="driver_id" ref="demo_driver_sarah"/>
+            <field name="employee_id" ref="hr.employee_admin"/>
+            <field name="departure_date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="return_date" eval="(DateTime.now() - timedelta(days=10, hours=-6)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="origin">Head Office, Johannesburg</field>
+            <field name="destination">Durban Port</field>
+            <field name="purpose">Equipment collection and delivery</field>
+            <field name="estimated_distance">1200</field>
+            <field name="passenger_count">1</field>
+            <field name="departure_odometer">77000</field>
+            <field name="return_odometer">78200</field>
+            <field name="state">completed</field>
+        </record>
+
+        <!-- Demo Vehicle Checklists -->
+        <record id="demo_checklist_1" model="fleet.vehicle.checklist">
+            <field name="reference">CHK/2026/0001</field>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="checklist_type">pre_trip</field>
+            <field name="checklist_date" eval="(DateTime.now() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">45120</field>
+            <field name="fuel_level">full</field>
+            <field name="exterior_clean" eval="True"/>
+            <field name="interior_clean" eval="True"/>
+            <field name="tire_condition_ok" eval="True"/>
+            <field name="lights_working" eval="True"/>
+            <field name="windscreen_ok" eval="True"/>
+            <field name="mirrors_ok" eval="True"/>
+            <field name="brakes_ok" eval="True"/>
+            <field name="horn_ok" eval="True"/>
+            <field name="first_aid_kit" eval="True"/>
+            <field name="fire_extinguisher" eval="True"/>
+            <field name="warning_triangle" eval="True"/>
+            <field name="spare_tire" eval="True"/>
+            <field name="jack_tools" eval="True"/>
+            <field name="state">completed</field>
+        </record>
+
+        <record id="demo_checklist_2" model="fleet.vehicle.checklist">
+            <field name="reference">CHK/2026/0002</field>
+            <field name="vehicle_id" ref="demo_vehicle_suv"/>
+            <field name="driver_id" ref="demo_driver_sarah"/>
+            <field name="checklist_type">post_trip</field>
+            <field name="checklist_date" eval="(DateTime.now() - timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">78250</field>
+            <field name="fuel_level">half</field>
+            <field name="exterior_clean" eval="False"/>
+            <field name="interior_clean" eval="True"/>
+            <field name="tire_condition_ok" eval="True"/>
+            <field name="lights_working" eval="True"/>
+            <field name="windscreen_ok" eval="True"/>
+            <field name="mirrors_ok" eval="True"/>
+            <field name="brakes_ok" eval="True"/>
+            <field name="horn_ok" eval="True"/>
+            <field name="issues_noted" eval="True"/>
+            <field name="issues_description">Vehicle exterior dirty from long-distance trip. Requires washing.</field>
+            <field name="state">completed</field>
+        </record>
+
+        <!-- Demo Odometer Readings -->
+        <record id="demo_odometer_1" model="fleet.odometer.reading">
+            <field name="reference">ODO/2026/0001</field>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="reading_date" eval="(DateTime.now() - timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">44500</field>
+            <field name="reading_type">regular</field>
+            <field name="location">Head Office</field>
+            <field name="fuel_level">three_quarter</field>
+            <field name="verified" eval="True"/>
+            <field name="verified_by_id" ref="base.user_admin"/>
+        </record>
+
+        <record id="demo_odometer_2" model="fleet.odometer.reading">
+            <field name="reference">ODO/2026/0002</field>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="reading_date" eval="(DateTime.now() - timedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">44850</field>
+            <field name="reading_type">regular</field>
+            <field name="location">Head Office</field>
+            <field name="fuel_level">half</field>
+            <field name="verified" eval="True"/>
+            <field name="verified_by_id" ref="base.user_admin"/>
+        </record>
+
+        <record id="demo_odometer_3" model="fleet.odometer.reading">
+            <field name="reference">ODO/2026/0003</field>
+            <field name="vehicle_id" ref="demo_vehicle_suv"/>
+            <field name="driver_id" ref="demo_driver_sarah"/>
+            <field name="reading_date" eval="(DateTime.now() - timedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="odometer_reading">77500</field>
+            <field name="reading_type">fuel</field>
+            <field name="location">Shell Garage, Pretoria</field>
+            <field name="fuel_level">full</field>
+            <field name="fuel_quantity">65.5</field>
+            <field name="fuel_cost">1310.00</field>
+            <field name="verified" eval="True"/>
+        </record>
+
+        <!-- Demo Accident Report -->
+        <record id="demo_accident_1" model="fleet.accident.report">
+            <field name="reference">ACC/2026/0001</field>
+            <field name="vehicle_id" ref="demo_vehicle_truck"/>
+            <field name="driver_id" ref="demo_driver_michael"/>
+            <field name="accident_date" eval="(DateTime.now() - timedelta(days=15)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="accident_location">N1 Highway near Midrand</field>
+            <field name="accident_address">N1 North, approximately 5km north of Midrand exit, Gauteng</field>
+            <field name="weather_conditions">rain</field>
+            <field name="road_conditions">wet</field>
+            <field name="accident_type">collision</field>
+            <field name="passenger_count">1</field>
+            <field name="passenger_details">Assistant: David Wilson</field>
+            <field name="third_party_involved" eval="True"/>
+            <field name="third_party_name">Peter Anderson</field>
+            <field name="third_party_contact">082 555 1234</field>
+            <field name="third_party_vehicle_reg">GHI789GP</field>
+            <field name="accident_description">Vehicle was traveling north on N1 in heavy rain. Third party vehicle changed lanes suddenly without indicating, causing our driver to brake hard. The wet road conditions resulted in the vehicle sliding forward and making contact with the rear of the third party vehicle.</field>
+            <field name="damage_description">Front bumper damaged, headlight cracked, bonnet slightly dented. Estimated repair cost R15,000.</field>
+            <field name="speed_at_accident">80</field>
+            <field name="witness_present" eval="True"/>
+            <field name="witness_details">Traffic officer on scene: Officer J. Mthembu, Badge #12345</field>
+            <field name="police_notified" eval="True"/>
+            <field name="police_station">Midrand Police Station</field>
+            <field name="police_case_number">CAS123/01/2026</field>
+            <field name="police_officer_name">Officer J. Mthembu</field>
+            <field name="vehicle_driveable" eval="True"/>
+            <field name="estimated_repair_cost">15000.00</field>
+            <field name="fault_determination">third_party</field>
+            <field name="state">investigation</field>
+        </record>
+
+        <!-- Demo Vehicle Relief Request -->
+        <record id="demo_relief_1" model="fleet.vehicle.relief">
+            <field name="reference">REL/2026/0001</field>
+            <field name="request_date" eval="(DateTime.now() - timedelta(days=8)).strftime('%Y-%m-%d')"/>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="original_vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="relief_reason">maintenance</field>
+            <field name="reason_description">Scheduled 45,000km service including oil change, filter replacement, and brake inspection</field>
+            <field name="start_date" eval="(DateTime.now() - timedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="expected_end_date" eval="(DateTime.now() + timedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="handover_odometer">45000</field>
+            <field name="handover_fuel_level">three_quarter</field>
+            <field name="handover_condition">Vehicle in good condition. Minor scratches on rear bumper. All equipment present.</field>
+            <field name="daily_rate">350.00</field>
+            <field name="priority">normal</field>
+            <field name="state">approved</field>
+        </record>
+
+        <record id="demo_relief_2" model="fleet.vehicle.relief">
+            <field name="reference">REL/2026/0002</field>
+            <field name="request_date" eval="(DateTime.now() - timedelta(days=15)).strftime('%Y-%m-%d')"/>
+            <field name="requester_id" ref="base.user_admin"/>
+            <field name="original_vehicle_id" ref="demo_vehicle_truck"/>
+            <field name="accident_report_id" ref="demo_accident_1"/>
+            <field name="relief_reason">accident</field>
+            <field name="reason_description">Vehicle involved in accident on N1. Front-end damage requires body shop repairs.</field>
+            <field name="start_date" eval="(DateTime.now() - timedelta(days=14)).strftime('%Y-%m-%d')"/>
+            <field name="expected_end_date" eval="(DateTime.now() + timedelta(days=7)).strftime('%Y-%m-%d')"/>
+            <field name="actual_end_date" eval="False"/>
+            <field name="relief_vehicle_id" ref="demo_vehicle_suv"/>
+            <field name="driver_id" ref="demo_driver_michael"/>
+            <field name="relief_assigned_date" eval="(DateTime.now() - timedelta(days=13)).strftime('%Y-%m-%d')"/>
+            <field name="handover_odometer">77800</field>
+            <field name="handover_fuel_level">full</field>
+            <field name="daily_rate">450.00</field>
+            <field name="priority">urgent</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- Demo Lost & Theft Report -->
+        <record id="demo_lost_theft_1" model="fleet.lost.theft">
+            <field name="reference">LT/2026/0001</field>
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="incident_type">theft_attempt</field>
+            <field name="incident_date" eval="(DateTime.now() - timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="incident_location">Company Parking Lot, Head Office</field>
+            <field name="incident_address">123 Main Street, Johannesburg, Gauteng</field>
+            <field name="incident_description">Attempted theft of vehicle radio and sound system. Window was broken but security responded before items could be removed. Suspect fled the scene.</field>
+            <field name="items_involved">Car radio, speakers, and window glass</field>
+            <field name="estimated_value">8500.00</field>
+            <field name="driver_id" ref="demo_driver_john"/>
+            <field name="last_seen_location">Company Parking Lot - Bay B12</field>
+            <field name="police_notified" eval="True"/>
+            <field name="police_station">Johannesburg Central Police Station</field>
+            <field name="police_case_number">CAS456/12/2025</field>
+            <field name="police_officer_name">Detective S. Naidoo</field>
+            <field name="insurance_notified" eval="True"/>
+            <field name="security_footage" eval="True"/>
+            <field name="security_footage_details">CCTV footage shows suspect approaching vehicle at 02:15 AM. Clear images of suspect captured.</field>
+            <field name="state">investigation</field>
+        </record>
+
+        <!-- Demo Maintenance/Service Records (MAINTENANCE_SERVICE_FORM.pdf) -->
+        <record id="demo_service_1" model="fleet.vehicle.log.services">
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="date" eval="(DateTime.now() - timedelta(days=30)).strftime('%Y-%m-%d')"/>
+            <field name="description">45,000km Scheduled Service</field>
+            <field name="cost_subtype_id" ref="fleet.type_service_service_8"/>
+            <field name="amount">3500.00</field>
+            <field name="odometer">45000</field>
+            <field name="notes">Oil change, oil filter, air filter, brake inspection, wheel alignment. All items as per manufacturer service schedule. Vehicle in good condition.</field>
+            <field name="state">done</field>
+        </record>
+
+        <record id="demo_service_2" model="fleet.vehicle.log.services">
+            <field name="vehicle_id" ref="demo_vehicle_suv"/>
+            <field name="date" eval="(DateTime.now() - timedelta(days=60)).strftime('%Y-%m-%d')"/>
+            <field name="description">60,000km Major Service</field>
+            <field name="cost_subtype_id" ref="fleet.type_service_service_8"/>
+            <field name="amount">6800.00</field>
+            <field name="odometer">60000</field>
+            <field name="notes">Major service including oil change, all filters, brake pads replacement, timing belt inspection, coolant flush, transmission service. All work completed as per Ford service schedule.</field>
+            <field name="state">done</field>
+        </record>
+
+        <record id="demo_service_3" model="fleet.vehicle.log.services">
+            <field name="vehicle_id" ref="demo_vehicle_truck"/>
+            <field name="date" eval="(DateTime.now() - timedelta(days=45)).strftime('%Y-%m-%d')"/>
+            <field name="description">Brake System Repair</field>
+            <field name="cost_subtype_id" ref="fleet.type_service_service_7"/>
+            <field name="amount">4200.00</field>
+            <field name="odometer">110000</field>
+            <field name="notes">Front brake pads and discs replaced. Rear brake shoes adjusted. Brake fluid flushed and replaced. System tested and certified roadworthy.</field>
+            <field name="state">done</field>
+        </record>
+
+        <record id="demo_service_4" model="fleet.vehicle.log.services">
+            <field name="vehicle_id" ref="demo_vehicle_bus"/>
+            <field name="date" eval="(DateTime.now() - timedelta(days=58)).strftime('%Y-%m-%d')"/>
+            <field name="description">Cooling System Overhaul</field>
+            <field name="cost_subtype_id" ref="fleet.type_service_service_7"/>
+            <field name="amount">12500.00</field>
+            <field name="odometer">94500</field>
+            <field name="notes">Radiator replacement due to coolant leak. Thermostat replaced. Water pump inspected and found satisfactory. Cooling system flushed and refilled with Mercedes-approved coolant. Pressure tested - no leaks detected.</field>
+            <field name="state">done</field>
+        </record>
+
+        <record id="demo_service_5" model="fleet.vehicle.log.services">
+            <field name="vehicle_id" ref="demo_vehicle_motorcycle"/>
+            <field name="date" eval="(DateTime.now() - timedelta(days=120)).strftime('%Y-%m-%d')"/>
+            <field name="description">10,000km Service</field>
+            <field name="cost_subtype_id" ref="fleet.type_service_service_8"/>
+            <field name="amount">1200.00</field>
+            <field name="odometer">10000</field>
+            <field name="notes">Oil and filter change, chain adjustment and lubrication, brake inspection, tire pressure check, general safety inspection. All items satisfactory.</field>
+            <field name="state">done</field>
+        </record>
+
+        <record id="demo_service_6" model="fleet.vehicle.log.services">
+            <field name="vehicle_id" ref="demo_vehicle_sedan"/>
+            <field name="date" eval="(DateTime.now() - timedelta(days=180)).strftime('%Y-%m-%d')"/>
+            <field name="description">30,000km Service</field>
+            <field name="cost_subtype_id" ref="fleet.type_service_service_8"/>
+            <field name="amount">2800.00</field>
+            <field name="odometer">30000</field>
+            <field name="notes">Oil change, oil filter, air filter, cabin filter, brake fluid top-up, coolant check, tire rotation. Vehicle serviced as per Toyota maintenance schedule.</field>
+            <field name="state">done</field>
+        </record>
+
+        <record id="demo_service_7" model="fleet.vehicle.log.services">
+            <field name="vehicle_id" ref="demo_vehicle_truck"/>
+            <field name="date" eval="(DateTime.now() + timedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="description">120,000km Major Service (Scheduled)</field>
+            <field name="cost_subtype_id" ref="fleet.type_service_service_8"/>
+            <field name="amount">8500.00</field>
+            <field name="odometer">120000</field>
+            <field name="notes">Scheduled major service - oil change, all filters, brake inspection, suspension check, differential service, transmission service, timing belt replacement.</field>
+            <field name="state">todo</field>
+        </record>
+
+        <record id="demo_service_8" model="fleet.vehicle.log.services">
+            <field name="vehicle_id" ref="demo_vehicle_suv"/>
+            <field name="date" eval="(DateTime.now() - timedelta(days=15)).strftime('%Y-%m-%d')"/>
+            <field name="description">Tire Replacement</field>
+            <field name="cost_subtype_id" ref="fleet.type_service_service_7"/>
+            <field name="amount">5600.00</field>
+            <field name="odometer">77500</field>
+            <field name="notes">All four tires replaced with Goodyear Wrangler AT/R 265/70R16. Old tires worn beyond legal limit. Wheel alignment and balancing performed.</field>
+            <field name="state">done</field>
+        </record>
+
+        <record id="demo_service_9" model="fleet.vehicle.log.services">
+            <field name="vehicle_id" ref="demo_vehicle_bus"/>
+            <field name="date" eval="(DateTime.now() + timedelta(days=15)).strftime('%Y-%m-%d')"/>
+            <field name="description">100,000km Service (Scheduled)</field>
+            <field name="cost_subtype_id" ref="fleet.type_service_service_8"/>
+            <field name="amount">9500.00</field>
+            <field name="odometer">100000</field>
+            <field name="notes">Scheduled major service - comprehensive inspection of all systems, oil and filter changes, brake system service, suspension inspection, air conditioning service.</field>
+            <field name="state">todo</field>
+        </record>
+
+        <record id="demo_service_10" model="fleet.vehicle.log.services">
+            <field name="vehicle_id" ref="demo_vehicle_motorcycle"/>
+            <field name="date" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="description">15,000km Service (Scheduled)</field>
+            <field name="cost_subtype_id" ref="fleet.type_service_service_8"/>
+            <field name="amount">1500.00</field>
+            <field name="odometer">15000</field>
+            <field name="notes">Scheduled service - oil change, chain adjustment, brake inspection, valve clearance check, spark plug replacement, air filter cleaning.</field>
+            <field name="state">todo</field>
+        </record>
+
+    </data>
+</odoo>

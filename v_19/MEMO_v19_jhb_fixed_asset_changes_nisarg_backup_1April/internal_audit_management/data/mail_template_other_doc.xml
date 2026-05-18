@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="email_template_other_review" model="mail.template">
+        <field name="name">Documents Review</field>
+        <field name="model_id" ref="internal_audit_management.model_other_documents"/>
+        <field name="subject">Document: Review
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_reviewer_1_ids.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_reviewer_1_ids.name"/>
+                    <br/>
+                    Please check the document.
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_other_sec_review" model="mail.template">
+        <field name="name">Documents Review</field>
+        <field name="model_id" ref="internal_audit_management.model_other_documents"/>
+        <field name="subject">Documents: Review
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_reviewer_2_ids.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_reviewer_2_ids.name"/>
+                    <br/>
+                    Please check the documents.
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_other_approve" model="mail.template">
+        <field name="name">Documents Approve</field>
+        <field name="model_id" ref="internal_audit_management.model_other_documents"/>
+        <field name="subject">Documents:Approve
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_approver_ids.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_approver_ids.name"/>
+                    <br/>
+                    Please check the documents.
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_other_rejected" model="mail.template">
+        <field name="name">Documents Rejected</field>
+        <field name="model_id" ref="internal_audit_management.model_other_documents"/>
+        <field name="subject">Documents: Rejected
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_preparer_ids.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_preparer_ids.name"/>
+                    <br/>
+                    Please check the documents.
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_other_reverted" model="mail.template">
+        <field name="name">Documents Reverted</field>
+        <field name="model_id" ref="internal_audit_management.model_other_documents"/>
+        <field name="subject">Documents: Reverted
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_preparer_ids.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_preparer_ids.name"/>
+                    <br/>
+                    Please check the documents.
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_other_send_bak" model="mail.template">
+        <field name="name">Documents</field>
+        <field name="model_id" ref="internal_audit_management.model_other_documents"/>
+        <field name="subject">Documents
+        </field>
+        <field name="description">send to the users.</field>
+        <field name="email_to">{{object.user_preparer_ids.partner_id.email}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi
+                    <t t-out="object.user_preparer_ids.name"/>
+                    <br/>
+                    Please check the documents.
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                </p>
+                <div style="margin: 16px 0px 16px 0px;">
+                    <a t-att-href="(object.get_form_url())"
+                       style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                        <t>
+                            Open
+                            <t t-out="object.name"/>
+                        </t>
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+</odoo>

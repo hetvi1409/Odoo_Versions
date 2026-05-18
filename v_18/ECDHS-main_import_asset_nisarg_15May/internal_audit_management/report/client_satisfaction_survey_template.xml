@@ -1,0 +1,123 @@
+<odoo>
+    <template id="report_client_template">
+        <t t-call="web.basic_layout">
+            <t t-set="title">Customer Satisfaction Survey</t>
+            <div class="page">
+                <table style="width:100%; margin-bottom:20px;" border="1">
+                    <tr>
+                        <td><h3 style="text-align:left;">Ga-Segonyana Local Municipality</h3></td>
+                        <td rowspan="3" style="vertical-align:middle"><img src="/internal_audit_management/static/src/image/img.png" style="height:90px; width:150px;"/></td>
+                    </tr>
+                    <tr>
+                        <td><h5 style="text-align:left;">Internal Audit Unit</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h4 style="text-align:left;">CUSTOMER SATISFACTION SURVEY</h4></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Survey Number:  <span t-esc="data.survey_number"/></strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Auditee: <span t-esc="data.auditee.name"/></strong></td>
+                        <td><strong>Project: <span t-esc="data.project.name"/></strong></td>
+                        <td><strong>Team Leader: <span t-esc="data.team_leader.name"/></strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Subject: <span t-esc="data.subject"/></strong></td>
+                        <td><strong>Project Name: <span t-esc="data.project_name"/></strong></td>
+                        <td><strong>Reviewer: <span t-esc="data.reviewer.name"/></strong></td>
+                    </tr>
+                </table>
+
+                <h2>Client Feedback</h2>
+                <p>Your input is essential to our improvement and success. Please mark the box which best describes the level at which we performed during the audit project. For unsatisfactory responses, provide details and recommendations. Thank you!</p>
+
+                <p><strong>Ratings:</strong></p>
+                <ul>
+                    <li>1. Not acceptable performance</li>
+                    <li>2. Meet some expectations</li>
+                    <li>3. Meet expectations</li>
+                    <li>4. Exceed expectations</li>
+                    <li>5. Exceptional performance</li>
+                </ul>
+                <t t-if="data.comments_ids">
+                    <table style="width:auto; border-collapse:collapse; margin-top:20px; height:300px;" border="1">
+                        <thead>
+                            <tr style="background-color:#db6a1f; vertical-align:middle">
+                                <th>Description</th>
+                                <th>Comment</th>
+                                <th>Rating</th>
+                            </tr>
+                        </thead>
+                        <t t-set="plan" t-value="data.comments_ids"/>
+                        <t t-foreach="plan" t-as="docs">
+                            <tbody>
+                                <tr>
+                                    <td><span t-esc="docs.description"/></td>
+                                    <td><span t-esc="docs.comment_client"/></td>
+                                    <td><span t-esc="docs.rating_client"/></td>
+                                </tr>
+                            </tbody>
+                        </t>
+                    </table>
+                </t>
+                <t t-if="data.feedback">
+                    <center>
+                        <h4>Revert Details</h4>
+                    </center>
+                    <t t-if="data.feedback">
+                        <table class="table table-striped align_center">
+                            <tr>
+                                <td>
+                                    <strong>Feedback:</strong>
+                                </td>
+                                <td>
+                                    <span t-field="data.feedback"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </t>
+                    <t t-set="reverts"
+                       t-value="data.env['audit.revert'].search([('res_id', '=', data.id), ('res_model', '=', data._name)])"/>
+                    <t t-if="reverts">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Revert Name</th>
+                                    <th>Created Date</th>
+                                    <th>Review Comments</th>
+                                    <th>Audit Proposal</th>
+                                    <th>State</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="reverts"
+                                    t-as="revert">
+                                    <td>
+                                        <t t-esc="revert.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="revert.date"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="revert.comments"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="revert.audit_findings"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="revert.state"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                </t>
+                <p style="margin-top:20px;"><strong>Completed by:</strong> <span t-esc="data.completed_by.name"/></p>
+                <p><strong>Position:</strong> <span t-esc="data.position"/></p>
+                <p><strong>Signature:</strong> ____________________</p>
+                <p><strong>Date:</strong> <span t-esc="data.date"/></p>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="customer_care_summary_report_wizard_form_view" model="ir.ui.view">
+        <field name="name">customer.care.summary.report.wizard.form.view</field>
+        <field name="model">customer.care.summary.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Customer Care Summary Report Wizard">
+                <group>
+                    <field name="quarter"/>
+                    <field name="year"/>
+                </group>
+                <footer>
+                    <button string="Generate Report" type="object" name="generate_report" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="customer_care_summary_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Customer Care Summary Report Wizard</field>
+        <field name="res_model">customer.care.summary.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'summary_report': True}</field>
+    </record>
+
+
+    <record id="case_register_action" model="ir.actions.act_window">
+        <field name="name">Case Register</field>
+        <field name="res_model">customer.care.summary.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'case_register': True}</field>
+    </record>
+
+    <menuitem id="customer_care_report" name="Customer Care Summary Report"
+        parent="helpdesk.helpdesk_ticket_report_menu_main" action="customer_care_summary_report_wizard_action"
+        sequence="4"/>
+
+    <menuitem id="case_register" name="Case Register Report"
+        parent="helpdesk.helpdesk_ticket_report_menu_main" action="case_register_action"
+        sequence="5"/>
+
+</odoo>

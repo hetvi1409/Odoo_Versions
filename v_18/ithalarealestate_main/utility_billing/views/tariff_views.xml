@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_utility_tariff_form" model="ir.ui.view">
+        <field name="name">utility.tariff.form</field>
+        <field name="model">utility.tariff</field>
+        <field name="arch" type="xml">
+            <form string="Tariff Plan">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="utility_type"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="fixed_product_id"/>
+                            <field name="price_includes_tax"/>
+                            <field name="tax_id"
+                                   invisible="price_includes_tax == 'inclusive'"
+                                   required="price_includes_tax == 'exclusive'"
+                            />
+                        </group>
+                    </group>
+                    <group>
+                        <field name="block_ids">
+                            <list editable="bottom">
+                                <field name="tariff_id"/>
+                                <field name="from_qty"/>
+                                <field name="to_qty"/>
+                                <field name="price_per_unit"/>
+                                <field name="currency_id"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_utility_tariff_list" model="ir.ui.view">
+        <field name="name">utility.tariff.list</field>
+        <field name="model">utility.tariff</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="utility_type"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_utility_tariff_list_block" model="ir.ui.view">
+        <field name="name">utility.tariff.block.list</field>
+        <field name="model">utility.tariff.block</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="tariff_id"/>
+                <field name="from_qty"/>
+                <field name="to_qty"/>
+                <field name="price_per_unit"/>
+                <field name="currency_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_utility_tariff_block_search" model="ir.ui.view">
+        <field name="name">utility.tariff.block.search</field>
+        <field name="model">utility.tariff.block</field>
+        <field name="arch" type="xml">
+            <search string="Search Tariff Blocks">
+                <field name="tariff_id" string="Tariff Plan"/>
+                <field name="currency_id"/>
+                <filter name="filter_tariff" string="Current Tariff" domain="[]" context="{'group_by':'tariff_id'}"/>
+                <group expand="1" string="Group By">
+                    <filter name="group_tariff_id" string="Tariff Plan"
+                            context="{'group_by': 'tariff_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_utility_tariffs" model="ir.actions.act_window">
+        <field name="name">Tariff Plans</field>
+        <field name="res_model">utility.tariff</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_utility_tariffs_block" model="ir.actions.act_window">
+        <field name="name">Tariff Blocks</field>
+        <field name="res_model">utility.tariff.block</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_group_tariff_id': 1}</field>
+    </record>
+
+</odoo>

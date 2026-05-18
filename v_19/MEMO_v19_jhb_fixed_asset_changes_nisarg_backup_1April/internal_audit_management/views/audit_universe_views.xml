@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_audit_universe" model="ir.actions.act_window">
+        <field name="name">Audit Universe</field>
+        <field name="res_model">audit.universe</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Audit Universe
+            </p>
+            <p>
+                Create and manage the Audit Universe;
+            </p>
+        </field>
+    </record>
+    <record id="audit_universe_view_tree" model="ir.ui.view">
+        <field name="name">audit.universe.view.list</field>
+        <field name="model">audit.universe</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="sequence_no"/>
+                <field name="period"/>
+                <field name="stages"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_universe_view_form" model="ir.ui.view">
+        <field name="name">audit.universe.view.form</field>
+        <field name="model">audit.universe</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!--                    <button name="action_preparer" type="object"-->
+                    <!--                            invisible="stages != 'preparer' or uid not in user_preparer_ids"-->
+                    <!--                            string="Preparer Review" class="oe_highlight"/>-->
+
+                    <button name="action_review" type="object"
+                            invisible="stages != 'preparer' or uid not in user_reviewer_1_ids"
+                            string="1st Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object"
+                            invisible="stages != 'first_reviewer' or uid not in user_reviewer_2_ids"
+                            string="2nd Review" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'first_reviewer' or uid not in user_reviewer_2_ids"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_approve" type="object"
+                            invisible="stages != 'second_reviewer' or uid not in user_approver_ids"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'second_reviewer' or uid not in user_approver_ids"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_reject" type="object"
+                            invisible="stages != 'second_reviewer' or uid not in user_approver_ids"
+                            string="Reject" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'rejected' or uid not in user_approver_ids"
+                            string="Move to Prepare" class="oe_highlight"/>
+                    <field name="stages" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <div class="pe-0 w-100">
+                        <h1 class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex w-100">
+                            </div>
+                            <div class="d-flex justify-content-start o_state_container">
+                                <field name="state"
+                                       widget="project_task_state_selection"
+                                       class="o_task_state_widget"/>
+                            </div>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="is_current_user_approver" invisible="1"/>
+                            <field name="is_current_user_reviewer" invisible="1"/>
+                            <field name="is_current_user_reviewer2" invisible="1"/>
+                            <field name="name"/>
+                            <field name="sequence_no"/>
+
+                            <field name="project_id" invisible="1"/>
+                            <field name="user_preparer_ids"
+                                   widget="many2many_avatar_user"/>
+                            <field name="user_reviewer_1_ids"
+                                   widget="many2many_avatar_user" readonly="stages == 'approved'"
+                            />
+                            <field name="user_reviewer_2_ids"
+                                   widget="many2many_avatar_user"
+                                   readonly="stages == 'approved'"/>
+                            <field name="user_approver_ids"
+                                   widget="many2many_avatar_user"
+                                   readonly="stages == 'approved'"/>
+
+
+                        </group>
+                        <group>
+                            <field name="period"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <notebook>
+                            <page string="Audit Universe Lines">
+                                <field name="audit_line_ids" widget="one2many">
+                                    <list editable="bottom">
+                                        <field name="sequence"/>
+                                        <field name="activity"/>
+                                        <field name="department_id"/>
+                                        <field name="department_head_id"/>
+                                        <field name="unit"/>
+                                        <field name="unit_head"/>
+                                        <field name="audit_interest"/>
+                                    </list>
+                                </field>
+                            </page>
+<!--                            <page string="Tracking"-->
+<!--                                  invisible=" not uid in user_preparer_ids">-->
+<!--                                <field name="audit_revert_line_ids"-->
+<!--                                       widget="one2many">-->
+<!--                                    <list editable="bottom">-->
+<!--                                        <field name="period"/>-->
+<!--                                        <field name="comments"/>-->
+<!--                                        <field name="stage"/>-->
+
+<!--                                    </list>-->
+<!--                                </field>-->
+<!--                            </page>-->
+                            <page string="Audit Reverts/ Review Notes">
+                                <group>
+                                    <field name="feedback"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <menuitem id="audit_universe_menu"
+              name="Audit Universe"
+              parent="project.menu_main_pm"
+              action="action_audit_universe"
+              sequence="10"/>
+    <!--    <record id="res_config_settings_view_form" model="ir.ui.view">-->
+    <!--        <field name="name">res.config.settings.project.view.form</field>-->
+    <!--        <field name="model">res.config.settings</field>-->
+    <!--        <field name="inherit_id" ref="project.res_config_settings_view_form"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//block[@name='analytic']" position="after">-->
+    <!--                <block title="Template" name="template">-->
+    <!--                    <setting id="project_template"-->
+    <!--                             help="Create new project using this template">-->
+    <!--                        <field name="template_id"/>-->
+    <!--                    </setting>-->
+    <!--                </block>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+</odoo>

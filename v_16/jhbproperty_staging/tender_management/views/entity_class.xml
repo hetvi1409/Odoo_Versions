@@ -1,0 +1,56 @@
+<odoo>
+    <record id="view_entity_class_tree" model="ir.ui.view">
+        <field name="name">entity.class.tree</field>
+        <field name="model">entity.class</field>
+        <field name="arch" type="xml">
+            <tree string="Entity Classes">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_entity_class_form" model="ir.ui.view">
+        <field name="name">entity.class.form</field>
+        <field name="model">entity.class</field>
+        <field name="arch" type="xml">
+            <form string="Entity Class">
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="entity_class_action" model="ir.actions.act_window">
+        <field name="name">Entity Classes</field>
+        <field name="res_model">entity.class</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_tender_configuration" name="Configuration"
+              parent="menu_tender_management_root"/>
+
+    <menuitem id="menu_entity_class_root" name="Entity Classes"
+              sequence="10" parent="menu_tender_configuration"
+              action="entity_class_action"/>
+
+</odoo>

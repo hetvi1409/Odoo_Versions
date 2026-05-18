@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Property Type -->
+        <record id="property_desc_list_view" model="ir.ui.view">
+            <field name="name">property.desc.list</field>
+            <field name="model">property.desc</field>
+            <field name="arch" type="xml">
+                <list string="Property Status">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="property_desc_form_view" model="ir.ui.view">
+            <field name="name">property.desc.form</field>
+            <field name="model">property.desc</field>
+            <field name="arch" type="xml">
+                <form string="Property Status">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="property_dec_type_form_action" model="ir.actions.act_window">
+            <field name="name">Property Description</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">property.desc</field>
+            <field name="view_id" ref="property_desc_list_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a new Property Type
+              </p>
+            </field>
+        </record>
+        <menuitem action="property_dec_type_form_action" id="menu_property_type_form_action" parent="itsys_real_estate.menu_settings" sequence="32" />
+
+    </data>
+</odoo>

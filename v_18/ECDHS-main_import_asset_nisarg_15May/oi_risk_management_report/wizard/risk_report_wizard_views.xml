@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="risk_report_wizard_form_views" model="ir.ui.view">
+        <field name="name">risk.report.wizard</field>
+        <field name="model">risk.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                <group>
+                    <field name="department_id"/>
+                </group>
+                <group>
+                    <field name="risk_type_id"/>
+                </group>
+                </group>
+                <footer>
+                    <button string="Report" class="oe_highlight" type="object" name="action_print_report"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+        <record id="risk_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Risk Report</field>
+        <field name="res_model">risk.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+        <menuitem name="Risk Report" id="menu_risk_report_wizard"
+              action="risk_report_wizard_action"
+              parent="oi_risk_management.reports_menu" sequence="14"/>
+
+</odoo>

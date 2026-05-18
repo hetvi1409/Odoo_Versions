@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="portal_my_home_property_enquiry"
+              name="Show Property Enquiry" customize_show="True"
+              inherit_id="portal.portal_my_home" priority="20">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_client_category_enable" t-value="True"/>
+            <t t-set="portal_alert_category_enable" t-value="True"/>
+        </xpath>
+        <div id="portal_client_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+<!--                <t t-set="icon"-->
+<!--                   t-value="'/cemetery_management/static/src/img/cemetery_application.svg'"/>-->
+                <t t-set="title">Enquiry</t>
+                <t t-set="url" t-value="'/my/enquiry'"/>
+                <t t-set="text">Follow, view your property enquiry</t>
+                <t t-set="placeholder_count" t-value="'property_enquiry'"/>
+            </t>
+        </div>
+    </template>
+    <template id="portal_my_home_menu_property_enquiry"
+              name="Portal layout : sign menu entries"
+              inherit_id="portal.portal_breadcrumbs" priority="60">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'property_enquiry' or property_enquiry"
+                t-attf-class="breadcrumb-item #{'active ' if not property_enquiry else ''}">
+                <a t-if="enquiry"
+                   t-attf-href="/my/enquiry?{{ keep_query() }}">Enquiries
+                </a>
+                <t t-else="">Enquiries</t>
+            </li>
+        </xpath>
+    </template>
+    <template id="my_portal_property_enquiry" name="Applications">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Enquiries</t>
+            </t>
+            <t t-if="enquires" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Enquiry #</th>
+                        <th class="text-end">Date Received</th>
+                        <th class="text-end">Tenant</th>
+                        <th class="text-end">State</th>
+                    </tr>
+                </thead>
+                <t t-foreach="enquires" t-as="enquiry">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/enquiry_portal/#{enquiry.id}">
+                                <t t-out="enquiry.name"/>
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="enquiry.date"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="enquiry.partner_id.sudo().name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="enquiry.state"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no applications .</p>
+        </t>
+    </template>
+    <template id="portal_enquiry_details" name="Enquiry">
+        <t t-call="portal.portal_layout">
+            <div class="card col-12 col-lg justify-content-end"
+                 style="padding: 10px;">
+                <div class="pb-2 pt-3">
+                    <h2 class="my-0">
+                        Enquiry:
+                        <em t-esc="enquiry.name"/>
+                    </h2>
+
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <strong>Date:</strong>
+                        <span t-field="enquiry.date"
+                              t-options='{"widget": "date"}'/>
+                    </div>
+                </div>
+<!--                <div class="row">-->
+<!--                    <div class="mb-3 col-6">-->
+<!--                        <strong>Stand Number:</strong>-->
+<!--                        <span t-field="enquiry.stand_number"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <p>Your enquiry in the
+                            <span t-field="enquiry.state"/>
+                            state.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="service_order_communication" class="mt-4">
+                <h2>History</h2>
+                <t t-call="portal.message_thread">
+                    <t t-set="object" t-value="enquiry"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+</odoo>

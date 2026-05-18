@@ -1,0 +1,77 @@
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.conversation</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="10"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div name="conversations" class="app_settings_block" data-string="Conversations" string="Conversations" data-key="pragmatic_odoo_whatsapp_integration">
+                        <h2>Whatsapp Chat-api Integration</h2>
+                        <div class="row mt16 o_settings_container" name="whatsapp_integration">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <group>
+                                            <field name="use_chat_api" class="oe_inline"/>
+                                        </group>
+                                        <group>
+                                            <field name="whatsapp_endpoint" attrs="{'invisible': [('use_chat_api','=',False)]}" class="oe_inline"/>
+                                        </group>
+                                        <group>
+                                            <field name="whatsapp_token" attrs="{'invisible': [('use_chat_api','=',False)]}" class="oe_inline" password="True"/>
+                                        </group>
+                                        <group>
+                                            <field name="whatsapp_authenticate" class="oe_inline" invisible="1"/>
+                                            <div class="col-lg-6 col-12 o_setting_box" attrs="{'invisible': [('use_chat_api','=',False)]}">
+                                                <button string="Get QR Code" type="object" class="oe_highlight" name="action_get_qr_code"
+                                                        attrs="{'visible': [('whatsapp_authenticate','!=',True)]}"/>
+                                            </div>
+                                        </group>
+                                        <group>
+                                            <div class="col-lg-6 col-12 o_setting_box" attrs="{'invisible': [('whatsapp_authenticate','=',False)]}">
+                                                <button string="Logout" type="object" class="oe_highlight" name="action_logout_from_whatsapp"
+                                                        attrs="{'visible': [('whatsapp_authenticate','=',True)]}"/>
+
+                                                <div class="text-muted">
+                                                    This will take 1 or 2 minutes to logout from whatsapp
+                                                </div>
+                                            </div>
+                                        </group>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Whatsapp Meta Integration</h2>
+                        <div class="row mt16 o_settings_container" name="whatsapp_integration">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <group>
+                                            <field name="use_meta_api" class="oe_inline"/>
+                                        </group>
+                                        <group>
+                                            <field name="whatsapp_phone_number" attrs="{'invisible': ['|', ('use_meta_api','=',False), ('use_chat_api','=',True)]}" class="oe_inline"/>
+                                        </group>
+                                        <group>
+                                            <field name="whatsapp_meta_token" attrs="{'invisible': ['|', ('use_meta_api','=',False), ('use_chat_api','=',True)]}" class="oe_inline" password="True"/>
+                                        </group>
+                                        <group>
+                                            <field name="whatsapp_meta_webhook_token" attrs="{'invisible': ['|', ('use_meta_api','=',False), ('use_chat_api','=',True)]}" class="oe_inline"/>
+                                        </group>
+                                        <group>
+                                            <field name="module_whatsapp_webhook_verify" invisible="1"/>
+<!--                                                   attrs="{'invisible': ['|', ('use_meta_api','=',False), ('use_chat_api','=',True)]}" class="oe_inline"/>-->
+                                        </group>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

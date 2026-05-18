@@ -1,0 +1,42 @@
+<odoo>
+    <record model="ir.module.category" id="e_system.module_category_memo_management">
+        <field name="name">E-Submission</field>
+        <field name="sequence">50</field>
+    </record>
+    <!-- Memo Responsible Officer -->
+    <record id="group_memo_requester" model="res.groups">
+        <field name="name">E-Submission Responsible Officer</field>
+        <field name="category_id" ref="e_system.module_category_memo_management"/>
+    </record>
+
+    <!-- Quality Assurance -->
+    <record id="group_memo_quality_assurance" model="res.groups">
+        <field name="name">E-Submission Quality Assurance</field>
+        <field name="category_id" ref="e_system.module_category_memo_management"/>
+    </record>
+
+    <!-- Recommenders -->
+    <record id="group_memo_recommenders" model="res.groups">
+        <field name="name">E-Submission Recommender</field>
+        <field name="category_id" ref="e_system.module_category_memo_management"/>
+    </record>
+
+    <!-- Approver -->
+    <record id="group_memo_approver" model="res.groups">
+        <field name="name">E-Submission Approver</field>
+        <field name="category_id" ref="e_system.module_category_memo_management"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- IT Team -->
+    <record id="group_it_team" model="res.groups">
+        <field name="name">E-Submission IT Team</field>
+        <field name="category_id" ref="e_system.module_category_memo_management"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="e_system.group_studio_access" model="res.groups">
+        <field name="name">Studio Access</field>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+</odoo>

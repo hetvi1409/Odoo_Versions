@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ===================================== -->
+        <!-- Preference Point System - Tree View -->
+        <!-- ===================================== -->
+        <record id="view_sagovpreference_point_system_list" model="ir.ui.view">
+            <field name="name">sagovpreference.point.system.list</field>
+            <field name="model">sagovpreference.point.system</field>
+            <field name="arch" type="xml">
+                <list string="Preference Point Systems">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="system_type"/>
+                    <field name="price_weight_percentage" string="Price %"/>
+                    <field name="preference_weight_percentage" string="Preference %"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- Preference Point System - Form View -->
+        <!-- ===================================== -->
+        <record id="view_sagovpreference_point_system_form" model="ir.ui.view">
+            <field name="name">sagovpreference.point.system.form</field>
+            <field name="model">sagovpreference.point.system</field>
+            <field name="arch" type="xml">
+                <form string="Preference Point System">
+                    <sheet>
+                        <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                        <widget name="web_ribbon" title="PPPFA Compliant" bg_color="text-bg-success" invisible="not pppfa_compliant"/>
+
+                        <div class="oe_title">
+                            <label for="name" string="System Name"/>
+                            <h1>
+                                <field name="name" placeholder="e.g., 80/20 Preference System" required="1"/>
+                            </h1>
+                            <group>
+                                <group>
+                                    <field name="code" placeholder="e.g., system_80_20" required="1"/>
+                                    <field name="system_type" widget="badge" decoration-info="system_type == '80_20'" decoration-success="system_type == '90_10'" required="1"/>
+                                </group>
+                                <group>
+                                    <field name="sequence"/>
+                                    <field name="active" widget="boolean_toggle"/>
+                                    <field name="currency_id" groups="base.group_multi_currency" options="{'no_create': True}"/>
+                                </group>
+                            </group>
+                        </div>
+
+                        <!-- Configuration Section -->
+                        <group>
+                            <group string="Description">
+                                <field name="description" widget="html" nolabel="1" placeholder="Detailed description of this preference point system..."/>
+                            </group>
+                        </group>
+
+                        <group string="Weighting Configuration">
+                            <group>
+                                <label for="price_weight_percentage" string="Price Weight"/>
+                                <div class="o_row">
+                                    <field name="price_weight_percentage" class="oe_inline"/>
+                                    <span>%</span>
+                                </div>
+                                <label for="preference_weight_percentage" string="Preference Weight"/>
+                                <div class="o_row">
+                                    <field name="preference_weight_percentage" class="oe_inline"/>
+                                    <span>%</span>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="total_preference_points"/>
+                                <field name="price_formula"/>
+                            </group>
+                        </group>
+
+                        <group invisible="price_formula != 'custom_formula'">
+                            <field name="custom_price_formula" nolabel="1" placeholder="Enter custom price calculation formula..."/>
+                        </group>
+
+                        <!-- Preference Points Section -->
+                        <separator string="Preference Points Configuration"/>
+                        <group string="B-BBEE Points">
+                            <group>
+                                <field name="bbbee_points" string="B-BBEE Points"/>
+                                <field name="bbbee_weight" string="B-BBEE Weight"/>
+                            </group>
+                        </group>
+
+                        <group string="Social Policy Points">
+                            <group>
+                                <field name="women_empowerment_points" string="Women Empowerment"/>
+                                <field name="youth_points" string="Youth Entrepreneurs"/>
+                                <field name="pwd_points" string="Persons with Disabilities"/>
+                            </group>
+                            <group>
+                                <field name="local_content_points" string="Local Content"/>
+                                <field name="sme_points" string="SME Support"/>
+                            </group>
+                        </group>
+
+                        <group string="Applicability">
+                            <group>
+                                <field name="minimum_applicable_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <group>
+                                <field name="applicable_value_range_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            </group>
+                        </group>
+
+                        <!-- Preference Criteria Section -->
+                        <separator string="Preference Criteria"/>
+                        <field name="preference_criteria_ids" nolabel="1"
+                               context="{'default_system_id': id,
+                                         'tree_view_ref': 'sa_government_tender.view_sagovpreference_point_criteria_list',
+                                         'form_view_ref': 'sa_government_tender.view_sagovpreference_point_criteria_form'}"/>
+
+                        <!-- Compliance Section -->
+                        <separator string="Regulatory Compliance"/>
+                        <group>
+                            <group string="Compliance Status">
+                                <field name="pppfa_compliant" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <group string="Legal Reference">
+                                <field name="legal_reference" nolabel="1" placeholder="Reference to PPPFA Section 2, National Treasury Instructions, B-BBEE Act, etc."/>
+                            </group>
+                        </group>
+
+                        <!-- Notes & Policies Section -->
+                        <separator string="Notes &amp; Policies"/>
+                        <group>
+                            <group string="Policy Notes">
+                                <field name="policy_notes" widget="html" nolabel="1" placeholder="Policy notes and guidelines for this preference point system..."/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Internal Notes">
+                                <field name="internal_notes" nolabel="1" placeholder="Internal notes for SCM team (not visible to suppliers)..."/>
+                            </group>
+                        </group>
+
+                        <!-- Audit Trail Section -->
+                        <separator string="Audit Trail"/>
+                        <group>
+                            <group string="Created By">
+                                <field name="created_by_user_id" readonly="1" options="{'no_create': True}"/>
+                                <field name="create_date" readonly="1"/>
+                            </group>
+                            <group string="Last Modified By">
+                                <field name="last_modified_by_user_id" readonly="1" options="{'no_create': True}"/>
+                                <field name="write_date" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- Preference Point System - Search View -->
+        <!-- ===================================== -->
+        <record id="view_sagovpreference_point_system_search" model="ir.ui.view">
+            <field name="name">sagovpreference.point.system.search</field>
+            <field name="model">sagovpreference.point.system</field>
+            <field name="arch" type="xml">
+                <search string="Preference Point Systems">
+                    <field name="name" string="System Name"/>
+                    <field name="code" string="Code"/>
+                    <separator/>
+                    <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                    <filter name="inactive" string="Inactive" domain="[('active', '=', False)]"/>
+                    <separator/>
+                    <filter name="system_80_20" string="80/20 System (R30,000 - R500,000)" domain="[('system_type', '=', '80_20')]"/>
+                    <filter name="system_90_10" string="90/10 System (Above R500,000)" domain="[('system_type', '=', '90_10')]"/>
+                    <filter name="system_custom" string="Custom System" domain="[('system_type', '=', 'custom')]"/>
+                    <group expand="1" string="Group By">
+                        <filter name="group_by_system_type" string="System Type" domain="[]" context="{'group_by': 'system_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- Preference Point System Action -->
+        <!-- ===================================== -->
+        <record id="action_sagovpreference_point_system" model="ir.actions.act_window">
+            <field name="name">Preference Point Systems</field>
+            <field name="res_model">sagovpreference.point.system</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_sagovpreference_point_system_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Preference Point System configuration.
+                </p>
+                <p>Define preference point systems per PPPFA (80/20, 90/10, or custom).</p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

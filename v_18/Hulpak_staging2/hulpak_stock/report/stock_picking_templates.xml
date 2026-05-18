@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    Template for report-->
+    <template id="report_coc_slip">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <!--Looping the data-->
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <div class="pull-left ; text-left">
+                            <h4>Delivery Address</h4>
+                            <t t-if="o.partner_id.name">
+                                <span t-esc="o.partner_id.name"/>
+                                <br/>
+                            </t>
+                            <t t-if="o.partner_id.street">
+                                <span t-esc="o.partner_id.street"/>
+                                <br/>
+                            </t>
+                            <t t-if="o.partner_id.street2">
+                                <span t-esc="o.partner_id.street2"/>
+                                <br/>
+                            </t>
+                            <t t-if="o.partner_id.city">
+                                <span t-esc="o.partner_id.city"/>
+                                <br/>
+                            </t>
+                            <t t-if="o.partner_id.state_id or o.partner_id.zip">
+                                <span t-esc="(o.partner_id.state_id.name or '') + ' ' + (o.partner_id.zip or '')"/>
+                                <br/>
+                            </t>
+                            <t t-if="o.partner_id.country_id">
+                                <span t-esc="o.partner_id.country_id.name"/>
+                            </t>
+                        </div>
+                        <br/>
+                        <br/>
+                        <h2 class="text-center">
+                            <strong>Certificate Of Conformance</strong>
+                        </h2>
+                        <div class="oe_structure"/>
+                        <div id="informations" class="report-wrapping-flexbox clearfix row mb-4">
+                            <div t-if="o.origin" class="col col-3 mw-100 mb-2" name="div_origin">
+                                <strong>Order</strong>
+                                <div t-field="o.origin" class="m-0">S0001</div>
+                            </div>
+                            <div t-if="o.state" class="col col-3 mw-100 mb-2" name="div_sched_date">
+                                <strong>Shipping Date</strong>
+                                <div t-if="o.state == 'done'" t-field="o.date_done" class="m-0"/>
+                                <div t-else="" t-field="o.scheduled_date" class="m-0"/>
+                        </div>
+                            <div t-if="o.state" class="col col-3 mw-100 mb-2" name="div_sched_date">
+                                <strong>Delivery No</strong>
+                                <div t-field="o.name" class="m-0"/>
+                        </div>
+                            <div t-if="o.state" class="col col-3 mw-100 mb-2" name="div_sched_date">
+                                <strong>Customer No</strong>
+                                <div t-field="o.sudo().sale_id.partner_id.ref" class="m-0"/>
+                        </div>
+                            <div class="col col-3 mw-100 mb-2" t-if="o.sudo().sale_id.client_order_ref">
+                                <strong>Customer Reference</strong>
+                                <div t-field="o.sudo().sale_id.client_order_ref" class="m-0">Customer reference</div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <!-- <center>
+                                <h2>PRODUCT DETAILS</h2>
+                            </center> -->
+                            <table class="table table-condensed"
+                                   style="border: 0px solid black;">
+                                <thead>
+                                    <tr>
+                                        <th name="th_sm_product">Product</th>
+                                        <th name="th_sm_ordered" class="text-end">Quantity</th>
+                                        <th name="th_sm_quantity" class="text-end">Top Out(mm)</th>
+                                        <th name="th_sm_quantity" class="text-end">Base (mm)</th>
+                                        <th name="th_sm_quantity" class="text-end">Depth (mm)</th>
+                                        <th name="th_sm_quantity" class="text-end">Capacity (ml)</th>
+                                        <th name="th_sm_quantity" class="text-end">Batch No</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.move_ids"  t-as="move_line">
+                                        <td>
+                                            <span t-esc="move_line.name"/>
+                                        </td>
+                                        <td class="text-center" name="move_line_aggregated_quantity">
+                                            <t t-if="move_line.quantity">
+                                                <span t-esc="move_line.quantity" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
+                                                <span t-esc="move_line.product_uom.name"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="move_line">
+                                                <span t-esc="move_line.product_id.product_tmpl_id.top_out_mm"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="move_line">
+                                                <span t-esc="move_line.product_id.product_tmpl_id.base_mm"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="move_line">
+                                                <span t-esc="move_line.product_id.product_tmpl_id.depth_mm"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="move_line">
+                                                <span t-esc="move_line.product_id.product_tmpl_id.capacity_ml"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="move_line">
+                                                <span t-esc="move_line.batch_info"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br/>
+                        <!-- Bottom Section: Pest Checks + Signature -->
+                        <div style="min-height: 150px; padding-top: 10px; margin-top: 30px;" >
+                            <!-- Pest Check Table -->
+                            <table style="width: 50%; border-collapse: collapse; margin-bottom: 30px; border: 0px solid white; ">
+                                <tr  style="border: 0px solid white;">
+                                    <td style="padding: 0px; border: 0px solid white;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid black; margin-right: 5px;"></div>
+                                        Pest Free
+                                    </td>
+                                    <td style="padding: 0px; border: 0px solid white;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid black; margin-right: 5px;"></div>
+                                        Free of Foil Deposit
+                                    </td>
+                                </tr>
+                                <tr  style="border: 0px solid white;">
+                                    <td style="padding: 0px; border: 0px solid white;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid black; margin-right: 5px;"></div>
+                                        Product conforms to specification
+                                    </td>
+                                    <td style="padding: 0px; border: 0px solid white;">
+                                        <div style="display: inline-block; width: 15px; height: 15px; border: 1px solid black; margin-right: 5px;"></div>
+                                        Condition of Delivery Vehicle
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- Signature Line -->
+                            <div style="width: 70%; font-size: 14px;">
+                                <div style="display: inline-block; width: 30%; border-bottom: 1px solid black; padding-bottom: 5px; margin-right: 3%;">
+                                    Signed By
+                                </div>
+                                <div style="display: inline-block; width: 30%; border-bottom: 1px solid black; padding-bottom: 5px; margin-right: 3%;">
+                                    Date
+                                </div>
+                                <div style="display: inline-block; width: 30%; border-bottom: 1px solid black; padding-bottom: 5px;">
+                                    Signature
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    <!--    Showing the company details and shipping address-->
+    <template id="coc_layout">
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"/>
+    </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+    </t>
+        <t t-call="web.external_layout">
+            <div class="header">
+                <div class="pull-left">
+                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                    <br/>
+                    <span t-esc="company.name"/>
+                    <br/>
+                    <span t-esc="company.street"/>
+                    <br/>
+                    <br/>
+                </div>
+                <div class="pull-right">
+                    <h4>Shipping Address</h4>
+                    <span t-esc="o.partner_id.street"/>
+                    <br/>
+                    <span t-esc="o.partner_id.city"/>
+                    <span t-esc="o.partner_id.zip"/>
+                    <br/>
+                    <span t-esc="o.partner_id.country_id.name"/>
+                </div>
+            </div>
+            <div class="article">
+                <t t-raw="0"/>
+            </div>
+        </t>
+    </template>
+</odoo>

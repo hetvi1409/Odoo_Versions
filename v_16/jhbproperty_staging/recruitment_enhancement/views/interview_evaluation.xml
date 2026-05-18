@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="interview_evluation_form_view" model="ir.ui.view">
+        <field name="name">interview.evualtion.form</field>
+        <field name="model">interview.evaluation</field>
+        <field name="arch" type="xml">
+            <form>
+               <sheet>
+                    <style>
+                        .o_input{
+                         border-color: black !important;
+                        border:1px solid black;
+                        padding:10px;
+                        border-radius:6px;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <field name="applicant_id"/>
+                        <field name="interviewer_id"/>
+                        <field name="technical_score"/>
+                        <field name="communication_score"/>
+                        <field name="experience_score"/>
+                        <field name="cultural_fit_score"/>
+                        <field name="total_score"/>
+                        <field name="recommendation"/>
+                    </group>
+               </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="interview_evluation_list_view" model="ir.ui.view">
+        <field name="name">interview.evualtion.list</field>
+        <field name="model">interview.evaluation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="applicant_id"/>
+                <field name="interviewer_id"/>
+                <field name="technical_score"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_interview_evaluation" model="ir.actions.act_window">
+        <field name="name">Interview Evaluation</field>
+        <field name="res_model">interview.evaluation</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

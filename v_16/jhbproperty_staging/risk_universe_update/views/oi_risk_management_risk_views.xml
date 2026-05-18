@@ -1,0 +1,298 @@
+<odoo>
+    <record model="ir.ui.view" id="custom_risks_tree">
+        <field name="name">oi_risk_management.risk.view.tree</field>
+        <field name="model">oi_risk_management.risk</field>
+        <field name="inherit_id" ref="oi_risk_management.risks_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <field name="oi_risk_type" invisible="1"/>
+                <field name="risk_type_id"/>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="list_of_risks_tree_view">
+        <field name="name">oi_risk_management.risk.view.tree</field>
+        <field name="model">oi_risk_management.risk</field>
+        <field name="inherit_id" ref="oi_risk_management.list_of_risks_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="oi_risk_type" optional="show"/>
+                <field name="risk_type_id" optional="show"/>
+
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="custom_risks_form">
+        <field name="name">oi_risk_management.risk.view.form</field>
+        <field name="model">oi_risk_management.risk</field>
+        <field name="inherit_id" ref="oi_risk_management.risk_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="risk_type_id"/>
+                <field name="oi_risk_type" invisible="1"/>
+
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="strategic_risks_view">
+        <field name="name">List of Risks</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+        <field name="domain">[('oi_risk_type', '=', 'strategic')]</field>
+        <field name="context">{
+            'search_default_risk': 1,
+            'default_oi_risk_type': 'strategic',
+
+            }
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="operational_risks_view">
+        <field name="name">List of Risks</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+        <field name="domain">[('oi_risk_type', '=', 'operational')]</field>
+        <field name="context">{
+            'search_default_risk': 1,
+            'default_oi_risk_type': 'operational',
+
+            }
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="fraud_risks_view">
+        <field name="name">List of Risks</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+        <field name="domain">[('oi_risk_type', '=', 'fraud')]</field>
+        <field name="context">{
+            'search_default_risk': 1,
+            'default_oi_risk_type': 'fraud',
+
+            }
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="project_risks_view">
+        <field name="name">List of Risks</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+        <field name="domain">[('oi_risk_type', '=', 'project')]</field>
+        <field name="context">{
+            'search_default_risk': 1,
+            'default_oi_risk_type': 'project',
+
+            }
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="business_risks_view">
+        <field name="name">List of Risks</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+        <field name="domain">[('oi_risk_type', '=', 'business')]</field>
+        <field name="context">{
+            'search_default_risk': 1,
+            'default_oi_risk_type': 'business',
+            }
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="process_risks_view">
+
+        <field name="name">List of Risks</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+        <field name="domain">[('oi_risk_type', '=', 'process')]</field>
+        <field name="context">{
+            'search_default_risk': 1,
+            'default_oi_risk_type': 'process',
+            }
+        </field>
+    </record>
+    <record model="ir.ui.view" id="risk_identification_form_view">
+        <field name="name">oi_risk_management.risk.view.form</field>
+        <field name="model">oi_risk_management.risk</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="main_risk_total_score" invisible="1"/>
+                <header>
+                    <field name="risk_state" widget="statusbar" readonly="1" options="{'clickable': '1'}"/>
+                    <field name="workflow_states" invisible="1"/>
+                    <field name="user_can_approve" invisible="1"/>
+                    <field name="button_approve_enabled" invisible="1"/>
+                    <field name="button_forward_enabled" invisible="1"/>
+                    <field name="button_return_enabled" invisible="1"/>
+                    <field name="button_transfer_enabled" invisible="1"/>
+                    <field name="approve_button_wizard" invisible="1"/>
+                    <field name="approve_button_name" invisible="1"/>
+                    <field name="approve_confirm_msg" invisible="1"/>
+                    <field name="reject_button_wizard" invisible="1"/>
+                    <field name="reject_button_name" invisible="1"/>
+                    <field name="reject_confirm_msg" invisible="1"/>
+
+
+                        <button name="action_risk_prepare" type="object" string="Prepare"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('risk_state', '!=', 'draft')]}"/>
+                        <button name="action_risk_reviewed" type="object" string="Reviewed"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('risk_state', '!=', 'prepared')]}"/>
+                        <button name="action_risk_approved" type="object" string="Approved"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('risk_state', '!=', 'reviewed')]}"/>
+                        <button name="action_risk_rejected" type="object" string="Rejected"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('risk_state', '!=', 'reviewed')]}"/>
+                </header>
+
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_open_versions"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('original_risk_id', '!=', False)]}">
+                            <field name="snapshots_count" widget="statinfo" string="Old Versions"/>
+                        </button>
+<!--                        <button type="object" name="action_view_complaince_id"-->
+<!--                                class="oe_stat_button" icon="fa-pencil-square-o"-->
+<!--                                invisible="complaince_id == False">-->
+<!--                            Compliance-->
+<!--                        </button>-->
+<!--                        <button type="object" name="action_view_complaince_universe"-->
+<!--                                class="oe_stat_button" icon="fa-pencil-square-o"-->
+<!--                                invisible="complaince_id == False">-->
+<!--                            Compliance Universe-->
+<!--                        </button>-->
+                    </div>
+                    <group>
+                        <h1 class="font-weight-bold text-center my-2" style="color: #666" colspan="2">Risk
+                            Identification
+                        </h1>
+                        <group>
+                            <field name="factor_sequence"/>
+                            <field name="name" string="Title"
+                                   attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                            <field name="uncertainty"
+                                   attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                            <field name="consequences"
+                                   attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                            <field name="main_cause"
+                                   attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="activity_id" string="Risk Factor"
+                                   attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+<!--                            <field name="complaince_id"/>-->
+                            <field name="version" readonly="1"/>
+                            <field name="version_date"
+                                   attrs="{'invisible': [('snapshots_count', '=', 0), ('original_risk_id', '=', False)]}"/>
+                            <field name="original_risk_id"
+                                   attrs="{'invisible': [('original_risk_id', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="department_id"
+                                   options="{'no_create': True, 'no_edit': True}"
+                                   attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                            <field name="owner_id" required="True"
+                                   domain="[('department_id', '=', department_id)]"
+                                   options="{'no_create': True, 'no_edit': True}"
+                                   attrs="{'readonly': [('risk_state', '!=', 'draft')]}" string="Risk Owner"/>
+                            <field name="owner_employee_ids" invisible="1"/>
+<!--                            <field name="employee_id"-->
+<!--                                   domain="[('id', 'in', owner_employee_ids)]"-->
+<!--                                   options="{'no_create': True, 'no_edit': True}"-->
+<!--                                   attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>-->
+
+                        </group>
+                        <group>
+                            <field name="category_id"
+                                   attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                            <field name="oi_risk_type" invisible="1"/>
+                            <field name="risk_type_id"/>
+                            <field name="tag_ids" widget="many2many_tags"
+                                   attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                            <field name="is_board" attrs="{'invisible': ['|',('risk_state', '!=', 'approved'),('main_risk_total_score','not in',['high', 'very_high'])]}"/>
+                        </group>
+                    </group>
+
+                </sheet>
+                <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="identification_risks_view">
+        <field name="name">Risks</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">list,form,graph,pivot,activity</field>
+        <field name="context">{
+            'search_default_risk': 1,
+            }
+        </field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('oi_risk_management.risks_tree')}),
+                          (0, 0, {'view_mode': 'form', 'view_id': ref('risk_identification_form_view')}),
+                          ]"/>
+    </record>
+    <menuitem name="Risk Universe" id="risk_universe_menu"
+              parent="oi_risk_management.menu_root" sequence="1"/>
+
+    <menuitem name="Risk Identification" id="risk_identification_menu"
+              parent="oi_risk_management.menu_root" sequence="2"/>
+
+    <menuitem name="Risk" id="risk_identification_menu_risk"
+              parent="risk_identification_menu"
+              action="identification_risks_view" sequence="2"/>
+
+    <menuitem name="Risk Factor" id="risk_identification_menu_event"
+              parent="risk_identification_menu"
+              action="oi_risk_management.activities_view" sequence="1"/>
+
+    <menuitem name="Strategic Risk Register" id="strategic_risk_tree_menu"
+              parent="risk_universe_menu"
+              action="strategic_risks_view" sequence="1"/>
+
+    <menuitem name="Operational Risk Register" id="operational_risk_tree_menu"
+              parent="risk_universe_menu"
+              action="operational_risks_view" sequence="2"/>
+
+    <menuitem name="Fraud Risk Register" id="fraud_risk_tree_menu"
+              parent="risk_universe_menu"
+              action="fraud_risks_view" sequence="3"/>
+
+    <menuitem name="Project Risk Register" id="project_risk_tree_menu"
+              parent="risk_universe_menu"
+              action="project_risks_view" sequence="4"/>
+
+    <menuitem name="Business Risk Register" id="business_risk_tree_menu"
+              parent="risk_universe_menu"
+              action="business_risks_view" sequence="5"/>
+
+    <menuitem name="Process Risks" id="process_risk_tree_menu"
+              parent="risk_universe_menu"
+              action="process_risks_view" sequence="6"/>
+
+</odoo>

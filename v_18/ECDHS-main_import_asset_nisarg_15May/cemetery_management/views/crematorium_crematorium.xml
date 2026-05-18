@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_crematorium_form" model="ir.ui.view">
+        <field name="name">crematorium.crematorium.form</field>
+        <field name="model">crematorium.crematorium</field>
+        <field name="arch" type="xml">
+            <form string="Crematorium">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="municipality_id"/>
+                        <span class="o_form_label o_td_label"
+                              name="address_name_parlour">
+                            <b>Address
+                            </b>
+                        </span>
+                        <div class="o_address_format">
+                            <field name="street"
+                                   placeholder="Street..."
+                                   class="o_address_street"/>
+                            <field name="street2"
+                                   placeholder="Street2..."
+                                   class="o_address_street2"/>
+                            <field name="city"
+                                   placeholder="City"
+                                   class="o_address_city"/>
+                            <field name="province_id"
+                                   placeholder="Province"
+                                   class="o_address_province"/>
+                            <field name="country_id"
+                                   placeholder="Country"
+                                   class="o_address_country_id"/>
+                            <field name="postal_code"
+                                   placeholder="Postal Code"
+                                   class="o_address_zip"/>
+                        </div>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_crematorium_tree" model="ir.ui.view">
+        <field name="name">crematorium.crematorium.list</field>
+        <field name="model">crematorium.crematorium</field>
+        <field name="arch" type="xml">
+            <list string="Crematoriums">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_crematorium" model="ir.actions.act_window">
+        <field name="name">Crematoriums</field>
+        <field name="res_model">crematorium.crematorium</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new crematorium.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="crematorium_menu_id" name="Crematoriums" sequence="4"
+              parent="menu_cemetery_configuration"
+              action="action_crematorium"/>
+</odoo>

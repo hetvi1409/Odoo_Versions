@@ -1,0 +1,31 @@
+<odoo>
+    <record model="ir.module.category" id="transport_request.module_transport_request">
+        <field name="name">Transport Request</field>
+        <field name="sequence">51</field>
+    </record>
+    <!-- Requester-->
+    <record id="group_requester" model="res.groups">
+        <field name="name">Requester</field>
+        <field name="category_id" ref="transport_request.module_transport_request"/>
+    </record>
+
+    <!-- Manager/Approver -->
+    <record id="group_manager_approver" model="res.groups">
+        <field name="name">Manager/Approver</field>
+        <field name="category_id" ref="transport_request.module_transport_request"/>
+    </record>
+
+    <!-- Transport Officer -->
+    <record id="group_transport_officer" model="res.groups">
+        <field name="name">Transport Officer</field>
+        <field name="category_id" ref="transport_request.module_transport_request"/>
+    </record>
+
+    <!-- Admin -->
+    <record id="group_transport_request_admin" model="res.groups">
+        <field name="name">Admin</field>
+        <field name="category_id" ref="transport_request.module_transport_request"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+</odoo>

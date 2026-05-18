@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="hr_payroll_dashboard_warning_employee_without_legal_name" model="hr.payroll.dashboard.warning">
+        <field name="name">Employees Without Legal Name</field>
+        <field name="country_id" eval="False"/>
+        <field name="evaluation_code">
+employees_wo_id = self.env['hr.employee'].search([
+    ('legal_name', '=', False),
+])
+if employees_wo_id:
+        warning_count = len(employees_wo_id)
+warning_records = employees_wo_id
+        </field>
+    </record>
+</odoo>

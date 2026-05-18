@@ -1,0 +1,75 @@
+<odoo>
+    <!-- Kanban View -->
+    <record id="view_procurement_kanban" model="ir.ui.view">
+        <field name="name">procurement.procurement.kanban</field>
+        <field name="model">memo.memo</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card">
+                            <div class="o_kanban_details">
+                                <strong>
+                                    <field name="name"/>
+                                </strong>
+                                <div>
+                                    <field name="state" widget="badge"/>
+                                    <br/>
+                                    <field name="date"/>
+                                </div>
+                                <div class="o_kanban_footer mt8">
+                                    <button type="object" name="action_approve_memo" class="btn btn-sm btn-primary"
+                                            invisible="state != 'draft'">
+                                        Approve
+                                    </button>
+                                    <button type="object" name="action_publish" class="btn btn-sm btn-success"
+                                            invisible="state != 'signed'">
+                                        Publish
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="view_procurement_graph" model="ir.ui.view">
+        <field name="name">procurement.procurement.graph</field>
+        <field name="model">memo.memo</field>
+        <field name="arch" type="xml">
+            <graph string="Procurement Statistics" type="bar">
+                <field name="state"/>
+                <field name="id" type="count"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_procurement_search" model="ir.ui.view">
+    <field name="name">procurement.procurement.search</field>
+    <field name="model">memo.memo</field>
+    <field name="arch" type="xml">
+        <search string="Search Procurements">
+            <field name="name"/>
+            <field name="memo_number" string="Procurement Number"/>
+            <field name="requester_id"/>
+            <field name="state"/>
+            <field name="date" string="Procurement Date"/>
+            <field name="create_uid"/>
+
+            <filter name="filter_draft" string="Draft" domain="[('state','=','draft')]"/>
+            <filter name="filter_published" string="Published" domain="[('state','=','published')]"/>
+            <filter name="filter_signed" string="Signed" domain="[('state','=','signed')]"/>
+
+            <separator />
+                <filter name="group_by_state" string="State" context="{'group_by':'state'}"/>
+                <filter name="group_by_creator" string="Created By" context="{'group_by':'create_uid'}"/>
+        </search>
+    </field>
+</record>
+
+
+</odoo>

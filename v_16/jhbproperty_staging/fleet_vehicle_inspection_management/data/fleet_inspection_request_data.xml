@@ -1,0 +1,1406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vehicle inspection master records -->
+    <record id="vehicle_inspection_monthly" model="vehicle.inspection">
+        <field name="name">Monthly Fleet Inspection</field>
+        <field name="inspection_period">30</field>
+        <field name="reminder_notification_days">5</field>
+        <field name="user_id" ref="base.user_admin"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="vehicle_inspection_quarterly" model="vehicle.inspection">
+        <field name="name">Quarterly Fleet Inspection</field>
+        <field name="inspection_period">90</field>
+        <field name="reminder_notification_days">10</field>
+        <field name="user_id" ref="base.user_admin"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="vehicle_inspection_ad_hoc" model="vehicle.inspection">
+        <field name="name">Ad Hoc Vehicle Inspection</field>
+        <field name="inspection_period">0</field>
+        <field name="reminder_notification_days">0</field>
+        <field name="user_id" ref="base.user_admin"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <!-- Inspection request records with all fields populated -->
+    <record id="inspection_request_001" model="inspection.request">
+        <field name="name">IR-2025-001</field>
+        <field name="inspection_id" ref="vehicle_inspection_monthly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lf58gfgp"/>
+        <field name="date_create">2025-01-05</field>
+        <field name="inspection_date">2025-01-06</field>
+        <field name="inspection_result">Passed - no defects noted.</field>
+        <field name="internal_note"><![CDATA[<p>Routine monthly inspection completed at JPC Fleet Depot.</p>]]></field>
+        <field name="state">inspection_finished</field>
+        <field name="inspection_line_reference">1001</field>
+        <field name="service_reference">2001</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_002" model="inspection.request">
+        <field name="name">IR-2025-002</field>
+        <field name="inspection_id" ref="vehicle_inspection_quarterly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh01cvgp"/>
+        <field name="date_create">2025-02-10</field>
+        <field name="inspection_date">2025-02-11</field>
+        <field name="inspection_result">Requires attention - minor defects logged.</field>
+        <field name="internal_note"><![CDATA[<p>Front right tyre pressure low; wiper blades replaced.</p>]]></field>
+        <field name="state">inspection_finished</field>
+        <field name="inspection_line_reference">1002</field>
+        <field name="service_reference">2002</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">no</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">no</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">no</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">no</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_003" model="inspection.request">
+        <field name="name">IR-2025-003</field>
+        <field name="inspection_id" ref="vehicle_inspection_ad_hoc"/>
+        <field name="vehicle_id" ref="fleet_vehicle_ls22dngp"/>
+        <field name="date_create">2025-03-03</field>
+        <field name="inspection_date">2025-03-03</field>
+        <field name="inspection_result">Failed - brake lights inoperative.</field>
+        <field name="internal_note"><![CDATA[<p>Vehicle held for immediate repairs; do not release.</p>]]></field>
+        <field name="state">inspection_started</field>
+        <field name="inspection_line_reference">1003</field>
+        <field name="service_reference">2003</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">yes</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">no</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">no</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">no</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">no</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">no</field>
+        <field name="posttrip_warning_lights_check">no</field>
+        <field name="posttrip_warning_light_display_check">yes</field>
+    </record>
+
+    <record id="inspection_request_004" model="inspection.request">
+        <field name="name">IR-2025-004</field>
+        <field name="inspection_id" ref="vehicle_inspection_monthly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh01cbgp"/>
+        <field name="date_create">2025-03-10</field>
+        <field name="inspection_date">2025-03-11</field>
+        <field name="inspection_result">Pending - scheduled inspection.</field>
+        <field name="internal_note"><![CDATA[<p>Unit queued for monthly checks.</p>]]></field>
+        <field name="state">draft</field>
+        <field name="inspection_line_reference">1004</field>
+        <field name="service_reference">2004</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_005" model="inspection.request">
+        <field name="name">IR-2025-005</field>
+        <field name="inspection_id" ref="vehicle_inspection_quarterly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh46vygp"/>
+        <field name="date_create">2025-03-15</field>
+        <field name="inspection_date">2025-03-16</field>
+        <field name="inspection_result">Awaiting supervisor review.</field>
+        <field name="internal_note"><![CDATA[<p>Inspection booked; keys with fleet office.</p>]]></field>
+        <field name="state">new</field>
+        <field name="inspection_line_reference">1005</field>
+        <field name="service_reference">2005</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">no</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">no</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">no</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_006" model="inspection.request">
+        <field name="name">IR-2025-006</field>
+        <field name="inspection_id" ref="vehicle_inspection_ad_hoc"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lk53sdgp"/>
+        <field name="date_create">2025-03-20</field>
+        <field name="inspection_date">2025-03-20</field>
+        <field name="inspection_result">In progress - driver reported vibration.</field>
+        <field name="internal_note"><![CDATA[<p>Technician assessing suspension.</p>]]></field>
+        <field name="state">inspection_started</field>
+        <field name="inspection_line_reference">1006</field>
+        <field name="service_reference">2006</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">yes</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">no</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">no</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">no</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">no</field>
+        <field name="posttrip_warning_lights_check">no</field>
+        <field name="posttrip_warning_light_display_check">yes</field>
+    </record>
+
+    <record id="inspection_request_007" model="inspection.request">
+        <field name="name">IR-2025-007</field>
+        <field name="inspection_id" ref="vehicle_inspection_monthly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_01_ck_gp"/>
+        <field name="date_create">2025-04-02</field>
+        <field name="inspection_date">2025-04-03</field>
+        <field name="inspection_result">Passed - vehicle ready for service.</field>
+        <field name="internal_note"><![CDATA[<p>Minor dust; no defects.</p>]]></field>
+        <field name="state">inspection_finished</field>
+        <field name="inspection_line_reference">1007</field>
+        <field name="service_reference">2007</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_008" model="inspection.request">
+        <field name="name">IR-2025-008</field>
+        <field name="inspection_id" ref="vehicle_inspection_quarterly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_01_cz_gp"/>
+        <field name="date_create">2025-04-08</field>
+        <field name="inspection_date">2025-04-09</field>
+        <field name="inspection_result">Pending - driver submitted checklist.</field>
+        <field name="internal_note"><![CDATA[<p>Awaiting supervisor sign-off.</p>]]></field>
+        <field name="state">new</field>
+        <field name="inspection_line_reference">1008</field>
+        <field name="service_reference">2008</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_009" model="inspection.request">
+        <field name="name">IR-2025-009</field>
+        <field name="inspection_id" ref="vehicle_inspection_ad_hoc"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_01_dd_gp"/>
+        <field name="date_create">2025-04-14</field>
+        <field name="inspection_date">2025-04-14</field>
+        <field name="inspection_result">In progress - brake pad wear noted.</field>
+        <field name="internal_note"><![CDATA[<p>Workshop replacing brake pads.</p>]]></field>
+        <field name="state">inspection_started</field>
+        <field name="inspection_line_reference">1009</field>
+        <field name="service_reference">2009</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">yes</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">no</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">no</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">no</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">no</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">no</field>
+        <field name="posttrip_warning_lights_check">no</field>
+        <field name="posttrip_warning_light_display_check">yes</field>
+    </record>
+
+    <record id="inspection_request_010" model="inspection.request">
+        <field name="name">IR-2025-010</field>
+        <field name="inspection_id" ref="vehicle_inspection_monthly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_47_md_gp"/>
+        <field name="date_create">2025-04-20</field>
+        <field name="inspection_date">2025-04-21</field>
+        <field name="inspection_result">Pending - inspection scheduled.</field>
+        <field name="internal_note"><![CDATA[<p>Depot will process this week.</p>]]></field>
+        <field name="state">draft</field>
+        <field name="inspection_line_reference">1010</field>
+        <field name="service_reference">2010</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_011" model="inspection.request">
+        <field name="name">IR-2025-011</field>
+        <field name="inspection_id" ref="vehicle_inspection_quarterly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_46_ws_gp"/>
+        <field name="date_create">2025-04-25</field>
+        <field name="inspection_date">2025-04-26</field>
+        <field name="inspection_result">Completed - replace worn wiper blades.</field>
+        <field name="internal_note"><![CDATA[<p>Wipers replaced during inspection.</p>]]></field>
+        <field name="state">inspection_finished</field>
+        <field name="inspection_line_reference">1011</field>
+        <field name="service_reference">2011</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">no</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">no</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_012" model="inspection.request">
+        <field name="name">IR-2025-012</field>
+        <field name="inspection_id" ref="vehicle_inspection_monthly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_46_xk_gp"/>
+        <field name="date_create">2025-05-02</field>
+        <field name="inspection_date">2025-05-03</field>
+        <field name="inspection_result">Pending - scheduled inspection.</field>
+        <field name="internal_note"><![CDATA[<p>Vehicle assigned for May inspection.</p>]]></field>
+        <field name="state">draft</field>
+        <field name="inspection_line_reference">1012</field>
+        <field name="service_reference">2012</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_013" model="inspection.request">
+        <field name="name">IR-2025-013</field>
+        <field name="inspection_id" ref="vehicle_inspection_quarterly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_60_xw_gp"/>
+        <field name="date_create">2025-05-10</field>
+        <field name="inspection_date">2025-05-11</field>
+        <field name="inspection_result">Completed - tyre pressure adjusted.</field>
+        <field name="internal_note"><![CDATA[<p>Adjusted tyre pressure to spec.</p>]]></field>
+        <field name="state">inspection_finished</field>
+        <field name="inspection_line_reference">1013</field>
+        <field name="service_reference">2013</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">no</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_014" model="inspection.request">
+        <field name="name">IR-2025-014</field>
+        <field name="inspection_id" ref="vehicle_inspection_ad_hoc"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_60_xr_gp"/>
+        <field name="date_create">2025-05-16</field>
+        <field name="inspection_date">2025-05-16</field>
+        <field name="inspection_result">In progress - coolant top up required.</field>
+        <field name="internal_note"><![CDATA[<p>Cooling system flushed and topped up.</p>]]></field>
+        <field name="state">inspection_started</field>
+        <field name="inspection_line_reference">1014</field>
+        <field name="service_reference">2014</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">yes</field>
+        <field name="exterior_clean_appearance_check">no</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">no</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">no</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">no</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">no</field>
+        <field name="posttrip_warning_lights_check">no</field>
+        <field name="posttrip_warning_light_display_check">yes</field>
+    </record>
+
+    <record id="inspection_request_015" model="inspection.request">
+        <field name="name">IR-2025-015</field>
+        <field name="inspection_id" ref="vehicle_inspection_monthly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_60_xh_gp"/>
+        <field name="date_create">2025-05-22</field>
+        <field name="inspection_date">2025-05-23</field>
+        <field name="inspection_result">Awaiting confirmation.</field>
+        <field name="internal_note"><![CDATA[<p>Driver submitted mileage update.</p>]]></field>
+        <field name="state">new</field>
+        <field name="inspection_line_reference">1015</field>
+        <field name="service_reference">2015</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_016" model="inspection.request">
+        <field name="name">IR-2025-016</field>
+        <field name="inspection_id" ref="vehicle_inspection_quarterly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_60_xx_gp"/>
+        <field name="date_create">2025-06-02</field>
+        <field name="inspection_date">2025-06-03</field>
+        <field name="inspection_result">Completed - minor dust cleaned.</field>
+        <field name="internal_note"><![CDATA[<p>Interior vacuumed during inspection.</p>]]></field>
+        <field name="state">inspection_finished</field>
+        <field name="inspection_line_reference">1016</field>
+        <field name="service_reference">2016</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_017" model="inspection.request">
+        <field name="name">IR-2025-017</field>
+        <field name="inspection_id" ref="vehicle_inspection_ad_hoc"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_46_vt_gp"/>
+        <field name="date_create">2025-06-10</field>
+        <field name="inspection_date">2025-06-10</field>
+        <field name="inspection_result">In progress - steering noise reported.</field>
+        <field name="internal_note"><![CDATA[<p>Steering components under inspection.</p>]]></field>
+        <field name="state">inspection_started</field>
+        <field name="inspection_line_reference">1017</field>
+        <field name="service_reference">2017</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">yes</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">no</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">no</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">no</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">no</field>
+        <field name="posttrip_warning_lights_check">no</field>
+        <field name="posttrip_warning_light_display_check">yes</field>
+    </record>
+
+    <record id="inspection_request_018" model="inspection.request">
+        <field name="name">IR-2025-018</field>
+        <field name="inspection_id" ref="vehicle_inspection_monthly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_46_sf_gp"/>
+        <field name="date_create">2025-06-18</field>
+        <field name="inspection_date">2025-06-19</field>
+        <field name="inspection_result">Pending - scheduled.</field>
+        <field name="internal_note"><![CDATA[<p>Inspection booked for June cycle.</p>]]></field>
+        <field name="state">draft</field>
+        <field name="inspection_line_reference">1018</field>
+        <field name="service_reference">2018</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_019" model="inspection.request">
+        <field name="name">IR-2025-019</field>
+        <field name="inspection_id" ref="vehicle_inspection_quarterly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_46_rz_gp"/>
+        <field name="date_create">2025-06-26</field>
+        <field name="inspection_date">2025-06-27</field>
+        <field name="inspection_result">Completed - OK.</field>
+        <field name="internal_note"><![CDATA[<p>All checks passed.</p>]]></field>
+        <field name="state">inspection_finished</field>
+        <field name="inspection_line_reference">1019</field>
+        <field name="service_reference">2019</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_020" model="inspection.request">
+        <field name="name">IR-2025-020</field>
+        <field name="inspection_id" ref="vehicle_inspection_ad_hoc"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lj_59_xr_gp"/>
+        <field name="date_create">2025-07-05</field>
+        <field name="inspection_date">2025-07-05</field>
+        <field name="inspection_result">In progress - oil leak investigation.</field>
+        <field name="internal_note"><![CDATA[<p>Underbody cleaned to trace leak.</p>]]></field>
+        <field name="state">inspection_started</field>
+        <field name="inspection_line_reference">1020</field>
+        <field name="service_reference">2020</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">yes</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">yes</field>
+        <field name="exterior_clean_appearance_check">no</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">no</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">no</field>
+
+        <field name="underhood_engine_oil_check">no</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">no</field>
+        <field name="posttrip_warning_lights_check">no</field>
+        <field name="posttrip_warning_light_display_check">yes</field>
+    </record>
+
+    <record id="inspection_request_021" model="inspection.request">
+        <field name="name">IR-2025-021</field>
+        <field name="inspection_id" ref="vehicle_inspection_monthly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_46_wf_gp"/>
+        <field name="date_create">2025-07-12</field>
+        <field name="inspection_date">2025-07-13</field>
+        <field name="inspection_result">Pending - inspection scheduled.</field>
+        <field name="internal_note"><![CDATA[<p>Driver will deliver vehicle to depot.</p>]]></field>
+        <field name="state">draft</field>
+        <field name="inspection_line_reference">1021</field>
+        <field name="service_reference">2021</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_022" model="inspection.request">
+        <field name="name">IR-2025-022</field>
+        <field name="inspection_id" ref="vehicle_inspection_quarterly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_70_nm_gp"/>
+        <field name="date_create">2025-07-20</field>
+        <field name="inspection_date">2025-07-21</field>
+        <field name="inspection_result">Completed - OK.</field>
+        <field name="internal_note"><![CDATA[<p>All critical checks passed.</p>]]></field>
+        <field name="state">inspection_finished</field>
+        <field name="inspection_line_reference">1022</field>
+        <field name="service_reference">2022</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+
+    <record id="inspection_request_023" model="inspection.request">
+        <field name="name">IR-2025-023</field>
+        <field name="inspection_id" ref="vehicle_inspection_monthly"/>
+        <field name="vehicle_id" ref="fleet_vehicle_lh_56_np_gp"/>
+        <field name="date_create">2025-07-28</field>
+        <field name="inspection_date">2025-07-29</field>
+        <field name="inspection_result">Pending - inspection scheduled.</field>
+        <field name="internal_note"><![CDATA[<p>Unit queued for July batch inspection.</p>]]></field>
+        <field name="state">new</field>
+        <field name="inspection_line_reference">1023</field>
+        <field name="service_reference">2023</field>
+        <field name="company_id" ref="base.main_company"/>
+
+        <field name="exterior_visible_damage_check">no</field>
+        <field name="exterior_four_tyres_inflated_check">yes</field>
+        <field name="exterior_fluid_leakage_check">no</field>
+        <field name="exterior_clean_appearance_check">yes</field>
+        <field name="exterior_four_tyres_inflated_gauge_check">yes</field>
+        <field name="exterior_tread_depth_check">yes</field>
+        <field name="exterior_wiper_blades_check">yes</field>
+
+        <field name="interior_clean_check">yes</field>
+        <field name="interior_visible_damage_check">no</field>
+        <field name="interior_safety_belts_check">yes</field>
+        <field name="interior_first_aid_kit_check">yes</field>
+        <field name="interior_emergency_kit_check">yes</field>
+        <field name="interior_registration_accessible_check">yes</field>
+        <field name="interior_insurance_accessible_check">yes</field>
+        <field name="interior_spare_tyre_check">yes</field>
+        <field name="interior_jack_system_check">yes</field>
+        <field name="interior_owner_manual_check">yes</field>
+        <field name="interior_accident_kit_check">yes</field>
+
+        <field name="operating_headlights_check">yes</field>
+        <field name="operating_taillights_check">yes</field>
+        <field name="operating_brake_lights_check">yes</field>
+        <field name="operating_backup_lights_check">yes</field>
+        <field name="operating_interior_lights_check">yes</field>
+        <field name="operating_windscreen_wipers_check">yes</field>
+        <field name="operating_horn_check">yes</field>
+        <field name="operating_mirrors_check">yes</field>
+        <field name="operating_parking_brake_check">yes</field>
+        <field name="operating_turn_signals_check">yes</field>
+        <field name="operating_sun_visor_check">yes</field>
+        <field name="operating_heating_cooling_check">yes</field>
+        <field name="operating_fuel_tank_check">yes</field>
+
+        <field name="underhood_engine_oil_check">yes</field>
+        <field name="underhood_windshield_fluid_check">yes</field>
+        <field name="underhood_power_steering_fluid_check">yes</field>
+        <field name="underhood_transmission_fluid_check">yes</field>
+        <field name="underhood_brake_fluid_check">yes</field>
+        <field name="underhood_coolant_level_check">yes</field>
+        <field name="underhood_belt_condition_check">yes</field>
+
+        <field name="posttrip_vehicle_operate_check">yes</field>
+        <field name="posttrip_warning_lights_check">yes</field>
+        <field name="posttrip_warning_light_display_check">no</field>
+    </record>
+</odoo>

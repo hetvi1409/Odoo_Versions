@@ -1,0 +1,448 @@
+<odoo>
+    <data>
+
+        <!-- risk tree view  -->
+        <record model="ir.ui.view" id="oi_risk_management.risks_tree">
+            <field name="name">oi_risk_management.risk.view.tree</field>
+            <field name="model">oi_risk_management.risk</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="sequence"/>
+                    <field name="name" string="Risk Name"/>
+                    <field name="activity_user_id"/>
+                    <field name="inherent_risk_total_score" string="Inherent risk"/>
+                    <field name="current_risk_total_score" string="Current risk"/>
+                    <field name="residual_risk_total_score" string="Residual risk"/>
+
+                    <field name="department_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- list of risks tree view  -->
+        <record model="ir.ui.view" id="oi_risk_management.list_of_risks_tree_view">
+            <field name="name">oi_risk_management.list.risks.view.tree</field>
+            <field name="model">oi_risk_management.risk</field>
+            <field name="arch" type="xml">
+                <tree expand="True">
+                    <field name="main_risk_total_score"/>
+
+                    <field name="name" string="Risk"/>
+
+                    <field name="description" optional="1"/>
+                    <field name="uncertainty" optional="1"/>
+                    <field name="main_cause" optional="1"/>
+                    <field name="consequences" optional="1"/>
+
+                    <field name="inherent_risk_total_score" string="Inherent risk"/>
+                    <field name="current_risk_total_score" string="Current risk"/>
+                    <field name="residual_risk_total_score" string="Residual risk"/>
+
+                    <field name="department_id"/>
+                    <field name="risk_evaluation_line_ids" invisible="1"/>
+                    <field name="state" string="State of Risk Assessment"/>
+                    <field name="is_board"
+                           attrs="{'invisible': ['|', ('state', 'not in', ['assessment_gm_approve', 'assessment_ceo_approve', 'approved']), ('main_risk_total_score', 'not in', ['high', 'very_high'])]}"/>
+                    <!--                           attrs="{'invisible': [-->
+                    <!--                                       '|',-->
+                    <!--                                       ('state', 'not in', ['assessment_gm_approve', 'assessment_ceo_approve', 'approved']),-->
+                    <!--                                       ('main_risk_total_score', 'not in', ['high', 'very_high'])]}"/>-->
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- list of risks board approval tree view  -->
+        <record model="ir.ui.view" id="oi_risk_management.list_of_risks_board_approval_tree_view">
+            <field name="name">oi_risk_management.list.risks.view.tree</field>
+            <field name="model">oi_risk_management.risk</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="main_risk_total_score" invisible="1"/>
+
+                    <field name="name" string="Risk" readonly="1"/>
+
+                    <field name="description" optional="1" readonly="1"/>
+                    <field name="uncertainty" optional="1" readonly="1"/>
+                    <field name="main_cause" optional="1" readonly="1"/>
+                    <field name="consequences" optional="1" readonly="1"/>
+                    <field name="owner_id" optional="1" readonly="1"/>
+
+                    <field name="inherent_risk_total_score" string="Inherent risk" readonly="1"/>
+                    <field name="current_risk_total_score" string="Current risk" readonly="1"/>
+                    <field name="residual_risk_total_score" string="Residual risk" readonly="1"/>
+
+                    <field name="department_id" readonly="1"/>
+                    <field name="state" string="State of Risk Assessment" readonly="1"/>
+                    <field name="is_board"
+                           widget="boolean_toggle"
+                           attrs="{'invisible': ['|', ('state', '!=', 'approved'), ('main_risk_total_score', 'not in', ['high', 'very_high'])]}"/>
+                    <!--                           attrs="{'invisible': [-->
+                    <!--                                       '|',-->
+                    <!--                                       ('state', 'not in', ['approved']),-->
+                    <!--                                       ('main_risk_total_score', 'not in', ['high', 'very_high'])-->
+                    <!--                                   ]}"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <!-- list risks search view -->
+        <record model="ir.ui.view" id="oi_risk_management.risk_search">
+            <field name="name">list.risk.default.search</field>
+            <field name="model">oi_risk_management.risk</field>
+            <field name="arch" type="xml">
+                <search string="Risks">
+                    <field name="name"/>
+                    <field name="department_id"/>
+                    <group expand="0" string="Group By">
+                        <filter name="department" context="{'group_by':'department_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <!-- risk form view  -->
+        <record model="ir.ui.view" id="oi_risk_management.risk_form">
+            <field name="name">oi_risk_management.risk.view.form</field>
+            <field name="model">oi_risk_management.risk</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="main_risk_total_score" invisible="1"/>
+                    <header>
+                        <field name="risk_state" widget="statusbar" readonly="1"/>
+                        <field name="workflow_states" invisible="1"/>
+                        <field name="user_can_approve" invisible="1"/>
+                        <field name="button_approve_enabled" invisible="1"/>
+                        <field name="button_forward_enabled" invisible="1"/>
+                        <field name="button_return_enabled" invisible="1"/>
+                        <field name="button_transfer_enabled" invisible="1"/>
+                        <field name="approve_button_wizard" invisible="1"/>
+                        <field name="approve_button_name" invisible="1"/>
+                        <field name="approve_confirm_msg" invisible="1"/>
+                        <field name="reject_button_wizard" invisible="1"/>
+                        <field name="reject_button_name" invisible="1"/>
+                        <field name="reject_confirm_msg" invisible="1"/>
+
+                        <button name="action_risk_prepare" type="object" string="Prepare"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('risk_state', '!=', 'draft')]}"/>
+                        <button name="action_risk_reviewed" type="object" string="Reviewed"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('risk_state', '!=', 'prepared')]}"/>
+                        <button name="action_risk_approved" type="object" string="Approved"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('risk_state', '!=', 'reviewed')]}"/>
+                        <button name="action_risk_rejected" type="object" string="Rejected"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('risk_state', '!=', 'reviewed')]}"/>
+                    </header>
+
+                    <sheet>
+                        <style>
+                            .o_form_view:not(.o_field_highlight)
+                            .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                            .o_input:not(:hover):not(:focus) {
+                            --o-input-border-color: black !important;
+                            }
+                            .o_form_view:not(o_field_highlight)
+                            .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                            .note-editable:not(:focus) {
+                            border-color: black !important;
+                            }
+                            .form-check:not(:hover),
+                            .form-check:not(:hover) .form-check-input:not(:disabled),
+                            .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                            border-color: black !important;
+                            }
+                        </style>
+
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_open_versions"
+                                    class="oe_stat_button"
+                                    icon="fa-pencil-square-o"
+                                    attrs="{'invisible': [('original_risk_id', '!=', False)]}">
+                                <!--                                    attrs="{'invisible' : [('original_risk_id', '!=', False)]}">-->
+                                <field name="snapshots_count" widget="statinfo" string="Old Versions"/>
+                            </button>
+                        </div>
+                        <group>
+                            <h1 class="font-weight-bold text-center my-2" style="color: #666" colspan="2">Risk</h1>
+                            <group>
+                                <field name="sequence"/>
+                                <field name="name" string="Title"
+                                       attrs="{'readonly': [('risk_state', 'not in', ['draft'])]}"/>
+                                <field name="uncertainty"
+                                       attrs="{'readonly': [('risk_state', 'not in', ['draft'])]}"/>
+                                <field name="main_cause"
+                                       attrs="{'readonly': [('risk_state', 'not in', ['draft'])]}"/>
+                                <field name="consequences"
+                                       attrs="{'readonly': [('risk_state', 'not in', ['draft'])]}"/>
+                            </group>
+                            <group>
+                                <field name="activity_id" string="Risk Factor"
+                                       attrs="{'readonly': [('risk_state', 'not in', ['draft'])]}"/>
+                                <field name="main_cause"
+                                       attrs="{'readonly': [('risk_state', 'not in', ['draft'])]}"/>
+                                <field name="consequences"
+                                       attrs="{'readonly': [('risk_state', 'not in', ['draft'])]}"/>
+                                <field name="version" readonly="1"/>
+                                <field name="version_date"
+                                       attrs="{'invisible': [('snapshots_count', '=', 0), ('original_risk_id', '=', False)]}"/>
+                                <field name="original_risk_id"
+                                       attrs="{'invisible': [('original_risk_id', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="department_id"
+                                       options="{'no_create': True, 'no_edit': True}"
+                                       attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                                <field name="owner_id" required="True"
+                                       options="{'no_create': True, 'no_edit': True}"
+                                       attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                                <field name="owner_employee_ids" invisible="1"/>
+                                <field name="employee_id"
+                                       options="{'no_create': True, 'no_edit': True}"
+                                       attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="category_id"
+                                       attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                                <field name="tag_ids" widget="many2many_tags"
+                                       attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+
+                                <field name="is_board"
+                                       attrs="{'invisible': ['|', ('risk_state', '!=', 'approved'), ('main_risk_total_score', 'not in', ['high', 'very_high'])]}"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <!--                            <page name="attachments" string="Attachments">-->
+                            <!--                                <group name="general">-->
+                            <!--                                    <field name="sources_ids" nolabel="1" widget="many2many_binary"-->
+                            <!--                                           attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+                            <!--                                </group>-->
+                            <!--                            </page>-->
+
+                            <page name="analysis" string="Analysis">
+                                <field name="risk_analysis_line_ids"
+                                       attrs="{'readonly': [('risk_state', '!=', 'draft')]}">
+                                    <!--                                       attrs="{'readonly': [('risk_state', '!=', 'draft')]}">-->
+                                    <tree>
+                                        <field name="line_no" string="No." readonly="1"/>
+                                        <field name="contributing_factor"/>
+                                        <field name="current_control_str"/>
+                                        <field name="risk_treatment_str"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <group>
+                                                <field name="can_have_owner" invisible="1"/>
+                                                <field name="risk_owner_id" invisible="1"/>
+                                                <field name="risk_state" invisible="1"/>
+                                                <group colspan="2">
+                                                    <field name="contributing_factor"
+                                                           attrs="{'readonly': [('parent.risk_state', 'not in', ['draft'])]}"/>
+                                                    <!--		                                                   attrs="{'readonly': [('parent.risk_state', 'not in', ['draft'])]}" ></field>-->
+                                                </group>
+                                                <group string="Current Control" colspan="2">
+                                                    <field name="current_control_ids" nolabel="1"
+                                                           colspan="2"
+                                                           attrs="{'readonly': [('parent.risk_state', 'not in', ['draft'])]}">
+                                                        <!--		                                                   attrs="{'readonly': [('parent.risk_state', 'not in', ['draft'])]}" colspan="2">-->
+                                                        <tree editable="bottom">
+                                                            <field name="name"/>
+                                                        </tree>
+                                                    </field>
+                                                </group>
+                                                <group string="Treatments" colspan="2">
+                                                    <field name="risk_treatment_ids" nolabel="1"
+                                                           context="{'default_owner_id': risk_owner_id}" colspan="2">
+                                                        <tree editable="bottom">
+                                                            <field name="risk_state" invisible="1"/>
+                                                            <field name="name"/>
+                                                            <field name="target_date"/>
+                                                            <field name="status"/>
+                                                            <field name="owner_id"
+                                                                   options="{'no_create': True, 'no_edit': True}"
+                                                                   attrs="{'required': [('parent.can_have_owner', '!=', False)]}"/>
+                                                            <!--		                                                           attrs="{'required': [('parent.can_have_owner', '!=', False)]}"-->
+                                                            <button name="action_change_status" type="object"
+                                                                    string="Change Status / Attach"
+                                                                    class="float-right btn-primary"
+                                                                    attrs="{'column_invisible': [('parent.risk_state', '=', 'draft')]}"/>
+                                                            <!--		                                                    <button name="action_view_documents" type="object"-->
+                                                            <!--		                                                            string="Open Document"-->
+                                                            <!--		                                                            class="float-right btn-primary"-->
+                                                            <!--                                                                    column_invisible="parent.risk_state == 'draft'"/>-->
+                                                            <!--		                                                            attrs="{'column_invisible': [('parent.risk_state', '=', 'draft')]}"/>-->
+                                                        </tree>
+                                                        <form>
+                                                            <field name="risk_state" invisible="1"/>
+                                                            <sheet>
+                                                                <div>
+                                                                    <label for="name"
+                                                                           style="width: 15%; vertical-align: middle;"/>
+                                                                    <field name="name" style="width: 80%"
+                                                                           attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                                                                    <!--		                                                                   attrs="{'readonly': [('risk_state', 'not in', ['draft'])]}"></field>-->
+                                                                </div>
+                                                                <div class="mt-2">
+                                                                    <label for="target_date"
+                                                                           style="width: 15%; vertical-align: middle;"/>
+                                                                    <field name="target_date" style="width: 80%"
+                                                                           attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                                                                    <!--		                                                                   attrs="{'readonly': [('risk_state', 'not in', ['draft'])]}"></field>-->
+                                                                </div>
+                                                                <div class="mt-2">
+                                                                    <label for="status"
+                                                                           style="width: 15%; vertical-align: middle;"/>
+                                                                    <field name="status" style="width: 80%"/>
+                                                                </div>
+                                                                <div class="mt-2">
+                                                                    <label for="owner_id"
+                                                                           style="width: 15%; vertical-align: middle;"/>
+                                                                    <field name="owner_id" style="width: 80%"
+
+
+                                                                           attrs="{'invisible': [('parent.can_have_owner', '=', False)], 'required': [('parent.can_have_owner', '!=', False)], 'readonly': [('parent.can_have_owner', '!=', False)]}"/>
+                                                                    <!--		                                                                   attrs="{'invisible': [('parent.can_have_owner', '=', False)], 'required': [('parent.can_have_owner', '!=', False)], 'readonly': [('risk_state', 'not in', ['draft'])]}"></field>-->
+                                                                </div>
+
+                                                                <field name="attachment_ids" nolabel="1" class="mt-2"
+                                                                       widget="many2many_binary"/>
+                                                            </sheet>
+                                                        </form>
+                                                    </field>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+
+                            <page name="evaluation" string="Evaluation">
+                                <field name="risk_evaluation_line_ids" nolabel="1"
+                                       attrs="{'readonly': [('risk_state', '!=', 'draft')]}">
+                                    <!--                                       attrs="{'readonly': [('state', 'not in', ['draft'])]}">-->
+                                    <tree create="0" delete="0">
+                                        <field name="type"></field>
+                                        <field name="inherent_risk" domain="[('type', '=', type)]"
+                                               options="{'no_create': True, 'no_edit': True}"></field>
+                                        <field name="current_risk" domain="[('type', '=', type)]"
+                                               options="{'no_create': True, 'no_edit': True}"></field>
+                                        <field name="residual_risk" domain="[('type', '=', type)]"
+                                               options="{'no_create': True, 'no_edit': True}"></field>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <!-- using only readonly="1" will NOT work, the client won't send it to the server 
+                                                but using it with force_save="1" will force the client to send it -->
+                                            <field name="type" readonly="1" force_save="1"></field>
+                                            <field name="risk_criteria_ids" readonly="1" nolabel="1" colspan="2">
+                                                <tree>
+                                                    <field name="score"></field>
+                                                    <field name="color" widget="color_picker" nolabel="1" readonly="1"/>
+                                                    <field name="name"></field>
+
+                                                    <field name="ehs"
+                                                           attrs="{'column_invisible': [('parent.type', '!=', 'severity')]}"/>
+                                                    <!--                                                           attrs="{'column_invisible': [('parent.type', '!=', 'severity')]}"></field>-->
+                                                    <field name="value"
+                                                           attrs="{'column_invisible': [('parent.type', '!=', 'severity')]}"/>
+                                                    <!--                                                           attrs="{'column_invisible': [('parent.type', '!=', 'severity')]}"></field>-->
+                                                    <field name="reputation"
+                                                           attrs="{'column_invisible': [('parent.type', '!=', 'severity')]}"/>
+                                                    <!--                                                           attrs="{'column_invisible': [('parent.type', '!=', 'severity')]}"></field>-->
+
+                                                    <field name="percentage"
+                                                           attrs="{'column_invisible': [('parent.type', '!=', 'likelihood')]}"/>
+                                                    <!--                                                           attrs="{'column_invisible': [('parent.type', '!=', 'likelihood')]}"></field>-->
+                                                    <field name="frequency"
+                                                           attrs="{'column_invisible': [('parent.type', '!=', 'likelihood')]}"/>
+                                                    <!--                                                           attrs="{'column_invisible': [('parent.type', '!=', 'likelihood')]}"></field>-->
+
+                                                    <field name="description"
+                                                           attrs="{'column_invisible': [('parent.type', '!=', 'control_effectiveness')]}"/>
+                                                    <!--                                                           attrs="{'column_invisible': [('parent.type', '!=', 'control_effectiveness')]}"></field>-->
+                                                </tree>
+                                            </field>
+                                        </group>
+                                        <group>
+                                            <field name="inherent_risk" domain="[('type', '=', type)]"
+                                                   options="{'no_create': True, 'no_edit': True}"></field>
+                                            <field name="inherent_risk_justification" string="Justification"></field>
+                                        </group>
+                                        <group>
+                                            <field name="current_risk" domain="[('type', '=', type)]"
+                                                   options="{'no_create': True, 'no_edit': True}"></field>
+                                            <field name="current_risk_justification" string="Justification"></field>
+                                        </group>
+                                        <group>
+                                            <field name="residual_risk" domain="[('type', '=', type)]"
+                                                   options="{'no_create': True, 'no_edit': True}"></field>
+                                            <field name="residual_risk_justification" string="Justification"></field>
+                                        </group>
+                                    </form>
+                                </field>
+
+                                <group>
+                                    <group>
+                                        <group string="Control Effectiveness" colspan="2">
+                                            <field name="main_risk_total_score"/>
+                                            <field name="control_effectiveness_id" string="Score"
+                                                   options="{'no_create': True, 'no_edit': True}"
+                                                   attrs="{'readonly': [('risk_state', '!=', 'draft')]}"/>
+                                            <!--                                                   attrs="{'readonly': [('state', 'not in', ['draft'])]}"-->
+                                        </group>
+                                        <group string="Risk Score" colspan="2">
+                                            <field name="inherent_risk_total_score" string="Inherent Risk Score"/>
+                                            <field name="current_risk_total_score" string="Current Risk Score"/>
+                                            <field name="residual_risk_total_score" string="Residual Risk Score"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <field name="control_effectiveness_risk_criteria_ids" readonly="1" nolabel="1"
+                                               colspan="2">
+                                            <tree>
+                                                <field name="score"></field>
+                                                <field name="color" widget="color_picker" nolabel="1" readonly="1"/>
+                                                <field name="name"></field>
+                                                <field name="description"></field>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                </group>
+
+                            </page>
+
+                            <!--<page name="related_risks" string="Related Risks">-->
+                            <!--    <field name="related_risk_ids" string="" domain="[('id', '!=', active_id)]"/>-->
+                            <!--</page>-->
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- risk calendar view -->
+        <record model="ir.ui.view" id="oi_risk_management.risk_calendar">
+            <field name="name">oi_risk_management.risk.view.calendar</field>
+            <field name="model">oi_risk_management.risk</field>
+            <field name="arch" type="xml">
+                <calendar string="Test" date_start="target_date">
+                    <field name="name"/>
+                    <field name="department_id" filters="1" invisible="1"/>
+                </calendar>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="performanance_contract_dashboard">
+        <div class="oh_dashboards">
+            <h1>Dashboard</h1>
+            <div class="container-fluid my-5 o_performance_contract_dashboard">
+                <t t-call="PerformanceContractDashboard"/>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="PerformanceContractDashboard">
+        <div class="row mt-5 px-4" id="graphs" t-ref="root">
+
+            <!-- In Progress Contracts Card -->
+            <div class="col-md-3 my-4">
+                <div class="chart-container card-shadow o_performanance_contract_dashboard_tile
+                            cursor-pointer"
+                    t-on-click="openInProgressContracts">
+
+                    <div class="o_tile_header bg-view d-flex align-items-center">
+                        <!-- <i class="fa fa-file-text-o mr-2" aria-hidden="true"></i> -->
+                        <h2 class="m-0">In Progress Contracts</h2>
+                    </div>
+
+                    <hr/>
+
+                    <div class="o_tile_body text-center">
+                        <h1 class="display-4">
+                            <t t-esc="state.inProgressCount"/>
+                        </h1>
+                        <span class="text-muted">Contracts</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-3 my-4">
+                <div class="chart-container card-shadow o_performanance_contract_dashboard_tile
+                            cursor-pointer"
+                    t-on-click="openPendingApprovals">
+
+                    <div class="o_tile_header bg-view">
+                        <h2>Pending Approvals</h2>
+                    </div>
+
+                    <hr/>
+
+                    <div class="o_tile_body text-center">
+                        <h1 class="display-4">
+                            <t t-esc="state.pendingApprovalsCount"/>
+                        </h1>
+                        <span class="text-muted">Contracts</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-3 my-4">
+                <div class="chart-container card-shadow o_performanance_contract_dashboard_tile
+                            cursor-pointer"
+                    t-on-click="openPendingEmployeeSignatures">
+
+                    <div class="o_tile_header bg-view">
+                        <h2>Pending Employee Signature</h2>
+                    </div>
+
+                    <hr/>
+
+                    <div class="o_tile_body text-center">
+                        <h1 class="display-4">
+                            <t t-esc="state.pendingEmployeeSignaturesCount"/>
+                        </h1>
+                        <span class="text-muted">Contracts</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-3 my-4">
+                <div class="chart-container card-shadow o_performanance_contract_dashboard_tile
+                            cursor-pointer"
+                    t-on-click="openPendingManagerSignatures">
+
+                    <div class="o_tile_header bg-view">
+                        <h2>Pending Manager Signature</h2>
+                    </div>
+
+                    <hr/>
+
+                    <div class="o_tile_body text-center">
+                        <h1 class="display-4">
+                            <t t-esc="state.pendingManagerSignaturesCount"/>
+                        </h1>
+                        <span class="text-muted">Contracts</span>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </t>
+
+
+</templates>

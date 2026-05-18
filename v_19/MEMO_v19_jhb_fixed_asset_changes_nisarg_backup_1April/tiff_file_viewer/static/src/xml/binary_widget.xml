@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<templates xml:space="preserve">-->
+<!--    <t t-name="BinaryButtonWidget" owl="1">-->
+<!--        <div class="o_binary_widget">-->
+<!--            <input type="file" ref="fileInput" style="display:none" t-on-change="onUpload"/>-->
+<!--            <button class="btn btn-secondary" t-on-click="() => this.fileInput.el.click()">Upload File</button>-->
+
+<!--            <t t-if="props.value">-->
+<!--                <button class="btn btn-primary ml-2" t-on-click="onDownload">-->
+<!--                    Download File-->
+<!--                </button>-->
+<!--            </t>-->
+<!--        </div>-->
+<!--    </t>-->
+<!--</templates>-->
+<templates id="template" xml:space="preserve">
+    <t t-name="widget_preview_image.binary_field" t-inherit="web.BinaryField"
+       t-inherit-mode="extension" owl="1">
+        <xpath expr="//button[hasclass('o_clear_file_button')]" position="before">
+            <t t-if="props.record.resId and !props.record.isDirty">
+                <button
+                        class="btn btn-secondary fa fa-folder-open o_clear_file_button"
+                        data-tooltip="Open"
+                        aria-label="Open"
+                        t-on-click="() => this.open_images({})"
+                />
+            </t>
+        </xpath>
+        <xpath expr="//a[hasclass('o_form_uri')]" position="after">
+            <button
+                    class="btn btn-secondary fa fa-folder-open o_clear_file_button"
+                    data-tooltip="Open"
+                    aria-label="Open"
+                    t-on-click="() => this.open_images({})"
+            />
+        </xpath>
+    </t>
+</templates>

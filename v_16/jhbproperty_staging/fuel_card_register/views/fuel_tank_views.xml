@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="fuel_tank_form">
+        <field name="name">fuel.tank.view.form</field>
+        <field name="model">fuel.tank</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <group string="TANK DETAILS">
+                            <field name="name"/>
+                            <field name="location"/>
+                            <field name="last_clean_date"/>
+                            <field name="vehicle_id"/>
+                        </group>
+                        <group string="FUEL DETAILS">
+                            <field name="type_of_fuel"/>
+                            <field name="capacity"/>
+                            <field name="liters"/>
+                            <field name="average_price"/>
+                            <div class="oe_button_box" name="add_fuel_button">
+                                <button name="action_add_fuel"
+                                        type="object"
+                                        class="oe_highlight"
+                                        string="Add Fuel"/>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="LAST FILLING DETAILS">
+                            <field name="last_filling_date"/>
+                            <field name="last_filling_amount"/>
+                            <field name="last_filling_price"/>
+                        </group>
+                        <group string="CONSUMPTION DETAILS">
+                            <field name="total_filling_fuel"/>
+                            <field name="last_added_fuel_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Fuel Filling History">
+                            <field name="fuel_filling_history">
+                                <tree>
+                                    <field name="fuel_filling_date"/>
+                                    <field name="price"/>
+                                    <field name="liters"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="fuel_tank_tree">
+        <field name="name">fuel.tank.view.tree</field>
+        <field name="model">fuel.tank</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="location"/>
+                <field name="last_clean_date"/>
+                <field name="type_of_fuel"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="fuel_tank_history_form">
+        <field name="name">fuel.tank.history.view.form</field>
+        <field name="model">fuel.filling.history</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="price"/>
+                        </group>
+                        <group>
+                            <field name="liters"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="fuel_tank_action" model="ir.actions.act_window">
+        <field name="name">Fuel Tank</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fuel.tank</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="menu_fuel_tank"
+              action="fuel_tank_action"
+              name="Fuel Tank"
+              parent="fleet.fleet_configuration"
+              sequence="10"/>
+</odoo>

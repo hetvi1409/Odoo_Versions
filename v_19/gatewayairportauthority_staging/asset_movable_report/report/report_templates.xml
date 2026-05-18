@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_report_asset_movable_report" model="ir.actions.report">
+        <field name="name">Asset Movable Report</field>
+        <field name="model">account.asset</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">asset_movable_report.report_asset_barcode_document</field>
+        <field name="report_file">asset_movable_report.report_asset_barcode_document</field>
+        <field name="binding_model_id" ref="account_asset.model_account_asset"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_asset_barcode_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+
+                <div class="page" style="font-family: 'Poppins', sans-serif;">
+
+                    <h2 style="text-align:center; color:#008F30; margin-bottom:22px;">
+                        Asset Movable Report
+                    </h2>
+
+                    <table class="table table-sm o_main_table"
+                           style="width:100%; border-collapse:collapse; font-size:13px; margin-bottom:25px;">
+
+                        <thead>
+                            <tr>
+                                <th colspan="4"
+                                    style="text-align:center;
+                                           background-color:#003DA5;
+                                           color:white;
+                                           font-size:15px;
+                                           padding:10px;
+                                           letter-spacing:0.5px;">
+                                    Asset Summary Overview
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <!-- Row 1 -->
+                            <tr style="background-color:#f5f8ff;">
+                                <td style="width:25%; padding:10px; border:1px solid #d0d7e2; font-weight:600;">Total Assets</td>
+                                <td style="width:25%; padding:10px; border:1px solid #d0d7e2; text-align:center;">
+                                    <t t-esc="data['total_asset']"/>
+                                </td>
+                                <td style="width:25%; padding:10px; border:1px solid #d0d7e2; font-weight:600;">Assets In Good Condition</td>
+                                <td style="width:25%; padding:10px; border:1px solid #d0d7e2; text-align:center;">
+                                    <t t-esc="data['good_assets']"/>
+                                </td>
+                            </tr>
+
+                            <!-- Row 2 -->
+                            <tr style="background-color:#ffffff;">
+                                <td style="padding:10px; border:1px solid #d0d7e2; font-weight:600;">Assets In Damaged Condition</td>
+                                <td style="padding:10px; border:1px solid #d0d7e2; text-align:center;">
+                                    <t t-esc="data['damaged_assets']"/>
+                                </td>
+                                <td style="padding:10px; border:1px solid #d0d7e2; font-weight:600;">Assets In Disposed Condition</td>
+                                <td style="padding:10px; border:1px solid #d0d7e2; text-align:center;">
+                                    <t t-esc="data['disposed_assets']"/>
+                                </td>
+                            </tr>
+
+                            <!-- Row 3 -->
+                            <tr style="background-color:#f5f8ff;">
+                                <td style="padding:10px; border:1px solid #d0d7e2; font-weight:600;">Lost Assets</td>
+                                <td style="padding:10px; border:1px solid #d0d7e2; text-align:center;">
+                                    <t t-esc="data['lost_assets']"/>
+                                </td>
+                                <td style="padding:10px; border:1px solid #d0d7e2; font-weight:600;">Written-off Assets</td>
+                                <td style="padding:10px; border:1px solid #d0d7e2; text-align:center;">
+                                    <t t-esc="data['written_off_assets']"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm o_main_table"
+                           style="width:100%; border-collapse:collapse; font-size:13px;">
+                        <thead>
+                            <tr style="background-color:#008F30; color:#FFFFFF; text-align:center;">
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Asset Description</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Barcode</th>
+                                <th style="padding:8px; border:1px solid #ccc; color:#FFFFFF; text-align:center;">Condition</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="docs" t-as="o">
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.name"/>
+                                </td>
+
+                                <!-- TEXT-ONLY BARCODE (no image) -->
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <t t-if="o.alternative_ref">
+                                        <div style="font-family:'Courier New', monospace; font-size:14px; letter-spacing:1px;">
+                                            <t t-esc="o.alternative_ref"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="not o.alternative_ref">
+                                        <span style="color:#888;">No Barcode</span>
+                                    </t>
+                                </td>
+
+                                <td style="padding:8px; border:1px solid #ddd; text-align:center;">
+                                    <span t-field="o.condition"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top:18px; text-align:right; font-size:11px; color:#666;">
+                        Generated on: <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/>
+                    </div>
+
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

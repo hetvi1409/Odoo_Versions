@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="offer_letter_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+
+                    <div class="page">
+                        <h2 style="text-align:center;">Offer Letter</h2>
+
+                        <p>Date: <t t-esc="o.create_date.strftime('%d-%m-%Y')"/></p>
+
+                        <p>To,</p>
+                        <p><strong><t t-esc="o.partner_name"/></strong></p>
+
+                        <br/>
+
+                        <p>Dear <t t-esc="o.partner_name"/>,</p>
+
+                        <p>
+                            We are pleased to offer you the position of
+                            <strong><t t-esc="o.job_id.name"/></strong>
+                            at our organization.
+                        </p>
+
+                        <p>
+                            Your skills and experience will be an ideal fit for our team.
+                            We look forward to your contribution and growth with us.
+                        </p>
+
+                        <p>
+                            Your expected joining date is:
+                            <strong><t t-esc="o.availability or ''"/></strong>
+                        </p>
+
+                        <br/>
+
+                        <p>
+                            Kindly confirm your acceptance of this offer by signing and returning this letter.
+                        </p>
+
+                        <br/><br/>
+
+                        <p>Sincerely,</p>
+                        <p><strong><t t-esc="o.company_id.name"/></strong></p>
+
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+
+    <record id="action_report_offer_letter" model="ir.actions.report">
+        <field name="name">Offer Letter</field>
+        <field name="model">hr.applicant</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">recruitment_enhancement.offer_letter_template</field>
+        <field name="report_file">recruitment_enhancement.offer_letter_template</field>
+        <field name="print_report_name">'Offer Letter - %s' % (object.partner_name)</field>
+    </record>
+
+
+</odoo>

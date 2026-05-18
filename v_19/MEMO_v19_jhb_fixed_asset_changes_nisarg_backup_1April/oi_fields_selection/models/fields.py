@@ -1,0 +1,62 @@
+
+from odoo import fields
+    
+super_description_selection = fields.Selection._description_selection
+super_get_values = fields.Selection.get_values
+super_setup_attrs__ = fields.Selection._setup_attrs__
+
+def _get_selection(self, env):
+    if 'ir.model.fields.selection.custom' not in env:
+        return
+    field_id = env['ir.model.fields']._get(self.model_name, self.name).id
+    return env['ir.model.fields.selection.custom']._get_selection(field_id)
+
+def _get_approval_selection(self, env):
+    if 'approval.record' not in env:
+        return
+    model = env[self.model_name]
+    if model._isinstance('approval.record') and self.name =='state':
+        return model._get_state()
+    
+def _description_selection(self, env):
+    custom_selection = _get_selection(self, env)
+    if custom_selection:
+        return custom_selection
+    
+    approval_selection = _get_approval_selection(self, env)
+    if approval_selection:
+        return approval_selection
+        
+    return super_description_selection(self, env)
+
+def get_values(self, env):
+    custom_selection = _get_selection(self, env)
+    if custom_selection:
+        return [sel[0] for sel in custom_selection]
+    
+    approval_selection = _get_approval_selection(self, env)
+    if approval_selection:
+        return list(map(lambda item : item[0], approval_selection))
+            
+    return super_get_values(self, env)
+
+def _setup_attrs__(self, model, name):
+    dynamic_selection = False
+    
+    _base_fields__ = self._base_fields__ or self._args__.get('_base_fields__', ())
+    
+    for field in _base_fields__:
+        if 'selection' in field._args__:
+            
+            if not isinstance(field._args__['selection'], list):
+                dynamic_selection = True
+                
+        if 'selection_add' in field._args__ and dynamic_selection:
+            field._args__.pop('selection_add')
+        
+    
+    return super_setup_attrs__(self, model, name)
+
+fields.Selection._description_selection = _description_selection
+fields.Selection.get_values = get_values
+fields.Selection._setup_attrs__ = _setup_attrs__

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="portal_my_home_menu_circulation_comment"
+              name="Portal layout : Circulation Comment"
+              inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'circulation_comment' or circulation_comment"
+                t-attf-class="breadcrumb-item #{'active' if not circulation_comment else ''}">
+                <a t-if="circulation_comment"
+                   t-attf-href="/my/circulation_comment">
+                    Circulation Comments
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_circulation_comment" name="Circulation Comments"
+              customize_show="True" inherit_id="portal.portal_my_home"
+              priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <div id="portal_vendor_category">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Circulation Comment</t>
+                    <t t-set="url" t-value="'/my/circulation_comment'"/>
+                    <t t-set="placeholder_count"
+                       t-value="'circulation_comment_count'"/>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="my_circulation_comment" name="Circulation Comments">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Circulation Comments</t>
+            </t>
+            <t t-if="not circulation_comment">
+                <p>There are currently no circulation comments for your account.
+                </p>
+            </t>
+            <t t-if="circulation_comment" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Circulation Comments Name #</th>
+                        <th>Enquiry</th>
+                        <th>Property</th>
+                        <th>Assessment</th>
+                        <th>JMC Number</th>
+                        <th class="text-end">Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <t t-foreach="circulation_comment" t-as="res">
+                        <tr>
+                            <td>
+                                <a t-attf-href="/circulation_comment_details_portal/#{res.id}">
+                                    <t t-out="res.name"/>
+                                </a>
+                            </td>
+                            <td >
+                                <span t-field="res.enquiry_id.name"/>
+                            </td>
+                            <td >
+                                <span t-field="res.property_id.name"/>
+                            </td>
+                            <td >
+                                <span t-field="res.assessment_id.name"/>
+                            </td>
+                            <td >
+                                <span t-field="res.jmc_number"/>
+                            </td>
+                            <td class="text-end">
+                                <span t-field="res.state"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+<!--    <template id="circulation_comment_details" name="Circulation Comment">-->
+<!--        <t t-call="portal.portal_layout">-->
+<!--            <div class="card col-12 col-lg justify-content-end"-->
+<!--                 style="padding: 10px;">-->
+<!--                <div class="pb-2 pt-3">-->
+<!--                    <h2 class="my-0">-->
+<!--                        Circulation Comment:-->
+<!--                        <em t-esc="circulation_comment.name"/>-->
+<!--                    </h2>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                    <div class="mb-3 col-6">-->
+<!--                        <p>Your circulation comment is currently in-->
+<!--                            <span t-field="circulation_comment.state"/>-->
+<!--                            State-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div id="service_order_communication" class="mt-4">-->
+<!--                <h2>History</h2>-->
+<!--                <t t-call="portal.message_thread">-->
+<!--                    <t t-set="object" t-value="circulation_comment"/>-->
+<!--                </t>-->
+<!--            </div>-->
+<!--        </t>-->
+<!--    </template>-->
+
+</odoo>

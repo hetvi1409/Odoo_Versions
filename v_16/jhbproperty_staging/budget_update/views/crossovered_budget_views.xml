@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_crossovered_budget" model="ir.ui.view">
+        <field name="name">crossovered.budget.form.inherit</field>
+        <field name="model">crossovered.budget</field>
+        <field name="inherit_id"
+               ref="account_budget.crossovered_budget_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']"
+                   position="attributes">
+                <attribute name="statusbar_visible">draft,sent,sale</attribute>
+
+            </xpath>
+            <xpath expr="//button[@name='action_budget_confirm']"
+                   position="attributes">
+                <attribute name="invisible">[('state', '!=', 'ceo_approved')]
+                </attribute>
+            </xpath>
+
+
+            <xpath expr="//button[@name='action_budget_confirm']"
+                   position="after">
+                <button name="ceo_approve_budget"
+                        string="Approve"
+                        type="object"
+                        groups="oi_risk_management.group_risk_ceo"
+                        attrs="{'invisible': [('state', '!=', 'finance_manager_approved')]}">
+
+                </button>
+            </xpath>
+
+
+            <xpath expr="//button[@name='action_budget_confirm']"
+                   position="after">
+                <button name="request_finance_approve_budget"
+                        string="Request To Approve"
+                        type="object"
+                        groups="budget_update.finance_users_access"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}">
+                </button>
+            </xpath>
+            <xpath expr="//button[@name='action_budget_confirm']"
+                   position="after">
+                <button name="action_finance_manager_approve" string="Approve"
+                        type="object"
+                        groups="budget_update.finance_managers_access"
+                        class="btn-primary" data-hotkey="q"
+                        attrs="{'invisible': [('state', '!=', 'waiting_finance_manager_approval')]}">
+                </button>
+            </xpath>
+            <xpath expr="//button[@name='action_budget_confirm']"
+                   position="after">
+                <button name="action_finance_manager_reject" string="Reject"
+                        type="object"
+                        groups="budget_update.finance_managers_access"
+                        class="btn-primary" data-hotkey="q"
+                        attrs="{'invisible': [('state', '!=', 'waiting_finance_manager_approval')]}">
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='budget_lines']" position="inside">
+                <group name="additional_info">
+                    <field name="reason_for_reject"
+                           options="{'no_create_edit': True}"
+                    attrs="{'readonly': [('state', '!=', 'waiting_finance_manager_approval')]}"/>
+                </group>
+            </xpath>
+            <xpath expr="//tree/field[@name='planned_amount']"
+                   position="attributes">
+                <attribute name='string'>Original Budget Amount</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='practical_amount']"
+                   position="attributes">
+                <attribute name='string'>Year TD actual</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='theoritical_amount']"
+                   position="attributes">
+                <attribute name='string'>Year TD budget</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='percentage']"
+                   position="attributes">
+                <attribute name='string'>YTD Variance</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='planned_amount']"
+                   position="after">
+                <field name="adjust_budget" string="Adjust Budget"/>
+                <field name="monthly_actual" string="Monthly Actual"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_order_form_inherit_crossovered_budget_lines"
+            model="ir.ui.view">
+        <field name="name">crossovered.budget.lines.form.inherit</field>
+        <field name="model">crossovered.budget.lines</field>
+        <field name="inherit_id"
+               ref="account_budget.view_crossovered_budget_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='planned_amount']"
+                   position="attributes">
+                <attribute name='string'>Original Budget Amount</attribute>
+            </xpath>
+            <xpath expr="//field[@name='practical_amount']"
+                   position="attributes">
+                <attribute name='string'>Year TD actual</attribute>
+            </xpath>
+            <xpath expr="//field[@name='theoritical_amount']"
+                   position="attributes">
+                <attribute name='string'>Year TD budget</attribute>
+            </xpath>
+            <xpath expr="//field[@name='percentage']"
+                   position="attributes">
+                <attribute name='string'>YTD Variance</attribute>
+            </xpath>
+            <xpath expr="//field[@name='planned_amount']"
+                   position="after">
+                <field name="adjust_budget" string="Adjust Budget"/>
+                <field name="monthly_actual" string="Monthly Actual"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_list_inherit_crossovered_budget_management"
+            model="ir.ui.view">
+        <field name="name">crossovered.budget.export.list.inherit</field>
+        <field name="model">crossovered.budget</field>
+        <field name="inherit_id"
+               ref="account_budget.crossovered_budget_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <header>
+                    <button name="export_budget_line"
+                            string="Export Budget Lines"
+                            type="object"/>
+                    <button name="send_mail_export_budget_line"
+                            string="Export and Send Mail"
+                            type="object"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
+
+
+

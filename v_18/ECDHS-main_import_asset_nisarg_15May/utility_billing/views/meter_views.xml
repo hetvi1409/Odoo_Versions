@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_utility_meter_form" model="ir.ui.view">
+        <field name="name">utility.meter.form</field>
+        <field name="model">utility.meter</field>
+        <field name="arch" type="xml">
+            <form string="Meter">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="utility_type"/>
+                            <field name="company_id"/>
+                            <field name="tariff_id" domain="[('utility_type','=',utility_type)]"/>
+                            <field name="start_reading"/>
+                            <field name="move_in_date"/>
+                            <field name="move_out_date"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="contract_id"/>
+                            <field name="partner_id"/>
+                            <field name="property_id"/>
+                            <field name="building_id"/>
+                            <field name="unit_reference"/>
+                            <field name="service_address"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Readings">
+                            <field name="reading_ids">
+                                <list>
+                                    <field name="reading_date"/>
+                                    <field name="billing_period_start"/>
+                                    <field name="billing_period_end"/>
+                                    <field name="previous_reading"/>
+                                    <field name="reading"/>
+                                    <field name="consumption"/>
+<!--                                    <field name="invoiced"/>-->
+                                    <field name="invoice_amount" />
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- Monitoring & Alerts Tab -->
+                        <page string="Monitoring &amp; Alerts">
+                            <group>
+                                <field name="alert_threshold"/>
+                                <field name="last_reading" readonly="1"/>
+                                <field name="last_reading_date" readonly="1"/>
+                                <field name="abnormal_usage" widget="boolean_toggle"/>
+                            </group>
+                        </page>
+
+                        <!-- Integration Tab -->
+                        <page string="Integration">
+                            <group>
+                                <field name="integration_source"/>
+                                <field name="external_sync_id"/>
+                                <field name="sync_status"/>
+                            </group>
+                        </page>
+
+                        <!-- Sustainability Tab -->
+                        <page string="Sustainability">
+                            <group>
+                                <field name="renewable_share"/>
+                                <field name="carbon_emission_estimate" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_utility_meter_list" model="ir.ui.view">
+        <field name="name">utility.meter.list</field>
+        <field name="model">utility.meter</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="utility_type"/>
+                <field name="partner_id"/>
+                <field name="unit_reference"/>
+                <field name="tariff_id"/>
+                <field name="last_reading"/>
+                <field name="last_reading_date"/>
+                <field name="abnormal_usage"/>
+                <field name="sync_status"/>
+                <field name="renewable_share"/>
+                <field name="carbon_emission_estimate"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_utility_meters" model="ir.actions.act_window">
+        <field name="name">Meters</field>
+        <field name="res_model">utility.meter</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

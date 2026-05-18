@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="hr_attendance_view_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.attendance.view.tree.inherit</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="editable"/>
+                <attribute name="js_class">hr_attendance_tree</attribute>
+            </xpath>
+            <xpath expr="//field[@name='worked_hours']" position="attributes">
+                <attribute name="string">Checked In Hours</attribute>
+            </xpath>
+            <xpath expr="//field[@name='worked_hours']" position="after">
+                <field name="validated_overtime_hours" string="Out of Office Hours"/>
+                <field name="timesheet_status" readonly="1" invisible="0"/>
+                <field name="overtime_status" readonly="1" invisible="0"/>
+                <button name="action_approve_timesheet"
+                        string="Approve Timesheet"
+                        type="object"
+                        icon="fa-check"
+                        attrs="{'invisible': [('timesheet_status', 'in', ['approved', 'refused'])]}"
+                        groups="hr_attendance.group_hr_attendance_manager,hr_attendance.group_hr_attendance_user"/>
+                <button name="action_decline_timesheet"
+                        string="Decline Timesheet"
+                        type="object"
+                        icon="fa-times"
+                        attrs="{'invisible': [('timesheet_status', 'in', ['approved', 'refused'])]}"
+                        groups="hr_attendance.group_hr_attendance_manager,hr_attendance.group_hr_attendance_user"/>
+                <button class="oe_stat_button"
+                        string="Approve Overtime"
+                        name="action_approve_overtime"
+                        icon="fa-check"
+                        type="object"
+                        attrs="{'invisible': ['|',('overtime_status', 'in', ['approved', 'refused']),('validated_overtime_hours','=',0.0)]}"
+                        groups="hr_attendance.group_hr_attendance_manager,hr_attendance.group_hr_attendance_user"/>
+                <button class="oe_stat_button"
+                        string="Refuse Overtime"
+                        name="action_refuse_overtime"
+                        icon="fa-times"
+                        type="object"
+                        attrs="{'invisible': ['|',('overtime_status', 'in', ['approved', 'refused']),('validated_overtime_hours','=',0.0)]}"
+                        groups="hr_attendance.group_hr_attendance_manager,hr_attendance.group_hr_attendance_user"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_attendance_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.attendance.view.form.inherit</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+<!--                   <xpath expr="//sheet" position="before">-->
+<!--                <header>-->
+<!--                    &lt;!&ndash;<field name="overtime_status" widget="statusbar" options="{'clickable': '1'}"/>&ndash;&gt;-->
+<!--                    <field name="timesheet_status" widget="statusbar" options="{'clickable' : '1'}"/>-->
+<!--                    <field name="overtime_status" widget="statusbar" options="{'clickable' : '1'}"/>-->
+<!--                </header>-->
+<!--            </xpath>-->
+             <xpath expr="//sheet" position="after">
+               <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="activity_ids" widget="mail_activity"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div>
+            </xpath>
+
+            <!-- Example: Add a field inside the form -->
+           <xpath expr="//group" position="replace">
+                <group>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="check_in"/>
+                        <field name="check_out"/>
+                    </group>
+                    <group>
+                        <field name="worked_hours" string="Checked In Hours"/>
+                        <field name="validated_overtime_hours" string="Out of Office Hours"/>
+                        <field name="timesheet_status" widget="radio" options="{'horizontal': true,'clickable' : '1'}"/>
+                        <field name="overtime_status" widget="radio" options="{'horizontal': true,'clickable' : '1'}"/>
+                    </group>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+        <menuitem id="hr_attendance.menu_hr_attendance_view_attendances" name="Management" parent="hr_attendance.menu_hr_attendance_root" sequence="10" groups="hr_attendance.group_hr_attendance_user" action="hr_attendance.hr_attendance_action"/>
+
+    <!-- Add a custom ir.rule for attendance records -->
+    <record id="hr_attendance_rule_user_records" model="ir.rule">
+        <field name="name">See Own Attendance Records</field>
+        <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Add a custom ir.rule for attendance managers -->
+    <record id="hr_attendance_rule_manager_records" model="ir.rule">
+        <field name="name">See All Attendance Records</field>
+        <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[
+            (4, ref('hr_attendance.group_hr_attendance_manager')),
+            (4, ref('hr_attendance.group_hr_attendance_user'))
+        ]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+</odoo>

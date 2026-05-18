@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sagovbid_opening_register_list" model="ir.ui.view">
+        <field name="name">sagovtender.bid.opening.register.list</field>
+        <field name="model">sagovtender.bid.opening.register</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="tender_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="opening_date"/>
+                <field name="opening_location"/>
+                <field name="all_signed"/>
+                <field name="published"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sagovbid_opening_register_form" model="ir.ui.view">
+        <field name="name">sagovtender.bid.opening.register.form</field>
+        <field name="model">sagovtender.bid.opening.register</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_load_bids" string="Load Bids" type="object" class="btn-primary" invisible="line_ids or state != 'draft'"/>
+                    <button name="action_conduct_opening" string="Conduct Opening" type="object" class="btn-success" invisible="state != 'draft'"/>
+                    <button name="action_complete" string="Complete" type="object" invisible="state != 'opened'"/>
+                    <button name="action_publish" string="Publish Online" type="object" invisible="state != 'completed'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="tender_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="opening_date"/>
+                        </group>
+                        <group>
+                            <field name="opening_location"/>
+                            <field name="all_signed"/>
+                            <field name="published"/>
+                            <field name="published_url" invisible="not published"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Bid Opening Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="partner_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="bid_amount" widget="monetary"/>
+                                    <field name="submission_date"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Stakeholders Present">
+                            <field name="stakeholder_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="title"/>
+                                    <field name="organization"/>
+                                    <field name="stakeholder_type"/>
+                                    <field name="signed"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sagovbid_opening_register" model="ir.actions.act_window">
+        <field name="name">Bid Opening Registers</field>
+        <field name="res_model">sagovtender.bid.opening.register</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

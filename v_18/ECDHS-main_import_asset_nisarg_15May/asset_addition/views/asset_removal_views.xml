@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.ui.view" id="asset_removal_form_approval">
+        <field name="name">asset.removal.approval.form</field>
+        <field name="model">asset.removal.approval</field>
+        <field name="inherit_id"
+               ref="asset_verification.asset_removal_form_approval"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_submit_for_approval']"
+                   position="after">
+                <button name="action_verify" string="Verify" type="object"
+                        invisible="state != 'send'"
+                        groups="fixed_assets.group_fixed_asset_approver"/>
+            </xpath>
+            <xpath expr="//button[@name='action_reject']"
+                   position="replace">
+                <button name="action_reject" string="Reject" type="object"
+                        invisible="state != 'verified'"
+                        groups="asset_verification.group_staging_approval_manager"/>
+            </xpath>
+            <xpath expr="//button[@name='action_approve']"
+                   position="replace">
+                <button name="action_approve" string="Approve" type="object"
+                        class="oe_highlight"
+                        invisible="state != 'verified'"
+                        groups="asset_verification.group_staging_approval_manager"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

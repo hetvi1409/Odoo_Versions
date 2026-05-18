@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--FIXME:: you should use noupdate="1" so that if the user changes the stages, their changes won't be overwritten if they upgrade the module-->
+<!--noupdate="1"-->
+<odoo>
+
+    <record id="oi_risk_management.approval_risk_owner_approve" model="approval.config">
+        <field name="model_id" ref="model_oi_risk_management_risk"/>
+        <field name="state">owner_approve</field>
+        <field name="name">Owner Approval</field>
+        <field name="condition" eval="True"/>
+        <field name="sequence">10</field>
+        <field name="group_ids" eval="[(4, ref('oi_risk_management.group_risk_manager'))]"/>
+        <field name="filter_condition">user.id in record.owner_employee_ids.mapped('user_id.id')</field>
+        <field name="allow_return" eval="True"/>
+        <field name="schedule_activity" eval="True"/>
+    </record>
+
+    <record id="oi_risk_management.approval_risk_manager_approve" model="approval.config">
+        <field name="model_id" ref="model_oi_risk_management_risk"/>
+        <field name="state">manager_approve</field>
+        <field name="name">Manager Approval</field>
+        <field name="condition" eval="True"/>
+        <field name="sequence">11</field>
+        <field name="group_ids" eval="[(4, ref('oi_risk_management.group_risk_manager'))]"/>
+        <field name="filter_condition">record.department_id.manager_id.user_id == user</field>
+        <field name="allow_return" eval="True"/>
+        <field name="schedule_activity" eval="True"/>
+    </record>
+
+</odoo>

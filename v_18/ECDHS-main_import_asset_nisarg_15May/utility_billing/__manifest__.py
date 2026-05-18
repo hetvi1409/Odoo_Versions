@@ -1,0 +1,26 @@
+{
+    "name": "Utility Billing (Tenants)",
+    "version": "18.0.1.0.0",
+    "category": "Accounting",
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': "https://natedsystems.co.za",
+    "summary": "Bill tenants for water/electricity using step tariffs and monthly readings",
+    "depends": ["account", "contacts", "product", "uom", "itsys_real_estate","property_management_system"],
+    "data": [
+        "data/ir_sequence_data.xml",
+        # "data/product_data.xml",
+        "security/ir.model.access.csv",
+        "views/tariff_views.xml",
+        "views/meter_views.xml",
+        "views/reading_views.xml",
+        "views/rental_contract_views.xml",
+
+        "wizard/billing_wizard_views.xml",
+        "views/menu.xml",
+    ],
+    "license": "LGPL-3",
+    "application": True,
+    "installable": True,
+}

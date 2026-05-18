@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="portal_my_home_enquiry_assessment" name="Enquiry_assessment"
+              customize_show="True"
+              inherit_id="portal.portal_my_home">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Assessment</t>
+                <t t-set="url" t-value="'/my/assessment'"/>
+                <t t-set="placeholder_count" t-value="'loan_count'"/>
+            </t>
+        </xpath>
+    </template>
+    <template id="portal_enquiry_assessment" name="Enquiry">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Enquiry Assessment</t>
+            </t>
+            <t t-if="assessment" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Assessment #</th>
+                        <th class="text-end">Date</th>
+                        <th class="text-end">Enquiry</th>
+                        <th class="text-end">Property</th>
+                        <th class="text-end">Stand Number</th>
+                        <th class="text-end">State</th>
+                    </tr>
+                </thead>
+                <t t-foreach="assessment" t-as="en">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/assessment_portal/#{en.sudo().id}">
+                                <t t-out="en.sudo().name"/>
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="en.sudo().create_date"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="en.sudo().enquiry_id.name"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="en.sudo().property_id.name"/>
+                        </td>
+
+                        <td class="text-end">
+                            <span t-field="en.sudo().stand_number"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="en.sudo().state"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no assessment for your account.</p>
+        </t>
+    </template>
+    <template id="portal_enquiry_assessment_details" name="Enquiry">
+        <t t-call="portal.portal_layout">
+            <div class="card col-12 col-lg justify-content-end"
+                 style="padding: 10px;">
+                <div class="pb-2 pt-3">
+                    <h2 class="my-0">
+                        Assessment:
+                        <em t-esc="assessment.name"/>
+                    </h2>
+
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <strong>Property:</strong>
+                        <span t-field="assessment.property_id.name"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <strong>Date:</strong>
+                        <span t-field="assessment.create_date"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <strong>Enquiry:</strong>
+                        <span t-field="assessment.enquiry_id.name"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <strong>Stand Number:</strong>
+                        <span t-field="assessment.stand_number"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <p>Your enquiry assessment in the
+                            <span t-field="assessment.state"/>
+                            state.
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <t t-if="assessment.state == 'compile'">
+                            <a role="button"
+                               t-attf-href="/assessment-evaluation/#{assessment.id}"
+                               class="btn col"
+                               style="color: #212529;background-color: #995c89;border-color: #f7f7f7;color: white;">
+                                <i style="margin-right:10px !important;"
+                                   class="fa fa-phone"/>
+                                Click here for circulation comments
+                            </a>
+                        </t>
+                    </div>
+                </div>
+
+            </div>
+            <div id="enquiry_assessment" class="mt-4">
+                <h2>History</h2>
+                <t t-call="portal.message_thread">
+                    <t t-set="object" t-value="assessment"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+</odoo>

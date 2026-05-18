@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="custom_audit_category_view_kanban" model="ir.ui.view" >
+        <field name="name">custom.audit.category.dashboard</field>
+        <field name="model">custom.audit.category</field>
+        <field name="priority">200</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_audit"
+                    group_create="0" create="0" sample="1"
+                    action="action_view_category" type="object" context="{'default_audit_category_id': active_id}"
+            >
+                <field name="name"/>
+                <templates>
+                    <t t-name="kanban-box" limit="4">
+                        <div >
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary"><field name="name"/></div>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content" t-if="!selection_mode">
+                                <div class="row">
+                                    <div class="col o_kanban_primary_left">
+                                        <button class="btn btn-primary o_helpdesk_ticket_btn" name="action_view_category" type="object" context="{'default_audit_category_id': active_id}">(<field name="request_count"/>): Overall Internal Audit Methodology</button>
+                                    </div>
+
+                                    <div class="col o_kanban_primary_right">
+                                        <div class="mb4">
+                                            <a name="action_view_request_reviewed" type="object" title="Number of tickets closed in the past 7 days." class="justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Review of Methodology</span>
+                                                <span class="ms-3">
+                                                    <field name="request_reviewed"/>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="mb4">
+                                            <a name="action_view_request_approved" type="object" title="Number of tickets closed in the past 7 days." class="justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Approval of methodology</span>
+                                                <span class="ms-3">
+                                                    <field name="request_approved"/>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="mb4">
+                                            <a name="action_view_completed" type="object" title="Number of tickets closed in the past 7 days." class="justify-content-between flex-nowrap d-inline-flex w-100">
+                                                <span>Completed Audits</span>
+                                                <span class="ms-3">
+                                                    <field name="request_completed"/>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+<!--                            <div class="container o_kanban_card_manage_pane dropdown-menu" role="menu">-->
+<!--                                <div t-if="widget.editable" class="row">-->
+<!--                                    <div class="col-6 o_kanban_card_manage_section o_kanban_manage_view">-->
+<!--                                        <div role="menuitem" class="o_kanban_card_manage_title">-->
+<!--                                            <span>View</span>-->
+<!--                                        </div>-->
+<!--                                        <div role="menuitem">-->
+<!--                                            <a name="action_view_enquiry" type="object">Enquiry</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div t-if="widget.editable" class="o_kanban_card_manage_settings row">-->
+<!--                                    <div role="menuitem" aria-haspopup="true" class="col-8">-->
+<!--                                        <ul class="oe_kanban_colorpicker" data-field="color" role="menu"/>-->
+<!--                                    </div>-->
+<!--                                    <div role="menuitem" class="col-4">-->
+<!--                                        <a name="action_view_enquiry_team" type="object">Settings</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_custom_audit_category_report"
+            model="ir.actions.act_window">
+        <field name="name">Overview</field>
+        <field name="res_model">custom.audit.category</field>
+        <field name="view_mode">kanban</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No data found!
+            </p>
+            <p>
+                This analysis shows you how many audit category have been created.
+            </p>
+        </field>
+<!--        <field name="view_ids"-->
+<!--                   eval="[(5, 0, 0),-->
+<!--                          (0, 0, {'view_mode': 'kanban', 'view_id': ref('custom_audit_category_view_graph_analysis')})-->
+<!--                          ]"/>-->
+    </record>
+
+    <menuitem id="custom_audit_request_menu_overview"
+              name="Overview"
+              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"
+              action="action_custom_audit_category_report"
+              sequence="1"/>
+
+<!--    <menuitem id="custom_audit_request_menu_dashboard"-->
+<!--              name="Dashboard"-->
+<!--              parent="odoo_audit_request_form.custom_audit_request_main_menu_root"-->
+<!--              action="action_custom_audit_category_report"-->
+<!--              sequence="1"/>-->
+
+</odoo>

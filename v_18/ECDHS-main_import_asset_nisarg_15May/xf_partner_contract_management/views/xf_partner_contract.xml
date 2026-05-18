@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="xf_partner_contract_form" model="ir.ui.view">
+        <field name="name">xf.partner.contract.form.inherit</field>
+        <field name="model">xf.partner.contract</field>
+        <field name="inherit_id" ref="xf_partner_contract.xf_partner_contract_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="supplier_ids" widget="many2many_tags"/>
+                <field name="procurement_required" invisible="True"/>
+            </xpath>
+            <xpath expr="//page[@name='documents']" position="after">
+                <page string="Amendments" name="amendments" invisible="state in ['draft', 'verify']">
+                    <field name="amendment_ids" nolabel="1"
+                           domain="[('amendment_type', '=', 'addendum')]"
+                           context="{'default_amendment_type': 'addendum'}">
+                        <list decoration-info="state == 'draft'"
+                              decoration-warning="state == 'submitted'"
+                              decoration-success="state == 'approved'"
+                              decoration-danger="state == 'rejected'">
+                            <field name="name"/>
+                            <field name="amendment_type"/>
+                            <field name="state"/>
+                            <field name="version_number"/>
+                            <field name="requested_by"/>
+                            <field name="state" widget="badge"
+                                   decoration-info="state == 'draft'"
+                                   decoration-warning="state == 'submitted'"
+                                   decoration-success="state == 'approved'"
+                                   decoration-danger="state == 'rejected'"/>
+                            <field name="approved_by"/>
+                            <field name="date_approved"/>
+                        </list>
+                    </field>
+                </page>
+                <page string="Recommend" name="recommend">
+                    <group>
+                        <group>
+                            <field name="recommend_by_deputy"/>
+                            <field name="meeting_id"
+                                   invisible="meeting_id == False"
+                                   options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"
+                                   readonly="True"/>
+                        </group>
+                        <group>
+                            <field name="recommend_by_legal"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Service Monitoring"
+                      invisible="state != 'running'">
+                    <group>
+                        <field name="monitoring_frequency" widget="selection"/>
+                        <field name="last_monitoring_date"/>
+                        <field name="next_monitoring_date"/>
+                    </group>
+                    <field name="monitoring_checklist_ids">
+                        <list>
+                            <field name="item"/>
+                            <field name="compliance_status"/>
+                            <field name="comments"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm']" position="before">
+                <button name="action_verify" type="object"
+                        string="Verify"
+                        invisible="state != 'draft'"
+                        class="oe_highlight"
+                />
+                <button name="action_not_verify" type="object"
+                        string="Not Verified"
+                        invisible="state != 'draft'"
+                        class="btn btn-secondary"
+                />
+                <button name="action_send_for_provider_signing" type="object"
+                        string="Send for Provider Signing"
+                        invisible="state != 'verify'"
+                        class="oe_highlight"
+                />
+                <button name="action_provider_signed" type="object"
+                        string="Confirm Provider Signed"
+                        invisible="state != 'send_service' or provider_signed"
+                        class="btn btn-primary"
+                />
+                <button name="action_review" type="object"
+                        string="Review / Amend"
+                        invisible="state != 'send_service'"
+                        class="btn btn-secondary"
+                />
+                <button name="action_send_verified_mail" type="object"
+                        string="Send Verified Mail"
+                        invisible="state != 'verify'"
+                        class="btn btn-primary"
+                />
+                <button name="action_verify_amend" type="object"
+                        string="Verify Amendment"
+                        invisible="state != 'review_amend'"
+                        class="btn btn-primary"
+                />
+                <button name="action_send_betting" type="object"
+                        string="Send for Vetting"
+                        invisible="state != 'verify_contract'"
+                        class="btn btn-primary"
+                />
+                <button name="action_recommend_by_deputy" type="object"
+                        string="Recommend: Deputy Director"
+                        invisible="state != 'send_for_betting'"
+                        groups="xf_partner_contract_management.group_xf_partner_contract_deputy"
+                        class="btn btn-primary"
+                />
+                <button name="action_recommend_by_legal" type="object"
+                        string="Recommend: Legal Services"
+                        invisible="state != 'recommend_by_deputy'"
+                        class="btn btn-primary"
+                />
+                <button name="action_approve" type="object"
+                        string="Approve"
+                        invisible="state not in ['recommend_by_legal', 'recommend_by_deputy']"
+                        class="btn btn-primary"
+                />
+                <button name="action_sign_contract" type="object"
+                        string="Send for Internal Signing"
+                        invisible="state != 'approval'"
+                        class="btn btn-primary"
+                />
+                <button name="action_create_meeting" type="object"
+                        string="Create On-site Meeting"
+                        invisible="state != 'sign'"
+                        class="btn btn-primary"
+                />
+                <button name="action_initiate_procurement" type="object"
+                        string="Create Procurement"
+                        invisible="state != 'running'"
+                        class="btn btn-primary"
+                />
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <style>
+                    .o_form_view:not(.o_field_highlight)
+                    .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                    .o_input:not(:hover):not(:focus) {
+                    --o-input-border-color: black !important;
+                    }
+                    .o_form_view:not(o_field_highlight)
+                    .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                    .note-editable:not(:focus) {
+                    border-color: black !important;
+                    }
+                    .form-check:not(:hover),
+                    .form-check:not(:hover) .form-check-input:not(:disabled),
+                    .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                    border-color: black !important;
+                    }
+                </style>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="view_memo_details" type="object"
+                        class="oe_stat_button"
+                        invisible="memo_id == False">
+                    <i class="fa fa-edit o_button_icon text-success" title="Contract Memo"/>
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Contract Memo</span>
+                    </div>
+                </button>
+                <button name="action_view_amendments" type="object"
+                        class="oe_stat_button"
+                        icon="fa-files-o"
+                        invisible="amendment_count == 0">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="amendment_count"/>
+                        </span>
+                        <span class="o_stat_text">Amendments</span>
+                    </div>
+                </button>
+                <button name="action_view_monitoring" type="object"
+                        class="oe_stat_button"
+                        invisible="state != 'running'">
+                    <i class="fa fa-id-card-o o_button_icon"/>
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Contract Monitoring</span>
+                    </div>
+                </button>
+                <button name="action_view_procurement" type="object"
+                        class="oe_stat_button"
+                        invisible="state != 'running'">
+                    <i class="fa fa-id-card-o o_button_icon"/>
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Procurement</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

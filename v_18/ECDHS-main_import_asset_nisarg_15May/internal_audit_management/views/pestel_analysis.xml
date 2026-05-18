@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_pestel_analysis" model="ir.actions.act_window">
+        <field name="name">Pestal Analysis</field>
+        <field name="res_model">pestel.analysis</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Pestel Analysis
+            </p>
+            <p>
+                Create and manage the Pastel Analysis
+            </p>
+        </field>
+    </record>
+    <record id="pestel_analysis_view_form" model="ir.ui.view">
+        <field name="name">pestel.analysis.view.form</field>
+        <field name="model">pestel.analysis</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="stages" widget="statusbar"/>
+                    <button name="action_review" type="object" invisible="stages != 'preparer' or uid not in user_reviewer_1_ids" string="1st Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object" invisible="stages != 'first_reviewer' or uid not in user_reviewer_2_ids" string="2nd Review" class="oe_highlight"/>
+                    <button name="action_revert" type="object" invisible="stages != 'first_reviewer' or uid not in user_reviewer_2_ids or stages != 'first_reviewer'" string="Revert" class="oe_highlight"/>
+                    <button name="action_approve" type="object" invisible="stages != 'second_reviewer' or uid not in user_approver_ids" string="Approve" class="oe_highlight"/>
+                    <button name="action_reject" type="object" invisible="stages != 'second_reviewer' or uid not in user_approver_ids" string="Reject" class="oe_highlight"/>
+<!--                    <button name="action_update" type="object"-->
+<!--                            invisible="stages != 'reverted' or uid not in user_preparer_ids"-->
+<!--                            string="Updated" class="oe_highlight"/>-->
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence_no"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group>
+                            <field name="user_preparer_ids"
+                                   widget="many2many_avatar_user"/>
+<!--                            <field name="user_reviewer_1_ids"-->
+<!--                                   widget="many2many_avatar_user"-->
+<!--                                   readonly="stages == 'approved'"/>-->
+<!--                            <field name="user_reviewer_2_ids"-->
+<!--                                   widget="many2many_avatar_user"-->
+<!--                                   readonly="stages == 'approved'"/>-->
+<!--                            <field name="user_approver_ids"-->
+<!--                                   widget="many2many_avatar_user"-->
+<!--                                   readonly="stages == 'approved'"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Political Factor">
+                            <field name="political_factor">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="critical_issues"/>
+                                    <field name="internal_audit_implication"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Economic Factor">
+                            <field name="economic_factor">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="critical_issues"/>
+                                    <field name="internal_audit_implication"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Social Factor">
+                            <field name="social_factor">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="critical_issues"/>
+                                    <field name="internal_audit_implication"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Technological Factor">
+                            <field name="technological_factor">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="critical_issues"/>
+                                    <field name="internal_audit_implication"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Environmental Factor">
+                            <field name="environmental_factor">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="critical_issues"/>
+                                    <field name="internal_audit_implication"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Legislative Factor">
+                            <field name="legislative_factor">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="critical_issues"/>
+                                    <field name="internal_audit_implication"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Tracking">
+                            <field name="tracking_ids">
+                                <list create="0">
+                                    <field name="user_id"/>
+                                    <field name="previous"/>
+                                    <field name="new_state"/>
+                                    <field name="comment"/>
+                                    <field name="date_updated"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Matrix">
+                            <div class="card" style="padding: 20px;">
+                                <div class="card_body" style="display: flex; flex-direction: column; gap: 10px;">
+                                    <!-- Row 1 -->
+                                    <div style="display: flex; justify-content: space-around; gap: 10px;">
+                                        <!-- Political -->
+                                        <div style="background-color: #2ecc71; color: black; padding: 20px; width: 45%; height: auto; display: flex; flex-direction: column; justify-content: center;">
+                                            <strong style="font-size: 36px; text-align: center;">Political</strong>
+                                            <span style="font-size: 18px;"><field name="political"/></span>
+                                        </div>
+                                         <!-- Weakness -->
+                                        <div style="background-color: #e74c3c; color: black; padding: 20px; width: 45%; height: auto; display: flex; flex-direction: column; justify-content: center;">
+                                            <strong style="font-size: 36px; text-align: center;">Economical</strong>
+                                            <span style="font-size: 18px;"><field name="economic"/></span>
+                                        </div>
+                                    </div>
+<!--                                     Row 2 -->
+                                    <div style="display: flex; justify-content: space-around; gap: 10px;">
+                                        <!-- Opportunities -->
+                                        <div style="background-color: #3498db; color: black; padding: 20px; width: 45%; height: auto; display: flex; flex-direction: column; justify-content: center;">
+                                            <strong style="font-size: 36px; text-align: center;">Social</strong>
+                                            <span style="font-size: 18px;"><field name="social"/></span>
+                                        </div>
+                                        <!-- Threats -->
+                                        <div style="background-color: #f1c40f; color: black; padding: 20px; width: 45%; height: auto; display: flex; flex-direction: column; justify-content: center;">
+                                            <strong style="font-size: 36px; text-align: center;">Technological</strong>
+                                            <span style="font-size: 18px;"><field name="techno"/></span>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-around; gap: 10px;">
+                                        <!-- Opportunities -->
+                                        <div style="background-color: #E0D7FF; color: black; padding: 20px; width: 45%; height: auto; display: flex; flex-direction: column; justify-content: center;">
+                                            <strong style="font-size: 36px; text-align: center;">Environment</strong>
+                                            <span style="font-size: 18px;"><field name="environment"/></span>
+                                        </div>
+                                        <!-- Threats -->
+                                        <div style="background-color: #ccf1ff; color: black; padding: 20px; width: 45%; height: auto; display: flex; flex-direction: column; justify-content: center;">
+                                            <strong style="font-size: 36px; text-align: center;">Legislative</strong>
+                                            <span style="font-size: 18px;"><field name="legislative"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </page>
+                        <page string="Audit Reverts/ Review Notes">
+                            <group>
+                                <field name="feedback"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="pestel_analysis_view_tree" model="ir.ui.view">
+        <field name="name">pestel.analysis.view.form</field>
+        <field name="model">pestel.analysis</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="name"/>
+                <field name="sequence_no"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </list>
+        </field>
+    </record>
+<!--    <menuitem id="environmental_menu"-->
+<!--              name="ENVIRONMENTAL ANALYSIS"-->
+<!--              parent="internal_audit_management.menu_internal_audit_config"-->
+<!--              sequence="6"/>-->
+<!--    <menuitem id="pestel_analysis_menu"-->
+<!--              name="Pestel Analysis"-->
+<!--              parent="internal_audit_management.environmental_menu"-->
+<!--              action="action_pestel_analysis"-->
+<!--              sequence="2"/>-->
+</odoo>

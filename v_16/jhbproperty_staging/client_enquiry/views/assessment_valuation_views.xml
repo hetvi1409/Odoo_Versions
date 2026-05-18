@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="assessment_valuation_view_form" model="ir.ui.view">
+        <field name="name">Valuation</field>
+        <field name="model">assessment.valuation</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" states="draft"
+                            groups="client_enquiry.group_property_manager"
+                            string="Submit" type="object"/>
+                    <button name="action_submit_scm" states="submit"
+                            groups="client_enquiry.group_property_manager"
+                            string="SCM" type="object"/>
+                    <button name="action_recommend" states="scm,submit"
+                            groups="client_enquiry.group_property_manager"
+                            string="Recommend" type="object"/>
+                    <button name="action_create_transaction" states="transaction"
+                            groups="client_enquiry.group_property_manager"
+                            string="Create Transaction" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_transaction" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('transaction_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Transaction</span>
+                            </div>
+                        </button>
+                        <button name="action_view_acquisition" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('acquisition_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Acquisition</span>
+                            </div>
+                        </button>
+                        <button name="action_view_circulation" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('circulation_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Circulation</span>
+                            </div>
+                        </button>
+                        <button name="action_view_assessment" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('assessment_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Assessment</span>
+                            </div>
+                        </button>
+                        <button name="action_view_enquiry" type="object"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('enquiry_id', '=', False)]}">
+                            <i class="fa fa-edit o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Enquiry</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="property_id"/>
+                            <field name="property_description"/>
+                            <field name="circulation_id"/>
+                            <field name="acquisition_id"/>
+                            <field name="valuation_date"/>
+                        </group>
+                        <group>
+                            <field name="property_number"/>
+                            <field name="jmc_number"/>
+                            <field name="transaction_id" invisible="1"/>
+                            <field name="assessment_id"/>
+                            <field name="enquiry_id"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="address"/>
+                            <field name="only_portion"/>
+                            <field name="property_category"/>
+                        </group>
+                        <group>
+                            <field name="contract_ids" widget="many2many_tags"/>
+                            <field name="size"/>
+                            <!--                            <field name="circulation_comments"/>-->
+                            <field name="purpose_valuation"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Documents">
+                            <group>
+                                <field name="attachment_ids"
+                                       widget="many2many_binary"/>
+                                <field name="valuation_attachment_ids"
+                                       widget="many2many_binary"/>
+                            </group>
+                        </page>
+                        <page string="Recommendation">
+                            <group>
+                                <field name="comments"/>
+                                <field name="is_recommended"
+                                       attrs="{'required': [('state', '==', 'scm')]}"/>
+                            </group>
+                        </page>
+                        <page string="GEOLIS">
+                            <iframe id="custom_src" name="custom_src"
+                                    src="https://ags.joburg.org.za/cgis/index.aspx"
+                                    width="100%" height="500"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="assessment_valuation_tree_view" model="ir.ui.view">
+        <field name="name">Valuation</field>
+        <field name="model">assessment.valuation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="property_id"/>
+                <field name="assessment_id"/>
+<!--                <field name="state"/>-->
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="action_assessment_valuation" model="ir.actions.act_window">
+        <field name="name">Valuation</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">assessment.valuation</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="action_assessment_valuations_menu"
+              name="Valuation"
+              action="action_assessment_valuation"
+              parent="client_enquiry.client_enquiry_helpdesk_enquiries_menu"
+              sequence="21"/>
+
+</odoo>

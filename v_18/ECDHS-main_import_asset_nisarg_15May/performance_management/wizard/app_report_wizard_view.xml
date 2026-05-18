@@ -1,0 +1,35 @@
+<odoo>
+    <record id="view_app_report_wizard_form" model="ir.ui.view">
+        <field name="name">app.report.wizard.form</field>
+        <field name="model">app.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Print Application Report">
+                <group>
+                    <field name="portfolio_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                </group>
+                <footer>
+                    <button name="action_print_report" string="Print Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+        <record id="report_app_action" model="ir.actions.act_window">
+        <field name="name">APP Report</field>
+        <field name="res_model">app.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+      <menuitem id="report_menu"
+              name="Reports"
+              parent="governance.menu_governance_root"
+              sequence="111"/>
+
+    <menuitem id="app_report_menu"
+              name="APP Annual Report"
+              action="report_app_action"
+              sequence="5"
+              parent="performance_management.report_menu"/>
+</odoo>
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_committee_meeting_form">
+        <field name="name">committee.meeting.view.form</field>
+        <field name="model">committee.meeting</field>
+        <field name="inherit_id"
+               ref="committee_meeting_management.view_committee_meeting_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='final']" position="after">
+                <page string="Transaction" invisible="is_transaction == False">
+                        <group>
+                            <field name="is_transaction" invisible="1"/>
+                            <field name="assessment_id"/>
+                            <field name="transaction_document_id" invisible="1"/>
+                            <label for="transaction_document_id" readonly="1"/>
+                            <button name="action_sign_document" invisible="transaction_document_id == False"
+                                    string="Open Document" type="object"/>
+                        </group>
+                    </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

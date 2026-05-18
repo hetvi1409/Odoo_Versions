@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_helpdesk_ticket_report_wizard_form" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.report.wizard.form</field>
+            <field name="model">helpdesk.ticket.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Ticket Report">
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="report_type"/>
+                    </group>
+                    <footer>
+                        <button string="Print" type="object" name="action_print_report" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_helpdesk_ticket_report_wizard" model="ir.actions.act_window">
+            <field name="name">Ticket Report</field>
+            <field name="res_model">helpdesk.ticket.report.wizard</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+        </record>
+
+
+        <menuitem id="menu_ticket_report"
+                  name="Ticket Report"
+                  action="action_helpdesk_ticket_report_wizard"
+                  parent="helpdesk.menu_helpdesk_root"
+                  sequence="50"/>
+    </data>
+</odoo>

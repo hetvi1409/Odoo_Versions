@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_patient_sick_note_document">
+        <t t-call="web.internal_layout">
+            <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+            <div class="page">
+                <!-- Title -->
+                <h3 style="text-align:left; font-weight:bold;">
+                    Sick note:
+                    <t t-esc="o.firstname"/>
+                    <t t-esc="o.lastname"/>
+                </h3>
+
+                <!-- Practice & Doctor -->
+                <table class="table table-borderless" style="width:100%; margin-top:10px;">
+                    <tr>
+                        <td>
+                            <b>Practice:</b>
+                            <t t-esc="o.doctor.name or ''"/>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Prescribing Doctor:</b>
+                            <t t-esc="o.doctor.name or ''"/>
+                        </td>
+                        <td></td>
+                        <td>
+                            <b>Tel:</b>
+                            <t t-esc="o.doctor.work_phone or ''"/>
+                        </td>
+                        <td rowspan="3">
+                            <div t-if="o.doctor.address_id">
+                                <div t-field="o.doctor.address_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}'/>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>HPCSA No:</b>
+                            <t t-esc="o.doctor.code or ''"/>
+                        </td>
+                        <td></td>
+                        <td>
+                            <b>Fax:</b>
+                            <!--                            <t t-esc="o.doctor.name or ''"/>-->
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>PR No:</b>
+                            <t t-esc="o.doctor.practise_number or ''"/>
+                        </td>
+                        <td></td>
+                        <td>
+                            <b>Email:</b>
+                            <t t-esc="o.doctor.work_email or ''"/>
+                        </td>
+                    </tr>
+                </table>
+                <hr/>
+                <!-- Patient Details -->
+                <h5 style="margin-top:15px;">Patient details</h5>
+                <table class="table table-borderless" style="width:100%;">
+                    <tr>
+                        <td>
+                            <b>Medical Aid:</b>
+                            <!-- <t t-esc="o.partner_id.administrator_id.name or ''"/> -->
+                        </td>
+                        <td>
+                            <b>Phone No:</b>
+                            <t t-esc="o.phone or ''"/>
+                        </td>
+                        <td rowspan="3">
+                            <address t-esc="o.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}'/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Medical Aid No:</b>
+                            <!-- <t t-esc="o.partner_id.destination_code or ''"/> -->
+                        </td>
+                        <td>
+                            <b>DOB:</b>
+                            <t t-esc="o.dob or ''"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Main Member:</b>
+                            <t t-esc="o.firstname or ''"/>
+                            <t t-esc="o.lastname or ''"/>
+                        </td>
+                        <td>
+                            <b>ID No:</b>
+                            <t t-esc="o.national_id or ''"/>
+                        </td>
+                    </tr>
+                </table>
+                <hr/>
+                <h5 style="margin-top:15px;">Desclaimer</h5>
+                <p>I, the healthcare provider for the patient under my care, confirm that a consultation has taken place
+                    and take responsibility for issuing this sick note.
+                </p>
+                <hr/>
+                <!-- Consultation Details -->
+                <h5 style="margin-top:15px;">Consultation details</h5>
+                <table class="table table-borderless" style="width:100%;">
+                    <tr>
+                        <td>
+                            <b>Consultation Date:</b>
+                            <!--                            <t t-esc="o.appointment_id.date or ''"/>-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Consultation Type:</b>
+                            <t t-esc="o.doctor.consultancy_type or ''"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Start Time:</b>
+                            <t t-esc="o.doctor.consultancy_start_time or ''"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Reason for Sick Leave:</b>
+                            Illness
+                        </td>
+                    </tr>
+                </table>
+                <hr/>
+                <!-- Contact Info -->
+                <p>To whom it may concern</p>
+                <p>
+                    <span t-field="o.firstname"/>
+                    has been deemed unfit for duty from: _________ up to and including _________
+                </p>
+
+                <!-- Signature -->
+                <p style="margin-top:30px;">Regards,</p>
+                <p>
+                    <span t-field="o.partner_id.name"></span>
+                </p>
+                <br/>
+                <table class="table table-borderless avoid-page-break-inside"
+                       style="align:center;width:100%;">
+                    <tr>
+                        <td style="font-size:130%;width:45%;text-align:left;">
+                            <div style="width:300px;height:50px;">
+                                <!--                            <t t-if="o.sign">-->
+                                <!--                                <img t-att-src="image_data_uri(o.sign)"-->
+                                <!--                                     style="width:300px;height:50px;"/>-->
+                                <!--                            </t>-->
+                            </div>
+                            <hr size="2" width="50%" color="black"
+                                style="margin-bottom: 0rem;"/>
+                            <span>
+                                <span t-field="o.partner_id.name"></span>
+                            </span>
+                        </td>
+                        <td style="font-size:130%;width:45%;text-align:left;">
+                            <!--                                            <span t-field="recommender.date"></span>-->
+                            <div style="width:300px;height:50px;">
+                                <t t-esc="o.create_date and o.create_date.strftime('%d/%m/%Y') or ''"/>
+                            </div>
+                            <hr size="2" width="50%" color="black"
+                                style="margin-bottom: 0rem;"/>
+                            <span>
+                                <span>Date</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <!--                            </span>-->
+                </table>
+            </div>
+        </t>
+    </template>
+    <template id="report_patient_sick_note">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="oehealth.report_patient_sick_note_document" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Demo: Department -->
+        <record id="demo_department_it" model="hr.department">
+            <field name="name">Information Technology</field>
+        </record>
+
+        <!-- Demo: Annual Procurement Plan -->
+        <record id="demo_app_laptops" model="sagovtender.annual.procurement.plan">
+            <field name="name">APP/2025/0001</field>
+            <field name="fiscal_year">2025/2026</field>
+            <field name="department_id" ref="demo_department_it"/>
+            <field name="budget_line">BAS-BL-001</field>
+            <field name="item_description">Procurement of 110 Laptop Computers for staff</field>
+            <field name="estimated_value">750000</field>
+            <field name="available_budget">800000</field>
+            <field name="planned_date" eval="(datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d')"/>
+            <field name="procurement_method">tender</field>
+            <field name="state">approved</field>
+        </record>
+    </data>
+</odoo>

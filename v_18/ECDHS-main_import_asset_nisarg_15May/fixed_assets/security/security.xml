@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="category_fixed_asset" model="ir.module.category">
+            <field name="name">Fixed Asset Manager</field>
+        </record>
+
+        <!-- Capturer: Can create and update asset records in Draft status -->
+        <record id="group_fixed_asset_capturer" model="res.groups">
+            <field name="name">Capturer</field>
+            <field name="category_id" ref="category_fixed_asset"/>
+            <field name="implied_ids" eval="[(4, ref('account.group_account_readonly'))]"/>
+        </record>
+
+        <!-- Authorizer: Can approve and move assets to Running status -->
+        <record id="group_fixed_asset_authorizer" model="res.groups">
+            <field name="name">Authorizer</field>
+            <field name="category_id" ref="category_fixed_asset"/>
+            <field name="implied_ids" eval="[(4, ref('account.group_account_readonly'))]"/>
+        </record>
+
+        <!-- Verifier: Can conduct and confirm asset verifications -->
+        <record id="group_fixed_asset_verifier" model="res.groups">
+            <field name="name">Verifier</field>
+            <field name="category_id" ref="category_fixed_asset"/>
+            <field name="implied_ids" eval="[(4, ref('account.group_account_readonly'))]"/>
+        </record>
+
+        <!-- Viewer/Reporter: Can view reports but not modify data -->
+        <record id="group_fixed_asset_viewer" model="res.groups">
+            <field name="name">Viewer/Reporter</field>
+            <field name="category_id" ref="category_fixed_asset"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Fixed Asset Manager: Full access to everything -->
+        <record id="group_fixed_asset_approver" model="res.groups">
+            <field name="name">Fixed Asset Manager</field>
+            <field name="category_id" ref="category_fixed_asset"/>
+            <field name="implied_ids" eval="[(4, ref('group_fixed_asset_capturer')),
+                                              (4, ref('group_fixed_asset_authorizer')),
+                                              (4, ref('group_fixed_asset_verifier'))]"/>
+        </record>
+
+        <!-- ============================================ -->
+        <!-- RECORD RULES FOR CAPTURER -->
+        <!-- ============================================ -->
+
+        <!-- Capturer: Can create/edit in draft state -->
+        <record id="rule_fixed_asset_capturer_draft" model="ir.rule">
+            <field name="name">Capturer - Draft (Read/Write/Create)</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_capturer'))]"/>
+            <field name="domain_force">[('state', '=', 'draft')]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- Capturer: Read-only for request_for_approval -->
+        <record id="rule_fixed_asset_capturer_request" model="ir.rule">
+            <field name="name">Capturer - Request for Approval (Read Only)</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_capturer'))]"/>
+            <field name="domain_force">[('state', '=', 'request_for_approval')]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- ============================================ -->
+        <!-- RECORD RULES FOR AUTHORIZER -->
+        <!-- ============================================ -->
+
+        <!-- Authorizer: Can only read and approve request_for_approval (write needed for state change only) -->
+        <record id="rule_fixed_asset_authorizer_request" model="ir.rule">
+            <field name="name">Authorizer - Request For Approval (Read/Approve)</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_authorizer'))]"/>
+            <field name="domain_force">[('state', '=', 'request_for_approval')]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>  <!-- Needed for state change via button -->
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- Authorizer: Read-only for open state -->
+        <record id="rule_fixed_asset_authorizer_open" model="ir.rule">
+            <field name="name">Authorizer - Open (Read Only)</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_authorizer'))]"/>
+            <field name="domain_force">[('state', '=', 'open')]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- ============================================ -->
+        <!-- RECORD RULES FOR VERIFIER -->
+        <!-- ============================================ -->
+
+        <!-- Verifier: Can work on open assets (dispose, cancel, verify) -->
+        <record id="rule_fixed_asset_verifier_open" model="ir.rule">
+            <field name="name">Verifier - Open (Read/Write)</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_verifier'))]"/>
+            <field name="domain_force">[('state', '=', 'open')]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- Verifier: Can view disposed assets (read-only) -->
+        <record id="rule_fixed_asset_verifier_disposed" model="ir.rule">
+            <field name="name">Verifier - Disposed (Read Only)</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_verifier'))]"/>
+            <field name="domain_force">[('state', '=', 'asset_disposed')]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- Verifier: Can view damaged assets (read-only) -->
+        <record id="rule_fixed_asset_verifier_damaged" model="ir.rule">
+            <field name="name">Verifier - Damaged (Read Only)</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_verifier'))]"/>
+            <field name="domain_force">[('state', '=', 'damaged')]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- Verifier: Can view cancelled assets (read-only) -->
+        <record id="rule_fixed_asset_verifier_cancelled" model="ir.rule">
+            <field name="name">Verifier - Cancelled (Read Only)</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_verifier'))]"/>
+            <field name="domain_force">[('state', '=', 'cancelled')]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- Verifier: Can view lost assets (read-only) -->
+        <record id="rule_fixed_asset_verifier_lost" model="ir.rule">
+            <field name="name">Verifier - Lost (Read Only)</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_verifier'))]"/>
+            <field name="domain_force">[('state', '=', 'lost')]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- Verifier: Can view written_off assets (read-only) -->
+        <record id="rule_fixed_asset_verifier_written_off" model="ir.rule">
+            <field name="name">Verifier - Written Off (Read Only)</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_verifier'))]"/>
+            <field name="domain_force">[('state', '=', 'written_off')]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- ============================================ -->
+        <!-- RECORD RULES FOR VIEWER/REPORTER -->
+        <!-- ============================================ -->
+
+        <record id="rule_fixed_asset_viewer" model="ir.rule">
+            <field name="name">Viewer/Reporter - All Records (Read Only)</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_viewer'))]"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- ============================================ -->
+        <!-- RECORD RULES FOR FIXED ASSET MANAGER -->
+        <!-- ============================================ -->
+
+        <record id="rule_fixed_asset_manager" model="ir.rule">
+            <field name="name">Fixed Asset Manager - Full Access</field>
+            <field name="model_id" ref="model_account_asset"/>
+            <field name="groups" eval="[(4, ref('group_fixed_asset_approver'))]"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+    </data>
+</odoo>

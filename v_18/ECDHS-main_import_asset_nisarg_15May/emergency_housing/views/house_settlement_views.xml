@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    
+    <record model="ir.ui.view" id="house_settlement_list_view">
+        <field name="name">house.settlement.list.view</field>
+        <field name="model">house.settlement</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="action_house_settlement" model="ir.actions.act_window">
+        <field name="name">House Settlement</field>
+        <field name="res_model">house.settlement</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_house_configuration" name="Configuration" sequence="10"
+              action="action_house_settlement"
+              parent="website_housing_subsidy.menu_housing_subsidy"/>
+    <menuitem id="menu_house_settlement" name="House Settlement" sequence="2"
+              action="action_house_settlement"
+              parent="emergency_housing.menu_house_configuration"/>
+    
+    <record model="ir.ui.view" id="property_nature_list_view">
+        <field name="name">property.nature.list.view</field>
+        <field name="model">property.nature</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="action_property_nature" model="ir.actions.act_window">
+        <field name="name">Nature Property Rights</field>
+        <field name="res_model">property.nature</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_property_nature" name="Nature Property Rights" sequence="2"
+              action="action_property_nature"
+              parent="emergency_housing.menu_house_configuration"/>
+
+</odoo>

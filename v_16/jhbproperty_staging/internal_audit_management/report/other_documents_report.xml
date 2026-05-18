@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <template id="report_document">
+       <t t-call="web.html_container">
+           <t t-foreach="docs" t-as="o">
+               <t t-call="web.external_layout">
+                   <div class="page">
+                       <h2 style="text-align: center;"> Document Report</h2>
+                       <br/>
+                       <table class="table table-bordered" style="width:100%; border-collapse: collapse;">
+                           <tbody>
+                               <tr t-if="o.name">
+                                   <td style="font-weight: bold; width: 30%;">Name:</td>
+                                   <td t-esc="o.name"/>
+                               </tr>
+                               <tr t-if="o.sequence_no">
+                                   <td style="font-weight: bold;">W/P Reference:</td>
+                                   <td t-esc="o.sequence_no"/>
+                               </tr>
+                               <tr t-if="o.requirements">
+                                   <td style="font-weight: bold;">Requirements:</td>
+                                   <td t-esc="o.requirements"/>
+                               </tr>
+                               <tr t-if="o.record_work_done">
+                                   <td style="font-weight: bold;">Work Done:</td>
+                                   <td t-esc="o.record_work_done"/>
+                               </tr>
+                               <tr t-if="o.conclusion">
+                                   <td style="font-weight: bold;">Conclusion:</td>
+                                   <td t-esc="o.conclusion"/>
+                               </tr>
+                               <tr t-if="o.user_preparer_ids">
+                                   <td style="font-weight: bold;">Preparer:</td>
+                                   <td t-esc="o.user_preparer_ids.name"/>
+                               </tr>
+                               <tr t-if="o.user_reviewer_1_ids">
+                                   <td style="font-weight: bold;">First Reviewer:</td>
+                                   <td t-esc="o.user_reviewer_1_ids.name"/>
+                               </tr>
+                               <tr t-if="o.user_reviewer_2_ids">
+                                   <td style="font-weight: bold;">Second Reviewer:</td>
+                                   <td t-esc="o.user_reviewer_2_ids.name"/>
+                               </tr>
+                               <tr t-if="o.user_approver_ids">
+                                   <td style="font-weight: bold;">Approver:</td>
+                                   <td t-esc="o.user_approver_ids.name"/>
+                               </tr>
+                                <tr t-if="o.feedback">
+                                   <td style="font-weight: bold;">Audit Reverts/Review Notes:</td>
+                                   <td t-esc="o.feedback"/>
+                               </tr>
+                           </tbody>
+                       </table>
+                   </div>
+               </t>
+           </t>
+       </t>
+   </template>
+</odoo>

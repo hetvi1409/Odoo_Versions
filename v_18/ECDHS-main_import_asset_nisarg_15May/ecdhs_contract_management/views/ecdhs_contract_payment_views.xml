@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Payment Verification  –  Form View
+    ================================================================= -->
+    <record id="ecdhs_contract_payment_view_form" model="ir.ui.view">
+        <field name="name">ecdhs.contract.payment.form</field>
+        <field name="model">ecdhs.contract.payment</field>
+        <field name="arch" type="xml">
+            <form string="Payment Verification">
+                <header>
+                    <button name="action_verify" type="object" string="Verify for Payment"
+                            invisible="state != 'pending'" class="btn-primary"/>
+                    <button name="action_mark_paid" type="object" string="Mark as Paid"
+                            invisible="state != 'verified'" class="btn-primary"/>
+                    <button name="action_open_vendor_bill" type="object" string="Open Vendor Bill"
+                        invisible="vendor_bill_id == False" class="btn-secondary"/>
+                    <button name="action_reject" type="object" string="Reject"
+                            invisible="state in ('paid','rejected')" class="btn-danger"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pending,verified,paid"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                            --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                            border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                            border-color: black !important;
+                        }
+                    </style>
+                    <widget name="web_ribbon" title="Rejected" bg_color="text-bg-danger"
+                            invisible="state != 'rejected'"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Invoice Details">
+                            <field name="contract_id" readonly="state != 'pending'" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                               <field name="folder_id" widget="documents_folder_many2one"/>
+                            <field name="original_contract_value" widget="monetary" readonly="1"/>
+                            <field name="invoice_date"/>
+                            <field name="service_period"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="contracted_amount" widget="monetary"/>
+                            <field name="invoice_amount" widget="monetary"/>
+                            <field name="vendor_bill_id"
+                                options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                context="{'default_move_type': 'in_invoice'}"/>
+                            <field name="amount_variance" widget="monetary" readonly="1"
+                                   decoration-danger="amount_variance &gt; 0" invisible="1"/>
+                        </group>
+                        <group string="Verification Record">
+                            <field name="verified_by_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="approved_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                    </group>
+
+                    <!-- SOP Step 22 checklist -->
+                    <group string="Payment Verification Checklist  –  SOP Step 22">
+                        <field name="monitoring_report_received"   widget="boolean_toggle"/>
+                        <field name="services_delivery_confirmed"  widget="boolean_toggle"/>
+                        <field name="invoice_matches_sla"          widget="boolean_toggle"/>
+                        <field name="tax_clearance_valid"          widget="boolean_toggle"/>
+                        <field name="grv_stamped"                  widget="boolean_toggle"/>
+                    </group>
+
+                    <group string="Remarks">
+                        <field name="notes" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Payment Verification  –  List View
+    ================================================================= -->
+    <record id="ecdhs_contract_payment_view_list" model="ir.ui.view">
+        <field name="name">ecdhs.contract.payment.list</field>
+        <field name="model">ecdhs.contract.payment</field>
+        <field name="arch" type="xml">
+            <list string="Payment Verifications"
+                  decoration-danger="state == 'rejected'"
+                  decoration-success="state == 'paid'"
+                  decoration-muted="state == 'rejected'">
+                <field name="name"/>
+                <field name="contract_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="invoice_date"/>
+                <field name="service_period" optional="show"/>
+                                <field name="original_contract_value" widget="monetary" optional="show"/>
+                <field name="contracted_amount" widget="monetary" optional="show"/>
+                <field name="invoice_amount" widget="monetary"/>
+                  <field name="vendor_bill_id" optional="show"
+                      options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="amount_variance" widget="monetary" optional="show"
+                       decoration-danger="amount_variance &gt; 0" invisible="1"/>
+                <field name="grv_stamped" widget="boolean" optional="show"/>
+                <field name="verified_by_id" optional="hide" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'paid'"
+                       decoration-warning="state == 'verified'"
+                       decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Window Action
+    ================================================================= -->
+    <record id="action_ecdhs_contract_payment" model="ir.actions.act_window">
+        <field name="name">Payment Verifications</field>
+        <field name="res_model">ecdhs.contract.payment</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No payment verifications found</p>
+            <p>Payment verifications are created from the contract record.</p>
+        </field>
+    </record>
+
+</odoo>

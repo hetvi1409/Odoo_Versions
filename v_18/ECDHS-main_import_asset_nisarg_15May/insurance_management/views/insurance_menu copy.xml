@@ -1,0 +1,23 @@
+<!-- views/insurance_menu.xml -->
+<odoo>
+    <menuitem id="menu_insurance_root" name="Insurance Management" icoweb_icon="insurance_management,static/description/icon.png"/>
+
+    <menuitem id="menu_insurance_policies" name="Policies" parent="menu_insurance_root" sequence="1"/>
+    <menuitem id="menu_insurance_claims" name="Claims" parent="menu_insurance_root" sequence="2"/>
+
+    <record id="action_insurance_policy" model="ir.actions.act_window">
+        <field name="name">Policies</field>
+        <field name="res_model">insurance.policy</field>
+        <field name="view_mode">list,form,kanban</field>
+    </record>
+
+    <menuitem id="menu_action_insurance_policy" name="Policies" parent="menu_insurance_policies" action="action_insurance_policy"/>
+
+    <record id="action_insurance_claim" model="ir.actions.act_window">
+        <field name="name">Claims</field>
+        <field name="res_model">insurance.claim</field>
+        <field name="view_mode">list,form,kanban</field>
+    </record>
+
+    <menuitem id="menu_action_insurance_claim" name="Claims" parent="menu_insurance_claims" action="action_insurance_claim"/>
+</odoo>

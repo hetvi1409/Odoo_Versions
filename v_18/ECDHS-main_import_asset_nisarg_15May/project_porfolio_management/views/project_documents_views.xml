@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="project_documents_view_list" model="ir.ui.view">
+        <field name="name">project.documents.view.list</field>
+        <field name="model">project.documents</field>
+        <field name="arch" type="xml">
+            <list string="Project Documents">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="project_id" options="{'no_create': True}"/>
+                <field name="type"/>
+                <field name="logged_date"/>
+                <field name="loaded_by_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="project_documents_view_form" model="ir.ui.view">
+        <field name="name">project.documents.view.form</field>
+        <field name="model">project.documents</field>
+        <field name="arch" type="xml">
+            <form string="Project Documents">
+                <sheet>
+                                                            <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover),
+                        .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover)
+                        .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover)
+                        .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+
+                    <group string="Details">
+                        <group>
+                            <field name="name"/>
+                            <field name="title"/>
+                            <field name="project_id" context="{'form_view_ref': 'project_porfolio_management.edit_project_ppe'}"
+                             options="{'no_create': True}"/>
+
+                            <field name="state"/>
+                            <field name="logged_date"/>
+                        </group>
+                        <group>
+                            <field name="type"/>
+                            <field name="files"/>
+                            <field name="loaded_by_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_project_documents" model="ir.actions.act_window">
+        <field name="name">Project Documents</field>
+        <field name="res_model">project.documents</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Documents found. Let's create one!
+            </p>
+            <p>
+                Create Documents to organize your tasks. Define a different workflow for each project.
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_ppo_governance" name="Governance" sequence="3"
+              parent="project_porfolio_management.projects_ppo_mian_menu"/>
+
+    <menuitem id="action_project_documents_menu" name="Project documents"
+              parent="menu_ppo_governance"
+              action="action_project_documents"
+              sequence="5"/>
+</odoo>

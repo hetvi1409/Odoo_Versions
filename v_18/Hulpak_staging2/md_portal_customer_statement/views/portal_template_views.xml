@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_customer_statement" name="Customer Statement" inherit_id="portal.portal_my_home" customize_show="True" priority="30">
+        <!-- <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_client_category_enable" t-value="True"/>
+            <t t-set="portal_vendor_category_enable" t-value="True"/>
+        </xpath> -->
+        <div id="portal_client_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/account/static/src/img/bank.svg'" />
+                <t t-set="title">Statements</t>
+                <t t-set="url" t-value="'/my/customer/statement'" />
+                <t t-set="text">Customer transaction summary</t>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+        </div>
+    </template>
+    <template id="portal_statement_lines" name="Statement Lines">
+        <t t-if="lines" t-call="portal.portal_table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <!-- <th>Job Name</th> -->
+                    <th>Date</th>
+                    <th>Journal</th>
+                    <th>Amount<br/>(Debit)</th>
+                    <th>Amount<br/>(Credit)</th>
+                    <th>Balance</th>
+                    <th t-if="data['form']['amount_currency']">Currency</th>
+                </tr>
+            </thead>
+            <tbody>
+                 <tr>
+                    <td>
+                        <strong><span>Initial Balance</span></strong>
+                    </td>
+                    <td>
+                        <span/>
+                    </td>
+                    <td>
+                        <span/>
+                    </td>
+                    <td class="text-start">
+                       <span t-esc="initial_balance['debit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                    </td>
+                    <td class="text-start">
+                        <span t-esc="initial_balance['credit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                    </td>
+                    <td class="text-start">
+                        <span t-esc="initial_balance['balance']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                    </td>
+                    <td class="text-end" t-if="data['form']['amount_currency']">
+                        <t t-if="line['currency_id']">
+                            <span t-esc="line['amount_currency']" t-options="{'widget': 'monetary', 'display_currency': line['currency_id']}" />
+                        </t>
+                    </td>
+                </tr>
+                <t t-foreach="lines" t-as="line">
+                    <tr>
+                        <td>
+                            <span t-esc="line['displayed_name']" />
+                        </td>
+                        <!-- <td>
+                            <span t-esc="line.get('job_name')" />
+                        </td> -->
+                        <td>
+                            <span t-esc="line['date']" />
+                        </td>
+                        <td>
+                            <span t-esc="line['code']" />
+                        </td>
+                        <td class="text-start">
+                            <span t-esc="line['debit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                        </td>
+                        <td class="text-start">
+                            <span t-esc="line['credit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                        </td>
+                        <td class="text-start">
+                            <span t-esc="line['progress']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                        </td>
+                        <td class="text-end" t-if="data['form']['amount_currency']">
+                            <t t-if="line['currency_id']">
+                                <span t-esc="line['amount_currency']" t-options="{'widget': 'monetary', 'display_currency': line['currency_id']}" />
+                            </t>
+                        </td>
+                    </tr>
+                </t>
+                <tr>
+                    <td>
+                        <strong><span>Total</span></strong>
+                    </td>
+                    <td>
+                        <span/>
+                    </td>
+                    <td>
+                        <span/>
+                    </td>
+                    <td class="text-start">
+                       <span t-esc="sum_balance['debit_sum']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                    </td>
+                    <td class="text-start">
+                        <span t-esc="sum_balance['credit_sum']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                    </td>
+                    <td class="text-start">
+                        <span t-esc="sum_balance['balance_sum']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                    </td>
+                    <td class="text-end" t-if="data['form']['amount_currency']">
+                        <t t-if="line['currency_id']">
+                            <span t-esc="line['amount_currency']" t-options="{'widget': 'monetary', 'display_currency': line['currency_id']}" />
+                        </t>
+                    </td>
+                </tr>
+            </tbody>
+        </t>
+    </template>
+    <template id="portal_my_customer_statement" name="My Customer Statements">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+            <div class="d-flex gap-2 my-3">
+                <a href="/my/" title="Go Back" class="btn btn-light px-2"><i class="oi oi-chevron-left"/></a>
+                <h3 class="my-0">Your Statements</h3>
+            </div>
+            <div t-if="lines" name="portal_customer_statement" id="portal_customer_statement" class="s_website_form" data-name="Form">
+                <form>
+                     <div name="my_portal_customer_statement" id="my_portal_customer_statement" class="row pb-5">
+                        <div class="mb-3 col-5 " data-type="date">
+                            <label for="date_from">Date From</label>
+                            <div class="input-group date">
+                                <input type="text" class="form-control datetimepicker-input o-portal-datetimepicker" name="date_from"/>
+                                <div class="input-group-text o_input_group_date_icon cursor-pointer">
+                                    <i class="fa fa-calendar"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-5 " data-type="date">
+                            <label for="date_to">Date To</label>
+                            <div class="input-group date">
+                                <input type="text" class="form-control datetimepicker-input o-portal-datetimepicker" name="date_to"/>
+                                <div class="input-group-text o_input_group_date_icon cursor-pointer">
+                                    <i class="fa fa-calendar"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2" style="padding-top: 21px;">
+                            <label for="Apply"></label>
+                            <button type="button" class="btn btn-primary" name="Apply" id="o_portal_statement_apply_dates">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <t t-if="not lines">
+                <p class="alert alert-warning">There are currently no any statements for your account.</p>
+            </t>
+            <t t-call="md_portal_customer_statement.portal_statement_lines"/>
+            <div t-if="lines" class="text-center pt-4">
+                <button type="button" class="btn btn-primary" name="Apply" id="o_portal_statement_report_print">
+                        Print Statements
+                    </button>
+            </div>
+        </t>
+    </template>
+</odoo>

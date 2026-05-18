@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_opms_app_import_wizard_form" model="ir.ui.view">
+            <field name="name">opms.app.import.wizard.form</field>
+            <field name="model">opms.app.import.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Import APP / Annual Performance Matrix">
+                    <sheet>
+                        <group string="Select Operation">
+                            <field name="operation_mode" required="1"/>
+                        </group>
+
+                        <!-- Financial Year: used by every operation -->
+                        <group string="Target Financial Year">
+                            <field name="financial_year"
+                                   options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+
+                        <separator string="Option 1 — Manual File Import" invisible="operation_mode != 'manual_import'"/>
+                        <group invisible="operation_mode != 'manual_import'">
+                            <field name="file_data" filename="file_name"
+                                   string="Excel File"
+                                   help="Upload the APP Matrix Excel file for manual import."/>
+                            <field name="file_name"/>
+                            <field name="import_mode"/>
+                        </group>
+
+                        <separator string="Option 1b — Auto-Import (Bundled or Corrected Excel)" invisible="operation_mode != 'auto_import'"/>
+                        <group invisible="operation_mode != 'auto_import'">
+                            <field name="versioned_excel_file"
+                                   help="Leave blank to auto-cleanse and import the original bundled file (a corrected copy will be saved automatically). Select a previously corrected version to re-use it."/>
+                        </group>
+
+                        <separator string="Option 2 — Copy from Previous Period" invisible="operation_mode != 'copy_previous'"/>
+                        <group invisible="operation_mode != 'copy_previous'">
+                            <field name="source_financial_year"
+                                   required="operation_mode == 'copy_previous'"
+                                   options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   help="Select the source year whose APP Plans, Annual Targets, Quarters and Quarterly Targets will be copied into the target year above. Dates are automatically shifted to the new year."/>
+                        </group>
+
+                        <separator string="Option 3 &#8212; Load Demo APP Plans (Full Hierarchy)" invisible="operation_mode != 'demo_app_plans'" groups="base.group_system"/>
+                        <group invisible="operation_mode != 'demo_app_plans'" groups="base.group_system">
+                            <field name="demo_source_url"
+                                   placeholder="https://... or filename under /data/ &#8212; leave blank to use bundled Excel"
+                                   help="URL to an APP or AOP PDF document, or a local filename. Leave blank to extract indicators from the bundled KPI Excel file."/>
+                            <field name="file_data" filename="file_name"
+                                   string="Upload APP/AOP PDF (optional)"
+                                   help="Upload an APP or Annual Operational Plan PDF as the indicator source. Only used when the URL field above is blank."/>
+                            <field name="file_name" invisible="1"/>
+                            <div class="text-muted">
+                                A full hierarchy (Programme &#8594; Sub-Programme &#8594; Directorate &#8594; Output &#8594; Indicator &#8594; Annual Target &#8594; Quarterly Targets) will be generated automatically with randomised planned target values.
+                            </div>
+                        </group>
+
+                        <separator string="Option 4 &#8212; Load Demo Submissions" invisible="operation_mode != 'demo_submissions'" groups="base.group_system"/>
+                        <group invisible="operation_mode != 'demo_submissions'" groups="base.group_system">
+                            <div class="o_form_label">This operation generates demo submissions for the selected Financial Year and is restricted to Administrator/Settings users.</div>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <!-- Option 1 actions -->
+                        <button name="action_validate_file"
+                                type="object"
+                                string="Validate File"
+                                class="btn-secondary"
+                                invisible="operation_mode != 'manual_import'"
+                                title="Validate the uploaded Excel file without importing."/>
+                        <button name="action_import_app"
+                                type="object"
+                                string="Import APP Matrix"
+                                class="btn-primary"
+                                invisible="operation_mode != 'manual_import'"
+                                title="Import the uploaded Excel file into the selected financial year."/>
+                        <button name="action_auto_import_from_excel"
+                                type="object"
+                                string="Auto-Import Bundled Excel"
+                                class="btn-info"
+                                invisible="operation_mode != 'auto_import'"
+                                title="Automatically load the bundled KPI Excel file from the module and import it into the selected financial year — no manual upload needed."/>
+
+                        <!-- Option 2 action -->
+                        <button name="action_copy_from_previous_period"
+                                type="object"
+                                string="Copy from Previous Period"
+                                class="btn-info"
+                                invisible="operation_mode != 'copy_previous'"
+                                title="Copy the full APP hierarchy from the selected source year into the target year, with dates adjusted accordingly."/>
+
+                        <!-- Demo APP Plans (Option 3) — Settings / Administrator group only -->
+                        <button name="action_load_demo_app_plans"
+                                type="object"
+                                string="Load Demo APP Plans"
+                                class="btn-warning"
+                                invisible="operation_mode != 'demo_app_plans'"
+                                groups="base.group_system"
+                                title="Generate a complete demo APP Plan hierarchy with randomised planned targets. For demo/presentation use only."/>
+
+                        <!-- Demo seed (Option 4) — Settings / Administrator group only -->
+                        <button name="action_load_demo_submissions"
+                                type="object"
+                                string="Load Demo Submissions"
+                                class="btn-warning"
+                                invisible="operation_mode != 'demo_submissions'"
+                                groups="base.group_system"
+                                title="Generate scrambled demo submissions for every quarterly target in the selected year. For demo/presentation use only."/>
+
+                        <button string="Cancel" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_opms_app_import_wizard" model="ir.actions.act_window">
+            <field name="name">Import APP Matrix</field>
+            <field name="res_model">opms.app.import.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
+

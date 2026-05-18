@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sagovdeclaration_interest_form" model="ir.ui.view">
+        <field name="name">sagovtender.declaration.interest.form</field>
+        <field name="model">sagovtender.declaration.interest</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit Declaration" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="tender_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="user_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="committee_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="committee_role"/>
+                            <field name="declaration_date"/>
+                        </group>
+                    </group>
+                    <group string="Declaration Statement">
+                        <field name="declaration_statement" widget="html" readonly="1"/>
+                        <field name="declaration_acknowledged"/>
+                    </group>
+                    <group string="Conflicts of Interest">
+                        <group>
+                            <field name="has_conflict"/>
+                            <field name="family_relationship"/>
+                            <field name="business_interest"/>
+                        </group>
+                        <group>
+                            <field name="financial_interest"/>
+                            <field name="other_conflict"/>
+                        </group>
+                    </group>
+                    <group invisible="not has_conflict">
+                        <field name="conflict_details" placeholder="Provide details of any conflicts..."/>
+                        <field name="conflicted_partner_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sagovdeclaration_interest" model="ir.actions.act_window">
+        <field name="name">Declarations of Interest</field>
+        <field name="res_model">sagovtender.declaration.interest</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

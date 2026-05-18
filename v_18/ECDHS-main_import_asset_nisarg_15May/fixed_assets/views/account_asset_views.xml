@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.view.tree</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_view_verification" string="Verification" type="object"
+                        icon="fa-bar-chart" />
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_account_asset_tree" model="ir.ui.view">
+        <field name="name">account.asset.view.tree</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <!-- <field name="description"/> -->
+                <field name="serial_number"/>
+                <field name="alternative_ref"/>
+                <!--<field name="condition"/>-->
+                <field name="job_location_id"/>
+                <!--<field name="custodian_department_id"/>-->
+                <field name="custodian_id"/>
+                <field name="minor_major_classification"/>
+                <field name="afs_classification"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

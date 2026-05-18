@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_config_settings_rebranding" model="ir.ui.view">
+        <field name="name">res.config.settings.rebranding</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='general_settings']" position="inside">
+                <block title="Rebranding" name="rebranding_setting_container">
+                    <setting id="replace_powered_by_odoo_setting"
+                             string="Replace Powered by Odoo"
+                             help="Replace the Odoo brand text in website footer promotion.">
+                        <field name="replace_powered_by_odoo"/>
+                        <div class="content-group" invisible="not replace_powered_by_odoo">
+                            <div class="mt16">
+                                <label for="powered_by_text" class="o_light_label"/>
+                                <field name="powered_by_text" placeholder="Your Brand Name" style="margin-left: 6px;"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+                <block title="Background Images" name="rebranding_background_setting_container">
+                    <setting id="login_background_image_setting"
+                             string="Login Screen Background"
+                             help="This image is shown as the login page background.">
+                        <field name="login_background_image" widget="image" class="oe_avatar" options="{'preview_image': 'login_background_image'}"/>
+                    </setting>
+                    <setting id="app_background_image_setting"
+                             string="App Screen Background"
+                             help="This image is shown on the backend app home screen.">
+                        <field name="app_background_image" widget="image" class="oe_avatar" options="{'preview_image': 'app_background_image'}"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,897 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Search View
+    ================================================================= -->
+    <record id="ecdhs_contract_view_search" model="ir.ui.view">
+        <field name="name">ecdhs.contract.search</field>
+        <field name="model">ecdhs.contract</field>
+        <field name="arch" type="xml">
+            <search string="Search Contracts">
+                <field name="name" string="Contract Reference"/>
+                <field name="subject"/>
+                <field name="service_provider_id"/>
+                <field name="end_user_department_id"/>
+                <field name="admin_officer_id"/>
+                <field name="deputy_director_id"/>
+                <separator/>
+                <filter string="All Contracts" name="not_terminated" domain="[]"/>
+                <filter string="Active"         name="active"    domain="[('state','=','active')]"/>
+                <filter string="Due for Renewal" name="expiring" domain="[('state','=','expiring')]"/>
+                <filter string="Awaiting Approval" name="in_approval"
+                        domain="[('state','in',['legal_review','approved'])]"/>
+                <filter string="New Drafts"    name="draft"     domain="[('state','=','draft')]"/>
+                <filter string="Terminated"      name="terminated" domain="[('state','=','terminated')]"/>
+                <separator/>
+                <filter string="SLA"     name="sla"     domain="[('contract_type','=','sla')]"/>
+                <filter string="Lease"   name="lease"   domain="[('contract_type','=','lease')]"/>
+                <filter string="Cession" name="cession" domain="[('contract_type','=','cession')]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status"           name="g_state"    domain="[]" context="{'group_by':'state'}"/>
+                    <filter string="Contract Type"    name="g_type"     domain="[]" context="{'group_by':'contract_type'}"/>
+                    <filter string="Service Provider" name="g_provider" domain="[]" context="{'group_by':'service_provider_id'}"/>
+                    <filter string="Department"       name="g_dept"     domain="[]" context="{'group_by':'end_user_department_id'}"/>
+                    <filter string="Start Date"       name="g_start"    domain="[]" context="{'group_by':'date_start:month'}"/>
+                    <filter string="End Date"         name="g_end"      domain="[]" context="{'group_by':'date_end:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         List View  (Contracts Register)
+    ================================================================= -->
+    <record id="ecdhs_contract_view_list" model="ir.ui.view">
+        <field name="name">ecdhs.contract.list</field>
+        <field name="model">ecdhs.contract</field>
+        <field name="arch" type="xml">
+            <list string="Contracts Register"
+                  decoration-danger="state == 'expiring'"
+                  decoration-muted="state in ('terminated','cancelled')">
+                <field name="name"/>
+                <field name="contract_type"/>
+                <field name="subject"/>
+                <field name="service_provider_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('active','provider_accepted')"
+                       decoration-warning="state in ('expiring','provider_changes_requested')"
+                       decoration-danger="state in ('terminated','cancelled','provider_rejected')"
+                       decoration-info="state in ('draft','verified','contract_drafted','legal_review','approved','provider_review_sent','signing')"/>
+                <field name="original_contract_value" widget="monetary" optional="show"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="end_user_department_id" optional="hide" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="deputy_director_id" optional="hide" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="admin_officer_id" optional="hide" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="kanban_state" widget="state_selection" optional="show"/>
+                <field name="activity_ids" widget="list_activity" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Kanban View
+    ================================================================= -->
+    <record id="ecdhs_contract_view_kanban" model="ir.ui.view">
+        <field name="name">ecdhs.contract.kanban</field>
+        <field name="model">ecdhs.contract</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" quick_create="false" sample="1">
+                <field name="state"/>
+                <field name="contract_type"/>
+                <field name="currency_id"/>
+                <field name="contract_value"/>
+                <field name="date_end"/>
+                <!-- <field name="is_indefinite"/> -->
+                <field name="kanban_state"/>
+                <field name="activity_ids"/>
+                <field name="activity_state"/>
+                <progressbar field="activity_state"
+                             colors='{"planned":"success","today":"warning","overdue":"danger"}'/>
+                <templates>
+                    <t t-name="card">
+                        <div class="fw-bolder text-truncate">
+                            <field name="name"/>
+                        </div>
+                        <div class="text-muted small text-truncate">
+                            <field name="subject"/>
+                        </div>
+                        <div class="mt-1">
+                            <field name="service_provider_id"/>
+                        </div>
+                        <footer>
+                            <span class="small text-muted" t-if="!record.is_indefinite.raw_value">
+                                <field name="date_end"/>
+                            </span>
+                            <span class="small text-muted" t-if="record.is_indefinite.raw_value">Open-ended</span>
+                            <field name="kanban_state" class="ms-auto" widget="state_selection"/>
+                            <field name="activity_ids" widget="kanban_activity" class="ms-1"/>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Form View
+    ================================================================= -->
+    <record id="ecdhs_contract_view_form" model="ir.ui.view">
+        <field name="name">ecdhs.contract.form</field>
+        <field name="model">ecdhs.contract</field>
+        <field name="arch" type="xml">
+            <form string="Procurement Contract">
+                <header>
+                        <button name="action_save_as_template" type="object"
+                            string="Save As Template"
+                            invisible="not contract_terms_summary"
+                            class="btn-secondary"/>
+
+                        <button name="action_save_version" type="object"
+                            string="Save Version"
+                            invisible="not contract_terms_summary or state not in ('draft','verified','contract_drafted','legal_review','changes_requested')"
+                            class="btn-secondary"/>
+
+                    <button name="action_open_request_changes_wizard" type="object"
+                        string="Request Changes"
+                        invisible="state not in ('legal_review','approved')"
+                        class="btn-warning"/>
+
+                        <button name="action_changes_completed" type="object"
+                            string="Changes Completed"
+                            invisible="state != 'changes_requested'"
+                            class="btn-primary"/>
+
+                    <!-- ── Workflow buttons (Odoo 17/18 direct-attribute syntax) ── -->
+                    <button name="action_draft_contract" type="object"
+                            string="Finish Drafting Contract"
+                            invisible="state != 'draft'"
+                            class="btn-primary"/>
+
+                    <button name="action_verify_documents" type="object"
+                            string="Verify Documents"
+                            invisible="state != 'contract_drafted'"
+                            class="btn-primary"/>
+
+                    <button name="action_send_to_legal" type="object"
+                            string="Send for Vetting"
+                            invisible="state != 'verified'"
+                            class="btn-primary"/>
+
+                    <button name="action_approve" type="object"
+                            string="Vetting Approved"
+                            invisible="state != 'legal_review'"
+                            class="btn-primary"/>
+
+                    <button name="action_convene_signing" type="object"
+                            string="Convene Signing"
+                            invisible="state != 'provider_accepted'"
+                            class="btn-primary"/>
+
+                            <button name="action_restart_signing" type="object"
+                                    string="Restart Signing"
+                                    invisible="state not in ('signing', 'signature_refused')"
+                                    class="btn-warning"
+                                    confirm="This will cancel the current signature request and restart the signing process. Continue?"/>
+
+                            <button name="action_send_to_provider_review" type="object"
+                                string="Send Draft to Provider"
+                                invisible="state not in ('approved','provider_rejected')"
+                                class="btn-primary"/>
+
+                            <!-- <button name="action_mark_provider_changes_requested" type="object"
+                                string="Provider Requested Changes"
+                                invisible="state != 'provider_review_sent'"
+                                class="btn-secondary"/> -->
+
+                            <button name="action_issue_revised_draft" type="object"
+                                string="Issue Revised Draft"
+                                invisible="state not in ('provider_changes_requested','provider_rejected')"
+                                class="btn-primary"/>
+
+                            <!-- <button name="action_mark_provider_accepted" type="object"
+                                string="Provider Accepted"
+                                invisible="state not in ('provider_review_sent','provider_changes_requested')"
+                                class="btn-success"/> -->
+
+                            <!-- <button name="action_mark_provider_rejected" type="object"
+                                string="Provider Rejected"
+                                invisible="state != 'provider_review_sent'"
+                                class="btn-danger"/> -->
+
+                    <button name="action_send_cover_letter" type="object"
+                            string="Send Contract Cover Letter to HOD"
+                            invisible="state != 'fully_signed' or memo_id == False"
+                            class="btn-primary"/>
+
+                    <button name="action_resend_cover_letter" type="object"
+                            string="Resend Contract Cover Letter to HOD"
+                            invisible="state not in ('cover_letter_sent', 'cover_letter_rejected') or memo_id == False"
+                            class="btn-primary"/>
+
+                    <button name="action_activate" type="object"
+                            string="Mark as Active"
+                            invisible="state not in ('cover_letter_signed')"
+                            class="btn-primary"/>
+
+                    <button name="action_terminate" type="object"
+                            string="Terminate Contract"
+                            invisible="state not in ('active','expiring')"
+                            class="btn-danger"/>
+
+                    <button name="action_set_draft" type="object"
+                            string="Reset to Draft"
+                            invisible="state != 'cancelled'"
+                            class="btn-secondary"/>
+
+                    <button name="action_cancel" type="object"
+                            string="Cancel"
+                            invisible="state in ('active','expiring','terminated','cancelled')"
+                            class="btn-secondary"/>
+
+
+                          <field name="state" widget="statusbar"/>
+                              <!-- statusbar_visible="draft,verified,contract_drafted,legal_review,approved,provider_review_sent,provider_changes_requested,provider_rejected,provider_accepted,signing,fully_signed,cover_letter_sent,cover_letter_signed,cover_letter_rejected,active"/> -->
+                </header>
+
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                            --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                            border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                            border-color: black !important;
+                        }
+                        .contract_template_label,
+                        .contract_template_label.o_form_label,
+                        label.contract_template_label {
+                            color: #ff0000 !important;
+                            font-weight: 700 !important;
+                        }
+                        .addendum_template_label,
+                        .addendum_template_label.o_form_label,
+                        label.addendum_template_label {
+                            color: #ff0000 !important;
+                            font-weight: 700 !important;
+                        }
+                    </style>
+                    <!-- Smart buttons -->
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_addenda" icon="fa-file-text-o"
+                                invisible="addendum_count == 0">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value"><field name="addendum_count"/></span>
+                                <span class="o_stat_text">Addenda</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_payments" icon="fa-credit-card"
+                            invisible="payment_count == 0 or state not in ('active','expiring','terminated','cancelled')">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value"><field name="payment_count"/></span>
+                                <span class="o_stat_text">Payments</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_monitoring" icon="fa-bar-chart"
+                                invisible="monitoring_count == 0 or state not in ('active','expiring','terminated','cancelled')">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value"><field name="monitoring_count"/></span>
+                                <span class="o_stat_text">Monitoring</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_change_requests" icon="fa-exchange"
+                                invisible="change_request_count == 0">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value"><field name="change_request_count"/></span>
+                                <span class="o_stat_text">Change Requests</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_versions" icon="fa-history">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value"><field name="version_count"/></span>
+                                <span class="o_stat_text">Versions</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Status ribbons -->
+                    <widget name="web_ribbon" title="Archived"          bg_color="text-bg-danger"   invisible="active"/>
+                    <widget name="web_ribbon" title="Active"            bg_color="text-bg-success"  invisible="state != 'active'"/>
+                    <widget name="web_ribbon" title="Expiring Soon"      bg_color="text-bg-warning"  invisible="state != 'expiring'"/>
+                    <widget name="web_ribbon" title="Terminated"         bg_color="text-bg-secondary" invisible="state != 'terminated'"/>
+                    <widget name="web_ribbon" title="Fully Signed"       bg_color="text-bg-success"  invisible="state != 'fully_signed'"/>
+                    <widget name="web_ribbon" title="Cover Letter Sent"   bg_color="text-bg-warning"  invisible="state != 'cover_letter_sent'"/>
+                    <widget name="web_ribbon" title="Cover Letter Signed" bg_color="text-bg-success"  invisible="state != 'cover_letter_signed'"/>
+                    <widget name="web_ribbon" title="Cover Letter Rejected" bg_color="text-bg-danger" invisible="state != 'cover_letter_rejected'"/>
+                    <widget name="web_ribbon" title="Signature Refused"  bg_color="text-bg-danger"   invisible="state != 'signature_refused'"/>
+
+                    <!-- Title -->
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <field name="kanban_state" widget="state_selection" readonly="state not in ('draft','verified','contract_drafted')"/>
+                    </div>
+
+                    <!-- Top group -->
+                    <group readonly="state not in ('draft','verified','contract_drafted')">
+                        <group string="Contract Details">
+                            <label for="contract_template_id" string="Contract Template" class="contract_template_label"
+                                               options="{'no_open': True, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="contract_template_id" nolabel="1" required="1" readonly="state not in ('draft','verified','contract_drafted')"
+                                               options="{'no_open': True, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="contract_type" required="1" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="municipality_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}" readonly="state not in ('draft','verified','contract_drafted')" invisible="contract_type not in ('funding_agreement')"/>
+                            <field name="region_id" readonly="1" options="{'no_open': True}" invisible="contract_type not in ('funding_agreement')"/>
+                            <field name="service_provider_id" required="1" readonly="state not in ('draft','verified','contract_drafted')" invisible="contract_type in ('funding_agreement')"
+                                               options="{'no_open': True, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="service_provider_contact" required="1" readonly="state not in ('draft','verified','contract_drafted')" invisible="contract_type in ('funding_agreement')"
+                                               options="{'no_open': True, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="service_provider_id" string="Municipal Manager" required="1" readonly="state not in ('draft','verified','contract_drafted')" invisible="contract_type not in ('funding_agreement')"
+                                               options="{'no_open': True, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="service_provider_contact" string="Municipal Contact Details" required="1" readonly="state not in ('draft','verified','contract_drafted')" invisible="contract_type not in ('funding_agreement')"
+                                               options="{'no_open': True, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="subject" required="1" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="bid_reference" invisible="contract_type in ('funding_agreement')" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="scmu_number" invisible="contract_type in ('funding_agreement')" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <div class="mt-2">
+                                <div>
+                                    <div class="o_form_label fw-bold mb-1">Draft (Unsigned) Contract</div>
+                                    <div class="d-flex gap-2">
+                                        <button name="action_print_contract" type="object"
+                                                string="Preview (Draft) Contract"
+                                                invisible="state in ('draft')"
+                                                class="btn-warning"
+                                                icon="fa-eye"/>
+                                    </div>
+                                </div>
+                            <div invisible="provider_signed_document_attachment_id == False" class="mt-2">
+                                    <div class="o_form_label fw-bold mb-1">Signed Contract</div>
+                                    <div class="d-flex gap-2">
+                                        <button name="action_preview_provider_signed_document" type="object"
+                                                string="Preview Signed Contract"
+                                                class="btn-info"
+                                                icon="fa-eye"/>
+                                        <!-- DISABLED - re-enable when needed
+                                        <button name="action_view_provider_signed_document" type="object"
+                                                string="Download Provider Signed Contract"
+                                                class="btn-success"
+                                                icon="fa-download"/>
+                                        -->
+                                    </div>
+                                </div>
+                                <div invisible="signed_document_attachment_id == False" class="mt-2">
+                                    <div class="o_form_label fw-bold mb-1">Signed (HOD) Cover Letter</div>
+                                    <div class="d-flex gap-2">
+                                        <button name="action_preview_signed_document" type="object"
+                                                string="Preview Signed (HOD) Cover Letter"
+                                                class="btn-success"
+                                                icon="fa-eye"/>
+                                        <!-- DISABLED - re-enable when needed
+                                        <button name="action_view_signed_document" type="object"
+                                                string="Download Signed (HOD) Cover Letter"
+                                                class="btn-success"
+                                                icon="fa-download"/>
+                                        -->
+                                    </div>
+                                </div>
+                            </div>
+                        </group>
+                        <group string="Parties">
+                            <field name="end_user_department_id" required="1" readonly="state not in ('draft','verified','contract_drafted')"
+                                    options="{'no_open': True, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="end_user_id" readonly="state not in ('draft','verified','contract_drafted')"
+                                options="{'no_open': True, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="legal_reviewer_id"
+                                   required="state in ('contract_drafted','legal_review')"
+                                   readonly="state not in ('draft','verified','contract_drafted')"
+                                   options="{'no_open': True, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="jbcc_required" readonly="state not in ('draft','verified','contract_drafted')"
+                                widget="boolean_toggle"
+                                invisible="contract_type != 'funding_agreement'"/>
+                            <field name="jbcc_upload_file" readonly="state not in ('draft','verified','contract_drafted')"
+                                filename="jbcc_upload_filename"
+                                required="contract_type == 'funding_agreement' and jbcc_required"
+                                invisible="contract_type != 'funding_agreement' or not jbcc_required"/>
+                            <field name="jbcc_upload_filename" invisible="1"/>
+                            <field name="gcc_required"
+                                widget="boolean_toggle"
+                                readonly="state not in ('draft','verified','contract_drafted')"
+                                invisible="contract_type != 'funding_agreement'"/>
+                            <field name="gcc_upload_file"
+                                filename="gcc_upload_filename"
+                                required="contract_type == 'funding_agreement' and gcc_required"
+                                readonly="state not in ('draft','verified','contract_drafted')"
+                                invisible="contract_type != 'funding_agreement' or not gcc_required"/>
+                            <field name="gcc_upload_filename" invisible="1"/>
+                            <field name="verify_without_jbcc_confirmed" invisible="1"/>
+                            <field name="verify_without_gcc_confirmed" invisible="1"/>
+                            <field name="memo_id"
+                                options="{'no_open': False, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"
+                                readonly="state in ('draft','cover_letter_sent','cover_letter_signed','cover_letter_rejected','active','expiring','terminated','cancelled')"
+                                invisible="state in ('draft')"/>
+                            <field name="company_id" readonly="state not in ('draft','verified','contract_drafted')"
+                                options="{'no_open': True, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="folder_id" widget="documents_folder_many2one"/>
+                            <field name="create_date" readonly="1"/>
+                            <field name="contract_date" required="0" readonly="1" invisible="1"/>
+                            <field name="sign_request_id"
+                                   readonly="1"
+                                   options="{'no_open': False, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="signed_document_attachment_id" invisible="1"/>
+                            <field name="provider_signed_document_attachment_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <group readonly="state not in ('draft','verified','contract_drafted')">
+                        <group string="Contract Period">
+                            <field name="date_start" required="1" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="contract_period_months" invisible="is_indefinite" required="not is_indefinite" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="date_end" invisible="is_indefinite" readonly="1"/>
+                            <!-- <field name="is_indefinite" readonly="state not in ('draft','verified','contract_drafted')"/> -->
+                            <field name="days_to_expiry"
+                                   invisible="is_indefinite or state in ('terminated','cancelled')"
+                                   string="Days to Expiry"
+                                   decoration-danger="days_to_expiry &lt; 90"
+                                   decoration-warning="days_to_expiry &lt; 180"/>
+                            <field name="termination_date" invisible="state not in ('terminated','cancelled')" readonly="1"/>
+                            <field name="termination_reason" invisible="state not in ('terminated','cancelled')" readonly="1"/>
+                        </group>
+                        <group string="Financial">
+                            <field name="original_contract_value" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="contract_value" string="Remaining Contract Balance" required="0" invisible="1" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="finance_link" widget="url"/>
+                            <!-- <field name="annual_value" required="1" readonly="state not in ('draft','verified','contract_drafted')"/> -->
+                            <!-- <field name="budget_account" readonly="state not in ('draft','verified','contract_drafted')"/> -->
+                            <field name="currency_id" invisible="1"/>
+                            <!-- <field name="requires_delegated_approval" widget="boolean" readonly="1"/> -->
+                        </group>
+                    </group>
+                    <!-- <group invisible="contract_type in ('funding_agreement')" readonly="state not in ('draft','verified','contract_drafted')">
+                        <group string="Drafting and Procurement Basis">
+                            <field name="procurement_method" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="preference_point_system" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="bbbee_level" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="delegated_authority_ref" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="treasury_instruction_ref" readonly="state not in ('draft','verified','contract_drafted')"/>
+                        </group>
+                        <group string="Supporting Documents Checklist  –  SOP Steps 1 &amp; 2">
+                            <field name="bid_spec_attached"          widget="boolean_toggle" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="ecbd4_attached"             widget="boolean_toggle" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="tax_clearance_valid"        widget="boolean_toggle" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="company_documents_obtained" widget="boolean_toggle" readonly="state not in ('draft','verified','contract_drafted')"/>
+                            <field name="all_documents_verified"     widget="boolean_toggle" readonly="1"/>
+                        </group>
+                    </group> -->
+
+                    <notebook>
+                        <page string="Contract Document" name="contract_document_tab" readonly="state not in ('draft','verified','contract_drafted','changes_requested')">
+                            <group string="Draft Contract Terms">
+                                <field name="contract_terms_summary" nolabel="1" readonly="state not in ('draft','verified','contract_drafted','changes_requested')"/>
+                            </group>
+                        </page>
+
+                        <page string="Annexures" name="annexures_appendices">
+                            <field name="annexure_document_upload_ids"
+                                   mode="list,form"
+                                   context="{'default_document_type': 'annexure'}"
+                                   readonly="state not in ('draft','verified','contract_drafted')">
+                                <list editable="bottom" decoration-info="sequence">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="document_type" column_invisible="1"/>
+                                    <field name="attachment_id" column_invisible="1"/>
+                                    <field name="file_name" column_invisible="1"/>
+                                    <field name="datas" filename="file_name" string="File"/>
+                                    <field name="name" string="Document Name" readonly="1"/>
+                                    <field name="annexure_sequence_name" string="Annexure / Appendices" readonly="1"/>
+                                    <button name="action_preview_document" type="object" string="Preview"
+                                            class="btn-primary" invisible="attachment_id == False"/>
+                                </list>
+                                <form>
+                                    <field name="document_type" invisible="1"/>
+                                    <field name="sequence"/>
+                                    <field name="attachment_id" invisible="1"/>
+                                    <field name="file_name" invisible="1"/>
+                                    <field name="annexure_sequence_name" readonly="1"/>
+                                    <field name="datas"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="folder_id" widget="documents_folder_many2one"/>
+                                </form>
+                            </field>
+                        </page>
+
+                        <page string="Supporting Documents" name="documentation">
+                            <field name="supporting_document_upload_ids"
+                                   mode="list,form"
+                                   context="{'default_document_type': 'supporting'}">
+                                <list editable="bottom" decoration-info="sequence">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="document_type" column_invisible="1"/>
+                                    <field name="attachment_id" column_invisible="1"/>
+                                    <field name="file_name" column_invisible="1"/>
+                                    <field name="datas" filename="file_name" string="File"/>
+                                        <field name="name" string="Document Name" readonly="1"/>
+                                        <field name="annexure_sequence_name" string="Supporting Document" readonly="1"/>
+                                    <button name="action_preview_document" type="object" string="Preview"
+                                            class="btn-primary" invisible="attachment_id == False"/>
+                                </list>
+                                <form>
+                                    <field name="document_type" invisible="1"/>
+                                    <field name="sequence"/>
+                                    <field name="attachment_id" invisible="1"/>
+                                    <field name="file_name" invisible="1"/>
+                                    <field name="annexure_sequence_name" readonly="1"/>
+                                    <field name="datas"/>
+                                    <field name="name" readonly="1"/>
+                                     <field name="folder_id" widget="documents_folder_many2one"/>
+                                </form>
+                            </field>
+                        </page>
+
+                        <page string="Signatories" name="officials">
+                            <group string="Signatories">
+                                <field name="signatory_ids" nolabel="1" context="{'default_contract_id': id}"
+                                       readonly="state in ('signing','fully_signed','cover_letter_sent','cover_letter_signed','cover_letter_rejected','active','expiring','terminated','cancelled','signature_refused')">
+                                    <list editable="bottom"
+                                          decoration-success="status == 'Signed'"
+                                          decoration-warning="status == 'Pending'"
+                                          decoration-danger="status == 'Declined'">
+                                        <field name="existing_user_ids" column_invisible="1"/>
+                                        <field name="is_service_provider" column_invisible="1"/>
+                                        <field name="sequence" widget="handle" invisible="is_service_provider"/>
+                                        <field name="sequence" string="#" readonly="1" invisible="not is_service_provider"/>
+                                        <field name="partner_id" string="Service Provider"
+                                               readonly="1"
+                                               invisible="not is_service_provider"
+                                               options="{'no_open': True}"/>
+                                        <field name="user_id" string="Signatory"
+                                               invisible="is_service_provider"
+                                               required="not is_service_provider"
+                                               readonly="parent.state in ('signing','fully_signed','cover_letter_sent','cover_letter_signed','cover_letter_rejected','active','expiring','terminated','cancelled','signature_refused')"
+                                               options="{'no_open': True, 'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                        <field name="role_designation"
+                                               required="not is_service_provider"
+                                               readonly="is_service_provider or parent.state in ('signing','fully_signed','cover_letter_sent','cover_letter_signed','cover_letter_rejected','active','expiring','terminated','cancelled','signature_refused')"/>
+                                        <field name="required" widget="boolean_toggle" readonly="is_service_provider or parent.state in ('signing','fully_signed','cover_letter_sent','cover_letter_signed','cover_letter_rejected','active','expiring','terminated','cancelled','signature_refused')"/>
+                                        <field name="status" widget="badge"
+                                               decoration-success="status == 'Signed'"
+                                               decoration-warning="status == 'Pending'"
+                                               decoration-danger="status == 'Declined'"/>
+                                        <field name="comment" readonly="is_service_provider"/>
+                                                                                <field name="comment" readonly="is_service_provider or parent.state in ('signing','fully_signed','cover_letter_sent','cover_letter_signed','cover_letter_rejected','active','expiring','terminated','cancelled','signature_refused')"/>
+                                        <field name="date" string="Signed On" readonly="1"/>
+                                        <field name="sign_initials" widget="image" options="{'size': [0, 50]}" readonly="1"/>
+                                        <button string="Sign" type="object" name="action_sign_line"
+                                                invisible="is_service_provider or sign_initials != False or user_id == False"/>
+                                    </list>
+                                </field>
+                            </group>
+
+                            <group string="Provider Collaboration Workflow">
+                                <group>
+                                    <field name="state" widget="statusbar"
+                                           statusbar_visible="approved,changes_requested,provider_review_sent,provider_changes_requested,provider_rejected,provider_accepted,signing,fully_signed"
+                                           readonly="1"/>
+                                    <field name="provider_review_state" readonly="1" invisible="1"/>
+                                    <field name="provider_review_due_date" readonly="1"/>
+                                    <field name="draft_version" readonly="1"/>
+                                    <field name="draft_revision_count" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="provider_last_sent_datetime" readonly="1"/>
+                                    <field name="provider_last_response_datetime" readonly="1"/>
+                                    <field name="provider_acceptance_datetime" readonly="1"/>
+                                    <field name="provider_review_url" widget="url" readonly="1"/>
+                                </group>
+                            </group>
+
+                            <!--<group string="Section-level Signatures (Enforced)">
+                                <field name="all_required_signatures_done" readonly="1"/>
+                                <button name="action_sign_internal_required_sections"
+                                        type="object"
+                                        string="Sign Internal Required Sections"
+                                        class="btn-secondary"
+                                        invisible="state != 'signing'"/>
+                                <field name="signature_section_ids" nolabel="1" context="{'default_contract_id': id}">
+                                    <list editable="bottom" default_order="sequence">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="section_reference"/>
+                                        <field name="provider_signature_required" widget="boolean"/>
+                                        <field name="provider_signed" widget="boolean_toggle"/>
+                                        <field name="provider_signed_on"/>
+                                        <field name="provider_signatory_name"/>
+                                        <field name="internal_signature_required" widget="boolean"/>
+                                        <field name="internal_signed" widget="boolean_toggle"/>
+                                        <field name="internal_signed_on"/>
+                                        <field name="internal_signatory_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="signed_section_file" filename="signed_section_filename"/>
+                                        <field name="signed_section_filename" invisible="1"/>
+                                    </list>
+                                </field>
+                            </group> -->
+
+                            <!-- <group>
+                                <group string="Responsible Officials  –  SOP Steps 8-11">
+                                    <field name="admin_officer_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="assistant_director_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="deputy_director_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="legal_reviewer_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="cfo_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="delegated_official_id"
+                                        required="requires_delegated_approval and state in ('legal_review','approved','signing','active','expiring')"
+                                        options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                </group>
+                                <group string="SOP Approval Trail (Manual Sign-off Record)">
+                                        <field name="compiled_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="compiled_date"/>
+                                        <field name="recommended_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="recommended_date"/>
+                                        <field name="supported_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="supported_date"/>
+                                </group>
+                            </group> -->
+                        </page>
+
+                        <page string="Addendums" name="addendums"
+                                    readonly="state in ('terminated','cancelled')"
+                                    invisible="state not in ('active','expiring','terminated','cancelled')">
+                            <field name="addendum_ids"
+                                    readonly="state in ('terminated','cancelled')"
+                                    context="{'default_contract_id': id, 'form_view_ref': 'ecdhs_contract_management.ecdhs_contract_addendum_view_form'}">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="addendum_type"/>
+                                    <field name="variation_amount" widget="monetary"/>
+                                    <field name="variation_percentage" string="Variation %" digits="[5,1]"/>
+                                    <field name="variation_exceeds_limit" widget="boolean"/>
+                                    <field name="signed_document_attachment_id" column_invisible="1"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'signed'"
+                                           decoration-warning="state in ('submitted','approved')"
+                                           decoration-danger="state == 'rejected'"/>
+                                    <button name="action_preview_addendum" type="object" string="Preview" class="btn-primary"/>
+                                    <button name="action_view_signed_addendum" type="object"
+                                            string="Download Signed Addendum"
+                                            class="btn-success"
+                                            icon="fa-download"
+                                            invisible="signed_document_attachment_id == False"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Contract Reviews" name="monitoring_tab"
+                                      readonly="state in ('terminated','cancelled')"
+                                      invisible="state not in ('active','expiring','terminated','cancelled')">
+                            <field name="monitoring_ids" context="{'default_contract_id': id}"
+                                      readonly="state in ('terminated','cancelled')">
+                                <list default_order="monitoring_date desc"
+                                      decoration-danger="non_compliance_found"
+                                      decoration-muted="state == 'acknowledged'">
+                                    <field name="monitoring_date"/>
+                                    <field name="monitoring_type"/>
+                                    <field name="conducted_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="sla_compliant" widget="boolean"/>
+                                    <field name="non_compliance_found" widget="boolean"/>
+                                    <field name="penalty_applicable" widget="boolean"/>
+                                    <field name="penalty_amount" widget="monetary"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="termination_recommended" widget="boolean"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'acknowledged'"
+                                           decoration-warning="state == 'submitted'"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Change Requests" name="change_requests_tab">
+                            <group>
+                                <field name="change_request_count" readonly="1"/>
+                                <field name="change_request_ids" nolabel="1" readonly="1" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}" context="{'default_contract_id': id}">
+                                    <list default_order="sequence" create="0" edit="0" delete="0" open_form_view="0">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="section_reference" readonly="1"/>
+                                        <field name="requested_change" readonly="1"/>
+                                        <field name="submitted_by" readonly="1"/>
+                                        <field name="status" widget="badge"/>
+                                        <field name="requested_on" readonly="1"/>
+                                        <field name="due_date" readonly="1"/>
+                                        <field name="response_note" readonly="1"/>
+                                        <field name="resolved_by_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                        <field name="resolved_on" readonly="1"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Versions" name="contract_versions_tab">
+                            <field name="version_ids" nolabel="1" readonly="1" context="{'default_contract_id': id}">
+                                <list create="0" delete="0" default_order="id desc">
+                                    <field name="version_number"/>
+                                    <field name="comment"/>
+                                    <field name="created_by" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                                    <field name="date"/>
+                                    <button name="action_revert_version" type="object" string="Revert" class="btn-primary"
+                                            invisible="parent.state in ('fully_signed','cover_letter_sent','cover_letter_signed','active','expiring','terminated','cancelled')"
+                                            confirm="Are you sure you want to revert contract terms to this version? This will overwrite the current draft terms."/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- <page string="Bid Documentation" name="bid_docs" invisible="contract_type in ('funding_agreement')">
+                            <group string="Legislative Compliance Checklist">
+                                <group>
+                                    <field name="constitution_s217_checked" widget="boolean_toggle"/>
+                                    <field name="pfma_checked" widget="boolean_toggle"/>
+                                    <field name="pppfa_checked" widget="boolean_toggle"/>
+                                    <field name="bbbee_checked" widget="boolean_toggle"/>
+                                </group>
+                                <group>
+                                    <field name="public_admin_act_checked" widget="boolean_toggle"/>
+                                    <field name="paia_checked" widget="boolean_toggle"/>
+                                    <field name="treasury_regulations_checked" widget="boolean_toggle"/>
+                                    <field name="practice_notes_checked" widget="boolean_toggle"/>
+                                </group>
+                            </group>
+                            <group string="Mandatory Clause Matrix">
+                                <field name="mandatory_clause_ok" readonly="1"/>
+                                <field name="clause_ids" nolabel="1" context="{'default_contract_id': id}">
+                                    <list editable="bottom" default_order="sequence">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="legislative_reference"/>
+                                        <field name="required" widget="boolean"/>
+                                        <field name="confirmed" widget="boolean_toggle"/>
+                                        <field name="evidence_reference"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </page> -->
+
+                        <!-- <page string="Invoices Raised" name="invoices_tab"
+                            invisible="state not in ('legal_review','active','expiring','terminated','cancelled')">
+                            <field name="payment_ids" context="{'default_contract_id': id}">
+                                <list decoration-danger="state == 'rejected'"
+                                      decoration-success="state == 'paid'"
+                                      decoration-muted="state == 'rejected'">
+                                    <field name="name"/>
+                                    <field name="invoice_date"/>
+                                    <field name="service_period"/>
+                                                                        <field name="original_contract_value" widget="monetary" optional="show"/>
+                                    <field name="invoice_amount" widget="monetary"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="vendor_bill_id"
+                                           options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="verified_by_id"
+                                           options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'paid'"
+                                           decoration-warning="state == 'verified'"
+                                           decoration-danger="state == 'rejected'"/>
+                                </list>
+                            </field>
+                        </page> -->
+
+                        <!-- <page string="Notes" name="notes_tab"
+                            invisible="state not in ('legal_review','active','expiring','terminated','cancelled')">
+                            <field name="notes" placeholder="Add internal notes…"/>
+                        </page> -->
+
+                        <!-- <page string="Provider Collaboration" name="provider_collaboration"
+                            invisible="state not in ('active','expiring','terminated','cancelled')">
+                        </page> -->
+
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Window Actions
+    ================================================================= -->
+    <record id="action_ecdhs_contract" model="ir.actions.act_window">
+        <field name="name">Contracts Register</field>
+        <field name="path">ecdhs-contracts</field>
+        <field name="res_model">ecdhs.contract</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{'search_default_not_terminated': 1}</field>
+        <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No contracts found
+            </p>
+            <p>
+                Create a new contract to begin the procurement contract management process.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_ecdhs_contract_active" model="ir.actions.act_window">
+        <field name="name">Active Contracts</field>
+        <field name="res_model">ecdhs.contract</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('state','=','active')]</field>
+        <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+    </record>
+
+    <record id="action_ecdhs_contract_expiring" model="ir.actions.act_window">
+        <field name="name">Due for Renewal</field>
+        <field name="res_model">ecdhs.contract</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('state','=','expiring')]</field>
+        <field name="search_view_id" ref="ecdhs_contract_view_search"/>
+    </record>
+
+    <!-- Report action: Contract Document PDF -->
+    <record id="action_report_contract_document" model="ir.actions.report">
+        <field name="name">Contract Document</field>
+        <field name="model">ecdhs.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ecdhs_contract_management.report_contract_document_template</field>
+        <field name="report_file">ecdhs_contract_management.report_contract_document_template</field>
+        <field name="print_report_name">(object.name or 'Contract') + ' - Contract Document'</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <record id="action_report_contract_document_draft_preview" model="ir.actions.report">
+        <field name="name">Draft Contract Preview</field>
+        <field name="model">ecdhs.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ecdhs_contract_management.report_contract_document_draft_template</field>
+        <field name="report_file">ecdhs_contract_management.report_contract_document_draft_template</field>
+        <field name="print_report_name">(object.name or 'Contract') + ' - Draft Preview'</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <!-- Internal report action: Annexure Cover Page (used programmatically by the PDF merge) -->
+    <record id="action_report_annexure_cover" model="ir.actions.report">
+        <field name="name">Annexure Cover</field>
+        <field name="model">ecdhs.contract.document.upload</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ecdhs_contract_management.report_annexure_cover_template</field>
+        <field name="report_file">ecdhs_contract_management.report_annexure_cover_template</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <!-- Internal report action: Addendum Cover Page (used programmatically by the PDF merge) -->
+    <record id="action_report_addendum_cover" model="ir.actions.report">
+        <field name="name">Addendum Cover</field>
+        <field name="model">ecdhs.contract.addendum</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ecdhs_contract_management.report_addendum_cover_template</field>
+        <field name="report_file">ecdhs_contract_management.report_addendum_cover_template</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <!-- Internal report action: Addendum Content Page (used programmatically by the PDF merge) -->
+    <record id="action_report_addendum_content" model="ir.actions.report">
+        <field name="name">Addendum Content</field>
+        <field name="model">ecdhs.contract.addendum</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ecdhs_contract_management.report_addendum_content_template</field>
+        <field name="report_file">ecdhs_contract_management.report_addendum_content_template</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+</odoo>

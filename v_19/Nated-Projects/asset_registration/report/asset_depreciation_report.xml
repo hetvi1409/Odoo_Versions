@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_account_asset_depreciation_report"
+                model="ir.actions.report">
+            <field name="name">Asset Depreciation report</field>
+            <field name="model">account.asset</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">asset_registration.account_asset_depreciation_report</field>
+            <field name="report_file">asset_registration.account_asset_depreciation_report</field>
+            <field name="print_report_name">'Asset Depreciation - %s' % object.name</field>
+            <field name="binding_model_id" ref="model_account_asset"/>
+            <field name="binding_type">report</field>
+        </record>
+        <template id="account_asset_depreciation_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div>
+                            <center><h2>Asset Depreciation</h2></center>
+                            <table class="table">
+                                <tbody class="order_body">
+                                    <tr>
+                                        <td>
+                                            <strong>Name of asset:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.name"/>
+                                        </td>
+                                        <td>
+                                            <strong>Description:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.description"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Original value:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.original_value"/>
+                                        </td>
+                                        <td>
+                                            <strong>Acquisition Date:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.acquisition_date"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Opening Cost:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.opening_cost"/>
+                                        </td>
+                                        <td>
+                                            <strong>Not Depreciable Value:
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.salvage_value"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h4>Asset Depreciation Lines</h4>
+
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th class="text-right">Date</th>
+                                        <th class="text-right">Reference</th>
+                                        <th class="text-right">Depreciation</th>
+                                        <th class="text-right">Cumulative Depreciation</th>
+                                        <th class="text-right">Depreciable Value</th>
+                                        <th class="text-right">Journal Entry</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="doc.depreciation_move_ids"
+                                        t-as="depreciation">
+                                        <td>
+                                            <span t-esc="depreciation.date"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="depreciation.ref"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="depreciation.depreciation_value"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="depreciation.asset_depreciated_value"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="depreciation.asset_remaining_value"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="depreciation.name"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+</odoo>

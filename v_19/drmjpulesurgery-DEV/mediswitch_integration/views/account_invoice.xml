@@ -1,0 +1,117 @@
+<odoo>
+    <record id="inherit_invoice_form_mediswitch_search" model="ir.ui.view">
+        <field name="name">Customer Invoice</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//filter[@name='salesperson']" position="after">
+                <filter string="Medical Aid" name="med_aid" context="{'group_by':'medical_scheme'}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+<!--    <record id="inherit_invoice_form_mediswitch_1" model="ir.ui.view">-->
+<!--        <field name="name">Customer Invoice</field>-->
+<!--        <field name="model">account.move</field>-->
+<!--        <field name="inherit_id" ref="account.view_move_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="company_id" position="after">-->
+<!--                <field name="medical_aid_pay" invisible="1"/>-->
+<!--                <field name="user_ref" invisible="1"/>-->
+<!--                <field name="authorization_code"/>-->
+<!--                <field name="benefit_check" invisible="1"/>-->
+<!--            </field>-->
+<!--            <button name="action_post" position="after">-->
+<!--                <button name="action_submit_claim" type="object" string="Submit Claim"-->
+<!--                        invisible="claim_level_mediswitch_status in ['01','02'] or (not medical_aid_pay) or (medical_aid_pay and state == 'draft')"-->
+<!--                        class="oe_highlight"/>-->
+
+<!--                <button name="action_reverse_claim" type="object" string="Reverse Claim"-->
+<!--                        invisible="(not medical_aid_pay) or (claim_level_mediswitch_status in ['01','02','06']) or (approved_amount == 0) or (medical_aid_pay and state == 'draft')"-->
+<!--                        class="oe_highlight"/>-->
+
+<!--                <button name="action_benefit_check" type="object" string="Benefit Check"-->
+<!--                        invisible="(not benefit_check) or ((not medical_aid_pay) and state != 'draft')"-->
+<!--                        class="oe_highlight"/>-->
+<!--            </button>-->
+<!--            <field name="invoice_date" position="replace">-->
+<!--                <field name="invoice_date"/>-->
+<!--&lt;!&ndash;                <field name="is_cash_sale" invisible="1"/>&ndash;&gt;-->
+<!--            </field>-->
+<!--            <field name="invoice_date" position="before">-->
+<!--                <field name="claim_level_mediswitch_status" readonly="True" invisible="not medical_aid_pay"/>-->
+<!--                <field name="responding_party" readonly="True"/>-->
+<!--                <field name="response_description" readonly="True"></field>-->
+<!--                <field name="general_comments" readonly="True"></field>-->
+<!--            </field>-->
+<!--            <xpath expr="//form//sheet//notebook//page[1]//field[@name='price_subtotal']" position="after">-->
+<!--                <field name="authorization_code"/>-->
+<!--            </xpath>-->
+<!--&lt;!&ndash;            <xpath expr="//field[@name='payment_term_id']" position="replace">&ndash;&gt;-->
+<!--&lt;!&ndash;                <field name="payment_term_id" readonly="claim_level_mediswitch_status in ['01','02','04','05'] or state == 'paid'"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            </xpath>&ndash;&gt;-->
+<!--            <xpath expr="//notebook" position="inside">-->
+<!--                <page string="Mediswitch Claims/Benefits">-->
+<!--                    <field name="medical_aid_claims_lines">-->
+<!--                        <list>-->
+<!--                            <field name="mediswitch_type"/>-->
+<!--                            <field name="invoice_id"/>-->
+<!--                            <field name="destination_code"/>-->
+<!--                            <field name="user_reference"/>-->
+<!--                            <field name="response_payload_date"/>-->
+<!--                            <field name="status"/>-->
+<!--                            <field name="switch_reference"/>-->
+<!--                            <field name="retry"/>-->
+<!--                            <field name="response_payload" groups="base.group_no_one"/>-->
+<!--                        </list>-->
+<!--                    </field>-->
+<!--                </page>-->
+<!--                <page string="Mediswitch Test Payload Values" groups="base.group_no_one">-->
+<!--                    <button name="action_submit_claim" type="object" string="Check Claim Payload"-->
+<!--                            context="{'is_testing':True}" class="oe_highlight"/>-->
+<!--                    <br/>-->
+<!--                    <label for="test_response_payload" string='Response'/>-->
+<!--                    <field name="test_response_payload" groups="base.group_no_one"/>-->
+<!--                </page>-->
+<!--            </xpath>-->
+<!--&lt;!&ndash;            <field name="comment" position="attributes">&ndash;&gt;-->
+<!--&lt;!&ndash;                <attribute name="groups">base.group_no_one</attribute>&ndash;&gt;-->
+<!--&lt;!&ndash;            </field>&ndash;&gt;-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="HUMINT_account_invoice_tree_with_onboarding" model="ir.ui.view">
+        <field name="name">Customer Invoice</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <field name="invoice_origin" position="after">
+                <field name="claim_level_mediswitch_status"></field>
+<!--                <field name="payment_term_id"/>-->
+            </field>
+        </field>
+    </record>
+
+
+    <record id="action_partner_msv1" model="ir.actions.act_window">
+        <field name="name">Msv's</field>
+        <field name="res_model">msv.response</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_partner_bulk_msv" model="ir.actions.act_window">
+        <field name="name">Bulk MSV</field>
+        <field name="res_model">bulk.msv</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="clinical_msv" name="MSV History" parent="TOMS.clinical_customer" sequence="2"
+              action="action_partner_msv1"/>
+    <menuitem id="bulk_msv" name="Send Bulk MSV" parent="TOMS.clinical_customer" sequence="3"
+              action="action_partner_bulk_msv"/>
+
+
+</odoo>

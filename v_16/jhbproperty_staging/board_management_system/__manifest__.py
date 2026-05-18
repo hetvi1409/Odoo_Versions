@@ -1,0 +1,28 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Board Management System",
+    'description': """Board Mangement System""",
+    'summary': """Agenda and meeting of minutes in the calnder module""",
+    'version': '17.0.1.0.0',
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': 'https://natedsystems.co.za/',
+    'sequence': '20',
+    'category': 'Productivity/Calendar',
+    'depends': ['base','calendar', 'survey', 'documents', 'appointment'],
+    'data': [
+        'data/documents_folder_data.xml',
+        'data/mail_template_data.xml',
+        'report/minutes_of_meeting_report.xml',
+        'report/agenda_report.xml',
+        'security/ir.model.access.csv',
+        'views/calendar_event_views.xml',
+        'views/res_config_settings_views.xml',
+    ],
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+}

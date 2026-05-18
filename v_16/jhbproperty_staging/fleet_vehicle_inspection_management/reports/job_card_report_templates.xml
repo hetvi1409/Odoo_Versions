@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Job Card Report Template -->
+    <template id="report_job_card_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="text-center">
+                            <strong>JOB CARD</strong>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-6">
+                        <strong>Job Card No:</strong> <span t-field="o.name"/>
+                    </div>
+                    <div class="col-6">
+                        <strong>Date:</strong> <span t-field="o.date"/>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <strong>Vehicle:</strong> <span t-field="o.vehicle_id.name"/>
+                    </div>
+                    <div class="col-6">
+                        <strong>Driver:</strong> <span t-field="o.driver_id.name"/>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5><strong>Client Information</strong></h5>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <strong>Client Name:</strong> <span t-field="o.client_name"/>
+                    </div>
+                    <div class="col-6">
+                        <strong>Department:</strong> <span t-field="o.client_department"/>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <strong>PO Number:</strong> <span t-field="o.po_number"/>
+                    </div>
+                    <div class="col-6">
+                        <strong>Hours Worked:</strong> <span t-field="o.hours_worked"/>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5><strong>Odometer Reading</strong></h5>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <strong>Start KMs:</strong> <span t-field="o.start_kms"/>
+                    </div>
+                    <div class="col-6">
+                        <strong>End KMs:</strong> <span t-field="o.end_kms"/>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5><strong>Work Description</strong></h5>
+                        <p t-field="o.work_description"/>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5><strong>Service Rating and Feedback</strong></h5>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <strong>Service Rating:</strong> <span t-field="o.service_rating"/> / 5
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <strong>Service Feedback:</strong>
+                        <p t-field="o.service_feedback"/>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <p>_____________________</p>
+                            <p><strong>Driver Signature</strong></p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-center">
+                            <p>_____________________</p>
+                            <p><strong>Fleet Office Signature</strong></p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-center">
+                            <p>_____________________</p>
+                            <p><strong>Client Signature</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_job_card">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="fleet_vehicle_inspection_management.report_job_card_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

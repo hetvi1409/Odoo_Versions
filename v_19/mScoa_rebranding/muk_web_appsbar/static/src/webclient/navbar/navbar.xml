@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<templates xml:space="preserve">
+
+    <t
+        t-name="muk_web_appsbar.NavBarAppsMenu"
+        t-inherit="web.NavBar.AppsMenu"
+        t-inherit-mode="extension"
+    >
+        <xpath expr="//div[contains(@class, 'o_navbar_apps_menu')]" position="replace">
+            <div t-if="!isScopedApp" class="o_navbar_apps_menu mk_navbar_apps_menu">
+                <Dropdown>
+                    <button data-hotkey="h" title="Home Menu">
+                        <i class="oi oi-apps" />
+                    </button>
+                    <t t-set-slot="content">
+                        <ul class="mk_apps_sidebar_menu mk_navbar_apps_menu_list">
+                            <t t-foreach="apps" t-as="app" t-key="app.id">
+                                <li t-attf-class="nav-item {{ menuService.getCurrentApp() === app ? 'active' : '' }}">
+                                    <DropdownItem
+                                        class="'mk_navbar_apps_menu_item'"
+                                        onSelected="() => this.onNavBarDropdownItemSelection(app)"
+                                        attrs="{ href: getMenuItemHref(app), 'data-menu-xmlid': app.xmlid, 'data-section': app.id }"
+                                    >
+                                        <img
+                                            t-if="app.webIconData"
+                                            class="mk_apps_sidebar_icon"
+                                            t-att-src="app.webIconData"
+                                        />
+                                        <img
+                                            t-else=""
+                                            class="mk_apps_sidebar_icon"
+                                            src="/base/static/description/icon.png"
+                                        />
+                                        <span class="mk_apps_sidebar_name">
+                                            <t t-out="app.name"/>
+                                        </span>
+                                    </DropdownItem>
+                                </li>
+                            </t>
+                        </ul>
+                    </t>
+                </Dropdown>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

@@ -1,0 +1,37 @@
+<odoo>
+    <record id="view_procurement_entity_form" model="ir.ui.view">
+        <field name="name">procurement.entity.form</field>
+        <field name="model">procurement.entity</field>
+        <field name="arch" type="xml">
+            <form string="Procurement Plan">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="entity_class_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_procurement_entity_tree" model="ir.ui.view">
+        <field name="name">procurement.entity.list</field>
+        <field name="model">procurement.entity</field>
+        <field name="arch" type="xml">
+            <list string="Procurement Plan">
+                <field name="name"/>
+                <field name="entity_class_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="procurement_entity_action" model="ir.actions.act_window">
+        <field name="name">Procurement Plan</field>
+        <field name="res_model">procurement.entity</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_procurement_entity_plan" name="Procurement Plan"
+              parent="menu_demand_for_tender_management"
+              action="procurement_entity_action"/>
+
+</odoo>

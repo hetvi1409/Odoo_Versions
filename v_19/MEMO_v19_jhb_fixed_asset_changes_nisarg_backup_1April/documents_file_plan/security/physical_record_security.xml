@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+<!--        <record id="module_physical_document_records_manage_category" model="ir.module.category">-->
+<!--            <field name="name">Physical Record Management</field>-->
+<!--            <field name="description">User access level for Physical Record module</field>-->
+<!--            <field name="sequence">20</field>-->
+<!--        </record>-->
+
+        <record id="group_physical_record_user" model="res.groups">
+            <field name="name">Physical Record User</field>
+<!--            <field name="category_id" ref="documents_file_plan.module_physical_document_records_manage_category"/>-->
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="physical_document_records_manage.group_physical_record_custom" model="res.groups">
+            <field name="name">Physical Record Manager</field>
+<!--            <field name="category_id" ref="documents_file_plan.module_physical_document_records_manage_category"/>-->
+            <field name="implied_ids"
+                   eval="[(4, ref('documents_file_plan.group_physical_record_user')),(4, ref('base.group_system')),(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_physical_record_registry" model="res.groups">
+            <field name="name">Physical Record Registry Team</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('physical_document_records_manage.group_physical_record_custom')),(4, ref('base.group_system')),(4, ref('base.group_user'))]"/>
+        </record>
+
+    </data>
+</odoo>

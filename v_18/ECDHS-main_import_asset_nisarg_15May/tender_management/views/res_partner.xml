@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_blacklist" model="ir.ui.view">
+        <field name="name">res.partner.form.blacklist</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Add CSD Number and Company Registration Number in Sales & Purchase section -->
+            <xpath expr="//page[@name='sales_purchases']//group[@name='sale']" position="after">
+                <group string="Supplier Registration">
+                    <field name="csd_number"/>
+                    <field name="company_registration_number"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook" position="inside">
+                <page string="Blacklist">
+                    <group>
+                        <field name="is_blacklisted"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_tree_blacklist" model="ir.ui.view">
+        <field name="name">res.partner.tree.blacklist</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="csd_number" optional="hide"/>
+                <field name="company_registration_number" optional="hide"/>
+            </xpath>
+            <xpath expr="//list" position="inside">
+                <field name="is_blacklisted"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="action_partner_supplier" model="ir.actions.act_window">
+        <field name="name">Suppliers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('supplier_rank', '>', 0)]</field>
+        <field name="context">{'search_default_is_blacklisted': 0}</field>
+    </record>
+</odoo>

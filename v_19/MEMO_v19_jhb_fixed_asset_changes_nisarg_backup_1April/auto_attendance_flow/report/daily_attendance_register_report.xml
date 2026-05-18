@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="report_daily_attendance_register_template">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <style>
+                    table, tbody, thead, tr, th, td {
+                    border: 2px solid black;
+                    border-collapse: collapse;
+                    font-size: 12px;
+                    text-align: center;
+                    }
+                    th, td {
+                    padding: 4px;
+                    }
+                    .header-title {
+                    background-color: #f4b400; /* yellow */
+                    font-size: 20px;
+                    font-weight: bold;
+                    text-align: center;
+                    color: black;
+                    }
+                    .section-label {
+                    background-color: #f4b400;
+                    font-weight: bold;
+                    text-align: left;
+                    }
+                    .remarks-row {
+                    background-color: #e0e0e0;
+                    }
+                </style>
+
+                <!-- HEADER -->
+                <table class="table" style="width:100%;">
+                    <tr>
+                        <td style="width: 120px; text-align:left;">
+                            <img t-if="doc.employee_id.company_id.footer_image"
+                                 t-att-src="image_data_uri(doc.employee_id.company_id.footer_image)"
+                                 style="height:80px; width:auto;" class="company-logo"/>
+                        </td>
+                        <td class="header-title">DAILY ATTENDANCE REGISTER</td>
+                    </tr>
+                </table>
+
+                <!-- EMPLOYEE INFO -->
+                <table class="table" style="width:100%; margin-top:5px; border-collapse:collapse;">
+                    <tr>
+                        <td class="section-label" style="width:20%;">
+                            <b>Month:</b>
+                        </td>
+                        <td style="width:30%;">
+                            <t t-esc="dict(doc._fields['month'].selection).get(doc.month, '')"/>
+                        </td>
+                        <td class="section-label" style="width:20%;">
+                            <b>Year:</b>
+                        </td>
+                        <td style="width:30%;">
+                            <t t-esc="doc.year"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="section-label">
+                            <b>Department:</b>
+                        </td>
+                        <td>
+                            <t t-esc="doc.department_id.name or ''"/>
+                        </td>
+                        <td class="section-label">
+                            <b>Branch/Directorate:</b>
+                        </td>
+                        <td>
+                            <t t-esc="doc.branch_directorate_id.name or ''"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="section-label">
+                            <b>Surname:</b>
+                        </td>
+                        <td>
+                            <t t-esc="doc.surname or (doc.employee_id.name.split(' ')[-1] if doc.employee_id else '')"/>
+                        </td>
+                        <td class="section-label">
+                            <b>Name/s:</b>
+                        </td>
+                        <td>
+                            <t t-esc="doc.name or (' '.join(doc.employee_id.name.split(' ')[:-1]) if doc.employee_id else '')"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="section-label">
+                            <b>SAP/Employee No.:</b>
+                        </td>
+                        <td>
+                            <t t-esc="doc.sap_employee_number or doc.employee_id.identification_id or ''"/>
+                        </td>
+                        <td class="section-label">
+                            <b>Contact Telephone or Cell Number:</b>
+                        </td>
+                        <td>
+                            <t t-esc="doc.contact_phone or doc.employee_id.mobile_phone or ''"/>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- ATTENDANCE TABLE -->
+                <table class="table" style="width:100%; margin-top:10px;">
+                    <thead>
+                        <tr style="font-weight: bold;">
+                            <th>Date</th>
+                            <th>Time of Arrival</th>
+                            <th>Employee Signature</th>
+                            <th>Time of Departure</th>
+                            <th>Employee Signature</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="total" t-value="0"/>
+                        <t t-foreach="doc.attendance_ids.sorted(key=lambda l: l.check_in)" t-as="line">
+                            <tr t-att-class="'remarks-row' if line.is_weekend_or_holiday or line.time_off_type_id else ''">
+                                <!-- Date -->
+                                <td style="text-align:right;">
+                                    <t t-set="total" t-value="total+1"/>
+                                    <t t-esc="total"/>
+                                </td>
+
+                                <!-- Time of Arrival -->
+                                <td style="text-align:left;">
+                                    <t t-esc="line.check_in if line.check_in else ''"/>
+                                    <!--                                    <t t-esc="line.check_in.strftime('%H:%M') if line.check_in else ''"/>-->
+                                </td>
+
+                                <!-- Employee Signature -->
+                                <td>____________________</td>
+
+                                <!-- Time of Departure -->
+                                <td style="text-align:left;">
+                                    <t t-esc="line.check_out if line.check_out else ''"/>
+                                    <!--                                    <t t-esc="line.check_out.strftime('%H:%M') if line.check_out else ''"/>-->
+                                </td>
+
+                                <!-- Employee Signature -->
+                                <td>____________________</td>
+
+                                <!-- Remarks -->
+                                <td style="text-align:left;">
+                                    <t t-if="line.time_off_type_id">
+                                        <t t-esc="line.time_off_type_id.name"/>
+                                    </t>
+                                    <t t-elif="line.is_weekend_or_holiday">
+                                        Weekend/Holiday
+                                    </t>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <!-- MANAGER SIGN-OFF -->
+                <table class="table" style="width:100%; margin-top:15px;">
+                    <tr>
+                        <td colspan="4" class="section-label" style="text-align:left; font-weight:normal;">
+                            I hereby confirm as the Line Manager, that the attendance of the employee above was checked.
+                            Where the employee was absent, the applicable leave was applied for, through the applicable
+                            channel and approved in terms of the Conditions of Service, Contract of Employment, policy
+                            and procedure and is hereby signed off below.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="section-label">Surname:</td>
+                        <td>
+                            <t t-esc="doc.manager_surname or (doc.manager_id.name.split(' ')[-1] if doc.manager_id else '')"/>
+                        </td>
+                        <td class="section-label">Initials:</td>
+                        <td>
+                            <t t-esc="doc.manager_initials or (doc.manager_id.name[0] if doc.manager_id else '')"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="section-label">SAP/Employee Number:</td>
+                        <td>
+                            <t t-esc="doc.manager_sap_employee_number or ''"/>
+                        </td>
+                        <td class="section-label">Cell Phone Number:</td>
+                        <td>
+                            <t t-esc="doc.manager_contact_phone or ''"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="section-label">Signature:</td>
+                        <td>
+                            <img t-if="doc.signature" t-att-src="image_data_uri(doc.signature)"
+                                 style="width:300px;height:70px;"/>
+                        </td>
+                        <td class="section-label">Date:</td>
+                        <td>
+                            <t t-out="doc.signature_date.strftime('%d - %m - %Y') if doc.signature_date else ''"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_daily_attendance_register">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="auto_attendance_flow.report_daily_attendance_register_template"/>
+            </t>
+        </t>
+    </template>
+
+    <record id="paperformat_attendance" model="report.paperformat">
+        <field name="name">A4 Attendance</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">32</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">5</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="daily_attendance_register_report" model="ir.actions.report">
+        <field name="name">Daily Attendance Register Report</field>
+        <field name="model">hr.timesheet.generator</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">auto_attendance_flow.report_daily_attendance_register</field>
+        <field name="report_file">auto_attendance_flow.report_daily_attendance_register</field>
+        <field name="print_report_name">'Daily Attandance - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="auto_attendance_flow.model_hr_timesheet_generator"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="auto_attendance_flow.paperformat_attendance"/>
+    </record>
+</odoo>

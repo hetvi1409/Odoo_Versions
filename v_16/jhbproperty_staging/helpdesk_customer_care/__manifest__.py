@@ -1,0 +1,30 @@
+{
+    'name': "Helpdesk Customer Care",
+    'description': """Helpdesk Customer Care""",
+    'summary': """Helpdesk Customer Care""",
+    'version': '16.0.1.0.0',
+    'sequence': '20',
+    'category': 'Services',
+    'depends': ['helpdesk', 'website_helpdesk', 'website', 'im_livechat'],
+    'data': [
+        'data/helpdesk_category_data.xml',
+        'security/ir.model.access.csv',
+        'views/helpdesk_category_views.xml',
+        'views/helpdesk_ticket_views.xml',
+        'views/im_livechat_support_page_inherit.xml',
+        # 'views/helpdesk_template.xml',
+    ],
+    'assets': {
+        'web.assets_frontend': [
+            'helpdesk_customer_care/static/src/scss/livechat_channel_action.scss',
+            # 'helpdesk_customer_care/static/src/js/helpdesk_ticket.js',
+            # 'helpdesk_customer_care/static/src/scss/helpdesk_ticket.scss',
+            'helpdesk_customer_care/static/src/js/helpdesk_ticket_validation.js',
+        ],
+    },
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

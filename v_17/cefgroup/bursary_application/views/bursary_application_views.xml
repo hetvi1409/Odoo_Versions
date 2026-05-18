@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bursary_application_tree" model="ir.ui.view">
+        <field name="name">bursary.application.tree</field>
+        <field name="model">bursary.application</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="subject"/>
+                <field name="name"/>
+                <field name="date_of_birth"/>
+                <field name="province_id"/>
+                <field name="stage_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_bursary_application_form" model="ir.ui.view">
+        <field name="name">bursary.application.form</field>
+        <field name="model">bursary.application</field>
+        <field name="arch" type="xml">
+            <form string="Bursary Application">
+                <header>
+                <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}" />
+<!--                        <button name="action_submit" string="Submit"-->
+<!--                                class="oe_highlight"-->
+<!--                                type="object" invisible="(state != 'draft')"/>-->
+<!--                        <button name="action_review" string="Review" class="oe_highlight"-->
+<!--                                type="object" invisible="(state != 'submitted')"/>-->
+<!--                        <button name="action_approve" string="Approve" class="oe_highlight"-->
+<!--                                type="object" invisible="(state != 'review')"/>-->
+<!--                        <button name="action_rejected" string="Reject" class="oe_highlight"-->
+<!--                                type="object" invisible="(state != 'review')"/>-->
+                    </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                                class="oe_stat_button"
+                                name="action_eliminated_questions"
+                                icon="fa-file-text">
+                            Elimination Questions
+                        </button>
+                    </div>
+
+                    <group>
+                        <field name="subject"/>
+                        <field name="bursary_id"/>
+                    </group>
+                    <group>
+                        <group string="Personal Information">
+                            <field name="name"/>
+                            <field name="surname"/>
+                            <field name="date_of_birth"/>
+                            <field name="id_number"/>
+                            <field name="gender"/>
+                            <field name="nationality"/>
+                            <field name="province_id"/>
+                            <field name="place_of_birth"/>
+                            <field name="race"/>
+                            <field name="disability"/>
+                            <field name="disability_type"/>
+                            <field name="current_activity"/>
+                            <field name="student_number"/>
+                            <field name="student_email"/>
+
+                        </group>
+
+                        <group string="Parent/Guardian Details">
+                            <field name="contact_number"/>
+                            <field name="alt_number"/>
+                            <field name="email"/>
+                            <field name="address"/>
+<!--                            <field name="income_below_600k"/>-->
+                            <field name="mother_name"/>
+                            <field name="father_name"/>
+                            <field name="guardian_name"/>
+                            <field name="annual_income"/>
+                            <field name="payslips" filename="Payslips"/>
+                            <field name="parent_deceased"/>
+                            <field name="death_certificate" filename="Death Certificate"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Academic Information">
+                            <field name="highest_grade"/>
+                            <field name="grade12_avg"/>
+                            <field name="currently_studying"/>
+                            <field name="academic_records" filename="Academic Records"/>
+                            <field name="current_qualification"/>
+                            <field name="institution"/>
+                            <field name="year_of_completion"/>
+                            <field name="funding_source"/>
+<!--                            <field name="age_16_26"/>-->
+                            <field name="age"/>
+<!--                            <field name="has_previous_qualifications"/>-->
+<!--                            <field name="further_study_post_undergrad"/>-->
+                        </group>
+
+                        <group string="Study Plans">
+                            <field name="applied_next_year"/>
+                            <field name="institution_type"/>
+                            <field name="proposed_institution"/>
+                            <field name="qualification_type"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Funding Status">
+                            <field name="applied_bursaries"/>
+                            <field name="received_bursary"/>
+                            <field name="bursary_details"/>
+                        </group>
+
+                        <group string="Document Uploads">
+                            <field name="mother_id" filename="Mother ID"/>
+                            <field name="father_id" filename="Father ID"/>
+                            <field name="mother_payslip" filename="Mother Payslip"/>
+                            <field name="father_payslip" filename="Father Payslip"/>
+                            <field name="student_id" filename="Student ID"/>
+                            <field name="matric_results" filename="Matric Results"/>
+                            <field name="tertiary_results" filename="Tertiary Results"/>
+                            <field name="proof_of_registration" filename="Proof of Registration"/>
+                            <field name="guardian_death_certificate" filename="Guardian Death Certificate"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Declaration">
+                            <field name="declaration"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_job_kanban" model="ir.ui.view">
+        <field name="name">bursary.bursary.kanban</field>
+        <field name="model">bursary.bursary</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard o_hr_bursary_kanban"  sample="1" limit="40" action="action_open_bursary_bursary_applications" type="object">
+                <field name="name"/>
+                <field name="active"/>
+                <field name="website_url"/>
+                <field name="is_published"/>
+                <field name="academic_year_id"/>
+                <templates>
+                    <t t-name="kanban-menu">
+                        <t t-name="kanban-menu" groups="hr_recruitment.group_hr_recruitment_user">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-4 o_kanban_card_manage_section">
+                                    <h5 role="menuitem" class="o_kanban_card_manage_title">
+                                        <span>View</span>
+                                    </h5>
+                                    <div role="menuitem" name="menu_view_applications">
+                                        <a name="action_open_bursary_bursary_applications" type="object">Applications</a>
+                                    </div>
+                                </div>
+                                <div class="col-4 o_kanban_card_manage_section">
+                                    <h5 role="menuitem" class="o_kanban_card_manage_title">
+                                        <span>Configuration</span>
+                                    </h5>
+                                    <div role="menuitem" name="menu_new_applications">
+                                        <a class="dropdown-item" t-if="widget.editable" name="edit_job" type="edit">Edit</a>
+                                    <a class="dropdown-item" t-if="record.active.raw_value" name="toggle_active" type="object">Archive</a>
+                                    <a class="dropdown-item" t-if="!record.active.raw_value" name="toggle_active" type="object">Unarchive</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+
+                    </t>
+                    <t t-name="kanban-box">
+
+                        <div class="o_kanban_card_header d-flex align-items-baseline gap-1">
+                            <div class="o_kanban_card_header_title">
+                                <div class="o_primary">
+                                    <span>
+                                        <t t-esc="record.name.value"/>
+                                    </span>
+                                </div>
+                                <small>
+                                    <field name="academic_year_id"/>
+                                </small>
+                            </div>
+                            <div class="container o_kanban_card_content mt-0 mt-sm-3">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <button class="btn btn-primary btn-bursary" name="action_new_bursary_applications" type="object" style="margin-bottom: 2%; !important">
+                                            <field name="new_application_count"/> New Applications
+                                        </button>
+                                        <br/>
+                                        <button class="btn btn-primary btn-bursary" name="action_staging_bursary_applications" type="object" style="margin-bottom: 2%; !important">
+                                            <field name="staging_application_count"/> Staging Applications
+                                        </button>
+                                        <br/>
+                                    </div>
+                                    <ul class="col-5 o_bursary_activities">
+                                        <a name="action_staging_bursary_applications" type="object">
+                                            <field name="bursary_count"/> Bursaries Application
+                                        </a>
+                                    </ul>
+                                </div>
+
+                            <div name="kanban_boxes" style="    width: 100%;"
+                                 class="row flex-nowrap border-top pt-2">
+                                <field name="website_url" invisible="1"
+                                       field_id="website_url_0"/>
+                                <div class="col">
+                                    <field name="is_published"
+                                           widget="boolean_toggle" class="me-1"
+                                           on_change="1"
+                                           field_id="is_published_0"/>
+                                    <t t-if="record.is_published.raw_value">
+                                        Published
+                                    </t>
+                                    <t t-else="">Not published</t>
+                                </div>
+                                <div class="o_link_trackers col text-end">
+                                    <a type="object" name="open_website_url">
+                                        <i class="fa fa-fw fa-external-link"
+                                           role="img"/>
+                                        Bursary Page
+                                    </a>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+                    </t>
+                </templates>
+
+            </kanban>
+        </field>
+    </record>
+    <record id="action_bursary_application" model="ir.actions.act_window">
+        <field name="name">Bursary Applications</field>
+        <field name="res_model">bursary.application</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

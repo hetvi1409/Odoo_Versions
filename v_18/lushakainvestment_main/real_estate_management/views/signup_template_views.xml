@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="custom_signup_fields" inherit_id="auth_signup.fields" name="Custom Signup Fields">
+        <xpath expr="//div[hasclass('field-password')]" position="before">
+            <div class="mb-3 field-is_tenant">
+                <input type="checkbox" name="is_tenant" t-att-value="is_tenant" id="is_tenant" autofocus="autofocus"
+                    autocapitalize="off" class="form-check-input" t-att-readonly="'readonly' if only_passwords else None"/>
+                <label for="is_tenant">Is Tenant</label>
+            </div>
+            <div class="mb-3 field-is_owner">
+                <input type="checkbox" name="is_tenant" t-att-value="is_owner" id="is_owner" autofocus="autofocus"
+                    autocapitalize="off" class="form-check-input" t-att-readonly="'readonly' if only_passwords else None"/>
+                <label for="is_owner">Is Owner</label>
+            </div>
+            <div class="mb-3 field-phone pt-2">
+                <label for="phone">Phone</label>
+                <input type="phone" name="phone" id="phone" class="form-control form-control-sm"
+                       required="required" t-att-autofocus="'autofocus' if only_passwords else None"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>

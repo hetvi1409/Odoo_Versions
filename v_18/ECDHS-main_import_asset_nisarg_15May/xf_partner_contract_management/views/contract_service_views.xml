@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Monitoring Report Tree View -->
+    <record id="view_contract_monitoring_report_tree" model="ir.ui.view">
+        <field name="name">contract.monitoring.report.tree</field>
+        <field name="model">contract.monitoring.report</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="state == 'request_terminated'"
+                  decoration-success="state == 'approve'"
+                  decoration-danger="state == 'rejected'"
+                  decoration-info="state == 'draft'">
+                <field name="date"/>
+                <field name="contract_id"/>
+                                <field name="partner_id" optional="show"/>
+                                <field name="company_id" optional="show"/>
+                <field name="user_id"/>
+                                <field name="findings" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'request_terminated'"
+                       decoration-success="state == 'approve'"
+                       decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Monitoring Report Form View -->
+    <record id="view_contract_monitoring_report_form" model="ir.ui.view">
+        <field name="name">contract.monitoring.report.form</field>
+        <field name="model">contract.monitoring.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget='statusbar'/>
+                    <button name="process_non_compliance"
+                            class="oe_highlight" invisible="state != 'draft'"
+                            string="Send Non-Complaince" type="object"/>
+                    <button name="action_approval_termination"
+                            class="oe_highlight" invisible="state != 'draft'"
+                            string="Request Termination" type="object"/>
+                    <button name="action_approve"
+                            class="oe_highlight" invisible="state != 'request_terminated'"
+                            string="Approve" type="object"/>
+                    <button name="action_refuse"
+                            class="oe_highlight" invisible="state != 'request_terminated'"
+                            string="Refuse" type="object"/>
+                    <button name="action_send_terminated_mail"
+                            class="oe_highlight" invisible="state != 'approve'"
+                            string="Send Terminated Mail" type="object"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_contract" type="object"
+                                class="oe_stat_button"
+                                invisible="contract_id == False">
+                            <i class="fa fa-id-card-o o_button_icon"/>
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Contract Monitoring
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                           <field name="contract_id"
+                               options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                        <field name="date"/>
+                           <field name="user_id"
+                               options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    </group>
+                    <notebook>
+                        <page string="Findings">
+                            <field name="findings"/>
+                        </page>
+                        <page string="Actions">
+                            <field name="actions_taken"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_contract_monitoring_report"
+            model="ir.actions.act_window">
+        <field name="name">Monitoring Reports</field>
+        <field name="res_model">contract.monitoring.report</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+    </record>
+    <menuitem id="menu_contract_monitoring" name="Service Monitoring"
+              parent="xf_partner_contract.xf_partner_contract_root_menuitem"
+              action="action_contract_monitoring_report"
+              sequence="20"/>
+
+</odoo>

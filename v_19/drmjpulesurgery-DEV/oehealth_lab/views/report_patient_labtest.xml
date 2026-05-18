@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_oeh_medical_patient_labtest_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o.with_context({'lang':o.patient.partner_id.lang})"/>
+            <t t-set="address">
+                <div t-field="o.patient.partner_id"
+                     t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+            </t>
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <div class="row mt32 mb32">
+                    <div class="col-6">
+                        <div t-if="o.patient" class="mb-2 bm-2">
+                            <span class="font-weight-bold">Patient: </span>
+                            <span class="m-0" t-field="o.patient"/>
+                        </div>
+                        <div t-if="o.patient" class="mb-2 bm-2">
+                            <span class="font-weight-bold">Age: </span>
+                            <span class="m-0" t-field="o.patient.age"/>
+                        </div>
+                        <div t-if="o.date_requested" class="mb-2 bm-2">
+                            <span class="font-weight-bold">Date Requested: </span>
+                            <span class="m-0" t-field="o.date_requested"/>
+                        </div>
+                        <div t-if="o.date_analysis" class="mb-2 bm-2">
+                            <span class="font-weight-bold">Analysis Date: </span>
+                            <span class="m-0" t-field="o.date_analysis"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div t-if="o.name" class="mb-2 bm-2">
+                            <strong class="font-weight-bold">Lab Test#: </strong>
+                            <span class="m-0" t-field="o.name"/>
+                        </div>
+                        <div t-if="o.requestor" class="mb-2 bm-2">
+                            <span class="font-weight-bold">Doctor who requested test: </span>
+                            <span class="m-0" t-field="o.requestor"/>
+                        </div>
+                        <div t-if="o.pathologist" class="mb-2 bm-2">
+                            <span class="font-weight-bold">Pathologist: </span>
+                            <span class="m-0" t-field="o.pathologist"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+                <div class="oe_structure"/>
+                <h2 t-if="o.lab_test_criteria" style="margin-bottom:0px !important;">Test Results</h2>
+                <table class="table table-condensed" width="100%" t-if="o.lab_test_criteria">
+                    <thead style="padding-top:0px !important;margin-top:0px !important;">
+                        <tr>
+                            <th class="text-center">SEQUENCE</th>
+                            <th class="text-left">TESTS</th>
+                            <th class="text-center">RESULT</th>
+                            <th class="text-left">UNITS</th>
+                            <th class="text-left">NORMAL RANGE</th>
+                        </tr>
+                   </thead>
+                   <tbody class="invoice_tbody">
+                       <t t-foreach="o.lab_test_type_ids" t-as="test_type">
+                            <br/>
+                            <tr class="text-left">
+                                <td style="border: none !important;font-size:20px;text-align: left;"><strong t-esc="test_type.name"/></td>
+                            </tr>
+                            <br/>
+                           <t t-set="counter" t-value="1"/>
+                            <tr t-foreach="o.lab_test_criteria" t-as="l">
+                                <t t-set="find_test_criteria" t-value="test_type.lab_criteria.filtered(lambda line: line.name == l.name)"/>
+                                <t t-if="find_test_criteria">
+                                    <td class="text-center">
+                                       <strong><span t-esc="counter"/></strong>
+                                        <t t-set="counter" t-value="counter+1"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="l.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="l.result"/>
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-field="l.units.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="l.normal_range"/>
+                                    </td>
+                                </t>
+                            </tr>
+                       </t>
+                    </tbody>
+                </table>
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+    <template id="report_oeh_medical_patient_labtest">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="oehealth_lab.report_oeh_medical_patient_labtest_document"
+                   t-lang="o.patient.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

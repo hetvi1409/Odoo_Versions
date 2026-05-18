@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_rs" model="ir.ui.view">
+        <field name="name">res.config.settings.form.inherit.rs</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="70"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Risk Management" string="Real Estate" name="itsys_real_estate">
+                    <block title="Reservations" name="reservations" >
+                        <setting string="Units Reservation" company_dependent="1" >
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <div>
+                                        <label for="reservation_hours" class="col-2 o_light_label"/>
+                                        <field name="reservation_hours" />
+                                    </div>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Ownership Contracts" name="reservations" >
+                        <setting string="Contracts Income Account" company_dependent="1" >
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <div>
+                                        <label for="income_account" class="col-lg-3 o_light_label"/>
+                                        <field name="income_account" options="{'no_create_edit': True, 'no_open': True}" context="{'active_test': False}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Rental Contracts" name="reservations" >
+                        <setting string="Security Deposit" company_dependent="1" >
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <div>
+                                        <label for="security_deposit_account" class="col-lg-3 o_light_label"/>
+                                        <field name="security_deposit_account" options="{'no_create_edit': True, 'no_open': True}" context="{'active_test': False}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Revenue" company_dependent="1" >
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <div>
+                                        <label for="revenue_account" class="col-lg-3 o_light_label"/>
+                                        <field name="revenue_account" options="{'no_create_edit': True, 'no_open': True}" context="{'active_test': False}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+<!--            <xpath expr="//div[hasclass('settings')]" position="inside">-->
+<!--                <div class="app_settings_block" data-string="Real Estate" string="Real Estate" data-key="itsys_real_estate" >-->
+<!--                    <h2>Reservations</h2>-->
+<!--                    <div class="row mt16 o_settings_container" >-->
+<!--                        <div class="col-xs-12 col-md-6 o_setting_box">-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <label for="reservation_hours"/>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="text-muted col-md-8">-->
+<!--                                        Set here number of hours to release units reservation-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="content-group">-->
+<!--                                    <div class="mt16">-->
+<!--                                        <field name="reservation_hours"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <h2>Ownership Contracts</h2>-->
+<!--                    <div class="row mt16 o_settings_container">-->
+<!--                        <div class="col-12 col-lg-6 o_setting_box">-->
+<!--                            <div class="o_setting_left_pane"/>-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <span class="o_form_label">Contracts Income Account</span>-->
+<!--                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>-->
+<!--                                <div class="text-muted">-->
+<!--                                    Set default Income Account for properties-->
+<!--                                </div>-->
+<!--                                <div class="content-group">-->
+<!--                                    <div class="row mt16">-->
+<!--                                        <label for="income_account" class="col-lg-3 o_light_label"/>-->
+<!--                                        <field name="income_account" options="{'no_create_edit': True, 'no_open': True}" context="{'active_test': False}"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <h2>Rental Contracts</h2>-->
+<!--                    <div class="row mt16 o_settings_container">-->
+<!--                        <div class="col-12 col-lg-6 o_setting_box">-->
+<!--                            <div class="o_setting_left_pane"/>-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <span class="o_form_label">Security Deposit</span>-->
+<!--                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>-->
+<!--                                <div class="text-muted">-->
+<!--                                    Set default Security Deposit account for properties-->
+<!--                                </div>-->
+<!--                                <div class="content-group">-->
+<!--                                    <div class="row mt16">-->
+<!--                                        <field name="security_deposit_account" options="{'no_create_edit': True, 'no_open': True}" context="{'active_test': False}"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-12 col-lg-6 o_setting_box">-->
+<!--                            <div class="o_setting_left_pane"/>-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <span class="o_form_label">Revenue</span>-->
+<!--                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>-->
+<!--                                <div class="text-muted">-->
+<!--                                    Revenue Account used in contracts-->
+<!--                                </div>-->
+<!--                                <div class="content-group">-->
+<!--                                    <div class="row mt16">-->
+<!--                                        <label for="revenue_account" class="col-lg-3 o_light_label"/>-->
+<!--                                        <field name="revenue_account" options="{'no_create_edit': True, 'no_open': True}" context="{'active_test': False}"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+
+    <record id="action_real_estate_config" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'itsys_real_estate'}</field>
+    </record>
+
+    <menuitem id="menu_real_estate_config"
+              name="Settings" parent="itsys_real_estate.menu_settings"
+              sequence="1000"
+              groups="base.group_system"
+              action="action_real_estate_config"/>
+
+
+
+        <!-- ========================= -->
+        <!-- Project Stages -->
+        <!-- ========================= -->
+        <record id="property_project_stage_list" model="ir.ui.view">
+            <field name="name">property.project.stage.list</field>
+            <field name="model">property.project.stage</field>
+            <field name="arch" type="xml">
+                <list string="Project Stages" editable="bottom">
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="color"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="property_project_stage_form" model="ir.ui.view">
+            <field name="name">property.project.stage.form</field>
+            <field name="model">property.project.stage</field>
+            <field name="arch" type="xml">
+                <form string="Project Stage">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="sequence"/>
+                            <field name="description"/>
+                            <field name="color"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_property_project_stage" model="ir.actions.act_window">
+            <field name="name">Project Stages</field>
+            <field name="res_model">property.project.stage</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_property_project_stage"
+                  name="Project Stages"
+                  parent="itsys_real_estate.menu_settings"
+                  action="action_property_project_stage"
+                  sequence="21"/>
+
+        <!-- ========================= -->
+        <!-- Project Types -->
+        <!-- ========================= -->
+        <record id="property_project_type_list" model="ir.ui.view">
+            <field name="name">property.project.type.list</field>
+            <field name="model">property.project.type</field>
+            <field name="arch" type="xml">
+                <list string="Project Types">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="property_project_type_form" model="ir.ui.view">
+            <field name="name">property.project.type.form</field>
+            <field name="model">property.project.type</field>
+            <field name="arch" type="xml">
+                <form string="Project Type">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="description"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_property_project_type" model="ir.actions.act_window">
+            <field name="name">Project Types</field>
+            <field name="res_model">property.project.type</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_property_project_type"
+                  name="Project Types"
+                  parent="itsys_real_estate.menu_settings"
+                  action="action_property_project_type"
+                  sequence="22"/>
+
+        <!-- ========================= -->
+        <!-- Power Suppliers -->
+        <!-- ========================= -->
+        <record id="property_power_supplier_list" model="ir.ui.view">
+            <field name="name">property.power.supplier.list</field>
+            <field name="model">property.power.supplier</field>
+            <field name="arch" type="xml">
+                <list string="Power Suppliers">
+                    <field name="name"/>
+                    <field name="supplier_ref"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="property_power_supplier_form" model="ir.ui.view">
+            <field name="name">property.power.supplier.form</field>
+            <field name="model">property.power.supplier</field>
+            <field name="arch" type="xml">
+                <form string="Power Supplier">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="supplier_ref"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_property_power_supplier" model="ir.actions.act_window">
+            <field name="name">Power Suppliers</field>
+            <field name="res_model">property.power.supplier</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_property_power_supplier"
+                  name="Power Suppliers"
+                  parent="itsys_real_estate.menu_settings"
+                  action="action_property_power_supplier"
+                  sequence="23"/>
+
+        <!-- ========================= -->
+        <!-- Municipalities -->
+        <!-- ========================= -->
+        <record id="res_municipality_list" model="ir.ui.view">
+            <field name="name">res.municipality.list</field>
+            <field name="model">res.municipality</field>
+            <field name="arch" type="xml">
+                <list string="Municipalities">
+                    <field name="name"/>
+                    <field name="province_id"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="res_municipality_form" model="ir.ui.view">
+            <field name="name">res.municipality.form</field>
+            <field name="model">res.municipality</field>
+            <field name="arch" type="xml">
+                <form string="Municipality">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="province_id"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_res_municipality" model="ir.actions.act_window">
+            <field name="name">Municipalities</field>
+            <field name="res_model">res.municipality</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_res_municipality"
+                  name="Municipalities"
+                  parent="itsys_real_estate.menu_settings"
+                  action="action_res_municipality"
+                  sequence="24"/>
+
+  
+</odoo>

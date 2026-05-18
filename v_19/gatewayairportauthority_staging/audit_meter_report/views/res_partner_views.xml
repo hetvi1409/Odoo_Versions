@@ -1,0 +1,112 @@
+<odoo>
+    <record id="res_partner_view_search" model="ir.ui.view">
+        <field name="name">res.partner.tree.search</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='type_company']" position="after">
+<!--                <filter name="Audited"-->
+<!--                        domain="[('x_studio_selection_field_1oh_1i5pnt5e5', '=', 'audited')]"-->
+<!--                />-->
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_form_inherit_audit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.audit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>  <!-- Reference the existing partner form view -->
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet/div[hasclass('oe_button_box')]" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_audit_lines"
+                        icon="fa-pencil-square-o" invisible="audit_line_count == 0">
+                    <field string="Audit Lines" name="audit_line_count" widget="statinfo"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//div[@name='warning_tax']" position="before">
+                <header>
+<!--                    <field widget="statusbar" options="{'clickable': '1'}"-->
+<!--                           name="x_studio_selection_field_1oh_1i5pnt5e5"/>-->
+                    <button name="action_create_audit_line"
+                            type="object"
+                            string="Create Audit Line"
+                            class="btn-primary"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+    <!--            &lt;!&ndash; Add fields after a specific group or section in the form &ndash;&gt;-->
+    <!--            <xpath expr="//form[1]/sheet[1]" position="inside">-->
+    <!--                <group string="Route Details">-->
+    <!--                    <group>-->
+    <!--                        <field name="route_name"/>-->
+    <!--                        <field name="audit_date"/>-->
+    <!--                    </group>-->
+    <!--                    <group>-->
+    <!--                        <field name="sg_label"/>-->
+    <!--                        <field name="twentyone_key"/>-->
+    <!--                    </group>-->
+    <!--                    <group>-->
+    <!--                        <field name="address"/>-->
+    <!--                        <field name="can_audit"/>-->
+    <!--                        <field name="can_audit_remark"/>-->
+    <!--                        <field name="suspected_tamper"/>-->
+    <!--                        <field name="suspected_tamper_reason"/>-->
+    <!--                    </group>-->
+    <!--                </group>-->
+
+
+    <!--                <group string="Address">-->
+    <!--                    <group>-->
+    <!--                        <field name="street_number"/>-->
+    <!--                        <field name="street_name"/>-->
+    <!--                        <field name="suburb"/>-->
+    <!--                    </group>-->
+    <!--                    <group>-->
+    <!--                        <field name="city"/>-->
+    <!--                        <field name="country"/>-->
+    <!--                        <field name="zip_code"/>-->
+    <!--                    </group>-->
+    <!--                </group>-->
+
+    <!--                <group string="Photos">-->
+    <!--                    <group>-->
+    <!--                        <field name="meter_box_outside_photo" widget="image" class="oe_avatar" options="{'zoom': true, 'preview_image':'image_128'}"/>-->
+    <!--                        <field name="renewable_photo"/>-->
+    <!--                    </group>-->
+    <!--                    <group>-->
+    <!--                        <field name="meter_seals_photo"/>-->
+    <!--                        <field name="meter_box_inside_photo"/>-->
+    <!--                    </group>-->
+    <!--                    <group>-->
+    <!--                        <field name="meter_photo"/>-->
+    <!--                        <field name="suspected_tamper_photo"/>-->
+    <!--                        <field name="dwelling_photo"/>-->
+    <!--                    </group>-->
+    <!--                </group>-->
+    <!--            </xpath>-->
+    <!--            <xpath expr="//form[1]/sheet[1]/group[1]/group[2]" position="inside">-->
+    <!--                <field name="owner_surname"/>-->
+    <!--                <field name="owner_account_number"/>-->
+    <!--            </xpath>-->
+
+    <!--            <xpath expr="//form[1]/sheet[1]/group[2]/group[1]" position="inside">-->
+    <!--                <field name="dwelling_type"/>-->
+    <!--                <field name="meter_position"/>-->
+    <!--                <field name="meter_type"/>-->
+    <!--                <field name="meter_phases"/>-->
+    <!--                <field name="meter_sealed"/>-->
+    <!--                <field name="meter_cover_sealed"/>-->
+    <!--                <field name="ct_ratio"/>-->
+    <!--                <field name="breaker_size"/>-->
+    <!--                <field name="remarks"/>-->
+
+
+    <!--            </xpath>-->
+
+    <!--        </field>-->
+    <!--    </record>-->
+</odoo>
+

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================================================================
+         Custom Thank You page shown after a signer completes a
+         contract signing ceremony.
+    ================================================================= -->
+    <template id="sign_thank_you_page" name="ECDHS Sign Thank You">
+        <t t-call="web.layout">
+            <t t-set="head">
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <style>
+                    body { background: #f4f6f9; font-family: Arial, sans-serif; margin: 0; padding: 0; }
+                    .ecdhs-thankyou-wrapper {
+                        display: flex;
+                        min-height: 100vh;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 40px 16px;
+                    }
+                    .ecdhs-thankyou-card {
+                        background: #ffffff;
+                        border-radius: 12px;
+                        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+                        max-width: 560px;
+                        width: 100%;
+                        padding: 48px 40px 40px;
+                        text-align: center;
+                    }
+                    .ecdhs-check-circle {
+                        width: 72px;
+                        height: 72px;
+                        border-radius: 50%;
+                        background: #d4edda;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin: 0 auto 24px;
+                        font-size: 36px;
+                        color: #28a745;
+                        line-height: 1;
+                    }
+                    .ecdhs-thankyou-card h1 {
+                        color: #1a3a5c;
+                        font-size: 1.75rem;
+                        font-weight: 700;
+                        margin: 0 0 12px;
+                    }
+                    .ecdhs-thankyou-card p {
+                        color: #555;
+                        font-size: 1rem;
+                        line-height: 1.6;
+                        margin: 0 0 28px;
+                    }
+                    .ecdhs-divider {
+                        border: none;
+                        border-top: 1px solid #e9ecef;
+                        margin: 0 0 24px;
+                    }
+                    .ecdhs-footer-note {
+                        font-size: 0.85rem;
+                        color: #888;
+                        margin: 0;
+                    }
+                    .ecdhs-close-btn {
+                        display: inline-block;
+                        padding: 10px 28px;
+                        background-color: #875A7B;
+                        color: #ffffff;
+                        text-decoration: none;
+                        border-radius: 6px;
+                        font-weight: 600;
+                        font-size: 0.95rem;
+                        margin-bottom: 28px;
+                        border: none;
+                        cursor: pointer;
+                    }
+                    .ecdhs-close-btn:hover { background-color: #6d4862; color: #ffffff; }
+                </style>
+            </t>
+            <div class="ecdhs-thankyou-wrapper">
+                <div class="ecdhs-thankyou-card">
+                    <div class="ecdhs-check-circle">&#10003;</div>
+                    <h1>Document Signed Successfully</h1>
+                    <p>
+                        Thank you for completing your electronic signature.<br/>
+                        The ECDHS Contract Management Unit has been notified and
+                        will process the next steps.
+                    </p>
+                    <hr class="ecdhs-divider"/>
+                    <p>
+                        <strong>You will receive a copy of the signed document by email</strong>
+                        once all parties have completed their signatures.
+                    </p>
+                    <button class="ecdhs-close-btn" onclick="window.close()">Close This Window</button>
+                    <p class="ecdhs-footer-note">
+                        Eastern Cape Department of Human Settlements &#8212;
+                        Contract Management Unit
+                    </p>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Views -->
+    <record id="view_supplier_verification_tree" model="ir.ui.view">
+        <field name="name">supplier.verification.tree</field>
+        <field name="model">supplier.verification</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="supplier_id"/>
+                <field name="csd_id"/>
+                <field name="csd_verification_status"/>
+                <field name="cidb_id"/>
+                <field name="cidb_verification_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_supplier_verification_form" model="ir.ui.view">
+        <field name="name">supplier.verification.form</field>
+        <field name="model">supplier.verification</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <field name="supplier_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    </group>
+                    <group>
+                        <group string="CSD for supplier verification">
+                            <field name="csd_id"/>
+                            <field name="csd_verification_status"
+                                   widget="radio"/>
+                        </group>
+                        <group string="CIDB for supplier verification">
+                            <field name="cidb_id"/>
+                            <field name="cidb_verification_status"
+                                   widget="radio"/>
+                        </group>
+                        <notebook>
+<!--                            <page string="Documents">-->
+<!--                                <group>-->
+<!--                                    &lt;!&ndash; Old fields removed &ndash;&gt;-->
+<!--                                </group>-->
+<!--                            </page>-->
+                            <page string="Checklist Docs">
+                                <field name="checklist_docs">
+                                    <tree editable="bottom">
+                                        <field name="checklist_doc"/>
+                                        <field name="document_file"/>
+                                        <field name="checklist_checkbox"/>
+                                        <field name="compliant_selection"/>
+                                        <field name="comment"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_supplier_verification" model="ir.actions.act_window">
+        <field name="name">Supplier Verification</field>
+        <field name="res_model">supplier.verification</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+    </record>
+    <menuitem id="menu_supplier_verification_vetting_main" name="Supplier Verification and Vetting"
+              sequence="4"
+              parent="tender_management.menu_tender_management_root"/>
+
+    <!-- Supplier Verification and Vetting Menu -->
+    <menuitem id="menu_supplier_verification_vetting"
+              name="Supplier Verification and Vetting"
+              sequence="5" parent="menu_supplier_verification_vetting_main"
+              action="action_supplier_verification"/>
+
+
+</odoo>

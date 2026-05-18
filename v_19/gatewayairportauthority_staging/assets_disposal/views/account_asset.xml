@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_account_asset_form_inherit" model="ir.ui.view">
+        <field name="name">account.asset.view.form.inherit</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_custom_validate']" position="after">
+    <button name="action_asset_disposal"
+            type="object"
+            string="Dispose asset"
+             invisible="state in ('damaged','cancelled','open','draft')"/>
+                </xpath>
+             <xpath expr="//field[@name='custodian_id']" position="after">
+                 <field name = 'custodian_department_id'/>
+                </xpath>
+        </field>
+    </record>
+</odoo>

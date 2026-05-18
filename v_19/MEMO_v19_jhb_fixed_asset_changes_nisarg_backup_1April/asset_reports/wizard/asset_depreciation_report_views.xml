@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Asset Depreciation report -->
+    <record id="asset_depreciation_reports_view_form" model="ir.ui.view">
+        <field name="name">asset.depreciation.reports.view.form</field>
+        <field name="model">asset.depreciation.reports</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="to_date"/>
+                    </group>
+                    <group>
+                        <field name="from_date"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_sample_report" string="Print Depreciation Report"
+                            type="object" class="btn-primary"/>
+                    <button name="print_sample_depreciated_report" string="Print Fully Depreciated Report"
+                            type="object" class="btn-primary"/>
+                    <button name="print_xlsx" string="Print Excel report"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="asset_depreciation_reports_action" model="ir.actions.act_window">
+        <field name="name">Asset Depreciation</field>
+        <field name="res_model">asset.depreciation.reports</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="asset_depreciation_reports_menu"
+              name="Asset Depreciation Report"
+              action="asset_depreciation_reports_action"
+              parent="account.account_reports_management_menu"/>
+</odoo>

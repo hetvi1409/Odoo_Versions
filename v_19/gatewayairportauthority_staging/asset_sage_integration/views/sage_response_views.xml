@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="sage_response_view_tree" model="ir.ui.view">
+        <field name="name">sage.response.view.tree</field>
+        <field name="model">sage.response</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="response_id"/>
+                <field name="autoIdx"/>
+                <field name="transactionDate"/>
+                <field name="reference"/>
+                <field name="description"/>
+                <field name="debit"/>
+                <field name="credit"/>
+                <field name="amount"/>
+                <field name="uniqueId"/>
+                <field name="accountNumber"/>
+                <field name="cReference2"/>
+                <field name="auditNumber"/>
+                <field name="accountLink"/>
+                <field name="trCode"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sage_response_view_form" model="ir.ui.view">
+        <field name="name">sage.response.view.form</field>
+        <field name="model">sage.response</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!--                    <button name="action_to_review"-->
+                    <!--                            string="To Review" type="object"-->
+                    <!--                    class="btn-primary"/>-->
+                    <!--                    <field name="status" widget="statusbar"/>-->
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="response_id"/>
+                            <field name="transactionDate"/>
+                            <field name="description"/>
+                            <field name="credit"/>
+                            <field name="uniqueId"/>
+                            <field name="cReference2"/>
+                            <field name="accountLink"/>
+                        </group>
+                        <group>
+                            <field name="autoIdx"/>
+                            <field name="reference"/>
+                            <field name="debit"/>
+                            <field name="amount"/>
+                            <field name="accountNumber"/>
+                            <field name="auditNumber"/>
+                            <field name="trCodeDescription"/>
+                        </group>
+                    </group>
+                    <group string="Other Info">
+                        <group>
+                            <field name="quantity"/>
+                        </group>
+                        <group>
+                            <field name="asset_model_id"/>
+                        </group>
+
+                    </group>
+                    <notebook>
+                        <page string="Assets">
+                            <field name="asset_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="sage_response_action" model="ir.actions.act_window">
+        <field name="name">Sage</field>
+        <field name="res_model">sage.response</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="xml">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new Sage
+            </p>
+        </field>
+    </record>
+
+    <menuitem parent="account.account_account_menu"
+              id="sage_response_menu" name="Sage Response"
+              action="sage_response_action" sequence="101"/>
+
+</odoo>

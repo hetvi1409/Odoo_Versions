@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_report_asset_impairment" model="ir.actions.report">
+        <field name="name">Asset Impairment</field>
+        <field name="model">asset.impairment.reports</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">asset_reports.report_asset_impairment</field>
+        <field name="report_file">asset_reports.report_asset_impairment</field>
+        <field name="print_report_name">'Asset Impairment - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_asset_impairment_reports"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_asset_impairment">
+        <t t-call="web.html_container">
+            <!--            <t t-foreach="docs" t-as="doc">-->
+            <t t-call="web.external_layout">
+                <div calss="page">
+    <!--                    <img class="img"-->
+    <!--                         src="/asset_reports/static/src/img/report_icon.png"/>-->
+                    <br/>
+                    <h3>Impairment</h3>
+                    <table class="table">
+                        <tbody class="order_body">
+                            <tr>
+                                <td>
+                                    From date:
+                                </td>
+                                <td>
+                                    <t t-esc="from_date"/>
+                                </td>
+                                <td>
+                                    Cost Centre:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Facility:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    To Date:
+                                </td>
+                                <td>
+                                    <t t-esc="to_date"/>
+                                </td>
+                                <td>
+                                    Department:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Function:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Is Approved:
+                                </td>
+                                <td>
+                                    _
+                                </td>
+                                <td>
+                                    Class:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Fund:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Date Type:
+                                </td>
+                                <td>
+                                    _
+                                </td>
+                                <td>
+                                    Item:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Region:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Class:
+                                </td>
+                                <td>
+                                    _
+                                </td>
+                                <td>
+                                    Project:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Dim 12:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    CompType:
+                                </td>
+                                <td>
+                                    _
+                                </td>
+                                <td>
+                                    Supplier:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Dim 13:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Cost Center:
+                                </td>
+                                <td>
+                                    _
+                                </td>
+                                <td>
+                                    Cost:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    Dim 14:
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr class="text-center">
+                                <th class="text-right">Barcode</th>
+                                <th class="text-right">Asset Description</th>
+                                <th class="text-right">New Book Value</th>
+                                <th class="text-right">Revaluation Amount</th>
+                                <th class="text-right">Effective From</th>
+                                <th class="text-right">Reason</th>
+                                <th class="text-right">Captured By</th>
+                                <th class="text-right">Approved</th>
+                                <th class="text-right">Cancelled</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="data"
+                                t-as="rec">
+                                <td>
+                                    <t t-esc="rec[0]"/>
+                                </td>
+                                <td>
+                                    <span t-esc="rec[1]"/>:
+                                    <span t-esc="rec[2]"/>
+                                </td>
+                                <td>
+                                    <span t-esc="rec[3]"/>
+                                </td>
+                                <td>
+                                    <span t-esc="rec[4]"/>
+                                </td>
+                                <td>
+                                    <span t-esc="rec[5]"/>
+                                </td>
+                                <td>
+                                    <span t-esc="rec[6]"/>
+                                </td>
+                                <td>
+                                    <span t-esc="rec[7]"/>
+                                </td>
+                                <td>
+                                    <span t-esc="rec[8]"/>
+                                </td>
+                                <td>
+                                    <t t-if="rec[9] == 'cancelled'">
+                                        True
+                                    </t>
+                                    <t t-if="rec[9] != 'cancelled'">
+                                        False
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

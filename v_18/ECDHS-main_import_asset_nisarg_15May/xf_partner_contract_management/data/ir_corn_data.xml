@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Automated action for monitoring reports -->
+    <record id="ir_cron_contract_monitoring" model="ir.cron">
+        <field name="name">Contract Monitoring Reports</field>
+        <field name="model_id"
+               ref="xf_partner_contract_management.model_xf_partner_contract"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate_monitoring_reports()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <!--    <field name="numbercall">-1</field>-->
+        <!--    <field name="doall">False</field>-->
+    </record>
+
+    <!-- Server action for non-compliance -->
+    <record id="action_contract_non_compliance" model="ir.actions.server">
+        <field name="name">Process Non-Compliance</field>
+        <field name="model_id"
+               ref="xf_partner_contract_management.model_contract_monitoring_report"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.process_non_compliance()
+        </field>
+    </record>
+</odoo>

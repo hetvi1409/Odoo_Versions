@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    
+    <record model="ir.ui.view" id="housing_emergency_form_view">
+        <field name="name">housing.emergency.form.view</field>
+        <field name="model">housing.emergency</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_submit" type="object" string="Submit"
+                            invisible="state != 'draft'" class="btn-primary"/>
+                    <button name="action_review" type="object" string="Review"
+                            invisible="state != 'submit'" class="btn-primary"/>
+                    <button name="action_review_feedback" type="object" string="Comments"
+                            invisible="state != 'submit'" class="btn-primary"/>
+                    <button name="action_approved" type="object" string="Approve"
+                            invisible="state != 'review'" class="btn-primary"/>
+                    <button name="action_rejected" type="object" string="Reject"
+                            invisible="state != 'review'" class="btn-primary"/>
+                    <button name="action_reset_draft" type="object" string="Draft"
+                            invisible="state != 'reject'" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <field name="name"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="province_id"/>
+                            <field name="municipality_id"/>
+                            <label for="latitude"
+                                   string="Geo Location"/>
+                            <div>
+                                <span>Lat :
+                                    <field name="latitude"
+                                           nolabel="1" class="oe_inline"/>
+                                </span>
+                                <br/>
+                                <span>Long:
+                                    <field name="longitude"
+                                           nolabel="1" class="oe_inline"/>
+                                </span>
+                            </div>
+                            <field name="designation"/>
+                            <field name="telephone"/>
+                            <span class="o_form_label o_td_label"
+                                  name="address_name_parlour">
+                                <b>Postal Address
+                                </b>
+                            </span>
+                            <div class="o_address_format">
+                                <field name="street"
+                                       placeholder="Street..."
+                                       class="o_address_street"/>
+                                <field name="street2"
+                                       placeholder="Street2..."
+                                       class="o_address_street2"/>
+                                <field name="city_id"
+                                       placeholder="City"
+                                       class="o_address_city"/>
+                                <field name="postal_code"
+                                       placeholder="Postal Code"
+                                       class="o_address_zip"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="department_id"/>
+                            <field name="date"/>
+                            <field name="partner_id"/>
+                            <field name="surname"/>
+                            <field name="fax_number"/>
+                            <field name="email"/>
+                            <span class="o_form_label o_td_label"
+                                  name="address_name_parlour">
+                                <b>Physical Address
+                                </b>
+                            </span>
+                            <div class="o_address_format">
+                                <field name="physical_street"
+                                       placeholder="Street..."
+                                       class="o_address_street"/>
+                                <field name="physical_street2"
+                                       placeholder="Street2..."
+                                       class="o_address_street2"/>
+                                <field name="physical_city_id"
+                                       placeholder="City"
+                                       class="o_address_city"/>
+                                <field name="physical_postal_code"
+                                       placeholder="Postal Code"
+                                       class="o_address_zip"/>
+                            </div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <group>
+                                <field name="emergency_housing_situation"/>
+                                <field name="location_and_cause"/>
+                                <field name="level_destitution"/>
+                                <field name="nature_scope"/>
+                                <field name="mec_agreed"/>
+                                <field name="informed_disaster"/>
+                            </group>
+                        </page>
+                        <page string="Community Profile">
+                            <group>
+                                <group>
+                                    <field name="number_affected_person"/>
+                                    <field name="number_person_unemployed"/>
+                                </group>
+                                <group>
+                                    <field name="income_profile"/>
+                                    <field name="reason_relocation"/>
+                                </group>
+                            </group>
+                        </page>INFRASTRUCTURAL
+                        <page string="Land, Municipal infrastructural service and shelter">
+                            <group>
+                                <field name="is_land"/>
+                            </group>
+                            <group invisible="is_land != True">
+                                <group>
+                                    <field name="settlement_id"/>
+                                    <field name="property_nature_id"/>
+                                </group>
+                                <group>
+                                    <field name="before_settlement_id"/>
+                                    <field name="consulted"/>
+                                    <field name="consent_obtained" invisible="consulted != 'yes'"/>
+                                </group>
+                            </group>
+                            <group invisible="is_land != True">
+                                <field name="line_ids" invisible="consulted != 'no'">
+                                    <list editable="bottom">
+                                        <field name="comments"/>
+                                        <field name="time_frame" widget="float_time"/>
+                                    </list>
+                                </field>
+                            </group>
+                            <group string="Has land been identified for possible settlement">
+                                <group>
+                                    <span class="o_form_label o_td_label"
+                                          name="address_name_parlour">
+                                        <b>Land Location
+                                        </b>
+                                    </span>
+                                    <div class="o_address_format">
+                                        <field name="land_street"
+                                               placeholder="Street..."
+                                               class="o_address_street"/>
+                                        <field name="land_street2"
+                                               placeholder="Street2..."
+                                               class="o_address_street2"/>
+                                        <field name="land_city_id"
+                                               placeholder="City"
+                                               class="o_address_city"/>
+                                        <field name="land_postal_code"
+                                               placeholder="Postal Code"
+                                               class="o_address_zip"/>
+                                    </div>
+                                    <field name="housing"/>
+                                    <field name="timeframe"/>
+                                </group>
+                                <group>
+                                    <field name="land_ownership_id"/>
+                                    <field name="land_availability_basis"/>
+                                    <field name="cost"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="municipal_services"/>
+                                    <field name="estimated_costs"/>
+                                </group>
+                                <group>
+                                    <field name="reasons"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="basic_services_details"/>
+                                </group>
+                                <group>
+                                    <field name="bulk_services_details"/>
+                                </group>
+                            </group>
+                            <group string="Shelter is required">
+                                <group>
+                                    <field name="no_of_person_shelter"/>
+                                    <field name="no_of_shelter"/>
+                                    <field name="estimated_cost_shelter"/>
+                                    <field name="other_cost_shelter"/>
+                                </group>
+                                <group>
+                                    <field name="nature_shelter"/>
+                                    <field name="material_ids" widget="many2many_tags"/>
+                                    <field name="manner_provide_shelter"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Steps taken to date">
+                            <group>
+                                <field name="actions_taken_ids">
+                                    <list editable="bottom">
+                                        <field name="actor_id"/>
+                                        <field name="description"/>
+                                        <field name="date_taken"/>
+                                        <field name="status"/>
+                                    </list>
+                                </field>
+                                <field name="interest_party_ids">
+                                    <list editable="bottom">
+                                        <field name="name"/>
+                                        <field name="party_type"/>
+                                        <field name="interest_details"/>
+                                        <field name="remarks"/>
+                                    </list>
+                                </field>
+                                <group>
+                                    <field name="disaster_declared"/>
+                                </group>
+                                <group>
+                                    <field name="action_description" invisible="disaster_declared != 'yes'"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Capacity Status And Arrangements">
+                            <group>
+                                <group>
+                                    <field name="brief_description"/>
+                                    <field name="cash_flow_funds"/>
+                                </group>
+                                <group>
+                                    <field name="financial_brief_description"/>
+                                    <field name="capacity_augmentation_plan"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Linkages with existing and/or other programmes">
+                            <group>
+                                <group>
+                                    <field name="linked_to_any_other_programmes"/>
+                                </group>
+                                <group>
+                                    <field name="detailed_plan_solution"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Further Information">
+                            <group>
+                                <group>
+                                    <field name="further_information"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_housing_emergency" model="ir.actions.act_window">
+        <field name="name">Housing Emergency</field>
+        <field name="res_model">housing.emergency</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_housing_emergency" name="Emergency Housing Grant" sequence="2"
+              action="action_housing_emergency"
+              parent="website_housing_subsidy.menu_housing_subsidy"/>
+
+</odoo>

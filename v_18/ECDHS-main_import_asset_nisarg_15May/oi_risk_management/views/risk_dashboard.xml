@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- risk dashboard tree view  -->
+        <record model="ir.ui.view" id="oi_risk_management.risk_dashboard">
+            <field name="name">oi_risk_management.risk.dashboard.view.tree</field>
+            <field name="model">oi_risk_management.risk_treatment</field>
+            <field name="arch" type="xml">
+<!--                <list editable="bottom" create="false" js_class="list_view_expand_groups">-->
+                <list editable="bottom" create="false" >
+                    <field name="risk_description" string="Risk Description"/>
+                    <field name="risk_owner_id" string="Risk Owner"/>
+
+                    <field name="risk_inherent_risk_total_score" string="Inherent risk"/>
+                    <field name="risk_current_risk_total_score" string="Current risk"/>
+                    <field name="risk_residual_risk_total_score" string="Residual risk"/>
+
+                    <field name="name" string="Risk Treatment" readonly="1"/>
+                    <field name="target_date" string="Treatment target" readonly="1"/>
+                    <field name="status" string="Treatment status" readonly="1"
+                           decoration-warning="status == 'in_progress'" decoration-success="status == 'close'"
+                           decoration-bf="1"/>
+                    <field name="is_overdue_str" string=" " readonly="1" decoration-danger="1" decoration-bf="1"/>
+                    <field name="comments" string="Treatment comments"/>
+                </list>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="oi_risk_management.risk_dashboard_search">
+            <field name="name">risk.dashboard.default.search</field>
+            <field name="model">oi_risk_management.risk_treatment</field>
+            <field name="arch" type="xml">
+                <search string="Risks">
+                    <field name="risk_id"/>
+                    <field name="department_id"/>
+                    <field name="name"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Risk" name="risk" context="{'group_by':'risk_id'}" help="Risk"/>
+                        <filter name="department" context="{'group_by':'department_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

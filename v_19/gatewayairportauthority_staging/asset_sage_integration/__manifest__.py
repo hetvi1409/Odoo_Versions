@@ -1,0 +1,28 @@
+{
+    'name': 'Fixed Asset Sage Integration',
+    'category': 'Accounting',
+    'summary': """Fixed Asset Sage Integration""",
+    'description': """Fixed Asset Sage Integration""",
+    'version': '19.0.1.0.0',
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': 'https://natedsystems.co.za/',
+    'license': 'AGPL-3',
+    'depends': [
+        'account_accountant', 'account', 'account_asset'
+    ],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/asset_sage_integration_views.xml',
+        'views/account_account_views.xml',
+        'views/sage_response_views.xml',
+        'views/account_asset_views.xml'
+    ],
+    # 'external_dependencies' : {
+    #     'python' : ['pycryptodome'],
+    # },
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+}

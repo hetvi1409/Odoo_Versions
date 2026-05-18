@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    
+    <record id="risk_type_view_form" model="ir.ui.view">
+        <field name="name">risk.type.view.form</field>
+        <field name="model">risk.type</field>
+        <field name="arch" type="xml">
+            <form >
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="oi_risk_type"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="risk_type_view_list" model="ir.ui.view">
+        <field name="name">risk.type.view.form</field>
+        <field name="model">risk.type</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="oi_risk_type"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_risk_type" model="ir.actions.act_window">
+        <field name="name">Risk Type</field>
+        <field name="res_model">risk.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your Risk Type!!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="risk_type_menu" parent="oi_risk_management.configuration_menu"
+        name="Risk Type" action="action_risk_type" sequence="4"/>
+
+</odoo>

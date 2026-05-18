@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Sequence for Portfolio Code -->
+    <record id="seq_portfolio_management" model="ir.sequence">
+        <field name="name">Portfolio Management</field>
+        <field name="code">portfolio.management</field>
+        <field name="prefix">PORTF-</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Action -->
+    <record id="action_portfolio_management" model="ir.actions.act_window">
+        <field name="name">Portfolios</field>
+        <field name="res_model">portfolio.management</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first portfolio
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_portfolio_root"
+              name="Portfolio/Program"
+              parent="project.menu_main_pm"
+              sequence="3"/>
+
+    <menuitem id="menu_portfolio_management"
+              name="Portfolios"
+              parent="menu_portfolio_root" sequence="1"
+              action="action_portfolio_management"/>
+
+    <!-- Tree View -->
+    <record id="view_portfolio_management_tree" model="ir.ui.view">
+        <field name="name">portfolio.management.tree</field>
+        <field name="model">portfolio.management</field>
+        <field name="arch" type="xml">
+            <list string="Portfolios">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="owner_id"/>
+                <field name="sponsor_id"/>
+                <field name="priority"/>
+<!--                <field name="budget_total"/>-->
+<!--                <field name="cost_actual"/>-->
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_portfolio_management_form" model="ir.ui.view">
+        <field name="name">portfolio.management.form</field>
+        <field name="model">portfolio.management</field>
+        <field name="arch" type="xml">
+            <form string="Portfolio">
+                <header>
+                    <button name="action_review" type="object"
+                            string="Review"
+                            invisible="state != 'draft'"
+                            class="btn-primary"/>
+                    <button name="action_activate" type="object"
+                            string="Activate"
+                            invisible="state != 'review'"
+                            class="btn-primary"/>
+                    <button name="action_cancelled" type="object"
+                            string="Cancel"
+                            invisible="state != 'review'"
+                            class="btn-primary"/>
+                    <buton name="action_close" type="object"
+                            string="Close"
+                            invisible="state in ['active', 'review']"
+                            class="btn-secondary"/>
+<!--                    <button name="action_create_program" type="object"-->
+<!--                            invisible="state in ['active']"-->
+<!--                            string="New Program" class="btn-success"/>-->
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,active,review,closed,cancelled"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_program" invisible="not program_count" icon="fa-puzzle-piece" class="oe_stat_button">
+                            <field name="program_count" widget="statinfo" string="Programs"/>
+                        </button>
+                        <button type="object" name="action_view_project" invisible="not project_count" icon="fa-puzzle-piece" class="oe_stat_button">
+                            <field name="project_count" widget="statinfo" string="Projects"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code" readonly="1"/>
+                            <field name="owner_id"/>
+                            <field name="sponsor_id"/>
+                            <field name="priority"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="budget_planned" />
+                            <field name="budget_actual" />
+                            <field name="budget_variance" />
+<!--                            <field name="budget_total" readonly="1"/>-->
+<!--                            <field name="cost_actual" readonly="1"/>-->
+                            <field name="currency_id" invisible="1"/>
+                            <field name="risk_profile"/>
+<!--                            <field name="analytic_account_id"/>-->
+
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Programs">
+                            <field name="program_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="budget_planned" />
+                                    <field name="budget_actual" />
+                                    <field name="budget_variance" />
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_portfolio_management_search" model="ir.ui.view">
+        <field name="name">portfolio.management.search</field>
+        <field name="model">portfolio.management</field>
+        <field name="arch" type="xml">
+            <search string="Search Portfolios">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="owner_id"/>
+                <field name="sponsor_id"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <filter string="Active" name="filter_active" domain="[('state','=','active')]"/>
+                <filter string="Closed" name="filter_closed" domain="[('state','=','closed')]"/>
+                <filter string="High Priority" name="filter_high_priority" domain="[('priority','=','high')]"/>
+            </search>
+        </field>
+    </record>
+
+</odoo>

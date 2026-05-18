@@ -1,0 +1,1760 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ===================================== -->
+        <!-- PROCUREMENT METHODS CONFIGURATION -->
+        <!-- ===================================== -->
+
+        <!-- Method A: Quotation < R30,000 -->
+        <record id="procurement_method_quotation_r30k" model="sagovprocurement.method">
+            <field name="name">Quotation &lt; R30,000</field>
+            <field name="code">quotation_r30k</field>
+            <field name="sequence">10</field>
+            <field name="active">True</field>
+            <field name="description"><![CDATA[
+                <h3>Quotation < R30,000 Procurement Method</h3>
+                <p>Simple procurement method for procuring goods or services with estimated value below R30,000.</p>
+                <h4>Process:</h4>
+                <ol>
+                    <li>Demand Identification - End-user identifies need</li>
+                    <li>Requisition Capture - SCM system entry</li>
+                    <li>Obtain Written Quotation(s) - Minimum 1 quotation</li>
+                    <li>Evaluation & Selection - Price reasonableness check</li>
+                    <li>Approval of Award - Delegated authority approval</li>
+                    <li>Purchase Order Issued - PO generation</li>
+                    <li>Delivery/Service - End-user confirmation</li>
+                    <li>Invoice & Payment - Standard payment processing</li>
+                </ol>
+            ]]></field>
+            <field name="min_value">0</field>
+            <field name="max_value">30000</field>
+            <field name="quotations_required">1</field>
+            <field name="quotation_period_days">5</field>
+            <field name="written_quotation_only">True</field>
+            <field name="requires_bsc_approval">False</field>
+            <field name="requires_bec_evaluation">False</field>
+            <field name="requires_bac_review">False</field>
+            <field name="requires_briefing_session">False</field>
+            <field name="advertising_days_minimum">0</field>
+            <field name="late_bids_rejected">True</field>
+            <field name="requires_compliance_check">False</field>
+            <field name="requires_declaration_interest">False</field>
+            <field name="pppfa_compliant">True</field>
+            <field name="pfma_compliant">True</field>
+            <field name="treasury_regulation_compliant">True</field>
+            <field name="legal_framework">PPPFA regulations; National Treasury SCM Instruction Notes; PFMA Section 76; Constitution Section 217</field>
+            <field name="allows_negotiation">False</field>
+            <field name="allows_framework_agreement">False</field>
+            <field name="allows_panel_procurement">False</field>
+            <field name="policy_notes"><![CDATA[<p>Simplest procurement method for low-value procurements. No formal advertisement required. Single quotation acceptable.</p>]]></field>
+        </record>
+
+        <!-- Method B: Open RFQ (R30,000 - R300,000 Municipality / R1,000,000 Departments) -->
+        <record id="procurement_method_open_rfq_r30k_r300k" model="sagovprocurement.method">
+            <field name="name">Open RFQ (R30,000 - R300,000)</field>
+            <field name="code">open_rfq_r30k_r300k</field>
+            <field name="sequence">20</field>
+            <field name="active">True</field>
+            <field name="description"><![CDATA[
+                <h3>Open Request for Quotation - R30,000 to R300,000</h3>
+                <p>Open competitive procurement method for goods and services in the R30,000 to R300,000 range (Municipalities: R30,000-R300,000; Departments: R30,000-R1,000,000).</p>
+            ]]></field>
+            <field name="min_value">30000</field>
+            <field name="max_value">300000</field>
+            <field name="quotations_required">3</field>
+            <field name="quotation_period_days">10</field>
+            <field name="written_quotation_only">True</field>
+            <field name="requires_bsc_approval">False</field>
+            <field name="requires_bec_evaluation">False</field>
+            <field name="requires_bac_review">False</field>
+            <field name="requires_briefing_session">False</field>
+            <field name="advertising_days_minimum">7</field>
+            <field name="late_bids_rejected">True</field>
+            <field name="requires_compliance_check">False</field>
+            <field name="requires_declaration_interest">False</field>
+            <field name="pppfa_compliant">True</field>
+            <field name="pfma_compliant">True</field>
+            <field name="mfma_compliant">True</field>
+            <field name="treasury_regulation_compliant">True</field>
+            <field name="legal_framework">PPPFA; National Treasury SCM Instruction Notes; MFMA Section 111; PFMA Section 76; Constitution Section 217</field>
+            <field name="allows_negotiation">False</field>
+            <field name="allows_framework_agreement">False</field>
+            <field name="allows_panel_procurement">False</field>
+            <field name="policy_notes"><![CDATA[<p>Open competitive process. Minimum 3 quotations preferred. Must be advertised on portal and website.</p>]]></field>
+        </record>
+
+        <!-- Method C: Competitive Bid < R50 Million -->
+        <record id="procurement_method_competitive_bid_r50m" model="sagovprocurement.method">
+            <field name="name">Competitive Bid &lt; R50 Million</field>
+            <field name="code">competitive_bid_r50m</field>
+            <field name="sequence">30</field>
+            <field name="active">True</field>
+            <field name="description"><![CDATA[
+                <h3>Competitive Bid < R50 Million</h3>
+                <p>Formal competitive bidding process for procurements between RFQ threshold and R50 million.</p>
+            ]]></field>
+            <field name="min_value">300000</field>
+            <field name="max_value">50000000</field>
+            <field name="quotations_required">1</field>
+            <field name="quotation_period_days">21</field>
+            <field name="written_quotation_only">True</field>
+            <field name="requires_bsc_approval">True</field>
+            <field name="requires_bec_evaluation">True</field>
+            <field name="requires_bac_review">True</field>
+            <field name="requires_briefing_session">True</field>
+            <field name="briefing_mandatory">False</field>
+            <field name="advertising_days_minimum">21</field>
+            <field name="late_bids_rejected">True</field>
+            <field name="requires_compliance_check">True</field>
+            <field name="requires_declaration_interest">True</field>
+            <field name="pppfa_compliant">True</field>
+            <field name="pfma_compliant">True</field>
+            <field name="mfma_compliant">True</field>
+            <field name="treasury_regulation_compliant">True</field>
+            <field name="legal_framework">PPPFA; National Treasury SCM Instruction Notes; PFMA Section 76; MFMA Section 111; Constitution Section 217</field>
+            <field name="allows_negotiation">False</field>
+            <field name="allows_framework_agreement">False</field>
+            <field name="allows_panel_procurement">False</field>
+            <field name="policy_notes"><![CDATA[<p>Formal competitive bidding with BSC, BEC, and BAC processes. Preference points apply. Compliance verification required.</p>]]></field>
+        </record>
+
+        <!-- Method D: Competitive Bid > R50 Million -->
+        <record id="procurement_method_competitive_bid_over_r50m" model="sagovprocurement.method">
+            <field name="name">Competitive Bid &gt; R50 Million</field>
+            <field name="code">competitive_bid_over_r50m</field>
+            <field name="sequence">40</field>
+            <field name="active">True</field>
+            <field name="description"><![CDATA[
+                <h3>Competitive Bid > R50 Million</h3>
+                <p>High-value competitive bidding process with extended timeline and formal oversight.</p>
+            ]]></field>
+            <field name="min_value">50000000</field>
+            <field name="max_value">0</field>
+            <field name="quotations_required">1</field>
+            <field name="quotation_period_days">30</field>
+            <field name="written_quotation_only">True</field>
+            <field name="requires_bsc_approval">True</field>
+            <field name="requires_bec_evaluation">True</field>
+            <field name="requires_bac_review">True</field>
+            <field name="requires_briefing_session">True</field>
+            <field name="briefing_mandatory">True</field>
+            <field name="advertising_days_minimum">30</field>
+            <field name="late_bids_rejected">True</field>
+            <field name="requires_compliance_check">True</field>
+            <field name="requires_declaration_interest">True</field>
+            <field name="pppfa_compliant">True</field>
+            <field name="pfma_compliant">True</field>
+            <field name="mfma_compliant">True</field>
+            <field name="treasury_regulation_compliant">True</field>
+            <field name="legal_framework">PPPFA; National Treasury SCM Instruction Notes; PFMA Section 76; MFMA Section 111; Constitution Section 217</field>
+            <field name="allows_negotiation">True</field>
+            <field name="allows_framework_agreement">False</field>
+            <field name="allows_panel_procurement">False</field>
+            <field name="policy_notes"><![CDATA[<p>High-value strategic procurement. Treasury concurrence required. Dedicated contract management.</p>]]></field>
+        </record>
+
+        <!-- Method E: Sole Source Procurement -->
+        <record id="procurement_method_sole_source" model="sagovprocurement.method">
+            <field name="name">Sole Source Procurement</field>
+            <field name="code">sole_source</field>
+            <field name="sequence">50</field>
+            <field name="active">True</field>
+            <field name="description"><![CDATA[
+                <h3>Sole Source Procurement</h3>
+                <p>Limited competition procurement for situations where only one supplier can provide the requirement.</p>
+            ]]></field>
+            <field name="min_value">0</field>
+            <field name="max_value">0</field>
+            <field name="quotations_required">1</field>
+            <field name="quotation_period_days">10</field>
+            <field name="written_quotation_only">True</field>
+            <field name="requires_bsc_approval">False</field>
+            <field name="requires_bec_evaluation">False</field>
+            <field name="requires_bac_review">False</field>
+            <field name="requires_briefing_session">False</field>
+            <field name="advertising_days_minimum">0</field>
+            <field name="late_bids_rejected">False</field>
+            <field name="requires_compliance_check">True</field>
+            <field name="requires_declaration_interest">False</field>
+            <field name="pppfa_compliant">False</field>
+            <field name="pfma_compliant">True</field>
+            <field name="mfma_compliant">True</field>
+            <field name="treasury_regulation_compliant">False</field>
+            <field name="legal_framework">PFMA Section 76; MFMA Section 111; Requires deviation approval</field>
+            <field name="allows_negotiation">True</field>
+            <field name="allows_framework_agreement">True</field>
+            <field name="allows_panel_procurement">False</field>
+            <field name="policy_notes"><![CDATA[<p>Non-competitive method requiring Accounting Officer approval. Price reasonableness verification essential.</p>]]></field>
+        </record>
+
+        <!-- Method F: Emergency/Deviation Procurement -->
+        <record id="procurement_method_emergency_procurement" model="sagovprocurement.method">
+            <field name="name">Emergency/Deviation Procurement</field>
+            <field name="code">emergency_procurement</field>
+            <field name="sequence">60</field>
+            <field name="active">True</field>
+            <field name="description"><![CDATA[
+                <h3>Emergency/Deviation Procurement</h3>
+                <p>Expedited procurement for unforeseen circumstances where competitive bidding is impractical.</p>
+            ]]></field>
+            <field name="min_value">0</field>
+            <field name="max_value">0</field>
+            <field name="quotations_required">1</field>
+            <field name="quotation_period_days">1</field>
+            <field name="written_quotation_only">False</field>
+            <field name="requires_bsc_approval">False</field>
+            <field name="requires_bec_evaluation">False</field>
+            <field name="requires_bac_review">False</field>
+            <field name="requires_briefing_session">False</field>
+            <field name="advertising_days_minimum">0</field>
+            <field name="late_bids_rejected">False</field>
+            <field name="requires_compliance_check">False</field>
+            <field name="requires_declaration_interest">False</field>
+            <field name="pppfa_compliant">False</field>
+            <field name="pfma_compliant">True</field>
+            <field name="mfma_compliant">True</field>
+            <field name="treasury_regulation_compliant">False</field>
+            <field name="legal_framework">PFMA Section 76; MFMA Section 111; Emergency provisions</field>
+            <field name="allows_negotiation">False</field>
+            <field name="allows_framework_agreement">False</field>
+            <field name="allows_panel_procurement">False</field>
+            <field name="policy_notes"><![CDATA[<p>Used only for genuine emergencies. Requires written motivation and Accounting Officer approval.</p>]]></field>
+        </record>
+
+        <!-- Method G: Panel Suppliers -->
+        <record id="procurement_method_panel_suppliers" model="sagovprocurement.method">
+            <field name="name">Panel Suppliers / Framework Agreement</field>
+            <field name="code">panel_suppliers</field>
+            <field name="sequence">70</field>
+            <field name="active">True</field>
+            <field name="description"><![CDATA[
+                <h3>Panel Suppliers / Framework Agreement</h3>
+                <p>Call-off procurement from pre-approved supplier panel or framework agreement.</p>
+            ]]></field>
+            <field name="min_value">0</field>
+            <field name="max_value">0</field>
+            <field name="quotations_required">1</field>
+            <field name="quotation_period_days">5</field>
+            <field name="written_quotation_only">False</field>
+            <field name="requires_bsc_approval">False</field>
+            <field name="requires_bec_evaluation">False</field>
+            <field name="requires_bac_review">False</field>
+            <field name="requires_briefing_session">False</field>
+            <field name="advertising_days_minimum">0</field>
+            <field name="late_bids_rejected">True</field>
+            <field name="requires_compliance_check">False</field>
+            <field name="requires_declaration_interest">False</field>
+            <field name="pppfa_compliant">True</field>
+            <field name="pfma_compliant">True</field>
+            <field name="mfma_compliant">True</field>
+            <field name="treasury_regulation_compliant">True</field>
+            <field name="legal_framework">PPPFA; Framework Agreement regulations; PFMA Section 76; MFMA Section 111</field>
+            <field name="allows_negotiation">False</field>
+            <field name="allows_framework_agreement">True</field>
+            <field name="allows_panel_procurement">True</field>
+            <field name="policy_notes"><![CDATA[<p>Used for repeat procurement from established supplier panels. Panel must have been established through competitive bidding.</p>]]></field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- PREFERENCE POINT SYSTEMS -->
+        <!-- ===================================== -->
+
+        <!-- 80/20 Preference System -->
+        <record id="preference_point_system_80_20" model="sagovpreference.point.system">
+            <field name="name">80/20 Preference System (R30,000 - R500,000)</field>
+            <field name="code">system_80_20</field>
+            <field name="sequence">10</field>
+            <field name="system_type">80_20</field>
+            <field name="active">True</field>
+            <field name="description"><![CDATA[
+                <h3>80/20 Preference Point System</h3>
+                <p>Price weighted at 80% and preference points weighted at 20%. Applicable to lower-value tenders (typically R30,000 - R500,000).</p>
+            ]]></field>
+            <field name="price_weight_percentage">80.0</field>
+            <field name="preference_weight_percentage">20.0</field>
+            <field name="total_preference_points">20.0</field>
+            <field name="price_formula">lowest_scored</field>
+            <field name="bbbee_points">20.0</field>
+            <field name="bbbee_weight">1.0</field>
+            <field name="women_empowerment_points">0.0</field>
+            <field name="youth_points">0.0</field>
+            <field name="local_content_points">0.0</field>
+            <field name="sme_points">0.0</field>
+            <field name="pwd_points">0.0</field>
+            <field name="minimum_applicable_value">30000</field>
+            <field name="pppfa_compliant">True</field>
+            <field name="legal_reference">PPPFA Section 2; National Treasury Instruction Note on Procurement; B-BBEE Act</field>
+            <field name="policy_notes"><![CDATA[
+                <p><strong>Applicable Range:</strong> R30,000 - R500,000</p>
+                <p><strong>Preference Points:</strong> B-BBEE Contribution (20 points)</p>
+                <p>All 20 preference points allocated to B-BBEE contribution per PPPFA regulations.</p>
+            ]]></field>
+        </record>
+
+        <!-- 90/10 Preference System -->
+        <record id="preference_point_system_90_10" model="sagovpreference.point.system">
+            <field name="name">90/10 Preference System (Above R500,000)</field>
+            <field name="code">system_90_10</field>
+            <field name="sequence">20</field>
+            <field name="system_type">90_10</field>
+            <field name="active">True</field>
+            <field name="description"><![CDATA[
+                <h3>90/10 Preference Point System</h3>
+                <p>Price weighted at 90% and preference points weighted at 10%. Applicable to higher-value tenders (typically above R500,000).</p>
+            ]]></field>
+            <field name="price_weight_percentage">90.0</field>
+            <field name="preference_weight_percentage">10.0</field>
+            <field name="total_preference_points">10.0</field>
+            <field name="price_formula">lowest_scored</field>
+            <field name="bbbee_points">10.0</field>
+            <field name="bbbee_weight">1.0</field>
+            <field name="women_empowerment_points">0.0</field>
+            <field name="youth_points">0.0</field>
+            <field name="local_content_points">0.0</field>
+            <field name="sme_points">0.0</field>
+            <field name="pwd_points">0.0</field>
+            <field name="minimum_applicable_value">500000</field>
+            <field name="pppfa_compliant">True</field>
+            <field name="legal_reference">PPPFA Section 2; National Treasury Instruction Note on Procurement; B-BBEE Act</field>
+            <field name="policy_notes"><![CDATA[
+                <p><strong>Applicable Range:</strong> Above R500,000</p>
+                <p><strong>Preference Points:</strong> B-BBEE Contribution (10 points)</p>
+                <p>All 10 preference points allocated to B-BBEE contribution per PPPFA regulations.</p>
+            ]]></field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- LINK PROCUREMENT METHODS TO PREFERENCE SYSTEMS -->
+        <!-- ===================================== -->
+
+        <!-- Link Method A: Quotation < R30,000 to 80/20 System -->
+        <record id="procurement_method_quotation_r30k" model="sagovprocurement.method">
+            <field name="preference_point_system_ids" eval="[(4, ref('preference_point_system_80_20'))]"/>
+        </record>
+
+        <!-- Link Method B: Open RFQ (R30,000 - R300,000) to 80/20 System -->
+        <record id="procurement_method_open_rfq_r30k_r300k" model="sagovprocurement.method">
+            <field name="preference_point_system_ids" eval="[(4, ref('preference_point_system_80_20'))]"/>
+        </record>
+
+        <!-- Link Method C: Competitive Bid < R50M to 90/10 System (as value exceeds R500k threshold) -->
+        <record id="procurement_method_competitive_bid_r50m" model="sagovprocurement.method">
+            <field name="preference_point_system_ids" eval="[(4, ref('preference_point_system_90_10'))]"/>
+        </record>
+
+        <!-- Link Method D: Competitive Bid > R50M to 90/10 System -->
+        <record id="procurement_method_competitive_bid_over_r50m" model="sagovprocurement.method">
+            <field name="preference_point_system_ids" eval="[(4, ref('preference_point_system_90_10'))]"/>
+        </record>
+
+        <!-- Link Method E: Sole Source - typically high value, use 90/10 -->
+        <record id="procurement_method_sole_source" model="sagovprocurement.method">
+            <field name="preference_point_system_ids" eval="[(4, ref('preference_point_system_90_10'))]"/>
+        </record>
+
+        <!-- Link Method F: Emergency Procurement - can use either system depending on value -->
+        <record id="procurement_method_emergency_procurement" model="sagovprocurement.method">
+            <field name="preference_point_system_ids" eval="[(4, ref('preference_point_system_80_20')), (4, ref('preference_point_system_90_10'))]"/>
+        </record>
+
+        <!-- Link Method G: Panel Suppliers - can use either system depending on value -->
+        <record id="procurement_method_panel_suppliers" model="sagovprocurement.method">
+            <field name="preference_point_system_ids" eval="[(4, ref('preference_point_system_80_20')), (4, ref('preference_point_system_90_10'))]"/>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- PREFERENCE CRITERIA FOR 80/20 SYSTEM -->
+        <!-- ===================================== -->
+
+        <!-- 80/20: B-BBEE Contribution (20 points) -->
+        <record id="preference_criteria_80_20_bbbee" model="sagovpreference.point.criteria">
+            <field name="system_id" ref="preference_point_system_80_20"/>
+            <field name="name">B-BBEE Contribution (20 points)</field>
+            <field name="sequence">10</field>
+            <field name="criteria_key">bbbee_level</field>
+            <field name="criteria_type">level</field>
+            <field name="points">20.0</field>
+            <field name="scoring_rule">tiered</field>
+            <field name="tiered_scoring">{"1-4": 20, "5-8": 10}</field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- PREFERENCE CRITERIA FOR 90/10 SYSTEM -->
+        <!-- ===================================== -->
+
+        <!-- 90/10: B-BBEE Contribution (10 points) -->
+        <record id="preference_criteria_90_10_bbbee" model="sagovpreference.point.criteria">
+            <field name="system_id" ref="preference_point_system_90_10"/>
+            <field name="name">B-BBEE Contribution (10 points)</field>
+            <field name="sequence">10</field>
+            <field name="criteria_key">bbbee_level</field>
+            <field name="criteria_type">level</field>
+            <field name="points">10.0</field>
+            <field name="scoring_rule">tiered</field>
+            <field name="tiered_scoring">{"1-4": 10, "5-8": 5}</field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- LINK PREFERENCE SYSTEMS TO PROCUREMENT METHODS (Applicable Methods) -->
+        <!-- ===================================== -->
+
+        <!-- 80/20 System - Applicable to Methods A, B (lower value procurements) -->
+        <record id="preference_point_system_80_20" model="sagovpreference.point.system">
+            <field name="applicable_value_range_ids" eval="[(4, ref('procurement_method_quotation_r30k')), (4, ref('procurement_method_open_rfq_r30k_r300k'))]"/>
+        </record>
+
+        <!-- 90/10 System - Applicable to Methods C, D, E, F, G (higher value procurements) -->
+        <record id="preference_point_system_90_10" model="sagovpreference.point.system">
+            <field name="applicable_value_range_ids" eval="[(4, ref('procurement_method_competitive_bid_r50m')), (4, ref('procurement_method_competitive_bid_over_r50m')), (4, ref('procurement_method_sole_source')), (4, ref('procurement_method_emergency_procurement')), (4, ref('procurement_method_panel_suppliers'))]"/>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- WORKFLOW STAGES FOR EACH PROCUREMENT METHOD -->
+        <!-- ===================================== -->
+
+        <!-- Method A: Quotation < R30,000 - Workflow Stages -->
+        <record id="workflow_stage_quotation_r30k_01" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_quotation_r30k"/>
+            <field name="name">Demand Identification</field>
+            <field name="sequence">10</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_quotation_r30k_02" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_quotation_r30k"/>
+            <field name="name">Requisition Capture</field>
+            <field name="sequence">20</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_quotation_r30k_03" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_quotation_r30k"/>
+            <field name="name">Obtain Written Quotation</field>
+            <field name="sequence">30</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_quotation_r30k_04" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_quotation_r30k"/>
+            <field name="name">Price Reasonableness Check</field>
+            <field name="sequence">40</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_quotation_r30k_05" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_quotation_r30k"/>
+            <field name="name">Approval of Award</field>
+            <field name="sequence">50</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">approval</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_quotation_r30k_06" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_quotation_r30k"/>
+            <field name="name">Purchase Order Issuance</field>
+            <field name="sequence">60</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+
+        <!-- Method B: Open RFQ (R30,000 - R300,000) - Workflow Stages -->
+        <record id="workflow_stage_open_rfq_01" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Requisition &amp; Budget Approval</field>
+            <field name="sequence">10</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_open_rfq_02" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Specification Development</field>
+            <field name="sequence">20</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_open_rfq_03" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">RFQ Advertisement</field>
+            <field name="sequence">30</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_open_rfq_04" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Quotation Submission Period</field>
+            <field name="sequence">40</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_open_rfq_05" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Quotation Opening</field>
+            <field name="sequence">50</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_open_rfq_06" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Evaluation &amp; Scoring</field>
+            <field name="sequence">60</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_open_rfq_07" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Award Approval</field>
+            <field name="sequence">70</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">approval</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_open_rfq_08" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Contract Award &amp; PO Issue</field>
+            <field name="sequence">80</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+
+        <!-- Method C: Competitive Bid < R50 Million - Workflow Stages -->
+        <record id="workflow_stage_comp_bid_r50m_01" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Requisition from APP</field>
+            <field name="sequence">10</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_02" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Budget Confirmation</field>
+            <field name="sequence">20</field>
+            <field name="responsible_group">other</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_03" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Specification Development</field>
+            <field name="sequence">30</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_04" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">BSC Approval to Advertise</field>
+            <field name="sequence">40</field>
+            <field name="responsible_group">bsc</field>
+            <field name="stage_type">approval</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_05" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Tender Advertisement (21 days min)</field>
+            <field name="sequence">50</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_06" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Tender Briefing Session</field>
+            <field name="sequence">60</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">False</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_07" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Bid Submission Period</field>
+            <field name="sequence">70</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_08" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Bid Opening Register</field>
+            <field name="sequence">80</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_09" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Compliance Verification (CSD, Tax, B-BBEE)</field>
+            <field name="sequence">90</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_10" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Declaration of Interest</field>
+            <field name="sequence">100</field>
+            <field name="responsible_group">bec</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_11" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">BEC Evaluation (Technical &amp; Price)</field>
+            <field name="sequence">110</field>
+            <field name="responsible_group">bec</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_12" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">BAC Review &amp; Recommendation</field>
+            <field name="sequence">120</field>
+            <field name="responsible_group">bac</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_13" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Accounting Officer Award Approval</field>
+            <field name="sequence">130</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">approval</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_14" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Award Notification &amp; Publication</field>
+            <field name="sequence">140</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">decision</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_r50m_15" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Contract Signing &amp; Management</field>
+            <field name="sequence">150</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+
+        <!-- Method D: Competitive Bid > R50 Million - Workflow Stages (Extended Process) -->
+        <record id="workflow_stage_comp_bid_over_r50m_01" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Requisition from APP</field>
+            <field name="sequence">10</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_02" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Budget Confirmation</field>
+            <field name="sequence">20</field>
+            <field name="responsible_group">other</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_03" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Feasibility Study</field>
+            <field name="sequence">30</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_04" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Specification Development</field>
+            <field name="sequence">40</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_05" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Treasury Concurrence (if required)</field>
+            <field name="sequence">50</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">approval</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_06" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">BSC Approval to Advertise</field>
+            <field name="sequence">60</field>
+            <field name="responsible_group">bsc</field>
+            <field name="stage_type">approval</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_07" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Tender Advertisement (30 days min)</field>
+            <field name="sequence">70</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_08" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Compulsory Briefing Session</field>
+            <field name="sequence">80</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_09" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Clarification Questions Period</field>
+            <field name="sequence">90</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_10" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Bid Submission Period</field>
+            <field name="sequence">100</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_11" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Bid Opening Register</field>
+            <field name="sequence">110</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_12" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Comprehensive Compliance Verification</field>
+            <field name="sequence">120</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_13" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Declaration of Interest</field>
+            <field name="sequence">130</field>
+            <field name="responsible_group">bec</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_14" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">BEC Technical Evaluation</field>
+            <field name="sequence">140</field>
+            <field name="responsible_group">bec</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_15" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">BEC Price &amp; Preference Evaluation</field>
+            <field name="sequence">150</field>
+            <field name="responsible_group">bec</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_16" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">BEC Report Compilation</field>
+            <field name="sequence">160</field>
+            <field name="responsible_group">bec</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_17" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">BAC Review &amp; Recommendation</field>
+            <field name="sequence">170</field>
+            <field name="responsible_group">bac</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_18" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Accounting Officer Award Approval</field>
+            <field name="sequence">180</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">approval</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_19" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Award Notification &amp; Publication</field>
+            <field name="sequence">190</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">decision</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_20" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Contract Negotiation (if required)</field>
+            <field name="sequence">200</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">False</field>
+        </record>
+        <record id="workflow_stage_comp_bid_over_r50m_21" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Contract Signing &amp; Management</field>
+            <field name="sequence">210</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">administrative</field>
+            <field name="required">True</field>
+        </record>
+
+        <!-- Method E: Sole Source - Workflow Stages -->
+        <record id="workflow_stage_sole_source_01" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Requisition with Justification</field>
+            <field name="sequence">10</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_sole_source_02" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Deviation Motivation Preparation</field>
+            <field name="sequence">20</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_sole_source_03" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">CFO Recommendation</field>
+            <field name="sequence">30</field>
+            <field name="responsible_group">other</field>
+            <field name="stage_type">approval</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_sole_source_04" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Accounting Officer Approval</field>
+            <field name="sequence">40</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">approval</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_sole_source_05" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Obtain Quotation from Sole Supplier</field>
+            <field name="sequence">50</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_sole_source_06" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Price Reasonableness Verification</field>
+            <field name="sequence">60</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_sole_source_07" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Compliance Verification</field>
+            <field name="sequence">70</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_sole_source_08" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Contract Award</field>
+            <field name="sequence">80</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">decision</field>
+            <field name="required">True</field>
+        </record>
+
+        <!-- Method F: Emergency Procurement - Workflow Stages -->
+        <record id="workflow_stage_emergency_01" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Emergency Declaration</field>
+            <field name="sequence">10</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_emergency_02" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Accounting Officer Emergency Approval</field>
+            <field name="sequence">20</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">approval</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_emergency_03" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Expedited Supplier Identification</field>
+            <field name="sequence">30</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_emergency_04" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Emergency Award</field>
+            <field name="sequence">40</field>
+            <field name="responsible_group">delegated_authority</field>
+            <field name="stage_type">decision</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_emergency_05" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Retrospective Reporting</field>
+            <field name="sequence">50</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">notification</field>
+            <field name="required">True</field>
+        </record>
+
+        <!-- Method G: Panel Suppliers - Workflow Stages -->
+        <record id="workflow_stage_panel_01" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Requisition from Panel</field>
+            <field name="sequence">10</field>
+            <field name="responsible_group">end_user</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_panel_02" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Panel Supplier Selection</field>
+            <field name="sequence">20</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_panel_03" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Request Quotations from Panel</field>
+            <field name="sequence">30</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">information</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_panel_04" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Evaluation &amp; Selection</field>
+            <field name="sequence">40</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">evaluation</field>
+            <field name="required">True</field>
+        </record>
+        <record id="workflow_stage_panel_05" model="sagovprocurement.workflow.stage">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Award &amp; PO Issue</field>
+            <field name="sequence">50</field>
+            <field name="responsible_group">scm</field>
+            <field name="stage_type">decision</field>
+            <field name="required">True</field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- DOCUMENT REQUIREMENTS FOR EACH PROCUREMENT METHOD -->
+        <!-- ===================================== -->
+
+        <!-- Method A: Quotation < R30,000 - Documents -->
+        <record id="doc_req_quotation_r30k_01" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_quotation_r30k"/>
+            <field name="name">Purchase Requisition Form</field>
+            <field name="sequence">10</field>
+            <field name="document_type">financial</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_quotation_r30k_02" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_quotation_r30k"/>
+            <field name="name">Written Quotation</field>
+            <field name="sequence">20</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_quotation_r30k_03" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_quotation_r30k"/>
+            <field name="name">Approval Authorization</field>
+            <field name="sequence">30</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+
+        <!-- Method B: Open RFQ - Documents -->
+        <record id="doc_req_open_rfq_01" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Purchase Requisition</field>
+            <field name="sequence">10</field>
+            <field name="document_type">financial</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_open_rfq_02" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Budget Confirmation</field>
+            <field name="sequence">20</field>
+            <field name="document_type">financial</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_open_rfq_03" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Terms of Reference/Specification</field>
+            <field name="sequence">30</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_open_rfq_04" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">RFQ Advertisement</field>
+            <field name="sequence">40</field>
+            <field name="document_type">other</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_open_rfq_05" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Submitted Quotations</field>
+            <field name="sequence">50</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_open_rfq_06" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Evaluation Report</field>
+            <field name="sequence">60</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+
+        <!-- Method C: Competitive Bid < R50M - Documents -->
+        <record id="doc_req_comp_bid_01" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Purchase Requisition (linked to APP)</field>
+            <field name="sequence">10</field>
+            <field name="document_type">financial</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_02" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Budget Confirmation from CFO</field>
+            <field name="sequence">20</field>
+            <field name="document_type">financial</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_03" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Terms of Reference/Specification</field>
+            <field name="sequence">30</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_04" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">BSC Approval to Advertise</field>
+            <field name="sequence">40</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_05" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Tender Advertisement</field>
+            <field name="sequence">50</field>
+            <field name="document_type">other</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_06" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Standard Bidding Documents (SBD 1-9)</field>
+            <field name="sequence">60</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_07" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Briefing Session Attendance Register</field>
+            <field name="sequence">70</field>
+            <field name="document_type">other</field>
+            <field name="mandatory">False</field>
+        </record>
+        <record id="doc_req_comp_bid_08" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Bid Opening Register</field>
+            <field name="sequence">80</field>
+            <field name="document_type">other</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_09" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">CSD Registration Certificate</field>
+            <field name="sequence">90</field>
+            <field name="document_type">compliance</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_10" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Tax Clearance Certificate</field>
+            <field name="sequence">100</field>
+            <field name="document_type">compliance</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_11" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">B-BBEE Certificate/Affidavit</field>
+            <field name="sequence">110</field>
+            <field name="document_type">compliance</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_12" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Declaration of Interest (SBD 4)</field>
+            <field name="sequence">120</field>
+            <field name="document_type">compliance</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_13" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">BEC Evaluation Report</field>
+            <field name="sequence">130</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_14" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">BAC Review Report</field>
+            <field name="sequence">140</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_15" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Award Approval Letter</field>
+            <field name="sequence">150</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_16" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Signed Contract</field>
+            <field name="sequence">160</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+
+        <!-- Method D: Competitive Bid > R50M - Documents (Extended) -->
+        <record id="doc_req_comp_bid_over_r50m_01" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Purchase Requisition (linked to APP)</field>
+            <field name="sequence">10</field>
+            <field name="document_type">financial</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_02" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Budget Confirmation from CFO</field>
+            <field name="sequence">20</field>
+            <field name="document_type">financial</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_03" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Feasibility Study Report</field>
+            <field name="sequence">30</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_04" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Detailed Terms of Reference</field>
+            <field name="sequence">40</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_05" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">National Treasury Concurrence</field>
+            <field name="sequence">50</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_06" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">BSC Approval to Advertise</field>
+            <field name="sequence">60</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_07" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Comprehensive Tender Advertisement</field>
+            <field name="sequence">70</field>
+            <field name="document_type">other</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_08" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Standard Bidding Documents (SBD 1-9)</field>
+            <field name="sequence">80</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_09" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Compulsory Briefing Attendance Register</field>
+            <field name="sequence">90</field>
+            <field name="document_type">other</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_10" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Clarification Questions &amp; Responses</field>
+            <field name="sequence">100</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_11" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Bid Opening Register</field>
+            <field name="sequence">110</field>
+            <field name="document_type">other</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_12" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">CSD Registration Certificate</field>
+            <field name="sequence">120</field>
+            <field name="document_type">compliance</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_13" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Tax Clearance Certificate</field>
+            <field name="sequence">130</field>
+            <field name="document_type">compliance</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_14" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">B-BBEE Certificate (SANAS Approved)</field>
+            <field name="sequence">140</field>
+            <field name="document_type">compliance</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_15" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Declaration of Interest (SBD 4)</field>
+            <field name="sequence">150</field>
+            <field name="document_type">compliance</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_16" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Company Financial Statements (3 years)</field>
+            <field name="sequence">160</field>
+            <field name="document_type">compliance</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_17" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Technical Proposal/Solution</field>
+            <field name="sequence">170</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_18" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Financial/Price Proposal</field>
+            <field name="sequence">180</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_19" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">BEC Technical Evaluation Report</field>
+            <field name="sequence">190</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_20" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">BEC Price &amp; Preference Evaluation Report</field>
+            <field name="sequence">200</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_21" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">BAC Review &amp; Recommendation Report</field>
+            <field name="sequence">210</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_22" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Award Approval Letter</field>
+            <field name="sequence">220</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_comp_bid_over_r50m_23" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Signed Service Level Agreement/Contract</field>
+            <field name="sequence">230</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+
+        <!-- Method E: Sole Source - Documents -->
+        <record id="doc_req_sole_source_01" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Purchase Requisition with Justification</field>
+            <field name="sequence">10</field>
+            <field name="document_type">financial</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_sole_source_02" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Deviation Motivation (MFMA 36/PFMA Section 76)</field>
+            <field name="sequence">20</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_sole_source_03" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">CFO Recommendation</field>
+            <field name="sequence">30</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_sole_source_04" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Accounting Officer Approval</field>
+            <field name="sequence">40</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_sole_source_05" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Sole Supplier Quotation</field>
+            <field name="sequence">50</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_sole_source_06" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Price Benchmarking Report</field>
+            <field name="sequence">60</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_sole_source_07" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Supplier Compliance Documents</field>
+            <field name="sequence">70</field>
+            <field name="document_type">compliance</field>
+            <field name="mandatory">True</field>
+        </record>
+
+        <!-- Method F: Emergency Procurement - Documents -->
+        <record id="doc_req_emergency_01" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Emergency Declaration Form</field>
+            <field name="sequence">10</field>
+            <field name="document_type">financial</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_emergency_02" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Accounting Officer Emergency Approval</field>
+            <field name="sequence">20</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_emergency_03" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Supplier Quotation</field>
+            <field name="sequence">30</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_emergency_04" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Emergency Award Documentation</field>
+            <field name="sequence">40</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_emergency_05" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Retrospective Report to Council/Governing Body</field>
+            <field name="sequence">50</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+
+        <!-- Method G: Panel Suppliers - Documents -->
+        <record id="doc_req_panel_01" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Purchase Requisition</field>
+            <field name="sequence">10</field>
+            <field name="document_type">financial</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_panel_02" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Panel/Framework Agreement Reference</field>
+            <field name="sequence">20</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_panel_03" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Quotations from Panel Suppliers</field>
+            <field name="sequence">30</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_panel_04" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Evaluation/Selection Report</field>
+            <field name="sequence">40</field>
+            <field name="document_type">technical</field>
+            <field name="mandatory">True</field>
+        </record>
+        <record id="doc_req_panel_05" model="sagovprocurement.document.requirement">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Call-off Purchase Order</field>
+            <field name="sequence">50</field>
+            <field name="document_type">legal</field>
+            <field name="mandatory">True</field>
+        </record>
+
+        <!-- ===================================== -->
+        <!-- EVALUATION CRITERIA FOR EACH PROCUREMENT METHOD -->
+        <!-- ===================================== -->
+
+        <!-- Method A: Quotation < R30,000 - Evaluation Criteria -->
+        <record id="eval_criteria_quotation_r30k_01" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_quotation_r30k"/>
+            <field name="name">Price Reasonableness</field>
+            <field name="sequence">10</field>
+            <field name="criteria_type">price</field>
+            <field name="weight">100.0</field>
+        </record>
+
+        <!-- Method B: Open RFQ - Evaluation Criteria -->
+        <record id="eval_criteria_open_rfq_01" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Price (80/20 or 90/10 System)</field>
+            <field name="sequence">10</field>
+            <field name="criteria_type">price</field>
+            <field name="weight">80.0</field>
+        </record>
+        <record id="eval_criteria_open_rfq_02" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">B-BBEE Preference Points</field>
+            <field name="sequence">20</field>
+            <field name="criteria_type">bbbee</field>
+            <field name="weight">20.0</field>
+        </record>
+        <record id="eval_criteria_open_rfq_03" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_open_rfq_r30k_r300k"/>
+            <field name="name">Compliance with Specification</field>
+            <field name="sequence">30</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">0.0</field>
+        </record>
+
+        <!-- Method C: Competitive Bid < R50M - Evaluation Criteria -->
+        <record id="eval_criteria_comp_bid_01" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Administrative Compliance</field>
+            <field name="sequence">10</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">0.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_02" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">CSD Registration Verification</field>
+            <field name="sequence">20</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">0.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_03" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Tax Compliance Status</field>
+            <field name="sequence">30</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">0.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_04" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Technical Capability &amp; Experience</field>
+            <field name="sequence">40</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">30.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_05" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Methodology &amp; Approach</field>
+            <field name="sequence">50</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">20.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_06" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Key Personnel Qualifications</field>
+            <field name="sequence">60</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">15.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_07" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Previous Similar Work/References</field>
+            <field name="sequence">70</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">15.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_08" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Delivery Timeframes</field>
+            <field name="sequence">80</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">10.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_09" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Quality Management Systems</field>
+            <field name="sequence">90</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">10.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_10" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">Price (90/10 System)</field>
+            <field name="sequence">100</field>
+            <field name="criteria_type">price</field>
+            <field name="weight">90.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_11" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_r50m"/>
+            <field name="name">B-BBEE Preference Points</field>
+            <field name="sequence">110</field>
+            <field name="criteria_type">bbbee</field>
+            <field name="weight">10.0</field>
+        </record>
+
+        <!-- Method D: Competitive Bid > R50M - Evaluation Criteria (Comprehensive) -->
+        <record id="eval_criteria_comp_bid_over_r50m_01" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Administrative Compliance (Mandatory)</field>
+            <field name="sequence">10</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">0.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_02" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">CSD Registration &amp; Verification</field>
+            <field name="sequence">20</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">0.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_03" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Tax Clearance Compliance</field>
+            <field name="sequence">30</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">0.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_04" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Briefing Attendance (Mandatory)</field>
+            <field name="sequence">40</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">0.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_05" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Financial Capability (3-Year Financials)</field>
+            <field name="sequence">50</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">15.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_06" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Company Track Record &amp; Stability</field>
+            <field name="sequence">60</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">10.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_07" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Technical Solution &amp; Innovation</field>
+            <field name="sequence">70</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">25.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_08" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Methodology &amp; Project Plan</field>
+            <field name="sequence">80</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">15.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_09" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Resource Allocation &amp; Capacity</field>
+            <field name="sequence">90</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">10.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_10" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Key Personnel - Qualifications &amp; Experience</field>
+            <field name="sequence">100</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">15.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_11" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Similar Projects &amp; References</field>
+            <field name="sequence">110</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">10.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_12" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Quality Assurance &amp; Control</field>
+            <field name="sequence">120</field>
+            <field name="criteria_type">quality</field>
+            <field name="weight">10.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_13" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Risk Management Strategy</field>
+            <field name="sequence">130</field>
+            <field name="criteria_type">quality</field>
+            <field name="weight">5.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_14" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Environmental &amp; Sustainability Practices</field>
+            <field name="sequence">140</field>
+            <field name="criteria_type">quality</field>
+            <field name="weight">5.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_15" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">Price (90/10 System)</field>
+            <field name="sequence">150</field>
+            <field name="criteria_type">price</field>
+            <field name="weight">90.0</field>
+        </record>
+        <record id="eval_criteria_comp_bid_over_r50m_16" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_competitive_bid_over_r50m"/>
+            <field name="name">B-BBEE Preference Points</field>
+            <field name="sequence">160</field>
+            <field name="criteria_type">bbbee</field>
+            <field name="weight">10.0</field>
+        </record>
+
+        <!-- Method E: Sole Source - Evaluation Criteria -->
+        <record id="eval_criteria_sole_source_01" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Justification Validity</field>
+            <field name="sequence">10</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">0.0</field>
+        </record>
+        <record id="eval_criteria_sole_source_02" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Price Reasonableness (Benchmarking)</field>
+            <field name="sequence">20</field>
+            <field name="criteria_type">price</field>
+            <field name="weight">60.0</field>
+        </record>
+        <record id="eval_criteria_sole_source_03" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Supplier Capability</field>
+            <field name="sequence">30</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">20.0</field>
+        </record>
+        <record id="eval_criteria_sole_source_04" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_sole_source"/>
+            <field name="name">Compliance Documentation</field>
+            <field name="sequence">40</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">20.0</field>
+        </record>
+
+        <!-- Method F: Emergency Procurement - Evaluation Criteria -->
+        <record id="eval_criteria_emergency_01" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Emergency Nature Justification</field>
+            <field name="sequence">10</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">0.0</field>
+        </record>
+        <record id="eval_criteria_emergency_02" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Immediate Availability</field>
+            <field name="sequence">20</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">40.0</field>
+        </record>
+        <record id="eval_criteria_emergency_03" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_emergency_procurement"/>
+            <field name="name">Price Reasonableness</field>
+            <field name="sequence">30</field>
+            <field name="criteria_type">price</field>
+            <field name="weight">60.0</field>
+        </record>
+
+        <!-- Method G: Panel Suppliers - Evaluation Criteria -->
+        <record id="eval_criteria_panel_01" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Panel Status Verification</field>
+            <field name="sequence">10</field>
+            <field name="criteria_type">other</field>
+            <field name="weight">0.0</field>
+        </record>
+        <record id="eval_criteria_panel_02" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Price Comparison (Panel Suppliers)</field>
+            <field name="sequence">20</field>
+            <field name="criteria_type">price</field>
+            <field name="weight">70.0</field>
+        </record>
+        <record id="eval_criteria_panel_03" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Availability &amp; Delivery</field>
+            <field name="sequence">30</field>
+            <field name="criteria_type">technical</field>
+            <field name="weight">20.0</field>
+        </record>
+        <record id="eval_criteria_panel_04" model="sagovprocurement.evaluation.criteria">
+            <field name="method_id" ref="procurement_method_panel_suppliers"/>
+            <field name="name">Service Level Performance History</field>
+            <field name="sequence">40</field>
+            <field name="criteria_type">quality</field>
+            <field name="weight">10.0</field>
+        </record>
+
+    </data>
+</odoo>

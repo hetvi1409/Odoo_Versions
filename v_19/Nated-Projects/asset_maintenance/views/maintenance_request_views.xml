@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="hr_equipment_request_view_form" model="ir.ui.view">
+        <field name="name">maintenance.request.view.form</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id"
+               ref="maintenance.hr_equipment_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button string="Create Job Card" name="create_job_card"
+                        type="object"
+                        attrs="{'invisible': ['|', ('done_type', '=', False), ('assessment_completed', '!=', False)]}"/>
+                <button string="Restored asset" name="action_restored_assets"
+                        type="object"
+                        attrs="{'invisible': ['|', ('assessment_done_type', '!=', 'restored'), ('assessment_completed', '=', False)]}"/>
+                <button string="No Replacement asset"
+                        name="action_no_replacement_assets" type="object"
+                        attrs="{'invisible': ['|', '|', ('assessment_done_type', '!=', 'improved'), ('replacement_type', '!=', 'no_replacement'), ('assessment_completed', '=', False)]}"/>
+                <button string="Asset Addition"
+                        name="action_asset_addition"
+                        type="object"
+                        attrs="{'invisible': ['|', '|', ('assessment_done_type', '!=', 'improved'), ('replacement_type', '!=', 'replacement'), ('assessment_completed', '=', False)]}"/>
+
+            </xpath>
+            <xpath expr="//div[hasclass('oe_right')]" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button name="get_job_card" class="oe_stat_button"
+                            icon="fa-id-card-o" type="object"
+                            attrs="{'invisible': [('job_card_count', '=', 0)]}">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_text">Job Card</span>
+                        </div>
+                    </button>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='email_cc']" position="after">
+                <field name="asset_id"/>
+                <field name="project_id"/>
+                <field name="job_card_count" invisible="1"/>
+                <field name="assessment_completed" invisible="1"/>
+                <field name="is_in_progress" invisible="1"/>
+                <field name="is_new_request" invisible="0"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Plan Check List" name="planned_check">
+                        <group>
+                            <group>
+                                <field name="is_lock"/>
+                                <field name="check_mounting"/>
+                                <field name="soundness"/>
+                            </group>
+                            <group>
+                                <field name="lock_status"
+                                       attrs="{'invisible':[('is_lock', '=', False)]}"/>
+                                <field name="check_mounting_status"
+                                       attrs="{'invisible':[('check_mounting', '=', False)]}"/>
+                                <field name="soundness_status"
+                                       attrs="{'invisible':[('soundness', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <group attrs="{'invisible':[('soundness', '=', False)]}">
+                            <field name="soundness_document_ids"
+                                   widget="many2many_binary"/>is_new_request
+                        </group>
+                        <group>
+                            <group>
+                                <field name="mechanical_leak"/>
+                                <field name="oil_seals"/>
+                                <field name="excessive_leakage"/>
+                                <field name="guages_operational"/>
+                                <field name="coupling_guard"/>
+                                <field name="lubricate_assembly"/>
+                                <field name="lubricant_pump"/>
+                                <field name="oil_equipment"/>
+                                <field name="auxiliary_functionality"/>
+                            </group>
+                            <group>
+                                <field name="soundness_status"
+                                       attrs="{'invisible':[('mechanical_leak', '=', False)]}"/>
+                                <field name="oil_seals_status"
+                                       attrs="{'invisible':[('oil_seals', '=', False)]}"/>
+                                <field name="excessive_leakage_status"
+                                       attrs="{'invisible':[('excessive_leakage', '=', False)]}"/>
+                                <field name="guages_operational_status"
+                                       attrs="{'invisible':[('guages_operational', '=', False)]}"/>
+                                <field name="coupling_guard_status"
+                                       attrs="{'invisible':[('coupling_guard', '=', False)]}"/>
+                                <field name="lubricate_assembly_status"
+                                       attrs="{'invisible':[('lubricate_assembly', '=', False)]}"/>
+                                <field name="lubricant_pump_status"
+                                       attrs="{'invisible':[('lubricant_pump', '=', False)]}"/>
+                                <field name="oil_equipment_status"
+                                       attrs="{'invisible':[('oil_equipment', '=', False)]}"/>
+                                <field name="auxiliary_functionality_status"
+                                       attrs="{'invisible':[('auxiliary_functionality', '=', False)]}"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Field Report" name="field_report">
+                        <field name="field_report" widget="html"/>
+                    </page>
+                    <page string="Operation" name="operation">
+                        <group>
+                            <group>
+                                <field name="municipality"/>
+                                <field name="pump_station"/>
+                                <field name="production_borehole"/>
+                                <field name="no_of_per_station"/>
+                                <field name="make_of_pump"/>
+                                <field name="residual_head"/>
+                                <field name="pump_stations_per_frequency"/>
+                                <field name="major_repairs"/>
+                                <field name="capacity_of_plant"/>
+                                <field name="population_served"/>
+                            </group>
+                            <group>
+                                <field name="operation_area"/>
+                                <field name="source_of_water"/>
+                                <field name="type_pump"/>
+                                <field name="year_installed"/>
+                                <field name="flow_rate"/>
+                                <field name="servicing_frequency"/>
+                                <field name="comments"/>
+                                <field name="production_rate"/>
+                                <field name="type_of_treatment"/>
+                                <field name="maintenance_work"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Corrective Maintenance"
+                          attrs="{'invisible':[('maintenance_type', '!=', 'corrective')]}">
+                        <group>
+                            <group>
+                                <field name="corrective_type"
+                                       attrs="{'required':[('maintenance_type', '=', 'corrective')]}"/>
+                                <field name="done_type"
+                                       attrs="{'required':[('maintenance_type', '=', 'corrective')]}"/>
+                            </group>
+
+                            <group>
+                                <field name="run_to_failure_type"
+                                       attrs="{'required':[('corrective_type', '=', 'run_to_failure')],'invisible':[('corrective_type', '!=', 'run_to_failure')]}"/>
+                                <field name="unplanned_failure_type"
+                                       attrs="{'required':[('corrective_type', '=', 'unplanned_failure')], 'invisible':[('corrective_type', '!=', 'unplanned_failure')]}"/>
+                            </group>
+                        </group>
+                        <group string="Internally"
+                               attrs="{'invisible':[('done_type', '!=', 'Internally')]}">
+                            <group>
+                                <field name="assignee_ids"
+                                       widget="many2many_tags"/>
+                                <field name="store_ids"
+                                       widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="vehicle_id"/>
+                            </group>
+                        </group>
+                        <group string="Externally"
+                               attrs="{'invisible':[('done_type', '!=', 'Externally')]}">
+                            <group>
+                                <field name="specifications"/>
+                            </group>
+                            <group>
+                                <field name="service_provider_ids"
+                                       widget="many2many_tags"/>
+                            </group>
+                        </group>
+
+                    </page>
+                    <page string="Preventive Maintenance"
+                          attrs="{'invisible':[('maintenance_type', '!=', 'preventive')]}">
+                        <group>
+                            <group>
+                                <field name="preventive_type"
+                                       attrs="{'required':[('maintenance_type', '=', 'preventive')]}"/>
+                                <field name="done_type"
+                                       attrs="{'required':[('maintenance_type', '=', 'corrective')]}"/>
+
+                            </group>
+                            <group>
+                                <field name="periodic_type"
+                                       attrs="{'required':[('preventive_type', '=', 'Periodic')],'invisible':[('preventive_type', '!=', 'Periodic')]}"/>
+                                <field name="predictive_type"
+                                       attrs="{'required':[('preventive_type', '=', 'Predictive')],'invisible':[('preventive_type', '!=', 'Predictive')]}"/>
+                                <field name="planned_type"
+                                       attrs="{'required':[('preventive_type', '=', 'Planned')],'invisible':[('preventive_type', '!=', 'Planned')]}"/>
+
+                            </group>
+                        </group>
+                        <group string="Internally"
+                               attrs="{'invisible':[('done_type', '!=', 'Internally')]}">
+                            <group>
+                                <field name="assignee_ids"
+                                       widget="many2many_tags"/>
+                                <field name="store_ids"
+                                       widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="vehicle_id"/>
+                            </group>
+                        </group>
+                        <group string="Externally"
+                               attrs="{'invisible':[('done_type', '!=', 'Externally')]}">
+                            <group>
+                                <field name="specifications"/>
+                            </group>
+                            <group>
+                                <field name="service_provider_ids"
+                                       widget="many2many_tags"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Assessment Details" name="assessment_details"
+                          attrs="{'invisible':[('assessment_completed', '=', False)]}">
+                        <group>
+                            <group>
+                                <field name="assessment_done_type"/>
+                            </group>
+                        </group>
+                        <group string="Assessment Details"/>
+                        <field name="assessment_details" widget="html"/>
+                        <group name="expense_cost" string="Restored Details"
+                               attrs="{'invisible':[('assessment_done_type', '!=', 'restored')]}">
+                            <group>
+                                <field name="expense_cost"
+                                       attrs="{'required':[('assessment_done_type', '=', 'restored')]}"/>
+                            </group>
+                        </group>
+                        <group name="expense_cost" string="Improved Details"
+                               attrs="{'invisible':[('assessment_done_type', '!=', 'improved')]}">
+                            <group>
+                                <field name="replacement_type"
+                                       attrs="{'required':[('assessment_done_type', '=', 'improved')]}"/>
+                            </group>
+                            <group>
+                                <field name="capitalise_costs"
+                                       attrs="{'required':[('replacement_type', '=', 'no_replacement')], 'invisible':[('replacement_type', '!=', 'no_replacement')]}"/>
+                                                            </group>
+                        </group>
+                        <group>
+                            <button string="Restored asset"
+                                        name="action_restored_assets"
+                                        type="object"
+                                        attrs="{'invisible': ['|', ('assessment_done_type', '!=', 'restored'), ('assessment_completed', '=', False)]}"/>
+                                <button string="No Replacement asset"
+                                        name="action_no_replacement_assets"
+                                        type="object"
+                                        attrs="{'invisible': ['|', '|', ('assessment_done_type', '!=', 'improved'), ('replacement_type', '!=', 'no_replacement'), ('assessment_completed', '=', False)]}"/>
+                                <button string="Asset Addition"
+                                        name="action_asset_addition"
+                                        type="object"
+                                        attrs="{'invisible': ['|', '|', ('assessment_done_type', '!=', 'improved'), ('replacement_type', '!=', 'replacement'), ('assessment_completed', '=', False)]}"/>
+
+
+                        </group>
+                    </page>
+                    <page string="Job Card Details">
+                        <field name="job_card_ids" nolabel="1" create="0">
+                            <kanban>
+                                <field name="id"/>
+                                <field name="sequence"/>
+                                <field name="name"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div t-attf-class="oe_kanban_global_click">
+                                            <div class="oe_kanban_details">
+                                                <ul>
+                                                    <li class="mb4">
+                                                        <h5>
+                                                            <field name="name"/>
+                                                        </h5>
+                                                    </li>
+                                                    <li>
+                                                        <div t-if="record.sequence.value">
+                                                            <field name="sequence"/>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_equipment_request_view_search" model="ir.ui.view">
+        <field name="name">maintenance.request.view.form</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id"
+               ref="maintenance.hr_equipment_request_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='todo']" position="after">
+                <filter string="Completed" name="completed"
+                        domain="[('stage_id.done', '=', True)]"/>
+                <filter string="In Progress" name="is_in_progress"
+                        domain="[('is_in_progress', '=', True)]"/>
+                <!--                <filter string="New Request" name="is_new_request" domain="[('is_new_request', '=', True)]"/>-->
+            </xpath>
+        </field>
+    </record>
+</odoo>

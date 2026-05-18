@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Action -->
+    <record id="action_queue_health" model="ir.actions.act_window">
+        <field name="name">Queue Health</field>
+        <field name="res_model">queue.health</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_queue_health" name="Queue Health"
+              parent="oehealth.oeh_medical_menu"
+              action="action_queue_health"
+              sequence="20"/>
+
+    <!-- List View -->
+    <record id="view_queue_health_list" model="ir.ui.view">
+        <field name="name">queue.health.list</field>
+        <field name="model">queue.health</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="appointment_id"/>
+                <field name="patient_id"/>
+                <field name="patient_id"/>
+                <field name="appointment_date"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View with Chatter -->
+    <record id="view_queue_health_form" model="ir.ui.view">
+        <field name="name">queue.health.form</field>
+        <field name="model">queue.health</field>
+        <field name="arch" type="xml">
+            <form string="Queue Health">
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="appointment_id"/>
+                            <field name="doctor_id"/>
+                            <field name="next"/>
+                        </group>
+                        <group>
+                            <field name="patient_id"/>
+                             <field name="clinical_notes"/>
+                <field name="clinical_sketchpad"/>
+                            <field name="appointment_date"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <field name="state"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+<record id="view_queue_health_kanban" model="ir.ui.view">
+    <field name="name">queue.health.kanban</field>
+    <field name="model">queue.health</field>
+    <field name="arch" type="xml">
+        <kanban class="o_health_queue_kanban">
+            <field name="appointment_id"/>
+            <field name="patient_id"/>
+            <field name="state"/>
+            <field name="appointment_date"/>
+            <field name="doctor_id"/><field name="next"/>
+            <templates>
+                <!-- <t t-name="kanban-box"> -->
+                <t t-name="card">
+                    <div class="row">
+                        <div class="col">
+                            <div>Datetime: <field name="appointment_date"/></div>
+                        </div>
+                        <div class="col">
+                            <div>Patient: <field name="patient_id"/></div>
+                        </div>
+                        <div class="col">
+                            <div>Doctor: <field name="doctor_id"/></div>
+                        </div>
+                        <div class="col">
+                            <div>Status: <field name="state"/></div>
+                        </div>
+                        <div class="col">
+                            <button type="object" name="action_in_progress" invisible="state != 'waiting' or next != True"
+                                    class="btn btn-primary btn-sm">
+                                Next
+                            </button>
+                            <button type="object" name="action_done" invisible="state != 'in_progress'"
+                                    class="btn btn-primary btn-sm">
+                                Completed
+                            </button>
+                              <button type="object" name="action_sketchpad"
+                                    class="btn btn-primary btn-sm">
+                                SketchPad
+                            </button>
+                                 <button type="object" name="action_notepad"
+                                    class="btn btn-primary btn-sm">
+                                ClinicalNote
+                            </button>
+                                 <button type="object" name="action_patient"
+                                    class="btn btn-primary btn-sm">
+                                Patient
+                            </button>
+                                 <button type="object" name="action_payment"
+                                    class="btn btn-primary btn-sm">
+                                Payment
+                            </button>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+<record id="view_queue_health_search" model="ir.ui.view">
+    <field name="name">queue.health.search</field>
+    <field name="model">queue.health</field>
+    <field name="arch" type="xml">
+        <search>
+            <!-- Regular Search Fields -->
+            <field name="doctor_id"/>
+            <field name="state"/>
+
+            <!-- Search Panel -->
+<!--            <searchpanel>-->
+<!--                &lt;!&ndash; Filter by Doctor &ndash;&gt;-->
+<!--&lt;!&ndash;                <field name="doctor_id" string="Doctor" icon="fa-user-md"/>&ndash;&gt;-->
+<!--                &lt;!&ndash; Filter by Status &ndash;&gt;-->
+<!--            </searchpanel>-->
+        </search>
+    </field>
+</record>
+
+</odoo>

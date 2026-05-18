@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Form View
+    ================================================================= -->
+    <record id="ecdhs_mail_template_preview_view_form" model="ir.ui.view">
+        <field name="name">ecdhs.mail.template.preview.form</field>
+        <field name="model">ecdhs.mail.template.preview</field>
+        <field name="arch" type="xml">
+            <form string="Email Template Preview" create="0" delete="0">
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                            --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                            border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                            border-color: black !important;
+                        }
+                    </style>
+
+                    <!-- Selection panel -->
+                    <group string="Template &amp; Test Record">
+                        <group string="Template">
+                            <field name="mail_template_id"
+                                   options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                        </group>
+                        <group string="Contract to Render Against">
+                            <field name="service_provider_id"
+                                   placeholder="Filter contracts by provider…"
+                                   options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="contract_id"
+                                   domain="[('service_provider_id', '=', service_provider_id)] if service_provider_id else []"
+                                   options="{'no_create': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                        </group>
+                    </group>
+
+                    <!-- Action button -->
+                    <div class="mt-2 mb-4">
+                        <button name="action_load_preview"
+                                type="object"
+                                string="Load Preview"
+                                class="btn-primary"
+                                invisible="not mail_template_id or not contract_id"/>
+                    </div>
+
+                    <!-- Output panel (hidden until rendered) -->
+                    <group string="Rendered Output"
+                           invisible="not preview_subject and not preview_body_html">
+                        <group>
+                            <field name="preview_subject" readonly="1"/>
+                        </group>
+                        <field name="preview_body_html" nolabel="1" readonly="1"/>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Server Action – always opens the single singleton record
+    ================================================================= -->
+    <record id="action_ecdhs_mail_template_preview_open" model="ir.actions.server">
+        <field name="name">Email Template Preview</field>
+        <field name="model_id" ref="model_ecdhs_mail_template_preview"/>
+        <field name="state">code</field>
+        <field name="code">
+record = env['ecdhs.mail.template.preview'].search([], order='id asc', limit=1)
+if not record:
+    record = env['ecdhs.mail.template.preview'].create({'name': 'Email Template Preview'})
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Email Template Preview',
+    'res_model': 'ecdhs.mail.template.preview',
+    'view_mode': 'form',
+    'res_id': record.id,
+    'target': 'current',
+}
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Server Action – opens filtered mail.template records
+    ================================================================= -->
+    <record id="action_ecdhs_mail_template_filtered_open" model="ir.actions.server">
+        <field name="name">Email Templates</field>
+        <field name="model_id" ref="mail.model_mail_template"/>
+        <field name="state">code</field>
+        <field name="code">
+contract_template_ids = env['mail.template'].search([
+    ('model_id.model', '=', 'ecdhs.contract')
+]).ids
+module_template_ids = env['ir.model.data'].search([
+    ('module', '=', 'ecdhs_contract_management'),
+    ('model', '=', 'mail.template')
+]).mapped('res_id')
+template_ids = list(set(contract_template_ids + module_template_ids))
+
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Email Templates',
+    'res_model': 'mail.template',
+    'view_mode': 'list,form',
+    'target': 'current',
+    'domain': [('id', 'in', template_ids)] if template_ids else [('id', '=', 0)],
+}
+        </field>
+    </record>
+
+</odoo>

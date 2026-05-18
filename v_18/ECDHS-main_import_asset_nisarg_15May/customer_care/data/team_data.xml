@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <!-- helpdesk team -->
+    <record id="customer_carehelpdesk_team" model="helpdesk.team">
+        <field name="name">Customer Care Support</field>
+        <field name="stage_ids"
+               eval="[(6, 0, [ref('helpdesk.stage_new'), ref('helpdesk.stage_in_progress'), ref('helpdesk.stage_on_hold'),ref('helpdesk.stage_solved'), ref('helpdesk.stage_cancelled')])]"/>
+        <field name="use_sla" eval="True"/>
+        <field name="use_rating" eval="True"/>
+        <field name="color">10</field>
+        <field name="assign_method">randomly</field>
+        <field name="member_ids" eval="[Command.link(ref('base.user_admin'))]"/>
+        <field name="privacy_visibility">portal</field>
+        <field name="description" type="html">
+            <p>We provide 24/7 support, Monday through Friday. Ticket responses are usually provided within 2 working
+                days.
+            </p>
+        </field>
+    </record>
+
+    <record id="cron_fetch_facebook_messages" model="ir.cron">
+        <field name="name">Fetch Facebook Page Message</field>
+        <field name="model_id" ref="model_facebook_config"/>
+        <field name="state">code</field>
+        <field name="code">model.fetch_facebook_message()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="helpdesk_stage_new" model="helpdesk.stage">
+        <field name="name">Closed</field>
+        <field name="sequence" eval="10"/>
+        <field name="team_ids" eval="[(6, 0, [ref('customer_care.customer_carehelpdesk_team')])]"/>
+    </record>
+
+    <record id="email_template_ticket_closing" model="mail.template">
+        <field name="name">Ticket Closing</field>
+        <field name="model_id" ref="model_helpdesk_ticket"/>
+        <field name="subject">Your ticket is closing</field>
+        <field name="description">Send notification to customers when ticket is closed.</field>
+        <field name="body_html"><![CDATA[
+            <p>Dear <t t-esc="object.partner_id.name"/>,</p>
+            <p>Your ticket <t t-esc="object.name"/> is being closed.</p>
+            <p>Thank you for contacting us.</p>
+            <br/>
+            <p>Best Regards,<br/>
+            <t t-esc="object.team_id.name"/></p>
+        ]]></field>
+    </record>
+
+</odoo>

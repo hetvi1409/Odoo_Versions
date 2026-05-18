@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="internal_audit_plan_view_form" model="ir.ui.view">
+        <field name="name">internal_audit_plan_view_form</field>
+        <field name="model">internal.audit.plan</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="internal_audit_management.internal_audit_plan_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="replace">
+                <form>
+                    <header>
+
+                            <button name="action_2nd_review" type="object" string="Prepare"
+                                    class="oe_highlight"
+                                    invisible="state != 'new'"/>
+                            <button name="action_approve" type="object" string="Reviewed"
+                                    class="oe_highlight"
+                                    invisible="state != 'second_reviewer'"/>
+                            <button name="action_mark_discrepancy" type="object"
+                                    invisible="state in ['reverted', 'rejected', 'approved']"
+                                    string="Refuse"/>
+                            <button name="action_send_sign" type="object" string="Send For Sign" class="oe_highlight"/>
+                            <button name="action_revert" type="object"
+                                    invisible="state not in ['first_reviewer', 'second_reviewer']" string="Revert"
+                                    class="oe_highlight"/>
+                            <field name="state" widget="statusbar" options="{'clickable': '1'}"
+                                   statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_records" type="object"
+                                    string="Revert Records"
+                                    class="oe_stat_button" icon="fa-book">
+                            </button>
+                            <button name="action_view_arp" type="object"
+                                    class="oe_stat_button" icon="fa-pencil-square-o"
+                                    string="ARP 1 Year" invisible="arp_count == 0">
+                                <field string="ARP 1 Year Plan" name="arp_count"
+                                       widget="statinfo"/>
+                            </button>
+                            <button name="view_signed_document" type="object"
+                                    class="oe_stat_button" icon="fa-pencil-square-o"
+                                    string="ARP 1 Year" invisible="not sign_request_id">
+                                Signed Document
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" readonly="not can_edit"/>
+                                <field name="sequence_no" readonly="1"/>
+                                <label for="date_from" string="Planned Date"/>
+                                <div>
+                                    <field name="date_from" class="oe_inline" readonly="not can_edit"/>
+                                    -
+                                    <field name="date_to" class="oe_inline" readonly="not can_edit"/>
+                                </div>
+                                <field name="period" readonly="not can_edit"/>
+                                <field name="folder_id" invisible="1"/>
+                                <field name="user_ids" widget="many2many_tags"
+                                       invisible="1"/>
+                                <field name="year_ids" widget="many2many_tags"
+                                       invisible="1"/>
+                                <field name="sign_request_id" invisible="0" readonly="not can_edit"/>
+                            </group>
+                            <group>
+                                <field name="can_edit" invisible="1"/>
+                                <field name="preparer_id" widget="many2one_avatar_user"/>
+                                <field name="reviewer_id" widget="many2one_avatar_user"/>
+                                <field name="approver_id" widget="many2one_avatar_user"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Lines">
+                                <field name="line_ids" readonly="not can_edit">
+                                    <list editable="bottom">
+                                        <field name="name"/>
+                                        <field name="team_ids" widget="many2many_tags"/>
+                                        <field name="risk_priority_rating"/>
+                                        <field name="year_1"/>
+                                        <field name="year_2"/>
+                                        <field name="year_3"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Tracking">
+                                <field name="internal_audit_plan_tracking_ids" readonly="not can_edit">
+                                    <list editable="bottom" create="0">
+                                        <field name="user_id"/>
+                                        <field name="previous_stage_id"/>
+                                        <field name="new_stage_id"/>
+                                        <field name="comment"/>
+                                        <field name="date"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Upload Documents">
+                                <group>
+                                    <group>
+                                        <field name="attachment_ids"
+                                               widget="many2many_binary"
+                                               readonly="not can_edit"/>
+                                    </group>
+                                    <group>
+                                        <button name="action_view_documents"
+                                                invisible="not attachment_ids"
+                                                type="object" icon="fa-file-text-o"
+                                                string="Open Documents"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Audit Reverts/ Review Notes">
+                                <group>
+                                    <field name="feedback" readonly="not can_edit"/>
+                                </group>
+                            </page>
+                            <page string="Projects">
+                                <field name="project_ids" readonly="not can_edit">
+                                    <list create="0">
+                                        <field name="name"/>
+                                        <field name="department_id"/>
+                                        <field name="user_id"/>
+                                        <field name="date_start"/>
+                                        <field name="date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </xpath>
+<!--            <xpath expr="//header" position="replace">-->
+<!--                <header>-->
+<!--                    <field name="state" widget="statusbar" options="{'clickable': '1'}"-->
+<!--                           statusbar_visible="preparer,second_reviewer,approved,reverted,rejected"/>-->
+<!--                    <button name="action_2nd_review" type="object" string="Prepare"-->
+<!--                            class="oe_highlight"-->
+<!--                            invisible="state != 'new'"/>-->
+<!--                    <button name="action_approve" type="object" string="Reviewed"-->
+<!--                            class="oe_highlight"-->
+<!--                            invisible="state != 'second_reviewer'"/>-->
+<!--                    <button name="action_mark_discrepancy" type="object"-->
+<!--                            invisible="state in ['reverted', 'rejected', 'approved']"-->
+<!--                            string="Refuse"/>-->
+<!--                    <button name="action_send_sign" type="object" string="Send For Sign" class="oe_highlight"/>-->
+<!--                    <button name="action_revert" type="object"-->
+<!--                            invisible="state not in ['first_reviewer', 'second_reviewer']" string="Revert"-->
+<!--                            class="oe_highlight"/>-->
+<!--                </header>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='user_preparer_ids']" position="replace">-->
+<!--                <field name="preparer_id" widget="many2one_avatar_user"/>-->
+<!--                <field name="reviewer_id" widget="many2one_avatar_user"/>-->
+<!--                <field name="approver_id" widget="many2one_avatar_user"/>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+</odoo>

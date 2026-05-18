@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="purchase_order_form">
+        <field name="name">purchase.order.view.tree</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_rfq_send']" position="after">
+                <button name="action_first_approve" string="Approve"
+                        type="object" states="draft,sent" class="oe_highlight"
+                        groups="supply_chain_management.purchase_requisition_scm_manager"
+                        data-hotkey="k"/>
+                <button name="action_rfq_send" states="approve"
+                        string="Send by Email" type="object"
+                        context="{'send_rfq':True}" class="oe_highlight"
+                        data-hotkey="g"/>
+            </xpath>
+
+            <xpath expr="//button[@name='button_cancel']" position="attributes">
+                <attribute name="states">draft,to
+                    approve,sent,purchase,approve
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_audit_finding" model="ir.actions.act_window">
+        <field name="name">Audit Finding</field>
+        <field name="res_model">audit.finding</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Audit Finding
+            </p>
+            <p>
+                Create and manage the Internal Audit Finding.
+            </p>
+        </field>
+    </record>
+    <record id="audit_finding_view_tree" model="ir.ui.view">
+        <field name="name">audit.finding.view.tree</field>
+        <field name="model">audit.finding</field>
+        <field name="arch" type="xml">
+            <list duplicate="0">
+                <field name="finding_name"/>
+                <field name="project_id"/>
+                <field name="task_id"/>
+                <field name="audit_finding"/>
+                <field name="audit_requirement" options="{'height': 100}"/>
+                <field name="impact"/>
+                <field name="audit_requirement"/>
+                <field name="internal_control_deficiency"/>
+                <field name="classification"/>
+                <field name="recommendation"/>
+                <field name="name_user" string="User Name"/>
+                <field name="position_id"/>
+                <field name="department_id"/>
+                <field name="head_department_id" widget="many2one_avatar_user"/>
+                <field name="finding_date"/>
+                <field name="stages"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="audit_finding_view_form" model="ir.ui.view">
+        <field name="name">audit.finding.view.form</field>
+        <field name="model">audit.finding</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_review" type="object"
+                            invisible="stages != 'preparer'"
+                            string="1st Review" class="oe_highlight"/>
+                    <button name="action_2nd_review" type="object"
+                            invisible="stages != 'first_reviewer'"
+                            string="2nd Review" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'first_reviewer'"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_approve" type="object"
+                            invisible="stages != 'second_reviewer'"
+                            string="Approve" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'second_reviewer'"
+                            string="Revert" class="oe_highlight"/>
+                    <button name="action_reject" type="object"
+                            invisible="stages != 'second_reviewer'"
+                            string="Reject" class="oe_highlight"/>
+                    <button name="action_revert" type="object"
+                            invisible="stages != 'rejected'"
+                            string="Move to Prepare" class="oe_highlight"/>
+                    <button name="action_sent_manager" type="object"
+                            invisible="stages != 'approved'"
+                            string="Send To Manager" class="oe_highlight"/>
+                    <button name="action_sent_auditor" type="object"
+                            invisible="stages != 'find_response'"
+                            string="Send To Auditor" class="oe_highlight"/>
+                    <field name="stages" widget="statusbar"
+                           statusbar_visible="find_raised,find_response,find_conclude"/>
+
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object"
+                                string="Revert Records"
+                                class="oe_stat_button" icon="fa-book">
+                        </button>
+                    </div>
+                    <div class="pe-0 w-100">
+                        <h1 class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex w-100">
+                                <field name="finding_name"/>
+                            </div>
+                            <div class="d-flex justify-content-start o_state_container">
+                                <field name="state" widget="project_task_state_selection" class="o_task_state_widget"/>
+                            </div>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <!--                            <field name="finding_number"/>-->
+                            <field name="project_id"/>
+                            <field name="task_id"/>
+                            <field name="audit_finding" options="{'height': 100}" readonly="stages == 'approved'"/>
+                            <field name="audit_requirement" options="{'height': 100}"/>
+                            <field name="impact" readonly="stages == 'approved'"/>
+                            <field name="internal_control_deficiency" readonly="stages == 'approved'"/>
+                            <field name="classification" readonly="stages == 'approved'"/>
+                            <field name="recommendation" readonly="stages == 'approved'"/>
+                            <field name="user_id" invisible="1"/>
+                            <field name="name_user" widget="many2one_avatar_user"/>
+                            <field name="position_id" readonly="stages == 'approved'"/>
+                            <field name="department_id"/>
+                            <field name="head_department_id" widget="many2one_avatar_user"/>
+                            <field name="finding_date" readonly="stages == 'approved'"/>
+                            <field name="user_ids" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="user_preparer_ids"
+                                   widget="many2one_avatar_user"/>
+                            <!--                            <field name="user_reviewer_1_ids"-->
+                            <!--                                   widget="many2one_avatar_user"  readonly="stages == 'approved'"/>-->
+                            <!--                            <field name="user_reviewer_2_ids"-->
+                            <!--                                   widget="many2one_avatar_user"  readonly="stages == 'approved'" />-->
+                            <!--                            <field name="user_approver_ids"-->
+                            <!--                                   widget="many2one_avatar_user"  readonly="stages == 'approved'"/>-->
+                        </group>
+                        <notebook>
+                            <page string="Documents">
+                                <field name="document_ids" widget="many2many_binary"/>
+                            </page>
+                            <page string="Management Response"
+                                  invisible=" stages not in ['find_response','find_conclude']">
+                                <group>
+                                    <group>
+                                        <field name="management_response"/>
+                                        <field name="manager_approval"/>
+                                        <field name="upload_document_name" invisible="1"/>
+                                        <field name="attachment_ids" filename="upload_document_name"
+                                               widget="many2many_binary"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Final Audit" invisible="stages != 'find_conclude'">
+                                <group>
+                                    <group>
+                                        <field name="auditor_conclusion"/>
+                                        <field name="is_finding_resolved"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Tracking">
+                                <field name="audit_finding_tracking_ids">
+                                    <list string="Tracking">
+                                        <field name="user_id"/>
+                                        <field name="previous_stage_id"/>
+                                        <field name="new_stage_id"/>
+                                        <field name="comment"/>
+                                        <field name="date"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Audit Reverts/ Review Notes">
+                                <group>
+                                    <field name="feedback"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_audit_position" model="ir.actions.act_window">
+        <field name="name">Audit Position</field>
+        <field name="res_model">audit.position</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Position
+            </p>
+            <p>
+                Create and manage the Internal Audit Position;
+            </p>
+        </field>
+    </record>
+    <record id="audit_position_view_tree" model="ir.ui.view">
+        <field name="name">audit.position.view.tree</field>
+        <field name="model">audit.position</field>
+        <field name="arch" type="xml">
+            <list duplicate="0" editable="bottom">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="action_audit_role" model="ir.actions.act_window">
+        <field name="name">Role</field>
+        <field name="res_model">audit.role</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Role
+            </p>
+            <p>
+                Create and manage the Roles;
+            </p>
+        </field>
+    </record>
+    <record id="audit_role_view_tree" model="ir.ui.view">
+        <field name="name">audit.role.view.form</field>
+        <field name="model">audit.role</field>
+        <field name="arch" type="xml">
+            <list duplicate="0" create="0">
+                <field name="name"/>
+                <field name="type"/>
+            </list>
+        </field>
+    </record>
+
+<!--    <menuitem name="Audit Finding" id="audit_finding_conf_menu"-->
+<!--              parent="internal_audit_management.menu_main_internal_audit"-->
+<!--              sequence="4" action="action_audit_finding"/>-->
+    <menuitem name="Audit Position" id="audit_position_conf_menu"
+              parent="internal_audit_management.menu_internal_audit_config"
+              sequence="5" action="action_audit_position"/>
+    <menuitem name="Audit Role" id="audit_role_conf_menu"
+              parent="internal_audit_management.menu_internal_audit_config"
+              sequence="5" action="action_audit_role"/>
+
+</odoo>

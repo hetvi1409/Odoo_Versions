@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+
+    <t t-name="conversations.Sidebar" owl="1">
+        <div name="root" class="o_DiscussSidebar2" id="fullSidebar">
+            <style>
+                .o_Discuss_sidebar {
+                    padding-top: 0;
+                }
+                .dropdown-menu {
+                    border: 0px;
+                }
+            </style>
+            
+            <div class="o_DiscussSidebar_group o_DiscussSidebar_groupLivechat">
+                <div class="o_DiscussSidebar_groupHeader2 dropdown" t-attf-data-target="#Whatsappmenu" id="whatsapptop">
+                    <div
+                        class="o_DiscussSidebar_groupHeaderItem2 o_DiscussSidebar_groupTitle o-clickable dropdown-toggle"
+                        tabindex="1"
+                        data-toggle="collapse" id="togglehead" aria-haspopup="true" aria-expanded="true" t-attf-data-target="#Whatsappmenu"><!--t-on-click.stop.prevent="toggleChat"-->
+                        
+                        <span class="scoop-micon" style="padding-right: 12px;"><i t-attf-class="fa fa-whatsapp"></i></span>
+                        <span> </span>
+                        <span t-attf-id="Whatsapptext" style="font-family: rosemary;">WHATSAPP CHATS</span>
+                    </div>
+                    <t t-foreach="MultiLivechatGroups" t-as="livechat_group" t-key="livechat_group.localId">
+                        <t t-if="livechat_group.chats and livechat_group.chats.length">
+                            <div t-attf-class="{{livechat_group.name.split(' ')[0]}}menu show" t-attf-id="{{livechat_group.name.split(' ')[0]}}menu" class="dropdown-menu scoop-submenu" x-placement="below-start" style="width: 237px;" aria-labelledby="togglehead" data-parent="#togglehead"> <!--t-if="state.chatVisible"-->
+                                <t t-foreach="livechat_group.chats" t-as="chat" t-key="chat.localId">
+                                    <DiscussSidebarItem class="o_DiscussSidebar_item scoop-name-menu" threadLocalId="chat.localId"/>
+                                </t>
+                            </div>
+                        </t>
+                    </t>
+                    <div class="o-autogrow"/>
+                    <div class="o_DiscussSidebar_groupHeaderItem o_DiscussSidebar_groupHeaderItemAdd fa fa-plus" t-on-click="_onClickChannelAdd" title="Add a new chat"/>
+                </div>
+            </div>
+            <hr class="o_DiscussSidebar_separator"/>                
+            
+        </div>
+    </t>
+
+</templates>

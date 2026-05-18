@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- action opening views on activity -->
+    <record model="ir.actions.act_window" id="oi_risk_management.activities_view">
+        <field name="name">Risk Factor</field>
+        <field name="res_model">oi_risk_management.activity</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+    </record>
+
+
+    <!-- action opening views on charts -->
+    <record model="ir.actions.act_window" id="oi_risk_management.charts_view">
+        <field name="name">Events/Activities Risks Statistics</field>
+        <field name="res_model">oi_risk_management.activity</field>
+        <field name="view_mode">graph</field>
+    </record>
+
+    <!-- action opening views on risk dashboard -->
+    <record model="ir.actions.act_window" id="oi_risk_management.risk_dashboard_action">
+        <field name="name">Risks Dashboard</field>
+        <field name="res_model">oi_risk_management.risk_treatment</field>
+        <field name="view_mode">tree,graph,pivot,activity</field>
+        <field name="context">{
+            'search_default_risk': 1,
+        }
+        </field>
+    </record>
+
+    <!-- action opening views on risk dashboard board -->
+    <record model="ir.actions.act_window" id="oi_risk_management.risk_dashboard_board_action">
+        <field name="name">Board Risks Dashboard</field>
+        <field name="res_model">oi_risk_management.risk_treatment</field>
+        <field name="view_mode">tree,graph,pivot,activity</field>
+        <field name="domain">[('risk_id.is_board', '=', True)]</field>
+        <field name="context">{
+            'search_default_risk': 1,
+        }
+        </field>
+    </record>
+
+    <!-- action opening views on risk dashboard exco -->
+    <record model="ir.actions.act_window" id="oi_risk_management.risk_dashboard_exco_action">
+        <field name="name">Exco Risks Dashboard</field>
+        <field name="res_model">oi_risk_management.risk_treatment</field>
+        <field name="view_mode">tree,graph,pivot,activity</field>
+        <field name="domain">[('risk_id.main_risk_total_score', 'in', ['high', 'very_high'])]</field>
+        <field name="context">{
+            'search_default_department': 1,
+            'search_default_risk': 2,
+        }
+        </field>
+    </record>
+
+
+    <!-- action opening views on list of risks -->
+    <record model="ir.actions.act_window" id="oi_risk_management.list_of_risks_action">
+        <field name="name">List of Risks</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+    </record>
+
+
+    <!-- action opening views on risk -->
+    <record model="ir.actions.act_window" id="oi_risk_management.risks_view">
+        <field name="name">List of Risks</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+        <field name="context">{
+            'search_default_risk': 1,
+        }
+        </field>
+    </record>
+
+
+    <!-- action opening views on list of risks board approval -->
+    <record model="ir.actions.act_window" id="oi_risk_management.list_of_risks_board_approval_action">
+        <field name="name">List of Risks Board Approval</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="oi_risk_management.list_of_risks_board_approval_tree_view"/>
+        <field name="domain">[('main_risk_total_score', 'in', ['high', 'very_high']),
+                              ('state', 'in', ['approved'])]
+        </field>
+    </record>
+
+    <!-- action opening views on list of risks board -->
+    <record model="ir.actions.act_window" id="oi_risk_management.list_of_risks_board_action">
+        <field name="name">Board List of Risks</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+        <field name="domain">[('is_board', '=', True)]</field>
+    </record>
+
+    <!-- action opening views on list of risks exco -->
+    <record model="ir.actions.act_window" id="oi_risk_management.list_of_risks_exco_action">
+        <field name="name">Exco List of Risks</field>
+        <field name="res_model">oi_risk_management.risk</field>
+        <field name="view_mode">tree,form,graph,pivot,activity</field>
+        <field name="domain">[('main_risk_total_score', 'in', ['high', 'very_high'])]</field>
+        <field name="context">{
+            'search_default_department': 1,
+        }
+        </field>
+    </record>
+
+    <!-- action opening views on configuration categories -->
+    <record model="ir.actions.act_window" id="oi_risk_management.configuration_activity_categories_view">
+        <field name="name">Categories</field>
+        <field name="res_model">oi_risk_management.activity_category</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <!-- action opening views on configuration tags -->
+    <record model="ir.actions.act_window" id="oi_risk_management.configuration_activity_tags_view">
+        <field name="name">Tags</field>
+        <field name="res_model">oi_risk_management.activity_tag</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="oi_risk_management.configuration_risk_severity_action">
+        <field name="name">Risk Severity</field>
+        <field name="res_model">oi_risk_management.risk_criteria</field>
+        <field name="domain">[('type', '=', 'severity')]</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{
+            'default_type': 'severity',
+        }
+        </field>
+        <field name="view_id" ref="oi_risk_management.risk_severity_tree"/>
+    </record>
+
+    <!-- action opening views on risk likelihood -->
+    <record model="ir.actions.act_window" id="oi_risk_management.configuration_risk_likelihood_action">
+        <field name="name">Risk Likelihood</field>
+        <field name="res_model">oi_risk_management.risk_criteria</field>
+        <field name="domain">[('type', '=', 'likelihood')]</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{
+            'default_type': 'likelihood',
+        }
+        </field>
+        <field name="view_id" ref="oi_risk_management.risk_likelihood_tree"/>
+    </record>
+
+    <!-- action opening views on risk control effectiveness -->
+    <record model="ir.actions.act_window" id="oi_risk_management.configuration_risk_control_effectiveness_action">
+        <field name="name">Risk Control Effectiveness</field>
+        <field name="res_model">oi_risk_management.risk_criteria</field>
+        <field name="domain">[('type', '=', 'control_effectiveness')]</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{
+            'default_type': 'control_effectiveness',
+        }
+        </field>
+        <field name="view_id" ref="oi_risk_management.risk_control_effectiveness_tree"/>
+    </record>
+
+    <!-- action opening views on risk dashboard department -->
+    <record id="oi_risk_management.risk_dashboard_wizard_action" model="ir.actions.act_window">
+        <field name="name">Generate a Risk Dashboard</field>
+        <field name="res_model">oi_risk.risk_dashboard_department_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- action opening views on list of risks department -->
+    <record id="list_of_risks_department_wizard_action" model="ir.actions.act_window">
+        <field name="name">Generate a List of Risks</field>
+        <field name="res_model">oi_risk.list_of_risks_department_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

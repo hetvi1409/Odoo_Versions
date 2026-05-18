@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="documents_approval_form_view" model="ir.ui.view">
+        <field name="name">documents.approval.form.view</field>
+        <field name="model">documents.approval</field>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit_for_approval"
+                            string="Submit For Approval" type="object"
+                            states="draft"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="oe_highlight"
+                            states="send"
+                            groups="document_approval.group_document_approval_manager"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            states="send"
+                            groups="document_approval.group_document_approval_manager"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+<!--                    <field name="thumbnail" nolabel="1" widget="image" class="oe_avatar" options="{preview_image:thumbnail}" attrs="{ 'invisible' : [('thumbnail', '=', False)]}"/>-->
+                    <div class="oe_title" aria-label="Name">
+                        <h1>
+                            <field name="name" class="oe_inline"
+                                   placeholder="Document Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="folder_id"/>
+                            <field name="owner_id"/>
+                            <field name="attachment_id" readonly="1"/>
+                            <filed name="user_id" string="Owner"/>
+                        </group>
+                        <group>
+                            <field name="general_type"/>
+                            <field name="partner_id"/>
+                            <field name="document_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Property" attrs="{'invisible': [('general_type', '!=', 'property')]}">
+                        <group>
+                            <field name="jmc_property_id" attrs="{'required': [('general_type', '==', 'property')]}"/>
+                            <field name="work_to_do" attrs="{'required': [('general_type', '==', 'property')]}"/>
+                        </group>
+                        <group>
+                            <field name="datas" string="Property Document" filename="name"/>
+                            <field name="erf_number"/>
+                            <field name="address"/>
+                        </group>
+                    </group>
+                    <group string="General File" attrs="{'invisible': [('general_type', '!=', 'general_file')]}">
+                        <group>
+                            <field name="datas" string="Memo Document" filename="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="document_approval_view_kanban" model="ir.ui.view">
+        <field name="name">documents.approval.form.view</field>
+        <field name="model">documents.approval</field>
+        <field name="arch" type="xml">
+            <kanban sample="1">
+                <field name="id"/>
+                <field name="owner_id"/>
+                <field name="create_date"/>
+                <field name="name"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div draggable="true" class="d-flex flex-column oe_kanban_global_area o_kanban_attachment o_documents_attachment"
+                            t-att-data-id="record.id.raw_value">
+<!--                                <div class="o_documents_image" t-attf-style="background-image: url('/documents/image/#{record.id.raw_value}?field=thumbnail&amp;unique=#{unique}');" />-->
+                            <div class="o_kanban_details flex-grow-1 flex-shrink-1 flex-auto">
+                                <div class="o_kanban_details_wrapper">
+                                    <div t-att-title="record.name.raw_value" class="o_kanban_record_title">
+                                        <field name="name" required="True" string="Document"/>
+                                    </div>
+                                    <div class="o_kanban_record_bottom flex-wrap">
+                                        <time class="oe_kanban_bottom_left">
+                                            <field name="create_date" widget="date"/>
+                                        </time>
+                                        <div class="oe_kanban_bottom_right">
+                                            <field name="activity_ids" widget="kanban_activity"/>
+                                            <field name="owner_id" widget="many2one_avatar_user"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="documents_approval_tree_view" model="ir.ui.view">
+        <field name="name">documents.approval.tree.view</field>
+        <field name="model">documents.approval</field>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="folder_id"/>
+                <field name="owner_id"/>
+                <field name="partner_id"/>
+                <field name="general_type"/>
+                <field name="document_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_documents_approval" model="ir.actions.act_window">
+        <field name="name">Documents Approval</field>
+        <field name="res_model">documents.approval</field>
+        <field name="view_mode">tree,kanban,form</field>
+    </record>
+    <menuitem id="documents_approval_menu"
+              action="action_documents_approval"
+              parent="documents.menu_root" sequence="8"/>
+</odoo>

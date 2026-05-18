@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sagovcompliance_check_list" model="ir.ui.view">
+        <field name="name">sagovcompliance.checklist</field>
+        <field name="model">sagovtender.compliance.check</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state=='draft'" decoration-success="state=='compliant'" decoration-danger="state=='non_compliant'" default_order="id desc" open_form_view="1">
+                <field name="tender_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="name"/>
+                <field name="bid_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <!-- <field name="partner_id" domain="[('id', '=', bid_id.partner_id.id)]" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/> -->
+                <field name="partner_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="state" widget="badge"/>
+                <field name="is_compliant"/>
+                <field name="checked_by_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="check_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sagovcompliance_check_form" model="ir.ui.view">
+        <field name="name">sagovtender.compliance.check.form</field>
+        <field name="model">sagovtender.compliance.check</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start_checking" string="Start Checking" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_verify_all" string="Auto-Verify All" type="object" invisible="state != 'checking'"/>
+                    <button name="action_mark_compliant" string="Mark Compliant" type="object" class="btn-success" invisible="state != 'checking'"/>
+                    <button name="action_mark_non_compliant" string="Mark Non-Compliant" type="object" class="btn-danger" invisible="state != 'checking'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <div class="alert alert-success" role="alert" invisible="not is_compliant">
+                        <strong>Compliant</strong> - All checks passed
+                    </div>
+                    <div class="alert alert-danger" role="alert" invisible="is_compliant or state == 'draft'">
+                        <strong>Non-Compliant</strong>
+                        <p><field name="non_compliance_reasons"/></p>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" required="1" readonly="1"/>
+                            <field name="tender_id" required="1" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="bid_id" domain="[('tender_id', '=', tender_id)]" required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="partner_id" domain='[("is_company", "=", True), ("id", "=", bid_id.partner_id)]' required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="checked_by_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="check_date" readonly="1"/>
+                            <field name="is_compliant" invisible="0" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="CSD Registration">
+                            <field name="csd_number"/>
+                            <field name="csd_registered"/>
+                            <field name="csd_verified"/>
+                            <field name="csd_notes"/>
+                        </group>
+                        <group string="Tax Compliance">
+                                <field name="tax_compliant"/>
+                                <field name="tax_clearance_number"/>
+                                <field name="tax_clearance_expiry"/>
+                                <field name="tax_verified"/>
+                                <field name="tax_notes"/>
+                        </group>
+                        <group string="COID">
+                                <field name="coid_compliant"/>
+                                <field name="coid_number"/>
+                                <field name="coid_verified"/>
+                                <field name="coid_notes"/>
+                        </group>
+                        <group string="B-BBEE">
+                                <field name="bbbee_compliant"/>
+                                <field name="bbbee_level"/>
+                                <field name="bbbee_certificate_type"/>
+                                <field name="bbbee_verified"/>
+                                <field name="bbbee_notes"/>
+                        </group>
+                    </group>
+                    <group string="Company Registration">
+                            <field name="cipc_registered"/>
+                            <field name="cipc_number"/>
+                            <field name="cipc_verified"/>
+                            <field name="sbd_forms_complete"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sagovcompliance_check" model="ir.actions.act_window">
+        <field name="name">Compliance Checks</field>
+        <field name="res_model">sagovtender.compliance.check</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

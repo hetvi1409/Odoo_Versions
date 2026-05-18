@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="project_project_view_form_simplified" model="ir.ui.view">
+        <field name="name">project.project.view.form.simplified.inherit</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="before">
+                <div class="oe_title mb-lg-3 mb-md-2">
+                    <label for="template_id" string="Project Template"/>
+                    <field name="template_id" class="o_project_name" />
+                    <field name="is_internal" />
+                </div>
+            </xpath>
+        </field>
+    </record>
+    <record id="edit_project_inherit" model="ir.ui.view">
+        <field name="name">project.project.form.inherit.job</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">false</attribute>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_send_back_review" type="object"
+                            string="Revert" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="replace">
+                <field name="is_internal"/>
+                <field name="audit_type"/>
+                <field name="project_number"/>
+                <field name="team_member_ids" widget="many2many_tags"/>
+                <field name="template_id" readonly="0"/>
+                <field name="audit_findings" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='project_update_all_action']" position="before">
+                <button class="oe_stat_button"
+                        type="object"
+                        name="action_view_audit_findings"
+                        string="Audit Findings"
+                        icon="fa-file-text">
+                    <field name="audit_findings" widget="statinfo"
+                           string="Audit Findings"/>
+                </button>
+                <button name="action_view_records" type="object"
+                        string="Revert Records"
+                        class="oe_stat_button" icon="fa-book">
+                </button>
+            </xpath>
+            <xpath expr="//group[2]" position="inside">
+                <field name="internal_audit_3_years" widget="many2one"/>
+                <field name="internal_audit_1_year_id" widget="many2one"/>
+                <field name="aop_id" widget="many2one"/>
+                <field name="time_budget_hours"/>
+            </xpath>
+            <xpath expr="//page[@name='settings']" position="after">
+                <page string="Upload Document">
+                    <field name="upload_document_name" invisible="1"/>
+                    <field name="upload_audit_document_ids"
+                           filename="upload_document_name"
+                           widget="many2many_binary"/>
+                </page>
+                <page string="Audit Reverts/ Review Notes">
+                    <group>
+                        <field name="feedback"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//page[3]" position="after">
+                <page string="Time Budget">
+                    <field name="time_budget_ids">
+                        <list editable="bottom">
+                            <field name="rank_id"/>
+                            <field name="auditor_id"/>
+                            <field name="hours" sum="total"/>
+                            <field name="planned_hours" sum="total"/>
+                            <field name="field_hours" sum="total"/>
+                            <field name="reporting_hours" sum="total"/>
+                            <field name="comments"/>
+                        </list>
+                    </field>
+                </page>
+                <page string="Project Level">
+                    <group>
+                        <field name="user_preparer_ids"
+                                   widget="many2one_avatar_user"/>
+                        <field name="user_reviewer_1_ids"
+                               widget="many2one_avatar_user"/>
+                        <field name="user_reviewer_2_ids"
+                               widget="many2one_avatar_user"/>
+                        <field name="user_approver"
+                               widget="many2one_avatar_user"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="project_timesheet_forecast_view_kanban_inherit_sale_timesheets"
+            model="ir.ui.view">
+        <field name="name">project.project.kanban.inherit.sale.timesheets
+        </field>
+        <field name="model">project.project</field>
+        <field name="inherit_id"
+               ref="hr_timesheet.view_project_kanban_inherited"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='project_burndown_menu']" position="after">
+                <div role="menuitem">
+                    <a name="action_view_audit_findings" type="object">
+                        Audit Findings
+                    </a>
+                </div>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_project_kanban"
+            model="ir.ui.view">
+        <field name="name">project.project.kanban.inherit.sale.timesheets
+        </field>
+        <field name="model">project.project</field>
+        <field name="inherit_id"
+               ref="project.view_project_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="is_internal"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project.open_view_project_all_config_group_stage" model="ir.actions.act_window">
+        <field name="domain">[('audit_type', '!=', 'consulting')]</field>
+    </record>
+    <record id="project.open_view_project_all_config" model="ir.actions.act_window">
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('project.view_project')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('project.edit_project')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('project.view_project_config_kanban')})]"/>
+
+    </record>
+
+    <record id="project.open_view_project_all" model="ir.actions.act_window">
+        <field name="domain">[('is_internal', '=', True)]</field>
+        <field name="context">{'default_is_internal': True}</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                         (0, 0, {'view_mode': 'kanban', 'view_id': ref('project.view_project_kanban')}),
+                         (0, 0, {'view_mode': 'form', 'view_id': ref('project.edit_project')})
+                         ]"/>
+    </record>
+
+<!--    <record id="project.view_project_config" model="ir.ui.view">-->
+<!--        <field name="name">project.project.config.audit</field>-->
+<!--        <field name="model">project.project</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//list" position="inside">-->
+<!--                <field name="audit_type" column_invisible="1"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//list" position="attributes">-->
+<!--                <attribute name="create">false</attribute>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+
+</odoo>

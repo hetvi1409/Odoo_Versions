@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="documents.documents_folder_groups_rule" model="ir.rule">
+        <field name="name">Documents.folder: groups</field>
+        <field name="model_id" ref="documents.model_documents_folder"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">
+            ['|', '|',
+            ('group_ids', 'in', [g.id for g in user.groups_id]),
+            ('read_group_ids', 'in', [g.id for g in user.groups_id]),
+            ('user_ids', 'in', [user.id])
+            ]
+        </field>
+    </record>
+
+    <!--    <record id="documents.documents_document_readonly_rule" model="ir.rule">-->
+    <!--            <field name="name">Documents.document: readonly rule</field>-->
+    <!--            <field name="model_id" ref="documents.model_documents_document"/>-->
+    <!--            <field name="groups" eval="[(4, ref('base.group_user'))]"/>-->
+    <!--            <field name="domain_force">[-->
+    <!--                '&amp;',-->
+    <!--                    ('folder_id.read_group_ids', 'in', [g.id for g in user.groups_id]), '|',-->
+    <!--                ('folder_id.user_ids', 'in', [user.id]),-->
+    <!--                    '|',-->
+    <!--                        ('folder_id.user_specific', '=', False),-->
+    <!--                        ('owner_id', '=', user.id)-->
+    <!--                ]</field>-->
+    <!--            <field name="perm_read" eval="True"/>-->
+    <!--            <field name="perm_write" eval="False"/>-->
+    <!--            <field name="perm_create" eval="False"/>-->
+    <!--            <field name="perm_unlink" eval="False"/>-->
+    <!--        </record>-->
+
+    <!--    <record id="documents_folder_groups_rule" model="ir.rule">-->
+    <!--        <field name="name">Documents.folder: groups, USers</field>-->
+    <!--        <field name="model_id" ref="model_documents_folder"/>-->
+    <!--        <field name="groups" eval="[(4, ref('base.group_user'))]"/>-->
+    <!--        <field name="domain_force">[-->
+    <!--            '|',-->
+    <!--            ('user_ids', '=', False),-->
+    <!--            ('user_ids', 'in', [user.id])-->
+    <!--            ]-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <record id="documents_document_write_rule" model="ir.rule">
+        <field name="name">Documents.document: User: Access</field>
+        <field name="model_id" ref="documents.model_documents_document"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[
+            '|', '|',
+            ('folder_id.user_ids', 'in', [user.id]),
+            ('folder_id.group_ids', 'in', [g.id for g in user.groups_id]),
+            ('folder_id.read_group_ids', 'in', [g.id for g in user.groups_id])
+            ]
+        </field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+</odoo>

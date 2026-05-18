@@ -1,0 +1,1076 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="menu_property_enquiry" model="website.menu">
+        <field name="name">Property Enquiry</field>
+        <field name="url">/enquiry</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">25</field>
+    </record>
+    <template id="portal_my_home_enquiry" name="Enquiry" customize_show="True"
+              inherit_id="portal.portal_my_home">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Enquiry</t>
+                <t t-set="url" t-value="'/my/enquiry'"/>
+                <t t-set="placeholder_count" t-value="'enquiry_count'"/>
+            </t>
+        </xpath>
+    </template>
+    <template id="portal_enquiry" name="Enquiry">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Quotations</t>
+            </t>
+            <t t-if="enquiry" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Enquiry #</th>
+                        <th class="text-end">Date</th>
+                        <th class="text-end">Stand Number</th>
+                        <th class="text-end">State</th>
+                    </tr>
+                </thead>
+                <t t-foreach="enquiry" t-as="en">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/enquiry_portal/#{en.id}">
+                                <t t-out="en.name"/>
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="en.date"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="en.stand_number"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="en.state"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no enquiry for your account.</p>
+        </t>
+    </template>
+    <template id="portal_enquiry_details" name="Enquiry">
+        <t t-call="portal.portal_layout">
+            <div class="card col-12 col-lg justify-content-end"
+                 style="padding: 10px;">
+                <div class="pb-2 pt-3">
+                    <h2 class="my-0">
+                        Enquiry:
+                        <em t-esc="enquiry.name"/>
+                    </h2>
+
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <strong>Date:</strong>
+                        <span t-field="enquiry.date"
+                              t-options='{"widget": "date"}'/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <strong>Stand Number:</strong>
+                        <span t-field="enquiry.stand_number"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <p>Your enquiry in the
+                            <span t-field="enquiry.state"/>
+                            state.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="service_order_communication" class="mt-4">
+                <h2>History</h2>
+                <t t-call="portal.message_thread">
+                    <t t-set="object" t-value="enquiry"/>
+                </t>
+            </div>
+        </t>
+    </template>
+    <template id="enquiry_form" name="Enquiry">
+        <t t-call="website.layout">
+            <div id="warp">
+                <section
+                        class="s_title parallax s_parallax_is_fixed bg-black-50"
+                        data-vcss="001" data-snippet="s_title"
+                        data-scroll-background-ratio="1"
+                        style="padding-bottom: 143px !important;padding-top: 35px !important;">
+                    <span class="s_parallax_bg oe_img_bg"
+                          style="background-image: url('client_enquiry/static/src/img/pexels-cottonbro-studio-4065876.jpg'); background-position: 85% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container" style="text-align: right;">
+                        <h1 style="font-family: monospace;">ENQUIRY</h1>
+                    </div>
+                </section>
+                <section class="s_text_block pt40 pb40 o_colored_level "
+                         data-snippet="s_text_block">
+                    <div class="container s_allow_columns">
+
+                        <div class="row">
+                            <div class="col-lg-8 mt-4 mt-lg-0">
+                                <p>
+                                    Contact us about anything related to
+                                    Property And Land.
+                                    <br/>
+                                    We'll do our best to get back to you as soon
+                                    as possible.
+                                </p>
+                            </div>
+                            <div class="col-lg-4 mt-4 mt-lg-0">
+                                <ul class="list-unstyled mb-0 ps-2">
+                                    <li>
+                                        <t t-esc="request.env.company.name"/>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-map-marker fa-fw me-2"/>
+                                        <span class="o_force_ltr">
+                                            <t t-esc="request.env.company.zip"/>
+                                            <t t-esc="request.env.company.street"/>
+                                            <t t-esc="request.env.company.street2"/>
+                                            <t t-esc="request.env.company.city"/>
+                                            <t t-esc="request.env.company.state_id.name"/>
+                                            <t t-esc="request.env.company.country_id.name"/>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-phone fa-fw me-2"/>
+                                        <span class="o_force_ltr">
+                                            <t t-esc="request.env.company.phone"/>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-1x fa-fw fa-envelope me-2"/>
+                                        <span>
+                                            <t t-esc="request.env.company.email"/>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <section class="s_website_form" data-vcss="001"
+                                 data-snippet="s_website_form"
+                                 id="iframe-client-enquiry">
+                            <!--                            <t t-call="client_enquiry.iframe_geolis_template"/>-->
+                            <iframe id="custom_src" name="custom_src"
+                                    src="https://ags.joburg.org.za/cgis/index.aspx"
+                                    width="100%" height="500"/>
+                            <!--                            	<script src="https://ags.joburg.org.za/JS_API/3.34/init.js"></script>-->
+                            <!--	<script src="js/jquery-3.1.0.min.js"></script>-->
+
+                            <div class="container">
+                                <form action="/enquiry/submit"
+                                      method="post"
+                                      enctype="multipart/form-data"
+                                      class="o_mark_required"
+                                      data-mark="*">
+                                    <input type="hidden"
+                                           name="csrf_token"
+                                           t-att-value="request.csrf_token()"/>
+                                    <input type="text" t-att-value="enquiry"
+                                           name="enquiry"/>
+                                    <div class="s_website_form_rows row s_col_no_bgcolor">
+                                    </div>
+                                    <br/>
+                                    <p>Particular of property for which
+                                        enquiry is made
+                                    </p>
+                                    <hr/>
+                                    <div class="s_website_form_rows row s_col_no_bgcolor">
+                                        <div class="mb-0 py-2 col-12 s_website_form_field">
+                                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                <label class="col-form-label col-sm-auto s_website_form_label"
+                                                       style="width: 200px"
+                                                       for="stand_number">
+                                                    <span class="s_website_form_label_content">
+                                                        Stand Number/
+                                                        Portion number
+                                                    </span>
+                                                </label>
+                                                <div class="col-sm">
+                                                    <input id="stand_number"
+                                                           type="text"
+                                                           t-att-value="stand_number"
+                                                           class="form-control s_website_form_input"
+                                                           name="stand_number"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-0 py-2 col-12 s_website_form_field">
+                                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                <label class="col-form-label col-sm-auto s_website_form_label"
+                                                       style="width: 200px"
+                                                       for="township">
+                                                    <span class="s_website_form_label_content">
+                                                        Township /Farm
+                                                        Name
+                                                    </span>
+                                                    <span class="s_website_form_mark">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <div class="col-sm">
+                                                    <input id="township"
+                                                           type="text"
+                                                           t-att-value="township"
+                                                           class="form-control s_website_form_input"
+                                                           name="township"
+                                                           required=""/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-0 py-2 col-12 s_website_form_field">
+                                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                <label class="col-form-label col-sm-auto s_website_form_label"
+                                                       style="width: 200px"
+                                                       for="entire_property">
+                                                    <span class="s_website_form_label_content">
+                                                        Does the enquiry
+                                                        relate to the
+                                                        entire property
+                                                        or a part
+                                                        thereof
+                                                    </span>
+                                                    <span class="s_website_form_mark">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <div class="col-sm">
+                                                    <select name="entire_property"
+                                                            required="true"
+                                                            id="entire_property"
+                                                            t-att-value="entire_property"
+                                                            style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                        <option value=""/>
+                                                        <option value="yes"
+                                                                t-att-selected="yes">
+                                                            Yes
+                                                        </option>
+                                                        <option value="no"
+                                                                t-att-selected="no">
+                                                            No
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-0 py-2 col-12 s_website_form_submit"
+                                         data-name="Submit Button">
+                                        <button style="width:30%;"
+                                                type="submit"
+                                                class="btn btn-primary btn-lg">
+                                            Submit
+                                        </button>
+                                        <div class="alert alert-danger"
+                                             style="display: inline-flex;margin-left: 10px;"
+                                             t-if="error" role="alert">
+                                            <t t-esc="error"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+    <template id="enquiry_form_1" name="Enquiry">
+        <t t-call="website.layout">
+            <div id="warp">
+                <section
+                        class="s_title parallax s_parallax_is_fixed bg-black-50"
+                        data-vcss="001" data-snippet="s_title"
+                        data-scroll-background-ratio="1"
+                        style="padding-bottom: 143px !important;padding-top: 35px !important;">
+                    <span class="s_parallax_bg oe_img_bg"
+                          style="background-image: url('/client_enquiry/static/src/img/pexels-cottonbro-studio-4065876.jpg'); background-position: 85% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container" style="text-align: right;">
+                        <h1 style="font-family: monospace;">ENQUIRY</h1>
+                    </div>
+                </section>
+                <section class="s_text_block pt40 pb40 o_colored_level "
+                         data-snippet="s_text_block">
+                    <div class="container s_allow_columns">
+                        <div class="row">
+                            <div class="col-lg-8 mt-4 mt-lg-0">
+                                <section class="s_website_form" data-vcss="001"
+                                         data-snippet="s_website_form">
+                                    <div class="container">
+                                        <form action="/enquiry/submit-1"
+                                              method="post"
+                                              enctype="multipart/form-data"
+                                              class="o_mark_required"
+                                              data-mark="*">
+                                            <input type="hidden"
+                                                   name="csrf_token"
+                                                   t-att-value="request.csrf_token()"/>
+                                            <input type="hidden"
+                                                   t-att-value="enquiry"
+                                                   name="enquiry"/>
+                                            <p>
+                                                Enquiry
+                                            </p>
+                                            <hr/>
+                                            <div class="s_website_form_rows row s_col_no_bgcolor">
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="type">
+                                                            <span class="s_website_form_label_content">
+                                                                Type of enquiry
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="type"
+                                                                    required="true"
+                                                                    id="type "
+                                                                    t-att-value="type"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value=""/>
+                                                                <option value="social_lease"
+                                                                        t-att-selected="social_lease">
+                                                                    Social
+                                                                    Lease/ Sale
+                                                                </option>
+                                                                <option value="commercial_lease"
+                                                                        t-att-selected="commercial_lease">
+                                                                    Commercial
+                                                                    Lease/Sale
+                                                                    (including
+                                                                    residential)
+                                                                </option>
+                                                                <option value="registration"
+                                                                        t-att-selected="registration">
+                                                                    Registration/
+                                                                    cancellation
+                                                                    of a
+                                                                    servitude
+                                                                </option>
+                                                                <option value="land"
+                                                                        t-att-selected="land">
+                                                                    Land
+                                                                    Regularisation
+                                                                    Matter
+                                                                </option>
+                                                                <option value="road"
+                                                                        t-att-selected="road">
+                                                                    Road reserve
+                                                                </option>
+                                                                <option value="user_agreement"
+                                                                        t-att-selected="user_agreement">
+                                                                    User
+                                                                    Agreement
+                                                                </option>
+                                                                <option value="encroachment"
+                                                                        t-att-selected="encroachment">
+                                                                    Encroachment
+                                                                    / Parking
+                                                                </option>
+                                                                <option value="outdoor"
+                                                                        t-att-selected="outdoor">
+                                                                    Outdoor
+                                                                    Advertising
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="proposed_use">
+                                                            <span class="s_website_form_label_content">
+                                                                Proposed use of
+                                                                the property
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="proposed_use"
+                                                                   t-att-value="proposed_use"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="proposed_use"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <p>
+                                                Particulars of person submitting
+                                                enquiry(individual)
+                                            </p>
+                                            <hr/>
+                                            <div class="s_website_form_rows row s_col_no_bgcolor">
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="surname">
+                                                            <span class="s_website_form_label_content">
+                                                                Surname
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="surname"
+                                                                   t-att-value="surname"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="surname"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="title">
+                                                            <span class="s_website_form_label_content">
+                                                                Title
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="title"
+                                                                    id="title "
+                                                                    t-att-value="title"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value=""/>
+                                                                <option value="Mr"
+                                                                        t-att-selected="Mr">
+                                                                    Mr
+                                                                </option>
+                                                                <option value="Mrs"
+                                                                        t-att-selected="Mrs">
+                                                                    Mrs
+                                                                </option>
+                                                                <option value="Ms"
+                                                                        t-att-selected="Ms">
+                                                                    Ms
+                                                                </option>
+                                                                <option value="Miss"
+                                                                        t-att-selected="Miss">
+                                                                    Miss
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="first_name">
+                                                            <span class="s_website_form_label_content">
+                                                                First Name
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="first_name"
+                                                                   t-att-value="first_name"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="first_name"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="cell_phone">
+                                                            <span class="s_website_form_label_content">
+                                                                Cellphone number
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="cell_phone"
+                                                                   t-att-value="cell_phone"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="cell_phone"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="email">
+                                                            <span class="s_website_form_label_content">
+                                                                Email
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="email"
+                                                                   t-att-value="email"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="email"
+                                                                   required=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <p>
+                                                Particulars of applicant
+                                                (Company/cc/partnership/trust/other
+                                                legal entity)
+                                            </p>
+                                            <hr/>
+                                            <div class="s_website_form_rows row s_col_no_bgcolor">
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="registration">
+                                                            <span class="s_website_form_label_content">
+                                                                Registration
+                                                                number
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="registration"
+                                                                   t-att-value="registration"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="registration"
+                                                                   required=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="street">
+                                                            <span class="s_website_form_label_content">
+                                                                Address
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="street"
+                                                                   t-att-value="street"
+                                                                   type="text"
+                                                                   style="margin-bottom: 10px;"
+                                                                   placeholder="Street.."
+                                                                   class="form-control s_website_form_input"
+                                                                   name="street"
+                                                                   required=""/>
+                                                            <input id="street_1"
+                                                                   t-att-value="street_1"
+                                                                   type="text"
+                                                                   style="margin-bottom: 10px;"
+                                                                   placeholder="Street2..."
+                                                                   class="form-control s_website_form_input"
+                                                                   name="street_1"
+                                                                   required=""/>
+                                                            <input id="city"
+                                                                   t-att-value="city"
+                                                                   type="text"
+                                                                   style="margin-bottom: 10px;"
+                                                                   placeholder="City..."
+                                                                   class="form-control s_website_form_input"
+                                                                   name="city"
+                                                                   required=""/>
+                                                            <input id="zip_code"
+                                                                   t-att-value="zip_code"
+                                                                   type="text"
+                                                                   style="margin-bottom: 10px;"
+                                                                   placeholder="Zip..."
+                                                                   class="form-control s_website_form_input"
+                                                                   name="zip_code"
+                                                                   required=""/>
+                                                            <t t-set="countries"
+                                                               t-value="request.env['res.country'].sudo().search([])"/>
+                                                            <select name="country"
+                                                                    placeholder="Country..."
+                                                                    style="margin-bottom: 10px;"
+                                                                    class="form-control country">
+                                                                <option/>
+                                                                <t t-foreach="countries or []"
+                                                                   t-as="country">
+                                                                    <option t-att-value="country.id">
+                                                                        <t t-esc="country.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                            <t t-set="states"
+                                                               t-value="request.env['res.country.state'].sudo().search([])"/>
+                                                            <select name="states"
+                                                                    placeholder="State..."
+                                                                    class="form-control country">
+                                                                <option/>
+                                                                <t t-foreach="states or []"
+                                                                   t-as="state">
+                                                                    <option t-att-value="state.id">
+                                                                        <t t-esc="state.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="telephone_number">
+                                                            <span class="s_website_form_label_content">
+                                                                Business Telephone number
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="telephone_number"
+                                                                   t-att-value="telephone_number"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="telephone_number"
+                                                                   required=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="mobile_number">
+                                                            <span class="s_website_form_label_content">
+                                                                Mobile Number
+                                                            </span>
+                                                            <span class="s_website_form_mark">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="mobile_number"
+                                                                   t-att-value="mobile_number"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   name="mobile_number"
+                                                                   required=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-0 py-2 col-12 s_website_form_submit"
+                                                 data-name="Submit Button">
+                                                <button style="width:30%;"
+                                                        type="submit"
+                                                        class="btn btn-primary btn-lg">
+                                                    Next <i class="fa fa-arrow-right" style="margin-left: 10px;" />
+                                                </button>
+                                                <div class="alert alert-danger"
+                                                     style="display: inline-flex;margin-left: 10px;"
+                                                     t-if="error" role="alert">
+                                                    <t t-esc="error"/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="col-lg-4 mt-4 mt-lg-0">
+                                <ul class="list-unstyled mb-0 ps-2">
+                                    <li>
+                                        <t t-esc="request.env.company.name"/>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-map-marker fa-fw me-2"/>
+                                        <span class="o_force_ltr">
+                                            <t t-esc="request.env.company.zip"/>
+                                            <t t-esc="request.env.company.street"/>
+                                            <t t-esc="request.env.company.street2"/>
+                                            <t t-esc="request.env.company.city"/>
+                                            <t t-esc="request.env.company.state_id.name"/>
+                                            <t t-esc="request.env.company.country_id.name"/>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-phone fa-fw me-2"/>
+                                        <span class="o_force_ltr">
+                                            <t t-esc="request.env.company.phone"/>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-1x fa-fw fa-envelope me-2"/>
+                                        <span>
+                                            <t t-esc="request.env.company.email"/>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+    <template id="enquiry_form_2" name="Enquiry">
+        <t t-call="website.layout">
+            <div id="warp">
+                <section
+                        class="s_title parallax s_parallax_is_fixed bg-black-50"
+                        data-vcss="001" data-snippet="s_title"
+                        data-scroll-background-ratio="1"
+                        style="padding-bottom: 143px !important;padding-top: 35px !important;">
+                    <span class="s_parallax_bg oe_img_bg"
+                          style="background-image: url('/client_enquiry/static/src/img/pexels-cottonbro-studio-4065876.jpg'); background-position: 85% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container" style="text-align: right;">
+                        <h1 style="font-family: monospace;">ENQUIRY</h1>
+                    </div>
+                </section>
+
+                <section class="s_text_block pt40 pb40 o_colored_level "
+                         data-snippet="s_text_block">
+                    <div class="container s_allow_columns">
+                        <div class="row">
+                            <div class="col-lg-8 mt-4 mt-lg-0">
+                                <section class="s_website_form" data-vcss="001"
+                                         data-snippet="s_website_form">
+                                    <div class="container">
+                                        <form action="/enquiry/submit-1"
+                                              method="post"
+                                              enctype="multipart/form-data"
+                                              class="o_mark_required"
+                                              data-mark="*">
+                                            <input type="hidden"
+                                                   name="csrf_token"
+                                                   t-att-value="request.csrf_token()"/>
+                                            <input type="text"
+                                                   t-att-value="enquiry"
+                                                   name="enquiry"/>
+                                            <p>
+                                                Enquiry
+                                            </p>
+                                            <hr/>
+                                            <div class="mb-0 py-2 col-12 s_website_form_submit"
+                                                 data-name="Submit Button">
+                                                <button style="width:30%;"
+                                                        type="submit"
+                                                        class="btn btn-primary btn-lg">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col-lg-4 mt-4 mt-lg-0">
+                                <ul class="list-unstyled mb-0 ps-2">
+                                    <li>
+                                        <t t-esc="request.env.company.name"/>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-map-marker fa-fw me-2"/>
+                                        <span class="o_force_ltr">
+                                            <t t-esc="request.env.company.zip"/>
+                                            <t t-esc="request.env.company.street"/>
+                                            <t t-esc="request.env.company.street2"/>
+                                            <t t-esc="request.env.company.city"/>
+                                            <t t-esc="request.env.company.state_id.name"/>
+                                            <t t-esc="request.env.company.country_id.name"/>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-phone fa-fw me-2"/>
+                                        <span class="o_force_ltr">
+                                            <t t-esc="request.env.company.phone"/>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-1x fa-fw fa-envelope me-2"/>
+                                        <span>
+                                            <t t-esc="request.env.company.email"/>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+    <template id="enquiry_form_submit" name="Enquiry">
+        <t t-call="website.layout">
+            <div id="warp">
+
+                <section class="s_text_block pt40 pb40 o_colored_level "
+                         data-snippet="s_text_block">
+                    <div id="wrap" class="oe_structure oe_empty">
+                        <section class="s_text_block pt40 pb40 o_colored_level "
+                                 data-snippet="s_text_block">
+                            <div class="container s_allow_columns">
+                                <div class="row">
+                                    <div class="col-lg-7 col-xl-6 me-lg-auto">
+                                        <span class="d-block fa fa-4x fa-thumbs-up mx-auto rounded-circle bg-primary"/>
+                                        <br/>
+                                        <h1 class="text-center">Thank You!</h1>
+                                        <div class="pb16 pt16 s_hr"
+                                             data-snippet="s_hr"
+                                             data-name="Separator">
+                                            <hr class="mx-auto border-top w-50 border-dark text-center"/>
+                                        </div>
+                                        <h5 class="text-center">
+                                            <span class="fa fa-check-circle"/>
+                                            <span>Your message has been sent
+                                                <b>successfully</b>
+                                            </span>
+                                        </h5>
+                                        <p class="text-cThank You!enter">We will
+                                            get back to you shortly.
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-4 mt-4 mt-lg-0">
+                                        <ul class="list-unstyled mb-0 ps-2">
+                                            <li>
+                                                <t t-esc="request.env.company.name"/>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-map-marker fa-fw me-2"/>
+                                                <span class="o_force_ltr">
+                                                    <t t-esc="request.env.company.zip"/>
+                                                    <t t-esc="request.env.company.street"/>
+                                                    <t t-esc="request.env.company.street2"/>
+                                                    <t t-esc="request.env.company.city"/>
+                                                    <t t-esc="request.env.company.state_id.name"/>
+                                                    <t t-esc="request.env.company.country_id.name"/>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-phone fa-fw me-2"/>
+                                                <span class="o_force_ltr">
+                                                    <t t-esc="request.env.company.phone"/>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-1x fa-fw fa-envelope me-2"/>
+                                                <span>
+                                                    <t t-esc="request.env.company.email"/>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+    <template id="iframe_geolis_template" name="Iframe">
+        <iframe id="custom_src" name="custom_src"
+                src="https://ags.joburg.org.za/cgis/index.aspx"
+                width="100%" height="500"/>
+
+    </template>
+    <template id="assessment_circulation" name="Enquiry">
+        <t t-call="website.layout">
+            <div id="warp">
+                <section
+                        class="s_title parallax s_parallax_is_fixed bg-black-50"
+                        data-vcss="001" data-snippet="s_title"
+                        data-scroll-background-ratio="1"
+                        style="padding-bottom: 143px !important;padding-top: 35px !important;">
+                    <span class="s_parallax_bg oe_img_bg"
+                          style="background-image: url('/client_enquiry/static/src/img/pexels-cottonbro-studio-4065876.jpg'); background-position: 85% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container" style="text-align: right;">
+                        <h1 style="font-family: monospace;">Assessment
+                            Circulation
+                        </h1>
+                    </div>
+                </section>
+                <section class="s_text_block pt40 pb40 o_colored_level "
+                         data-snippet="s_text_block">
+                    <div class="container s_allow_columns">
+                        <section class="s_website_form" data-vcss="001"
+                                 data-snippet="s_website_form"
+                                 id="iframe-client-enquiry">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-7 col-xl-6 me-lg-auto">
+                                        <form action="/assessment/circulation_property"
+                                              method="post"
+                                              enctype="multipart/form-data"
+                                              class="o_mark_required"
+                                              data-mark="*">
+                                            <input type="hidden"
+                                                   name="csrf_token"
+                                                   t-att-value="request.csrf_token()"/>
+                                            <input type="hidden"
+                                                   t-att-value="enquiry"
+                                                   name="enquiry"/>
+                                            <br/>
+                                            <t t-esc="name"/>
+                                            <hr/>
+                                            <div class="s_website_form_rows row s_col_no_bgcolor">
+                                                <div class="mb-0 py-2 col-12 s_website_form_field">
+                                                <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                    <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                           for="township">
+                                                        <span class="s_website_form_label_content">
+                                                            Circulation Documents:
+                                                        </span>
+                                                        <span class="s_website_form_mark">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <div class="col-sm">
+                                                        <label for="attachment">
+                                                        <a class="text-light"
+                                                           style="color: #276e72 !important;"
+                                                           role="button"
+                                                           aria-disabled="false">
+                                                            Upload
+                                                            Document
+                                                        </a>
+                                                    </label>
+                                                    <input type="file"
+                                                           name="file[]"
+                                                           id="attachment"
+                                                           style="visibility: hidden; position: absolute;"
+                                                           multiple="true"/>
+
+                                                    <p id="files-area">
+                                                        <span id="filesList">
+                                                            <span id="files-names"/>
+                                                        </span>
+                                                    </p>
+<!--                                                    <script type="text/javascript"-->
+<!--                                                            src="/e_license_system/static/src/js/file_upload.js"/>-->
+<!--                                                        </div>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div class="mb-0 py-2 col-12 s_website_form_submit"
+                                                 data-name="Submit Button">
+                                                <button style="width:30%;"
+                                                        type="submit"
+                                                        class="btn btn-primary btn-lg">
+                                                    Submit
+                                                </button>
+                                                <div class="alert alert-danger"
+                                                     style="display: inline-flex;margin-left: 10px;"
+                                                     t-if="error" role="alert">
+                                                    <t t-esc="error"/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+<!--                                    <div class="col-lg-4 mt-4 mt-lg-0">-->
+<!--                                        <ul class="list-unstyled mb-0 ps-2">-->
+<!--                                            <li>-->
+<!--                                                <t t-esc="name"/>-->
+<!--                                                <hr/>-->
+<!--                                            </li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+    <template id="assessment_circulation_submit" name="Enquiry">
+        <t t-call="website.layout">
+            <div id="warp">
+                <section class="s_text_block pt40 pb40 o_colored_level "
+                         data-snippet="s_text_block">
+                    <div id="wrap" class="oe_structure oe_empty">
+                        <section class="s_text_block pt40 pb40 o_colored_level "
+                                 data-snippet="s_text_block">
+                            <div class="container s_allow_columns">
+                                <div class="row">
+                                    <div class="col-lg-7 col-xl-6 me-lg-auto">
+                                        <span class="d-block fa fa-4x fa-thumbs-up mx-auto rounded-circle bg-primary"/>
+                                        <br/>
+                                        <h1 class="text-center">Thank You!</h1>
+                                        <div class="pb16 pt16 s_hr"
+                                             data-snippet="s_hr"
+                                             data-name="Separator">
+                                            <hr class="mx-auto border-top w-50 border-dark text-center"/>
+                                        </div>
+                                        <h5 class="text-center">
+                                            <span class="fa fa-check-circle"/>
+                                            <span>Your message has been sent
+                                                <b>successfully</b>
+                                            </span>
+                                        </h5>
+                                    </div>
+                                    <div class="col-lg-4 mt-4 mt-lg-0">
+                                        <ul class="list-unstyled mb-0 ps-2">
+                                            <li>
+                                                <t t-esc="request.env.company.name"/>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-map-marker fa-fw me-2"/>
+                                                <span class="o_force_ltr">
+                                                    <t t-esc="request.env.company.zip"/>
+                                                    <t t-esc="request.env.company.street"/>
+                                                    <t t-esc="request.env.company.street2"/>
+                                                    <t t-esc="request.env.company.city"/>
+                                                    <t t-esc="request.env.company.state_id.name"/>
+                                                    <t t-esc="request.env.company.country_id.name"/>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-phone fa-fw me-2"/>
+                                                <span class="o_force_ltr">
+                                                    <t t-esc="request.env.company.phone"/>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-1x fa-fw fa-envelope me-2"/>
+                                                <span>
+                                                    <t t-esc="request.env.company.email"/>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo>

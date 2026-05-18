@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <template id="receipts_payments_report_document">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="row">
+                        <div class="col-6">
+                            <b>
+                                Start Date: <span t-esc="start_date"/><br/>
+                                End Date: <span t-esc="end_date"/>
+                            </b>
+                        </div>
+                        <div class="col-6" align="right">
+<!--                            Last Printed on:-->
+                            <b>
+                                Print Date: <span t-esc="data.get('date')"/><br/>
+                                Printed by: <span t-esc="request.env.user.name"/>
+                            </b>
+                        </div>
+                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-6">-->
+<!--                            <b>-->
+<!--                                Printed by : <span t-esc="request.env.user.name"/>-->
+<!--                            </b>-->
+<!--                        </div>-->
+<!--                        <div class="col-6" align="right">-->
+<!--                            Last Printed by: <span t-esc="request.env.user.name"/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <br/>
+                    <div class="solid">
+                        <p style="border-top: 3px solid #bbb;"/>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <table style="border:0px; margin-left: 25px">
+                                <th>
+                                    <h3>INVOICES</h3>
+                                </th>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                    <table class="table table-borderless" style="border:0px; font-size: 17px;">
+                        <th scope="col">Date</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Reference Number</th>
+                        <th scope="col">Account Number</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Med.Aid</th>
+                        <th scope="col">Patient</th>
+                        <th scope="col">Total</th>
+
+                        <t t-set="invoices"
+                           t-value="request.env['account.move'].search([('invoice_date', '>=', start_date), ('invoice_date', '&lt;=', end_date), ('state','!=','draft'),('state','!=','cancel'), ('type','=','out_invoice')])"/>
+                        <t t-foreach="invoices" t-as="invoice">
+                            <tbody>
+                                <tr>
+                                    <td style="border:0px;">
+                                        <span t-esc='invoice.invoice_date'></span>
+                                    </td>
+                                    <td style="border:0px;">
+                                        <span t-esc='invoice.user_id.name'></span>
+                                    </td>
+                                    <td style="border:0px;">
+                                        <span t-esc='invoice.number'></span>
+                                    </td>
+                                    <td style="border:0px;">
+                                        <span t-esc='invoice.partner_id.individual_internal_ref'></span>
+                                    </td>
+                                    <td style="border:0px;">
+                                        <span t-esc='invoice.partner_id.name'></span>
+                                    </td>
+                                    <td style="border:0px; text-align: right;">
+                                        <span t-esc='invoice.approved_amount' t-as="line"></span>
+                                    </td>
+                                    <td style="border:0px; text-align: right;">
+                                        <span t-esc='invoice.residual'></span>
+                                    </td>
+                                    <td style="border:0px; text-align: right;">
+<!--                                        <t t-set="amount" t-value="invoice.approved_amount+invoice.residual"/>-->
+                                        <t t-esc="invoice.amount_total_signed"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </t>
+                        <tfoot align="right">
+                            <tr>
+                                <th colspan="3"></th>
+                                <th></th>
+                                <th>INVOICE Total :</th>
+                                <td style="text-align: right;">
+                                    <t t-esc="('%.2f' % sum(invoices.mapped('approved_amount')))"/>
+                                </td>
+                                <td style="text-align: right;">
+                                    <t t-esc="('%.2f' % sum(invoices.mapped('residual')))"/>
+                                </td>
+                                <td style="text-align: right;">
+                                    <t t-esc="('%.2f' % (sum(invoices.mapped('approved_amount')) + sum(invoices.mapped('residual'))))"/>
+                                </td>
+                            </tr>
+                        </tfoot>
+
+                    </table>
+                    <div class="solid">
+                        <p style="border-top: 3px solid #bbb;"/>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <table style="border:0px; margin-left: 25px">
+                                <th>
+                                    <h3>RECEIPTS</h3>
+                                </th>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                    <table class="table table-borderless" style="border:0px; font-size: 17px;">
+                        <th scope="col">Date</th>
+                        <th scope="col">User</th>
+                        <th scope="col">RefNo</th>
+                        <th scope="col">AccNo</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Med.Aid</th>
+                        <th scope="col">Patient</th>
+                        <th scope="col">Total</th>
+                        <tbody>
+                            <t t-set="receipt"
+                               t-value="request.env['account.payment'].search([('payment_date', '>=', start_date), ('payment_date', '&lt;=', end_date), ('payment_type','=','inbound')])"/>
+                            <t t-foreach="receipt" t-as="receipts">
+
+                                <tr>
+                                    <td style="border:0px;">
+                                        <span t-esc='receipts.payment_date'></span>
+                                    </td>
+                                    <td style="border:0px;">
+                                        <span t-esc='receipts.create_uid.name'></span>
+                                    </td>
+                                    <td style="border:0px;">
+                                        <span t-esc='receipts.name'></span>
+                                    </td>
+                                    <td style="border:0px;">
+                                        <span t-esc='receipts.partner_id.individual_internal_ref'></span>
+                                    </td>
+                                    <td style="border:0px;">
+                                        <span t-esc='receipts.partner_id.name'></span>
+                                    </td>
+                                    <td style="border:0px;">
+                                        <span t-esc='receipts.journal_id.name'></span>
+                                    </td>
+                                    <td style="border:0px;"></td>
+                                    <td style="border:0px;"></td>
+                                    <td style="border:0px; text-align: right;">
+                                        <span t-esc='receipts.amount'></span>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <th colspan="4"></th>
+                                <th></th>
+                                <th>RECEIPT Total :</th>
+                                <td style="text-align: right;"></td>
+                                <td style="text-align: right;"></td>
+                                <td style="text-align: right;">
+                                    <t t-esc="('%.2f' % sum(receipt.mapped('amount')))"/>
+                                </td>
+                            </tr>
+                        </tfoot>
+
+                    </table>
+
+                    <!--                    </div>-->
+                </t>
+            </t>
+            <!--            </t>-->
+        </template>
+    </data>
+</odoo>

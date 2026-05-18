@@ -1,0 +1,25 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Property: Title Deeds",
+    'description': """Property Update""",
+    'summary': """Property Update""",
+    'version': '16.0.1.0.1',
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': 'https://natedsystems.co.za/',
+    'sequence': '20',
+    'category': 'Services',
+    'depends': ['itsys_real_estate','property_update'],
+    'data': [
+        'data/server_action_data.xml',
+        'security/ir.model.access.csv',
+        'views/title_deeds_views.xml',
+        'views/building_views.xml',
+    ],
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+}

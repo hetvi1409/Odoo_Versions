@@ -1,0 +1,54 @@
+<!-- views/insurance_claim_views.xml -->
+<odoo>
+    <record id="view_insurance_claim_list" model="ir.ui.view">
+        <field name="name">insurance.claim.list</field>
+        <field name="model">insurance.claim</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="policy_id"/>
+                <field name="date"/>
+                <field name="status"/>
+                <field name="claim_amount"/>
+                <field name="payout_amount"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_insurance_claim_form" model="ir.ui.view">
+        <field name="name">insurance.claim.form</field>
+        <field name="model">insurance.claim</field>
+        <field name="arch" type="xml">
+            <form string="Insurance Claim">
+                <header>
+                    <field name="status" widget="statusbar"/>
+                    <button name="action_open_documents" type="object" class="oe_stat_button">
+                        <field name="claim_documents_count" widget="statinfo"/>
+                    </button>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="policy_id"/>
+                        <field name="date"/>
+                        <field name="status"/>
+                    </group>
+                    <group>
+                        <field name="claim_amount"/>
+                        <field name="payout_amount"/>
+                        <field name="currency_id"/>
+                    </group>
+                    <group>
+                        <field name="contact_person"/>
+                        <field name="contact_number"/>
+                        <field name="contact_email"/>
+                    </group>
+                    <group>
+                        <field name="incident_id"/>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

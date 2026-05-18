@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_portal_audit_request_probc" name="Audit Request layout : audit
+        request entries" inherit_id="portal.portal_breadcrumbs" >
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'audit_request' or audit_request" t-attf-class="breadcrumb-item
+                #{'active ' if not audit_request else ''}">
+                <a t-if="audit_request" t-attf-href="/custom/audit/request?{{ keep_query() }}">External Audit Requests</a>
+                <t t-else="">External Audit Requests</t>
+            </li>
+            <li t-if="audit_request" class="breadcrumb-item active">
+                <t t-esc="audit_request.name" t-if="audit_request.name"/>
+            </li>
+        </xpath>
+    </template>
+    
+    <template id="custom_portal_my_home_audit_request_probc" name="Portal My Home : audit
+        request entries" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">External Audit Requests</t>
+                <t t-set="url" t-value="'/custom/audit/request'"/>
+                <!-- <t t-set="count" t-value="audit_request_count"/> -->
+                <t t-set="placeholder_count" t-value="'audit_request_count'"/>
+            </t>
+        </xpath>
+    </template>
+    
+    <template id="custom_portal_audit_request_list_probc" name="External Audit Requests">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">External Audit Requests</t>
+            </t>
+            <t t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th name="number">Request Number</th>
+                        <th name="title">Request Name</th>
+                        <th name="created">Created by</th>
+                        <th name="date">Created Date</th>
+                        <th name="responsible">Audit Responsible</th>
+                        <th name="audit_date">Audit Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="audit_requests" t-as="request">
+                        <tr>
+                            <td name="number">
+                                <t t-set='access_request' t-value='request.get_portal_url()'/>
+                                <a t-attf-href="/custom/audit/request/form/#{request.id}?{{ keep_query(access_token=request.access_token) }}">
+                                    <span t-field="request.sequence_name"/>
+                                </a>
+                            </td>
+                            <td name="title">
+                                <span t-field="request.name"/>
+                            </td>
+                            <td name="responsible">
+                                <span t-field="request.responsible_user_id.name"/>
+                            </td>
+                            <td name="date">
+                                <span t-field="request.create_date"/>
+                            </td>
+                            <td name="responsible">
+                                <span t-field="request.audit_user_id.name"/>
+                            </td>
+                            <td name="audit_date">
+                                <span t-field="request.audit_date"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+    
+    <template id="custom_portal_audit_request_detail_form_probc" name="Audit Request Form
+        Details">
+        <t t-call="portal.portal_layout">
+            <t t-call="portal.portal_record_layout">
+                <t t-set="card_header">
+                    <div class="row no-gutters">
+                        <div class="col-md text-md-right">
+                            <small class="text-right">Status:</small>
+                            <span t-field="audit_request.state" class=" badge badge-pill badge-info"/>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>
+                            <strong>
+                                <span t-field="audit_request.name"/>
+                                (#
+                                <span t-field="audit_request.sequence_name"/>
+                                )
+                            </strong>
+                        </h3>
+                    </div>
+                    <div class="clearfix"/>
+                    <div class="col-md-12 col-sm-12 mt16">
+                        <table class="table table-responsive-sm">
+                            <tbody>
+                                <tr>
+                                    <td name="method">
+                                        <strong>Audit Method</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="audit_request.type"/>
+                                    </td>
+                                    <td name="external" class="text-left">
+                                        <strong>External Audit Partner</strong>
+                                    </td>
+                                    <td name="external" class="text-left">
+                                        <span t-field="audit_request.partner_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td name="category">
+                                        <strong>Audit Category</strong>
+                                    </td>
+                                    <td name="category">
+                                        <span t-field="audit_request.audit_category_id.name"/>
+                                    </td>
+                                    <td name="tags">
+                                        <strong>Audit Tags</strong>
+                                    </td>
+                                    <td name="tags">
+                                        <t t-foreach="audit_request.audit_tag_ids" t-as="tags">
+                                            <span class="badge rounded-pill text-bg-info" t-esc="tags.name">
+                                            </span>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td name="responsible">
+                                        <strong>Audit Responsible</strong>
+                                    </td>
+                                    <td name="responsible">
+                                        <span t-field="audit_request.audit_user_id.name"/>
+                                    </td>
+                                    <td name="created">
+                                        <strong>Created by</strong>
+                                    </td>
+                                    <td name="created">
+                                        <span t-field="audit_request.responsible_user_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td name="date">
+                                        <strong>Audit Date</strong>
+                                    </td>
+                                    <td name="date">
+                                        <span t-field="audit_request.audit_date"/>
+                                    </td>
+                                    <td name="create_date">
+                                        <strong>Created Date</strong>
+                                    </td>
+                                    <td name="create_date">
+                                        <span t-field="audit_request.create_date"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td name="dead_date">
+                                        <strong>Deadline Date</strong>
+                                    </td>
+                                    <td name="dead_date">
+                                        <span t-field="audit_request.deadline_date"/>
+                                    </td>
+                                    <td name="com">
+                                        <strong>Company</strong>
+                                    </td>
+                                    <td name="com">
+                                        <span t-field="audit_request.company_id.name"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h5 style="color: #00A09D;">Audit Results</h5>
+                    <div class="clearfix"/>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div name="request_detail">
+                                <strong>Audit Request Details:</strong>
+                                <span t-field="audit_request.audit_reason"/>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div name="expect_result">
+                                <strong>Audit Expected Result:</strong>
+                                <span t-field="audit_request.expected_result"/>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div name="final_result">
+                                <strong>Audit Result:</strong>
+                                <span t-field="audit_request.request_for"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+            <div class="mt32">
+                <h4>
+                    <strong>Message and communication history</strong>
+                </h4>
+                <t t-call="portal.message_thread">
+                    <t t-set="object" t-value="audit_request"/>
+                    <t t-set="token" t-value="audit_request.access_token"/>
+                    <t t-set="pid" t-value="pid"/>
+                    <t t-set="hash" t-value="hash"/>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

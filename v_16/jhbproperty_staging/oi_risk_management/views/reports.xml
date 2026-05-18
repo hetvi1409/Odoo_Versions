@@ -1,0 +1,344 @@
+<odoo>
+    <data>
+        <record id="oi_risk_management.risk_profile_wizard" model="ir.ui.view">
+            <field name="name">oi_risk_management.risk_profile.form</field>
+            <field name="model">oi_risk.risk_profile_wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="group_class"/>
+                        <field name="department_id"/>
+<!--                               invisible="group_class != 'department'"-->
+<!--                               required="group_class == 'department'"/>-->
+<!--                               attrs="{'invisible': [('group_class', '!=', 'department')], 'required': [('group_class', '=', 'department')]}"/>-->
+                        <field name="evaluation_risk_type" string="Risk Type"/>
+                    </group>
+                    <footer>
+                        <button string="Generate" class="oe_highlight" type="object" name="generate"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="oi_risk_management.risk_profile_wizard_action" model="ir.actions.act_window">
+            <field name="name">Generate a Risk Profile</field>
+            <field name="res_model">oi_risk.risk_profile_wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <record id="oi_risk_management.risk_profile_table" model="ir.ui.view">
+            <field name="name">risk_profile_table</field>
+            <field name="model">oi_risk.risk_profile_wizard</field>
+            <field name="type">qweb</field>
+            <field name="key">oi_risk_management.risk_profile_table</field>
+            <field name="arch" type="xml">
+<style>
+                    .o_risk_field_container {
+                        margin-top: 0.75rem;
+                    }
+
+                    .o_risk_field_label {
+                        display: inline;
+                    }
+
+                    .o_risk_field {
+                        display: inline;
+                        margin-left: 0.75rem;
+                        color: #686868;
+                    }
+
+                    .o_risk_profile_table {
+                        table-layout: fixed;
+                        margin: 0 auto;
+                    }
+
+                    .o_risk_profile_cell {
+                        width: 75px;
+                        height: 75px;
+                        border: 1px solid #3e3e3e;
+                    }
+
+                    .o_risk_profile_cell_very_high {
+                        background-color: red;
+                    }
+
+                    .o_risk_profile_cell_high {
+                        background-color: orange;
+                    }
+
+                    .o_risk_profile_cell_medium {
+                        background-color: yellow;
+                    }
+
+                    .o_risk_profile_cell_low {
+                        background-color: green;
+                    }
+
+                    .o_risk_circle {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 30px;
+                        height: 30px;
+                        background-color: #cecece;
+
+                        float: left;
+                        margin-left: 3px;
+
+                        font-weight: bold;
+                        font-size: 12px;
+
+                        border: 1px solid #8d8d8d;
+                        border-radius: 999px;
+                    }
+
+                    /* the numbers represent the control effectiveness score  */
+                    .o_risk_circle_1 {
+                        width: 25px;
+                        height: 25px;
+                    }
+
+                    .o_risk_circle_2 {
+                        width: 30px;
+                        height: 30px;
+                        margin-left: 25%;
+                    }
+
+                    .o_risk_circle_3 {
+                        width: 35px;
+                        height: 35px;
+                        margin-left: 20%;
+                    }
+
+                    .o_risk_circle_4 {
+                        width: 40px;
+                        height: 40px;
+                        margin-left: 20%;
+                    }
+
+                    .o_risk_circle_5 {
+                        width: 45px;
+                        height: 45px;
+                        margin-left: 20%;
+                    }
+
+                    .oi_risk_severity_row &gt; td {
+                        font-size: 16px;
+                        font-weight: bold;
+                        text-align: center;
+                    }
+
+                    .oi_risk_likelihood_column &gt; td {
+                        font-size: 16px;
+                        font-weight: bold;
+                        text-align: right;
+                    }
+
+                    .oi_risk_probability_column {
+                        -ms-writing-mode: tb-rl;
+                        -webkit-writing-mode: vertical-rl;
+                        writing-mode: vertical-rl;
+                        transform: rotate(180deg);
+                        white-space: nowrap;
+                        vertical-align: top;
+                        text-align: center;
+                    }
+                    body {background-color: white;}
+                </style>  
+                
+				<t t-set="evaluation_system1" t-value="evaluation_system"/>
+				<t t-set="evaluation_system" t-value="evaluation_system1['evaluation_system']"/>
+               
+               <div class="d-flex mt-5">
+                    <table class="o_risk_profile_table">
+                       <tbody>
+                           <tr>
+                               <td/>
+                               <td colspan="6" class="pt-2">
+                                   <h3 style="text-align: center">
+                                       Risk type: <t t-esc="evaluation_system1['evaluation_risk_type_string']"/>
+                                   </h3>
+                               </td>
+                           </tr>
+                           <t t-foreach="[5, 4, 3, 2, 1]" t-as="p">
+                               <tr>
+                                   <!--the positive integers represent the actual criteria-->
+                                   <t t-foreach="[-1, 0, 1, 2, 3, 4, 5]" t-as="s">
+                                       <t t-if="s == -1 and p == 5">
+                                           <td class="oi_risk_probability_column font-weight-bold text-big" rowspan="6">
+                                               <h3 class="pr-3">
+                                                   Probability (Likelihood)
+                                               </h3>
+                                           </td>
+                                       </t>
+                                       <t t-elif="s == 0">
+                                           <td class="font-weight-bold text-big">
+                                               <h3 class="pr-2">
+                                                   <t t-esc="p"/>
+                                               </h3>
+                                           </td>
+                                       </t>
+                                       <t t-elif="s != -1">
+                                           <t t-set="cell_name" t-value="'P' + str(p) + ' ' + 'S' + str(s)"/>
+                                           <t t-set="cell_type" t-value="evaluation_system[cell_name]['type']"/>
+                                           <td t-attf-class="o_risk_profile_cell o_risk_profile_cell_{{ cell_type }}">
+                                               <div class="d-flex w-100 h-100 justify-content-center align-items-center flex-wrap">
+                                                   <t t-foreach="docs.env['oi_risk_management.risk'].search([('id','in',evaluation_system[cell_name]['risk_ids'])])" t-as="risk_id">
+                                                       <t t-set="control_effectiveness_score" t-value="risk_id.control_effectiveness_id.score"/>
+                                                       <a data-toggle="popover" target="_blank" t-attf-data-content="{{ risk_id['name'] }}" data-trigger="hover" t-att-href="'/web#action=%s&amp;id=%s&amp;view_type=form&amp;model=oi_risk_management.risk' % (%(oi_risk_management.risks_view)d, risk_id.id, )" t-attf-class="o_risk_circle o_risk_circle_{{ control_effectiveness_score }}">
+                                                           R<t t-esc="risk_id.id"/>
+                                                       </a>
+                                                       <script>
+                                                           $('.o_risk_circle').popover();
+                                                       </script>
+                                                   </t>
+                                               </div>
+                                           </td>
+                                       </t>
+                                   </t>
+                               </tr>
+                           </t>
+                           <tr class="oi_risk_severity_row">
+                               <td/>
+                               <td>1</td>
+                               <td>2</td>
+                               <td>3</td>
+                               <td>4</td>
+                               <td>5</td>
+                           </tr>
+                           <tr>
+                               <td/>
+                               <td colspan="6" class="pt-2">
+                                   <h3 style="text-align: center">
+                                       Impact (Severity/Consequence)
+                                   </h3>
+                               </td>
+                           </tr>
+                       </tbody>
+                   </table>
+               </div>
+            </field>
+        </record>
+        
+        <record id="oi_risk_management.risk_profile_view" model="ir.ui.view">
+            <field name="name">risk_profile_view</field>
+            <field name="model">oi_risk.risk_profile_wizard</field>
+            <field name="type">qweb</field>
+            <field name="key">oi_risk_management.risk_profile_view</field>
+            <field name="arch" type="xml">
+                <div class="o_form_view o_form_readonly o_project_plan">
+                    <div class="o_form_sheet_bg">
+                        <div class="o_form_sheet o_timesheet_plan_content">
+                            <div class="d-flex">
+                                <div>
+                                    <!-- Wizard form values -->
+                                    <div class="py-3">
+                                        <div class="o_risk_field_container">
+                                            <h4 class="o_risk_field_label">Department: </h4>
+                                            <h5 class="o_risk_field"><t t-esc="wizard['department'] or 'Not specified'"/></h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-5">
+                                        <!-- Legend -->
+                                        <ul>
+                                            <t t-foreach="wizard['risk_ids']" t-as="risk_id">
+                                                <t t-set="risk" t-value="env['oi_risk_management.risk'].browse(risk_id)"/>
+                                                <li style="font-size: 18px">
+                                                    <b>R<t t-esc="risk.id"/> - </b><span class="px-2"/><t t-esc="risk.name"/>
+                                                </li>
+                                            </t>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <t t-if="wizard['evaluation_risk_type']">
+	                				<t t-set="evaluation_system" t-value="docs.get_evaluation_system(wizard['evaluation_risk_type'],wizard['department_id'],wizard['group_class'])"/>
+									<t t-call="oi_risk_management.risk_profile_table"/>                                
+                                </t>
+                                
+                                <t t-else="">
+	                                <div style="flex-direction: row; display: flex;width:100%">
+										<t t-set="evaluation_system" t-value="docs.get_evaluation_system('inherent_risk',wizard['department_id'],wizard['group_class'])"/>
+										<t t-call="oi_risk_management.risk_profile_table"/>
+		                				<t t-set="evaluation_system" t-value="docs.get_evaluation_system('current_risk',wizard['department_id'],wizard['group_class'])"/>
+										<t t-call="oi_risk_management.risk_profile_table"/>
+										<t t-set="evaluation_system" t-value="docs.get_evaluation_system('residual_risk',wizard['department_id'],wizard['group_class'])"/>
+										<t t-call="oi_risk_management.risk_profile_table"/>
+									</div>
+								</t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+    </data>
+
+    <template id="risk_profile_view">
+        <t t-call="web.html_container">
+<!--            <t t-call="web.external_layout">-->
+                                <div class="o_form_view o_form_readonly o_project_plan">
+                    <div class="o_form_sheet_bg">
+                        <div class="o_form_sheet o_timesheet_plan_content">
+                            <div class="d-flex">
+                                <div>
+                                    <!-- Wizard form values -->
+                                    <div class="py-3">
+                                        <div class="o_risk_field_container">
+                                            <h4 class="o_risk_field_label">Department: </h4>
+                                            <h5 class="o_risk_field"><t t-esc="wizard['department'] or 'Not specified'"/></h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-5">
+                                        <!-- Legend -->
+                                        <ul>
+                                            <t t-foreach="wizard['risk_ids']" t-as="risk_id">
+                                                <t t-set="risk" t-value="env['oi_risk_management.risk'].browse(risk_id)"/>
+                                                <li style="font-size: 18px">
+                                                    <b>R<t t-esc="risk.id"/> - </b><span class="px-2"/><t t-esc="risk.name"/>
+                                                </li>
+                                            </t>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <t t-if="wizard['evaluation_risk_type']">
+	                				<t t-set="evaluation_system" t-value="docs.get_evaluation_system(wizard['evaluation_risk_type'],wizard['department_id'],wizard['group_class'])"/>
+									<t t-call="oi_risk_management.risk_profile_table"/>
+                                </t>
+
+                                <t t-else="">
+	                                <div style="flex-direction: row; display: flex;width:100%">
+										<t t-set="evaluation_system" t-value="docs.get_evaluation_system('inherent_risk',wizard['department_id'],wizard['group_class'])"/>
+										<t t-call="oi_risk_management.risk_profile_table"/>
+		                				<t t-set="evaluation_system" t-value="docs.get_evaluation_system('current_risk',wizard['department_id'],wizard['group_class'])"/>
+										<t t-call="oi_risk_management.risk_profile_table"/>
+										<t t-set="evaluation_system" t-value="docs.get_evaluation_system('residual_risk',wizard['department_id'],wizard['group_class'])"/>
+										<t t-call="oi_risk_management.risk_profile_table"/>
+									</div>
+								</t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </t>
+<!--        </t>-->
+    </template>
+
+    <record id="report_risk_profile" model="ir.actions.report">
+        <field name="name">Risk Profile</field>
+        <field name="model">oi_risk.risk_profile_wizard</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">Risk Profile</field>
+        <field name="binding_type">report</field>
+        <field name="report_name">oi_risk_management.risk_profile_view</field>
+        <field name="report_file">oi_risk_management.risk_profile_view</field>
+    </record>
+</odoo>

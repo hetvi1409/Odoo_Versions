@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Briefing Session List View -->
+    <record id="view_sagovtender_briefing_session_list" model="ir.ui.view">
+        <field name="name">sagovtender.briefing.session.list</field>
+        <field name="model">sagovtender.briefing.session</field>
+        <field name="arch" type="xml">
+            <list string="Briefing Sessions" decoration-info="state=='scheduled'" decoration-success="state=='completed'" decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="tender_number"/>
+                <field name="tender_title"/>
+                <field name="session_type"/>
+                <field name="session_date"/>
+                <field name="venue"/>
+                <field name="is_compulsory" widget="boolean_toggle"/>
+                <field name="registered_count"/>
+                <field name="attended_count"/>
+                <field name="state" widget="badge" decoration-info="state=='scheduled'" decoration-success="state=='completed'" decoration-warning="state=='in_progress'" decoration-muted="state=='cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Briefing Session Form View -->
+    <record id="view_sagovtender_briefing_session_form" model="ir.ui.view">
+        <field name="name">sagovtender.briefing.session.form</field>
+        <field name="model">sagovtender.briefing.session</field>
+        <field name="arch" type="xml">
+            <form string="Briefing Session">
+                <header>
+                    <button name="action_schedule" string="Schedule" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_start_session" string="Start Session" type="object" class="btn-success" invisible="state != 'scheduled'"/>
+                    <button name="action_complete" string="Complete" type="object" class="btn-success" invisible="state != 'in_progress'"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-warning" invisible="state in ('completed', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,scheduled,in_progress,completed"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_attendees" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="attendee_count" widget="statinfo" string="Attendees"/>
+                        </button>
+                        <button name="action_view_questions" type="object" class="oe_stat_button" icon="fa-question-circle">
+                            <field name="question_count" widget="statinfo" string="Questions"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tender_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="tender_number"/>
+                            <field name="tender_title"/>
+                            <field name="session_type"/>
+                            <field name="is_compulsory"/>
+                        </group>
+                        <group>
+                            <field name="session_date"/>
+                            <field name="session_end_date"/>
+                            <field name="registration_deadline"/>
+                            <field name="max_attendees"/>
+                            <field name="responsible_user_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Venue Details">
+                            <group>
+                                <group>
+                                    <field name="is_virtual"/>
+                                    <field name="meeting_link" widget="url" invisible="not is_virtual"/>
+                                    <field name="venue"/>
+                                    <field name="venue_address" widget="text"/>
+                                </group>
+                                <group>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Site Visit" invisible="not site_visit_required">
+                            <group>
+                                <field name="site_visit_required"/>
+                                <field name="site_visit_location" invisible="not site_visit_required"/>
+                                <field name="site_visit_date" invisible="not site_visit_required"/>
+                            </group>
+                            <field name="site_visit_instructions" widget="html" invisible="not site_visit_required"/>
+                        </page>
+                        <page string="Attendees">
+                            <group>
+                                <group>
+                                    <field name="registered_count" readonly="1"/>
+                                    <field name="attended_count" readonly="1"/>
+                                </group>
+                            </group>
+                            <field name="attendee_ids">
+                                <list editable="bottom" decoration-success="state=='attended'" decoration-muted="state=='absent'">
+                                    <field name="partner_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="attendee_name"/>
+                                    <field name="attendee_position"/>
+                                    <field name="attendee_email"/>
+                                    <field name="attendee_phone"/>
+                                    <field name="registration_date"/>
+                                    <field name="state" widget="badge"/>
+                                    <button name="action_mark_attended" string="Mark Attended" type="object" icon="fa-check" invisible="state == 'attended'"/>
+                                    <button name="action_mark_absent" string="Mark Absent" type="object" icon="fa-times" invisible="state == 'absent'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Questions &amp; Answers">
+                            <field name="question_ids">
+                                <list decoration-muted="state=='pending'" decoration-info="state=='answered'" decoration-success="state=='published'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="partner_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="category"/>
+                                    <field name="question"/>
+                                    <field name="answer"/>
+                                    <field name="is_published" widget="boolean_toggle"/>
+                                    <field name="requires_addendum" widget="boolean_toggle"/>
+                                    <field name="state" widget="badge"/>
+                                    <button name="action_answer_question" string="Answer" type="object" icon="fa-edit" invisible="state != 'pending'"/>
+                                    <button name="action_publish" string="Publish" type="object" icon="fa-share" invisible="state == 'published'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Minutes &amp; Clarifications">
+                            <group>
+                                <field name="key_points" widget="text" readonly="state == 'draft'" invisible="0"/>
+                            </group>
+                            <separator string="Minutes of Meeting"/>
+                                <field name="minutes" widget="html" readonly="state == 'draft'" invisible="0"/>
+                            <separator string="Clarifications Issued"/>
+                                <field name="clarifications_issued" widget="html" readonly="state == 'draft'" invisible="0"/>
+                            <group>
+                                <field name="addendum_required" readonly="state == 'draft'" invisible="0"/>
+                                <field name="addendum_description" widget="text" invisible="not addendum_required" readonly="state == 'draft'"/>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" widget="text"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Briefing Session Search View -->
+    <record id="view_sagovtender_briefing_session_search" model="ir.ui.view">
+        <field name="name">sagovtender.briefing.session.search</field>
+        <field name="model">sagovtender.briefing.session</field>
+        <field name="arch" type="xml">
+            <search string="Briefing Sessions">
+                <field name="name"/>
+                <field name="tender_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                <field name="tender_number"/>
+                <field name="venue"/>
+                <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="Scheduled" name="scheduled" domain="[('state','=','scheduled')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state','=','in_progress')]"/>
+                <filter string="Completed" name="completed" domain="[('state','=','completed')]"/>
+                <filter string="Compulsory" name="compulsory" domain="[('is_compulsory','=',True)]"/>
+                <separator/>
+                <filter string="Upcoming" name="upcoming" domain="[('session_date','&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Tender" name="group_tender" context="{'group_by':'tender_id'}"/>
+                    <filter string="Session Type" name="group_type" context="{'group_by':'session_type'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by':'state'}"/>
+                    <filter string="Session Date" name="group_date" context="{'group_by':'session_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Briefing Session Action -->
+    <record id="action_sagovtender_briefing_session" model="ir.actions.act_window">
+        <field name="name">Briefing Sessions</field>
+        <field name="res_model">sagovtender.briefing.session</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_upcoming': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Schedule a Tender Briefing Session
+            </p>
+            <p>
+                Briefing sessions allow potential bidders to ask questions and clarify tender requirements.
+            </p>
+        </field>
+    </record>
+
+    <!-- Briefing Attendee Form View -->
+    <record id="view_sagovtender_briefing_attendee_form" model="ir.ui.view">
+        <field name="name">sagovtender.briefing.attendee.form</field>
+        <field name="model">sagovtender.briefing.attendee</field>
+        <field name="arch" type="xml">
+            <form string="Briefing Attendee">
+                <header>
+                    <button name="action_mark_attended" string="Mark Attended" type="object" class="btn-success" invisible="state == 'attended'"/>
+                    <button name="action_mark_absent" string="Mark Absent" type="object" class="btn-warning" invisible="state == 'absent'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <group>
+                            <field name="briefing_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="partner_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="attendee_name"/>
+                            <field name="attendee_position"/>
+                        </group>
+                        <group>
+                            <field name="attendee_email"/>
+                            <field name="attendee_phone"/>
+                            <field name="id_number"/>
+                            <field name="registration_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="attendance_confirmed"/>
+                            <field name="attendance_time" invisible="not attendance_confirmed"/>
+                        </group>
+                        <group>
+                            <field name="signature" widget="image"/>
+                        </group>
+                    </group>
+                    <separator string="Notes"/>
+                    <field name="notes" widget="text"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Briefing Question Form View -->
+    <record id="view_sagovtender_briefing_question_form" model="ir.ui.view">
+        <field name="name">sagovtender.briefing.question.form</field>
+        <field name="model">sagovtender.briefing.question</field>
+        <field name="arch" type="xml">
+            <form string="Question &amp; Answer">
+                <header>
+                    <button name="action_publish" string="Publish" type="object" class="btn-primary" invisible="state == 'published'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view:not(.o_field_highlight)
+                        .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                        .o_input:not(:hover):not(:focus) {
+                        --o-input-border-color: black !important;
+                        }
+                        .o_form_view:not(o_field_highlight)
+                        .o_field_html .note-editable:not(:hover), .o_form_view:not(o_field_highlight) .o_field_html
+                        .note-editable:not(:focus) {
+                        border-color: black !important;
+                        }
+                        .form-check:not(:hover),
+                        .form-check:not(:hover) .form-check-input:not(:disabled),
+                        .form-select:not(:hover), .form-select:not(:hover) .form-check-input:not(:disabled) {
+                        border-color: black !important;
+                        }
+                    </style>
+                    <group>
+                        <group>
+                            <field name="briefing_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="partner_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="category"/>
+                            <field name="question_date"/>
+                        </group>
+                        <group>
+                            <field name="is_published"/>
+                            <field name="requires_addendum"/>
+                            <field name="answered_by" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="answer_date"/>
+                        </group>
+                    </group>
+                    <separator string="Question"/>
+                    <field name="question" widget="text"/>
+                    <separator string="Answer"/>
+                    <field name="answer" widget="text"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_sagovtender_briefing_session"
+              name="Briefing Sessions"
+              parent="menu_tender"
+              action="action_sagovtender_briefing_session"
+              sequence="35"/>
+
+</odoo>

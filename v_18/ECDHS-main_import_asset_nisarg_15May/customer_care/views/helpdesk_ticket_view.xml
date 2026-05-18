@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="ecdhs_helpdesk_tickets_view_tree_inherited" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.tree.inherited.ecdhs</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_tickets_view_tree"/>
+        <field name="arch" type="xml">
+            <field name='ticket_ref' position="before">
+                <field name="show_channel" column_invisible="True"/>
+                <field name="channel"  string="Nature of Logging" widget="channel_icon" invisible="not show_channel"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="ecdhs_helpdesk_ticket_view_form_inherited" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherited.ecdhs</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <style>
+                    .o_form_view:not(.o_field_highlight)
+                    .o_field_widget:not(.o_field_invalid):not(.o_field_highlight)
+                    .o_input:not(:hover):not(:focus) {
+                                --o-input-border-color: black !important;
+                                }
+                </style>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                 <attribute name="invisible">1</attribute>
+            </xpath>
+
+
+            <xpath expr="//field[@name='email_cc']" position="after">
+                <field name="partner_name"/>
+                <div class="o_row align-items-center">
+                    <label for="partner_id" string="Partner"/>
+                        <field name="partner_id" label="Partner" class="field_partner_id oe_inline" domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]" widget="res_partner_many2one" context="{'default_phone': partner_phone}"/>
+
+                        <button name="action_assign_partner" type="object" icon="fa-refresh" class="btn btn-sm btn-link ms-1" title="Assign Partner"/>
+                    </div>
+            </xpath>
+
+
+
+
+            <xpath expr="//sheet//group" position="inside">
+                <group string="Enquiry Details">
+                    <!--                    <field name="subject"/>-->
+                    <field name="region"/>
+                    <field name="category" string="Directorate" invisible="1"/>
+                    <field name="department_id" string="Directorate"/>
+                </group>
+                <group string="Enquirer Details">
+                    <field name="enquirer_name" required="1"/>
+                    <field name="enquirer_surname" required="1"/>
+                    <field name="id_number" required="1"/>
+                    <field name="contact_number"/>
+                    <field name="email" required="1"/>
+                </group>
+                <group string="Source Tracking">
+                    <field name="channel" string="Nature of Logging"/>
+                    <field name="attachment_ids" widget="many2many_binary"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="helpdesk.menu_helpdesk_root" name="Customer Care"/>
+</odoo>

@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_task_form2" model="ir.ui.view">
+        <field name="name">project.task.view.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='project_id']" position="before">
+                <field name="project_number" readonly="1"/>
+                <field name="project_category"/>
+            </xpath>
+            <xpath expr="//page[@name='extra_info']" position="attributes">
+                <attribute name="string">Project Information</attribute>
+            </xpath>
+
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button class="oe_stat_button" name="get_asset_details"
+                        attrs="{'invisible': [('asset_id','=', False)]}"
+                        type="object" icon="fa-id-card-o">
+                    Assets
+                </button>
+                <button class="oe_stat_button" name="get_invoice_details"
+                        attrs="{'invisible': [('invoice_id','=', False)]}"
+                        type="object" icon="fa-pencil-square-o">
+                    Invoice
+                </button>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="create_asset_project" string="Create Asset"
+                        type="object" class="oe_highlight"
+                        attrs="{'invisible': [('is_completed','=', False)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='user_ids']" position="after">
+                <field name="contract_id"/>
+                <field name="consultant_id"/>
+                <field name="contract_value"/>
+                <field name="contingencies_vat"/>
+                <field name="vat"/>
+                <field name="date_completion"/>
+
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="asset_id"/>
+                <field name="invoice_id"
+                       attrs="{'readonly': [('is_completed','=', False)]}"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Project Management">
+                    <group string="Project Planing"/>
+                    <field name="project_planning_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="description"/>
+                        </tree>
+                    </field>
+                    <group string="Project Implementation"/>
+                    <field name="project_implementation_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="description"/>
+                        </tree>
+                    </field>
+                    <group string="Project Monitoring"/>
+                    <field name="project_monitoring_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="description"/>
+                        </tree>
+                    </field>
+                    <group string="Project Commissioning"/>
+                    <field name="project_commissioning_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="description"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="WIP">
+                    <group>
+                        <group>
+                            <field name="is_completed" invisible="1"/>
+                            <field name="is_paid" invisible="1"/>
+                            <field name="location"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="addition"/>
+                            <field name="accumulated_payment"/>
+                            <field name="completed_project"/>
+                            <!--                            <field name="as_per_tb"/>-->
+                            <!--                            <field name="IA01952"/>-->
+                            <!--                            <field name="rts"/>-->
+                            <field name="value_work"/>
+                            <!--                            <field name="total"/>-->
+                        </group>
+                        <group>
+                            <field name="payments"/>
+                            <field name="retention"/>
+                            <field name="retention_paid"/>
+                            <field name="retention_held"/>
+                            <field name="retention_reserved"/>
+                            <field name="total_retention_held"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Documents">
+                    <group>
+                        <field name="attachment_ids" widget="many2many_binary"/>
+                        <field name="approved_plans_ids" widget="many2many_binary"/>
+                        <field name="award_letter_ids" widget="many2many_binary"/>
+                        <field name="contract_ids" widget="many2many_binary"/>
+                        <field name="invoice_attachement_ids" widget="many2many_binary"/>
+<!--                        <field name="site_meeting_attachement_ids" widget="many2many_binary"/>-->
+                        <field name="completion_certificate_attachement_ids" widget="many2many_binary"/>
+                        <field name="project_attachement_ids" widget="many2many_binary"/>
+                        <field name="asbuilt_attachement_ids" widget="many2many_binary"/>
+                        <field name="other_project_attachement_ids" widget="many2many_binary"/>
+                    </group>
+                </page>
+                <page string="Unbundling">
+                    <group string="Project">
+                    </group>
+                    <field name="wip_project_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="direct"/>
+                            <field name="indirect"/>
+                            <field name="total"/>
+                        </tree>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right"
+                           colspan="2">
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_project_total"/>
+                        </div>
+                        <field name="wip_project_total"
+                               nolabel="1"/>
+                    </group>
+<!--                    <group string="UNBUNDLING">-->
+<!--                    </group>-->
+<!--                    <field name="unbundling_ids">-->
+<!--                        <tree editable="bottom">-->
+<!--                            <field name="name"/>-->
+<!--                            <field name="currency_id" invisible="1"/>-->
+<!--                            <field name="amount"/>-->
+<!--                            <field name="type"/>-->
+<!--                            <field name="weighted_average"/>-->
+<!--                            <field name="allocate_indirect"/>-->
+<!--                            <field name="total"/>-->
+<!--                        </tree>-->
+<!--                    </field>-->
+<!--                    <group class="oe_subtotal_footer oe_right"-->
+<!--                           colspan="2">-->
+<!--                        <div class="oe_inline o_td_label">-->
+<!--                            <label for="unbundling_direct_total"/>-->
+<!--                        </div>-->
+<!--                        <field name="unbundling_direct_total"-->
+<!--                               nolabel="1"/>-->
+<!--                        <div class="oe_inline o_td_label">-->
+<!--                            <label for="unbundling_indirect_total"/>-->
+<!--                        </div>-->
+<!--                        <field name="unbundling_indirect_total"-->
+<!--                               nolabel="1"/>-->
+<!--                    </group>-->
+                    <group string="STEP 1 - INPUT AS PER BOQ"/>
+                    <field name="boq_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="type"/>
+                            <field name="amount"/>
+                        </tree>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right"
+                           colspan="2">
+                        <div class="oe_inline o_td_label">
+                            <label for="boq_amount"/>
+                        </div>
+                        <field name="boq_amount"
+                               nolabel="1"/>
+                    </group>
+                    <separator/>
+                    <group string="STEP 2 - UNBUNDLING OF ASSETS"/>
+                    <field name="unbundling_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount"/>
+                            <field name="type"/>
+                            <field name="weighted_average"/>
+                            <field name="allocate_indirect"/>
+                            <field name="total"/>
+                        </tree>
+                    </field>
+
+                    <group class="oe_subtotal_footer oe_right"
+                           colspan="2">
+                        <div class="oe_inline o_td_label">
+                            <label for="unbundling_direct_total"/>
+                        </div>
+                        <field name="unbundling_direct_total"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="unbundling_indirect_total"/>
+                        </div>
+                        <field name="unbundling_indirect_total"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="unbundling_total_weighted_average"/>
+                        </div>
+                        <field name="unbundling_total_weighted_average"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="unbundling_total_allocate_indirect"/>
+                        </div>
+                        <field name="unbundling_total_allocate_indirect"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="unbundling_total_cost"/>
+                        </div>
+                        <field name="unbundling_total_cost"
+                               nolabel="1"/>
+                    </group>
+                    <separator/>
+                    <separator/>
+                    <separator/>
+                    <group string="STEP 3 - FINALISATION"/>
+                    <field name="final_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="type"/>
+                            <field name="amount"/>
+                            <field name="asset_type_id"/>
+                        </tree>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right"
+                           colspan="2">
+                        <div class="oe_inline o_td_label">
+                            <label for="final_total"/>
+                        </div>
+                        <field name="final_total"
+                               nolabel="1"/>
+                    </group>
+                    <separator/>
+                    <group string="STEP 4 - ADDING THE PROJECT ONTO THE ASSET REGISTER"/>
+                    <field name="final_asset_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount"/>
+                            <field name="asset_type_id"/>
+                            <field name="date"/>
+                            <field name="location"/>
+                            <field name="description"/>
+                        </tree>
+                    </field>
+
+
+                </page>
+                <page string="Project Details">
+                    <group string="CONSTRUCTION COST"/>
+                    <field name="wip_construction_ids">
+                        <tree editable="bottom">
+                            <field name="inv_date"/>
+                            <field name="vote_number"/>
+                            <field name="certificate_number"/>
+                            <field name="partner_id"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount"/>
+                            <field name="vat"/>
+                            <field name="vat_include"/>
+                            <field name="retention"/>
+                            <field name="surety"/>
+                            <field name="guarantee"/>
+                            <field name="cap_amount"/>
+                        </tree>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right"
+                           colspan="2">
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_const_total_amount"/>
+                        </div>
+                        <field name="wip_const_total_amount"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_const_total_vat"/>
+                        </div>
+                        <field name="wip_const_total_vat"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_const_total_vat_include"/>
+                        </div>
+                        <field name="wip_const_total_vat_include"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_const_total_retention"/>
+                        </div>
+                        <field name="wip_const_total_retention"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_const_total_surety"/>
+                        </div>
+                        <field name="wip_const_total_surety"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_const_total_guarantee"/>
+                        </div>
+                        <field name="wip_const_total_guarantee"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_const_total_cap_amount"/>
+                        </div>
+                        <field name="wip_const_total_cap_amount"
+                               nolabel="1"/>
+                    </group>
+                    <separator/>
+                    <separator/>
+                    <separator/>
+                    <separator/>
+                    <separator/>
+                    <group string="PROFESSIONAL FEES"/>
+                    <field name="wip_professional_ids">
+                        <tree editable="bottom">
+                            <field name="inv_date"/>
+                            <field name="vote_number"/>
+                            <field name="certificate_number"/>
+                            <field name="partner_id"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount"/>
+                            <field name="vat"/>
+                            <field name="vat_include"/>
+                            <field name="retention"/>
+                            <field name="surety"/>
+                            <field name="guarantee"/>
+                            <field name="cap_amount"/>
+                        </tree>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right"
+                           colspan="2">
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_pro_total_amount"/>
+                        </div>
+                        <field name="wip_pro_total_amount"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_pro_total_vat"/>
+                        </div>
+                        <field name="wip_pro_total_vat"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_pro_total_vat_include"/>
+                        </div>
+                        <field name="wip_pro_total_vat_include"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_pro_total_retention"/>
+                        </div>
+                        <field name="wip_pro_total_retention"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_pro_total_surety"/>
+                        </div>
+                        <field name="wip_pro_total_surety"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_pro_total_guarantee"/>
+                        </div>
+                        <field name="wip_pro_total_guarantee"
+                               nolabel="1"/>
+                        <div class="oe_inline o_td_label">
+                            <label for="wip_pro_total_cap_amount"/>
+                        </div>
+                        <field name="wip_pro_total_cap_amount"
+                               nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_task_search_form" model="ir.ui.view">
+        <field name="name">project.task.view.search</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter string="WIP WATER" name="project_category"
+                        domain="[('project_category', '=', 'WATER')]"/>
+                <filter string="WIP SEWERAGE" name="project_category"
+                        domain="[('project_category', '=', 'SEWERAGE')]"/>
+                <filter string="WIP Building" name="project_category"
+                        domain="[('project_category', '=', 'Building')]"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_report_client_enquiry_sla_policy_status_report" model="ir.actions.report">
+        <field name="name">Sla policy Status</field>
+        <field name="model">enquiry.sla.policy.status</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">client_enquiry.client_enquiry_sla_policy_status_report</field>
+        <field name="report_file">client_enquiry.client_enquiry_sla_policy_status_report</field>
+        <field name="binding_model_id" ref="model_enquiry_sla_policy_status"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="client_enquiry_sla_policy_status_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="text-center">
+                        <h1>Service Standards</h1>
+                    </div>
+                    <t t-if="data['type'] == 'quarterly'">
+                        <t t-if="data['quarterly_type'] == 'q1'">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <th class="text-center">SLS</th>
+                                    <th class="text-center">Core Service</th>
+                                    <th class="text-center">Service Level Standard Target</th>
+                                    <th class="text-center">Jan</th>
+                                    <th class="text-center">Feb</th>
+                                    <th class="text-center">Mar</th>
+                                    <th class="text-center">Q1 Actual</th>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="result" t-as="rec">
+                                        <td>
+                                            <t t-esc="rec[0]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[1]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[2]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[3]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[4]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[5]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[6]"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-if="data['quarterly_type'] == 'q2'">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <th class="text-center">SLS</th>
+                                    <th class="text-center">Core Service</th>
+                                    <th class="text-center">Service Level Standard Target</th>
+                                    <th class="text-center">APR</th>
+                                    <th class="text-center">MAY</th>
+                                    <th class="text-center">JUN</th>
+                                    <th class="text-center">Q2 Actual</th>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="result" t-as="rec">
+                                        <td>
+                                            <t t-esc="rec[0]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[1]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[2]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[3]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[4]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[5]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[6]"/>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-if="data['quarterly_type'] == 'q3'">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <th class="text-center">SLS</th>
+                                    <th class="text-center">Core Service</th>
+                                    <th class="text-center">Service Level Standard Target</th>
+                                    <th class="text-center">JUL</th>
+                                    <th class="text-center">AUG</th>
+                                    <th class="text-center">SEP</th>
+                                    <th class="text-center">Q3 Actual</th>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="result" t-as="rec">
+                                        <td>
+                                            <t t-esc="rec[0]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[1]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[2]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[3]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[4]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[5]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[6]"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-if="data['quarterly_type'] == 'q4'">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <th class="text-center">SLS</th>
+                                    <th class="text-center">Core Service</th>
+                                    <th class="text-center">Service Level Standard Target</th>
+                                    <th class="text-center">OCT</th>
+                                    <th class="text-center">NOV</th>
+                                    <th class="text-center">DEC</th>
+                                    <th class="text-center">Q4 Actual</th>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="result" t-as="rec">
+                                        <td>
+                                            <t t-esc="rec[0]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[1]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[2]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[3]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[4]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[5]"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="rec[6]"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </t>
+                    <t t-if="data['type'] == 'annually'">
+                        <table class="table table-condensed">
+                            <thead>
+                                <th class="text-center">SLS</th>
+                                <th class="text-center">Core Service</th>
+                                <th class="text-center">Service Level Standard
+                                    Target
+                                </th>
+                                <th class="text-center">Quarter 1</th>
+                                <th class="text-center">Quarter 2</th>
+                                <th class="text-center">Quarter 3</th>
+                                <th class="text-center">Quarter 1</th>
+                                <th class="text-center">YTD Total</th>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="result" t-as="rec">
+                                    <td>
+                                        <t t-esc="rec[0]"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="rec[1]"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="rec[2]"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="rec[3]"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="rec[4]"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="rec[5]"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="rec[6]"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="rec[7]"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </t>
+                    <t t-if="data['type'] == 'monthly'">
+                        <table class="table table-condensed">
+                            <thead>
+                                <th class="text-center">SLS</th>
+                                <th class="text-center">Core Service</th>
+                                <th class="text-center">Service Level Standard
+                                    Target
+                                </th>
+                                <th class="text-center">Monthly</th>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="result" t-as="rec">
+                                    <td>
+                                        <t t-esc="rec[0]"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="rec[1]"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="rec[2]"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="rec[3]"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

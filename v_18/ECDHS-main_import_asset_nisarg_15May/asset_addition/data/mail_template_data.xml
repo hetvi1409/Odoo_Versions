@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="email_template_asset_addition_submitted" model="mail.template">
+        <field name="name">Asset Addition Submitted</field>
+        <field name="model_id" ref="asset_addition.model_asset_addition"/>
+        <field name="subject">Asset Addition Submitted: {{ object.name }}
+        </field>
+        <field name="email_from">{{ object.company_id.email or '' }}</field>
+
+        <field name="body_html" type="html">
+            <div>
+                <p>The Asset Addition Request
+                    <strong>
+                        <t t-esc="object.name"/>
+                    </strong>
+                    has been submitted.
+                </p>
+
+                <p>
+                    <strong>Asset Name:</strong>
+                    <t t-esc="object.asset_name"/>
+                    <br/>
+                    <strong>Description:</strong>
+                    <t t-esc="object.description"/>
+                </p>
+
+                <p>Please review and take necessary action.</p>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_asset_addition_approved" model="mail.template">
+        <field name="name">Asset Addition Approved</field>
+        <field name="model_id" ref="asset_addition.model_asset_addition"/>
+        <field name="subject">Asset Addition Approved: {{ object.name }}</field>
+        <field name="email_from">{{ object.company_id.email or '' }}</field>
+
+        <field name="body_html" type="html">
+            <div>
+                <p>Your Asset Addition Request
+                    <strong>
+                        <t t-esc="object.name"/>
+                    </strong>
+                    has been approved.
+                </p>
+
+                <p>
+                    <strong>Asset Name:</strong>
+                    <t t-esc="object.asset_name"/>
+                    <br/>
+                    <strong>Description:</strong>
+                    <t t-esc="object.description"/>
+                </p>
+
+                <p>The asset will now be created / moved to In Use.</p>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_asset_addition_refused" model="mail.template">
+        <field name="name">Asset Addition Refused</field>
+        <field name="model_id" ref="asset_addition.model_asset_addition"/>
+        <field name="subject">Asset Addition Refused: {{ object.name }}</field>
+        <field name="email_from">{{ object.company_id.email or '' }}</field>
+
+        <field name="body_html" type="html">
+            <div>
+                <p>Your Asset Addition Request
+                    <strong>
+                        <t t-esc="object.name"/>
+                    </strong>
+                    has been <strong>refused</strong>.
+                </p>
+
+                <p>
+                    <strong>Asset Name:</strong>
+                    <t t-esc="object.asset_name"/>
+                    <br/>
+                    <strong>Description:</strong>
+                    <t t-esc="object.description"/>
+                </p>
+
+                <p>Please review the request and submit again if needed.</p>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_asset_verification_approved"
+            model="mail.template">
+        <field name="name">Asset Verification</field>
+        <field name="model_id"
+               ref="asset_verification.model_asset_verification"/>
+        <field name="subject">Asset Verification Approved: {{ object.name }}
+        </field>
+        <field name="body_html" type="html">
+            <div>
+                <p>Your Asset Verification Request
+                    <strong>
+                        <t t-esc="object.asset_id.name"/>
+                    </strong>
+                    has been <strong>approved</strong>.
+                </p>
+
+                <p>Please review the request and submit again if needed.</p>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_asset_verification_reject" model="mail.template">
+        <field name="name">Asset Verification</field>
+        <field name="model_id"
+               ref="asset_verification.model_asset_verification"/>
+        <field name="subject">Asset Verification Rejected: {{ object.name }}
+        </field>
+        <field name="body_html" type="html">
+            <div>
+                <p>Your Asset Verification Request
+                    <strong>
+                        <t t-esc="object.asset_id.name"/>
+                    </strong>
+                    has been <strong>rejected</strong>.
+                </p>
+
+                <p>Please review the request and submit again if needed.</p>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_asset_removal_verified" model="mail.template">
+        <field name="name">Asset Removal Verified Notification</field>
+        <field name="model_id"
+               ref="asset_verification.model_asset_removal_approval"/>
+        <field name="subject">Removal Approval Verified: Asset {{
+            object.asset_id.name }}
+        </field>
+        <field name="email_from">{{ object.company_id.email or '' }}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>The asset
+                    <t t-esc="object.asset_id.name"/>
+                    removal approval has been verified.
+                </p>
+                <p>Please contact approval manager for more details.</p>
+            </div>
+        </field>
+    </record>
+
+</odoo>

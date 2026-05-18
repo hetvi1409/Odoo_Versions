@@ -1,0 +1,26 @@
+<odoo>
+    <record id="view_adjust_life_wizard_form" model="ir.ui.view">
+        <field name="name">account.asset.adjust.life.wizard.form</field>
+        <field name="model">account.asset.adjust_life_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Adjust Asset Life">
+                <group>
+                    <field name="asset_id" readonly="1"/>
+                    <field name="new_remaining_life"/>
+                </group>
+                <footer>
+                    <button string="Confirm" type="object" name="confirm" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adjust_life_wizard" model="ir.actions.act_window">
+        <field name="name">Adjust Remaining Life</field>
+        <field name="res_model">account.asset.adjust_life_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_asset_id': id}</field>
+    </record>
+</odoo>

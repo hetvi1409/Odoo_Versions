@@ -1,0 +1,1117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="website_menu_emergency_housing" model="website.menu">
+        <field name="name">Emergency Housing Grant</field>
+        <field name="sequence" type="int">4</field>
+        <field name="url">/housing-grant</field>
+    </record>
+
+    <template id="housing_grant_application_form" name="Application">
+        <t t-call="website.layout">
+            <center>
+                <header id="home" class="hero-section-grant">
+                    <div class="container">
+                        <h1>Emergency Housing Grant Application</h1>
+                        <p>You can create your application form from here</p>
+                    </div>
+                </header>
+            </center>
+            <div id="wrap"
+                 class="oe_structure oe_empty">
+                <form action="/submit/housing"
+                      enctype="multipart/form-data"
+                      class="o_mark_required" data-mark="*"
+                      data-model_name="" method="post">
+                    <input type="hidden" name="csrf_token"
+                           t-att-value="request.csrf_token()"/>
+                    <section class="s_text_block pt40 pb40 o_colored_level" id="housing_land"
+                                 data-vcss="001" data-snippet="s_text_block">
+                            <div class="container s_allow_columns">
+                                <div class="row">
+                                    <div class="form-application-border">
+                                        <div class="s_website_form_rows row s_col_no_bgcolor">
+                                            <div class="form-group form-application-group col-12 s_website_form_field s_website_form_required"
+                                                 data-type="char"
+                                                 data-name="Field">
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 90%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Province
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="province_id"
+                                                                    id="province_id"
+                                                                    required="True"
+                                                                    t-att-value="data.get('province')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="provinces"
+                                                                   t-as="province">
+                                                                    <option t-att-value="province.id"
+                                                                            t-att-selected="province.id == data.get('province')">
+                                                                        <t t-esc="province.province"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 90%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Department
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="department_id"
+                                                                    id="department_id"
+                                                                    required="True"
+                                                                    t-att-value="data.get('department')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="departments"
+                                                                   t-as="department">
+                                                                    <option t-att-value="department.id"
+                                                                            t-att-selected="department.id == data.get('department')">
+                                                                        <t t-esc="department.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Municipality
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="municipality_id"
+                                                                    id="municipality_id"
+                                                                    required="True"
+                                                                    t-att-value="data.get('municipality')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="municipalities"
+                                                                   t-as="municipality">
+                                                                    <option t-att-value="municipality.id"
+                                                                            t-att-selected="municipality.id == data.get('municipality')">
+                                                                        <t t-esc="municipality.municipality"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Date of Disaster
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="date"
+                                                                   type="date"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="date"
+                                                                   name="date"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Firstname
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="firstname"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="firstname"
+                                                                   name="firstname"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Surname
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="surname"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="surname"
+                                                                   name="surname"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Designation
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="designation"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="designation"
+                                                                   name="designation"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Telephone
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="telephone"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="telephone"
+                                                                   name="telephone"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Fax Number
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="fax_number"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="fax_number"
+                                                                   name="fax_number"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Email
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="email"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="email"
+                                                                   name="email"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <h4>Postal Address</h4>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Street
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="street"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="street"
+                                                                   name="street"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Street2
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="street2"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="street2"
+                                                                   name="street2"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Postal Code
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="postal_code"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="postal_code"
+                                                                   name="postal_code"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                City
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="city_id"
+                                                                    id="city_id"
+                                                                    t-att-value="data.get('city')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="cities"
+                                                                   t-as="city">
+                                                                    <option t-att-value="city.id"
+                                                                            t-att-selected="city.id == data.get('city')">
+                                                                        <t t-esc="city.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <h4>Physical Address</h4>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Street
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="physical_street"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="physical_street"
+                                                                   name="physical_street"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Street2
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="physical_street2"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="physical_street2"
+                                                                   name="physical_street2"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Postal Code
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="physical_postal_code"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="physical_postal_code"
+                                                                   name="physical_postal_code"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 90%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                City
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="physical_city_id"
+                                                                    id="physical_city_id"
+                                                                    t-att-value="data.get('postal_city')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="postal_cities"
+                                                                   t-as="postal_city">
+                                                                    <option t-att-value="postal_city.id"
+                                                                            t-att-selected="postal_city.id == data.get('postal_city')">
+                                                                        <t t-esc="postal_city.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </section>
+
+                    <section class="s_text_block pt40 pb40 o_colored_level"
+                                 data-vcss="001" data-snippet="s_text_block">
+                            <div class="container s_allow_columns">
+                                <div class="row">
+                                    <div class="form-application-border">
+                                        <div class="s_website_form_rows row s_col_no_bgcolor">
+                                            <div class="form-group form-application-group col-12 s_website_form_field s_website_form_required"
+                                                 data-type="char"
+                                                 data-name="Field">
+                                                <h4>DESCRIPTION OF EMERGENCY HOUSING SITUATION</h4>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Brief description of the emergency housing situation
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="emergency_housing_situation"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="emergency_housing_situation"
+                                                                   name="emergency_housing_situation"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Description of location and cause of the emergency housing situation
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="location_and_cause"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="location_and_cause"
+                                                                   name="location_and_cause"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Describe level of destitution /displacement and impact on persons.
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="level_destitution"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="level_destitution"
+                                                                   name="level_destitution"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Nature, scope, and extent of the emergency housing situation
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="nature_scope"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="nature_scope"
+                                                                   name="nature_scope"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Has the MEC agreed to this application
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="mec_agreed"
+                                                                    id="mec_agreed "
+                                                                    t-att-value="data.get('mec_agreed')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value=""/>
+                                                                <option value="yes"
+                                                                        t-att-selected="'yes' == data.get('mec_agreed')">
+                                                                    Yes
+                                                                </option>
+                                                                <option value="no"
+                                                                        t-att-selected="'no' == data.get('mec_agreed')">
+                                                                    No
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </section>
+
+                    <section class="s_text_block pt40 pb40 o_colored_level"
+                                 data-vcss="001" data-snippet="s_text_block">
+                            <div class="container s_allow_columns">
+                                <div class="row">
+                                    <div class="form-application-border">
+                                        <div class="s_website_form_rows row s_col_no_bgcolor">
+                                            <div class="form-group form-application-group col-12 s_website_form_field s_website_form_required"
+                                                 data-type="char"
+                                                 data-name="Field">
+                                                <h4>COMMUNITY PROFILE</h4>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                The number of affected persons, households, and families
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="number_affected_person"
+                                                                   type="number"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="number_affected_person"
+                                                                   name="number_affected_person"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                An income profile of the families
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="income_profile"
+                                                                   type="float"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="income_profile"
+                                                                   name="income_profile"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                The number of persons unemployed
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="number_person_unemployed"
+                                                                   type="number"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="number_person_unemployed"
+                                                                   name="number_person_unemployed"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Whether relocation / resettlement is required, and, if so, full reasons
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="reason_relocation"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="reason_relocation"
+                                                                   name="reason_relocation"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </section>
+
+                    <section class="s_text_block pt40 pb40 o_colored_level"
+                                 data-vcss="001" data-snippet="s_text_block">
+                            <div class="container s_allow_columns">
+                                <div class="row">
+                                    <div class="form-application-border">
+                                        <div class="s_website_form_rows row s_col_no_bgcolor">
+                                            <div class="form-group form-application-group col-12 s_website_form_field s_website_form_required"
+                                                 data-type="char"
+                                                 data-name="Field">
+                                                <h4>LAND, MUNICIPAL INFRASTRUCTURAL SERVICE AND SHELTER</h4>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Land is required
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="is_land"
+                                                                    id="is_land "
+                                                                    t-att-value="data.get('is_land')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value=""/>
+                                                                <option value="yes"
+                                                                        t-att-selected="'yes' == data.get('is_land')">
+                                                                    Yes
+                                                                </option>
+                                                                <option value="no"
+                                                                        t-att-selected="'no' == data.get('is_land')">
+                                                                    No
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 90%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Whether the current settlement
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="settlement_id"
+                                                                    id="settlement_id"
+                                                                    required="True"
+                                                                    t-att-value="data.get('settlement')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="settlements"
+                                                                   t-as="settlement">
+                                                                    <option t-att-value="settlement.id"
+                                                                            t-att-selected="settlement.id == data.get('settlement')">
+                                                                        <t t-esc="settlement.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 90%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Settlement pattern before the occurrence of the event which caused the emergency housing situation
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="before_settlement_id"
+                                                                    id="before_settlement_id"
+                                                                    required="True"
+                                                                    t-att-value="data.get('before_settlement')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="before_settlements"
+                                                                   t-as="before_settlement">
+                                                                    <option t-att-value="before_settlement.id"
+                                                                            t-att-selected="before_settlement.id == data.get('before_settlement')">
+                                                                        <t t-esc="before_settlement.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 90%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Nature of Property Type
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="property_nature_id"
+                                                                    id="property_nature_id"
+                                                                    required="True"
+                                                                    t-att-value="data.get('property_nature')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="property_natures"
+                                                                   t-as="property_nature">
+                                                                    <option t-att-value="property_nature.id"
+                                                                            t-att-selected="property_nature.id == data.get('property_nature')">
+                                                                        <t t-esc="property_nature.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Have the affected persons been consulted
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="consulted"
+                                                                    id="consulted "
+                                                                    t-att-value="data.get('consulted')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value=""/>
+                                                                <option value="yes"
+                                                                        t-att-selected="'yes' == data.get('consulted')">
+                                                                    Yes
+                                                                </option>
+                                                                <option value="no"
+                                                                        t-att-selected="'no' == data.get('consulted')">
+                                                                    No
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Has their consent and cooperation been obtained
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="consent_obtained"
+                                                                    id="consent_obtained "
+                                                                    t-att-value="data.get('consent_obtained')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value=""/>
+                                                                <option value="yes"
+                                                                        t-att-selected="'yes' == data.get('consent_obtained')">
+                                                                    Yes
+                                                                </option>
+                                                                <option value="no"
+                                                                        t-att-selected="'no' == data.get('consent_obtained')">
+                                                                    No
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <h4>Land Location</h4>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Street
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="land_street"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="street"
+                                                                   name="street"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Street2
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="land_street2"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="land_street2"
+                                                                   name="land_street2"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Postal Code
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="land_postal_code"
+                                                                   type="text"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="land_postal_code"
+                                                                   name="land_postal_code"
+                                                                   required="1"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                City
+                                                            </span>
+                                                            <span class="s_website_form_mark"
+                                                                  style="color: red;">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="land_city_id"
+                                                                    id="land_city_id"
+                                                                    t-att-value="data.get('land_city')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="land_cities"
+                                                                   t-as="land_city">
+                                                                    <option t-att-value="land_city.id"
+                                                                            t-att-selected="land_city.id == data.get('land_city')">
+                                                                        <t t-esc="land_city.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h4>Land been identified for possible settlement</h4>
+                                                <div class="row">
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 200px"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Ownership of the Land
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="land_ownership_id"
+                                                                    id="land_ownership_id"
+                                                                    t-att-value="data.get('land_ownership')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option t-att-selected=""/>
+                                                                <t t-foreach="land_ownerships"
+                                                                   t-as="land_ownership">
+                                                                    <option t-att-value="land_ownership.id"
+                                                                            t-att-selected="land_ownership.id == data.get('land_ownership')">
+                                                                        <t t-esc="land_ownership.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Basis for Land Availability
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="land_availability_basis"
+                                                                    id="land_availability_basis"
+                                                                    t-att-value="data.get('land_availability_basis')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value=""/>
+                                                                <option value="donation"
+                                                                        t-att-selected="'donation' == data.get('land_availability_basis')">
+                                                                    Donation
+                                                                </option>
+                                                                <option value="lease"
+                                                                        t-att-selected="'lease' == data.get('land_availability_basis')">
+                                                                    Lease
+                                                                </option>
+                                                                <option value="purchase"
+                                                                        t-att-selected="'purchase' == data.get('land_availability_basis')">
+                                                                    Purchase
+                                                                </option>
+                                                                <option value="other"
+                                                                        t-att-selected="'other' == data.get('land_availability_basis')">
+                                                                    Other Info
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Housing Development/Housing Purposes
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <select name="housing"
+                                                                    id="housing"
+                                                                    t-att-value="data.get('housing')"
+                                                                    style="width:100%;background: white;border: 1px solid #CED4DA;height: 38px;border-radius: 4px;">
+                                                                <option value=""/>
+                                                                <option value="housing_development"
+                                                                        t-att-selected="'housing_development' == data.get('housing')">
+                                                                    Housing Development
+                                                                </option>
+                                                                <option value="housing_purposes"
+                                                                        t-att-selected="'housing_purposes' == data.get('housing')">
+                                                                    Housing Purposes
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s_col_no_resize s_col_no_bgcolor">
+                                                        <label class="col-form-label col-sm-auto s_website_form_label"
+                                                               style="width: 100%;"
+                                                               for="studio1">
+                                                            <span class="s_website_form_label_content">
+                                                                Timeframe of preparing for are settlement
+                                                            </span>
+                                                        </label>
+                                                        <div class="col-sm">
+                                                            <input id="timeframe"
+                                                                   type="float"
+                                                                   class="form-control s_website_form_input"
+                                                                   t-att-value="timeframe"
+                                                                   name="timeframe" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </section>
+
+                    <div class="row">
+                        <div class="col form-group d-flex justify-content-center s_website_form_submit"
+                             data-name="Submit Button" style="    margin: 30px;">
+                            <div class="s_website_form_label"/>
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </t>
+    </template>
+    <template id="thank_you_page" name="Thank You Page">
+        <t t-call="website.layout">
+            <div class="container text-center mt-5">
+                <h2>Thank you for your application!</h2>
+                <p>We have received your details. You will be contacted if
+                    needed.
+                </p>
+                <p><strong>Application Number:</strong> <t t-esc="application.name"/></p>
+            </div>
+        </t>
+    </template>
+
+</odoo>

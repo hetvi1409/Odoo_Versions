@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="physical_document_submission_list_view" model="ir.ui.view">
+        <field name="name">physical.document.submission.tree.fileplan</field>
+        <field name="model">physical.document.submission</field>
+        <field name="arch" type="xml">
+            <tree create="true" multi_edit="1" sample="1" default_order="create_date DESC, id DESC">
+                <field name="name" required="True" readonly="False"/>
+                <field name="reference_month"/>
+                <field name="reference_year"/>
+                <field name="sender_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="create_date" optional="hide"/>
+                <field name="write_date" optional="show"/>
+                <field name="id" invisible="1"/>
+                <field name="state"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="physical_document_submission_view_form_new_file" model="ir.ui.view">
+        <field name="name">physical.document.submission.form</field>
+        <field name="model">physical.document.submission</field>
+        <field name="arch" type="xml">
+            <form create="true">
+                <header>
+                    <button type="object" name="action_submit" string="Submit" attrs="{'invisible': [('show_submit', '==', False)]}"/>
+                    <button type="object" name="action_approve_submission" string="Approve"
+                            attrs="{'invisible': [('show_approve_reject', '==', False)]}"/>
+                    <button type="object" name="action_reject_submission" string="Reject"
+                            attrs="{'invisible': [('show_approve_reject', '==', False)]}"/>
+                    <button type="object" name="action_filed" string="Filed on Warehouse"
+                            attrs="{'invisible': [('state', '!=', 'approved')]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title" aria-label="Name">
+                        <h1>
+                            <field name="name" class="oe_inline" placeholder="Document Name" required="True" attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+<!--                                   readonly="state in ['approved','filed','rejected']"/>-->
+                        </h1>
+                    </div>
+                    <field name="show_approve_reject" invisible="1"/>
+                    <field name="show_submit" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="sender_id" attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+<!--                            <field name="sender_id" readonly="state in ['approved','filed','rejected']"/>-->
+                            <field name="receiver_id" attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+<!--                            <field name="receiver_id" readonly="state in ['approved','filed','rejected']"/>-->
+                            <field name="location_id" attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+<!--                                   readonly="state in ['approved','filed','rejected']"/>-->
+                            <field name="department_id" attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+<!--                            <field name="department_id" readonly="state in ['approved','filed','rejected']"/>-->
+                            <field name="submission_date" attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+<!--                            <field name="submission_date" readonly="state in ['approved','filed','rejected']"/>-->
+                        </group>
+                        <group>
+<!--                            <field name="create_date"/>-->
+                            <field name="create_date" attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+                            <field name="create_uid" widget="many2one_avatar_user" attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+<!--                                   readonly="state in ['approved','filed','rejected']"/>-->
+                            <field name="reference_month" attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+<!--                            <field name="reference_month" readonly="state in ['approved','filed','rejected']"/>-->
+                            <field name="reference_year" attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+<!--&lt;!&ndash;                            <field name="reference_year" readonly="state in ['approved','filed','rejected']"/>&ndash;&gt;-->
+<!--                            <field name="d_number"/>-->
+<!--                            <field name="umz_number"/>-->
+                            <field name="folder_id"/>
+                            <field name="child_folder_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description_1" class="oe-bordered-editor" placeholder="Description 1..." attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+<!--                               readonly="state in ['approved','filed','rejected']"/>-->
+                        <field name="description_2" class="oe-bordered-editor" placeholder="Description 2..." attrs="{'readonly': [('state', 'in', ('approved','filed','rejected'))]}"/>
+<!--                               readonly="state in ['approved','filed','rejected']"/>-->
+                    </group>
+                    <notebook>
+                        <page name="submission_document" string="Documents">
+                            <field name="physical_document_ids">
+                                <tree editable="bottom">
+                                    <field name="name" readonly="True"/>
+                                    <field name="attachment_id" string="File" domain="[('id', '=', False)]"
+                                           options="{'create': false, 'create_edit': false}"
+                                           context="{'default_res_model': 'physical.document.upload'}"
+                                           column_invisible="False"/>
+                                    <field name="physical_submission_id" attrs="{'column_invisible': True}"/>
+                                    <field name="datas" string="File" filename="name" attrs="{'column_invisible': True}"/>
+                                    <field name="folder_id" widget="documents_folder_many2one" attrs="{'readonly': ['|',
+                            ('parent.show_approve_reject', '==', False),
+                            ('parent.state', 'in', ('approved', 'filed', 'rejected'))]}"/>
+<!--                                           readonly="parent.show_approve_reject == False or parent.state in ['approved','filed','rejected']"/>-->
+                                    <field name="child_folder_id" widget="documents_folder_many2one"
+                                           domain="[('folder_id', '=', folder_id),('type', '=', 'folder')]" attrs="{'readonly': ['|',
+                            ('parent.show_approve_reject', '==', False),
+                            ('parent.state', 'in', ('approved', 'filed', 'rejected'))]}"/>
+<!--                                           readonly="parent.show_approve_reject == False or parent.state in ['approved','filed','rejected']"/>-->
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="physical_document_submission_view_search_inherit" model="ir.ui.view">
+        <field name="name">physical.document.submission.search.view.inherit</field>
+        <field name="model">physical.document.submission</field>
+        <field name="arch" type="xml">
+            <search string="Documents">
+                <field name="name" string="Name / Extension"/>
+                <field name="sender_id"/>
+                <field name="physical_document_ids" string="File"/>
+                <field name="reference_month" string="Month"/>
+                <field name="reference_year" string="Year"/>
+                <field name="create_uid" string="Created by"/>
+                <filter string="My Documents" name="my_documents_filter"
+                        domain="['|', ('sender_id', '=', uid), ('create_uid', '=', uid)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Owner" name="filter_sender_id" domain="[]" context="{'group_by': 'sender_id'}"/>
+                    <filter string="Creation Date" name="filter_create_date" domain="[]"
+                            context="{'group_by':'create_date'}"/>
+                    <filter string="Month" name="filter_reference_month" domain="[]"
+                            context="{'group_by': 'reference_month'}"/>
+                    <filter string="Year" name="filter_reference_year" domain="[]"
+                            context="{'group_by': 'reference_year'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="physical_document_submission_action" model="ir.actions.act_window">
+        <field name="name">File Submission</field>
+<!--        <field name="path">physical_documents_submission</field>-->
+        <field name="res_model">physical.document.submission</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('documents_file_plan.physical_document_submission_list_view')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('documents_file_plan.physical_document_submission_view_form_new_file')})]"/>
+    </record>
+
+
+</odoo>

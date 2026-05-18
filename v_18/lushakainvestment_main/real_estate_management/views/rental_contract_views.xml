@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="rental_contract_form_view" model="ir.ui.view">
+        <field name="name">rental.contract.view.form</field>
+        <field name="model">rental.contract</field>
+        <field name="inherit_id" ref="itsys_real_estate.rental_contract_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet/group[3]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='apply_tax']" position="after">
+                <field name="sign_template_id" readonly="1"/>
+                <field name="otl_sign_template_id" readonly="1"/>
+                <field name="lead_id" readonly="1"/>
+            </xpath>
+            <xpath expr="//group/field[@name='amount_total']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='building_area']" position="after">
+                <field name="additional_area"/>
+                <field name="section_number"/>
+                <field name="annual_escalation"/>
+            </xpath>
+            <xpath expr="//sheet/separator" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//div[@class='oe_button_box']" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="action_view_installment"
+                        invisible="not installment_count"
+                        icon="fa-external-link">
+                    <field string="Installments" name="installment_count"
+                           widget="statinfo"/>
+                </button>
+                <button class="oe_stat_button" type="object"
+                        name="action_view_attach_line"
+                        icon="fa-external-link">
+                    <field string="Documents" name="attach_line_count"
+                           widget="statinfo"/>
+                </button>
+                <button class="oe_stat_button" type="object"
+                        name="go_to_custom_template"
+                        invisible="not sign_template_id"
+                        icon="fa-external-link">
+                    Sign Document
+                </button>
+                <button class="oe_stat_button" type="object"
+                        name="go_to_otl_custom_template"
+                        invisible="not otl_sign_template_id"
+                        icon="fa-external-link">
+                    OTL Sign Document
+                </button>
+                <button class="oe_stat_button" type="object"
+                        name="action_crm_lead"
+                        invisible="not lead_id"
+                        icon="fa-tags">
+                    Lead
+                </button>
+            </xpath>
+            <xpath expr="//page[1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Transaction" name="transaction">
+                    <group string="Lease Timing" name="lease_timing">
+                        <group>
+                            <field name="date_from" string="Beneficial Occupation Date"/>
+                            <field name="lease_comm_date"/>
+                            <field name="date_to" string="Lease End Date"/>
+                            <field name="lease_duration_months"/>
+                        </group>
+                        <group>
+                            <field name="beneficial_occupation_period"/>
+                            <field name="lease_term"/>
+                            <field name="lease_duration_years"/>
+                            <field name="lease_duration_days"/>
+                        </group>
+                    </group>
+                    <group string="Lease Financials – Recurring" name="lease_financials_recurring">
+                        <group string="Rent">
+                            <field name="total_area"/>
+                            <field name="net_rent"/>
+                            <field name="net_rent_monthly"/>
+                        </group>
+                        <group string="Rent">
+                            <field name="additional_area"/>
+                            <field name="additional_area_rate"/>
+                            <field name="additional_area_rate_monthly"/>
+                        </group>
+                        <group string="Parking">
+                            <field name="is_parking"/>
+                            <field name="parking" invisible="not is_parking"/>
+                            <field name="parking_bays" invisible="not is_parking"/>
+                            <field name="parking_bays_monthly" invisible="not is_parking"/>
+                        </group>
+                        <group string="Levy">
+                            <field name="is_levy"/>
+                            <field name="levy_rate" invisible="not is_levy"/>
+                            <field name="levy_rate_monthly" invisible="not is_levy"/>
+                        </group>
+                        <group string="Tax">
+                            <field name="is_tax_rates"/>
+                            <field name="rates_tax" invisible="not is_tax_rates"/>
+                            <field name="rates_tax_monthly" invisible="not is_tax_rates"/>
+                        </group>
+                    </group>
+                    <group string="Annual amounts" name="annual_amount">
+                        <group>
+                            <field name="net_rent_annual"/>
+                            <field name="levy_rate_annual"/>
+                        </group>
+                        <group>
+                            <field name="parking_bays_annual"/>
+                            <field name="rates_tax_annual" invisible="not is_tax_rates"/>
+                        </group>
+                    </group>
+                    <group string="Discount Amounts" name="discount_amount">
+                        <group>
+                            <field name="deposit_amount"/>
+                        </group>
+                        <group>
+                            <field name="current_interest_accrued"/>
+                        </group>
+                    </group>
+                    <group string="Lease Commission" name="lease_commision">
+                        <group>
+                            <field name="total_agent_commission" widget="percentage"/>
+                        </group>
+                        <group>
+                            <field name="total_com_amount_excluded_vat"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Location" name="location">
+                    <group>
+                        <group>
+                            <field name="building" readonly="state != 'draft'"/>
+                            <field name="building_code" readonly="state != 'draft'"/>
+                            <field name="no_of_floors" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="property_owner_id" options="{'no_create_edit': True}"/>
+                            <field name="region" readonly="state != 'draft'"/>
+                            <field name="company_id" />
+                            <field name="currency_id" />
+                        </group>
+                    </group>
+                </page>
+                <page string="Building Unit" name="building_unit">
+                    <group>
+                        <group>
+                            <field name="building_unit" options="{'no_create': True, 'no_open': True}"
+                                   readonly="state != 'draft'"/>
+                            <field name="unit_code" readonly="state != 'draft'"/>
+                            <field name="floor" readonly="state != 'draft'"/>
+                            <field name="address" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="type" readonly="state != 'draft'"/>
+                            <field name="status" readonly="state != 'draft'"/>
+                            <field name="building_area" readonly="state != 'draft'"/>
+                        </group>
+
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//button[@name='action_calculate']" position="before">
+                <button name="action_contract_sign_document" type="object"
+                        invisible="state in ['cancel','confirmed','renew']"
+                        string="Sign Document " class="oe_highlight"/>
+                <button name="action_contract_otl_sign_report" type="object"
+                        invisible="state in ['cancel','confirmed','renew']"
+                        string="OTL Sign Document " class="oe_highlight"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="jmc_documents_form_view" model="ir.ui.view">
+        <field name="name">Request File</field>
+        <field name="priority" eval="6"/>
+        <field name="model">jmc.documents</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+<!--                            <field name="jmc_number"/>-->
+                            <field name="property_id"
+                                   context="{'property_jmc_number': True}" />
+                            <field name="folder"/>
+                            <field name="transaction_folder" attrs="{'invisible': [('folder', '!=', 'Transaction Report')]}"/>
+                            <field name="committee_folder" attrs="{'invisible': [('folder', '!=', 'Committees')], 'required': [('folder', '=', 'Committees')]}"/>
+                            <field name="tender_folder" attrs="{'invisible': [('folder', '!=', 'Tender')], 'required': [('folder', '=', 'Tender')]}"/>
+                            <field name="executive_folder" attrs="{'invisible': [('folder', '!=', 'Executive Adjudication Committee')], 'required': [('folder', '=', 'Executive Adjudication Committee')]}"/>
+                            <field name="agreement_folder" attrs="{'invisible': [('folder', '!=', 'Agreement')], 'required': [('folder', '=', 'Agreement')]}"/>
+<!--                            <field name="document_folder_id"/>-->
+<!--                            <field name="folder_ids" widget="many2many_tags"/>-->
+                        </group>
+                        <group>
+                            <field name="document" filename="name"/>
+                            <field name="folder_id"/>
+                            <field name="name"/>
+                        </group>
+                    </group>
+
+                    <footer>
+                        <button name="action_upload_document" type="object" string="Upload" class="btn btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="jmc_documents_action">
+        <field name="name">Upload Document</field>
+        <field name="res_model">jmc.documents</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

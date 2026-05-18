@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<!--t-if="message.author === env.messaging.currentPartner" style="margin: 0px 200px 0px;" -->
+    <t t-name="basic.projectsView" owl="1">
+        <div>
+            <h1>Products</h1>
+        </div>
+        <div name="root" style="display: -webkit-box; flex-flow: row wrap;">
+            <t t-if="purchaseView">
+                <div class="o_kanban_view oe_background_grey o_kanban_dashboard o_project_kanban o_emphasize_colors o_kanban_ungrouped" t-foreach="purchaseView" t-as="record" t-key="record.id">
+                    <!-- <t t-esc="record.name"/> -->
+                    <div class="oe_kanban_color_3 oe_kanban_global_click o_has_icon oe_kanban_content oe_kanban_card o_kanban_record" style="max-width: 270px; min-height: 149px;">
+                        <div class="o_project_kanban_main ">
+                            <div class="o_kanban_card_content mw-100">
+                                <div class="o_kanban_primary_left">
+                                    <div class="o_primary">
+                                        <span class="o_text_overflow"><t t-esc="record.name"/></span>
+                                        <span class="o_text_overflow text-muted" t-if="record.partner_id">
+                                            <span class="fa fa-user mr-2" aria-label="Partner" title="Partner"/><t t-esc="record.partner_id"/>
+                                        </span>
+                                        <div t-if="record.date or record.date_start" class="text-muted o_row">
+                                            <span class="fa fa-clock-o mr-2" title="Dates"/><t t-esc="record.date_start"/>
+                                            <i t-if="record.date and record.date_start" class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon" title="Arrow"/>
+                                            <t t-esc="record.date" t-if="record.date"/>
+                                        </div>
+                                        <div t-if="record.alias_name and record.alias_domain" class="text-muted">
+                                            <span class="fa fa-envelope-o mr-2" aria-label="Domain Alias" title="Domain Alias"/><t t-esc="record.alias_id"/>
+                                        </div>
+                                        <div t-if="record.rating_active" class="text-muted" title="Percentage of happy ratings over the past 30 days." groups="project.group_project_rating">
+                                            <b>
+                                                <t t-if="record.rating_percentage_satisfaction != -1">
+                                                    <i class="fa fa-smile-o" role="img" aria-label="Percentage of satisfaction" title="Percentage of satisfaction"/> <t t-esc="record.rating_percentage_satisfaction"/>%
+                                                </t>
+                                            </b>
+                                        </div>
+                                        <!-- <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_manage_pane dropdown-menu" role="menu" groups="base.group_user">
+                                <div class="row">
+                                    <div class="col-6 o_kanban_card_manage_section o_kanban_manage_view">
+                                        <div role="menuitem" class="o_kanban_card_manage_title">
+                                            <span>View</span>
+                                        </div>
+                                        <div role="menuitem">
+                                            <a name="action_view_tasks" type="object">Tasks</a>
+                                        </div>
+                                        <div role="menuitem" t-if="record.doc_count.raw_value">
+                                            <a name="attachment_tree_view" type="object">Documents</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 o_kanban_card_manage_section o_kanban_manage_reporting" groups="project.group_project_manager">
+                                        <div role="menuitem" class="o_kanban_card_manage_title">
+                                            <span>Reporting</span>
+                                        </div>
+                                        <div role="menuitem">
+                                            <a name="action_view_tasks_analysis" type="object">Tasks Analysis</a>
+                                        </div>
+                                        <div role="menuitem">
+                                            <a name="569" type="action">Burndown Chart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_manage_settings row" groups="project.group_project_manager">
+                                    <div role="menuitem" aria-haspopup="true" class="col-8">
+                                        <ul class="oe_kanban_colorpicker" data-field="color" role="popup"/>
+                                    </div>
+                                    <div role="menuitem" class="col-4">
+                                        <a t-if="record.privacy_visibility.raw_value == 'portal'" class="dropdown-item" role="menuitem" name="576" type="action">Share</a>
+                                        <!-- [XBO] TODO: remove the name attribute in this a tag in master -->
+                                        <a class="dropdown-item" role="menuitem" type="edit" name="action_view_kanban_project">Edit</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="o_kanban_manage_toggle_button o_dropdown_kanban" href="#">
+                                <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                            </a>
+                            <span>
+                                <div class="o_favorite o_field_widget" name="is_favorite">
+                                    <a href="#"><i class="fa fa-star" title="Remove from Favorites" aria-label="Remove from Favorites" role="img"></i></a>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="o_kanban_record_bottom mt-3">
+                            <div class="oe_kanban_bottom_left">
+                                <div class="o_project_kanban_boxes">
+                                    <a class="o_project_kanban_box" name="action_view_tasks" type="object">
+                                        <div>
+                                            <span class="o_value"><t t-esc="record.task_count"/></span>
+                                            <span class="o_label"><t t-esc="record.label_tasks"/></span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <t t-esc="record.activity_ids" widget="kanban_activity"/>
+                            </div>
+                            <div class="oe_kanban_bottom_right">
+                                <span t-att-class="'o_status_bubble mx-0 o_color_bubble_' + record.last_update_color" t-att-title="record.last_update_status"/>
+                                <div name="user_id" class="o_clickable_m2x_avatar o_field_many2one_avatar o_field_widget o_quick_editable">
+                                    <div class="o_m2o_avatar"><img t-attf-src="/web/image/res.users/{{record.user_id[0]}}/avatar_128" t-att-alt="record.user_id[1]"/></div>
+                                </div>
+                                <!-- <t t-esc="record.user_id.image_1920" widget="many2one_avatar_user" t-if="record.user_id"/> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_opms_sub_entity_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .opms-sub-report-title {
+                            color: #079c4b;
+                            font-size: 19px;
+                            font-weight: 700;
+                            margin-bottom: 8px;
+                            text-transform: uppercase;
+                        }
+                        .opms-sub-report-subtitle {
+                            font-size: 11px;
+                            margin-bottom: 4px;
+                        }
+                        .opms-sub-report-subtitle strong,
+                        .opms-sub-report-section {
+                            font-weight: 700;
+                        }
+                        .opms-sub-report-section {
+                            font-size: 11px;
+                            margin: 10px 0 6px;
+                        }
+                        .opms-sub-report-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            table-layout: fixed;
+                            font-size: 9px;
+                            margin-bottom: 12px;
+                        }
+                        .opms-sub-report-table th,
+                        .opms-sub-report-table td {
+                            border: 1px solid #4a4a4a;
+                            padding: 2px 3px;
+                            vertical-align: top;
+                            line-height: 1.2;
+                            overflow-wrap: break-word;
+                            white-space: normal;
+                            hyphens: none;
+                            -webkit-hyphens: none;
+                            -moz-hyphens: none;
+                        }
+                        .opms-sub-report-table thead th {
+                            background: #079c4b;
+                            color: #ffffff;
+                            text-align: center;
+                            font-size: 8px;
+                            font-weight: 700;
+                            padding: 3px 2px;
+                        }
+                        .opms-sub-report-table thead th.left,
+                        .opms-sub-report-table tbody td.left,
+                        .opms-sub-report-table tbody td.numeric-cell {
+                            text-align: left;
+                        }
+                        .opms-sub-report-table tbody td {
+                            background: #efefef;
+                        }
+                        .opms-sub-report-table tbody td.ref-cell {
+                            background: #079c4b;
+                            color: #ffffff;
+                            font-weight: 700;
+                        }
+                    </style>
+
+                    <t t-foreach="sections or []" t-as="section" t-key="section.get('scope_title')">
+                        <h2 class="opms-sub-report-title" t-att-style="'page-break-before: always;' if section_index &gt; 0 else ''">
+                            <t t-esc="section.get('scope_title') or '-'"/>
+                        </h2>
+
+                        <p class="opms-sub-report-subtitle">
+                            <strong>Purpose:</strong>
+                            <t t-esc="section.get('purpose_text') or '-'"/>
+                        </p>
+
+                        <p class="opms-sub-report-section">Outcomes, Outputs, Performance Indicators and Targets</p>
+
+                        <table class="opms-sub-report-table">
+                            <colgroup>
+                                <col style="width: 8%;"/>
+                                <col style="width: 15%;"/>
+                                <col style="width: 18%;"/>
+                                <t t-foreach="section.get('ordered_years', [])" t-as="year">
+                                    <col style="width: 7.375%;"/>
+                                </t>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th rowspan="3" class="left">Outcome</th>
+                                    <th rowspan="3" class="left">Outputs</th>
+                                    <th rowspan="3" class="left">Output Indicators</th>
+                                    <t t-if="section.get('ordered_years')">
+                                        <th t-att-colspan="len(section.get('ordered_years'))">Annual Targets</th>
+                                    </t>
+                                </tr>
+                                <tr t-if="section.get('ordered_years')">
+                                    <t t-if="section.get('aud_years')">
+                                        <th t-att-colspan="len(section.get('aud_years'))">Audited/Actual performance</th>
+                                    </t>
+                                    <t t-if="section.get('est_years')">
+                                        <th t-att-colspan="len(section.get('est_years'))">Estimated<br/>performance</th>
+                                    </t>
+                                    <t t-if="section.get('mtdp_years')">
+                                        <th t-att-colspan="len(section.get('mtdp_years'))">MTDP Period</th>
+                                    </t>
+                                </tr>
+                                <tr t-if="section.get('ordered_years')">
+                                    <t t-foreach="section.get('ordered_years')" t-as="year">
+                                        <th>
+                                            <t t-esc="year"/>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="section.get('annual_rows')">
+                                    <t t-foreach="section.get('annual_rows')" t-as="row">
+                                        <tr>
+                                            <td class="ref-cell left"><t t-esc="row.get('outcome_label')"/></td>
+                                            <td class="left"><t t-esc="row.get('output_name')"/></td>
+                                            <td class="left"><t t-esc="row.get('indicator_name')"/></td>
+                                            <t t-foreach="section.get('ordered_years')" t-as="year">
+                                                <td class="numeric-cell"><t t-esc="row.get('targets', {}).get(year, '-')"/></td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-if="not section.get('annual_rows')">
+                                    <tr>
+                                        <td colspan="3" class="left">No output indicators found for this selection.</td>
+                                        <t t-foreach="section.get('ordered_years')" t-as="year">
+                                            <td class="numeric-cell">-</td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <p class="opms-sub-report-section">
+                            Indicators, Annual and Quarterly Targets
+                            <t t-if="section.get('selected_fiscal_year_name')">
+                                <span> (<t t-esc="section.get('selected_fiscal_year_name')"/>)</span>
+                            </t>
+                        </p>
+
+                        <table class="opms-sub-report-table">
+                            <colgroup>
+                                <col style="width: 8%;"/>
+                                <col style="width: 32%;"/>
+                                <col style="width: 13%;"/>
+                                <col style="width: 11.75%;"/>
+                                <col style="width: 11.75%;"/>
+                                <col style="width: 11.75%;"/>
+                                <col style="width: 11.75%;"/>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" class="left">Ref</th>
+                                    <th rowspan="2" class="left">Output Indicators</th>
+                                    <th rowspan="2">Annual Target <t t-esc="section.get('selected_fiscal_year_name') or ''"/></th>
+                                    <th colspan="4" class="left">Quarterly Targets</th>
+                                </tr>
+                                <tr>
+                                    <th>1st</th>
+                                    <th>2nd</th>
+                                    <th>3rd</th>
+                                    <th>4th</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="section.get('quarterly_rows')">
+                                    <t t-foreach="section.get('quarterly_rows')" t-as="row">
+                                        <tr>
+                                            <td class="ref-cell left"><t t-esc="row.get('indicator_label')"/></td>
+                                            <td class="left"><t t-esc="row.get('indicator_name')"/></td>
+                                            <td class="numeric-cell"><t t-esc="row.get('annual_target')"/></td>
+                                            <td class="numeric-cell"><t t-esc="row.get('q1')"/></td>
+                                            <td class="numeric-cell"><t t-esc="row.get('q2')"/></td>
+                                            <td class="numeric-cell"><t t-esc="row.get('q3')"/></td>
+                                            <td class="numeric-cell"><t t-esc="row.get('q4')"/></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-if="not section.get('quarterly_rows')">
+                                    <tr>
+                                        <td colspan="7" class="left">No annual or quarterly targets found for the selected fiscal year.</td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

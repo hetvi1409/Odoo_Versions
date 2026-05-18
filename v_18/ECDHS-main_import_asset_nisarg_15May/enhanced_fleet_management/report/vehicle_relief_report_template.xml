@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_vehicle_relief_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Vehicle Relief Form</h2>
+                        <p><strong>Reference:</strong> <span t-esc="doc.reference"/></p>
+                        <p><strong>Requester:</strong> <span t-esc="doc.requester_id.name"/></p>
+                        <p><strong>Department:</strong> <span t-esc="doc.department_id.name"/></p>
+                        <p><strong>Relief Reason:</strong> <span t-esc="dict(doc._fields['relief_reason'].selection).get(doc.relief_reason)"/></p>
+                        <p><strong>Original Vehicle:</strong> <span t-esc="doc.original_vehicle_id.name"/> (<span t-esc="doc.original_registration"/>)</p>
+                        <p><strong>Relief Vehicle:</strong> <span t-esc="doc.relief_vehicle_id.name"/> (<span t-esc="doc.relief_registration"/>)</p>
+                        <p><strong>Period:</strong> <span t-esc="doc.start_date"/> to <span t-esc="doc.expected_end_date"/></p>
+                        <p><strong>Driver:</strong> <span t-esc="doc.driver_id.name"/></p>
+                        <h3>Reason Description</h3>
+                        <p t-esc="doc.reason_description"/>
+                        <h3>Costs</h3>
+                        <p><strong>Daily Rate:</strong> <span t-esc="doc.daily_rate"/></p>
+                        <p><strong>Additional Costs:</strong> <span t-esc="doc.additional_costs"/></p>
+                        <p><strong>Total Cost:</strong> <span t-esc="doc.total_cost"/></p>
+                        <h3>Approval</h3>
+                        <p><strong>Approved By:</strong> <span t-esc="doc.approved_by_id.name"/></p>
+                        <p><strong>Approval Date:</strong> <span t-esc="doc.approval_date"/></p>
+                        <h3>Notes</h3>
+                        <p t-esc="doc.notes"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

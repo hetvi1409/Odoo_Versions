@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="exception_report_view_form" model="ir.ui.view">
+        <field name="name">exception_report_view_form</field>
+        <field name="model">exception.report</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="internal_audit_management.exception_report_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='record_work_done']" position="after">
+                <field name="can_edit" invisible="1"/>
+                <field name="preparer_id" widget="many2one_avatar_user"/>
+                <field name="reviewer_id" widget="many2one_avatar_user"/>
+                <field name="approver_id" widget="many2one_avatar_user"/>
+            </xpath>
+            <xpath expr="//field[@name='requirements']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='record_work_done']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='conclusion']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='attachment_ids']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='notes']" position="attributes">
+                <attribute name="readonly">not can_edit</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

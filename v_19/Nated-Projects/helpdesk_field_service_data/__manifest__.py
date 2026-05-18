@@ -1,0 +1,35 @@
+{
+    'name': "Incidents",
+    'description': """Incidents""",
+    'summary': """Incidents""",
+    'version': '16.0.1.0.0',
+    'sequence': '20',
+    'category': 'Services',
+    'depends': ['industry_fsm', 'helpdesk'],
+    'data': [
+        'data/res_company_data.xml',
+        'data/helpdesk_department_data.xml',
+        'data/helpdesk_category_data.xml',
+        'data/helpdesk_sub_category_data.xml',
+        'data/helpdesk_ticket_data.xml',
+        'data/ir_sequence_data.xml',
+        'security/ir.model.access.csv',
+        'security/helpdesk_field_service_security.xml',
+        'views/helpdesk_department_views.xml',
+        'views/helpdesk_category_views.xml',
+        'views/helpdesk_sub_category_views.xml',
+        'views/helpdesk_ticket_views.xml',
+        'views/helpdesk_request_stock_views.xml',
+        'wizard/helpdesk_review_views.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+        ],
+    },
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+
+}

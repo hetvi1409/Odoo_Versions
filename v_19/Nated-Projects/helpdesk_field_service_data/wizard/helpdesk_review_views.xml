@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="helpdesk_review_form_view" model="ir.ui.view">
+        <field name="name">helpdesk.review.form.view</field>
+        <field name="model">helpdesk.review</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="ticket_id"/>
+                        <field name="is_internal_resolve"/>
+                        <field name="assignee_id"
+                               attrs="{'invisible': [('is_internal_resolve', '=', False)]}"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_submit"
+                            string="Submit"
+                            type="object"
+                            class="btn-primary"
+                            data-hotkey="t"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+</odoo>

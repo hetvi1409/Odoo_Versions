@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="approval_team_line_approved_view_form" model="ir.ui.view">
+        <field name="name">approval.team.line.approved.view.form</field>
+        <field name="model">approval.team.line</field>
+        <field name="arch" type="xml">
+            <form string="Approval Team Line">
+                <sheet>
+                    <group>
+                        <field name="signature" widget="signature" required="[('approval_signed_required','=',True),('rejected_signed_required','=',True)]"/>
+                    </group>
+                </sheet>
+                <!-- <footer>
+                    <button name="action_approved" string="Approved"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel" data-hotkey="z"/>
+                </footer> -->
+            </form>
+        </field>
+    </record>
+
+
+    <record id="approval_team_line_reject_view_form" model="ir.ui.view">
+        <field name="name">approval.team.line.reject.view.form</field>
+        <field name="model">approval.team.line</field>
+        <field name="arch" type="xml">
+            <form string="Approval Team Line">
+                <sheet>
+                    <group>
+                        <field name="signature" widget="signature"/>
+                        <field name="approval_date" />
+                        <field name="reject_reason" required="1"/>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+</odoo>

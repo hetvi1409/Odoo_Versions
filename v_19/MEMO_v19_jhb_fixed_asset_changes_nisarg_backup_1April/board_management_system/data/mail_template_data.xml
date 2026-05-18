@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="email_template_share_minutes_of_meeting" model="mail.template">
+        <field name="name">Share Minutes of Meeting</field>
+        <field name="model_id" ref="calendar.model_calendar_event"/>
+        <field name="subject">MOM: {{ object.name or 'n/a' }}</field>
+        <field name="description">Send mail to the Attendees</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi Team,
+                    <br/>
+                    Please go through the minutes of meeting of <b><t t-out="object.name"/></b> meeting.
+                    <br/>
+                    <b>Minutes Of Meeting</b>
+                    <t t-out="object.mom"/>
+                </p>
+            </div>
+        </field>
+    </record>
+    <record id="email_template_share_send_meeting_details" model="mail.template">
+        <field name="name">Share Meeting Details</field>
+        <field name="model_id" ref="calendar.model_calendar_event"/>
+        <field name="subject">Meeting: {{ object.name or 'n/a' }}</field>
+        <field name="description">Send mail to the Attendees</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hi Team,
+                    <br/>
+                    <b>
+                        <t t-out="object.user_id.name"/>
+                    </b>
+                    invited you for the
+                    <b>
+                        <t t-out="object.name"/>
+                    </b>
+                    meeting.
+                    Please go through the documents.
+                    <br/>
+                    <p>
+                        <strong>Details of the event</strong>
+                    </p>
+                    <ul>
+                        <t t-if="object.location">
+                            <li>Location:
+                                <t t-out="object.location"></t>
+                            </li>
+                        </t>
+                        Starts on <t t-out="object.start"/> and ends at <t t-out="object.stop"/><br/>
+                        Duration: <t t-out="object.duration"/> hours
+                        <li>Attendees
+                            <ul>
+                                <li t-foreach="object.partner_ids"
+                                    t-as="attendee">
+                                        <span style="margin-left:5px"
+                                              t-out="attendee.name or ''">
+                                        </span>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Agenda
+                            <ul>
+                                <li><t t-out="object.agenda"/></li>
+                                <li t-foreach="object.agenda_ids"
+                                    t-as="agenda">
+                                        <span style="margin-left:5px"
+                                              t-out="agenda.name or ''">
+                                        </span>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Minutes Of Meting
+                            <ul>
+                                <li><t t-out="object.mom"/></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </p>
+            </div>
+        </field>
+    </record>
+</odoo>

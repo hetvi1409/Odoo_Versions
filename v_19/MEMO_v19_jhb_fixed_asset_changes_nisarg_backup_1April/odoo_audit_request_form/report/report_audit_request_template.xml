@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_report_audit_request_probc">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.internal_layout">
+                    <div class="page">
+                        <div>
+                            <center>
+                                <h2>
+                                    <strong>Audit Request Report</strong>
+                                </h2>
+                            </center>
+                        </div>
+                        <div>
+                            <h4>
+                                <span t-field="doc.sequence_name"/>
+                                -
+                                <span t-field="doc.state"/>
+                            </h4>
+                        </div>
+                        <br/>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th name="title">
+                                        <span>Audit Request Name</span>
+                                    </th>
+                                    <th name="method">
+                                        <span>Audit Method</span>
+                                    </th>
+                                    <th name="category">
+                                        <span>Audit Category</span>
+                                    </th>
+                                    <t t-if="doc.partner_id">
+                                        <th name="external">
+                                            <span>External Audit Partner</span>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td name="title">
+                                        <span t-field="doc.name"/>
+                                    </td>
+                                    <td name="type">
+                                        <span t-field="doc.type"/>
+                                    </td>
+                                    <td name="category">
+                                        <span t-field="doc.audit_category_id.name"/>
+                                    </td>
+                                    <t t-if="doc.partner_id">
+                                        <td name="partner">
+                                            <span t-field="doc.partner_id.name"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <td name="tags">
+                                        <strong>Audit Tags</strong>
+                                    </td>
+                                    <td name="tags">
+                                        <span t-esc="', '.join(map(lambda x: (x.name), doc.audit_tag_ids))"/>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th name="create_by">
+                                        <span>Created by</span>
+                                    </th>
+                                    <th name="create_Date">
+                                        <span>Created Date</span>
+                                    </th>
+                                    <th name="responsible">
+                                        <span>Audit Responsible</span>
+                                    </th>
+                                    <th name="audit_date">
+                                        <span>Audit Date</span>
+                                    </th>
+                                    <th name="dead_date">
+                                        <span>Deadline Date</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td name="responsible">
+                                        <span t-field="doc.responsible_user_id.name"/>
+                                    </td>
+                                    <td name="create_date">
+                                        <span t-field="doc.create_date"/>
+                                    </td>
+                                    <td name="user">
+                                        <span t-field="doc.audit_user_id.name"/>
+                                    </td>
+                                    <td name="audit_date">
+                                        <span t-field="doc.audit_date"/>
+                                    </td>
+                                    <td name="dead_date">
+                                        <span t-field="doc.deadline_date"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td name="confirmed_by">
+                                        <strong>Confirmed by:</strong>
+                                    </td>
+                                    <td name="confirmed_by">
+                                        <span t-field="doc.confirm_user_id.name"/>
+                                    </td>
+                                    <td name="confirmed_date">
+                                        <strong>Confirmed Date:</strong>
+                                    </td>
+                                    <td name="confirmed_date">
+                                        <span t-field="doc.date_confirm"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td name="approved_by">
+                                        <strong>Approved by:</strong>
+                                    </td>
+                                    <td name="approved_by">
+                                        <span t-field="doc.approve_user_id.name"/>
+                                    </td>
+                                    <td name="approved_date">
+                                        <strong>Approved Date:</strong>
+                                    </td>
+                                    <td name="approved_date">
+                                        <span t-field="doc.date_approve"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td name="audit_complete">
+                                        <strong>Audit Completed by:</strong>
+                                    </td>
+                                    <td name="audit_complete">
+                                        <span t-field="doc.done_user_id.name"/>
+                                    </td>
+                                    <td name="audit_date">
+                                        <strong>Audit Completed Date:</strong>
+                                    </td>
+                                    <td name="audit_date">
+                                        <span t-field="doc.date_done"/>
+                                    </td>
+                                </tr>
+                                <t t-if="doc.state == 'f_refuse'">
+                                    <tr>
+                                        <td name="refuse">
+                                            <strong>Refused by:</strong>
+                                        </td>
+                                        <td name="refuse">
+                                            <span t-field="doc.refuse_user_id.name"/>
+                                        </td>
+                                        <td name="refuse_date">
+                                            <strong>Refused Date:</strong>
+                                        </td>
+                                        <td name="refuse_date">
+                                            <span t-field="doc.date_refuse"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td name="refuse_reason">
+                                            <strong>Refused Reason:</strong>
+                                        </td>
+                                        <td name="refuse_reason">
+                                            <span t-field="doc.refuse_reason"/>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td name="request_detail">
+                                        <strong>Audit Request Details</strong>
+                                    </td>
+                                    <td name="audit_reason">
+                                        <span t-field="doc.audit_reason"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td name="expect_result">
+                                        <strong>Audit Expected Result</strong>
+                                    </td>
+                                    <td name="expect_result">
+                                        <span t-field="doc.expected_result"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td name="final_result">
+                                        <strong>Audit Result</strong>
+                                    </td>
+                                    <td name="final_result">
+                                        <span t-field="doc.request_for"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row col-12 mt32 mb32">
+                        <div class="col-6">
+                            <strong>Requester Signature:____________________</strong>
+                        </div>
+                        <div class="col-6">
+                            <strong>Approver Signature:____________________</strong>
+                        </div>
+                    </div>
+                    <div class="row col-12 mt32 mb32">
+                        <div class="col-6">
+                            <strong>Requester Date:____________________</strong>
+                        </div>
+                        <div class="col-6">
+                            <strong>Approver Date:____________________</strong>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

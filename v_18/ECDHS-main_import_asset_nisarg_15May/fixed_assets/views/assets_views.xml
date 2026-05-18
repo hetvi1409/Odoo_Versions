@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_action_fixed_assets"
+              name="Fixed Assets"
+              sequence="1"
+              web_icon="fixed_assets,static/description/icon.png"
+              />
+    <!-- Reuse the existing menu from account_asset -->
+    <menuitem id="menu_action_account_asset_form_custom"
+              name="Assets"
+              parent="fixed_assets.menu_action_fixed_assets"
+              sequence="2"
+              />
+
+    <menuitem id="menu_action_account_asset_form_custom_1"
+              name="All Assets"
+              parent="fixed_assets.menu_action_account_asset_form_custom"
+              action="account_asset.action_account_asset_form"
+              sequence="20"
+              />
+
+    <record id="action_account_asset_form_minor" model="ir.actions.act_window">
+        <field name="name">Minor Assets</field>
+        <field name="res_model">account.asset</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('asset_type', '=', 'minor')]</field>
+        <field name="context">{'default_asset_type': 'minor'}</field>
+    </record>
+
+
+    <menuitem id="menu_action_account_asset_form_custom_2"
+          name="Minor Assets"
+          parent="fixed_assets.menu_action_account_asset_form_custom"
+          action="fixed_assets.action_account_asset_form_minor"
+          sequence="30"/>
+
+
+
+    <record id="action_account_asset_form_major" model="ir.actions.act_window">
+        <field name="name">Major Assets</field>
+        <field name="res_model">account.asset</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '!=', 'model'), ('parent_id', '=', False),('asset_type', '=', 'major')]</field>
+        <field name="context">{'default_asset_type': 'major'}</field>
+    </record>
+
+    <menuitem id="menu_action_account_asset_form_custom_3"
+          name="Major Assets"
+          parent="fixed_assets.menu_action_account_asset_form_custom"
+          action="fixed_assets.action_account_asset_form_major"
+          sequence="40"/>
+
+
+
+
+
+     <menuitem id="asset_registry.asset_category_menuitem"
+            name="Asset Category"
+            action="asset_registry.asset_category_action"
+            parent="fixed_assets.menu_action_fixed_assets"
+            sequence="3"
+    />
+      <menuitem id="asset_verification.product_detail_search_barcode_menu" name="Asset Verification"
+              action="asset_verification.account_asset_action_barcode_search"
+              parent="fixed_assets.menu_action_fixed_assets" sequence="4"/>
+
+     <menuitem id="asset_location_menuitem"
+            name="Asset Location"
+            action="asset_verification.action_asset_verification_job_location"
+            parent="fixed_assets.menu_action_fixed_assets"
+            sequence="5"/>
+    <menuitem id="asset_verification.menu_asset_verification_job" name="Verification Jobs"
+          parent="fixed_assets.menu_action_fixed_assets" action="asset_verification.action_asset_verification_job" sequence="6"/>
+      <menuitem id="asset_verification.menu_asset_verification_staging" name="Unverified Assets" parent="fixed_assets.menu_action_fixed_assets"
+              action="asset_verification.action_asset_verification_staging" sequence="7"/>
+    <menuitem id="asset_location_menuitem_account" name="Asset Location" action="asset_verification.action_asset_verification_job_location"
+              parent="accountant.menu_accounting" sequence="2"/>
+
+    <!-- asset_building_menuitem: commented out because asset_registry.asset_building_action
+         may not exist in all install configurations. The action is defined in asset_registry
+         and restored when that module is fully installed/upgraded. -->
+    <!-- <menuitem id="asset_building_menuitem" name="Asset Building"
+              parent="fixed_assets.menu_action_fixed_assets" action="asset_registry.asset_building_action" sequence="13"/> -->
+
+<!--        <menuitem id="asset_verification.menu_asset_verification_job_location" name="Job Locations"-->
+<!--              parent="fixed_assets.menu_action_fixed_assets" action="asset_verification.action_asset_verification_job_location" sequence="11"/>-->
+
+    <menuitem id="asset_condition_menuitem" name="Asset Condition"
+              parent="fixed_assets.menu_action_fixed_assets" action="asset_verification.action_asset_condition" sequence="14"/>
+
+    <menuitem id="fixed_assets_configuration_menu"
+              name="Configuration"
+              parent="fixed_assets.menu_action_fixed_assets"
+              sequence="15"
+              />
+
+    <menuitem id="fixed_assets_asset_settings_menu"
+              name="Settings"
+              parent="fixed_assets.fixed_assets_configuration_menu"
+              action="fixed_assets.fixed_assets_config_settings_action"
+              sequence="1"
+    />
+
+
+    <record id="view_account_asset_form_inherit_approval" model="ir.ui.view">
+        <field name="name">account.asset.form.inherit.approval</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <!-- <button name="action_approve" string="Submit for Approval" class="btn-primary" type="object" invisible= "state != 'draft'"/> -->
+                <button name="action_approve" string="Submit for Approval" class="btn-primary" type="object" invisible= "state != 'draft'"
+                    groups="fixed_assets.group_fixed_asset_capturer,fixed_assets.group_fixed_asset_approver"/>
+
+
+            </xpath>
+                 <xpath expr="//button[@name='action_custom_validate']" position="attributes">
+                <attribute name="groups">fixed_assets.group_fixed_asset_authorizer</attribute>
+                <!-- <attribute name="groups">fixed_assets.group_fixed_asset_approver</attribute> -->
+            </xpath>
+            <xpath expr="//page[@name='related_items']" position="attributes">
+                                    <attribute name="invisible">1</attribute>
+            </xpath>
+
+        </field>
+     </record>
+
+<!--    <menuitem id="fixed_assets_location_menuitem"-->
+<!--            name="Asset Location"-->
+<!--            action="asset_registry.asset_location_action"-->
+<!--            parent="fixed_assets.menu_action_fixed_assets"-->
+<!--            sequence="2"-->
+<!--    />-->
+<!--     <menuitem id="asset_category_menuitem"-->
+<!--            name="Asset Category"-->
+<!--            action="asset_registry.asset_category_action"-->
+<!--            parent="fixed_assets.menu_action_fixed_assets"-->
+<!--            sequence="3"-->
+<!--    />-->
+
+</odoo>

@@ -1,0 +1,47 @@
+<odoo>
+    <record id="view_facebook_config_tree" model="ir.ui.view">
+        <field name="name">facebook.config.view.list</field>
+        <field name="model">facebook.config</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="app_id"/>
+                <field name="app_secret"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_facebook_config_form" model="ir.ui.view">
+        <field name="name">facebook.config.form</field>
+        <field name="model">facebook.config</field>
+        <field name="arch" type="xml">
+            <form string="Facebook Configuration">
+                <sheet>
+                    <header>
+                        <button name="create_ticket_from_fb_message" string="Fetch" type="object"
+                                class="btn-primary"
+                                help="Fetch messages and comment from facebook pages to run this action."/>
+                    </header>
+                    <group>
+                        <field name="name"/>
+                        <field name="app_id"/>
+                        <field name="app_secret"/>
+                        <field name="access_token" readonly="0"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_facebook_config" model="ir.actions.act_window">
+        <field name="name">Facebook Config</field>
+        <field name="res_model">facebook.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem id="menu_facebook_config" parent="helpdesk.helpdesk_menu_config" name="Facebook Config" sequence="90"
+              action="action_facebook_config"/>
+    <menuitem id="menu_whatsapp_config" parent="helpdesk.helpdesk_menu_config" name="Whatsapp Config" sequence="91"
+              action="whatsapp.whatsapp_account_action"/>
+</odoo>

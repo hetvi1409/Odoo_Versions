@@ -1,0 +1,22 @@
+{
+    'name': 'Property OmniClass Management',
+    'version': '1.0.0',
+    'summary': 'Land, Building and Unit models with OmniClass classification',
+    'category': 'Real Estate',
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': 'https://natedsystems.co.za/',
+    'license': 'LGPL-3',
+    'depends': ['base', 'mail','insurance_management','itsys_real_estate'],
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'views/property_menu.xml',
+        'views/omniclass_views.xml',
+        'views/property_views.xml',
+        'data/omniclass_sample.xml',
+    ],
+    'installable': True,
+    'application': True,
+}

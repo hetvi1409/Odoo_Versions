@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_revise_materiality" model="ir.actions.act_window">
+        <field name="name">Materiality Setting</field>
+        <field name="res_model">revise.materiality</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Revise Materiality
+            </p>
+            <p>
+                Create and manage the Revise Materiality;
+            </p>
+        </field>
+    </record>
+    <record id="revise_materiality_view_form" model="ir.ui.view">
+        <field name="name">revise.materiality.view.form</field>
+        <field name="model">revise.materiality</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="materiality_type"/>
+                        </group>
+                        <group>
+                            <field name="display_formular"/>
+                        </group>
+                    </group>
+                    <group string="Calculate Overall Materiality">
+                        <group>
+                            <field name="numerator"/>
+                            <field name="denominator"/>
+                        </group>
+                        <group>
+                            <field name="abnormal_items_specific"/>
+                            <field name="materiality"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="performance_materiality"/>
+                        <field name="trivial_amount"/>
+                    </group>
+                    <notebook>
+                        <page string="Comments">
+                            <field name="comment_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Tracking"
+                              name="revise_materiality_tracking">
+                            <field name="revise_materiality_tracking_ids">
+                                <tree editable="bottom">
+                                    <field name="user_id"/>
+                                    <field name="previous_stage_id"/>
+                                    <field name="new_stage_id"/>
+                                    <field name="comment"/>
+                                    <field name="date"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            <div class="oe_chatter">
+            <field name="message_follower_ids"/>
+            <field name="activity_ids"/>
+            <field name="message_ids"/>
+        </div>
+            </form>
+        </field>
+    </record>
+    <record id="revise_materiality_view_tree" model="ir.ui.view">
+        <field name="name">revise.materiality.view.form</field>
+        <field name="model">revise.materiality</field>
+        <field name="arch" type="xml">
+            <tree duplicate="0">
+                <field name="materiality_type"/>
+                <field name="display_formular"/>
+                <field name="numerator"/>
+            </tree>
+        </field>
+    </record>
+    <menuitem id="reverse_materiality_menu"
+              name="Materiality Setting"
+              parent="internal_audit_management.audit_process_menu"
+              action="action_revise_materiality"
+              sequence="20"/>
+</odoo>

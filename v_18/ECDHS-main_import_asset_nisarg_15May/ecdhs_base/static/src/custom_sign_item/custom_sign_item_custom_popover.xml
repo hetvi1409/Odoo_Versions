@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+    <!-- Inherit the original sign template control panel -->
+    <t t-inherit="sign.SignItemCustomPopover" t-inherit-mode="extension">
+        <!-- Replace the Sign Now button with our condition -->
+        <xpath expr="//div[@id='o_sign_responsible_select_input']" position="replace">
+            <div class="o_field_widget d-block" id="o_sign_responsible_select_input">
+                <Many2OneField t-props="getMany2XProps(record, 'responsible_id')"
+                               update="(value) => record.update(value)" canOpen="false" canCreate="false"
+                               canQuickCreate="false"
+                               canCreateEdit="false"/>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

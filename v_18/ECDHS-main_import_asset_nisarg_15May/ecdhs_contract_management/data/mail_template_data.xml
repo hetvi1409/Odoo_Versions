@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ================================================================
+             SOP Step 23 – Expiry Notice Email Template
+        ================================================================= -->
+        <record id="mail_template_contract_expiry_notice" model="mail.template">
+            <field name="name">Contract Management: 6-Month Expiry Notice</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Contract Expiry Notice – {{ object.name }} expires {{ object.date_end }}</field>
+            <field name="email_to">{{ object.end_user_id.email or '' }}</field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear <t t-out="object.end_user_id.name or 'Contract Administrator'"/>,</p>
+
+<p>Please be advised that the following contract is due to expire within the next
+<strong>6 months</strong> and requires your immediate attention:</p>
+
+<table border="0" cellpadding="6" cellspacing="0" style="margin:12px 0;">
+    <tr><td><strong>Contract Reference:</strong></td><td><t t-out="object.name"/></td></tr>
+    <tr><td><strong>Contract Subject:</strong></td><td><t t-out="object.subject"/></td></tr>
+    <tr><td><strong>Service Provider:</strong></td><td><t t-out="object.service_provider_id.name"/></td></tr>
+    <tr><td><strong>Contract End Date:</strong></td><td><t t-out="object.date_end"/></td></tr>
+    <tr><td><strong>Contract Value:</strong></td>
+        <td><t t-out="format_amount(object.contract_value, object.currency_id)"/></td></tr>
+</table>
+
+<p>In accordance with the Contract Management Standard Operating Procedure (SOP-CONTRACT-MANAGEMENT-01),
+please ensure one of the following actions is taken <strong>before the contract expires</strong>:</p>
+
+<ol>
+    <li>Initiate a new procurement process if the service will still be required beyond the expiry date.</li>
+    <li>Prepare the contract termination documentation if the service is no longer required.</li>
+</ol>
+
+<p style="color:#c0392b;"><strong>Note:</strong> Allowing a contract to lapse without proper renewal or
+termination processing may constitute irregular expenditure in terms of the
+<em>Public Finance Management Act No. 1 of 1999 (PFMA)</em>.</p>
+
+<p>Kind regards,<br/>
+<strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">{{ object.admin_officer_id.lang or 'en_US' }}</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <!-- ================================================================
+             Termination Notice to Service Provider
+        ================================================================= -->
+        <record id="mail_template_contract_termination_notice" model="mail.template">
+            <field name="name">Contract Management: Termination Notice to Service Provider</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Formal Contract Termination Notice – {{ object.name }}</field>
+            <field name="email_to">{{ object.service_provider_id.email or '' }}</field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear <t t-out="object.service_provider_id.name"/>,</p>
+
+<p>This serves as formal notice that the contract referenced below has been terminated.</p>
+
+<table border="0" cellpadding="6" cellspacing="0" style="margin:12px 0;">
+    <tr><td><strong>Contract Reference:</strong></td><td><t t-out="object.name"/></td></tr>
+    <tr><td><strong>Contract Subject:</strong></td><td><t t-out="object.subject"/></td></tr>
+    <tr><td><strong>Effective Termination Date:</strong></td><td><t t-out="object.termination_date"/></td></tr>
+    <tr><td><strong>Reason:</strong></td><td><t t-out="object.termination_reason or 'As per discussions'"/></td></tr>
+</table>
+
+<p>Please ensure that all outstanding deliverables, invoices and documentation are submitted
+to the ECDHS Contract Management Unit within <strong>7 (seven) business days</strong> of this notice.</p>
+
+<p>Kind regards,<br/>
+<strong>ECDHS Contract Management Unit</strong><br/>
+Eastern Cape Department of Human Settlements</p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <record id="mail_template_provider_draft_sent" model="mail.template">
+            <field name="name">Contract Management: Draft Sent to Provider</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Draft Contract for Review – {{ object.name }} (v{{ object.draft_version }})</field>
+            <field name="email_to">{{ object.service_provider_id.email or '' }}</field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear <t t-out="object.service_provider_id.name"/>,</p>
+<p>Please review the attached draft contract and provide comments or change requests by <strong><t t-out="object.provider_review_due_date or ''"/></strong>.</p>
+<p><a t-att-href="object.provider_review_url or '#'" class="btn btn-primary">Open (Draft) Contract</a></p>
+<p>Kind regards,<br/><strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <record id="mail_template_provider_revised_draft_sent" model="mail.template">
+            <field name="name">Contract Management: Revised Draft Sent to Provider</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Revised Draft Contract – {{ object.name }} (v{{ object.draft_version }})</field>
+            <field name="email_to">{{ object.service_provider_id.email or '' }}</field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear <t t-out="object.service_provider_id.name"/>,</p>
+<p>A revised draft including change-request outcomes is now available. Kindly review and respond by <strong><t t-out="object.provider_review_due_date or ''"/></strong>.</p>
+<p><a t-att-href="object.provider_review_url or '#'" class="btn btn-primary">Open Revised Contract</a></p>
+<p>Kind regards,<br/><strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <record id="mail_template_provider_acceptance_ack" model="mail.template">
+            <field name="name">Contract Management: Provider Acceptance Confirmation</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Provider Acceptance Recorded – {{ object.name }}</field>
+            <field name="email_to">{{ object.service_provider_id.email or '' }}</field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear <t t-out="object.service_provider_id.name"/>,</p>
+<p>Your acceptance of the draft contract has been recorded. The contract now proceeds to section-level signatures.</p>
+<p><a t-att-href="object.provider_review_url or '#'" class="btn btn-primary">Open Contract</a></p>
+<p>Kind regards,<br/><strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <record id="mail_template_provider_review_reminder" model="mail.template">
+            <field name="name">Contract Management: Provider Review Reminder</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Reminder: Contract Review Due – {{ object.name }}</field>
+            <field name="email_to">{{ object.service_provider_id.email or '' }}</field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear <t t-out="object.service_provider_id.name"/>,</p>
+<p>This is an automated reminder that contract review feedback is due on <strong><t t-out="object.provider_review_due_date or ''"/></strong>.</p>
+<p><a t-att-href="object.provider_review_url or '#'" class="btn btn-primary">Open Contract</a></p>
+<p>Kind regards,<br/><strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <record id="mail_template_legal_vetting_request" model="mail.template">
+            <field name="name">Contract Management: Vetting Request</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Vetting Request – {{ object.name }}</field>
+            <field name="email_to">{{ object.legal_reviewer_id.email or object.legal_reviewer_id.partner_id.email or '' }}</field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear Vetting Team,</p>
+
+<p>The following contract has been submitted for vetting and sign-off:</p>
+
+<table border="0" cellpadding="6" cellspacing="0" style="margin:12px 0;">
+    <tr><td><strong>Contract Reference:</strong></td><td><t t-out="object.name"/></td></tr>
+    <tr><td><strong>Contract Subject:</strong></td><td><t t-out="object.subject"/></td></tr>
+    <tr><td><strong>Contract Type:</strong></td><td><t t-out="dict(object._fields['contract_type'].selection).get(object.contract_type, '')"/></td></tr>
+    <tr><td><strong>Service Provider:</strong></td><td><t t-out="object.service_provider_id.name"/></td></tr>
+    <tr><td><strong>Contract Value:</strong></td><td><t t-out="format_amount(object.contract_value, object.currency_id)"/></td></tr>
+</table>
+
+<p>Please complete vetting and advise on Vetting Team sign-off within <strong>5 working days</strong>.</p>
+
+<p style="margin:16px 0;"><a t-att-href="object.get_base_url() + '/web#model=ecdhs.contract&amp;id=' + str(object.id)" style="display:inline-block;padding:8px 18px;background-color:#875A7B;color:#ffffff;text-decoration:none;border-radius:4px;font-weight:bold;font-family:Arial,sans-serif;">Open Contract: <t t-out="object.name"/></a></p>
+
+<p>Kind regards,<br/><strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <record id="mail_template_contract_memo_required" model="mail.template">
+            <field name="name">Contract Management: Memo Required for Cover Letter</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Memo Required for Contract Cover Letter – {{ object.name }}</field>
+            <field name="email_to"></field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear Contracts Team,</p>
+
+<p>The following contract is fully signed by the provider but has no linked memo:</p>
+
+<table border="0" cellpadding="6" cellspacing="0" style="margin:12px 0;">
+    <tr><td><strong>Contract Reference:</strong></td><td><t t-out="object.name"/></td></tr>
+    <tr><td><strong>Contract Subject:</strong></td><td><t t-out="object.subject"/></td></tr>
+    <tr><td><strong>Service Provider:</strong></td><td><t t-out="object.service_provider_id.name"/></td></tr>
+    <tr><td><strong>Current Status:</strong></td><td><t t-out="dict(object._fields['state'].selection).get(object.state, object.state)"/></td></tr>
+</table>
+
+<p>Please create and link a memo to this contract so the Contract Cover Letter can be sent to HOD.</p>
+
+<p style="margin:16px 0;"><a t-att-href="object.get_base_url() + '/web#model=ecdhs.contract&amp;id=' + str(object.id)" style="display:inline-block;padding:8px 18px;background-color:#875A7B;color:#ffffff;text-decoration:none;border-radius:4px;font-weight:bold;font-family:Arial,sans-serif;">Open Contract: <t t-out="object.name"/></a></p>
+
+<p>Kind regards,<br/><strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <!-- ================================================================
+             Sign Request – Service Provider signing invitation (action_convene_signing)
+        ================================================================= -->
+        <record id="mail_template_provider_sign_request" model="mail.template">
+            <field name="name">Contract Management: Provider Sign Request</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Signature Request – {{ object.name }}</field>
+            <field name="email_to">{{ object.service_provider_id.email or '' }}</field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear <t t-out="object.service_provider_id.name"/>,</p>
+
+<p>A digital signature has been requested for the following contract:</p>
+
+<table border="0" cellpadding="6" cellspacing="0" style="margin:12px 0;">
+    <tr><td><strong>Contract Reference:</strong></td><td><t t-out="object.name"/></td></tr>
+    <tr><td><strong>Contract Subject:</strong></td><td><t t-out="object.subject"/></td></tr>
+    <tr><td><strong>Contract Type:</strong></td><td><t t-out="dict(object._fields['contract_type'].selection).get(object.contract_type, '')"/></td></tr>
+    <tr><td><strong>Contract Value:</strong></td><td><t t-out="format_amount(object.contract_value, object.currency_id)"/></td></tr>
+    <tr><td><strong>Contract Start Date:</strong></td><td><t t-out="object.date_start"/></td></tr>
+    <tr><td><strong>Contract End Date:</strong></td><td><t t-out="object.date_end"/></td></tr>
+</table>
+
+<p>Please open the signature request link and complete your digital signature at your earliest convenience.</p>
+
+<p>Kind regards,<br/>
+<strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <!-- ================================================================
+             Sign Request – HOD cover-letter signing invitation (action_send_cover_letter)
+        ================================================================= -->
+        <record id="mail_template_hod_cover_letter_sign_request" model="mail.template">
+            <field name="name">Contract Management: HOD Contract Cover Page Sign Request</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Contract Cover Letter Signature Request – {{ object.name }}</field>
+            <field name="email_to"></field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear HOD,</p>
+
+<p>The Contract Cover Letter package for the following contract is ready for your digital signature:</p>
+
+<table border="0" cellpadding="6" cellspacing="0" style="margin:12px 0;">
+    <tr><td><strong>Contract Reference:</strong></td><td><t t-out="object.name"/></td></tr>
+    <tr><td><strong>Contract Subject:</strong></td><td><t t-out="object.subject"/></td></tr>
+    <tr><td><strong>Contract Type:</strong></td><td><t t-out="dict(object._fields['contract_type'].selection).get(object.contract_type, '')"/></td></tr>
+    <tr><td><strong>Service Provider:</strong></td><td><t t-out="object.service_provider_id.name"/></td></tr>
+    <tr><td><strong>Contract Value:</strong></td><td><t t-out="format_amount(object.contract_value, object.currency_id)"/></td></tr>
+    <tr><td><strong>Memo Linked:</strong></td><td><t t-out="object.memo_id.display_name if object.memo_id else ''"/></td></tr>
+</table>
+
+<p>Please open the Sign app and complete your signature at your earliest convenience.</p>
+
+<p style="margin:16px 0;"><a t-att-href="object.get_base_url() + '/web#model=ecdhs.contract&amp;id=' + str(object.id)" style="display:inline-block;padding:8px 18px;background-color:#875A7B;color:#ffffff;text-decoration:none;border-radius:4px;font-weight:bold;font-family:Arial,sans-serif;">Open Contract: <t t-out="object.name"/></a></p>
+
+<p>Kind regards,<br/>
+<strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <record id="mail_template_cover_letter_hod_request" model="mail.template">
+            <field name="name">Contract Management: Cover Letter Signature Request (HOD)</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Contract Cover Letter Signature Request – {{ object.name }}</field>
+            <field name="email_to"></field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear HOD,</p>
+
+<p>The Contract Cover Letter package for the following contract is ready for digital signature:</p>
+
+<table border="0" cellpadding="6" cellspacing="0" style="margin:12px 0;">
+    <tr><td><strong>Contract Reference:</strong></td><td><t t-out="object.name"/></td></tr>
+    <tr><td><strong>Contract Subject:</strong></td><td><t t-out="object.subject"/></td></tr>
+    <tr><td><strong>Contract Type:</strong></td><td><t t-out="dict(object._fields['contract_type'].selection).get(object.contract_type, '')"/></td></tr>
+    <tr><td><strong>Memo Linked:</strong></td><td><t t-out="object.memo_id.display_name if object.memo_id else ''"/></td></tr>
+</table>
+
+<p>Please open the Sign app and complete your signature.</p>
+
+<p style="margin:16px 0;"><a t-att-href="object.get_base_url() + '/web#model=ecdhs.contract&amp;id=' + str(object.id)" style="display:inline-block;padding:8px 18px;background-color:#875A7B;color:#ffffff;text-decoration:none;border-radius:4px;font-weight:bold;font-family:Arial,sans-serif;">Open Contract: <t t-out="object.name"/></a></p>
+
+<p>Kind regards,<br/><strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <record id="mail_template_contract_change_requested" model="mail.template">
+            <field name="name">Contract Management: Change Request Submitted</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Contract Change Request – {{ object.name }}</field>
+            <field name="email_to"></field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear <t t-out="ctx.get('recipient_name') or 'User'"/>,</p>
+
+<p>A change request has been submitted for contract <strong><t t-out="object.name"/></strong>.</p>
+
+<p><strong>Section:</strong> <t t-out="ctx.get('change_section') or ''"/></p>
+<p><strong>Change Request:</strong><br/><t t-out="ctx.get('change_details') or ''"/></p>
+
+<p style="margin:16px 0;"><a t-att-href="ctx.get('contract_url') or (object.get_base_url() + '/web#model=ecdhs.contract&amp;id=' + str(object.id))" style="display:inline-block;padding:8px 18px;background-color:#875A7B;color:#ffffff;text-decoration:none;border-radius:4px;font-weight:bold;font-family:Arial,sans-serif;">Open Contract: <t t-out="object.name"/></a></p>
+
+<p>Kind regards,<br/><strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+        <record id="mail_template_contract_changes_completed" model="mail.template">
+            <field name="name">Contract Management: Changes Completed</field>
+            <field name="model_id" ref="model_ecdhs_contract"/>
+            <field name="subject">Contract Changes Completed – {{ object.name }}</field>
+            <field name="email_to"></field>
+            <field name="body_html"><![CDATA[
+<div data-ecdhs-green-mail="1" style="background-color:#dcefe0;border:1px solid #b8d8bf;border-radius:8px;padding:18px 20px;color:#2f3b4a;">
+<p>Dear <t t-out="ctx.get('recipient_name') or 'User'"/>,</p>
+
+<p>The requested contract changes for <strong><t t-out="object.name"/></strong> have been completed and sent back to vetting.</p>
+
+<p style="margin:16px 0;"><a t-att-href="ctx.get('contract_url') or (object.get_base_url() + '/web#model=ecdhs.contract&amp;id=' + str(object.id))" style="display:inline-block;padding:8px 18px;background-color:#875A7B;color:#ffffff;text-decoration:none;border-radius:4px;font-weight:bold;font-family:Arial,sans-serif;">Open Contract: <t t-out="object.name"/></a></p>
+
+<p>Kind regards,<br/><strong>ECDHS Contract Management Unit</strong></p>
+</div>
+            ]]></field>
+            <field name="lang">en_US</field>
+            <field name="auto_delete">False</field>
+        </record>
+
+    </data>
+</odoo>

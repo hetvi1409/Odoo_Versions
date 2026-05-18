@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<template>
+    <t t-name="AssetVerification">
+        <div class="o_stock_barcode_main_menu_container o_home_menu_background">
+            <div class="o_stock_barcode_main_menu position-relative">
+                <h1 class="mb-4">Asset Verification</h1>
+
+                <!-- Verification Job Selection Field -->
+                <div class="mb-3">
+                    <label for="verificationJobSelection">Select Verification Job:</label>
+                    <select id="verificationJobSelection" class="form-control">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+
+                <div class="o_stock_barcode_container position-relative d-inline-block mt-4 mb-5">
+                    <input type="text" class="oe_barcode_value"
+                           id="oe_barcode_id" placeholder=""
+                           autofocus="autofocus"/>
+                    <t>
+                        <img src="/barcodes/static/img/barcode.png"
+                             alt="Barcode" class="img-fluid mb-1 mt-1"/>
+                    </t>
+                    <span class="o_stock_barcode_laser"/>
+                </div>
+
+                <ul class="text-left mb-sm-5 pl-4">
+                    <li>Use <b>Break Open</b> to scan the Asset using camera scanner.</li>
+                    <li>Use <b>Gun</b> directly to break open the Asset.</li>
+                </ul>
+
+                <button class="btn btn-primary o_stock_mobile_barcode button_asset" t-on-click="openMobileScanner">
+                    <i class="fa fa-camera"/> Tap to scan
+                </button>
+
+                <button class="btn btn-primary button_job" id="openJobButton" style="display: none;" t-on-click="openSelectedJob">
+                    <i class="fa fa-folder-open"/> Open Job
+                </button>
+
+            </div>
+        </div>
+    </t>
+</template>

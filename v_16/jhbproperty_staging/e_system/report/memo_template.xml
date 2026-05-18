@@ -1,0 +1,741 @@
+<odoo>
+    <template id="report_memo_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="memo">
+                <div class="header o_company_custom_layout"
+                     style="padding-bottom: 10px; margin-bottom: 15px;">
+                    <t t-set="company" t-value="memo.company_id"/>
+
+                    <!-- Row: Logo + Info -->
+                    <div class="row">
+                        <!-- Left: Logo -->
+                        <div class="col-4 d-flex">
+                            <img t-att-src="image_data_uri(company.header_image)" alt="Logo"
+                                 style="max-height:180px;max-width:90%"/>
+                        </div>
+
+                        <!-- Right: Company Info -->
+                        <div class="col-8" style="font-size: 13px;">
+                            <!--                            <div class="text-center"><strong>City of Joburg Property Company SOC Ltd.</strong></div>-->
+                            <div class="text-center">
+                                <t t-if="company">
+                                    <strong>
+                                        <span t-esc="company.name"/>
+                                    </strong>
+                                </t>
+                            </div>
+                            <!--                            <hr style="border: 2px solid black;"/>-->
+                            <div class="text-center"
+                                 style="padding-top:5px;padding-bottom:5px;border-bottom:2px solid #f4ecd6;"></div>
+                            <div class="row" style="padding-top:10px;">
+                                <!--                                <t t-set="partner" t-value="memo.requester_id.partner_id"/>-->
+                                <div class="col-1 text-start">
+                                </div>
+                                <div class="col-3 text-start">
+                                    <!--                                    <t t-if="company">-->
+                                    <!--                                        <span t-if="company.street">-->
+                                    <!--                                            <t t-esc="company.street"/>-->
+                                    <!--                                            <br/>-->
+                                    <!--                                        </span>-->
+                                    <!--                                        <span t-if="company.street2">-->
+                                    <!--                                            <t t-esc="company.street2"/>-->
+                                    <!--                                            <br/>-->
+                                    <!--                                        </span>-->
+                                    <!--                                        <span t-if="company.city">-->
+                                    <!--                                            <t t-esc="company.city"/>-->
+                                    <!--                                            <br/>-->
+                                    <!--                                        </span>-->
+                                    <!--                                        <span t-if="company.state_id">-->
+                                    <!--                                            <t t-esc="company.state_id.name"/>-->
+                                    <!--                                            <br/>-->
+                                    <!--                                        </span>-->
+                                    <!--                                        <span t-if="company.zip">-->
+                                    <!--                                            <t t-esc="company.zip"/>-->
+                                    <!--                                            <br/>-->
+                                    <!--                                        </span>-->
+                                    <!--                                        <span t-if="company.country_id">-->
+                                    <!--                                            <t t-esc="company.country_id.name"/>-->
+                                    <!--                                            <br/>-->
+                                    <!--                                        </span>-->
+                                    <!--                                    </t>-->
+                                    <span>3rd Floor</span>
+                                    <br/>
+                                    <span>Forum 1</span>
+                                    <br/>
+                                    <span>Braam Park</span>
+                                    <br/>
+                                    <span>33 Hoofd Street</span>
+                                    <br/>
+                                    <span>Braamfontein</span>
+                                    <br/>
+                                    <span>2017</span>
+                                    <br/>
+                                </div>
+                                <div class="col-1 text-start">
+                                </div>
+                                <div class="col-3 text-start">
+                                    <!--                                    <t t-if="company">-->
+                                    <!--                                        <span t-if="company.city">-->
+                                    <!--                                            <t t-esc="company.city"/>-->
+                                    <!--                                            <br/>-->
+                                    <!--                                        </span>-->
+                                    <!--                                        <span t-if="company.state_id">-->
+                                    <!--                                            <t t-esc="company.state_id.name"/>-->
+                                    <!--                                            <br/>-->
+                                    <!--                                        </span>-->
+                                    <!--                                        <span t-if="company.zip">-->
+                                    <!--                                            <t t-esc="company.zip"/>-->
+                                    <!--                                            <br/>-->
+                                    <!--                                        </span>-->
+                                    <!--                                        <span t-if="company.country_id">-->
+                                    <!--                                            <t t-esc="company.country_id.name"/>-->
+                                    <!--                                            <br/>-->
+                                    <!--                                        </span>-->
+                                    <!--                                    </t>-->
+                                    <span>PO Box 31565</span>
+                                    <br/>
+                                    <span>Braamfontein</span>
+                                    <br/>
+                                    <span>2017</span>
+                                    <br/>
+                                </div>
+                                <div class="col-4 text-start">
+                                    <t t-if="company">
+                                        <span t-if="company.phone">Phone
+                                            <t t-esc="company.phone"/>
+                                            <br/>
+                                        </span>
+                                        <span t-if="company.mobile">Mobile
+                                            <t t-esc="company.mobile"/>
+                                            <br/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                        <a t-if="company.website" t-att-href="company.website" t-att-class="classes"
+                                           style="color:black;font-weight: bold;">
+                                            <t t-esc="company.website"/>
+                                        </a>
+                                    </t>
+                                    <!--                                    <span>Tel: +27(0) 10 219 9000</span><br/>-->
+                                    <!--                                    <span>Fax: +27(0) 10 219 9400</span><br/><br/><br/><br/><br/><br/>-->
+                                    <!--                                    <a t-attf-href="https://jhbproperty.co.za/" style="color:black;font-weight: bold;">www.jhbproperty.co.za</a>-->
+                                </div>
+                            </div>
+                            <!--                            <div class="mt-2 text-end">-->
+                            <!--                                <a t-if="company.website" t-att-href="company.website" t-att-class="classes">-->
+                            <!--                                    <t t-esc="company.website"/>-->
+                            <!--                                </a>-->
+                            <!--                            </div>-->
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="article o_report_layout_standard o_table_standard o_company_custom_layout o_snail_mail">
+                    <div class="page o_content_pdf">
+                        <!-- Date -->
+                        <p style="font-weight: bold; font-size: 20px; padding-top: 30px; margin-bottom: 10px;">
+                            <t t-esc="memo.date"/>
+                        </p>
+                        <br/>
+
+                        <!-- FROM and TO Block -->
+                        <div class="row" style="font-size: 20px;">
+                            <!-- FROM Column -->
+                            <div class="col-8">
+                                <span style="font-weight: bold;">FROM:</span>
+                                <div>
+                                    <span t-if="memo.requester_id.employee_id" style="font-weight: bold;">
+                                        <t t-esc="memo.requester_id.employee_id.name"/>
+                                        <br/>
+                                    </span>
+                                    <span t-if="memo.requester_id.employee_id and memo.requester_id.employee_id.department_id"
+                                          style="font-weight: bold;">
+                                        <t t-esc="memo.requester_id.employee_id.department_id.name"/>
+                                        :
+                                    </span>
+                                    <span t-if="memo.requester_id.employee_id and memo.requester_id.employee_id.job_id">
+                                        <t t-esc="memo.requester_id.employee_id.job_id.name"/>
+                                    </span>
+                                    <br/>
+                                    <a t-if="memo.requester_id.employee_id.work_email"
+                                       t-att-href="'mailto:' + memo.requester_id.employee_id.work_email"
+                                       style="color: #007bff; text-decoration: none;"
+                                       t-esc="memo.requester_id.employee_id.work_email"/>
+                                </div>
+                            </div>
+
+                            <!-- TO Column -->
+                            <div class="col-4">
+                                <span style="font-weight: bold;">TO:</span>
+                                <div>
+                                    <span t-if="memo.approver_id.employee_id" style="font-weight: bold;">
+                                        <t t-esc="memo.approver_id.employee_id.name"/>
+                                        <br/>
+                                    </span>
+                                    <span t-if="memo.approver_id.employee_id and memo.approver_id.employee_id.department_id"
+                                          style="font-weight: bold;">
+                                        <t t-esc="memo.approver_id.employee_id.department_id.name"/>
+                                        :
+                                    </span>
+                                    <span t-if="memo.approver_id.employee_id and memo.approver_id.employee_id.job_id">
+                                        <t t-esc="memo.approver_id.employee_id.job_id.name"/>
+                                    </span>
+                                    <br/>
+                                    <a t-if="memo.approver_id.employee_id.work_email"
+                                       t-att-href="'mailto:' + memo.approver_id.employee_id.work_email"
+                                       style="color: #007bff; text-decoration: none;"
+                                       t-esc="memo.approver_id.employee_id.work_email"/>
+                                </div>
+                            </div>
+                        </div>
+
+<!--                        <t t-if="memo.requester_id.employee_id and memo.requester_id.employee_id.parent_id">-->
+<!--                            <div class="col-8 pt-4" style="font-size: 20px;">-->
+<!--                                <p>-->
+<!--                                    <span t-if="memo.requester_id.employee_id.parent_id" style="font-weight: bold;">-->
+<!--                                        <t t-esc="memo.requester_id.employee_id.parent_id.name"/>-->
+<!--                                        <br/>-->
+<!--                                    </span>-->
+<!--                                    <span t-if="memo.requester_id.employee_id.parent_id and memo.requester_id.employee_id.parent_id.department_id"-->
+<!--                                          style="font-weight: bold;">-->
+<!--                                        <t t-esc="memo.requester_id.employee_id.parent_id.department_id.name"/>-->
+<!--                                        :-->
+<!--                                    </span>-->
+<!--                                    <span t-if="memo.requester_id.employee_id.parent_id and memo.requester_id.employee_id.parent_id.job_id">-->
+<!--                                        <t t-esc="memo.requester_id.employee_id.parent_id.job_id.name"/>-->
+<!--                                    </span>-->
+<!--                                    <br/>-->
+<!--                                    <a t-if="memo.requester_id.employee_id.parent_id.work_email"-->
+<!--                                       t-att-href="'mailto:' + memo.requester_id.employee_id.parent_id.work_email"-->
+<!--                                       style="color: #007bff; text-decoration: none;"-->
+<!--                                       t-esc="memo.requester_id.employee_id.parent_id.work_email"/>-->
+<!--                                </p>-->
+<!--                            </div>-->
+<!--                        </t>-->
+                        <br/>
+
+                        <!-- SUBJECT / REFERENCE -->
+                        <p style="font-weight: bold; margin-top: 20px; font-size: 20px;">
+                            REFERENCE:
+                            <span t-esc="memo.subject"/>
+                        </p>
+
+                        <!-- BODY -->
+                        <p style="margin-top: 10px; text-align: justify; font-size: 20px;">
+                            <span t-if="memo.purpose_body" t-esc="memo.purpose_body">
+                                <br/>
+                            </span>
+                            <span t-if="memo.background_body" t-esc="memo.background_body">
+                                <br/>
+                            </span>
+                            <span t-if="memo.motivation_body" t-esc="memo.motivation_body"/>
+                        </p>
+
+                        <br/>
+                        <t t-if="memo.is_financial">
+                            <h4 class="mb-3" style="text-align:left;">FINANCIAL IMPLICATIONS</h4>
+                        </t>
+                        <t t-if="memo.financial_sentence">
+                            <div id="memo_financial_sentence mt-2 mb-2" class="clearfix">
+                                <div class="justify-text">
+                                    <p name="financial_sentence" class="mb-2">
+                                        <span t-field="memo.financial_sentence"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </t>
+                        <br/>
+                        <t t-if="memo.is_financial">
+                            <table class="table table-borderless mt-2 mb-2">
+                                <tbody>
+                                    <tr t-if="memo.funds">
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>Funds:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.funds">
+                                                <span t-field="memo.funds"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="memo.responsibility">
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>Responsibility:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.responsibility">
+                                                <span t-field="memo.responsibility"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="memo.objective">
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>Objective:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.objective">
+                                                <span t-field="memo.objective"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="memo.item">
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>Item:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.item">
+                                                <span t-field="memo.item"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="memo.project">
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>Project:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.project">
+                                                <span t-field="memo.project"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="memo.asset">
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>Asset:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.asset">
+                                                <span t-field="memo.asset"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="memo.regional_identifier">
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>Regional Identifier:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.regional_identifier">
+                                                <span t-field="memo.regional_identifier"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="memo.amount_paid">
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>Amount Paid:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.amount_paid">
+                                                <span t-field="memo.amount_paid"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="memo.service_provider">
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>Service Provider:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.service_provider">
+                                                <span t-field="memo.service_provider"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="memo.infrastructure">
+                                        <td style="text-align:left;width:40%;">
+                                            <strong>
+                                                <span>Infrastructure:</span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:left;width:60%;">
+                                            <t t-if="memo.infrastructure">
+                                                <span t-field="memo.infrastructure"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+                        </t>
+                        <br/>
+                        <h6 class="mb-3" style="text-align:left;">Requesting Officer:</h6>
+                        <table class="table table-borderless" style="align:center;width:100%;">
+                            <span t-if="memo.requester_sign">
+                                <tr>
+                                    <td style="font-size:130%;width:45%;text-align:left;">
+                                        <t t-if="memo.requester_sign">
+                                            <img t-att-src="image_data_uri(memo.requester_sign)"
+                                                 style="width:300px;height:70px;"/>
+                                        </t>
+                                        <hr size="2" width="50%" color="black"
+                                            style="margin-bottom: 0rem;"/>
+                                        <span>
+                                            <span t-field="memo.requester_id.name"></span>
+                                            <br/>
+                                            <span t-field="memo.requester_id.employee_id.sudo().department_id.name"></span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </span>
+                        </table>
+                        <br/>
+                        <t t-if="memo.recommendation">
+                            <div id="recommendation mt-2 mb-2" class="clearfix">
+                                <div class="justify-text">
+                                    <p name="recommendation" class="mb-2">
+                                        <span t-field="memo.recommendation"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </t>
+                        <br/>
+                        <table class="table table-borderless"
+                               style="font-size: 18px; align:center;width:100%; page-break-inside: avoid;">
+                            <t t-foreach="memo.recommender_ids" t-as="recommender">
+                                <t t-if="recommender.status == 'Recommended'">
+                                    <tr>
+                                        <td>
+                                            <strong>Recommended : Yes</strong>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-else="">
+                                    <tr>
+                                        <td>
+                                            <strong>Recommended : No</strong>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <t t-if="recommender.sign_initials">
+                                    <tr>
+                                        <td style="font-size:18px;width: 60%; vertical-align: top; border-bottom: 1px solid black;">
+                                            <img t-att-src="image_data_uri(recommender.sign_initials)"
+                                                 style="width:300px;height:50px;"/>
+                                        </td>
+                                        <td style="font-size:18px;width: 20%; vertical-align: top;">
+                                        </td>
+                                        <td style="font-size:18px;width: 10%; text-align: right; vertical-align: bottom;">
+                                            <p>
+                                                <div style="width:400px;height:20px;">
+                                                    <strong>Date:</strong>
+                                                </div>
+                                            </p>
+                                        </td>
+                                        <td style="font-size:18px;width: 10%; text-align: left; vertical-align: bottom; border-bottom: 1px solid black;">
+                                            <p>
+                                                <div style="width:200px;height:20px;">
+                                                    <!--                                                    <span t-field="recommender.date"></span>-->
+                                                    <span t-out="recommender.date.strftime('%d - %m - %Y') if recommender.date else ''"/>
+                                                </div>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size:18px;width: 60%; vertical-align: top;">
+                                            <span>
+                                                <span t-field="recommender.user_id.name"></span>
+                                                <br/>
+                                                <span t-if="recommender.user_id.employee_id and recommender.user_id.employee_id.job_id">
+                                                    <t t-esc="recommender.user_id.employee_id.department_id.name"/>
+                                                    :
+                                                </span>
+                                                <span t-if="recommender.user_id.employee_id and recommender.user_id.employee_id.department_id">
+                                                    <t t-esc="recommender.user_id.employee_id.job_id.name"/>
+                                                </span>
+                                            </span>
+                                        </td>
+                                        <td style="font-size:18px;width: 20%; vertical-align: top;">
+                                        </td>
+                                        <td style="font-size:18px;width: 10%; text-align: right; vertical-align: top;">
+                                        </td>
+                                        <td style="font-size:18px;width: 10%; text-align: right; vertical-align: top;">
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </table>
+                        <!--                        <t t-if="memo.state in ['approved']">-->
+                        <!--                            <strong class="mb-3" style="font-size: 18px; text-align:left;">Approved : Yes</strong>-->
+                        <!--                        </t>-->
+                        <!--                        <t t-else="">-->
+                        <!--                            <strong class="mb-3" style=" font-size: 18px;text-align:left;">Approved : No</strong>-->
+                        <!--                        </t>-->
+                        <table class="table table-borderless"
+                               style="font-size: 18px; align:center;width:100%; page-break-inside: avoid;">
+                            <t t-if="memo.state in ['approved']">
+                                <tr>
+                                    <td>
+                                        <strong class="mb-3" style="font-size: 18px; text-align:left;">Approved : Yes
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-else="">
+                                <tr>
+                                    <td>
+                                        <strong class="mb-3" style=" font-size: 18px;text-align:left;">Approved : No
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </t>
+                            <span t-if="memo.approver_sign">
+                                <!--                                <tr>-->
+                                <!--                                    <td style="font-size:18px;width:45%;text-align:left;">-->
+                                <!--                                        <t t-if="memo.approver_sign">-->
+                                <!--                                            <img t-att-src="image_data_uri(memo.approver_sign)"-->
+                                <!--                                                 style="width:300px;height:70px;"/>-->
+                                <!--                                        </t>-->
+                                <!--                                        <hr size="2" width="50%" color="black"-->
+                                <!--                                            style="margin-bottom: 0rem;"/>-->
+                                <!--                                        <span>-->
+                                <!--                                            <span t-field="memo.approver_id.name"></span>-->
+                                <!--                                            <br/>-->
+                                <!--                                            <span t-if="memo.approver_id.employee_id and memo.approver_id.employee_id.job_id">-->
+                                <!--                                                <t t-esc="memo.approver_id.employee_id.department_id.name"/>-->
+                                <!--                                                :-->
+                                <!--                                            </span>-->
+                                <!--                                            <span t-if="memo.approver_id.employee_id and memo.approver_id.employee_id.department_id">-->
+                                <!--                                                <t t-esc="memo.approver_id.employee_id.job_id.name"/>-->
+                                <!--                                            </span>-->
+                                <!--                                            &lt;!&ndash;                                            <span t-field="memo.approver_id.employee_id.department_id.name"></span>&ndash;&gt;-->
+                                <!--                                        </span>-->
+                                <!--                                    </td>-->
+                                <!--                                </tr>-->
+                                <tr>
+                                    <td style="font-size:18px;width:60%;text-align:left; border-bottom: 1px solid black;">
+                                        <t t-if="memo.approver_sign">
+                                            <img t-att-src="image_data_uri(memo.approver_sign)"
+                                                 style="width:300px;height:70px;"/>
+                                        </t>
+                                    </td>
+                                    <td style="font-size:18px;width: 20%; vertical-align: top;">
+                                    </td>
+                                    <td style="font-size:18px;width: 10%; text-align: right; vertical-align: bottom; ">
+                                        <p>
+                                            <div style="width:400px;height:20px;">
+                                                <strong>Date:</strong>
+                                            </div>
+                                        </p>
+                                    </td>
+                                    <td style="font-size:18px;width: 10%; text-align: left; vertical-align: bottom; border-bottom: 1px solid black;">
+                                        <p>
+                                            <div style="width:200px;height:20px;">
+                                                <!--                                                <span t-field="memo.approve_date"></span>-->
+                                                <span t-out="memo.approve_date.strftime('%d - %m - %Y') if memo.approve_date else ''"/>
+                                            </div>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size:18px;width: 60%; vertical-align: top;">
+                                        <span>
+                                            <span t-field="memo.approver_id.name"></span>
+                                            <br/>
+                                            <span t-if="memo.approver_id.employee_id and memo.approver_id.employee_id.job_id">
+                                                <t t-esc="memo.approver_id.employee_id.department_id.name"/>
+                                                :
+                                            </span>
+                                            <span t-if="memo.approver_id.employee_id and memo.approver_id.employee_id.department_id">
+                                                <t t-esc="memo.approver_id.employee_id.job_id.name"/>
+                                            </span>
+                                            <!--                                            <span t-field="memo.approver_id.employee_id.department_id.name"></span>-->
+                                        </span>
+                                    </td>
+                                    <td style="font-size:18px;width: 20%; vertical-align: top;">
+                                    </td>
+                                    <td style="font-size:18px;width: 10%; text-align: right; vertical-align: top;">
+                                    </td>
+                                    <td style="font-size:18px;width: 10%; text-align: right; vertical-align: top;">
+                                    </td>
+                                </tr>
+                            </span>
+                        </table>
+                    </div>
+                </div>
+                <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+                    <!--                    <div style="border-top: 1px solid black;">-->
+                    <div class="row">
+                        <!-- Left: Logo -->
+                        <div class="col-5 d-flex">
+                            <img t-att-src="image_data_uri(company.footer_image)" alt="Logo"
+                                 style="max-height:120px;max-width:90%"/>
+                            <!--                                 style="height: 70%; width: 40%;"/>-->
+                        </div>
+
+                        <!-- Right: Company Info -->
+                        <div class="col-7" style="text-align: left;font-size: 12px;">
+                            <t t-if="company">
+                                <div>
+                                    <span>Non-Executive Directors :
+                                        <t t-if="company.non_executive_director_1">
+                                            <t t-esc="company.non_executive_director_1.name"/>
+                                            <t t-if="company.non_executive_director_1.department_id">
+                                                (<t t-esc="company.non_executive_director_1.department_id.name"/>),
+                                            </t>
+                                        </t>
+                                    </span>
+                                </div>
+                                <div>
+                                    <span>
+                                        <t t-if="company.non_executive_director_2">
+                                            <t t-esc="company.non_executive_director_2.name"/>,
+                                        </t>
+                                    </span>
+                                    <span>
+                                        <t t-if="company.non_executive_director_3">|
+                                            <t t-esc="company.non_executive_director_3.name"/>,
+                                        </t>
+                                    </span>
+                                    <span>
+                                        <t t-if="company.non_executive_director_4">|
+                                            <t t-esc="company.non_executive_director_4.name"/>,
+                                        </t>
+                                    </span>
+                                    <span>
+                                        <t t-if="company.non_executive_director_5">|
+                                            <t t-esc="company.non_executive_director_5.name"/>,
+                                        </t>
+                                    </span>
+                                    <span>
+                                        <t t-if="company.non_executive_director_6">|
+                                            <t t-esc="company.non_executive_director_6.name"/>,
+                                        </t>
+                                    </span>
+                                    <span>
+                                        <t t-if="company.non_executive_director_7">|
+                                            <t t-esc="company.non_executive_director_7.name"/>,
+                                        </t>
+                                    </span>
+                                    <span>
+                                        <t t-if="company.non_executive_director_8">|
+                                            <t t-esc="company.non_executive_director_8.name"/>,
+                                        </t>
+                                    </span>
+                                    <span>
+                                        <t t-if="company.non_executive_director_9">|
+                                            <t t-esc="company.non_executive_director_9.name"/>,
+                                        </t>
+                                    </span>
+                                    <span>
+                                        <t t-if="company.non_executive_director_10">|
+                                            <t t-esc="company.non_executive_director_10.name"/>,
+                                        </t>
+                                    </span>
+                                    <span>
+                                        <t t-if="company.non_executive_director_11">|
+                                            <t t-esc="company.non_executive_director_11.name"/>,
+                                        </t>
+                                    </span>
+                                </div>
+                                <br/>
+                                <div>
+                                    <span>Executive Directors :
+                                        <t t-if="company.executive_director_1">
+                                            <t t-esc="company.executive_director_1.name"/>
+                                            <t t-if="company.executive_director_1.department_id">
+                                                (<t t-esc="company.executive_director_1.department_id.name"/>),
+                                            </t>
+                                        </t>
+                                        <t t-if="company.executive_director_2">
+                                            |
+                                            <t t-esc="company.executive_director_2.name"/>
+                                            <t t-if="company.executive_director_2.department_id">
+                                                (<t t-esc="company.executive_director_2.department_id.name"/>),
+                                            </t>
+                                        </t>
+                                    </span>
+                                </div>
+                                <br/>
+                                <div>
+                                    <span>Company Secretary :
+                                        <t t-if="company.company_secretory">
+                                            <t t-esc="company.company_secretory.name"/>
+                                            <t t-if="company.company_secretory.department_id">
+                                                (<t t-esc="company.company_secretory.department_id.name"/>),
+                                            </t>
+                                        </t>
+                                    </span>
+                                </div>
+                                <div>
+                                    <span>
+                                        <t t-esc="company.name"/>
+                                    </span>
+                                </div>
+                                <div style="margin: 0;">
+                                    <span>Company Registration Number:
+                                        <t t-if="company.company_registration_number">
+                                            <t t-esc="company.company_registration_number"/>
+                                        </t>
+                                    </span>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                    <!--                    </div>-->
+                </div>
+                <!--                <div class="footer o_company_custom_layout">-->
+                <!--                    <div class="o_footer_content d-flex border-top pt-2">-->
+                <!--                        &lt;!&ndash;                        <div class="flex-grow-1 text-start me-2" t-field="company.report_footer"/>&ndash;&gt;-->
+                <!--                        <div class="row">-->
+                <!--                            &lt;!&ndash; Left: Logo &ndash;&gt;-->
+                <!--                            <div class="col-4 d-flex">-->
+                <!--                                <img t-att-src="image_data_uri(company.footer_image)" alt="Logo"-->
+                <!--                                     style="max-height:85px;max-width:90%"/>-->
+                <!--                                &lt;!&ndash;                                 style="height: 70%; width: 40%;"/>&ndash;&gt;-->
+                <!--                            </div>-->
+
+                <!--                            &lt;!&ndash; Right: Company Info &ndash;&gt;-->
+                <!--                            <div class="col-8" style="text-align: left;">-->
+                <!--                                <div>Non-Executive Directors: Simon Motha (Chairperson),</div>-->
+                <!--                                <div>Bettycourt Teffo | Fufuleho Ratshikovha | Sandy Colopen | Mxolisi Zondo |</div>-->
+                <!--                                <div>Ntombikayise Tini | Thapelo Mashamaite | Tshepang Thaitelo | Yolisa Ngqabazi |-->
+                <!--                                    Moketsetsi Rabodila-->
+                <!--                                </div>-->
+                <!--                                <br/>-->
+                <!--                                <div>Executive Directors: Musah Makhunga (Acting Chief Executive Officer)</div>-->
+                <!--                                <div>Mfanafuthi Zondo (Acting Chief Financial Officer)</div>-->
+                <!--                                <br/>-->
+                <!--                                <div>Company Secretary: Gontse Dlamini</div>-->
+                <!--                                <div>City of Joburg Property Company SOC Ltd.</div>-->
+                <!--                                <div>Registration Number: 2000/017147/07</div>-->
+                <!--                            </div>-->
+                <!--                            &lt;!&ndash;                            <div class="col-8">&ndash;&gt;-->
+                <!--                            &lt;!&ndash;                                <div class="row">&ndash;&gt;-->
+                <!--                            &lt;!&ndash;                                    <div class="col-3" style="font-size: 10px;">&ndash;&gt;-->
+                <!--                            &lt;!&ndash;                                    </div>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;                                    <div class="col-9" style="font-size: 10px;">&ndash;&gt;-->
+                <!--                            &lt;!&ndash;                                        <t t-if="company">&ndash;&gt;-->
+                <!--                            &lt;!&ndash;                                            <span>Non-Executive Directors :&ndash;&gt;-->
+                <!--                                                                                            <t t-if="company.non_executive_director_1">-->
+                <!--                                                                                                <t t-esc="company.non_executive_director_1.name"/>-->
+                <!--                                                                                            </t>-->
+                <!--                            &lt;!&ndash;                                                <br/>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;                                            </span>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;                                        </t>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;                                    </div>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;                                </div>&ndash;&gt;-->
+                <!--                            &lt;!&ndash;                            </div>&ndash;&gt;-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Sequence for Intake Requests -->
+    <record id="seq_pm_intake" model="ir.sequence">
+        <field name="name">Project Intake</field>
+        <field name="code">pm.intake</field>
+        <field name="prefix">REQ-</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Action -->
+    <record id="action_pm_intake" model="ir.actions.act_window">
+        <field name="name">Project Intakes</field>
+        <field name="res_model">pm.intake</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Submit your first intake request
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_pm_intake"
+              name="PM Intake" sequence="3"
+              parent="menu_portfolio_root"
+              action="action_pm_intake"/>
+
+    <!-- Kanban View -->
+    <record id="view_pm_intake_kanban" model="ir.ui.view">
+        <field name="name">pm.intake.kanban</field>
+        <field name="model">pm.intake</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column" default_group_by="state">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_kanban_record">
+                            <field name="name" class="fw-bold"/>
+                            <div>
+                                <span>Requester:</span>
+                                <field name="requester_id"/>
+                            </div>
+                            <div>
+                                <span>Dept:</span>
+                                <field name="dept_id"/>
+                            </div>
+                            <div>
+                                <span>Budget:</span>
+                                <field name="requested_budget"/>
+                            </div>
+                            <div>
+                                <span>Status:</span>
+                                <field name="state"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- list View -->
+    <record id="view_pm_intake_list" model="ir.ui.view">
+        <field name="name">pm.intake.list</field>
+        <field name="model">pm.intake</field>
+        <field name="arch" type="xml">
+            <list string="Intake Requests">
+                <field name="name"/>
+                <field name="requester_id"/>
+                <field name="dept_id"/>
+                <field name="requested_budget"/>
+                <field name="estimated_effort_days"/>
+                <field name="state"/>
+                <field name="project_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_pm_intake_form" model="ir.ui.view">
+        <field name="name">pm.intake.form</field>
+        <field name="model">pm.intake</field>
+        <field name="arch" type="xml">
+            <form string="Project Intake">
+                <header>
+                    <button name="action_submit" type="object" string="Submit"
+                            invisible="state != 'draft'"/>
+                    <button name="action_pmo_review" type="object"
+                            string="Send to PMO"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_business_review" type="object"
+                            string="Business Review"
+                            invisible="state != 'pmo_review'"/>
+                    <button name="action_approve" type="object" string="Approve"
+                            invisible="state != 'business_review'"/>
+                    <button name="action_reject" type="object" string="Reject"
+                            invisible="state not in ['pmo_review', 'business_review']"/>
+                    <button name="action_convert_to_project" type="object"
+                            string="Convert to Project"
+                            invisible="state != 'approved'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="submitted,pmo_review,business_review,approved,rejected,converted"/>
+                </header>
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="requester_id"/>
+                            <field name="requester_name" />
+                            <field name="requester_email" />
+                            <field name="dept_id"/>
+                        </group>
+                        <group>
+                            <field name="requested_budget"/>
+                            <field name="estimated_effort_days"/>
+<!--                            <field name="approvals_request_id"/>-->
+                            <field name="project_id" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Summary">
+                            <field name="summary"/>
+                        </page>
+                        <page string="Attachments">
+                            <field name="attachments" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_pm_intake_search" model="ir.ui.view">
+        <field name="name">pm.intake.search</field>
+        <field name="model">pm.intake</field>
+        <field name="arch" type="xml">
+            <search string="Search Intake Requests">
+                <field name="name"/>
+                <field name="requester_id"/>
+                <field name="dept_id"/>
+                <field name="state"/>
+                <filter string="Pending Review" name="filter_pending"
+                        domain="[('state','in',('submitted','pmo_review','business_review'))]"/>
+                <filter string="Approved" name="filter_approved"
+                        domain="[('state','=','approved')]"/>
+                <filter string="Converted" name="filter_converted"
+                        domain="[('state','=','converted')]"/>
+            </search>
+        </field>
+    </record>
+
+</odoo>

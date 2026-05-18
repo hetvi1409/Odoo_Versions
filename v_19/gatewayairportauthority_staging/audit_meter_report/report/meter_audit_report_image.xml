@@ -1,0 +1,256 @@
+<odoo>
+    <!-- Define the report action -->
+    <record id="action_report_partner_custom" model="ir.actions.report">
+        <field name="name">Audited Report</field>
+        <field name="model">res.partner</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">audit_meter_report.report_partner_custom_document</field>
+        <field name="binding_model_id" ref="base.model_res_partner"/> <!-- Correct reference -->
+        <field name="print_report_name">'Audit_Report_' + str(object.id)</field>
+        <field name="multi">False</field>
+    </record>
+
+    <record id="action_download_pdfs" model="ir.actions.server">
+        <field name="name">Download Separate PDFs</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.action_download_pdfs()
+        </field>
+    </record>
+
+    <!-- Define the report template -->
+    <template id="report_partner_custom_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <style>
+                    .page {
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                    }
+                    h2 {
+                    text-align: center;
+                    margin-bottom: 20px;
+                    }
+                    .row {
+                    width: 100%;
+                    display: flex;
+                    }
+                    .column {
+                    width: 50%;
+                    padding: 10px;
+                    }
+                    .photo-section {
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin-top: 20px;
+                    }
+                    .photo-item img {
+                    display: block;
+                    margin-bottom: 5px;
+                    }
+                    p {
+                    margin: 8px 0;
+                    }
+                    .photo-item {
+                    width: 50%;
+                    text-align: center;
+                    padding: 10px;
+                    }
+                    .page-break {
+                    page-break-before: always;
+                    }
+                </style>
+
+                <div class="page">
+                    <t t-foreach="docs" t-as="partner">
+                         <h2>Audited Report</h2>
+                        <!-- Start of Audit Data -->
+                        <div class="row">
+                            <!-- First column for general audit and meter information -->
+                            <div class="column">
+                                <p>
+                                    <strong>Name:</strong>
+                                    <span t-field="partner.name"/>
+                                </p>
+                                <p>
+                                    <strong>Email:</strong>
+                                    <span t-field="partner.email"/>
+                                </p>
+                                <p>
+                                    <strong>Phone:</strong>
+                                    <span t-field="partner.phone"/>
+                                </p>
+                                <p>
+                                    <strong>Address:</strong>
+                                    <span t-field="partner.street"/>
+                                </p>
+                                <p>
+                                    <strong>Audit Date:</strong>
+                                    <span t-field="partner.audit_date"/>
+                                </p>
+                                <!--                                <p><strong>SG Label:</strong> <span t-field="partner.sg_label"/></p>-->
+                                <!--                                <p><strong>TwentyOne Key:</strong> <span t-field="partner.twentyone_key"/></p>-->
+                                <p>
+                                    <strong>Center Latitude:</strong>
+                                    <span t-field="partner.partner_latitude"/>
+                                </p>
+                                <p>
+                                    <strong>Center Longitude:</strong>
+                                    <span t-field="partner.partner_longitude"/>
+                                </p>
+                                <!--                                <p><strong>Can Audit:</strong> <span t-field="partner.can_audit" t-options='{"widget": "boolean"}'/></p>-->
+                                <!--                                <p><strong>Can Audit Remark:</strong> <span t-field="partner.can_audit_remark"/></p>-->
+                                <!--                                <p><strong>Suspected Tamper:</strong> <span t-field="partner.suspected_tamper" t-options='{"widget": "boolean"}'/></p>-->
+                                <!--                                <p><strong>Suspected Tamper Reason:</strong> <span t-field="partner.suspected_tamper_reason"/></p>-->
+                                <p>
+                                    <strong>Owner Name:</strong>
+                                    <span t-field="partner.x_studio_name_of_property_owneroccupant"/>
+                                </p>
+                                <p>
+                                    <strong>Owner Surname:</strong>
+                                    <span t-field="partner.owner_surname"/>
+                                </p>
+                                <p>
+                                    <strong>Owner ID Number:</strong>
+                                    <span t-field="partner.x_studio_identification_no_of_property_owner"/>
+                                </p>
+                                <p>
+                                    <strong>Owner Contact Number:</strong>
+                                    <span t-field="partner.mobile"/>
+                                </p>
+                                <p>
+                                    <strong>Owner Email:</strong>
+                                    <span t-field="partner.email"/>
+                                </p>
+                                <p>
+                                    <strong>Owner Account Number:</strong>
+                                    <span t-field="partner.owner_account_number"/>
+                                </p>
+                            </div>
+
+                            <!-- Second column for meter, address, and other information -->
+                            <div class="column">
+                                <!--                                <p><strong>Dwelling Type:</strong> <span t-field="partner.dwelling_type"/></p>-->
+                                <!--                                <p><strong>Meter Position:</strong> <span t-field="partner.meter_position"/></p>-->
+                                <!--                                <p><strong>Meter Type:</strong> <span t-field="partner.meter_type"/></p>-->
+                                <p>
+                                    <strong>Unique Identification Number:</strong>
+                                    <span t-field="partner.id"/>
+                                </p>
+                                <p>
+                                    <strong>Meter Number:</strong>
+                                    <span t-field="partner.x_studio_meter_number"/>
+                                </p>
+                                <p>
+                                    <strong>Meter Reading:</strong>
+                                    <span t-field="partner.x_studio_meter_readings"/>
+                                </p>
+                                <!--                                <p><strong>Meter Phases:</strong> <span t-field="partner.meter_phases"/></p>-->
+                                <p>
+                                    <strong>Meter Condition:</strong>
+                                    <span t-field="partner.x_studio_meter_condition"/>
+                                </p>
+                                <p>
+                                    <strong>Meter Sealed:</strong>
+                                    <span t-field="partner.meter_sealed" t-options='{"widget": "boolean"}'/>
+                                </p>
+                                <!--                                <p><strong>Meter Cover Sealed:</strong> <span t-field="partner.meter_cover_sealed"/></p>-->
+                                <!--                                <p><strong>CT/Ratio:</strong> <span t-field="partner.ct_ratio"/></p>-->
+                                <!--                                <p><strong>Breaker Size:</strong> <span t-field="partner.breaker_size"/></p>-->
+                                <!--                                <p><strong>Remarks:</strong> <span t-field="partner.remarks"/></p>-->
+                                <p>
+                                    <strong>Street Number:</strong>
+                                    <span t-field="partner.street"/>
+                                </p>
+                                <p>
+                                    <strong>Street Name:</strong>
+                                    <span t-field="partner.street2"/>
+                                </p>
+                                <!--                                <p><strong>Suburb:</strong> <span t-field="partner.suburb"/></p>-->
+                                <p>
+                                    <strong>Town:</strong>
+                                    <span t-field="partner.city"/>
+                                </p>
+                                <!--                                <p><strong>Country:</strong> <span t-field="partner.country"/></p>-->
+                                <p>
+                                    <strong>Postal Code:</strong>
+                                    <span t-field="partner.zip"/>
+                                </p>
+                                <p>
+                                    <strong>Property Type:</strong>
+                                    <t t-if="partner.x_studio_category">
+                                        <span t-field="partner.x_studio_category.x_name"/>
+
+                                    </t>
+                                    <t t-else="">
+                                        <span>N/A</span>
+                                    </t>
+                                </p>
+
+                            </div>
+                        </div>
+
+                        <!-- Photo Section -->
+                        <div class="row">
+                            <div class="column">
+                                <div class="photo-item">
+                                    <p>
+                                        <strong>Property Photo:</strong>
+                                    </p>
+                                    <span t-if="partner.x_studio_property_image"
+                                          t-field="partner.x_studio_property_image" t-options='{"widget": "image", "size": [200, 200]}'/>
+                                    <span t-if="not partner.x_studio_property_image">N/A</span>
+                                </div>
+
+                                <!--                            <div class="photo-item">-->
+                                <!--                                <p><strong>Renewable Photo:</strong></p>-->
+                                <!--                                <span t-if="partner.renewable_photo" t-field="partner.renewable_photo" t-options='{"widget": "image"}'/>-->
+                                <!--                                <span t-if="not partner.renewable_photo">N/A</span>-->
+                                <!--                            </div>-->
+
+                                <!--                            <div class="photo-item">-->
+                                <!--                                <p><strong>Meter Seals Photo:</strong></p>-->
+                                <!--                                <span t-if="partner.meter_seals_photo" t-field="partner.meter_seals_photo" t-options='{"widget": "image"}'/>-->
+                                <!--                                <span t-if="not partner.meter_seals_photo">N/A</span>-->
+                                <!--                            </div>-->
+
+                                <!--                            <div class="photo-item">-->
+                                <!--                                <p><strong>Meter Box Inside Photo:</strong></p>-->
+                                <!--                                <span t-if="partner.meter_box_inside_photo" t-field="partner.meter_box_inside_photo" t-options='{"widget": "image"}'/>-->
+                                <!--                                <span t-if="not partner.meter_box_inside_photo">N/A</span>-->
+                                <!--                            </div>-->
+                            </div>
+                            <div class="column">
+                                <div class="photo-item">
+                                    <p>
+                                        <strong>Meter Photo:</strong>
+                                    </p>
+                                    <span t-if="partner.x_studio_meter_image" t-field="partner.x_studio_meter_image"
+                                          t-options='{"widget": "image", "size": [200, 200]}'/>
+                                    <span t-if="not partner.x_studio_meter_image">N/A</span>
+                                </div>
+
+                                <!--                            <div class="photo-item">-->
+                                <!--                                <p><strong>Suspected Tamper Photo:</strong></p>-->
+                                <!--                                <span t-if="partner.suspected_tamper_photo" t-field="partner.suspected_tamper_photo" t-options='{"widget": "image"}'/>-->
+                                <!--                                <span t-if="not partner.suspected_tamper_photo">N/A</span>-->
+                                <!--                            </div>-->
+
+                                <!--                            <div class="photo-item">-->
+                                <!--                                <p><strong>Dwelling Photo:</strong></p>-->
+                                <!--                                <span t-if="partner.dwelling_photo" t-field="partner.dwelling_photo" t-options='{"widget": "image"}'/>-->
+                                <!--                                <span t-if="not partner.dwelling_photo">N/A</span>-->
+                                <!--                            </div>-->
+                            </div>
+                        </div>
+                        <t t-if="partner != docs[-1]">
+                        <div class="page-break"></div>
+                    </t>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

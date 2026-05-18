@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="action_lega_dashboard" model="ir.actions.client">
+            <field name="name">Dashboard</field>
+            <field name="tag">legal_dashboard</field>
+        </record>
+
+        <!--   Law Menu    -->
+        <menuitem id="law_menu_root_bits" name="Legal" groups="law_firm_bits.group_law_firm_lawyer_assistant_bits"
+                  web_icon="law_firm_bits,static/description/icon.png"/>
+
+        <!--   Dashboard -->
+
+        <menuitem name="Dashboard" id="law_menu_dashboard" parent="law_menu_root_bits"
+                  action="action_lega_dashboard" sequence="1" active="False"/>
+
+        <!--   Case & Matter -->
+        <menuitem name="Case / Matter" id="law_menu_case_matter_top" parent="law_menu_root_bits" sequence="6"/>
+
+        <menuitem id="law_menu_matter" name="Case Matter" parent="law_menu_case_matter_top"
+                  action="law_firm_bits.action_view_all_matters" sequence="10"/>
+
+        <menuitem id="law_menu_case" name="Court Case" parent="law_menu_case_matter_top"
+                  action="law_firm_bits.action_view_all_cases" sequence="10"/>
+
+        <!--   Client   -->
+        <menuitem id="law_menu_client" name="Clients" parent="law_menu_root_bits"
+                  action="law_firm_bits.action_legal_res_partner_clients" sequence="10"/>
+
+        <!--   Lawyers   -->
+        <menuitem id="law_menu_court_lawyers" name="Lawyers" parent="law_menu_root_bits"
+                  sequence="11" action="open_view_lawyers"/>
+
+        <!--   Trust Funds   -->
+        <menuitem id="law_menu_trust_fund" name="Trust Funds" parent="law_menu_root_bits"
+                  action="law_firm_bits.law_trust_account_act_action" sequence="10"/>
+
+        <!--   Configuration   -->
+        <menuitem id="law_menu_configuration" name="Configuration" parent="law_menu_root_bits"
+                  groups="law_firm_bits.group_law_firm_lawyer_bits" sequence="100"/>
+
+        <menuitem id="law_menu_court" name="Court" parent="law_menu_configuration"
+                  sequence="5" action="law_court_act_action"/>
+
+        <menuitem id="law_menu_court_judge" name="Judge" parent="law_menu_configuration"
+                  sequence="10" action="law_court_judge_act_action"/>
+
+        <menuitem id="law_menu_crime_type" name="Crime Type" parent="law_menu_configuration"
+                  sequence="10" action="law_crime_type_act_action"/>
+
+        <menuitem id="law_menu_law_default_task" name="Default Task" parent="law_menu_configuration"
+                  sequence="15" action="law_task_act_action"/>
+
+        <menuitem id="law_menu_law_task_list" name="Task List" parent="law_menu_configuration"
+                  sequence="20" action="law_task_list_act_action"/>
+
+
+        <!--   Consultation     -->
+        <menuitem id="consultation_menu_root_bits" name="Consultation"
+                  web_icon="law_firm_bits,static/description/icon_2.png"
+                  groups="law_firm_bits.group_law_firm_lawyer_assistant_bits"/>
+
+        <menuitem id="consultation_calendar_sub_menu_root_bits" name="Calendar"
+                  parent="law_firm_bits.consultation_menu_root_bits" sequence="10"
+                  action="law_firm_bits.action_calendar_event_domain"/>
+
+        <menuitem id="consultation_sub_menu_root_bits" name="Consultation"
+                  parent="law_firm_bits.consultation_menu_root_bits"
+                  action="action_consultation_calendar_event" sequence="16"
+                  groups="law_firm_bits.group_law_firm_lawyer_assistant_bits"/>
+
+        <record id="helpdesk_team_dashboard_action_main_legal" model="ir.actions.act_window">
+            <field name="name">Legal Overview</field>
+            <field name="res_model">helpdesk.team</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="context">{}</field>
+            <field name="view_id" ref="helpdesk.helpdesk_team_view_kanban"/>
+            <field name="domain">[('is_legal_team', '=', True)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No teams found
+                </p>
+                <p>
+                    Create teams to organize your tickets by expertise or geographical region, and define a different
+                    workflow for each team.
+                </p>
+            </field>
+        </record>
+        <record id="helpdesk.helpdesk_team_dashboard_action_main" model="ir.actions.act_window">
+            <field name="name">Helpdesk Overview</field>
+            <field name="res_model">helpdesk.team</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[('is_legal_team','=', False)]</field>
+            <field name="view_id" ref="helpdesk.helpdesk_team_view_kanban"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No teams found
+                </p>
+                <p>
+                    Create teams to organize your tickets by expertise or geographical region, and define a different
+                    workflow for each team.
+                </p>
+            </field>
+        </record>
+        <menuitem name="Legal Dashboard" id="law_menu_legal_dashboard" parent="law_menu_root_bits"
+                  action="law_firm_bits.helpdesk_team_dashboard_action_main_legal" sequence="0"/>
+        <menuitem name="Matters" id="legal_menu_matters" parent="law_menu_root_bits" sequence="4"/>
+        <menuitem name="My Matters" id="legal_menu_my_matters" parent="legal_menu_matters"
+                  action="law_firm_bits.case_matter_action_main_my" sequence="0"/>
+        <menuitem name="All Matters" id="legal_menu_all_matters" parent="legal_menu_matters"
+                  action="law_firm_bits.case_matter_action_main_tree" sequence="1"/>
+
+    </data>
+
+</odoo>

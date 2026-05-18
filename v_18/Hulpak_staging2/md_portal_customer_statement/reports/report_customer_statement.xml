@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="md_report_partnerledger">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-set="data_report_margin_top" t-value="12" />
+                <t t-set="data_report_header_spacing" t-value="9" />
+                <t t-set="data_report_dpi" t-value="110" />
+                <div class="page">
+                    <h1>Statement</h1>
+                    <div class="row mb-4" id="informations">
+                        <div t-if="partner.name" class="col" name="informations_partner">
+                            <strong>Customer:</strong>
+                            <div t-esc="partner.name"></div>
+                        </div>
+                        <div class="col" name="informations_date">
+                        </div>
+                        <div t-if="data['form']['date_from']" class="col" name="expiration_date">
+                            <strong>Date from :</strong>
+                            <div t-esc="data['form']['date_from']"></div>
+                        </div>
+                        <div t-if="data['form']['date_from']" class="col" name="expiration_date">
+                            <strong>Date to :</strong>
+                            <div t-esc="data['form']['date_to']"></div>
+                        </div>
+                    </div>
+                    <table class="table table-sm table-reports">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Date</th>
+                                <th>Journal</th>
+                                <th class="text-end">Amount<br/>(Debit)</th>
+                                <th class="text-end">Amount<br/>(Credit)</th>
+                                <th class="text-end">Balance</th>
+                                <th t-if="data['form']['amount_currency']">Currency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong><span>Initial Balance</span></strong>
+                                </td>
+                                <td>
+                                    <span />
+                                </td>
+                                <td>
+                                    <span />
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="initial_balance['debit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="initial_balance['credit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="initial_balance['balance']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                </td>
+                                <td class="text-end" t-if="data['form']['amount_currency']">
+                                    <t t-if="line['currency_id']">
+                                        <span t-esc="line['amount_currency']" t-options="{'widget': 'monetary', 'display_currency': line['currency_id']}" />
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr t-foreach="lines" t-as="line">
+                                <td>
+                                    <span t-esc="line['displayed_name']" />
+                                </td>
+                                <td>
+                                    <span t-esc="line['date']" />
+                                </td>
+                                <td>
+                                    <span t-esc="line['code']" />
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="line['debit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="line['credit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="line['progress']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                </td>
+                                <td class="text-end" t-if="data['form']['amount_currency']">
+                                    <t t-if="line['currency_id']">
+                                        <span t-esc="line['amount_currency']" t-options="{'widget': 'monetary', 'display_currency': line['currency_id']}" />
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong><span>Total</span></strong>
+                                </td>
+                                <td>
+                                    <span />
+                                </td>
+                                <td>
+                                    <span />
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="sum_balance['debit_sum']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="sum_balance['credit_sum']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="sum_balance['balance_sum']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                </td>
+                                <td class="text-end" t-if="data['form']['amount_currency']">
+                                    <t t-if="line['currency_id']">
+                                        <span t-esc="line['amount_currency']" t-options="{'widget': 'monetary', 'display_currency': line['currency_id']}" />
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+    <record id="md_action_report_partnerledger" model="ir.actions.report">
+        <field name="name">Customer Report</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">md_portal_customer_statement.md_report_partnerledger</field>
+        <field name="report_file">md_portal_customer_statement.md_report_partnerledger</field>
+    </record>
+</odoo>

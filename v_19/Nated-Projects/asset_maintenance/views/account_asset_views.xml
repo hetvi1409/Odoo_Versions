@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.view.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button class="oe_stat_button" name="action_maintenance_request"
+                        type="object" icon="fa-wrench">
+                    Maintenance
+                </button>
+            </xpath>
+            <!--            <xpath expr="//button[@name='validate']" position="attributes">-->
+            <!--                <attribute name="string">Asset Addition</attribute>-->
+            <!--            </xpath>-->
+            <xpath expr="//page[@name='depreciation_board']"
+                   position="attributes">
+                <attribute name="string">Depreciation History</attribute>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Service Maintenance">
+                    <group>
+                        <group>
+                            <field name="equipment_id"/>
+                        </group>
+                        <group>
+                            <field name="equipment_state"/>
+                        </group>
+                    </group>
+                    <field name="maintenance_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="equipment_id"/>
+                            <field name="request_date"/>
+                            <field name="maintenance_type"/>
+                            <!--                            <field name="duration"/>-->
+                            <field name="duration_plan" widget="float_time"/>
+                            <field name="scheduled_date"/>
+                            <button type="object" icon="fa-wrench"
+                                    name="create_maintenance_request"
+                                    attrs="{'invisible': [('parent.equipment_state', '!=', 'approve')]}"
+                                    string="Maintenance Request"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Maintenance Related cost">
+                    <group>
+                        <group>
+                            <field name="expense_cost"/>
+                        </group>
+                        <group>
+                            <field name="capitalise_costs"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button type="object" name="create_equipment"
+                        string="Asset Maintenance"
+                        attrs="{'invisible': ['|', ('equipment_id', '!=', False), ('state', 'in', ['model'])]}"/>
+                <button type="object" name="create_maintenance_request"
+                        string="Create Maintenance Request"
+                        attrs="{'invisible': [('equipment_id', '=', False)]}"/>
+                <button type="object" name="action_submit"
+                        string="Submit Maintenance Plan"
+                        attrs="{'invisible': [('equipment_state', '!=', 'draft')]}"/>
+                <button type="object" name="action_approve"
+                        string="Approve Maintenance Plan"
+                        attrs="{'invisible': [('equipment_state', '!=', 'submit')]}"/>
+                <button type="object" name="action_refuse"
+                        string="Refuse Maintenance Plan"
+                        attrs="{'invisible': [('equipment_state', '!=', 'submit')]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

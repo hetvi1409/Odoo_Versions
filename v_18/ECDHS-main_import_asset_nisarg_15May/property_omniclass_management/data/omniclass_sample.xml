@@ -1,0 +1,66 @@
+<odoo>
+  <!-- Table 91 - Properties -->
+  <record id="oc_prop_91_01" model="omniclass.properties">
+    <field name="code">91-01</field>
+    <field name="name">Site</field>
+    <field name="description">Properties / Land</field>
+  </record>
+
+  <!-- Table 11 - Function (example) -->
+  <record id="oc_func_11_01" model="omniclass.function">
+    <field name="code">11-01</field>
+    <field name="name">Function - Commercial</field>
+  </record>
+
+  <!-- Table 21 - Space -->
+  <record id="oc_space_21_01" model="omniclass.space">
+    <field name="code">21-01</field>
+    <field name="name">Space - Retail</field>
+  </record>
+
+  <!-- Table 22 - Element -->
+  <record id="oc_elem_22_01" model="omniclass.element">
+    <field name="code">22-01</field>
+    <field name="name">Element - Structure</field>
+  </record>
+
+  <!-- Table 31 - Product -->
+  <record id="oc_prod_31_01" model="omniclass.product">
+    <field name="code">31-01</field>
+    <field name="name">Product - HVAC Unit</field>
+  </record>
+
+  <!-- Table 33 - Material -->
+  <record id="oc_mat_33_01" model="omniclass.material">
+    <field name="code">33-01</field>
+    <field name="name">Material - Concrete</field>
+  </record>
+
+  <!-- demo property + building + unit -->
+  <record id="demo_land_1" model="property.land">
+    <field name="name">Demo Site A</field>
+    <field name="location">123 Demo Ave</field>
+    <field name="full_extent_sqm">5000.0</field>
+    <field name="omniclass_code_91" ref="oc_prop_91_01"/>
+  </record>
+
+  <record id="demo_building_1" model="building">
+    <field name="name">Demo Building 1</field>
+    <field name="land_id" ref="demo_land_1"/>
+    <field name="gross_building_area_sqm">2500.0</field>
+    <field name="omniclass_code_11" ref="oc_func_11_01"/>
+    <field name="omniclass_code_21" ref="oc_space_21_01"/>
+    <field name="omniclass_code_22" ref="oc_elem_22_01"/>
+  </record>
+
+  <record id="demo_unit_1" model="property.unit">
+    <field name="name">Unit 1</field>
+    <field name="building_id" ref="demo_building_1"/>
+    <field name="unit_type">shop</field>
+    <field name="gross_lettable_area_sqm">1250.0</field>
+    <field name="omniclass_code_21" ref="oc_space_21_01"/>
+    <field name="omniclass_code_22" ref="oc_elem_22_01"/>
+    <field name="omniclass_code_31" ref="oc_prod_31_01"/>
+    <field name="omniclass_code_33" ref="oc_mat_33_01"/>
+  </record>
+</odoo>

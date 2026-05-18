@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_transport_request_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>TRANSPORT REQUEST FORM</h2>
+                            <h3><t t-esc="o.reference"/></h3>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Requester Information:</strong>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Name:</strong></td>
+                                        <td><t t-esc="o.requester_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Employee No:</strong></td>
+                                        <td><t t-esc="o.employee_id.barcode or '-'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Department:</strong></td>
+                                        <td><t t-esc="o.department_id.name or '-'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Job Position:</strong></td>
+                                        <td><t t-esc="o.job_id.name or '-'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Contact Phone:</strong></td>
+                                        <td><t t-esc="o.phone or '-'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email:</strong></td>
+                                        <td><t t-esc="o.email or '-'"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <strong>Request Details:</strong>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Status:</strong></td>
+                                        <td><span class="badge badge-info"><t t-esc="dict(o._fields['state'].selection).get(o.state)"/></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Date Required:</strong></td>
+                                        <td><t t-esc="o.date_required"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Time Required:</strong></td>
+                                        <td><t t-esc="'%02d:%02d' % (int(o.time_required), int((o.time_required % 1) * 60))"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Transport Type:</strong></td>
+                                        <td><t t-esc="dict(o._fields['transport_type'].selection).get(o.transport_type)"/></td>
+                                    </tr>
+                                    <tr t-if="o.return_date">
+                                        <td><strong>Return Date:</strong></td>
+                                        <td><t t-esc="o.return_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Priority:</strong></td>
+                                        <td>
+                                            <t t-if="o.is_urgent">
+                                                <span class="badge badge-danger">URGENT</span>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-esc="dict(o._fields['priority'].selection).get(o.priority)"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <strong>Trip Information:</strong>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td width="25%"><strong>Pickup Location:</strong></td>
+                                        <td><t t-esc="o.pickup_location"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Destination:</strong></td>
+                                        <td><t t-esc="o.destination"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Est. Distance (KM):</strong></td>
+                                        <td><t t-esc="o.distance_km or '-'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Purpose:</strong></td>
+                                        <td><t t-esc="o.purpose"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <strong>Passengers:</strong>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td width="25%"><strong>Number of Passengers:</strong></td>
+                                        <td><t t-esc="o.number_of_passengers"/></td>
+                                    </tr>
+                                    <tr t-if="o.passenger_names">
+                                        <td><strong>Passenger Names:</strong></td>
+                                        <td><t t-esc="o.passenger_names"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3" t-if="o.vehicle_id or o.driver_id">
+                            <div class="col-12">
+                                <strong>Vehicle Assignment:</strong>
+                                <table class="table table-bordered">
+                                    <tr t-if="o.vehicle_id">
+                                        <td width="25%"><strong>Vehicle:</strong></td>
+                                        <td><t t-esc="o.vehicle_id.name"/> (<t t-esc="o.vehicle_id.license_plate"/>)</td>
+                                    </tr>
+                                    <tr t-if="o.driver_id">
+                                        <td><strong>Driver:</strong></td>
+                                        <td><t t-esc="o.driver_id.name"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3" t-if="o.special_requirements">
+                            <div class="col-12">
+                                <strong>Special Requirements:</strong>
+                                <p><t t-esc="o.special_requirements"/></p>
+                            </div>
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="col-4">
+                                <div class="border-top pt-2">
+                                    <strong>Requester Signature</strong><br/>
+                                    Date: <t t-esc="o.create_date.strftime('%Y-%m-%d')"/>
+                                </div>
+                            </div>
+                            <div class="col-4" t-if="o.manager_approval_date">
+                                <div class="border-top pt-2">
+                                    <strong>Manager Approval</strong><br/>
+                                    <t t-esc="o.manager_id.name"/><br/>
+                                    Date: <t t-esc="o.manager_approval_date.strftime('%Y-%m-%d')"/>
+                                </div>
+                            </div>
+                            <div class="col-4" t-if="o.fleet_approval_date">
+                                <div class="border-top pt-2">
+                                    <strong>Fleet Manager Approval</strong><br/>
+                                    <t t-esc="o.fleet_manager_id.name"/><br/>
+                                    Date: <t t-esc="o.fleet_approval_date.strftime('%Y-%m-%d')"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

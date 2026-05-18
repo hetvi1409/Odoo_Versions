@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+    <!-- Inherit the original sign template control panel -->
+    <t t-inherit="sign.SignTemplateControlPanel" t-inherit-mode="extension">
+        <!-- Replace the Sign Now button with our condition -->
+        <xpath expr="//button[contains(@class, 'o_sign_template_sign_now')]" position="replace">
+            <t t-if="showSignNowButton">
+                <button type="button"
+                        class="btn btn-primary o_sign_template_sign_now text-nowrap"
+                        t-on-click="onSignNowClick">
+                    Sign Now
+                </button>
+            </t>
+        </xpath>
+    </t>
+
+</templates>

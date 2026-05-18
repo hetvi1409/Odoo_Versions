@@ -1,0 +1,35 @@
+{
+    'name': 'Contract Management: Workflow',
+    'version': '18.0.1.0.0',
+    'summary': """Workflow updates
+    """,
+    'category': 'Document Management,Accounting',
+    'author': 'XFanis',
+    'support': 'odoo@xfanis.dev',
+    'website': 'https://xfanis.dev/odoo.html',
+    'live_test_url': '',
+    'license': 'OPL-1',
+    'price': 35,
+    'currency': 'EUR',
+    'description':
+        """Contract Management, Manage, approve, renew contracts""",
+    'data': [
+        'data/ir_sequence_data.xml',
+        'data/mail_template_data.xml',
+        'data/ir_cron_data.xml',
+        'data/contract_setup_data.xml',
+        'security/ir.model.access.csv',
+        'security/security.xml',
+        'views/bsc_memo_views.xml',
+        'views/xf_partner_contract.xml',
+        'views/contract_service_views.xml',
+        'views/procurement_request_views.xml',
+        'views/contract_amendment_views.xml',
+        'wizard/memo_documents_views.xml',
+    ],
+    'depends': ['xf_partner_contract_purchase', 'xf_partner_contract', 'board_management_system'],
+    'installable': True,
+    'auto_install': False,
+    'application': True,
+}
+# -*- coding: utf-8 -*-

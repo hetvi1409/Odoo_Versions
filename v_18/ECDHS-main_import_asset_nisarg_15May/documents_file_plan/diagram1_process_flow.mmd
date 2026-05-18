@@ -1,0 +1,45 @@
+graph TD
+    A[Start] --> B{Action Type?}
+
+    B -->|Document Submission| C[User Creates/Uploads Document]
+    B -->|Physical Record Entry| D[User Creates Physical Record]
+    B -->|File Request| E[User Initiates File Request]
+
+    C --> C1[Fill Document Metadata]
+    C1 --> C2[Reference Month/Year]
+    C2 --> C3[Department & Location]
+    C3 --> C4[Sender & Receiver Info]
+    C4 --> C5[D Number & UMZ Number]
+    C5 --> C6[Submission Date]
+    C6 --> C7[Document Stored in Folder]
+    C7 --> Z[End]
+
+    D --> D1[Select Attachment/File]
+    D1 --> D2[Select Target Folder]
+    D2 --> D3[Set Reference Month/Year]
+    D3 --> D4[Save Physical Record]
+    D4 --> D5{Document Record Exists?}
+
+    D5 -->|Yes| D6[Update Existing Document]
+    D5 -->|No| D7[Create New Document]
+
+    D6 --> D8[Sync Metadata]
+    D7 --> D8
+    D8 --> D9[folder_id, reference_month,<br/>reference_year updated]
+    D9 --> Z
+
+    E --> E1[Fill Request Details]
+    E1 --> E2[Specify Document Name]
+    E2 --> E3[Select Requestee/Receiver]
+    E3 --> E4[Set Department & Location]
+    E4 --> E5[Add D/UMZ Numbers if known]
+    E5 --> E6[Set Request Date]
+    E6 --> E7[Submit Request]
+    E7 --> E8[Notification Sent to Requestee]
+    E8 --> Z
+
+    style C fill:#e1f5ff
+    style D fill:#fff4e1
+    style E fill:#ffe1f5
+    style D8 fill:#90EE90
+    style D9 fill:#90EE90

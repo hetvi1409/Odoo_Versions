@@ -1,0 +1,21 @@
+{
+    'name': 'Webinars and Podcasts',
+    'version': '16.0.1.0.0',
+    'summary': 'Manage webinars and podcasts in Odoo',
+    'category': 'Website',
+    'author': 'Nated Systems',
+    'company': 'Nated Systems',
+    'maintainer': 'Nated Systems',
+    'website': 'https://natedsystems.co.za/',
+    'depends': ['base', 'website','event','website_event'],
+    'data': [
+        'data/event_tag_category.xml',
+        'views/event_event_views.xml',
+        'views/event_template.xml',
+    ],
+    'images': [],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

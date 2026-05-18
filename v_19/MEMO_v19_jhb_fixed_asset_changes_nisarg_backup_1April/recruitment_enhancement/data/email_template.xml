@@ -1,0 +1,394 @@
+<odoo>
+    <data>
+        <record id="mail_template_requisition_submit" model="mail.template">
+            <field name="name">Requisition Approval Request</field>
+            <field name="model_id" ref="recruitment_enhancement.model_recruitment_requisition"/>
+            <field name="subject">{{ object.name }} - {{ ctx.get('stage', 'Approval') }} Request</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_cc">{{ ','.join(filter(None, object.approval_line_ids.mapped('user_id.email'))) or '' }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello Approvers,
+                        <br/>
+                        <br/>
+                        <p>
+                            You have received a Recruitment Requisition
+                            <strong><t t-out="object.name or ''">REQ-0001</t></strong>
+                            <t t-out="ctx.get('request', 'approval')"/> request at stage
+                            <strong><t t-out="ctx.get('stage', '')"/></strong>.
+                        </p>
+                        <p>You can open the requisition using the link below:</p>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="object.create_uid.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+           <field name="auto_delete" eval="False"/>
+        </record>
+
+        <record id="mail_template_requisition_returned" model="mail.template">
+            <field name="name">Requisition Returned/Rejection Notice</field>
+            <field name="model_id" ref="recruitment_enhancement.model_recruitment_requisition"/>
+            <field name="subject">Requisition Returned: {{ object.name }}</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_cc">{{ ','.join(filter(None, object.approval_line_ids.mapped('user_id.email'))) or '' }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello Approvers,
+                        <br/>
+                        <br/>
+                        <p>
+                            Requisition <strong><t t-out="object.name or ''">REQ-0001</t></strong>
+                            was returned/rejected at stage <strong><t t-out="ctx.get('stage', '')"/></strong>.
+                        </p>
+                        <p>Feedback: <t t-out="ctx.get('reason', 'No feedback')"/></p>
+                        <br/>
+                        Best regards,
+                        <br/>
+                        <t t-out="user.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+           <field name="auto_delete" eval="False"/>
+        </record>
+
+
+        <record id="mail_template_requisition_final_notification" model="mail.template">
+            <field name="name">Requisition Final Notification</field>
+            <field name="model_id" ref="recruitment_enhancement.model_recruitment_requisition"/>
+            <field name="subject">Requisition {{ object.name }} has been finalized</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_cc">{{ ','.join(filter(None, object.approval_line_ids.mapped('user_id.email'))) or '' }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hello <t t-out="ctx.get('recipient_name', '')"/>,
+                    <br/>
+                    <br/>
+                    <p>
+                        Requisition <strong><t t-out="object.name or ''">REQ-0001</t></strong>
+                        has been <strong>
+                        <t t-if="object.approval_status == 'fully_approved'">
+                            and is now fully approved.
+                        </t>
+                        <t t-if ="object.approval_status == 'rejected'">
+                            and has been rejected.
+                        </t>
+                        </strong>
+                    </p>
+                    <br/>
+                    <p>
+                        <a t-att-href="'/web#id=%s&amp;model=recruitment.requisition&amp;view_type=form' % object.id"
+                        style="background-color:#9A6C8E;color:white;padding:8px 16px;text-decoration:none;border-radius:4px;">
+                        View Requisition
+                        </a>
+                    </p>
+                    Best regards,
+                    <br/>
+                    <t t-out="user.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+           <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- mail for requisition submission -->
+        <record id="mail_template_requisition_submit_id" model="mail.template">
+            <field name="name">Requisition Submission Notification</field>
+            <field name="model_id" ref="recruitment_enhancement.model_recruitment_requisition"/>
+            <field name="subject">Action Required: Requisition {{ object.name }} - Pending Your Approval</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <!-- <field name="email_cc">{{ ','.join(filter(None, object.approval_line_ids.mapped('user_id.email'))) or '' }}</field> -->
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hello <t t-out="ctx.get('recipient_user', user).name or ''"/>,
+                    <br/>
+                    <br/>
+                    <p>
+                        A new requisition <strong><t t-out="object.name or ''">REQ-0001</t></strong>
+                        has been submitted by <strong><t t-out="object.create_uid.name or ''"/></strong>
+                        and is now <strong style="color:#9A6C8E;">pending for your approval</strong>.
+                    </p>
+                    <br/>
+                    <p>
+                        <strong>Details:</strong><br/>
+                        • Requisition Number: <t t-out="object.name or ''"/><br/>
+                        • Submitted By: <t t-out="object.create_uid.name or ''"/><br/>
+                        • Date: <t t-out="object.create_date.strftime('%Y-%m-%d') if object.create_date else ''"/><br/>
+                    </p>
+                    <br/>
+                    <p>Please review and take appropriate action on this requisition at your earliest convenience.</p>
+                    <br/>
+                    <p>
+                        <a t-att-href="'/web#id=%s&amp;model=recruitment.requisition&amp;view_type=form' % object.id"
+                        style="background-color:#9A6C8E;color:white;padding:10px 20px;text-decoration:none;border-radius:4px;display:inline-block;">
+                        Review &amp; Approve Requisition
+                        </a>
+                    </p>
+                    <br/>
+                    <br/>
+                    Best regards,
+                    <br/>
+                    <t t-out="object.create_uid.name or ''"/>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ user.lang }}</field>
+           <field name="auto_delete" eval="False"/>
+        </record>
+
+        <record id="email_template_job_applicant_congratulations" model="mail.template">
+            <field name="name">Recruitment: Job Application Acknowledgement</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="subject">Your Job Application: {{ object.job_id.name }}</field>
+            <field name="email_to">{{ (not object.partner_id and object.email_from or '') }}</field>
+            <field name="partner_to">{{ object.partner_id.id or '' }}</field>
+            <field name="description">Confirmation email sent to all new job applications</field>
+            <field name="body_html" type="html">
+                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                       style="background-color: white; border-collapse: collapse; margin-left: 20px;">
+                    <tr>
+                        <td valign="top" style="padding: 0px 10px;">
+                            <div style="font-size: 13px; margin: 0px; padding: 0px;">
+                                Hello,
+                                <br/>
+                                <br/>
+                                We confirm we successfully received your application for the job
+                                "
+                                <a t-att-href="hasattr(object.job_id, 'website_url') and object.job_id.website_url or ''"
+                                   style="color:#9A6C8E;">
+                                    <strong t-out="object.job_id.name or ''">Experienced Developer</strong>
+                                </a>
+                                " at <strong t-out="object.company_id.name or ''">YourCompany</strong>.
+                                <br/>
+                                <br/>
+                                We will come back to you shortly.
+
+                                <div t-if="'website_url' in object.job_id and object.job_id.website_url"
+                                     style="padding: 16px 8px 16px 8px;">
+                                    <a t-att-href="object.job_id.website_url"
+                                       style="background-color: #875a7b; text-decoration: none; color: #fff; padding: 8px 16px 8px 16px; border-radius: 5px;">
+                                        Job Description
+                                    </a>
+                                </div>
+
+                                <hr width="97%"
+                                    style="background-color: rgb(204,204,204); border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 16px 0px 16px 0px;"/>
+                                <t t-if="object.user_id">
+                                    <h3 style="color:#9A6C8E;">
+                                        <strong>Your Contact:</strong>
+                                    </h3>
+                                    <p>
+                                        <strong t-out="object.user_id.name or ''">Mitchell Admin</strong>
+                                        <br/>
+                                        <span>Email:
+                                            <t t-out="object.user_id.email or ''">admin@yourcompany.example.com</t>
+                                        </span>
+                                        <br/>
+                                        <span>Phone:
+                                            <t t-out="object.user_id.phone or ''">+1 650-123-4567</t>
+                                        </span>
+                                    </p>
+                                    <hr width="97%"
+                                        style="background-color: rgb(204,204,204); border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 16px 0px 16px 0px;"/>
+                                </t>
+
+                                <hr width="97%"
+                                    style="background-color: rgb(204,204,204); border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 17px 0px 16px 0px;"/>
+                                <t t-set="location" t-value="''"/>
+                                <t t-if="object.job_id.address_id.name">
+                                    <strong t-out="object.job_id.address_id.name or ''">Teksa SpA</strong>
+                                    <br/>
+                                </t>
+                                <t t-if="object.job_id.address_id.street">
+                                    <t t-out="object.job_id.address_id.street or ''">Puerto Madero 9710</t>
+                                    <br/>
+                                    <t t-set="location" t-value="object.job_id.address_id.street"/>
+                                </t>
+                                <t t-if="object.job_id.address_id.street2">
+                                    <t t-out="object.job_id.address_id.street2 or ''">Of A15, Santiago (RM)</t>
+                                    <br/>
+                                    <t t-set="location" t-value="'%s, %s' % (location, object.job_id.address_id.street2)"/>
+                                </t>
+                                <t t-if="object.job_id.address_id.city">
+                                    <t t-out="object.job_id.address_id.city or ''">Pudahuel</t>,
+                                    <t t-set="location" t-value="'%s, %s' % (location, object.job_id.address_id.city)"/>
+                                </t>
+                                <t t-if="object.job_id.address_id.state_id.name">
+                                    <t t-out="object.job_id.address_id.state_id.name or ''">C1</t>,
+                                    <t t-set="location"
+                                       t-value="'%s, %s' % (location, object.job_id.address_id.state_id.name)"/>
+                                </t>
+                                <t t-if="object.job_id.address_id.zip">
+                                    <t t-out="object.job_id.address_id.zip or ''">98450</t>
+                                    <t t-set="location" t-value="'%s, %s' % (location, object.job_id.address_id.zip)"/>
+                                </t>
+                                <br/>
+                                <t t-if="object.job_id.address_id.country_id.name">
+                                    <t t-out="object.job_id.address_id.country_id.name or ''">Argentina</t>
+                                    <br/>
+                                    <t t-set="location"
+                                       t-value="'%s, %s' % (location, object.job_id.address_id.country_id.name)"/>
+                                </t>
+                                <br/>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">{{ object.partner_id.lang or '' }}</field>
+        </record>
+
+
+        <record id="email_template_offer_letter" model="mail.template">
+            <field name="name">Recruitment: Offer Letter</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="subject">Job Offer - {{ object.job_id.name }} at {{ object.company_id.name }}</field>
+            <field name="email_to">{{ (not object.partner_id and object.email_from or '') }}</field>
+            <field name="partner_to">{{ object.partner_id.id or '' }}</field>
+            <field name="description">Offer letter sent to selected candidates</field>
+            <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0" width="590"
+                   style="background-color: white; border-collapse: collapse; margin-left: 20px;">
+                <tr>
+                <td valign="top" style="padding: 0px 10px;">
+                    <div style="font-size: 13px; margin: 0px; padding: 0px;">
+                    <p>Dear <strong t-out="object.partner_name or ''">Applicant</strong>,</p>
+                    <br/>
+                    <p>
+                        We are pleased to offer you the position of
+                        <strong t-out="object.job_id.name or ''">Job Position</strong>
+                        at <strong t-out="object.company_id.name or ''">Company Name</strong>.
+                    </p>
+                    <br/>
+                    <p>
+                        We were impressed with your qualifications and believe you will be a valuable addition to our team.
+                    </p>
+                    <br/>
+                    <h3 style="color:#9A6C8E;">Position Details:</h3>
+                    <ul>
+                        <li><strong>Position:</strong> <t t-out="object.job_id.name or ''">Job Title</t></li>
+                        <li><strong>Department:</strong> <t t-out="object.department_id.name or 'TBD'">Department</t></li>
+                        <li><strong>Reporting To:</strong> <t t-out="object.user_id.name or 'TBD'">Manager</t></li>
+                    </ul>
+                    <br/>
+                    <p>
+                        Please review the attached offer letter for complete details regarding compensation, benefits, and other terms of employment.
+                    </p>
+                    <br/>
+                    <p>
+                        To accept this offer, please sign and return the offer letter by the specified date.
+                        If you have any questions, please don't hesitate to contact us.
+                    </p>
+                    <br/>
+                    <p>We look forward to welcoming you to our team!</p>
+                    <br/>
+                    <hr width="97%"
+                        style="background-color: rgb(204,204,204); border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 16px 0px 16px 0px;"/>
+                    <p>
+                        Best regards,
+                        <br/>
+                        <strong t-out="object.user_id.name or object.company_id.name or ''">HR Team</strong>
+                        <br/>
+                        <t t-if="object.user_id.email">
+                        Email: <t t-out="object.user_id.email or ''">hr@company.com</t>
+                        <br/>
+                        </t>
+                        <t t-if="object.user_id.phone">
+                        Phone: <t t-out="object.user_id.phone or ''">+1 234-567-8900</t>
+                        </t>
+                    </p>
+                    </div>
+                </td>
+                </tr>
+            </table>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- mail for rejected applicants -->
+        <record id="email_template_applicant_rejected" model="mail.template">
+            <field name="name">Recruitment: Applicant Rejected</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="subject">Application Status - {{ object.job_id.name }} at {{ object.company_id.name }}</field>
+            <field name="email_to">{{ (not object.partner_id and object.email_from or '') }}</field>
+            <field name="partner_to">{{ object.partner_id.id or '' }}</field>
+            <field name="description">Notification sent to rejected applicants</field>
+            <field name="body_html" type="html">
+                <p>Dear <strong t-out="object.partner_name or ''">Applicant</strong>,</p>
+                <p>We regret to inform you that your application for the position of <strong t-out="object.job_id.name or ''">Job Position</strong> at <strong t-out="object.company_id.name or ''">Company Name</strong> has not been successful.</p>
+                <p>We appreciate your interest in joining our team and encourage you to apply for future openings that match your skills and experience.</p>
+                <p>Thank you for your time and effort.</p>
+                <p>
+                    <a t-att-href="'/web#id=%s&amp;model=recruitment.requisition&amp;view_type=form' % object.id"
+                        style="background-color:#9A6C8E;color:white;padding:8px 16px;text-decoration:none;border-radius:4px;">
+                        View Requisition
+                    </a>
+                </p>
+                <p>Best regards,</p>
+                <p><strong t-out="object.user_id.name or object.company_id.name or ''">HR Team</strong></p>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- mail for interview created -->
+        <record id="email_template_interview_created_id" model="mail.template">
+            <field name="name">Recruitment: Interview Scheduled</field>
+            <field name="model_id" ref="recruitment_enhancement.model_recruitment_interview"/>
+            <field name="subject">Interview Scheduled - {{ object.job_id.name }}</field>
+            <field name="partner_to">{{ object.application_id.partner_name }}</field>
+            <field name="body_html" type="html">
+                    <p>Dear <strong t-esc="object.application_id.partner_name or ''"/>,
+                        <br/><br/>
+                        Your interview for Job Position:
+                        <strong t-esc="object.job_id.name or ''"/>
+                        has been scheduled at
+                        <strong t-esc="object.interview_time or ''"/>.
+
+                        <t t-if="object.interview_type == 'online'">
+                            This will be an <strong>online</strong> interview.
+                        </t>
+                        <t t-if="object.interview_type == 'offline'">
+                            This will be held at <strong>our company</strong>.
+                        </t>
+                        <br/><br/>
+                        Best regards,<br/>
+                        <strong t-esc="object.application_id.company_id.name or ''"/>
+                    </p>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <!-- mail for shortlisted candidate -->
+        <record id="email_template_shortlist_interviewer" model="mail.template">
+            <field name="name">Recruitment: Shortlisted Candidate</field>
+            <field name="model_id" ref="recruitment_enhancement.model_recruitment_interview"/>
+            <field name="subject">Congratulations! You've Been Shortlisted - {{ object.job_id.name }}</field>
+            <field name="partner_to">{{ object.application_id.partner_name }}</field>
+            <field name="body_html" type="html">
+                <p>Dear <strong t-esc="object.application_id.partner_name or ''"/>,
+                <br/><br/>
+                Congratulations! We are pleased to inform you that you have been shortlisted for the position of
+                <strong t-esc="object.job_id.name or ''"/> at
+                <strong t-esc="object.application_id.company_id.name or ''"/>.
+                <br/><br/>
+                We were impressed with your application and look forward to meeting you in the upcoming interview.
+                <br/><br/>
+                Best regards,<br/>
+                <strong t-esc="object.application_id.company_id.name or ''"/>
+                </p>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

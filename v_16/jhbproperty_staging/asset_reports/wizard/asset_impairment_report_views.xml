@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Asset impairment report -->
+    <record id="asset_impairment_reports_view_form" model="ir.ui.view">
+        <field name="name">asset.impairment.reports.view.form</field>
+        <field name="model">asset.impairment.reports</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="to_date"/>
+                    </group>
+                    <group>
+                        <field name="from_date"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_sample_report" string="Print report"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="asset_impairment_reports_action" model="ir.actions.act_window">
+        <field name="name">Asset Impairment</field>
+        <field name="res_model">asset.impairment.reports</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="asset_impairment_reports_menu"
+              name="Asset Impairment Report"
+              action="asset_impairment_reports_action"
+              parent="account.menu_finance_entries_management"/>
+</odoo>

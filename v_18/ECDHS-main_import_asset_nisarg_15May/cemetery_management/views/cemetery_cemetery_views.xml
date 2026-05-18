@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_cemetery_cemetery_form" model="ir.ui.view">
+        <field name="name">cemetery.cemetery.form</field>
+        <field name="model">cemetery.cemetery</field>
+        <field name="arch" type="xml">
+            <form string="Cemetery">
+                <header>
+                    <field name="state" widget="statusbar"
+                           options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_section" icon="fa-bars">
+                            <field string="Section" name="sections_count"
+                                   widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_grave" icon="fa-bars">
+                            <field string="Grave" name="graves_count"
+                                   widget="statinfo"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Closed"
+                            bg_color="text-bg-danger" invisible="state != 'closed'"/>
+                    <widget name="web_ribbon" title="Active"
+                            bg_color="text-bg-success"
+                            invisible="state != 'active'"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="cemetery_id" readonly="1"/>
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="municipality_id"/>
+                            <label for="street" string="Location"/>
+                            <div class="o_address_format">
+                                <field name="street" placeholder="Street..."
+                                       class="o_address_street"/>
+                                <field name="street2" placeholder="Street 2..."
+                                       class="o_address_street"/>
+                                <field name="ward_id" placeholder="Ward"
+                                       class="o_address_street"/>
+                                <field name="city" placeholder="City"
+                                       class="o_address_city"/>
+                                <field name="zip" placeholder="ZIP"
+                                       class="o_address_zip"/>
+                                <field name="country_id" placeholder="Country"
+                                       class="o_address_country"
+                                       options='{"no_open": True}'/>
+                            </div>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="province_id"/>
+                            <field name="phone" widget="phone"/>
+                            <field name="email" widget="email"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Sections">
+                            <field name="section_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="square_meter"/>
+                                    <field name="graves_count"/>
+                                    <field name="adult_graves_count"/>
+                                    <field name="infant_graves_count"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="cemetery_id"/>
+                                        <field name="square_meter"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="GIS" name="geo_location">
+                            <group string="Geolocation">
+                                <label for="date_localization"
+                                       string="Geo Location"/>
+                                <div>
+                                    <span>Lat :
+                                        <field name="partner_latitude"
+                                               nolabel="1" class="oe_inline"/>
+                                    </span>
+                                    <br/>
+                                    <span>Long:
+                                        <field name="partner_longitude"
+                                               nolabel="1" class="oe_inline"/>
+                                    </span>
+                                    <br/>
+                                    <span invisible="not date_localization">
+                                        Updated on:
+                                        <field name="date_localization"
+                                               nolabel="1" readonly="1"
+                                               class="oe_inline"/>
+                                        <br/>
+                                    </span>
+                                    <div name="geo_localize_button">
+                                        <button invisible="partner_latitude != 0 or partner_longitude != 0"
+                                                icon="fa-gear"
+                                                string="Compute based on address"
+                                                title="Compute Localization"
+                                                name="geo_localize"
+                                                type="object"
+                                                class="btn btn-link p-0"/>
+                                        <button invisible="partner_latitude == 0 and partner_longitude == 0"
+                                                icon="fa-refresh"
+                                                string="Refresh"
+                                                title="Refresh Localization"
+                                                name="geo_localize"
+                                                type="object"
+                                                class="btn btn-link p-0"/>
+                                        <button invisible="partner_latitude == 0 and partner_longitude == 0"
+                                                string="Open Map"
+                                                title="Go To URL"
+                                                name="action_open_map"
+                                                type="object"
+                                                class="btn btn-link p-0">
+                                            <i class="fa fa-globe"
+                                               style="font-size:22px"/>
+                                            Open Map
+                                        </button>
+                                    </div>
+                                </div>
+                                <field name="location_url" invisible="1"
+                                       widget="url"/>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="elevation"/>
+                                    <label for="size"/>
+                                    <div>
+                                        <field name="size" placeholder="Size"/>
+                                        <field name="size_unit" placeholder="Size"/>
+                                    </div>
+
+                                </group>
+                                <group>
+                                    <field name="square_meter"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cemetery_cemetery_tree" model="ir.ui.view">
+        <field name="name">cemetery.cemetery.list</field>
+        <field name="model">cemetery.cemetery</field>
+        <field name="arch" type="xml">
+            <list string="Cemetery">
+                <field name="name"/>
+                <field name="cemetery_id"/>
+                <field name="municipality_id"/>
+                <field name="sections_count"/>
+                <field name="graves_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_cemetery_cemetery" model="ir.actions.act_window">
+        <field name="name">Cemetery</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">cemetery.cemetery</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new cemetery
+            </p>
+            <p>
+                Create and manage the cemeteries;
+            </p>
+        </field>
+    </record>
+</odoo>

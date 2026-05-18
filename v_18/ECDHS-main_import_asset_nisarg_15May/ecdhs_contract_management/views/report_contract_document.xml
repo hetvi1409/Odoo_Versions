@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Custom Layout for Contract Documents (Logo + Footer only, no header text)
+    ================================================================= -->
+    <template id="contract_minimal_layout">
+        <t t-set="company" t-value="res_company or company"/>
+        <div class="header">
+            <div class="row">
+                <div class="col-3">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 80px;" alt="Logo"/>
+                </div>
+                <div class="col-9 text-right">
+                    <!-- Header text removed - only logo remains -->
+                </div>
+            </div>
+        </div>
+
+        <div class="article o_report_layout_standard">
+            <t t-raw="0"/>
+        </div>
+
+        <!-- <div class="footer o_standard_footer">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <ul class="list-inline mb4">
+                    <li t-if="company.phone" class="list-inline-item d-inline">
+                        Phone: <span class="o_force_ltr" t-field="company.phone"/>
+                    </li>
+                    <li t-if="company.email" class="list-inline-item d-inline">
+                        Email: <span t-field="company.email"/>
+                    </li>
+                    <li t-if="company.website" class="list-inline-item d-inline">
+                        Web: <span t-field="company.website"/>
+                    </li>
+                </ul>
+                <div class="text-muted">
+                    Page: <span class="page"/> / <span class="topage"/>
+                </div>
+            </div>
+        </div> -->
+    </template>
+
+    <!-- ================================================================
+         QWeb Report Template – Contract Document
+    ================================================================= -->
+    <template id="report_contract_document_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-set="company" t-value="doc.company_id"/>
+                <t t-call="ecdhs_contract_management.contract_minimal_layout">
+                    <t t-set="res_company" t-value="doc.company_id"/>
+                    <div class="page" style="position: relative;">
+                        <t t-set="is_draft_preview" t-value="bool(doc.env.context.get('draft_preview'))"/>
+                        <div t-if="is_draft_preview"
+                             style="position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;">
+                            <div style="position: absolute; top: 10%; left: -25%; width: 180%; transform: rotate(-30deg); color: rgba(120, 120, 120, 0.13); font-size: 32px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; line-height: 2.8; white-space: nowrap;">
+                                <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                                <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                                <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                                <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                                <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                                <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                            </div>
+                        </div>
+                        <div style="position: relative; z-index: 1;">
+
+                        <!-- Cover heading -->
+                        <!-- <div style="text-align:center; margin-bottom:24px;">
+                            <h2 style="margin:0; font-size:1.3rem; text-transform:uppercase; letter-spacing:.06em;">
+                                Eastern Cape Department of Human Settlements
+                            </h2>
+                            <h1 style="margin:8px 0 4px; font-size:1.6rem;">
+                                <t t-esc="doc.name"/>
+                            </h1>
+                            <p style="margin:0; font-size:1rem; color:#555;">
+                                <t t-esc="doc.subject"/>
+                            </p>
+                        </div>
+
+                        <hr style="border:none; border-top:2px solid #0f4c81; margin-bottom:20px;"/> -->
+
+                        <!-- Contract details table -->
+                        <!-- <table style="width:100%; border-collapse:collapse; font-size:.88rem; margin-bottom:20px;">
+                            <tr>
+                                <td style="width:30%; font-weight:600; padding:5px 8px; background:#f0f4f8;">Contract Reference</td>
+                                <td style="padding:5px 8px;"><t t-esc="doc.name"/></td>
+                                <td style="width:30%; font-weight:600; padding:5px 8px; background:#f0f4f8;">Contract Type</td>
+                                <td style="padding:5px 8px;"><t t-esc="dict(doc._fields['contract_type'].selection).get(doc.contract_type, doc.contract_type)"/></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:600; padding:5px 8px; background:#f0f4f8;">Service Provider</td>
+                                <td style="padding:5px 8px;"><t t-esc="doc.service_provider_id.name"/></td>
+                                <td style="font-weight:600; padding:5px 8px; background:#f0f4f8;">End-User Department</td>
+                                <td style="padding:5px 8px;"><t t-esc="doc.end_user_department_id.name or '—'"/></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:600; padding:5px 8px; background:#f0f4f8;">Start Date</td>
+                                <td style="padding:5px 8px;"><t t-esc="doc.date_start"/></td>
+                                <td style="font-weight:600; padding:5px 8px; background:#f0f4f8;">End Date</td>
+                                <td style="padding:5px 8px;"><t t-esc="doc.date_end or ('No Fixed End Date' if doc.is_indefinite else '—')"/></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:600; padding:5px 8px; background:#f0f4f8;">Total Contract Value</td>
+                                <td style="padding:5px 8px;">R <t t-esc="'{:,.2f}'.format(doc.original_contract_value or doc.contract_value or 0)"/></td>
+                                <td style="font-weight:600; padding:5px 8px; background:#f0f4f8;">Draft Version</td>
+                                <td style="padding:5px 8px;">v<t t-esc="doc.draft_version"/></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:600; padding:5px 8px; background:#f0f4f8;">Procurement Method</td>
+                                <td style="padding:5px 8px;"><t t-esc="doc.procurement_method or '—'"/></td>
+                                <td style="font-weight:600; padding:5px 8px; background:#f0f4f8;">Bid / Tender Reference</td>
+                                <td style="padding:5px 8px;"><t t-esc="doc.bid_reference or '—'"/></td>
+                            </tr>
+                        </table> -->
+
+                        <!-- Signatories -->
+                        <!-- <h3 style="margin:0 0 8px; font-size:1rem; border-bottom:1px solid #ccc; padding-bottom:4px;">
+                            Signatories
+                        </h3>
+                        <table style="width:100%; border-collapse:collapse; font-size:.88rem; margin-bottom:20px;">
+                            <thead>
+                                <tr style="background:#f0f4f8;">
+                                    <th style="padding:7px 10px; text-align:left; border-bottom:2px solid #cdd5df;">#</th>
+                                    <th style="padding:7px 10px; text-align:left; border-bottom:2px solid #cdd5df;">Signatory</th>
+                                    <th style="padding:7px 10px; text-align:left; border-bottom:2px solid #cdd5df;">Role / Designation</th>
+                                    <th style="padding:7px 10px; text-align:left; border-bottom:2px solid #cdd5df;">Status</th>
+                                    <th style="padding:7px 10px; text-align:left; border-bottom:2px solid #cdd5df;">Signed On</th>
+                                    <th style="padding:7px 10px; text-align:left; border-bottom:2px solid #cdd5df;">Initials</th>
+                                    <th style="padding:7px 10px; text-align:left; border-bottom:2px solid #cdd5df;">Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.signatory_ids.sorted('sequence')" t-as="sig">
+                                    <tr>
+                                        <td style="padding:7px 10px; border-bottom:1px solid #e8ecf0;"><t t-esc="sig.sequence"/></td>
+                                        <td style="padding:7px 10px; border-bottom:1px solid #e8ecf0;">
+                                            <t t-if="sig.is_service_provider">
+                                                <t t-esc="sig.partner_id.name or '—'"/>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-esc="sig.user_id.name or '—'"/>
+                                            </t>
+                                        </td>
+                                        <td style="padding:7px 10px; border-bottom:1px solid #e8ecf0;"><t t-esc="sig.role_designation or '—'"/></td>
+                                        <td style="padding:7px 10px; border-bottom:1px solid #e8ecf0;"><t t-esc="sig.status or '—'"/></td>
+                                        <td style="padding:7px 10px; border-bottom:1px solid #e8ecf0;"><t t-esc="sig.date or '—'"/></td>
+                                        <td style="padding:7px 10px; border-bottom:1px solid #e8ecf0;">
+                                            <t t-if="sig.sign_initials">
+                                                <img t-att-src="'data:image/png;base64,' + sig.sign_initials.decode('utf-8')" style="height:40px; max-width:80px;"/>
+                                            </t>
+                                            <t t-else="">—</t>
+                                        </td>
+                                        <td style="padding:7px 10px; border-bottom:1px solid #e8ecf0;"><t t-esc="sig.comment or '—'"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table> -->
+
+                        <!-- Contract terms -->
+                        <div style="page-break-before: always;">
+                            <!-- <h3 style="margin:0 0 8px; font-size:1rem; border-bottom:1px solid #ccc; padding-bottom:4px;">
+                                Draft Contract Terms and Working Arrangements
+                            </h3> -->
+                            <t t-if="doc.contract_terms_summary">
+                                <div style="font-size:.88rem; line-height:1.6; margin-bottom:20px;">
+                                    <t t-out="doc.contract_terms_summary"/>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <p style="color:#888; font-size:.88rem;">No contract terms recorded.</p>
+                            </t>
+                        </div>
+
+                        <div style="font-size:.75rem; color:#888; text-align:center; margin-top:32px;">
+                            Eastern Cape Department of Human Settlements · Procurement Contract Management ·
+                            Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y %H:%M')"/>
+                        </div>
+                        </div>
+
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_contract_document_draft_template" inherit_id="ecdhs_contract_management.report_contract_document_template">
+        <xpath expr="//div[contains(@class, 'page')]" position="inside">
+            <div style="position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;">
+                <div style="position: absolute; top: 10%; left: -25%; width: 180%; transform: rotate(-30deg); color: rgba(120, 120, 120, 0.13); font-size: 32px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; line-height: 2.8; white-space: nowrap;">
+                    <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                    <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                    <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                    <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                    <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                    <div>DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT   DRAFT DOCUMENT</div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ================================================================
+         Annexure Cover Page Template  (rendered per-annexure by the
+         Python PDF-merge override; NOT called directly from the main
+         contract template so covers and their PDFs are interleaved).
+    ================================================================= -->
+    <template id="report_annexure_cover_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-set="company" t-value="doc.contract_id.company_id"/>
+                <t t-call="ecdhs_contract_management.contract_minimal_layout">
+                    <t t-set="res_company" t-value="doc.contract_id.company_id"/>
+                <div style="
+                    width             : 100%;
+                    min-height        : 247mm;
+                    box-sizing        : border-box;
+                    padding           : 28mm 22mm;
+                    display           : flex;
+                    flex-direction    : column;
+                    justify-content   : space-between;
+                    align-items       : stretch;
+                    background        : #fff;
+                ">
+                    <!-- Large top box: ANNEXURE A / B … -->
+                    <div style="
+                        border      : 3px solid #000;
+                        padding     : 32mm 20mm;
+                        text-align  : center;
+                    ">
+                        <span style="
+                            display        : block;
+                            font-size      : 3.4rem;
+                            font-weight    : 900;
+                            text-transform : uppercase;
+                            letter-spacing : .04em;
+                            line-height    : 1.1;
+                        "><t t-esc="doc.annexure_sequence_name or ''"/></span>
+                    </div>
+
+                    <!-- Lower-centre box: document name -->
+                    <div style="
+                        border      : 2px solid #000;
+                        padding     : 16px 28px;
+                        text-align  : center;
+                        align-self  : center;
+                        min-width   : 60%;
+                    ">
+                        <span style="
+                            display        : block;
+                            font-size      : 1.05rem;
+                            font-weight    : 700;
+                            text-transform : uppercase;
+                            letter-spacing : .06em;
+                        "><t t-esc="doc.name or ''"/></span>
+                    </div>
+                </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ================================================================
+         Addendum Cover Page Template  (rendered per-addendum by the
+         Python PDF-merge override).
+    ================================================================= -->
+    <template id="report_addendum_cover_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-set="company" t-value="doc.contract_id.company_id"/>
+                <t t-call="ecdhs_contract_management.contract_minimal_layout">
+                    <t t-set="res_company" t-value="doc.contract_id.company_id"/>
+                <div style="
+                    width             : 100%;
+                    min-height        : 247mm;
+                    box-sizing        : border-box;
+                    padding           : 28mm 22mm;
+                    display           : flex;
+                    flex-direction    : column;
+                    justify-content   : space-between;
+                    align-items       : stretch;
+                    background        : #fff;
+                ">
+                    <div style="
+                        border      : 3px solid #000;
+                        padding     : 32mm 20mm;
+                        text-align  : center;
+                    ">
+                        <span style="
+                            display        : block;
+                            font-size      : 3.4rem;
+                            font-weight    : 900;
+                            text-transform : uppercase;
+                            letter-spacing : .04em;
+                            line-height    : 1.1;
+                        "><t t-esc="doc.addendum_sequence_name or 'ADDENDUM'"/></span>
+                    </div>
+
+                    <div style="
+                        border      : 2px solid #000;
+                        padding     : 16px 28px;
+                        text-align  : center;
+                        align-self  : center;
+                        min-width   : 60%;
+                    ">
+                        <span style="
+                            display        : block;
+                            font-size      : 1.05rem;
+                            font-weight    : 700;
+                            letter-spacing : .02em;
+                        "><t t-esc="doc.name or ''"/></span>
+                    </div>
+                </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ================================================================
+         Addendum Content Page Template  (rendered per-addendum by the
+         Python PDF-merge override).
+    ================================================================= -->
+    <template id="report_addendum_content_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-set="company" t-value="doc.contract_id.company_id"/>
+                <t t-call="ecdhs_contract_management.contract_minimal_layout">
+                    <t t-set="res_company" t-value="doc.contract_id.company_id"/>
+                    <div class="page">
+                        <div style="text-align:center; margin-bottom:18px;">
+                            <h2 style="margin:0; font-size:1.15rem; text-transform:uppercase; letter-spacing:.04em; font-weight:800;">
+                                <t t-esc="doc.addendum_sequence_name or 'ADDENDUM'"/>
+                            </h2>
+                            <h3 style="margin:8px 0 0; font-size:1.05rem; font-weight:700;">
+                                <t t-esc="doc.name or ''"/>
+                            </h3>
+                        </div>
+                        <hr style="border:none; border-top:2px solid #0f4c81; margin-bottom:16px;"/>
+
+                        <t t-if="doc.change_description">
+                            <div style="font-size:.90rem; line-height:1.65;">
+                                <t t-out="doc.change_description"/>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <p style="font-size:.90rem; color:#777;">No addendum content recorded.</p>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

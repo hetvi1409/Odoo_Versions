@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="inherit_hr_appraisal_goal_view_form" model="ir.ui.view">
+        <field name="name">inherit.hr.appraisal.goal.view.form.inherit</field>
+        <field name="model">hr.appraisal.goal</field>
+        <field name="inherit_id" ref="hr_appraisal.hr_appraisal_goal_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='employee_ids']" position="after">
+                <field name="employee_id"/>
+                <field name="is_assigned" invisible="1"/>
+            </xpath>
+            <!-- <xpath expr="/form//field[@name='employee_id']" position="attributes">
+                <attribute name="invisible">not is_assigned</attribute>
+            </xpath> -->
+            <xpath expr="/form//field[@name='tag_ids']" position="after">
+                <field name="weightage" options="{'editable': true}" widget="progressbar"/>
+                <field name="result"/>
+                <field name="status"/>
+
+            </xpath>
+            <xpath expr="/form//field[@name='employee_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="action_hr_appraisal_goal_id" model="ir.actions.act_window">
+        <field name="name">Goals</field>
+        <field name="res_model">hr.appraisal.goal</field>
+        <field name="view_mode">list,kanban,form,graph,calendar</field>
+        <field name="domain">[('employee_ids', '!=', False), ('child_ids', '=', False)]</field>
+        <field name="context">{'search_default_groupby_employee': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new goals
+            </p>
+            <p>
+                Assign Goals to motivate your Employees and keep track of their objectives between Appraisals.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_hr_appraisal_goal_calendar" model="ir.ui.view">
+        <field name="name">hr.appraisal.goal.calendar</field>
+        <field name="model">hr.appraisal.goal</field>
+        <field name="arch" type="xml">
+            <calendar string="Goals Calendar" date_start="deadline" date_stop="deadline"
+                mode="month" event_open_popup="True" color="employee_id">
+                <field name="name"/>
+                <field name="employee_id"/>
+            </calendar>
+
+        </field>
+    </record>
+
+</odoo>

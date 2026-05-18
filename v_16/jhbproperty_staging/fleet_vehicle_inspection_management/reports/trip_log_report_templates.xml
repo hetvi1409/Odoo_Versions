@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Trip Log Report Template -->
+    <template id="report_trip_log_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="text-center">
+                            <strong>LOG BOOK</strong>
+                        </h2>
+                    </div>
+                </div>
+
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Driver Name</th>
+                            <th>Depot Name</th>
+                            <th>Reg Num</th>
+                            <th>Opening Odo</th>
+                            <th>Closing Odo</th>
+                            <th>Total KMS</th>
+                            <th>Signature</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span t-field="o.date"/></td>
+                            <td><span t-field="o.driver_id.name"/></td>
+                            <td><span t-field="o.company_id.name"/></td>
+                            <td><span t-field="o.vehicle_id.license_plate"/></td>
+                            <td><span t-field="o.start_odometer"/></td>
+                            <td><span t-field="o.end_odometer"/></td>
+                            <td><span t-field="o.distance"/></td>
+                            <td>________________</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <strong>Destination:</strong> <span t-field="o.destination"/>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <strong>Remarks:</strong>
+                        <p t-field="o.remarks"/>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-6 text-center">
+                        <p>_____________________</p>
+                        <p><strong>Driver Signature</strong></p>
+                    </div>
+                    <div class="col-6 text-center">
+                        <p>_____________________</p>
+                        <p><strong>Fleet Office</strong></p>
+                    </div>
+                </div>
+
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_trip_log">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="fleet_vehicle_inspection_management.report_trip_log_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

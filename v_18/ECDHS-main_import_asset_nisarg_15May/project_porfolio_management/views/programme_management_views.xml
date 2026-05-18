@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Sequence for Program Code -->
+    <record id="seq_portfolio_program" model="ir.sequence">
+        <field name="name">Portfolio Program</field>
+        <field name="code">portfolio.program</field>
+        <field name="prefix">PROG-</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Action -->
+    <record id="action_portfolio_program" model="ir.actions.act_window">
+        <field name="name">Programs</field>
+        <field name="res_model">portfolio.program</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first program
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu (under Portfolio Management) -->
+    <menuitem id="menu_portfolio_program"
+              name="Programs"
+              parent="menu_portfolio_root" sequence="2"
+              action="action_portfolio_program"/>
+
+    <!-- list View -->
+    <record id="view_portfolio_program_list" model="ir.ui.view">
+        <field name="name">portfolio.program.list</field>
+        <field name="model">portfolio.program</field>
+        <field name="arch" type="xml">
+            <list string="Programs">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="portfolio_id"/>
+                <field name="manager_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+<!--                <field name="budget_total"/>-->
+<!--                <field name="cost_actual"/>-->
+<!--                <field name="percent_complete" widget="progressbar"/>-->
+                <field name="risk_score"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_portfolio_program_form" model="ir.ui.view">
+        <field name="name">portfolio.program.form</field>
+        <field name="model">portfolio.program</field>
+        <field name="arch" type="xml">
+            <form string="Program">
+                <header>
+                    <button name="action_review" type="object"
+                            string="Review"
+                            invisible="state != 'draft'"
+                            class="btn-primary"/>
+                    <button name="action_activate" type="object"
+                            string="Activate"
+                            invisible="state != 'review'"
+                            class="btn-primary"/>
+                    <button name="action_cancelled" type="object"
+                            string="Cancel"
+                            invisible="state != 'review'"
+                            class="btn-primary"/>
+                    <buton name="action_close" type="object"
+                            string="Close"
+                            invisible="state in ['active', 'review']"
+                            class="btn-secondary"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,active,review,closed,cancelled"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_project" invisible="not project_count" icon="fa-puzzle-piece" class="oe_stat_button">
+                            <field name="project_count" widget="statinfo" string="Projects"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code" readonly="1"/>
+                            <field name="portfolio_id"/>
+                            <field name="manager_id"/>
+<!--                            <field name="analytic_account_id"/>-->
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="budget_planned" />
+                            <field name="budget_actual" />
+                            <field name="budget_variance" />
+                            <field name="risk_score" />
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Projects">
+                            <field name="project_ids" context="{'default_is_ppe': True, 'form_view_ref': 'project_porfolio_management.edit_project_ppe'}">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="budget_planned"/>
+                                    <field name="budget_actual"/>
+                                    <field name="budget_variance"/>
+                                    <field name="planned_progress" widget="progressbar"/>
+                                    <field name="actual_progress" widget="progressbar"/>
+                                    <field name="variance_progress" widget="progressbar"/>
+                                </list>
+                            </field>
+                        </page>
+<!--                        <page string="Milestones">-->
+<!--                            <field name="milestone_ids">-->
+<!--                                <list>-->
+<!--                                    <field name="name"/>-->
+<!--                                    <field name="date_deadline"/>-->
+<!--                                    <field name="stage_id"/>-->
+<!--                                </list>-->
+<!--                            </field>-->
+<!--                        </page>-->
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_portfolio_program_search" model="ir.ui.view">
+        <field name="name">portfolio.program.search</field>
+        <field name="model">portfolio.program</field>
+        <field name="arch" type="xml">
+            <search string="Search Programs">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="portfolio_id"/>
+                <field name="manager_id"/>
+                <field name="state"/>
+                <filter string="Active" name="filter_active" domain="[('state','=','active')]"/>
+                <filter string="Closed" name="filter_closed" domain="[('state','=','closed')]"/>
+                <filter string="High Risk" name="filter_high_risk" domain="[('risk_score','>=',70)]"/>
+            </search>
+        </field>
+    </record>
+
+</odoo>

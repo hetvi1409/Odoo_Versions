@@ -1,0 +1,171 @@
+<odoo>
+  <!-- Land -->
+  <record id="view_property_land_tree" model="ir.ui.view">
+    <field name="model">property.land</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="location"/>
+        <field name="full_extent_sqm"/>
+        <field name="omniclass_code_91"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_property_land_form" model="ir.ui.view">
+    <field name="model">property.land</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="location"/>
+            <field name="full_extent_sqm"/>
+            <field name="omniclass_code_91"/>
+          </group>
+          <notebook>
+            <page string="Buildings">
+              <field name="building_ids">
+                <list>
+                  <field name="name"/>
+                  <field name="gross_building_area_sqm"/>
+                  <field name="omniclass_code_11"/>
+                  <field name="omniclass_code_21"/>
+                </list>
+              </field>
+            </page>
+            <page string="Summary">
+              <group>
+                <field name="total_building_area"/>
+                <field name="total_lettable_area"/>
+              </group>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Building -->
+  <record id="view_property_building_tree" model="ir.ui.view">
+    <field name="model">building</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="land_id"/>
+        <field name="gross_building_area_sqm"/>
+        <field name="omniclass_code_11"/>
+        <field name="omniclass_code_21"/>
+        <field name="omniclass_code_22"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_property_building_form" model="ir.ui.view">
+    <field name="model">building</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="land_id"/>
+            <field name="gross_building_area_sqm"/>
+          </group>
+          <group>
+            <field name="omniclass_code_11"/>
+            <field name="omniclass_code_21"/>
+            <field name="omniclass_code_22"/>
+          </group>
+          <notebook>
+            <page string="Units">
+              <field name="unit_ids">
+                <list>
+                  <field name="name"/>
+                  <field name="unit_type"/>
+                  <field name="gross_lettable_area_sqm"/>
+                  <field name="omniclass_code_21"/>
+                </list>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Unit -->
+  <record id="view_property_unit_tree" model="ir.ui.view">
+    <field name="model">property.unit</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="building_id"/>
+        <field name="unit_type"/>
+        <field name="gross_lettable_area_sqm"/>
+        <field name="omniclass_code_21"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_property_unit_form" model="ir.ui.view">
+    <field name="model">property.unit</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="building_id"/>
+            <field name="land_id" readonly="1"/>
+            <field name="unit_type"/>
+            <field name="gross_lettable_area_sqm"/>
+          </group>
+          <group>
+            <field name="omniclass_code_21"/>
+            <field name="omniclass_code_22"/>
+            <field name="omniclass_code_31"/>
+            <field name="omniclass_code_33"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Search views with filters -->
+  <record id="view_property_land_search" model="ir.ui.view">
+    <field name="model">property.land</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name"/>
+        <field name="location"/>
+        <filter name="by_omni_91" string="By OmniClass 91" domain="[]" context="{'group_by':'omniclass_code_91'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="view_property_building_search" model="ir.ui.view">
+    <field name="model">building</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name"/>
+        <field name="land_id"/>
+        <filter name="by_omni_11" string="By OmniClass 11" domain="[]" context="{'group_by':'omniclass_code_11'}"/>
+        <filter name="by_omni_21" string="By OmniClass 21" domain="[]" context="{'group_by':'omniclass_code_21'}"/>
+        <filter name="by_omni_22" string="By OmniClass 22" domain="[]" context="{'group_by':'omniclass_code_22'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="view_property_unit_search" model="ir.ui.view">
+    <field name="model">property.unit</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name"/>
+        <field name="building_id"/>
+        <filter name="by_omni_21_unit" string="By OmniClass 21" domain="[]" context="{'group_by':'omniclass_code_21'}"/>
+        <filter name="by_omni_22_unit" string="By OmniClass 22" domain="[]" context="{'group_by':'omniclass_code_22'}"/>
+        <filter name="by_omni_31_unit" string="By OmniClass 31" domain="[]" context="{'group_by':'omniclass_code_31'}"/>
+        <filter name="by_omni_33_unit" string="By OmniClass 33" domain="[]" context="{'group_by':'omniclass_code_33'}"/>
+      </search>
+    </field>
+  </record>
+</odoo>
