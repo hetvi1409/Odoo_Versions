@@ -1,0 +1,52 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="library_managment_list">
+      <field name="name">Books.list.view</field>
+      <field name="model">library.book</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="name"/>
+          <field name="author"/>
+          <field name="isbn"/>
+        </list>
+      </field>
+    </record>
+
+    <!-- explicit form view definition -->
+    <record model="ir.ui.view" id="library_managment_form">
+      <field name="name">Books.form.view</field>
+      <field name="model">library.book</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+                <field name="status" widget="statusbar"/>
+          </header>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="author"/>
+              <field name="isbn"/>
+              <field name="category"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="library_managment_actions_window">
+      <field name="name">Books window</field>
+      <field name="res_model">library.book</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- menu items to access the actions -->
+    <menuitem name="Library Management" id="menu_root" web_icon="library_management_owl,static/src/img/library_icon.png"/>
+    <menuitem name="Books" id="books_menu" parent="menu_root" action="library_managment_actions_window"/>
+
+  </data>
+</odoo>

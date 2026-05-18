@@ -1,0 +1,1 @@
+from . import mecalux_quant_format_wizard

@@ -1,0 +1,1 @@
+- remove separated transaction for each ApiLog.mark_processed() call.

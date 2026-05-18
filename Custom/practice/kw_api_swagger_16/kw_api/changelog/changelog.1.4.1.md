@@ -1,0 +1,1 @@
+- Fix incorrect *[DELETE] kw_api/auth/token* endpoint.

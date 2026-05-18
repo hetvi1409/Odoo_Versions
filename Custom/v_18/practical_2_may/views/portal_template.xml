@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- portal view -->
+    <template id="portal_my_home_inherit_mrp" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[@id='portal_common_category']" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Manufacturing</t>
+                <t t-set="text">View your Manufacturing Orders</t>
+                <t t-set="url" t-value="'/my/mrp'" />
+                <t t-set="count" t-value="mrp_count" />
+                <t t-set="config_card" t-value="True"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- mrp template page -->
+    <template id="portal_my_mrp_list" name="My Manufacturing Orders">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+            <h1> Manufacturing Order</h1>
+        </t>
+    </template>
+
+</odoo>

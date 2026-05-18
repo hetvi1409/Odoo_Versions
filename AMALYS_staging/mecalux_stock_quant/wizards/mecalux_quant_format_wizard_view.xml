@@ -1,0 +1,33 @@
+<odoo>
+    <data>
+        <record id="mecalux_quant_format_wizard_view_form" model="ir.ui.view">
+            <field name="name">mecalux.quant.format.wizard.view.form</field>
+            <field name="model">mecalux.quant.format</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="mecalux_file" filename="mecalux_file_name"/>
+                            <field name="mecalux_file_name" invisible="1"/>
+                            <field name="stock_location_id"/>
+                        </group>
+                        <footer>
+                            <button string="Import" type="object" name="import_mecalux_quants" class="btn-primary"/>
+                            <button string="Discard" class="btn-secondary" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_mecalux_quant_format_wizard" model="ir.actions.act_window">
+            <field name="name">Import Mecalux Quants</field>
+            <field name="res_model">mecalux.quant.format</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_mecalux_quant_format_wizard" name="Import Mecalux Quants" action="action_mecalux_quant_format_wizard" parent="stock.menu_stock_config_settings" sequence="99" />
+
+    </data>
+</odoo>

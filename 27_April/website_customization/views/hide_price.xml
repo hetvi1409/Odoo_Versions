@@ -1,0 +1,56 @@
+<odoo>
+
+    <template id="hide_price_public" inherit_id="website_sale.product">
+
+        <!-- Replace price section -->
+        <xpath expr="//t[@t-call='website_sale.product_price']" position="replace">
+
+            <t t-if="request.env.user._is_public()">
+            <!-- has_group('base.group_public') -->
+                <div>
+                    <span class="text-danger">Login to see price</span>
+                </div>
+            </t>
+
+            <t t-else="">
+                <t t-call="website_sale.product_price"/>
+            </t>
+
+        </xpath>
+
+    </template>
+
+    <template id="hide_price_public_from_list" inherit_id="website_sale.products_item">
+
+        <!-- Replace price section -->
+        <xpath expr="//div[@class='product_price']" position="replace">
+
+            <t t-if="request.env.user._is_public()">
+                <div>
+                    <span class="text-danger">Login to see price</span>
+                </div>
+            </t>
+
+            <t t-else="">
+                <div class="product_price" itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer">
+                    <span class="h6 mb-0"
+                          t-if="template_price_vals['price_reduce'] or not website.prevent_zero_price_sale"
+                          t-out="template_price_vals['price_reduce']"
+                          t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                    <span class="h6 mb-0" t-elif="any(ptav.price_extra for ptav in product.attribute_line_ids.product_template_value_ids)">&amp;nbsp;</span>
+                    <span class="h6 mb-0" t-else="" t-field="website.prevent_zero_price_sale_text"/>
+                    <t t-if="'base_price' in template_price_vals and (template_price_vals['base_price'] &gt; template_price_vals['price_reduce']) and (template_price_vals['price_reduce'] or not website.prevent_zero_price_sale)">
+                        <del t-attf-class="text-muted me-1 h6 mb-0" style="white-space: nowrap;">
+                            <em class="small" t-esc="template_price_vals['base_price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                        </del>
+                    </t>
+                    <span itemprop="price" style="display:none;" t-esc="template_price_vals['price_reduce']" />
+                    <span itemprop="priceCurrency" style="display:none;" t-esc="website.currency_id.name" />
+                </div>
+            </t>
+
+        </xpath>
+
+    </template>
+
+</odoo>

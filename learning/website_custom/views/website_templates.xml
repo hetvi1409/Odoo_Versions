@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ====================================================================
+         Website Top-Menu Entry
+    ==================================================================== -->
+    <record id="website_menu_contact_form" model="website.menu">
+        <field name="name">Contact Us</field>
+        <field name="url">/contact-us-form</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">99</field>
+    </record>
+
+    <!-- ====================================================================
+         Website Contact Form Page
+    ==================================================================== -->
+    <template id="website_contact_form_page" name="Contact Us Form">
+        <t t-call="website.layout">
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h2 class="mb-4">Contact Us</h2>
+                        <p class="text-muted mb-4">
+                            Fill in the form below and we'll get back to you.
+                            Fields marked with <span class="text-danger">*</span> are required.
+                        </p>
+
+                        <form action="/contact-us-form/submit" method="post"
+                              class="o_website_form">
+                            <input type="hidden" name="csrf_token"
+                                   t-att-value="request.csrf_token()"/>
+
+                            <!-- Full Name -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label fw-semibold">
+                                    Full Name <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" id="name" name="name"
+                                       class="form-control"
+                                       t-att-class="'is-invalid' if error.get('name') else ''"
+                                       t-att-value="values.get('name', '')"
+                                       placeholder="Enter your full name"/>
+                                <div t-if="error.get('name')" class="invalid-feedback">
+                                    <t t-out="error['name']"/>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-semibold">
+                                    Email <span class="text-danger">*</span>
+                                </label>
+                                <input type="email" id="email" name="email"
+                                       class="form-control"
+                                       t-att-class="'is-invalid' if error.get('email') else ''"
+                                       t-att-value="values.get('email', '')"
+                                       placeholder="example@email.com"/>
+                                <div t-if="error.get('email')" class="invalid-feedback">
+                                    <t t-out="error['email']"/>
+                                </div>
+                            </div>
+
+                            <!-- Phone & Mobile -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label fw-semibold">Phone</label>
+                                    <input type="tel" id="phone" name="phone"
+                                           class="form-control"
+                                           t-att-value="values.get('phone', '')"
+                                           placeholder="+1 234 567 890"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="mobile" class="form-label fw-semibold">Mobile</label>
+                                    <input type="tel" id="mobile" name="mobile"
+                                           class="form-control"
+                                           t-att-value="values.get('mobile', '')"
+                                           placeholder="+1 234 567 890"/>
+                                </div>
+                            </div>
+
+                            <!-- Company -->
+                            <div class="mb-3">
+                                <label for="company_name" class="form-label fw-semibold">
+                                    Company Name
+                                </label>
+                                <input type="text" id="company_name" name="company_name"
+                                       class="form-control"
+                                       t-att-value="values.get('company_name', '')"
+                                       placeholder="Your company (optional)"/>
+                            </div>
+
+                            <!-- Street -->
+                            <div class="mb-3">
+                                <label for="street" class="form-label fw-semibold">Street</label>
+                                <input type="text" id="street" name="street"
+                                       class="form-control"
+                                       t-att-value="values.get('street', '')"
+                                       placeholder="Street address"/>
+                            </div>
+
+                            <!-- City / Zip -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="city" class="form-label fw-semibold">City</label>
+                                    <input type="text" id="city" name="city"
+                                           class="form-control"
+                                           t-att-value="values.get('city', '')"
+                                           placeholder="City"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="zip" class="form-label fw-semibold">Zip</label>
+                                    <input type="text" id="zip" name="zip"
+                                           class="form-control"
+                                           t-att-value="values.get('zip', '')"
+                                           placeholder="Zip / Postal code"/>
+                                </div>
+                            </div>
+
+                            <!-- Country -->
+                            <div class="mb-3">
+                                <label for="country_id" class="form-label fw-semibold">Country</label>
+                                <select id="country_id" name="country_id" class="form-select">
+                                    <option value="">-- Select Country --</option>
+                                    <t t-foreach="countries" t-as="country">
+                                        <option t-att-value="country.id"
+                                                t-att-selected="'selected' if str(country.id) == values.get('country_id','') else None">
+                                            <t t-out="country.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <!-- Message -->
+                            <div class="mb-4">
+                                <label for="message" class="form-label fw-semibold">Message</label>
+                                <textarea id="message" name="message" rows="4"
+                                          class="form-control"
+                                          placeholder="Write your message here..."><t
+                                    t-out="values.get('message', '')"/></textarea>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    Submit
+                                </button>
+                                <a href="/" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ====================================================================
+         Thank-You Page
+    ==================================================================== -->
+    <template id="website_contact_thank_you" name="Contact Us – Thank You">
+        <t t-call="website.layout">
+            <div class="container py-5 text-center">
+                <div class="mb-4">
+                    <i class="fa fa-check-circle fa-5x text-success"/>
+                </div>
+                <h2 class="mb-3">Thank You!</h2>
+                <p class="lead text-muted">
+                    Your contact information has been submitted successfully.
+                </p>
+                <div class="mt-4 d-flex justify-content-center gap-3">
+                    <a href="/" class="btn btn-primary">Back to Home</a>
+                    <a href="/my/contacts" class="btn btn-outline-secondary">View My Contacts</a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ====================================================================
+         Portal – My Contacts List
+    ==================================================================== -->
+    <template id="portal_contacts_list" name="My Contacts">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">My Contacts</t>
+            </t>
+
+            <div t-if="not contacts" class="alert alert-warning mt-3">
+                You have no submitted contacts yet.
+                <a href="/contact-us-form">Submit one now</a>.
+            </div>
+
+            <div t-else="" class="card mt-3">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Contact Information</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Company</th>
+                                <th>City</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="contacts" t-as="contact">
+                                <tr>
+                                    <td><t t-out="contact_index + 1"/></td>
+                                    <td>
+                                        <a t-attf-href="/my/contacts/#{contact.id}">
+                                            <t t-out="contact.name"/>
+                                        </a>
+                                    </td>
+                                    <td><t t-out="contact.email or '—'"/></td>
+                                    <td><t t-out="contact.phone or contact.mobile or '—'"/></td>
+                                    <td><t t-out="contact.company_name or '—'"/></td>
+                                    <td><t t-out="contact.city or '—'"/></td>
+                                    <td>
+                                        <a t-attf-href="/my/contacts/#{contact.id}"
+                                           class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ====================================================================
+         Portal – Contact Detail
+    ==================================================================== -->
+    <template id="portal_contact_detail" name="Contact Detail">
+        <t t-call="portal.portal_layout">
+            <div class="card mt-3">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        Contact Details –
+                        <t t-out="customer_contact_portal.name"/>
+                    </h5>
+                    <a href="/my/contacts" class="btn btn-sm btn-light">
+                        ← Back to Contacts
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <!-- Personal Info -->
+                        <div class="col-md-6">
+                            <h6 class="text-muted text-uppercase fw-semibold mb-3">
+                                Personal Information
+                            </h6>
+                            <dl class="row">
+                                <dt class="col-sm-4">Full Name</dt>
+                                <dd class="col-sm-8">
+                                    <t t-out="customer_contact_portal.name"/>
+                                </dd>
+
+                                <dt class="col-sm-4">Email</dt>
+                                <dd class="col-sm-8">
+                                    <a t-attf-href="mailto:#{customer_contact_portal.email}">
+                                        <t t-out="customer_contact_portal.email"/>
+                                    </a>
+                                </dd>
+
+                                <dt class="col-sm-4">Phone</dt>
+                                <dd class="col-sm-8">
+                                    <t t-out="customer_contact_portal.phone or '—'"/>
+                                </dd>
+
+                                <dt class="col-sm-4">Mobile</dt>
+                                <dd class="col-sm-8">
+                                    <t t-out="customer_contact_portal.mobile or '—'"/>
+                                </dd>
+
+                                <dt class="col-sm-4">Company</dt>
+                                <dd class="col-sm-8">
+                                    <t t-out="customer_contact_portal.company_name or '—'"/>
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="col-md-6">
+                            <h6 class="text-muted text-uppercase fw-semibold mb-3">
+                                Address
+                            </h6>
+                            <dl class="row">
+                                <dt class="col-sm-4">Street</dt>
+                                <dd class="col-sm-8">
+                                    <t t-out="customer_contact_portal.street or '—'"/>
+                                </dd>
+
+                                <dt class="col-sm-4">City</dt>
+                                <dd class="col-sm-8">
+                                    <t t-out="customer_contact_portal.city or '—'"/>
+                                </dd>
+
+                                <dt class="col-sm-4">Zip</dt>
+                                <dd class="col-sm-8">
+                                    <t t-out="customer_contact_portal.zip or '—'"/>
+                                </dd>
+
+                                <dt class="col-sm-4">Country</dt>
+                                <dd class="col-sm-8">
+                                    <t t-out="customer_contact_portal.country_id.name if customer_contact_portal.country_id else '—'"/>
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <!-- Message -->
+                        <t t-if="customer_contact_portal.message">
+                            <div class="col-12">
+                                <h6 class="text-muted text-uppercase fw-semibold mb-2">Message</h6>
+                                <p class="border rounded p-3 bg-light">
+                                    <t t-out="customer_contact_portal.message"/>
+                                </p>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ====================================================================
+         Portal Sidebar – My Contacts entry
+    ==================================================================== -->
+    <template id="portal_my_contacts_menu" inherit_id="portal.portal_my_home"
+              name="Portal My Contacts Menu" priority="40">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">My Contacts</t>
+                <t t-set="url">/my/contacts</t>
+                <t t-set="placeholder_count" t-value="'contact_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>

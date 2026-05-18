@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="odoo_chess.ChessBoard">
+        <div class="o_chess_board_wrapper">
+            <!-- Game Status -->
+            <div class="o_chess_status mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span t-att-class="turnIndicatorClass">
+                        <t t-esc="turnIndicator"/>
+                    </span>
+                    <span t-if="state.isCheck and !state.gameOver" class="badge bg-danger">
+                        Check!
+                    </span>
+                </div>
+            </div>
+
+            <!-- Main Game Area: Board + Side Panel -->
+            <div class="o_chess_game_area">
+                <!-- Opponent Clock (mobile only - shown above board) -->
+                <div t-if="state.isTimed" class="o_chess_clock_mobile o_chess_clock_mobile_top">
+                    <div t-att-class="opponentClockClass">
+                        <span class="o_clock_player_name">
+                            <t t-esc="opponentName"/>
+                        </span>
+                        <span class="o_clock_time">
+                            <t t-esc="opponentTimeDisplay"/>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Chessboard Container -->
+                <div class="o_chess_board_container">
+                    <div t-ref="board" class="o_chess_board"/>
+                </div>
+
+                <!-- Player Clock (mobile only - shown below board) -->
+                <div t-if="state.isTimed" class="o_chess_clock_mobile o_chess_clock_mobile_bottom">
+                    <div t-att-class="myClockClass">
+                        <span class="o_clock_player_name">
+                            <t t-esc="myName"/> (You)
+                        </span>
+                        <span class="o_clock_time">
+                            <t t-esc="myTimeDisplay"/>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Side Panel (desktop only) -->
+                <div class="o_chess_side_panel">
+                    <!-- Opponent Clock -->
+                    <div t-if="state.isTimed" class="o_chess_side_clock">
+                        <div t-att-class="opponentClockClass">
+                            <span class="o_clock_player_name">
+                                <t t-esc="opponentName"/>
+                            </span>
+                            <span class="o_clock_time">
+                                <t t-esc="opponentTimeDisplay"/>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Odoo Fun Fact (middle, shown between clocks when timed) -->
+                    <div t-if="state.isTimed and state.currentFact" class="o_chess_fact_panel">
+                        <div class="o_chess_fact card">
+                            <div class="card-body">
+                                <small class="text-muted">
+                                    <i class="fa fa-lightbulb-o me-1"/>
+                                    <t t-esc="state.currentFact"/>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Player Clock -->
+                    <div t-if="state.isTimed" class="o_chess_side_clock">
+                        <div t-att-class="myClockClass">
+                            <span class="o_clock_player_name">
+                                <t t-esc="myName"/> (You)
+                            </span>
+                            <span class="o_clock_time">
+                                <t t-esc="myTimeDisplay"/>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder when no time control -->
+                    <div t-if="!state.isTimed and state.currentFact" class="o_chess_fact_panel_untimed">
+                        <div class="o_chess_fact card">
+                            <div class="card-body">
+                                <small class="text-muted">
+                                    <i class="fa fa-lightbulb-o me-1"/>
+                                    <t t-esc="state.currentFact"/>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Odoo Fun Fact (mobile only) -->
+            <div t-if="state.currentFact" class="o_chess_fact_mobile mt-3">
+                <div class="o_chess_fact card bg-light">
+                    <div class="card-body py-2">
+                        <small class="text-muted">
+                            <i class="fa fa-lightbulb-o me-1"/>
+                            <t t-esc="state.currentFact"/>
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Controls (only if game is active) -->
+            <div t-if="!state.gameOver" class="o_chess_controls mt-3 mb-3">
+                <div class="btn-group" role="group">
+                    <button t-if="state.isMyTurn and !state.drawOffered"
+                            class="btn btn-outline-warning btn-sm"
+                            t-on-click="onOfferDraw">
+                        <i class="fa fa-handshake-o"/> Offer Draw
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm"
+                            t-on-click="onResign">
+                        <i class="fa fa-flag"/> Resign
+                    </button>
+                </div>
+
+                <!-- Draw Offer Response -->
+                <div t-if="state.drawOffered" class="alert alert-info mt-2" role="alert">
+                    <strong>Draw Offered!</strong>
+                    <div class="mt-2">
+                        <button class="btn btn-success btn-sm me-2" t-on-click="onAcceptDraw">
+                            Accept
+                        </button>
+                        <button class="btn btn-secondary btn-sm" t-on-click="onDeclineDraw">
+                            Decline
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Last Move Display -->
+            <div t-if="state.lastMove" class="o_chess_last_move text-muted small mb-2">
+                Last move: <t t-esc="state.lastMove.from"/> → <t t-esc="state.lastMove.to"/>
+            </div>
+
+            <!-- Promotion Dialog -->
+            <div t-if="state.showPromotion" class="o_chess_promotion_overlay" t-on-click="onCancelPromotion">
+                <div class="o_chess_promotion_dialog" t-on-click.stop="">
+                    <div class="o_chess_promotion_title">Choose promotion piece</div>
+                    <div class="o_chess_promotion_pieces">
+                        <button class="o_chess_promotion_piece" t-on-click="() => this.onSelectPromotion('q')"
+                                t-att-title="'Queen'">
+                            <img t-att-src="'/odoo_chess/static/lib/chessboardjs/img/chesspieces/wikipedia/' + state.promotionColor + 'Q.png'"
+                                 alt="Queen"/>
+                        </button>
+                        <button class="o_chess_promotion_piece" t-on-click="() => this.onSelectPromotion('r')"
+                                t-att-title="'Rook'">
+                            <img t-att-src="'/odoo_chess/static/lib/chessboardjs/img/chesspieces/wikipedia/' + state.promotionColor + 'R.png'"
+                                 alt="Rook"/>
+                        </button>
+                        <button class="o_chess_promotion_piece" t-on-click="() => this.onSelectPromotion('b')"
+                                t-att-title="'Bishop'">
+                            <img t-att-src="'/odoo_chess/static/lib/chessboardjs/img/chesspieces/wikipedia/' + state.promotionColor + 'B.png'"
+                                 alt="Bishop"/>
+                        </button>
+                        <button class="o_chess_promotion_piece" t-on-click="() => this.onSelectPromotion('n')"
+                                t-att-title="'Knight'">
+                            <img t-att-src="'/odoo_chess/static/lib/chessboardjs/img/chesspieces/wikipedia/' + state.promotionColor + 'N.png'"
+                                 alt="Knight"/>
+                        </button>
+                    </div>
+                    <button class="btn btn-sm btn-secondary mt-2" t-on-click="onCancelPromotion">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

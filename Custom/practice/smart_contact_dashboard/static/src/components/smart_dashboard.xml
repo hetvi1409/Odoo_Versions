@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="smart_contract_dashboard.smart_dashboard" >
+        <div class="o_action m-2">
+
+            <t t-if="state.loading">
+                <div class="text-center mt-4">
+                    <h4>Loading...</h4>
+                </div>
+            </t>
+
+            <t t-else="">
+
+
+            <h1>Hello, Welcome!</h1>
+
+            <p>Counter: <t t-esc="state.count"/></p>
+
+            <t t-if="state.count % 2 === 0">
+                <p class="text-success">Even</p>
+            </t>
+            <t t-else="">
+                <p class="text-danger">Odd</p>
+            </t>
+
+            <button type="button" t-on-click="increment" style="height: 50px; width: 20%; border-radius: 8px;">Increment</button>
+            <button class="mt-2" type="button" t-on-click="decrement" style="height: 50px; width: 20%; border-radius: 8px;">Decrement</button>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Partner</th>
+                        <th>phone</th>
+                        <th>email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="state.partners" t-as="partner" t-key="partner.id">
+                        <tr>
+                            <td><t t-esc="partner.name"/></td>
+                            <td><t t-esc="partner.phone"/></td>
+                            <td><t t-esc="partner.email"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+
+            <hr/>
+
+            <h3>Create Partner</h3>
+
+            <form t-on-submit="createPartner">
+                <div class="mb-2">
+                    <input type="text" name="name" placeholder="Name"
+                           t-att-value="state.newPartner.name" t-on-input="onInputChange" class="form-control"/>
+                </div>
+
+                <div class="mb-2">
+                    <input type="email" name="email" placeholder="Email"
+                           t-att-value="state.newPartner.email" t-on-input="onInputChange" class="form-control"/>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Create
+                </button>
+            </form>
+
+            </t>
+
+        </div>
+
+    </t>
+</templates>

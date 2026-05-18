@@ -1,0 +1,26 @@
+<odoo>
+  <data>
+
+        <record id="view_stock_picking_kanban_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.kanban.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.stock_picking_kanban"/>
+                <field name="arch" type="xml">
+
+                    <xpath expr="//kanban[1]/templates[1]/t[@t-name='card']/footer[1]" position="after">
+                        <!-- <field name="move_ids_without_package"/> -->
+                        <field name="kanban_product_summary"/>
+                    </xpath>
+
+                    <!-- <xpath expr="//kanban[1]/templates[1]/t[@t-name='card']/footer[1]" position="replace">
+                        <footer>
+                            <field name="move_ids_without_package" widget="many2many_tags"
+                                options="{'color_field': 'product_id', 'display_name': 'product_id'}"/>
+                        </footer>
+                    </xpath> -->
+
+                </field>
+        </record>
+
+  </data>
+</odoo>

@@ -1,0 +1,700 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<templates xml:space="preserve">-->
+
+<!--    <t t-name="accounting_dashboard.accounting_dashboard_template">-->
+<!--        <div class="o_accounting_dashboard_wrap d-flex flex-column" style="height: 100vh; overflow: hidden;">-->
+<!--             <div class="o_accounting_dashboard_scroll p-3" style="overflow-y: auto;">-->
+<!--                <div class="o_financial_dashboard container-fluid">-->
+
+<!--                    &lt;!&ndash; Header &ndash;&gt;-->
+<!--                    <div class="d-flex justify-content-between align-items-center mb-3">-->
+<!--                        <h3 class="fw-bold">Financial Report</h3>-->
+<!--                        <select id="yearSelector" class="form-select w-auto">-->
+<!--                            <option value="2021">2021</option>-->
+<!--                            <option value="2022">2022</option>-->
+<!--                            <option value="2023">2023</option>-->
+<!--                            <option value="2024">2024</option>-->
+<!--                            <option value="2025">2025</option>-->
+<!--                            <option value="2026">2026</option>-->
+<!--                            <option value="2027">2027</option>-->
+<!--                            <option value="2028">2028</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; KPI Boxes &ndash;&gt;-->
+<!--                    <div class="row mb-4 text-center">-->
+<!--                        <div class="col-md-2">-->
+<!--                            <div class="card shadow-sm">-->
+<!--                                <div class="card-body">-->
+<!--                                    <h6>Revenue</h6>-->
+<!--                                    <h4 id="revenue_val">$57,670K</h4>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-2">-->
+<!--                            <div class="card shadow-sm">-->
+<!--                                <div class="card-body">-->
+<!--                                    <h6>Gross Profit</h6>-->
+<!--                                    <h4 id="gross_profit_val">$14,481K</h4>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-2">-->
+<!--                            <div class="card shadow-sm">-->
+<!--                                <div class="card-body">-->
+<!--                                    <h6>EBIT</h6>-->
+<!--                                    <h4 id="ebit_val">$7,788K</h4>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-2">-->
+<!--                            <div class="card shadow-sm">-->
+<!--                                <div class="card-body">-->
+<!--                                    <h6>Net Profit</h6>-->
+<!--                                    <h4 id="net_profit_val">$7,736K</h4>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-2">-->
+<!--                            <div class="card shadow-sm">-->
+<!--                                <div class="card-body">-->
+<!--                                    <h6>Net Profit Margin</h6>-->
+<!--                                    <h4 id="net_profit_margin">13.41%</h4>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-2">-->
+<!--                            <div class="card shadow-sm">-->
+<!--                                <div class="card-body">-->
+<!--                                    <h6>Expenses</h6>-->
+<!--                                    <h4 id="expenses_val">$49,881K</h4>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Graph + Donut Charts &ndash;&gt;-->
+<!--                    <div class="row">-->
+<!--                        &lt;!&ndash; Line Chart &ndash;&gt;-->
+<!--                        <div class="col-md-8">-->
+<!--                            <div class="card shadow-sm">-->
+<!--                                <div class="card-body">-->
+<!--                                    <h6>Revenue vs Gross Profit</h6>-->
+<!--                                    <canvas id="revenueGrossChart"></canvas>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; Donut Charts &ndash;&gt;-->
+<!--                        <div class="col-md-4">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-md-6">-->
+<!--                                    <div class="card shadow-sm">-->
+<!--                                        <div class="card-body text-center">-->
+<!--                                            <h6>% of Revenue Target</h6>-->
+<!--                                            <canvas id="revenueTargetChart"></canvas>-->
+<!--                                            <p class="mt-2"><strong>90%</strong></p>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-6">-->
+<!--                                    <div class="card shadow-sm">-->
+<!--                                        <div class="card-body text-center">-->
+<!--                                            <h6>% of Gross Profit Target</h6>-->
+<!--                                            <canvas id="grossTargetChart"></canvas>-->
+<!--                                            <p class="mt-2"><strong>87%</strong></p>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+
+<!--                    &lt;!&ndash; Last Row: Ratios and Summary Boxes &ndash;&gt;-->
+<!--                    <div class="row mt-4">-->
+<!--                        &lt;!&ndash; Quick vs Current Ratio &ndash;&gt;-->
+<!--                        <div class="col-md-4">-->
+<!--                            <div class="card text-center shadow-sm p-3">-->
+<!--                                <h6 class="text-muted">Quick vs Current Ratio</h6>-->
+<!--                                <h4 class="fw-bold" t-esc="quick_ratio or 0.0"></h4>-->
+<!--                                <small class="text-muted">As of <t t-esc="current_date"/></small>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        &lt;!&ndash; Summary Box 1 &ndash;&gt;-->
+<!--                        <div class="col-md-4">-->
+<!--                                <div class="card shadow-sm">-->
+<!--                                    <div class="card-body">-->
+<!--                                        <h6>Quick vs Current Ratio</h6>-->
+<!--                                        <canvas id="ratioChart"></canvas>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                        </div>-->
+
+<!--                        <div class="col-md-4">-->
+<!--                                <div class="card shadow-sm">-->
+<!--                                    <div class="card-body">-->
+<!--                                        <h6>Income vs Expense</h6>-->
+<!--                                        <canvas id="incomeExpenseChart"></canvas>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+
+<!--                </div>-->
+<!--             </div>-->
+<!--        </div>-->
+<!--    </t>-->
+<!--</templates>-->
+
+
+<!--*******************************************************************************8-->
+<!--WORKINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG-->
+<!--<templates xml:space="preserve">-->
+<!--  <t t-name="accounting_dashboard.accounting_dashboard_template">-->
+<!--    <div class="o_accounting_dashboard_wrap d-flex flex-column">-->
+<!--      <div class="o_accounting_dashboard_scroll p-3">-->
+<!--        <div class="o_financial_dashboard container-fluid">-->
+
+<!--          &lt;!&ndash; Header &ndash;&gt;-->
+<!--          <div class="d-flex justify-content-between align-items-center mb-3">-->
+<!--            <h3 class="fw-bold">Financial Report</h3>-->
+<!--            <select id="yearSelector" class="form-select w-auto">-->
+<!--              <option value="2021">2021</option>-->
+<!--              <option value="2022">2022</option>-->
+<!--              <option value="2023">2023</option>-->
+<!--              <option value="2024">2024</option>-->
+<!--              <option value="2025">2025</option>-->
+<!--              <option value="2026">2026</option>-->
+<!--              <option value="2027">2027</option>-->
+<!--              <option value="2028">2028</option>-->
+<!--            </select>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; KPI Boxes &ndash;&gt;-->
+<!--          <div class="row mb-4 text-center">-->
+<!--            <div class="col-md-2">-->
+<!--              <div class="card shadow-sm">-->
+<!--                <div class="card-body">-->
+<!--                  <h6>Revenue</h6>-->
+<!--                  <h4 id="revenue_val">$57,670K</h4>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-2">-->
+<!--              <div class="card shadow-sm">-->
+<!--                <div class="card-body">-->
+<!--                  <h6>Gross Profit</h6>-->
+<!--                  <h4 id="gross_profit_val">$14,481K</h4>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-2">-->
+<!--              <div class="card shadow-sm">-->
+<!--                <div class="card-body">-->
+<!--                  <h6>EBIT</h6>-->
+<!--                  <h4 id="ebit_val">$7,788K</h4>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-2">-->
+<!--              <div class="card shadow-sm">-->
+<!--                <div class="card-body">-->
+<!--                  <h6>Net Profit</h6>-->
+<!--                  <h4 id="net_profit_val">$7,736K</h4>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-2">-->
+<!--              <div class="card shadow-sm">-->
+<!--                <div class="card-body">-->
+<!--                  <h6>Net Profit Margin</h6>-->
+<!--                  <h4 id="net_profit_margin">13.41%</h4>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-2">-->
+<!--              <div class="card shadow-sm">-->
+<!--                <div class="card-body">-->
+<!--                  <h6>Expenses</h6>-->
+<!--                  <h4 id="expenses_val">$49,881K</h4>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; Graph + Donut Charts &ndash;&gt;-->
+<!--          <div class="row">-->
+<!--            &lt;!&ndash; Line Chart &ndash;&gt;-->
+<!--            <div class="col-md-8">-->
+<!--              <div class="card shadow-sm mb-3">-->
+<!--                <div class="card-body">-->
+<!--                  <h6>Revenue vs Gross Profit</h6>-->
+<!--                  <canvas id="revenueGrossChart" style="width:100%; height:300px;"></canvas>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Donut Charts &ndash;&gt;-->
+<!--            <div class="col-md-4">-->
+<!--              <div class="row">-->
+<!--                <div class="col-md-6">-->
+<!--                  <div class="card shadow-sm mb-3">-->
+<!--                    <div class="card-body text-center">-->
+<!--                      <h6>% of Revenue Target</h6>-->
+<!--                      <canvas id="revenueTargetChart" style="width:100%; height:150px;"></canvas>-->
+<!--                      <p class="mt-2"><strong>90%</strong></p>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="col-md-6">-->
+<!--                  <div class="card shadow-sm mb-3">-->
+<!--                    <div class="card-body text-center">-->
+<!--                      <h6>% of Gross Profit Target</h6>-->
+<!--                      <canvas id="grossTargetChart" style="width:100%; height:150px;"></canvas>-->
+<!--                      <p class="mt-2"><strong>87%</strong></p>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; Last Row: Ratios and Summary Boxes &ndash;&gt;-->
+<!--          <div class="row mt-4 mb-4"> &lt;!&ndash; Added bottom margin &ndash;&gt;-->
+
+<!--           &lt;!&ndash; Quick vs Current Ratio &ndash;&gt;-->
+<!--            <div class="col-md-6">-->
+<!--                <div class="card shadow-sm mb-3">-->
+<!--                    <div class="card-body">-->
+<!--                        <h6>Quick vs Current Ratio</h6>-->
+<!--                        <canvas id="ratioLineChart" style="width:100%; height:250px;"></canvas>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+
+
+<!--              <div class="col-md-3">-->
+<!--                <div class="card shadow-sm mb-3">-->
+<!--                    <div class="card-body text-center">-->
+<!--                        <h6>Quick Ratio</h6>-->
+<!--                        <canvas id="quickGauge"></canvas>-->
+<!--                        <p class="mt-2"><strong>1.31</strong></p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-3">-->
+<!--                <div class="card shadow-sm mb-3">-->
+<!--                    <div class="card-body text-center">-->
+<!--                        <h6>Current Ratio</h6>-->
+<!--                        <canvas id="currentGauge"></canvas>-->
+<!--                        <p class="mt-2"><strong>1.75</strong></p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Ratio Chart &ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="col-md-4">&ndash;&gt;-->
+<!--&lt;!&ndash;              <div class="card shadow-sm mb-3">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="card-body">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <h6>Quick vs Current Ratio</h6>&ndash;&gt;-->
+<!--&lt;!&ndash;                  <canvas id="ratioChart" style="width:100%; height:250px;"></canvas>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;              </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+
+<!--            &lt;!&ndash; Income vs Expense &ndash;&gt;-->
+<!--            <div class="col-md-4">-->
+<!--              <div class="card shadow-sm mb-3">-->
+<!--                <div class="card-body">-->
+<!--                  <h6>Income vs Expense</h6>-->
+<!--                  <canvas id="incomeExpenseChart" style="width:100%; height:250px;"></canvas>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </t>-->
+<!--</templates>-->
+
+
+
+
+
+<!--<templates xml:space="preserve">-->
+<!--  <t t-name="accounting_dashboard.accounting_dashboard_template">-->
+<!--    <div class="o_accounting_dashboard_wrap d-flex flex-column">-->
+<!--      <div class="o_financial_dashboard container-fluid p-3">-->
+
+<!--        &lt;!&ndash; Header &ndash;&gt;-->
+<!--        <div class="d-flex justify-content-between align-items-center mb-3">-->
+<!--          <h3 class="fw-bold">Financial Report</h3>-->
+
+
+<!--          &lt;!&ndash;Year Selector&ndash;&gt;-->
+<!--          <select id="yearSelector" class="form-select w-auto" t-on-change="onYearChange">-->
+<!--            <option value="2021">2021</option>-->
+<!--            <option value="2022">2022</option>-->
+<!--            <option value="2023">2023</option>-->
+<!--            <option value="2024">2024</option>-->
+<!--            <option value="2025">2025</option>-->
+<!--            <option value="2026">2026</option>-->
+<!--            <option value="2027">2027</option>-->
+<!--            <option value="2028">2028</option>-->
+<!--          </select>-->
+<!--        </div>-->
+
+
+<!--        &lt;!&ndash; KPI Boxes &ndash;&gt;-->
+<!--        <div class="row mb-3 text-center">-->
+<!--          <div class="col">-->
+<!--            <div class="card shadow-sm">-->
+<!--              <div class="card-body p-2">-->
+<!--                <h6>Revenue</h6>-->
+<!--                  <img t-att-src="'/accounting_dashboard/static/src/img/revenue.jpg'" style="height: 80px;" alt="Revenue" class="img-fluid mb-2"/>-->
+<!--                  <h4 id="revenue_val"><t t-esc="state.data.revenue"/></h4>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col">-->
+<!--            <div class="card shadow-sm">-->
+<!--              <div class="card-body p-2">-->
+<!--                <h6>Gross Profit</h6>-->
+<!--                  <img t-att-src="'/accounting_dashboard/static/src/img/gross_profit.png'" style="height: 80px;" alt="Gross Profit" class="img-fluid mb-2"/>-->
+<!--                  <h4 id="gross_profit_val">-->
+<!--                    <t t-esc="state.data.other_income + state.data.revenue"/>-->
+<!--                  </h4>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col">-->
+<!--            <div class="card shadow-sm">-->
+<!--              <div class="card-body p-2">-->
+<!--                <h6>EBIT</h6>-->
+<!--                  <img t-att-src="'/accounting_dashboard/static/src/img/Ebit.png'" style="height: 80px;" alt="EBIT" class="img-fluid mb-2"/>-->
+<!--                <h4 id="ebit_val">0</h4>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col">-->
+<!--            <div class="card shadow-sm">-->
+<!--              <div class="card-body p-2">-->
+<!--                <h6>Net Profit</h6>-->
+<!--                  <img t-att-src="'/accounting_dashboard/static/src/img/net_profit.png'" style="height: 80px;" alt="Net Profit" class="img-fluid mb-2"/>-->
+<!--                <h4 id="net_profit_val"><t t-esc="(state.data.other_income + state.data.revenue) - (state.data.expense_cost + state.data.expense + state.data.depreciation)"/></h4>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col">-->
+<!--            <div class="card shadow-sm">-->
+<!--              <div class="card-body p-2">-->
+<!--                <h6>Net Profit Margin</h6>-->
+<!--                  <img t-att-src="'/accounting_dashboard/static/src/img/net_profit_margin.png'" style="height: 80px;" alt="Net Profit Margin" class="img-fluid mb-2"/>-->
+<!--                <h4 id="net_profit_margin">0%</h4>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col">-->
+<!--            <div class="card shadow-sm">-->
+<!--              <div class="card-body p-2">-->
+<!--                <h6>Expenses</h6>-->
+<!--                  <img t-att-src="'/accounting_dashboard/static/src/img/expense.png'" style="height: 80px;" alt="Expenses" class="img-fluid mb-2"/>-->
+<!--                <h4 id="expenses_val"><t t-esc="state.data.expense"/></h4>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col">-->
+<!--            <div class="card shadow-sm">-->
+<!--              <div class="card-body p-2">-->
+<!--                <h6>Depreciation</h6>-->
+<!--                  <img t-att-src="'/accounting_dashboard/static/src/img/expense.png'" style="height: 80px;" alt="Depreciation" class="img-fluid mb-2"/>-->
+<!--                <h4 id="depreciation"><t t-esc="state.data.depreciation"/></h4>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col">-->
+<!--            <div class="card shadow-sm">-->
+<!--              <div class="card-body p-2">-->
+<!--                <h6>Total Expenses</h6>-->
+<!--                  <img t-att-src="'/accounting_dashboard/static/src/img/expense.png'" style="height: 80px;" alt="Total Expenses" class="img-fluid mb-2"/>-->
+<!--                <h4 id="total_expense"><t t-esc="state.data.expense + state.data.depreciation"/></h4>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Row 2: Line Chart + Donut Charts &ndash;&gt;-->
+<!--        <div class="row mb-3">-->
+<!--          &lt;!&ndash; Line Chart &ndash;&gt;-->
+<!--          <div class="col-md-8">-->
+<!--            <div class="card shadow-sm">-->
+<!--              <div class="card-body">-->
+<!--                <h6>Revenue vs Gross Profit</h6>-->
+<!--                <canvas id="revenueGrossChart" style="width:100%; height:250px;"></canvas>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; Donut Charts &ndash;&gt;-->
+<!--          <div class="col-md-4">-->
+<!--            <div class="row">-->
+<!--              <div class="col-6">-->
+<!--                <div class="card shadow-sm mb-3">-->
+<!--                  <div class="card-body text-center">-->
+<!--                    <h6>% of Revenue Target</h6>-->
+<!--                    <canvas id="revenueTargetChart" style="width:100%; height:120px;"></canvas>-->
+<!--                    <p class="mt-2"><strong>90%</strong></p>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="col-6">-->
+<!--                <div class="card shadow-sm mb-3">-->
+<!--                  <div class="card-body text-center">-->
+<!--                    <h6>% of Gross Profit Target</h6>-->
+<!--                    <canvas id="grossTargetChart" style="width:100%; height:120px;"></canvas>-->
+<!--                    <p class="mt-2"><strong>87%</strong></p>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--         <div class="row d-flex align-items-stretch mb-2">-->
+<!--              &lt;!&ndash; Quick vs Current Ratio Line &ndash;&gt;-->
+<!--              <div class="col-md-6 d-flex">-->
+<!--                <div class="card shadow-sm flex-fill d-flex flex-column">-->
+<!--                  <div class="card-body d-flex flex-column">-->
+<!--                    <h6>Quick vs Current Ratio</h6>-->
+<!--                    <canvas id="ratioLineChart" style="width:100%; height:220px;"></canvas>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--              &lt;!&ndash; Quick + Current Ratio stacked &ndash;&gt;-->
+<!--              <div class="col-md-3 d-flex">-->
+<!--                <div class="card shadow-sm flex-fill d-flex flex-column justify-content-between">-->
+<!--                  <div class="card-body text-center">-->
+<!--                    <h6>Quick Ratio</h6>-->
+<!--                    <canvas id="quickGauge" style="height:100px; max-width:100%;"></canvas>-->
+<!--                    <p class="mt-1"><strong>1.31</strong></p>-->
+<!--                  </div>-->
+<!--                  <hr class="my-2" />-->
+<!--                  <div class="card-body text-center">-->
+<!--                    <h6>Current Ratio</h6>-->
+<!--                    <canvas id="currentGauge" style="height:100px; max-width:100%;"></canvas>-->
+<!--                    <p class="mt-1"><strong>1.75</strong></p>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--              &lt;!&ndash; Income vs Expense &ndash;&gt;-->
+<!--              <div class="col-md-3 d-flex">-->
+<!--                <div class="card shadow-sm flex-fill d-flex flex-column">-->
+<!--                  <div class="card-body d-flex flex-column">-->
+<!--                    <h6>Income vs Expense</h6>-->
+<!--                    <canvas id="incomeExpenseChart" style="width:100%; height:220px;"></canvas>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+
+<!--      </div>-->
+<!--    </div>-->
+<!--  </t>-->
+<!--</templates>-->
+
+
+
+
+
+
+<!--PERFECT DESIGN BUT WHEN CHANGE IN YEAR IT WILL MESS-->
+<templates xml:space="preserve">
+  <t t-name="accounting_dashboard.accounting_dashboard_template">
+    <div class="o_accounting_dashboard_wrap d-flex flex-column">
+      <div class="o_financial_dashboard container-fluid p-3" style="max-height: 100vh; overflow-y: auto;">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="fw-bold">Financial Report</h3>
+
+            <select class="form-select w-auto" t-on-change="onYearChange">
+                  <t t-foreach="state.year_range" t-as="year" t-key="year">
+                    <option t-att-value="year"
+                            t-att-selected="year === state.year ? 'selected' : false">
+                      <t t-esc="year"/>
+                    </option>
+                  </t>
+            </select>
+        </div>
+
+        <!-- First Row: KPI Boxes -->
+        <div class="row mb-3 text-center">
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body p-2">
+                <h6>Revenue</h6>
+                  <img t-att-src="'/accounting_dashboard/static/src/img/revenue.jpg'" style="height: 80px;" alt="Revenue" class="img-fluid mb-2"/>
+                  <h4 id="revenue_val"><t t-esc="state.data.revenue"/></h4>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body p-2">
+                <h6>Gross Profit</h6>
+                  <img t-att-src="'/accounting_dashboard/static/src/img/gross_profit.png'" style="height: 80px;" alt="Gross Profit" class="img-fluid mb-2"/>
+                  <h4 id="gross_profit_val">
+                    <t t-esc="state.data.other_income + state.data.revenue"/>
+                  </h4>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body p-2">
+                <h6>EBIT</h6>
+                  <img t-att-src="'/accounting_dashboard/static/src/img/Ebit.png'" style="height: 80px;" alt="EBIT" class="img-fluid mb-2"/>
+                <h4 id="ebit_val">0</h4>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body p-2">
+                <h6>Net Profit</h6>
+                  <img t-att-src="'/accounting_dashboard/static/src/img/net_profit.png'" style="height: 80px;" alt="Net Profit" class="img-fluid mb-2"/>
+                <h4 id="net_profit_val"><t t-esc="(state.data.other_income + state.data.revenue) - (state.data.expense_cost + state.data.expense + state.data.depreciation)"/></h4>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body p-2">
+                <h6>Net Profit Margin</h6>
+                  <img t-att-src="'/accounting_dashboard/static/src/img/net_profit_margin.png'" style="height: 80px;" alt="Net Profit Margin" class="img-fluid mb-2"/>
+                <h4 id="net_profit_margin">0%</h4>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body p-2">
+                <h6>Expenses</h6>
+                  <img t-att-src="'/accounting_dashboard/static/src/img/expense.png'" style="height: 80px;" alt="Expenses" class="img-fluid mb-2"/>
+                <h4 id="expenses_val"><t t-esc="state.data.expense"/></h4>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body p-2">
+                <h6>Depreciation</h6>
+                  <img t-att-src="'/accounting_dashboard/static/src/img/expense.png'" style="height: 80px;" alt="Depreciation" class="img-fluid mb-2"/>
+                <h4 id="depreciation"><t t-esc="state.data.depreciation"/></h4>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body p-2">
+                <h6>Total Expenses</h6>
+                  <img t-att-src="'/accounting_dashboard/static/src/img/expense.png'" style="height: 80px;" alt="Total Expenses" class="img-fluid mb-2"/>
+                <h4 id="total_expense"><t t-esc="state.data.expense + state.data.depreciation"/></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Second Row: Charts -->
+
+<!--          ***************************************************-->
+        <div class="row mb-3">
+  <div class="col-md-8 mb-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h6>Revenue vs Gross Profit</h6>
+        <canvas id="revenueGrossChart" class="w-100" style="height: 250px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2 mb-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body text-center">
+        <h6>% of Revenue Target</h6>
+        <canvas id="revenueTargetChart" class="w-100" style="height: 120px;"></canvas>
+        <p class="mt-2"><strong>90%</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2 mb-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body text-center">
+        <h6>% of Gross Profit Target</h6>
+        <canvas id="grossTargetChart" class="w-100" style="height: 120px;"></canvas>
+        <p class="mt-2"><strong>87%</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!--          **********************************************-->
+                  <!-- Third Row: Ratio & Income/Expense Graphs -->
+
+<div class="row mb-3">
+  <div class="col-md-5 mb-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h6>Quick vs Current Ratio</h6>
+        <canvas id="ratioLineChart" class="w-100" style="height: 220px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2 mb-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body text-center d-flex flex-column justify-content-between">
+        <div>
+          <h6>Quick  Current Ratio</h6>
+          <canvas id="quickGauge" class="w-100" style="height: 100px;"></canvas>
+          <p class="mt-1"><strong>1.31</strong></p>
+        </div>
+        <hr class="my-2" />
+        <div>
+          <canvas id="currentGauge" class="w-100" style="height: 100px;"></canvas>
+          <p class="mt-1"><strong>1.75</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-5 mb-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h6>Income vs Expense</h6>
+        <canvas id="incomeExpenseChart" class="w-100" style="height: 220px;"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+      </div>
+    </div>
+  </t>
+</templates>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- list View -->
+    <record id="view_sale_report_sql_list" model="ir.ui.view">
+        <field name="name">sale.report.sql.list</field>
+        <field name="model">sale.report.sql</field>
+        <field name="arch" type="xml">
+            <list string="Sales SQL Report">
+                <field name="partner_id"/>
+                <field name="total_orders"/>
+                <field name="total_amount"/>
+                <field name="average_amount"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Pivot View -->
+    <record id="view_sale_report_sql_pivot" model="ir.ui.view">
+        <field name="name">sale.report.sql.pivot</field>
+        <field name="model">sale.report.sql</field>
+        <field name="arch" type="xml">
+            <pivot string="Sales Pivot Report">
+                <field name="partner_id" type="row"/>
+                <field name="total_amount" type="measure"/>
+                <field name="total_orders" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="view_sale_report_sql_graph" model="ir.ui.view">
+        <field name="name">sale.report.sql.graph</field>
+        <field name="model">sale.report.sql</field>
+        <field name="arch" type="xml">
+            <graph string="Sales Graph Report" type="bar">
+                <field name="partner_id"/>
+                <field name="total_amount"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_sale_report_sql" model="ir.actions.act_window">
+        <field name="name">Sales SQL Report</field>
+        <field name="res_model">sale.report.sql</field>
+        <field name="view_mode">list,pivot,graph</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_sale_report_sql"
+              name="Sales SQL Report"
+              parent="sale.sale_menu_root"
+              action="action_sale_report_sql"/>
+
+</odoo>

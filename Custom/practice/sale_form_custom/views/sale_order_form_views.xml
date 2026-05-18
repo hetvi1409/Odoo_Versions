@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+    ══════════════════════════════════════════════════════════════════════════
+    Sale Order Form — Custom Renderer + Widget Injection
+    ══════════════════════════════════════════════════════════════════════════
+
+    WHAT THIS FILE DOES:
+      1. Inherits the standard sale.order form view
+      2. Replaces the default "state" statusbar widget with our custom JS one
+      3. Replaces the default "amount_total" display with our AmountSummaryWidget
+      4. Sets js_class="sale_form_custom" so Odoo uses our SaleFormRenderer
+
+    HOW js_class WORKS:
+      When Odoo loads a form view, it looks at the `js_class` attribute on
+      the <form> tag.  It then looks up that string in the "views" JS registry.
+      We registered "sale_form_custom" in sale_form_renderer.js, so Odoo
+      will use SaleFormRenderer + SaleFormController for this form only.
+      All other form views remain unaffected.
+    ══════════════════════════════════════════════════════════════════════════
+    -->
+
+    <record id="view_sale_order_form_custom" model="ir.ui.view">
+        <field name="name">sale.order.form.custom</field>
+        <field name="model">sale.order</field>
+
+        <!-- Inherit from the standard sale order form -->
+        <field name="inherit_id" ref="sale.view_order_form"/>
+
+        <field name="arch" type="xml">
+
+            <!--
+            ── PATCH 1: Set js_class on the <form> tag ─────────────────────
+            position="attributes" patches attributes of the matched node
+            without replacing the node itself.
+            This is the ONLY correct way to add js_class in an inherited view.
+            -->
+            <xpath expr="//form" position="attributes">
+                <attribute name="js_class">sale_form_custom</attribute>
+            </xpath>
+
+
+            <!--
+            ── PATCH 2: Replace the default statusbar widget on `state` ────
+            The standard form has:
+                <field name="state" widget="statusbar" .../>
+            We replace it with our custom JS widget using position="replace".
+
+            IMPORTANT: statusbar_visible keeps the same behavior as the
+            original — it defines which states show in the bar.
+            We keep it so the underlying field value is unchanged.
+            -->
+            <xpath expr="//field[@name='state'][@widget='statusbar']" position="replace">
+                <field
+                    name="state"
+                    widget="sale_status_bar"
+                    readonly="1"
+                />
+            </xpath>
+
+
+            <!--
+            ── PATCH 3: Add AmountSummaryWidget next to amount_total ────────
+            The standard form shows amount_total inside a totals section.
+            We use position="attributes" to add our widget= on the existing
+            field — cleanest approach, doesn't break the default layout.
+
+            NOTE: We do NOT use position="replace" here because that would
+            remove the field from the view's field list and break onchanges.
+            Adding widget= via attributes keeps the field wired to the record.
+            -->
+            <xpath expr="//field[@name='amount_total']" position="attributes">
+                <attribute name="widget">amount_summary</attribute>
+            </xpath>
+
+
+            <!--
+            ── PATCH 4: Add a custom note section above the chatter ─────────
+            The default form's last div before chatter is the "Terms" note.
+            We inject a helpful summary div after it.
+
+            position="before" on the chatter means: add our div just before
+            the message thread opens.
+            -->
+            <xpath expr="//div[@class='oe_chatter']" position="before">
+                <div class="o-form-custom-footer">
+                    <!--
+                        This is a pure HTML element injected into the view arch.
+                        It shows a static tip. No JS needed — just XML + SCSS.
+                        You could also put an OWL component here via a field widget.
+                    -->
+                    <p class="o-footer-tip">
+                        Use the chatter below to log notes or send messages
+                        to the customer directly from this order.
+                    </p>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

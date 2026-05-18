@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!--
+        OWL template for AmountSummaryWidget.
+        t-name must match static template = "..." in amount_summary_widget.js
+        owl="1" is required in Odoo 18 to mark this as an OWL template.
+    -->
+    <t t-name="sale_form_custom.AmountSummary" owl="1">
+        <div class="o-amount-summary">
+
+            <!-- ── Subtotal row ── -->
+            <div class="o-amt-row">
+                <span class="o-amt-label">Subtotal (excl. tax)</span>
+                <!--
+                    t-esc safely escapes and renders the string returned
+                    by the `untaxed` getter in our JS component.
+                -->
+                <span class="o-amt-value" t-esc="untaxed"/>
+            </div>
+
+            <!-- ── Tax row with visual bar ── -->
+            <div class="o-amt-row">
+                <span class="o-amt-label">Tax</span>
+                <div class="o-amt-tax-wrap">
+                    <!-- Tax percentage bar -->
+                    <div class="o-tax-track">
+                        <!--
+                            t-att-style sets the width dynamically.
+                            taxPercent is a getter that returns e.g. "18.0"
+                        -->
+                        <div
+                            class="o-tax-fill"
+                            t-att-style="'width: ' + taxPercent + '%'"
+                        />
+                    </div>
+                    <span class="o-amt-value" t-esc="tax"/>
+                </div>
+            </div>
+
+            <!-- ── Divider ── -->
+            <div class="o-amt-divider"/>
+
+            <!-- ── Total row ── -->
+            <div class="o-amt-row o-amt-total-row">
+                <span class="o-amt-label o-amt-total-label">Total</span>
+                <!--
+                    totalColorClass returns "amt-low" / "amt-mid" / "amt-high"
+                    t-att-class dynamically applies it alongside the base class
+                -->
+                <span
+                    t-att-class="'o-amt-value o-amt-total ' + totalColorClass"
+                    t-esc="total"
+                />
+            </div>
+
+        </div>
+    </t>
+
+</templates>

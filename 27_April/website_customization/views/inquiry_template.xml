@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Inquiry Form Page -->
+    <template id="inquiry_form_template" name="Inquiry Form">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <h2>Inquiry Form</h2>
+
+                <t t-if="error">
+                    <div class="alert alert-danger">
+                        <t t-esc="error"/>
+                    </div>
+                </t>
+
+                <form action="/inquiry/submit" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                    <div class="form-group mb-3">
+                        <label>Name *</label>
+                        <input type="text" name="name" class="form-control"/>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label>Email *</label>
+                        <input type="email" name="email" class="form-control"/>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label>Phone</label>
+                        <input type="text" name="phone" class="form-control"/>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label>Message</label>
+                        <textarea name="message" class="form-control"/>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </t>
+    </template>
+
+
+    <!-- Thank You Page -->
+    <template id="thank_you_template" name="Thank You">
+        <t t-call="website.layout">
+            <div class="container mt-5 text-center">
+                <h2>Thank You!</h2>
+                <p>Your inquiry has been submitted successfully.</p>
+            </div>
+        </t>
+    </template>
+
+</odoo>

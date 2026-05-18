@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add clear cart button -->
+	<template id="clear_cart_inherited" inherit_id="website_sale.cart" active="True" customize_show="True" name="Clear Cart">
+		<xpath expr="//div[contains(@class, 'ms-3') and contains(@class, 'border-start') and contains(@class, 'ps-2')]" position="inside">
+            <t t-set="website_sale_order" t-value="request.cart" />
+            <a t-if="website_sale_order and website_sale_order.website_order_line"
+               href="/shop/clear/cart"
+               class="btn btn-primary btn-sm mt8 float-end"
+               style="vertical-align: top;">
+                <i class="fa fa-trash mr8"></i> Clear Cart
+            </a>
+		</xpath>
+	</template>
+</odoo>

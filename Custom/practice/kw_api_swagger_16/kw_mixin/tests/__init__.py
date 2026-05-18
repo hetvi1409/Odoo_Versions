@@ -1,0 +1,6 @@
+from . import (
+    test_datetime_extract,
+    test_translit_ua,
+    test_transliterate_clean,
+    test_alphabet_sorted_mixin,
+)

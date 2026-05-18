@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="swagger_template" name="Swagger UI" inherit_id="web.report_layout" priority="99">
+        <xpath expr="//title" position="replace">
+            <title>Swagger API Documentation</title>
+        </xpath>
+        <xpath expr="//main" position="inside">
+            <div class="container">
+                <div id="swagger-ui"></div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist/swagger-ui-bundle.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist/swagger-ui.css"/>
+            <script type="text/javascript">
+                window.onload = function() {
+                    const ui = SwaggerUIBundle({
+                        url: "/kw_api/swagger/swagger.json",
+                        dom_id: '#swagger-ui',
+                        presets: [
+                            SwaggerUIBundle.presets.apis,
+                            SwaggerUIStandalonePreset
+                        ],
+                        layout: "BaseLayout"
+                    });
+                }
+            </script>
+        </xpath>
+    </template>
+
+    <record id="swagger_action" model="ir.actions.act_url">
+        <field name="name">Swagger</field>
+        <field name="url">/kw_api/swagger</field>
+    </record>
+
+    <menuitem id="kw_swagger_menu"
+              name="Swagger"
+              parent="kw_api.kw_api_main_menu"
+              sequence="200"
+              action="swagger_action"/>
+
+</odoo>

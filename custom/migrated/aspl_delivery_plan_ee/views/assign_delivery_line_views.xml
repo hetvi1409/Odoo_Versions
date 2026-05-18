@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_stock_picking_kanban_assigned" model="ir.ui.view">
+            <field name="name">stock.picking.kanban.assigned</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.stock_picking_kanban"/>
+            <field name="mode">primary</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban[hasclass('o_kanban_mobile')]" position="attributes">
+                    <attribute name="js_class">stock_barcode_list_kanban</attribute>
+                    <attribute name="import">false</attribute>
+                    <attribute name="quick_create">false</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='state']" position="replace">
+                    <field name="state" widget="badge"
+                           decoration-success="state in ['confirmed','assigned']"
+                           decoration-info="state in ['draft','waiting']"
+                           decoration-danger="state == 'cancel'"
+                           class="ms-auto"/>
+                </xpath>
+                <xpath expr="//field[@name='activity_ids']" position="replace"/>
+            </field>
+        </record>
+
+        <record id="assign_delivery_line_action" model="ir.actions.act_window">
+            <field name="name">Assigned Delivery Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="domain">[('is_assigned', '=', True),('state','=','assigned'),('responsible_driver', '!=', False)]</field>
+            <field name="views" eval="[
+                (ref('view_stock_picking_kanban_assigned'), 'kanban'),
+                (False, 'form')
+            ]"/>
+        </record>
+
+        <menuitem id="assign_delivery_line_menu"
+                  name="Assigned Delivery Orders"
+                  parent="menu_delivery_plan_root"
+                  action="assign_delivery_line_action"
+                  sequence="20"/>
+
+        <record id="view_stock_picking_kanban_sequence_order" model="ir.ui.view">
+            <field name="name">stock.picking.kanban.sequence.order</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.stock_picking_kanban"/>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <kanban position="attributes">
+                    <attribute name="default_order">sequence_number asc</attribute>
+                </kanban>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+

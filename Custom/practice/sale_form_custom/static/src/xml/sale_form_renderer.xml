@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!--
+        SaleFormRenderer template.
+
+        HOW TEMPLATE INHERITANCE WORKS IN OWL (Odoo 18):
+          - t-inherit="web.FormRenderer" means: start with the default
+            FormRenderer template and apply our XPath-like patches.
+          - t-inherit-mode="extension" means: patch (don't replace) the parent.
+
+        This way we keep ALL default form behavior (chatter, statusbar,
+        save/discard buttons) and only inject our custom elements.
+    -->
+    <t t-name="sale_form_custom.SaleFormRenderer"
+       t-inherit="web.FormRenderer"
+       t-inherit-mode="extension"
+       owl="1">
+
+        <!--
+            PATCH 1: Add a state-colored banner INSIDE the form's .o_form_view
+            container, before the standard content.
+
+            XPath target: the root div of the form view.
+            position="inside" + before the first child = top of the form.
+        -->
+        <xpath expr="//div[hasclass('o_form_view')]" position="inside">
+
+            <!--
+                This banner is injected at the very top of the form.
+                headerColorClass getter returns e.g. "state-confirmed"
+                which SCSS uses to change the left border + badge color.
+
+                t-if="!isNew" hides the banner on brand-new unsaved records
+                (they have no meaningful state to show yet).
+            -->
+            <t t-if="!isNew">
+                <div t-att-class="'o-sale-info-banner ' + headerColorClass">
+
+                    <!-- Order reference -->
+                    <div class="o-banner-item">
+                        <span class="o-banner-label">Order</span>
+                        <span class="o-banner-value" t-esc="orderName"/>
+                    </div>
+
+                    <!-- Customer name -->
+                    <div class="o-banner-item">
+                        <span class="o-banner-label">Customer</span>
+                        <span class="o-banner-value" t-esc="partnerName"/>
+                    </div>
+
+                    <!-- Order date -->
+                    <div class="o-banner-item">
+                        <span class="o-banner-label">Order Date</span>
+                        <span class="o-banner-value" t-esc="orderDate"/>
+                    </div>
+
+                    <!-- State badge (right-aligned via SCSS flex) -->
+                    <div class="o-banner-state">
+                        <span class="o-state-badge" t-esc="stateLabel"/>
+                    </div>
+
+                </div>
+            </t>
+
+        </xpath>
+
+    </t>
+
+</templates>

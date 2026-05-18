@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <!-- Accessory Products -->
+<template id="insert_accessory_products_snippet" inherit_id="website_sale.product" name="Accessory Products">
+  <xpath expr="//div[@id='wrap']" position="inside">
+
+    <t t-set="accessories"
+       t-value="product.accessory_product_ids.filtered(lambda p: p.sale_ok and p.website_published)"/>
+
+    <t t-if="accessories">
+      <t t-set="carousel_id" t-value="'accessory-products-%s' % product.id"/>
+
+      <section class="container mt-5 mb-5" t-attf-id="#{carousel_id}">
+        <h4 class="text-center mb-4" style="font-size: 1.4rem; font-weight: 500; color: #495057;">Related Products</h4>
+
+        <div class="recent-products-carousel" data-carousel="accessory-products">
+          <button class="carousel-btn left" type="button" aria-label="Previous" title="Previous">&lt;</button>
+          <button class="carousel-btn right" type="button" aria-label="Next" title="Next">&gt;</button>
+
+          <div class="items-container">
+            <t t-foreach="accessories" t-as="acc">
+              <div class="item card text-center p-3" style="margin: 0.5rem;">
+                <a t-att-href="acc.website_url" class="d-block mb-3">
+                  <div style="width: 200px; height: 200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 8px;">
+                    <img class="img-fluid" 
+                         t-att-src="acc.image_1024 and '/web/image/product.product/%s/image_512' % acc.id or '/web/image/product.product/3050/image_512?unique=0cb49d3'"
+                         t-att-alt="acc.product_tmpl_id.name"
+                         t-att-title="acc.product_tmpl_id.name"
+                         style="max-width: 100%; max-height: 100%; object-fit: contain;"/>
+                  </div>
+                </a>
+                <a t-att-href="acc.website_url" class="text-decoration-none">
+                  <h6 class="mb-2" style="font-size: 1rem; font-weight: 500;"><t t-esc="acc.product_tmpl_id.name"/></h6>
+                </a>
+               
+                <div class="variant-values mb-3" t-if="acc.product_template_variant_value_ids">
+                  <t t-foreach="acc.product_template_variant_value_ids" t-as="variant_value">
+                    <span class="badge rounded-pill bg-light text-dark me-1 mb-1" 
+                          t-att-style="'border: 1px solid %s; color: %s;' % (variant_value.html_color or '#6c757d', variant_value.html_color or '#6c757d')">
+                      <t t-esc="variant_value.name"/>
+                    </span>
+                  </t>
+                </div>
+                
+                <div class="text-muted">
+                  <span t-field="acc.list_price"
+                        t-options="{'widget': 'monetary', 'display_currency': request.website.currency_id}"/>
+                </div>
+              </div>
+            </t>
+          </div>
+        </div>
+      </section>
+    </t>
+
+  </xpath>
+</template>
+
+
+<!-- Recently Viewed Products -->
+    <template id="insert_recent_products_snippet" inherit_id="website_sale.product" name="Recently Viewed Products">
+      <xpath expr="//div[@id='wrap']" position="inside">
+
+        <t t-set="visitor" t-value="request.env['website.visitor']._get_visitor_from_request()"/>
+        <t t-set="products" t-value="[]"/>
+
+        <t t-if="visitor">
+          <t t-set="tracks"
+             t-value="request.env['website.track'].sudo().search([('visitor_id','=', visitor.id), ('product_id','!=', False)], order='visit_datetime desc', limit=30)"/>
+          <t t-if="tracks">
+            <t t-set="product_ids" t-value="list(dict.fromkeys(tracks.mapped('product_id.id')))"/>
+            <t t-set="products" t-value="request.env['product.product'].sudo().browse(product_ids).filtered('website_published')[:20]"/>
+          </t>
+        </t>
+
+        <t t-if="products and len(products) > 0">
+          <t t-set="carousel_id" t-value="'recent-products-%s' % (visitor.id if visitor else 'anon')"/>
+
+          <section class="container mt-5 mb-5" t-attf-id="#{carousel_id}">
+            <h4 class="text-center mb-4" style="font-size: 1.4rem; font-weight: 500; color: #495057;">Recently Viewed Products</h4>
+
+            <div class="recent-products-carousel" data-carousel="recent-products">
+              <button class="carousel-btn left" type="button" aria-label="Previous" title="Previous">&lt;</button>
+              <button class="carousel-btn right" type="button" aria-label="Next" title="Next">&gt;</button>
+
+              <div class="items-container">
+                <t t-foreach="products" t-as="product">
+                  <div class="item card text-center p-3" style="margin: 0.5rem;">
+                    <a t-att-href="product.website_url" class="d-block mb-3">
+                      <div style="width: 200px; height: 200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 8px;">
+                        <img class="img-fluid"
+                             t-att-src="product.image_1024 and '/web/image/product.product/%s/image_512' % product.id or '/web/image/product.product/3050/image_512?unique=0cb49d3'"
+                             t-att-alt="product.product_tmpl_id.name"
+                             t-att-title="product.product_tmpl_id.name"
+                             style="max-width: 100%; max-height: 100%; object-fit: contain;"/>
+                      </div>
+                    </a>
+                    <a t-att-href="product.website_url" class="text-decoration-none">
+                      <h6 class="mb-2" style="font-size: 1rem; font-weight: 500;"><t t-esc="product.product_tmpl_id.name"/></h6>
+                    </a>
+                    
+                    <!-- Variant Values Display -->
+                    <div class="variant-values mb-3" t-if="product.product_template_variant_value_ids">
+                      <t t-foreach="product.product_template_variant_value_ids" t-as="variant_value">
+                        <span class="badge rounded-pill bg-light text-dark me-1 mb-1" 
+                              t-att-style="'border: 1px solid %s; color: %s;' % (variant_value.html_color or '#6c757d', variant_value.html_color or '#6c757d')">
+                          <t t-esc="variant_value.name"/>
+                        </span>
+                      </t>
+                    </div>
+                    
+                    <div class="text-muted">
+                      <span t-field="product.list_price"
+                            t-options="{'widget': 'monetary', 'display_currency': request.website.currency_id}"/>
+                    </div>
+                  </div>
+                </t>
+              </div>
+            </div>
+          </section>
+        </t>
+      </xpath>
+    </template>
+  <!-- Social Media Icons Override -->
+  <template id="custom_social_media_icons" inherit_id="website_sale.product_share_buttons" name="Custom Social Media Icons">
+    <xpath expr="//div[@data-snippet='s_share']" position="replace">
+      <div
+        data-snippet="s_share"
+        data-name="Share"
+        class="s_share text-start o_no_link_popover"
+      >
+        <h4 class="s_share_title d-none o_default_snippet_text">Share</h4>
+        <!-- Facebook -->
+        <a
+          href="https://www.facebook.com/nutrifood360"
+          target="_blank"
+          aria-label="Facebook"
+          class="s_share_facebook"
+        >
+          <i class="fa fa-facebook rounded shadow-sm"/>
+        </a>
+        <!-- Instagram -->
+        <a
+          href="https://www.instagram.com/nutrifood360/"
+          target="_blank"
+          aria-label="Instagram"
+          class="s_share_instagram"
+        >
+          <i class="fa fa-instagram rounded shadow-sm"/>
+        </a>
+      </div>
+    </xpath>
+  </template>
+  </data>
+</odoo>

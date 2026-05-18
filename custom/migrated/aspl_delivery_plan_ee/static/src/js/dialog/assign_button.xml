@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="aspl_delivery_plan_ee.assign_driver_popup">
+        <Dialog size="'md'" title="props.title" footer="false" header="false">
+            <div class="driver-header my-1" style="width: 100%; font-weight: 500; font-size: larger; display: flex; flex-direction: row;">
+                <div class="w-25 px-3 py-1">Delivery User</div>
+                <div class="w-75" style="border: 1px solid #00000052; border-radius: 7px; display: flex; justify-content: center;">
+                    <div class="user-select-container" style="width: 100%; padding: 5px;">
+
+                        <select class="user-select" name="users" id="res-users" style="border: 0px solid #00000052;">
+                            <t t-foreach="this.state.resUsers" t-as="user" t-key="user.id">
+                                <option t-attf-value="{{user.id}}" t-att-selected="user.id == this.uid and 'selected' or None">
+                                    <t t-esc="user.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="main-container">
+                <div class="table-container mx-n2" style="height: 26vh; overflow: auto;">
+                    <form action="#" id="delivery_form">
+                        <table class="table table-striped">
+                            <tbody>
+                                <t t-set="sequence" t-value="1"/>
+                                <t t-foreach="this.props.PriorityOrders" t-as="priority" t-key="sequence">
+                                    <t t-foreach="priority.orders" t-as="order" t-key="sequence">
+                                        <tr class="assign-order-line">
+                                            <td class="sequence" t-att-data-sequence="sequence">
+                                                <t t-esc="sequence"/>.
+                                                </td>
+                                            <td class="cust-partner-name px-4" t-att-data-partner-id="order.partner_id">
+                                                <t t-esc="order.partner_name" />
+                                            </td>
+                                            <td class="delivery-order" t-att-data-order-id="order.order_id">
+                                                <t t-esc="order.order" />
+                                            </td>
+                                            <td class="remove-driver" t-on-click="removeOrderLine">
+                                                <i class="fa fa-trash-o"></i>
+                                            </td>
+                                        </tr>
+                                        <t t-set="sequence" t-value="sequence+1"/>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="footer-container" style="display: flex; justify-content: flex-end; align-items: center; width: 100%; gap: 10px;">
+                    <button type="button" class="btn btn-primary mt-2" t-on-click="assignDriver">Assign</button>
+                    <button type="button" class="btn btn-secondary mt-2" t-on-click="props.close">Cancel</button>
+                </div>
+            </div>
+        </Dialog>
+    </t>
+</templates>

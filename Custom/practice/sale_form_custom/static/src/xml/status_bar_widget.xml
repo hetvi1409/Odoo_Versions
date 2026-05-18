@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!--
+        OWL template for StatusBarWidget.
+        Renders a horizontal step bar for sale.order state.
+    -->
+    <t t-name="sale_form_custom.StatusBar" owl="1">
+        <div class="o-sale-status-bar">
+
+            <!-- Progress line behind the steps -->
+            <div class="o-status-track">
+                <!--
+                    progressPercent getter returns 0–100.
+                    This fills the track line proportionally.
+                -->
+                <div
+                    class="o-status-progress"
+                    t-att-style="'width: ' + progressPercent + '%'"
+                />
+            </div>
+
+            <!--
+                t-foreach loops over the `steps` getter array.
+                Each `step` object has: key, label, isDone, isActive, isCancelled
+            -->
+            <t t-foreach="steps" t-as="step" t-key="step.key">
+                <div
+                    t-att-class="
+                        'o-status-step ' +
+                        (step.isActive    ? 'step-active'    : '') +
+                        (step.isDone      ? ' step-done'     : '') +
+                        (step.isCancelled ? ' step-cancelled': '')
+                    "
+                >
+                    <!-- Step circle / dot -->
+                    <div class="o-step-dot">
+                        <!--
+                            Show a checkmark SVG inside done steps.
+                            t-if / t-else are OWL's conditional directives.
+                        -->
+                        <t t-if="step.isDone">
+                            <svg width="10" height="10" viewBox="0 0 10 10">
+                                <polyline
+                                    points="1.5,5 4,7.5 8.5,2.5"
+                                    fill="none"
+                                    stroke="white"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </t>
+                        <!-- Cancelled: show × symbol -->
+                        <t t-elif="step.isCancelled">
+                            <svg width="10" height="10" viewBox="0 0 10 10">
+                                <line x1="2" y1="2" x2="8" y2="8" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                                <line x1="8" y1="2" x2="2" y2="8" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                            </svg>
+                        </t>
+                    </div>
+
+                    <!-- Step label below the dot -->
+                    <span class="o-step-label" t-esc="step.label"/>
+                </div>
+            </t>
+
+        </div>
+    </t>
+
+</templates>

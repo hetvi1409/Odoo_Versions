@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<templates xml:space="preserve">
+
+    <t t-name="aspl_delivery_plan_ee.DeliveryTemplate">
+        <div class="container" style="height: 100vh; width: 100%; overflow: auto">
+
+            <t t-if="state.color_scheme === 'dark'">
+                <style>
+                    .navbar {
+                        background-color: transparent !important;
+                    }
+                    .delivery-data {
+                        background-color: transparent !important;
+                        <!-- border-color: #555 !important; -->
+                    }
+
+                    #select-all-btn {
+                        background-color: #17212a !important;
+                        color: white !important;
+                    }
+                    .order-item {
+                        background-color: transparent !important;
+                    }
+                    #menu{
+                        background-color: #1d2a38 !important;
+                        color: white !important;
+                    }
+                    .warehouse-name{
+                        background-color: transparent !important;
+                    }
+                </style>
+            </t>
+
+            <div class="navbar" style="display: flex; align-items: center; justify-content: space-between; height: 60px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 0 15px; background-color: #fff;">
+
+                <!-- Delivery Date -->
+                <div class="date" style="display: flex; align-items: center; padding-right: 20px;">
+                    <div>
+                        <h3 style="margin: 0;">Delivery Date:</h3>
+                    </div>
+                    <div>
+                         <input id="date_from" type="date" t-att-value="state.formatedDate" t-on-change="updateDate" style="margin-right: 20px;
+                            border:aliceblue; color:darkgrey; width:121px;"/>
+                    </div>
+
+                </div>
+                <!-- Warehouse Dropdown -->
+                <div class="warehouse" style="display: flex; padding-left: 20px; color : white !important;">
+                    <select id="warehouse_select" t-model="state.selectedWarehouseId" t-on-change="updateWarehouse" style=" text-align: center; margin-left : -50px;
+                            -webkit-appearance: none;
+                            -moz-appearance: none;
+                            appearance: none;
+                            background-color: #017e84;
+                            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg width=\'18\' height=\'18\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'10\' fill=\'white\'/%3E%3Cpath d=\'M7 10l5 5 5-5\' stroke=\'%23017e84\' stroke-width=\'2\' fill=\'none\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E');
+                            background-repeat: no-repeat;
+                            background-position: right 12px center;
+                            background-size: 17px 17px;
+                            color: white;
+                            border: 1px solid #017e84;
+                            border-radius: 5px;
+                            height: 50px;
+                            width: 180px;
+                            font-size: 20px;">
+                        <option value="" style="color: black;">Warehouse </option>
+                        <t t-foreach="state.warehouses" t-as="wh" t-key="wh.id">
+                            <option t-att-value="wh.id" t-att-selected="wh.id === state.selectedWarehouseId"
+                                    style="color: black;">
+                                <t t-esc="`(${wh.lot_stock_id?.[1] || 'No Stock Location'})`"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+                <!-- Search Box -->
+                <div style="position: relative; display: inline-block; flex-grow: 1; width: 40%; max-width: 500px; display: flex; justify-content: center; padding-left: 20px; padding-right: 20px;">
+                    <i class="o_searchview_icon oi oi-search me-2" role="img" style="position: absolute; left: 28px; top: 50%; transform: translateY(-50%); z-index: 1;"></i>
+                    <input type="text" id="searchPartner" t-on-input="searchPartner" t-on-change="searchPartner" class="form-control" placeholder="Search" style="border-radius: 5px 0 0 5px; border: 1px solid #ddd; height: 40px; padding-left: 30px; width: 100%;"/>
+                </div>
+
+                <!-- Find Button -->
+                <div class="empty-div" style="width: 90px; height: 40px; margin-left: 10px; "></div>
+
+            </div>
+
+            <!-- Main container -->
+            <div class="main-body-container d-flex mt-5">
+
+                <!-- Customer deliveries left panel -->
+                <div class="body-left-section h-100" style="width: 30%">
+                    <div class="delivery-data" style="display: inline-block; border: 2px solid #ccc; border-radius: 10px;
+                        background-color: #f9f9f9; height: 710px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 8px;
+                        width: 100%; overflow-y: auto;">
+                        <div style="background-color: #714B67; color: white; text-align: center; padding: 10px; font-size: 18px; font-weight: 400;">Customers</div>
+                        <button type="button" id="select-all-btn" t-on-click="toggleselectall"
+                                style="background-color:#f9fafb; color: black;
+                                       font-size: 16px; border: none; cursor: pointer;
+                                       border-radius: 5px; display: block; text-align: center;">
+                            Select All
+                        </button>
+                        <div class="partner-section" style="margin-bottom: 20px;">
+
+                            <!-- Customers list -->
+                            <t t-foreach="this.state.customers" t-as="customer" t-key="customer">
+                                <div class="customer-header" style="display: flex; justify-content: space-between; width: -webkit-fill-available; background-color:#017e84; color: white; font-size: 16px;">
+                                    <t t-esc="this.state.customers[customer].partner_name"/>
+                                    <i class="customer-orders-popup fa fa-chevron-circle-down" t-on-click="(event) => toggleOrderList(event, customer)" aria-hidden="true"></i>
+                                </div>
+                                <!-- Customer's delivery orders list -->
+                                <div class="orders-list" t-attf-id="orders-list-{{customer}}" style="display: none;">
+                                    <t t-foreach="this.state.customers[customer].orders" t-as="order" t-key="order.id">
+                                        <div class="order-item" style="display: flex; width: -webkit-fill-available;">
+                                            <div class="checkbox mr8" style="font-size: 17px;">
+                                                <input type="checkbox" class="item-checkbox" t-attf-value="{{order.id}}" t-attf-data-customer-id="{{customer}}"/>
+                                            </div>
+                                            <div class="order-name" t-attf-value="{{order.id}}" style="display: flex; justify-content: space-between; font-size: 14px; color: #714B67; width: -webkit-fill-available;">
+                                                <div>
+                                                    <t t-esc="order.name"/>
+                                                    <t t-if="order.priority">
+                                                        <span t-esc="order.priority" class="m-5" style="
+                                                            width: 24px;
+                                                            height: 24px;
+                                                            border-radius: 50%;
+                                                            background-color: #017e84;
+                                                            color: white;
+                                                            display: inline-flex;
+                                                            align-items: center;
+                                                            justify-content: center;
+                                                            font-size: 12px;
+                                                            font-weight: bold;
+                                                        "/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span style="width: 24px;"></span>
+                                                    </t>
+                                                </div>
+                                                <div style="display: flex; gap: 10px; align-items: center;">
+                                                    <i t-if="order.responsible_driver" class="fa fa-lock" aria-hidden="true" t-attf-data-order="{{order.id}}" t-on-click="unlockOrderDetails"></i>
+                                                    <i class="order-details-popup fa fa-bars" t-attf-data-order="{{order.id}}" t-on-click="showOrderDetails" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                    <!-- Information popup -->
+                    <div id="menu" style="
+                        position: absolute;
+                        z-index: 9999;
+                        background: white;
+                        border: 1px solid rgb(204, 204, 204);
+                        border-radius: 12px;
+                        display: none;">
+                        <span id="closeBtn" t-on-click="closeMenu" style="position: absolute;
+                        top: 10px; right: 10px; cursor: pointer; font-size: 20px;
+                        font-weight: bold;">
+                            <i class="fa fa-close" aria-hidden="true"></i>
+                        </span>
+                        <div class="warehouse"><br/>
+                            <span></span>
+                            <span class="warehouse-name">
+                                <b style="margin-right: 10px;">Warehouse:  </b>
+                                <t t-esc="this.state.informationPopupData.warehouse_name"/>
+                            </span>
+                            <br/><br/>
+                            <div class="data-lines" >
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="height:30px; margin-left: 10px;">
+                                        <b>Product</b>
+                                    </span>
+                                    <span style="width:74px; height:30px;">
+                                        <b>Quantity</b>
+                                    </span>
+                                </div>
+                                <t t-if="this.state.informationPopupData.data_lines">
+                                    <t t-foreach="this.state.informationPopupData.data_lines" t-as="line" t-key="line.line_id">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="margin-left: 10px;">
+                                            <t t-esc="line.product_name"/>
+                                        </span>
+                                        <span style="width:26px; height:26px; line-height: 26px;">
+                                            <t t-esc="line.quantity"/>
+                                        </span>
+                                    </div>
+                                    </t>
+                                </t>
+                            </div><br/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map right panel -->
+                <div class="body-right-section border border-2 ms-4 rounded-3" style="width: -webkit-fill-available; height: 710px;">
+                    <div>
+                        <div id="map" style="width: 100%; height: 710px;"></div>
+                        <div class="map-buttons-container">
+                            <button id="processButton" t-on-click="processDelivery" class="btn btn-primary"
+                                    style="padding: 10px 15px; border-radius: 5px; background-color: #714B67; border: none; color: white;">
+                                <i class="fa fa-circle-o-notch" aria-hidden="true"></i> Process
+                            </button>
+                            <button id="assignButton" t-on-click="assignDelivery" class="btn btn-secondary"
+                                    style="padding: 10px 15px; border-radius: 5px; background-color: #017e84; border: none; color: white;">
+                                <i class="fa fa-user-o" aria-hidden="true"></i> Assign
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </t>
+
+</templates>

@@ -1,0 +1,26 @@
+<odoo>
+  <data>
+
+        <record id="view_sale_order_inherit" model="ir.ui.view">
+            <field name="name">sale.order.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//field[@name='order_line']/list//field[@name='discount']" position="after">
+                      <field name="discount_amount"/>
+                  </xpath>
+
+<!-- <xpath expr="//div[hasclass('oe_subtotal_footer')]//field[@name='amount_total']"
+       position="attributes">
+  <attribute name="widget">color_amount</attribute>
+</xpath> -->
+
+<!-- <xpath expr="//field[@name='amount_tax']" position="after">
+  <field name="amount_total" widget="color_amount"/>
+</xpath> -->
+
+                </field>
+        </record>
+
+  </data>
+</odoo>

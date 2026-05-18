@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Form view for the delete reason wizard -->
+    <record id="view_delete_reason_wizard_form" model="ir.ui.view">
+        <field name="name">mail.message.delete.reason.wizard.form</field>
+        <field name="model">mail.message.delete.reason.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Delete Log Note">
+                <group>
+                    <field name="message_id" invisible="1"/>
+                    <field name="reason"
+                           placeholder="Explain why this log note needs to be deleted..."
+                           required="1"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_delete"
+                            string="Confirm Delete"
+                            type="object"
+                            class="btn-danger"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open the wizard -->
+    <record id="action_delete_reason_wizard" model="ir.actions.act_window">
+        <field name="name">Delete Log Note</field>
+        <field name="res_model">mail.message.delete.reason.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

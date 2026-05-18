@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- category -->
+    <record model="ir.module.category" id="module_process_manufacturing">
+        <field name="name">Process Manufacturing</field>
+    </record>
+
+    <!-- group for Process Manufacturing -->
+    <record id="group_process_manufacturing" model="res.groups">
+        <field name="name">Process Manufacturing</field>
+        <field name="category_id" ref="module_process_manufacturing" />
+    </record>
+
+    <!-- record rule -->
+    <record id="mrp_rule_own_records" model="ir.rule">
+        <field name="name">Own Records</field>
+        <field ref="model_mrp_production" name="model_id"></field>
+        <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_process_manufacturing'))]" />
+    </record>
+
+
+</odoo>
